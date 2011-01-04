@@ -1,0 +1,30 @@
+public class sample.Sample extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        sample.Sample r0;
+
+        r0 := @this: sample.Sample;
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+        return;
+    }
+
+    public void m1()
+    {
+        sample.Sample r0;
+        sample.Foo $r1, r2, r3, $r4;
+        int $i0;
+
+        r0 := @this: sample.Sample;
+        $r1 = new sample.Foo;
+        specialinvoke $r1.<sample.Foo: void <init>()>();
+        r2 = $r1;
+        $r4 = new sample.Foo;
+        specialinvoke $r4.<sample.Foo: void <init>()>();
+        r3 = $r4;
+        $i0 = r3.<sample.Foo: int y>;
+        virtualinvoke r2.<sample.Foo: void x_(int)>($i0);
+        return;
+    }
+}

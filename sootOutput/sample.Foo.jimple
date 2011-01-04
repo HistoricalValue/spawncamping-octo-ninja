@@ -1,0 +1,37 @@
+class sample.Foo extends java.lang.Object
+{
+    private int _x;
+    public int y;
+
+    void <init>()
+    {
+        sample.Foo r0;
+
+        r0 := @this: sample.Foo;
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+        r0.<sample.Foo: int _x> = 12;
+        r0.<sample.Foo: int y> = 15;
+        return;
+    }
+
+    public int x()
+    {
+        sample.Foo r0;
+        int $i0;
+
+        r0 := @this: sample.Foo;
+        $i0 = r0.<sample.Foo: int _x>;
+        return $i0;
+    }
+
+    public void x_(int)
+    {
+        sample.Foo r0;
+        int i0;
+
+        r0 := @this: sample.Foo;
+        i0 := @parameter0: int;
+        r0.<sample.Foo: int _x> = i0;
+        return;
+    }
+}
