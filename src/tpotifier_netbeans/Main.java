@@ -3,15 +3,11 @@ package tpotifier_netbeans;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-import sample.SingletonTPO;
 import sample.util.SingletonKeeper;
 import sample.util.SingletonKeeper.CleanUpper;
 
@@ -40,7 +36,7 @@ public class Main {
                 LOG.log(Level.INFO, "Performing cleanup {0}", action);
                 action.UnDo();
             }
-            LOG.log(Level.INFO, "Don with cleanups");
+            LOG.log(Level.INFO, "Dan with cleanups");
         }
     }
     private static Initialisation initialisation;
@@ -73,14 +69,6 @@ public class Main {
                 final CleanUpper lazyMaid = new SingletonKeeper.CleanUpper() {
                     @Override public void CleanUp (final Object inst) {}
                 };
-                //
-                SK.Register(SingletonTPO.class,
-                        new SingletonKeeper.Constructor () {
-                            @Override
-                            public Object Construct () {
-                                return new SingletonTPO();
-                            }
-                        }, lazyMaid);
                 //
                 SK.Register(TPOTransformer.class,
                         new SingletonKeeper.Constructor() {
@@ -131,9 +119,22 @@ public class Main {
         init();
 
         try {
-            soot.Main.main(new String[]{"-app", "-validate",
+            soot.Main.main(new String[]{
+            "-app",
+            "-validate",
+//            "-whole-program",
             "-output-format", "jimple",
             "-trim-cfgs",
+            "-phase-option", "cg", "enabled:true",
+            "-phase-option", "cg.spark",
+                    "enabled:true,"
+                    + "verbose:true,"
+                    + "propagator:worklist,"
+                    + "simple-edges-bidirectional:false,"
+                    + "on-fly-cg:true,"
+                    + "set-impl:double,"
+                    + "double-set-old:hybrid,"
+                    + "double-set-new:hybrid",
             "sample.Sample"});
         }
         finally {

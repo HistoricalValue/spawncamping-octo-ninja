@@ -1,0 +1,72 @@
+public class sample.SharedMemoryTPO extends java.lang.Object
+{
+    private static final java.util.Map instances;
+    private final java.lang.Integer key;
+
+    public void <init>(int, java.lang.Object)
+    {
+        sample.SharedMemoryTPO r0;
+        int i0;
+        java.lang.Object r1;
+        java.lang.Integer $r2, $r4, $r6;
+        java.util.Map $r3, $r5;
+        boolean $z0;
+
+        r0 := @this: sample.SharedMemoryTPO;
+        i0 := @parameter0: int;
+        r1 := @parameter1: java.lang.Object;
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+        r0.<sample.SharedMemoryTPO: java.lang.Integer key> = $r2;
+        $r3 = <sample.SharedMemoryTPO: java.util.Map instances>;
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+        $z0 = interfaceinvoke $r3.<java.util.Map: boolean containsKey(java.lang.Object)>($r4);
+        if $z0 != 0 goto label0;
+
+        $r5 = <sample.SharedMemoryTPO: java.util.Map instances>;
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+        interfaceinvoke $r5.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r6, r1);
+
+     label0:
+        return;
+    }
+
+    public void SetInstance(java.lang.Object)
+    {
+        sample.SharedMemoryTPO r0;
+        java.lang.Object r1;
+        java.util.Map $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: sample.SharedMemoryTPO;
+        r1 := @parameter0: java.lang.Object;
+        $r2 = <sample.SharedMemoryTPO: java.util.Map instances>;
+        $r3 = r0.<sample.SharedMemoryTPO: java.lang.Integer key>;
+        interfaceinvoke $r2.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r3, r1);
+        return;
+    }
+
+    public java.lang.Object GetInstance()
+    {
+        sample.SharedMemoryTPO r0;
+        java.util.Map $r1;
+        java.lang.Integer $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: sample.SharedMemoryTPO;
+        $r1 = <sample.SharedMemoryTPO: java.util.Map instances>;
+        $r2 = r0.<sample.SharedMemoryTPO: java.lang.Integer key>;
+        $r3 = interfaceinvoke $r1.<java.util.Map: java.lang.Object get(java.lang.Object)>($r2);
+        return $r3;
+    }
+
+    static void <clinit>()
+    {
+        java.util.HashMap $r0;
+
+        $r0 = new java.util.HashMap;
+        specialinvoke $r0.<java.util.HashMap: void <init>(int)>(1024);
+        <sample.SharedMemoryTPO: java.util.Map instances> = $r0;
+        return;
+    }
+}

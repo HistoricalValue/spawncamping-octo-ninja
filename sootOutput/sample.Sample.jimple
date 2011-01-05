@@ -10,21 +10,27 @@ public class sample.Sample extends java.lang.Object
         return;
     }
 
-    public void m1()
+    public static void main(java.lang.String[])
     {
-        sample.Sample r0;
-        sample.Foo $r1, r2, r3, $r4;
+        java.lang.String[] r0;
+        sample.SharedMemoryTPO $r1, $r6;
+        sample.Foo $r2, r3, r4, r5, $r7;
         int $i0;
 
-        r0 := @this: sample.Sample;
-        $r1 = new sample.Foo;
-        specialinvoke $r1.<sample.Foo: void <init>()>();
-        r2 = $r1;
-        $r4 = new sample.Foo;
-        specialinvoke $r4.<sample.Foo: void <init>()>();
-        r3 = $r4;
-        $i0 = r3.<sample.Foo: int y>;
-        virtualinvoke r2.<sample.Foo: void x_(int)>($i0);
+        r0 := @parameter0: java.lang.String[];
+        $r1 = new sample.SharedMemoryTPO;
+        $r2 = new sample.Foo;
+        specialinvoke $r2.<sample.Foo: void <init>()>();
+        specialinvoke $r1.<sample.SharedMemoryTPO: void <init>(int,java.lang.Object)>(1, $r2);
+        r3 = (sample.Foo) $r1;
+        r4 = r3;
+        $r6 = new sample.SharedMemoryTPO;
+        $r7 = new sample.Foo;
+        specialinvoke $r7.<sample.Foo: void <init>()>();
+        specialinvoke $r6.<sample.SharedMemoryTPO: void <init>(int,java.lang.Object)>(2, $r7);
+        r5 = (sample.Foo) $r6;
+        $i0 = r5.<sample.Foo: int y>;
+        virtualinvoke r4.<sample.Foo: void x_(int)>($i0);
         return;
     }
 }
