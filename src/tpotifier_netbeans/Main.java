@@ -2,7 +2,7 @@ package tpotifier_netbeans;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.security.SignatureSpi;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -117,9 +117,20 @@ public class Main {
         initialisation = null;
     }
 
+    private enum _SootMode {
+        App, WholeProgramWithSpark
+    }
+    private static final _SootMode SootMode = _SootMode.
+            App
+//            WholeProgramWithSpark
+            ;
+    
     private static final Scene SootScene = Scene.v();
     private static void abc (final String className, final int level) {
-        SootScene.addBasicClass(className, level);
+        switch (SootMode) {
+            case App:   SootScene.addBasicClass(className, level);  break;
+            case WholeProgramWithSpark:                             break;
+        }
     }
     private static void abc (final String className) {
         abc(className, soot.SootClass.SIGNATURES);
@@ -230,25 +241,45 @@ public class Main {
             abcb("java.io.FileOutputStream");
             abcb("java.io.FileInputStream");
             abcb("java.security.ProtectionDomain");
-            
-            soot.Main.main(new String[]{
-//            "-app",
-            "-validate",
-//            "-whole-program",
-            "-output-format", "jimple",
-//            "-output-format", "dava",
-            "-trim-cfgs",
-//            "-phase-option", "cg", "enabled:true",
-//            "-phase-option", "cg.spark",
-//                    "enabled:true,"
-//                    + "verbose:true,"
-//                    + "propagator:worklist,"
-//                    + "simple-edges-bidirectional:false,"
-//                    + "on-fly-cg:false,"
-//                    + "set-impl:hybrid," // hash, bit, hybrid, array, double
-//                    + "double-set-old:hybrid,"
-//                    + "double-set-new:hybrid",
-            "sample.Sample"});
+
+            final ArrayList<String> sootopts = new ArrayList<>(30);
+            switch (SootMode) {
+                case App:
+                    sootopts.add("-app");
+                case WholeProgramWithSpark:
+                    sootopts.add("-whole-program");
+                    sootopts.add("-phase-option"); sootopts.add("cg.spark");
+                    sootopts.add(   ""
+                                    + "enabled:true"
+                                    + ",simple-edges-bidirectional:false"
+                                    + ",on-fly-cg:true"
+                                    + ",propagator:worklist"
+                                    + ",set-impl:double"
+                                    + ",double-set-old:hybrid"
+                                    + ",double-set-new:hybrid"
+//                                    + ",dump-html:true"
+                                    );
+                    break;
+            }
+
+//            sootopts.add("-validate");
+            final String outputFormat =
+                    "jimple"
+                    // "dava"
+                    ;
+            sootopts.add("-output-format"); sootopts.add(outputFormat);
+            sootopts.add("-trim-cfgs");
+            sootopts.add("-main-class");
+            sootopts.add("sample.Sample");
+            sootopts.add("sample.Sample");
+            //
+//            sootopts.add("-help");
+//            sootopts.add("-phase-list");
+//            sootopts.add("-phase-help"); sootopts.add("cg.spark");
+
+            final String[] sootArgs = new String[sootopts.size()];
+            sootopts.toArray(sootArgs);
+            soot.Main.main(sootArgs);
         }
         finally {
             cleanup();
