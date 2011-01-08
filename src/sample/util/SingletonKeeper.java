@@ -88,18 +88,20 @@ public class SingletonKeeper {
             throw new RuntimeException("Cannot register while it's a mess. The maids need to come");
     }
 
-    public Object Get (final Class<?> name) {
+    public <T> T Get (final Class<? extends T> klass) {
         if (underWork)
             throw new RuntimeException("Cannot do that now -- under maid work.");
 
         if (maidQue.isEmpty())
             throw new RuntimeException("The maids have been here.");
         else {
-            final SingletonEntry sentry = singletons.get(name);
+            final SingletonEntry sentry = singletons.get(klass);
             assert sentry != null;
             final Object result = sentry.instance;
             assert result != null;
-            return result;
+            assert klass.isInstance(result);
+            @SuppressWarnings("unchecked") T reslut = (T) result;
+            return reslut;
         }
     }
 }

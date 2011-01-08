@@ -2,6 +2,7 @@ package tpotifier_netbeans;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.security.SignatureSpi;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,6 +11,10 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import sample.util.SingletonKeeper;
 import sample.util.SingletonKeeper.CleanUpper;
+import soot.Pack;
+import soot.PackManager;
+import soot.Scene;
+import soot.Transform;
 
 public class Main {
 
@@ -93,13 +98,10 @@ public class Main {
             @Override public String toString () { return "Soot"; }
             @Override
             public void Do () {
-                final SingletonKeeper SK = SingletonKeeper.S();
-                soot.PackManager.v().getPack("jtp").add(
-                        new soot.Transform(
-                                TPOTransformer.PhaseName,
-                                (soot.BodyTransformer)SK.Get(TPOTransformer.class)
-                        )
-                );
+                final SingletonKeeper SK  = SingletonKeeper.S();
+                final PackManager     PM  = soot.PackManager.v();
+                final Pack            JTP = PM.getPack("jtp");
+                JTP.add(new Transform(TPOTransformer.PhaseName, SK.Get(TPOTransformer.class)));
             }
             @Override
             public void UnDo () {}
@@ -115,26 +117,137 @@ public class Main {
         initialisation = null;
     }
 
+    private static final Scene SootScene = Scene.v();
+    private static void abc (final String className, final int level) {
+        SootScene.addBasicClass(className, level);
+    }
+    private static void abc (final String className) {
+        abc(className, soot.SootClass.SIGNATURES);
+    }
+    private static void abcb (final String className) {
+        abc(className, soot.SootClass.BODIES);
+    }
     public static void main (final String[] args) {
         init();
 
         try {
+            abc("java.lang.Thread");
+            abc("java.lang.ThreadGroup");
+            abc("java.lang.ExceptionInInitializerError");
+            abc("java.lang.RuntimeException");
+            abc("java.lang.ClassNotFoundException");
+            abc("java.lang.ArithmeticException");
+            abc("java.lang.ArrayStoreException");
+            abc("java.lang.ClassCastException");
+            abc("java.lang.IllegalMonitorStateException");
+            abc("java.lang.IndexOutOfBoundsException");
+            abc("java.lang.ArrayIndexOutOfBoundsException");
+            abc("java.lang.NegativeArraySizeException");
+            abc("java.lang.NullPointerException");
+            abc("java.lang.InstantiationError");
+            abc("java.lang.InternalError");
+            abc("java.lang.OutOfMemoryError");
+            abc("java.lang.StackOverflowError");
+            abc("java.lang.UnknownError");
+            abc("java.lang.ThreadDeath");
+            abc("java.lang.ClassCircularityError");
+            abc("java.lang.ClassFormatError");
+            abc("java.lang.IllegalAccessError");
+            abc("java.lang.IncompatibleClassChangeError");
+            abc("java.lang.LinkageError");
+            abc("java.lang.VerifyError");
+            abc("java.lang.NoSuchFieldError");
+            abc("java.lang.AbstractMethodError");
+            abc("java.lang.NoSuchMethodError");
+            abc("java.lang.UnsatisfiedLinkError");
+            abc("java.lang.Thread");
+            abc("java.lang.Runnable");
+            abc("java.lang.Cloneable");
+            abc("java.io.Serializable");
+            abc("java.lang.ref.Finalizer");
+            abc("java.lang.ClassLoader");
+            abc("java.security.PrivilegedActionException");
+            abcb("java.lang.Object");
+            abcb("java.lang.Object");
+            abcb("java.lang.Class");
+            abcb("java.lang.Void");
+            abcb("java.lang.Boolean");
+            abcb("java.lang.Byte");
+            abcb("java.lang.Character");
+            abcb("java.lang.Short");
+            abcb("java.lang.Integer");
+            abcb("java.lang.Long");
+            abcb("java.lang.Float");
+            abcb("java.lang.Double");
+            abcb("java.lang.String");
+            abcb("java.lang.StringBuffer");
+            abcb("java.lang.Error");
+            abcb("java.lang.AssertionError");
+            abcb("java.lang.Throwable");
+            abcb("java.lang.NoClassDefFoundError");
+            abcb("java.lang.ExceptionInInitializerError");
+            abcb("java.lang.RuntimeException");
+            abcb("java.lang.ClassNotFoundException");
+            abcb("java.lang.ArithmeticException");
+            abcb("java.lang.ArrayStoreException");
+            abcb("java.lang.ClassCastException");
+            abcb("java.lang.IllegalMonitorStateException");
+            abcb("java.lang.IndexOutOfBoundsException");
+            abcb("java.lang.ArrayIndexOutOfBoundsException");
+            abcb("java.lang.NegativeArraySizeException");
+            abcb("java.lang.NullPointerException");
+            abcb("java.lang.InstantiationError");
+            abcb("java.lang.InternalError");
+            abcb("java.lang.OutOfMemoryError");
+            abcb("java.lang.StackOverflowError");
+            abcb("java.lang.UnknownError");
+            abcb("java.lang.ThreadDeath");
+            abcb("java.lang.ClassCircularityError");
+            abcb("java.lang.ClassFormatError");
+            abcb("java.lang.IllegalAccessError");
+            abcb("java.lang.IncompatibleClassChangeError");
+            abcb("java.lang.LinkageError");
+            abcb("java.lang.VerifyError");
+            abcb("java.lang.NoSuchFieldError");
+            abcb("java.lang.AbstractMethodError");
+            abcb("java.lang.NoSuchMethodError");
+            abcb("java.lang.UnsatisfiedLinkError");
+            abcb("java.lang.Thread");
+            abcb("java.lang.Runnable");
+            abcb("java.lang.Cloneable");
+            abcb("java.io.Serializable");
+            abcb("java.lang.ref.Finalizer");
+            abcb("java.lang.System");
+            abcb("java.lang.ThreadGroup");
+            abcb("java.lang.ClassLoader");
+            abcb("java.security.PrivilegedActionException");
+            abcb("sample.SharedMemoryTPO");
+            abcb("sun.misc.VM");
+            abcb("java.lang.Terminator");
+            abcb("sun.misc.Version");
+            abcb("java.io.BufferedInputStream");
+            abcb("java.io.FileDescriptor");
+            abcb("java.io.FileOutputStream");
+            abcb("java.io.FileInputStream");
+            abcb("java.security.ProtectionDomain");
+            
             soot.Main.main(new String[]{
-            "-app",
+//            "-app",
             "-validate",
 //            "-whole-program",
             "-output-format", "jimple",
+//            "-output-format", "dava",
             "-trim-cfgs",
-            "-phase-option", "cg", "enabled:true",
-            "-phase-option", "cg.spark",
-                    "enabled:true,"
-                    + "verbose:true,"
-                    + "propagator:worklist,"
-                    + "simple-edges-bidirectional:false,"
-                    + "on-fly-cg:true,"
-                    + "set-impl:double,"
-                    + "double-set-old:hybrid,"
-                    + "double-set-new:hybrid",
+//            "-phase-option", "cg", "enabled:true",
+//            "-phase-option", "cg.spark",
+//                    "enabled:true,"
+//                    + "verbose:true,"
+//                    + "propagator:worklist,"
+//                    + "simple-edges-bidirectional:false,"
+//                    + "on-fly-cg:false,"
+//                    + "set-impl:hybrid," // hash, bit, hybrid, array, double
+//                    + "double-set-old:hybrid,"
+//                    + "double-set-new:hybrid",
             "sample.Sample"});
         }
         finally {
