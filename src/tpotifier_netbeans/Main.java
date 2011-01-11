@@ -55,6 +55,7 @@ public class Main {
                     + "tpotifier_netbeans.handlers: java.util.logging.ConsoleHandler\n"
                     + "sample.level: ALL\n"
                     + "sample.hanlders: java.util.logging.ConsoleHandler\n"
+                    + "sample.util.handlers: java.util.logging.ConsoleHandler\n"
             ).getBytes("iso8859-1")));
         } catch (IOException ex) {
             throw new AssertionError(ex);
@@ -82,10 +83,6 @@ public class Main {
                                 return new TPOTransformer();
                             }
                         }, lazyMaid);
-                //
-                //
-                //
-                SK.ConstructAll();
             }
             @Override
             public void UnDo () {
@@ -117,10 +114,10 @@ public class Main {
         initialisation = null;
     }
 
-    private enum _SootMode {
+    public enum _SootMode {
         App, WholeProgramWithSpark
     }
-    private static final _SootMode SootMode = _SootMode.
+    public static final _SootMode SootMode = _SootMode.
             App
 //            WholeProgramWithSpark
             ;
@@ -138,11 +135,8 @@ public class Main {
     private static void abcb (final String className) {
         abc(className, soot.SootClass.BODIES);
     }
-    public static void main (final String[] args) {
-        init();
-
-        try {
-            {
+    private static void _addBasicClasses () {
+        {
                 abc("java.lang.Thread");
                 abc("java.lang.ThreadGroup");
                 abc("java.lang.ExceptionInInitializerError");
@@ -243,11 +237,18 @@ public class Main {
                 abcb("java.io.FileInputStream");
                 abcb("java.security.ProtectionDomain");
             }
+    }
+
+    public static void main (final String[] args) {
+        init();
+
+        try {
+            _addBasicClasses();
 
             final ArrayList<String> sootopts = new ArrayList<>(30);
             switch (SootMode) {
                 case App:
-                    sootopts.add("-app");
+//                    sootopts.add("-app");
                     break;
                 case WholeProgramWithSpark:
                     sootopts.add("-whole-program");
@@ -260,6 +261,7 @@ public class Main {
                                     + ",set-impl:double"
                                     + ",double-set-old:hybrid"
                                     + ",double-set-new:hybrid"
+                                    + ",lazy-pts:false"
 //                                    + ",dump-html:true"
                                     );
                     break;
@@ -268,11 +270,11 @@ public class Main {
 //            sootopts.add("-validate");
             final String outputFormat =
                     "jimple"
-                    // "dava"
+//                     "dava"
                     ;
             sootopts.add("-output-format"); sootopts.add(outputFormat);
-            sootopts.add("-dump-body"); sootopts.add("ALL");
-            sootopts.add("-throw-analysis"); sootopts.add("unit");
+            sootopts.add("-dump-body"); sootopts.add("jtp");
+//            sootopts.add("-throw-analysis"); sootopts.add("unit");
             sootopts.add("-exclude"); sootopts.add("java");
             sootopts.add("-trim-cfgs");
             sootopts.add("-main-class");
