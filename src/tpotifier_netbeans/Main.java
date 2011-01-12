@@ -17,7 +17,10 @@ import soot.Scene;
 import soot.Transform;
 
 public class Main {
-
+    final static String outputFormat =
+            "jimple"
+//            "dava"
+            ;
     private interface InitialisationAction {
         void Do ();
         void UnDo ();
@@ -268,10 +271,6 @@ public class Main {
             }
 
 //            sootopts.add("-validate");
-            final String outputFormat =
-                    "jimple"
-//                     "dava"
-                    ;
             sootopts.add("-output-format"); sootopts.add(outputFormat);
             sootopts.add("-dump-body"); sootopts.add("jtp");
 //            sootopts.add("-throw-analysis"); sootopts.add("unit");

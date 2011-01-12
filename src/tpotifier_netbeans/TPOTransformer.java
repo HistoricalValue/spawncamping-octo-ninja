@@ -23,25 +23,36 @@ import soot.SootClass;
 import soot.SootMethod;
 import soot.Type;
 import soot.Unit;
+import soot.UnitBox;
 import soot.Value;
 import soot.ValueBox;
 import soot.jimple.AssignStmt;
 import soot.jimple.EqExpr;
+import soot.jimple.GotoStmt;
+import soot.jimple.IdentityRef;
 import soot.jimple.IfStmt;
+import soot.jimple.InstanceFieldRef;
 import soot.jimple.InstanceInvokeExpr;
 import soot.jimple.InstanceOfExpr;
+import soot.jimple.IntConstant;
 import soot.jimple.InvokeExpr;
 import soot.jimple.InvokeStmt;
 import soot.jimple.Jimple;
 import soot.jimple.JimpleBody;
+import soot.jimple.Ref;
+import soot.jimple.SpecialInvokeExpr;
+import soot.jimple.StaticFieldRef;
 import soot.jimple.Stmt;
+import soot.jimple.ThisRef;
 import soot.jimple.VirtualInvokeExpr;
+import soot.jimple.internal.StmtBox;
 import soot.jimple.spark.pag.GlobalVarNode;
 import soot.jimple.spark.pag.LocalVarNode;
 import soot.jimple.spark.pag.Node;
 import soot.jimple.spark.pag.PAG;
 import soot.jimple.spark.pag.VarNode;
 import soot.util.Chain;
+import soot.util.HashChain;
 
 public class TPOTransformer extends soot.BodyTransformer {
 
@@ -72,11 +83,27 @@ public class TPOTransformer extends soot.BodyTransformer {
     }
 
     private static final class Transformer {
-        private final Scene         scene                   = Scene.v();
-        private final SootClass     ProxyClass              = scene.getSootClass("sample.SharedMemoryTPO");
-        private static final RefType ProxyType              = RefType.v("sample.SharedMemoryTPO");
-        private final SootMethod    ProxyGetInstanceMethod  = ProxyClass.getMethodByName(ProxyGetInstanceMethodName);
-        private final RefType       ObjectType              = RefType.v("java.lang.Object");
+        private static final class Alteration {
+            enum Type { Insertion, Replacement }
+            final Type type;
+            final Unit point;
+            final Chain<Unit> patch;
+            Alteration (final Type _type, final Unit _point, final Chain<Unit> _patch) {
+                type = _type;
+                point = _point;
+                patch = _patch;
+            }
+        }
+        private final Scene             scene                           = Scene.v();
+        private final SootClass         ProxyClass                      = scene.getSootClass("sample.SharedMemoryTPO");
+        private static final RefType    ProxyType                       = RefType.v("sample.SharedMemoryTPO");
+        private final SootMethod        ProxyGetInstanceMethod          = ProxyClass.getMethodByName(ProxyGetInstanceMethodName);
+        private final RefType           ObjectType                      = RefType.v("java.lang.Object");
+        private final static Pattern    addBasicClassExceptionPatter    = Pattern.compile("Scene");//.addBasicClass\\(([^,]+),([A-Z]+)\\);");
+        private final PrintStream       out                             = soot.G.v().out;
+        private final Jimple            jimple                          = Jimple.v();
+        private final List<Alteration>  alterations                     = new LinkedList<>();
+        private final IntConstant       IntConstantZero                 = IntConstant.v(0);
         //
         private boolean isAProxyType (final Type type) {
             final boolean result = ProxyType.equals(type);
@@ -140,7 +167,7 @@ public class TPOTransformer extends soot.BodyTransformer {
         private static String getUniqueLocalName (final Iterable<Local> locals, final String basename) {
             String result;
             for (int i = 0; localsContainLocalNamed(locals, result = basename + i); ++i)
-                ;
+                {}
             return result;
         }
         private static Local createAndAddFlagLocal (final Jimple jimple, final Chain<Local> locals) {
@@ -155,27 +182,26 @@ public class TPOTransformer extends soot.BodyTransformer {
             locals.add(result);
             return result;
         }
-        private final static Pattern addBasicClassExceptionPatter = Pattern
-                .compile("Scene");//.addBasicClass\\(([^,]+),([A-Z]+)\\);");
-        private final PrintStream out = soot.G.v().out;
-        private final Jimple jimple = Jimple.v();
-        private final List<Unit[]> insertions = new LinkedList<>();
         //
         private final JimpleBody                    body;
         private final SootMethod                    method;
         private final Chain<Local>                  locals;
         private final PatchingChain<Unit>           units;
+        private final Chain<Unit>                   units_nonpatching;
         private final Collection<? extends Local>   tagged;
         private final Local                         isInstanceFlagLocal;
         private final Local                         internalObjectHolder;
+        private final EqExpr                        isInstExpr;
         Transformer (final JimpleBody _body) {
             body                = _body;
             method              = _body.getMethod();
             locals              = _body.getLocals();
             units               = _body.getUnits();
+            units_nonpatching   = units.getNonPatchingChain();
             tagged              = getTagged(locals, method);
             isInstanceFlagLocal = createAndAddFlagLocal(jimple, locals);
             internalObjectHolder= createAndAddHolderLocal(jimple, locals);
+            isInstExpr          = jimple.newEqExpr(isInstanceFlagLocal, IntConstantZero);
         }
         private boolean tagged_contains (final Local local) {
             return tagged.contains(local);
@@ -194,12 +220,102 @@ public class TPOTransformer extends soot.BodyTransformer {
 
             for (final Unit unit: units) {
                 final String unitstr = unit.toString();
-                if (unit instanceof InvokeStmt)
-                    transformInstanceInvoke((InvokeStmt) unit);
+                if (unit instanceof Stmt) {
+                    final Stmt stmt = (Stmt) unit;
+                    
+                }
+                else
+                    throw new RuntimeException("Stmt expected but got " +
+                            unit + " : " + unit.getClass()); // TODO handle
             }
 
-            for (final Unit[] insertionPair: insertions)
-                units.insertBefore(insertionPair[0], insertionPair[1]);
+            applyAlterations();
+        }
+
+        private void applyAlterations () {
+            for (final Alteration alteration: alterations) {
+                final Unit point = alteration.point;
+                units_nonpatching.insertBefore(alteration.patch, point);
+                switch (alteration.type) {
+                    case Insertion: {
+                        break;
+                    }
+                    case Replacement: {
+                        units.remove(point);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private HashChain<Unit> generatePatchForProxiedObjectOperation(final Local local, final Unit opOnObj) {
+            //
+            // larkness  = (local instanceof ProxyT)
+            final InstanceOfExpr    flagExpr            = jimple.newInstanceOfExpr(local, ProxyType);
+            final AssignStmt        flagAssignmentStmt  = jimple.newAssignStmt(isInstanceFlagLocal, flagExpr);
+            //
+            // ... else ->
+            // objectHolder = proxy.getInstance()
+            final VirtualInvokeExpr getInstExpr         = jimple.newVirtualInvokeExpr(local, ProxyGetInstanceMethod.makeRef());
+            final AssignStmt        objaAsgndProxyStmt  = jimple.newAssignStmt(internalObjectHolder, getInstExpr);
+            // goto end-of-if (opOnObj)
+            final GotoStmt          gotoOpOnObj         = jimple.newGotoStmt(opOnObj);
+            //
+            // ... then ->
+            // objectHolder = local
+            final AssignStmt        objoAsgndLocalStmt  = jimple.newAssignStmt(internalObjectHolder, local);
+            //
+            // if ...
+            // if larkness == 0 (!local instanceof ProxyT) then holder = obj
+            final IfStmt            ifInstOfStmt        = jimple.newIfStmt(isInstExpr, objoAsgndLocalStmt);
+            //
+            //
+            // flagAssignmentStmt       : larkness = (local instanceof ProxyT)
+            // ifInstOfStmt             : if larkness == 0 goto objoAsgndLocalStmt
+            // objaAsgndProxyStmt       : objectHolder = proxy.getInstance()
+            // gotoObjoInvoke           : goto opOnObj
+            // objoAsgndLocalStmt       : objectHolder = local
+            // opOnObj                  : ... [ f(objectHolder) ]
+            final HashChain<Unit> patch = new HashChain<>();
+            patch.addLast(flagAssignmentStmt);
+            patch.addLast(ifInstOfStmt);
+            patch.addLast(objaAsgndProxyStmt);
+            patch.addLast(gotoOpOnObj);
+            patch.addLast(objoAsgndLocalStmt);
+            patch.addLast(opOnObj);
+            return patch;
+        }
+        private HashChain<Unit> generatePatchForProxiedObjectOperation(final Local local) {
+            final Unit noop = jimple.newNopStmt();
+            final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, noop);
+            patch.add(noop);
+            return patch;
+        }
+
+        private void transformAssignment (final AssignStmt assignStmt) {
+            final Value rhs = assignStmt.getRightOp();
+            if (rhs == null)
+                throw new RuntimeException("wat"); // TODO handle
+
+            if (rhs instanceof Ref)
+                if (rhs instanceof InstanceFieldRef) {
+                    final InstanceFieldRef ifr = (InstanceFieldRef) rhs;
+                    final Value base = ifr.getBase();
+                    if (base instanceof Local) {
+                        final Local local = (Local) base;
+                        if (tagged_contains(local)) {
+
+                        }
+                    }
+                    else
+                        throw new RuntimeException("Local expected as base");
+                }
+                else if (rhs instanceof StaticFieldRef)
+                    {} // it's ok and do nothing
+                else
+                    throw new RuntimeException("Unhandled field access that is not an InstanceFieldRef: " +
+                            rhs + " : " + rhs.getClass());
+
         }
 
         private void transformInstanceInvoke (final InvokeStmt invokeStmt)
@@ -212,38 +328,23 @@ public class TPOTransformer extends soot.BodyTransformer {
                 if (base instanceof Local) {
                     final Local local = (Local) base;
                     if (tagged_contains(local)) {
-                        // objectHolder = local
-                        final AssignStmt        objoAsgndLocalStmt  = jimple.newAssignStmt(internalObjectHolder, local);
-                        //
-                        // objectHolder = proxy.getInstance()
-                        final VirtualInvokeExpr getInstExpr         = jimple.newVirtualInvokeExpr(local, ProxyGetInstanceMethod.makeRef());
-                        final AssignStmt        objaAsgndProxyStmt  = jimple.newAssignStmt(internalObjectHolder, getInstExpr);
                         //
                         // objectHolder.originalMethod(..)
-                        final VirtualInvokeExpr objoInvokeExpr      = jimple.newVirtualInvokeExpr(  internalObjectHolder,
-                                                                                                    vie.getMethodRef(),
-                                                                                                    vie.getArgs());
-                        final InvokeStmt        objoInvokeStmt      = jimple.newInvokeStmt(objoInvokeExpr);
-                        //
-                        // larkness  = (local instanceof ProxyT)
-                        final InstanceOfExpr    flagExpr            = jimple.newInstanceOfExpr(local, ProxyType);
-                        final AssignStmt        flagAssignmentStmt  = jimple.newAssignStmt(isInstanceFlagLocal, flagExpr);
-                        //
-                        // if larkness == 0 (!local instanceof ProxyT)
-//                        final EqExpr            isInstExpr          = jimple.newEqExpr(isInstanceFlagLocal, );
-//                        IfStmt                  ifInstOfStmt        = jimple.newIfStmt(isInstanceFlagLocal, objoAsgndLocalStmt);
-                        //
-                        //
-//                        insertions.add(new Unit[]{ifInstOfStmt      , invokeStmt});
-                        insertions.add(new Unit[]{flagAssignmentStmt, invokeStmt});
-                        insertions.add(new Unit[]{objoInvokeStmt    , flagAssignmentStmt});
-                        insertions.add(new Unit[]{objaAsgndProxyStmt, objoInvokeStmt});
-                        insertions.add(new Unit[]{objoAsgndLocalStmt, objaAsgndProxyStmt});
+                        final VirtualInvokeExpr objoInvokeExpr =
+                                jimple.newVirtualInvokeExpr(internalObjectHolder, vie.getMethodRef(), vie.getArgs());
+                        final InvokeStmt objoInvokeStmt =
+                                jimple.newInvokeStmt(objoInvokeExpr);
+                        final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, objoInvokeStmt);
+                        alterations.add(new Alteration(Alteration.Type.Replacement, invokeStmt, patch));
                     }
                 }
                 else
                     throw new RuntimeException("Local expected");
             }
+            else if (expr instanceof SpecialInvokeExpr)
+                {} // we're ok, it's <init> or <cinit>
+            else
+                throw new RuntimeException("What invoke expression is this? " + expr + " / "  + expr.getClass());
         }
     }
 }

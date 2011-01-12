@@ -10,13 +10,6 @@ public class Sample {
         Foo f2 = (Foo) (Object) new SharedMemoryTPO(0x02, new Foo());
         f.x_(f2.y);
 
-        if ((Object) f instanceof SharedMemoryTPO)
-            ((Foo)((SharedMemoryTPO)(Object)f).GetInstance()).x();
-
-        FA.x_(f.y);
-
-        boolean lol = true;
-        if (lol) lol = false; else lol = true;
-        if (true) lol = false; else lol = true;
+        FA.y = f.x();
     }
 }
