@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import sample.util.AssertionError;
 import soot.Body;
 import soot.Local;
 import soot.PatchingChain;
@@ -28,6 +29,7 @@ import soot.Value;
 import soot.ValueBox;
 import soot.jimple.AssignStmt;
 import soot.jimple.EqExpr;
+import soot.jimple.FieldRef;
 import soot.jimple.GotoStmt;
 import soot.jimple.IdentityRef;
 import soot.jimple.IfStmt;
@@ -218,18 +220,74 @@ public class TPOTransformer extends soot.BodyTransformer {
                     tagged
                     );
 
-            for (final Unit unit: units) {
-                final String unitstr = unit.toString();
-                if (unit instanceof Stmt) {
-                    final Stmt stmt = (Stmt) unit;
-                    
-                }
-                else
-                    throw new RuntimeException("Stmt expected but got " +
-                            unit + " : " + unit.getClass()); // TODO handle
-            }
+            for (final Unit unit: units);
 
             applyAlterations();
+        }
+
+        private void produceFieldRefPatch (final Stmt stmt) {
+            final FieldRef fieldRef = stmt.getFieldRef();
+            if (fieldRef instanceof InstanceFieldRef) {
+                final InstanceFieldRef ifr = (InstanceFieldRef) fieldRef;
+                final Value base = ifr.getBase();
+                if (base instanceof Local) {
+                    final Local local = (Local) base;
+                    if (tagged_contains(local)) {
+                        // objectHolder.originalFieldAccess
+                    }
+                }
+                else
+                    // TODO handle
+                    throw new TPOTransformationException("\"base\" of instance field ref is expected to be \"Local\", but here got:"
+                            + base + " : " + base.getClass());
+            }
+        }
+
+        private void produceInvokeExprPatch (final InvokeStmt stmt) {
+            final InvokeExpr        ie  = stmt.getInvokeExpr();
+            final VirtualInvokeExpr vie = makeNewInvokeExpr(ie);
+            if (vie != null) {
+                //      stmt.getInvokeExpr() is a VirtualInvokeExpr
+                // &&   its base is Local
+                // &&   its base is tagged
+                final Local local = (Local) ((VirtualInvokeExpr)ie).getBase();
+                assert tagged_contains(local);
+                final InvokeStmt newStmt = jimple.newInvokeStmt(vie);
+                final HashChain<Unit> patch =
+                        generatePatchForProxiedObjectOperation(local, newStmt);
+            }
+        }
+
+        private VirtualInvokeExpr makeNewInvokeExpr (final InvokeExpr invokeExpr) {
+            if (invokeExpr instanceof InstanceInvokeExpr)
+                if (invokeExpr instanceof SpecialInvokeExpr)
+                    {} // itsok
+                else
+                if (invokeExpr instanceof VirtualInvokeExpr) {
+                    final VirtualInvokeExpr vie = (VirtualInvokeExpr) invokeExpr;
+                    final Value base = vie.getBase();
+                    if (base instanceof Local) {
+                        final Local local = (Local) base;
+                        if (tagged_contains(local)) {
+                            // objectHolder.originalMethod(..)
+                            final VirtualInvokeExpr newInvokeExpr =
+                                    jimple.newVirtualInvokeExpr(internalObjectHolder, vie.getMethodRef(), vie.getArgs());
+                            return newInvokeExpr;
+                            //
+//                            final InvokeStmt newInvokeStmt =
+//                                    jimple.newInvokeStmt(newInvokeExpr);
+//                            final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, newInvokeStmt);
+                        }
+                    }
+                    else
+                        // TODO handle
+                        throw new TPOTransformationException("\"base\" of instance invokation is expected to be \"Local\", but here got:"
+                                + base + " : " + base.getClass());
+                }
+                else
+                    throw new AssertionError("Wat instance invokation expression is dis??? "
+                            + invokeExpr + " : " + invokeExpr.getClass());
+            return null;
         }
 
         private void applyAlterations () {
@@ -290,61 +348,6 @@ public class TPOTransformer extends soot.BodyTransformer {
             final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, noop);
             patch.add(noop);
             return patch;
-        }
-
-        private void transformAssignment (final AssignStmt assignStmt) {
-            final Value rhs = assignStmt.getRightOp();
-            if (rhs == null)
-                throw new RuntimeException("wat"); // TODO handle
-
-            if (rhs instanceof Ref)
-                if (rhs instanceof InstanceFieldRef) {
-                    final InstanceFieldRef ifr = (InstanceFieldRef) rhs;
-                    final Value base = ifr.getBase();
-                    if (base instanceof Local) {
-                        final Local local = (Local) base;
-                        if (tagged_contains(local)) {
-
-                        }
-                    }
-                    else
-                        throw new RuntimeException("Local expected as base");
-                }
-                else if (rhs instanceof StaticFieldRef)
-                    {} // it's ok and do nothing
-                else
-                    throw new RuntimeException("Unhandled field access that is not an InstanceFieldRef: " +
-                            rhs + " : " + rhs.getClass());
-
-        }
-
-        private void transformInstanceInvoke (final InvokeStmt invokeStmt)
-        {
-            final String stmtstr = invokeStmt.toString();
-            final InvokeExpr expr = invokeStmt.getInvokeExpr();
-            if (expr instanceof VirtualInvokeExpr) {
-                final VirtualInvokeExpr vie = (VirtualInvokeExpr) expr;
-                final Value base = vie.getBase();
-                if (base instanceof Local) {
-                    final Local local = (Local) base;
-                    if (tagged_contains(local)) {
-                        //
-                        // objectHolder.originalMethod(..)
-                        final VirtualInvokeExpr objoInvokeExpr =
-                                jimple.newVirtualInvokeExpr(internalObjectHolder, vie.getMethodRef(), vie.getArgs());
-                        final InvokeStmt objoInvokeStmt =
-                                jimple.newInvokeStmt(objoInvokeExpr);
-                        final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, objoInvokeStmt);
-                        alterations.add(new Alteration(Alteration.Type.Replacement, invokeStmt, patch));
-                    }
-                }
-                else
-                    throw new RuntimeException("Local expected");
-            }
-            else if (expr instanceof SpecialInvokeExpr)
-                {} // we're ok, it's <init> or <cinit>
-            else
-                throw new RuntimeException("What invoke expression is this? " + expr + " / "  + expr.getClass());
         }
     }
 }

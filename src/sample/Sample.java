@@ -11,5 +11,6 @@ public class Sample {
         f.x_(f2.y);
 
         FA.y = f.x();
+        f.y = FA.y;
     }
 }
