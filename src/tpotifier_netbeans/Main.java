@@ -79,11 +79,11 @@ public class Main {
                     @Override public void CleanUp (final Object inst) {}
                 };
                 //
-                SK.Register(TPOTransformer.class,
+                SK.Register(TPOJimpleBodyTransformer.class,
                         new SingletonKeeper.Constructor() {
                             @Override
                             public Object Construct () {
-                                return new TPOTransformer();
+                                return new TPOJimpleBodyTransformer();
                             }
                         }, lazyMaid);
             }
@@ -101,7 +101,7 @@ public class Main {
                 final SingletonKeeper SK  = SingletonKeeper.S();
                 final PackManager     PM  = soot.PackManager.v();
                 final Pack            JTP = PM.getPack("jtp");
-                JTP.add(new Transform(TPOTransformer.PhaseName, SK.Get(TPOTransformer.class)));
+                JTP.add(new Transform(TPOJimpleBodyTransformer.PhaseName, SK.Get(TPOJimpleBodyTransformer.class)));
             }
             @Override
             public void UnDo () {}

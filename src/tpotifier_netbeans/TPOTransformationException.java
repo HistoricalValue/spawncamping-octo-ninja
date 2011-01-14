@@ -11,6 +11,8 @@ package tpotifier_netbeans;
  */
 public class TPOTransformationException extends RuntimeException {
 
+    private final static long serialVersionUID = 0x930;
+
     /**
      * Creates a new instance of <code>TPOTransformationException</code> without detail message.
      */

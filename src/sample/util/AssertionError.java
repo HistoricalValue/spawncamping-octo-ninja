@@ -2,6 +2,8 @@ package sample.util;
 
 public class AssertionError extends RuntimeException {
 
+    private final static long serialVersionUID = 0x8746;
+
     public AssertionError(Throwable cause) {
         super(cause);
     }

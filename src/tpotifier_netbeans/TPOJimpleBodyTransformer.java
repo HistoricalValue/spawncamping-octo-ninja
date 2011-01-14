@@ -56,7 +56,7 @@ import soot.jimple.spark.pag.VarNode;
 import soot.util.Chain;
 import soot.util.HashChain;
 
-public class TPOTransformer extends soot.BodyTransformer {
+public class TPOJimpleBodyTransformer extends soot.BodyTransformer {
 
     public static final String PhaseName = "jtp.replaceTPOs";
     public static final String ProxyGetInstanceMethodName = "GetInstance";
@@ -79,7 +79,7 @@ public class TPOTransformer extends soot.BodyTransformer {
                     b.getMethod().getName(), contains_enabled, enabledIsTrue,
                     phaseNameIsCorrect, bodyIsJimple);
     }
-    private static final Logger LOG = Logger.getLogger(TPOTransformer.class.getName());
+    private static final Logger LOG = Logger.getLogger(TPOJimpleBodyTransformer.class.getName());
     private static void logfine (final String msg, Object... args) {
         LOG.log(Level.FINE, msg, args);
     }
