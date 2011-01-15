@@ -54,7 +54,7 @@ public class Main {
             // Loggers first
             LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(("\n"
                     + "java.util.logging.ConsoleHandler.level: ALL\n"
-                    + "tpotifier_netbeans.level: ALL\n"
+                    + "tpotifier_netbeans.level: INFO\n"
                     + "tpotifier_netbeans.handlers: java.util.logging.ConsoleHandler\n"
                     + "sample.level: ALL\n"
                     + "sample.hanlders: java.util.logging.ConsoleHandler\n"

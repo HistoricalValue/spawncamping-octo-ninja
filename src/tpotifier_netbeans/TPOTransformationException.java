@@ -29,9 +29,11 @@ public class TPOTransformationException extends RuntimeException {
     }
 
     public TPOTransformationException(Throwable cause) {
+        super(cause);
     }
 
     public TPOTransformationException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }
