@@ -12,5 +12,9 @@ public class Sample {
 
         FA.y = f.x();
         f.y = FA.y;
+
+        // cast to remain
+        Object o = new Sample();
+        Sample s = (Sample) o;
     }
 }

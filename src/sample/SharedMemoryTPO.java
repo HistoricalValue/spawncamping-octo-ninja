@@ -20,6 +20,7 @@ public class SharedMemoryTPO {
     //
 
     public Object GetInstance () {
+        System.out.printf("[TPO Shared Memory] Request for object %#x%n", key);
         return instances.get(key);
     }
 }

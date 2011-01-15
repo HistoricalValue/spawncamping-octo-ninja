@@ -62,9 +62,9 @@ import soot.util.HashChain;
 
 
 class Base_ic implements Base_icExpr {
-    private InstanceInvokeExpr iie;
+    private VirtualInvokeExpr iie;
     private InstanceFieldRef ifr;
-    Base_ic (final InstanceInvokeExpr _iie) { iie = _iie; ifr = null; }
+    Base_ic (final VirtualInvokeExpr _iie) { iie = _iie; ifr = null; }
     Base_ic (final InstanceFieldRef _ifr) { ifr = _ifr; iie = null; }
 
     @Override public void setBase (final Value base) {
@@ -77,8 +77,8 @@ class Base_ic implements Base_icExpr {
         throw new AssertionError(); // TODO handle
     }
 
-    static private Base_ic aBase_ic = new Base_ic((InstanceInvokeExpr) null);
-    static Base_ic Base_icFor (final InstanceInvokeExpr b) {
+    static private Base_ic aBase_ic = new Base_ic((VirtualInvokeExpr) null);
+    static Base_ic Base_icFor (final VirtualInvokeExpr b) {
         aBase_ic.iie = b;
         aBase_ic.ifr = null;
         return aBase_ic;
@@ -90,7 +90,7 @@ class Base_ic implements Base_icExpr {
     }
 }
 
-enum AlterationType { Insertion, Replacement }
+enum AlterationType { Insertion, Replacement, Removal }
 final class Alteration {    
     final AlterationType type;
     final Unit point;
@@ -123,12 +123,17 @@ final class Transformer {
     private final Scene             scene                           = Scene.v();
     private final SootClass         ProxyClass                      = scene.getSootClass("sample.SharedMemoryTPO");
     private static final RefType    ProxyType                       = RefType.v("sample.SharedMemoryTPO");
+    private static final RefType    ValueType                       = RefType.v("sample.Foo");
     private final SootMethod        ProxyGetInstanceMethod          = ProxyClass.getMethodByName(TPOJimpleBodyTransformer.ProxyGetInstanceMethodName);
     private final PrintStream       out                             = soot.G.v().out;
     private final Jimple            jimple                          = Jimple.v();
     private final List<Alteration>  alterations                     = new LinkedList<>();
     private final IntConstant       IntConstantZero                 = IntConstant.v(0);
     //
+    private boolean isAValueType (final Type type) {
+        final boolean result = ValueType.equals(type);
+        return result;
+    }
     private boolean isAProxyType (final Type type) {
         final boolean result = ProxyType.equals(type);
         return result;
@@ -269,12 +274,37 @@ final class Transformer {
         else
         if (rhs instanceof InvokeExpr) {
             assert lhs instanceof Local;
-            produceInvokeExprPatch(stmt, (InvokeExpr) rhs);
+            if (rhs instanceof VirtualInvokeExpr)
+                produceInvokeExprPatch(stmt, (VirtualInvokeExpr) rhs);
         }
-        else if (rhs instanceof NewExpr || rhs instanceof CastExpr || rhs instanceof Local)
+        else if (rhs instanceof CastExpr) {
+            assert lhs instanceof Local;
+            // if rhs is a local which is tagged (could point to a proxy)
+            // then this cast has to be eliminated
+            final CastExpr cast = (CastExpr) rhs;
+            final Value base = cast.getOp();
+            if (base instanceof Local) {
+                final Local local = (Local) base;
+                final boolean taggedContainsLocal = tagged_contains(local);
+                final Type castType = cast.getCastType();
+                final boolean castTypeIsValueType = isAValueType(castType);
+                final Type baseType = local.getType();
+                final boolean baseTypeIsProxyType = isAProxyType(baseType);
+                if (taggedContainsLocal && castTypeIsValueType && baseTypeIsProxyType) {
+                    final HashChain<Unit> patch = new HashChain<>();
+                    patch.add(jimple.newAssignStmt(lhs, local));
+                    addReplacementAlteration(stmt, patch);
+                }
+            }
+            else
+                throw new TPOTransformationException("base of cast expr is expected to be a Local. We got: "
+                        + base + " : " + base.getClass());
+        }
+        else if (rhs instanceof NewExpr || rhs instanceof Local || rhs instanceof InstanceOfExpr)
             {} // it'sok
         else
-            throw new TPOTransformationException("What kind of assignment is dis!!! >8-|");
+            throw new TPOTransformationException("What kind of assignment is dis!!! >8-| "
+                    + stmt + " : " + stmt.getClass());
     }
     private void producePatchForBaseReplacement (final Stmt jump2stmt, final Base_icExpr base_ic) {
         final Value base = base_ic.getBase();
@@ -304,8 +334,10 @@ final class Transformer {
     }
     private void produceInvokeExprPatch (final Stmt jump2stmt, final InvokeExpr invokeExpr) {
 //        assert jump2stmt.getUseBoxes().contains(jimple.newInvokeExprBox(invokeExpr));
-        if (invokeExpr instanceof InstanceInvokeExpr)
-            producePatchForBaseReplacement(jump2stmt, Base_ic.Base_icFor((InstanceInvokeExpr) invokeExpr));
+        if (invokeExpr instanceof InstanceInvokeExpr) {
+            if (invokeExpr instanceof VirtualInvokeExpr)
+                producePatchForBaseReplacement(jump2stmt, Base_ic.Base_icFor((VirtualInvokeExpr) invokeExpr));
+        }
         else
             throw new TPOTransformationException("What kind of invokation expression is dis!!: "
                     + invokeExpr + " : " + invokeExpr.getClass());
@@ -319,17 +351,18 @@ final class Transformer {
     private void applyAlterations () {
         for (final Alteration alteration: alterations) {
             try {
+                final AlterationType type = alteration.type;
                 final Unit point = alteration.point;
-                units_nonpatching.insertBefore(alteration.patch, point);
-                switch (alteration.type) {
-                    case Insertion: {
-                        break;
-                    }
-                    case Replacement: {
-                        units.remove(point);
-                        break;
-                    }
-                }
+                //
+                final boolean doPatching = type != AlterationType.Removal;
+                final boolean doRemovePoint = type != AlterationType.Insertion;
+                //
+                assert !(type == AlterationType.Removal) || alteration.patch == null;
+                //
+                if (doPatching)
+                    units_nonpatching.insertBefore(alteration.patch, point);
+                if (doRemovePoint)
+                    units.remove(point);
             }
             catch (final Exception ex) {
                 final String message = "Applying alteration \""
@@ -341,17 +374,20 @@ final class Transformer {
     }
 
     /** @return new alteration's id */
-    private int addAlteration (final AlterationType type, final Unit point, final Chain<Unit> patch) {
+    private int __addAlteration (final AlterationType type, final Unit point, final Chain<Unit> patch) {
         final Alteration alteration = new Alteration(type, point, patch);
         final boolean added = alterations.add(alteration);
         assert added;
         return alteration.id;
     }
     private int addReplacementAlteration (final Unit point, final Chain<Unit> patch) {
-        return addAlteration(AlterationType.Replacement, point, patch);
+        return __addAlteration(AlterationType.Replacement, point, patch);
     }
     private int addInsertionAlteration (final Unit point, final Chain<Unit> patch) {
-        return addAlteration(AlterationType.Insertion, point, patch);
+        return __addAlteration(AlterationType.Insertion, point, patch);
+    }
+    private int addRemovalAlteration (final Unit point) {
+        return __addAlteration(AlterationType.Removal, point, null);
     }
 
     private HashChain<Unit> generatePatchForProxiedObjectOperation(final Local local, final Unit opOnObj) {
