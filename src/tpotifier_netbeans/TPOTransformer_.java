@@ -293,13 +293,17 @@ final class Transformer {
     }
 
     private void produceFieldRefPatch (final Stmt jump2stmt, final FieldRef fr) {
+//        assert jump2stmt.getUseBoxes().contains(jimple.newVariableBox(fr));
         if (fr instanceof InstanceFieldRef)
             producePatchForBaseReplacement(jump2stmt, Base_ic.Base_icFor((InstanceFieldRef) fr));
+        else if (fr instanceof StaticFieldRef)
+            {} // it'sok
         else
             throw new TPOTransformationException("What kind of Field Ref is dis!!: "
                     + fr + " : " + fr.getClass());
     }
     private void produceInvokeExprPatch (final Stmt jump2stmt, final InvokeExpr invokeExpr) {
+//        assert jump2stmt.getUseBoxes().contains(jimple.newInvokeExprBox(invokeExpr));
         if (invokeExpr instanceof InstanceInvokeExpr)
             producePatchForBaseReplacement(jump2stmt, Base_ic.Base_icFor((InstanceInvokeExpr) invokeExpr));
         else
@@ -310,34 +314,6 @@ final class Transformer {
     private void produceInvokeStmtPatch (final InvokeStmt stmt) {
         final InvokeExpr ie  = stmt.getInvokeExpr();
         produceInvokeExprPatch(stmt, ie);
-    }
-
-    private VirtualInvokeExpr makeNewInvokeExpr (final InvokeExpr invokeExpr) {
-        if (invokeExpr instanceof InstanceInvokeExpr)
-            if (invokeExpr instanceof SpecialInvokeExpr)
-                {} // itsok
-            else
-            if (invokeExpr instanceof VirtualInvokeExpr) {
-                final VirtualInvokeExpr vie = (VirtualInvokeExpr) invokeExpr;
-                final Value base = vie.getBase();
-                if (base instanceof Local) {
-                    final Local local = (Local) base;
-                    if (tagged_contains(local)) {
-                        // objectHolder.originalMethod(..)
-                        final VirtualInvokeExpr newInvokeExpr =
-                                jimple.newVirtualInvokeExpr(internalObjectHolder, vie.getMethodRef(), vie.getArgs());
-                        return newInvokeExpr;
-                    }
-                }
-                else
-                    // TODO handle
-                    throw new TPOTransformationException("\"base\" of instance invokation is expected to be \"Local\", but here got:"
-                            + base + " : " + base.getClass());
-            }
-            else
-                throw new AssertionError("Wat instance invokation expression is dis??? "
-                        + invokeExpr + " : " + invokeExpr.getClass());
-        return null;
     }
 
     private void applyAlterations () {
