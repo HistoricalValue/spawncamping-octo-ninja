@@ -124,7 +124,9 @@ final class Transformer {
     private final SootClass         ProxyClass                      = scene.getSootClass("sample.SharedMemoryTPO");
     private static final RefType    ProxyType                       = RefType.v("sample.SharedMemoryTPO");
     private static final RefType    ValueType                       = RefType.v("sample.Foo");
+    private static final RefType    ObjectType                      = RefType.v("jaba.lang.Object");
     private final SootMethod        ProxyGetInstanceMethod          = ProxyClass.getMethodByName(TPOJimpleBodyTransformer.ProxyGetInstanceMethodName);
+    private final SootMethod        ProxySetInstanceMethod          = ProxyClass.getMethodByName(TPOJimpleBodyTransformer.ProxySetInstanceMethodName);
     private final PrintStream       out                             = soot.G.v().out;
     private final Jimple            jimple                          = Jimple.v();
     private final List<Alteration>  alterations                     = new LinkedList<>();
@@ -211,6 +213,12 @@ final class Transformer {
         locals.add(result);
         return result;
     }
+    private static Local createAndAddTmpHolderLocal (final Jimple jimple, final Chain<Local> locals) {
+        final String        localName   = getUniqueLocalName(locals, "$methtmp");
+        final Local         result      = jimple.newLocal(localName, ObjectType);
+        locals.add(result);
+        return result;
+    }
     //
 //    private final JimpleBody                    body;
     private final SootMethod                    method;
@@ -220,6 +228,7 @@ final class Transformer {
     private final Collection<? extends Local>   tagged;
     private final Local                         isInstanceFlagLocal;
     private final Local                         internalObjectHolder;
+    private final Local                         tmpMethodResultHolder;
     private final EqExpr                        isInstExpr;
     Transformer (final JimpleBody _body) {
 //        body                = _body;
@@ -230,6 +239,7 @@ final class Transformer {
         tagged              = getTagged(locals, method);
         isInstanceFlagLocal = createAndAddFlagLocal(jimple, locals);
         internalObjectHolder= createAndAddHolderLocal(jimple, locals);
+        tmpMethodResultHolder=createAndAddTmpHolderLocal(jimple, locals);
         isInstExpr          = jimple.newEqExpr(isInstanceFlagLocal, IntConstantZero);
     }
     private boolean tagged_contains (final Local local) {
@@ -261,21 +271,64 @@ final class Transformer {
         final Value lhs = stmt.getLeftOp();
         final Value rhs = stmt.getRightOp();
         //
+        final HashChain<Unit> lhsTaggedLocalPatching;
+        //
         // Field-write (o.x = v)
+        if (lhs instanceof Local) {
+            final Local local = (Local) lhs;
+            if (tagged_contains(local)) {
+                stmt.setLeftOp(tmpMethodResultHolder);
+
+                // Patch to be added at the end
+                lhsTaggedLocalPatching = new HashChain<>();
+
+                // Make patch
+                //
+                // flag = instaceof
+                lhsTaggedLocalPatching.add(jimple.newAssignStmt(isInstanceFlagLocal,
+                            jimple.newInstanceOfExpr(local, ProxyType)));
+                // ... then: local.SetInstance(tmpResultHolder)
+                final Stmt invokeSetting = jimple.newInvokeStmt(
+                        jimple.newVirtualInvokeExpr(
+                                local,
+                                ProxySetInstanceMethod.makeRef(),
+                                tmpMethodResultHolder));
+
+                // ... else
+                final Stmt assignSetting = jimple.newAssignStmt(local, tmpMethodResultHolder);
+
+                //
+                final Stmt afterElse = jimple.newNopStmt();
+
+                // if (instanceof)
+                lhsTaggedLocalPatching.add(jimple.newIfStmt(jimple.newEqExpr(isInstanceFlagLocal, IntConstantZero), assignSetting));
+                lhsTaggedLocalPatching.add(invokeSetting);
+                lhsTaggedLocalPatching.add(jimple.newGotoStmt(afterElse));
+                lhsTaggedLocalPatching.add(assignSetting);
+                lhsTaggedLocalPatching.add(afterElse);
+            }
+            else
+                lhsTaggedLocalPatching = null;
+        }
+        else
+            lhsTaggedLocalPatching = null;
+
+        //
         if (lhs instanceof FieldRef) {
+            assert !(lhs instanceof Local);
             assert rhs instanceof Local;
-            produceFieldRefPatch(stmt, (FieldRef) lhs);
+            produceFieldRefReplacementPatch(stmt, (FieldRef) lhs);
         }
         else
         if (rhs instanceof FieldRef) {
             assert lhs instanceof Local;
-            produceFieldRefPatch(stmt, (FieldRef) rhs);
+            produceFieldRefReplacementPatch(stmt, (FieldRef) rhs);
         }
         else
         if (rhs instanceof InvokeExpr) {
             assert lhs instanceof Local;
             if (rhs instanceof VirtualInvokeExpr)
-                produceInvokeExprPatch(stmt, (VirtualInvokeExpr) rhs);
+                produceInvokeExprReplacementPatch(stmt, (VirtualInvokeExpr) rhs);
         }
         else if (rhs instanceof CastExpr) {
             assert lhs instanceof Local;
@@ -305,6 +358,9 @@ final class Transformer {
         else
             throw new TPOTransformationException("What kind of assignment is dis!!! >8-| "
                     + stmt + " : " + stmt.getClass());
+
+        if (lhsTaggedLocalPatching != null)
+            addAppendingAlteration(stmt, lhsTaggedLocalPatching);
     }
     private void producePatchForBaseReplacement (final Stmt jump2stmt, final Base_icExpr base_ic) {
         final Value base = base_ic.getBase();
@@ -322,7 +378,7 @@ final class Transformer {
                     + base + " : " + base.getClass());
     }
 
-    private void produceFieldRefPatch (final Stmt jump2stmt, final FieldRef fr) {
+    private void produceFieldRefReplacementPatch (final Stmt jump2stmt, final FieldRef fr) {
 //        assert jump2stmt.getUseBoxes().contains(jimple.newVariableBox(fr));
         if (fr instanceof InstanceFieldRef)
             producePatchForBaseReplacement(jump2stmt, Base_ic.Base_icFor((InstanceFieldRef) fr));
@@ -332,7 +388,7 @@ final class Transformer {
             throw new TPOTransformationException("What kind of Field Ref is dis!!: "
                     + fr + " : " + fr.getClass());
     }
-    private void produceInvokeExprPatch (final Stmt jump2stmt, final InvokeExpr invokeExpr) {
+    private void produceInvokeExprReplacementPatch (final Stmt jump2stmt, final InvokeExpr invokeExpr) {
 //        assert jump2stmt.getUseBoxes().contains(jimple.newInvokeExprBox(invokeExpr));
         if (invokeExpr instanceof InstanceInvokeExpr) {
             if (invokeExpr instanceof VirtualInvokeExpr)
@@ -345,7 +401,7 @@ final class Transformer {
 
     private void produceInvokeStmtPatch (final InvokeStmt stmt) {
         final InvokeExpr ie  = stmt.getInvokeExpr();
-        produceInvokeExprPatch(stmt, ie);
+        produceInvokeExprReplacementPatch(stmt, ie);
     }
 
     private void applyAlterations () {

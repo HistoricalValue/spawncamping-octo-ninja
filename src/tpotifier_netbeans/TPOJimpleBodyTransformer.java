@@ -60,6 +60,7 @@ public class TPOJimpleBodyTransformer extends soot.BodyTransformer {
 
     public static final String PhaseName = "jtp.replaceTPOs";
     public static final String ProxyGetInstanceMethodName = "GetInstance";
+    public static final String ProxySetInstanceMethodName = "SetInstance";
     
     private static final long serialVersionUID = 237;
     
