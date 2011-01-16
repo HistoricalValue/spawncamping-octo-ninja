@@ -90,7 +90,7 @@ class Base_ic implements Base_icExpr {
     }
 }
 
-enum AlterationType { Insertion, Replacement, Removal }
+enum AlterationType { Insertion, Replacement, Removal, Appending }
 final class Alteration {    
     final AlterationType type;
     final Unit point;
@@ -411,12 +411,16 @@ final class Transformer {
                 final Unit point = alteration.point;
                 //
                 final boolean doPatching = type != AlterationType.Removal;
+                final boolean doAppending = type == AlterationType.Appending;
                 final boolean doRemovePoint = type != AlterationType.Insertion;
                 //
                 assert !(type == AlterationType.Removal) || alteration.patch == null;
                 //
                 if (doPatching)
-                    units_nonpatching.insertBefore(alteration.patch, point);
+                    if (doAppending)
+                        units_nonpatching.insertAfter(alteration.patch, point);
+                    else
+                        units_nonpatching.insertBefore(alteration.patch, point);
                 if (doRemovePoint)
                     units.remove(point);
             }
@@ -444,6 +448,9 @@ final class Transformer {
     }
     private int addRemovalAlteration (final Unit point) {
         return __addAlteration(AlterationType.Removal, point, null);
+    }
+    private int addAppendingAlteration (final Unit point, final Chain<Unit> patch) {
+        return __addAlteration(AlterationType.Appending, point, patch);
     }
 
     private HashChain<Unit> generatePatchForProxiedObjectOperation(final Local local, final Unit opOnObj) {
