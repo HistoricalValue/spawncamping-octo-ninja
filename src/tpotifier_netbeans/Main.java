@@ -17,11 +17,15 @@ import soot.Scene;
 import soot.Transform;
 
 public class Main {
-    final static String outputFormat =
-            "jimple"
-//            "dava"
-//            "class"
-            ;
+    static boolean PerformTransformations = true;
+    static boolean withGetInstanceCall = true;
+    static boolean withObjoInvoke = true;
+    static boolean withObjoAssign = false;
+    //
+    static private boolean WithJimpleOutput = true;
+    static private boolean WithClassOutput = true;
+    static private boolean WithDavaOutput = false;
+    //
     private interface InitialisationAction {
         void Do ();
         void UnDo ();
@@ -105,7 +109,9 @@ public class Main {
                 JTP.add(new Transform(TPOJimpleBodyTransformer.PhaseName, SK.Get(TPOJimpleBodyTransformer.class)));
             }
             @Override
-            public void UnDo () {}
+            public void UnDo () {
+                soot.G.reset();
+            }
         });
         //
         //
@@ -243,9 +249,37 @@ public class Main {
             }
     }
 
-    public static void main (final String[] args) {
+    private static final Object SootThreadsMutex = new Object();
+    private static class SootStarter extends Thread {
+        @Override
+        public void start () {
+            System.out.println("starting thread " + this);
+            super.start();
+        }
+    }
+    private static final class JimpleSootStarter extends SootStarter { @Override public void run(){if(WithJimpleOutput)synchronized(SootThreadsMutex){main0(new String[]{"jimple"});}}}
+    private static final class ClassSootStarter extends SootStarter{@Override public void run(){if(WithClassOutput)synchronized(SootThreadsMutex){main0(new String[]{"class"});}}}
+    private static final class DavaSootStarter extends SootStarter{@Override public void run(){if(WithDavaOutput)synchronized(SootThreadsMutex){main0(new String[]{"dava"});}}}
+    public static void main (final String[] args) throws InterruptedException {
+        final JimpleSootStarter jss = new JimpleSootStarter();
+        final ClassSootStarter css = new ClassSootStarter();
+        final DavaSootStarter dss = new DavaSootStarter();
+        //
+        // Serialising because of Singleton Keeper not being thread-safe
+        // (or even multithreadedly usable)
+        //
+        dss.start();
+        css.start();
+        jss.start();
+        //
+        jss.join();
+        css.join();
+        dss.join();
+    }
+    public static void main0 (final String[] args) {
         init();
 
+        final String outputFormat = args[0];
         try {
             _addBasicClasses();
 
@@ -273,13 +307,17 @@ public class Main {
 
 //            sootopts.add("-validate");
             sootopts.add("-output-format"); sootopts.add(outputFormat);
-            sootopts.add("-dump-body"); sootopts.add("jtp");
+//            sootopts.add("-dump-body"); sootopts.add("jtp");
 //            sootopts.add("-throw-analysis"); sootopts.add("unit");
             sootopts.add("-exclude"); sootopts.add("java");
             sootopts.add("-trim-cfgs");
             sootopts.add("-main-class");
             sootopts.add("sample.Sample");
             sootopts.add("sample.Sample");
+//            sootopts.add("tpotifier_netbeans.Main");
+            sootopts.add("sample.util.P");
+//            sootopts.add("sample.SharedMemoryTPO");
+
             //
 //            sootopts.add("-help");
 //            sootopts.add("-phase-list");
@@ -297,5 +335,4 @@ public class Main {
 
     private Main () {
     }
-
 }
