@@ -212,7 +212,6 @@ final class Transformer {
         final Local         result      = jimple.newLocal(name, type);
         locals.add(result);
         return result;
-        
     }
     private static Local createAndAddFlagLocal (final Jimple jimple, final Chain<Local> locals) {
         return createAndAddLocal(jimple, locals, "$larkness", soot.BooleanType.v());
@@ -403,8 +402,9 @@ final class Transformer {
         if (base instanceof Local) {
             final Local local = (Local) base;
             assert tagged_contains(local);
-            base_ic.setBase(internalObjectHolder);
-            final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, jump2stmt);
+            final Local objHolder = getLocalForType(local.getType());
+            base_ic.setBase(objHolder);
+            final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, objHolder, jump2stmt);
             final int altid =
                     tpotifier_netbeans.Main.withObjoInvoke ?
                     addInsertionAlteration(jump2stmt, patch) :
@@ -511,9 +511,15 @@ final class Transformer {
         return __addAlteration(AlterationType.Appending, point, patch);
     }
 
-    private HashChain<Unit> generatePatchForProxiedObjectOperation(final Local local, final Unit opOnObj) {
+    private HashChain<Unit> generatePatchForProxiedObjectOperation (final Local local, final Local objHolder, final Unit opOnObj) {
+        //
+        //
+        final Stmt objHolderInitialisation = jimple.newAssignStmt(objHolder, NullConstant.v());
         //
         // printings
+        // ---
+        // printBeforeGetInstanceStmt       : println("before calling GetInstance for local ")
+        // printBeforeAssignmentStmt        : println("before plain assignment for local")
         final Stmt printBeforeGetInstanceStmt = jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(),
                 StringConstant.v("Before calling GetInstance for local " + local)));
         final Stmt printBeforeAssignmentStmt = jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(),
@@ -525,29 +531,35 @@ final class Transformer {
         final InstanceOfExpr    flagExpr            = jimple.newInstanceOfExpr(local, ProxyType);
         final AssignStmt        flagAssignmentStmt  = jimple.newAssignStmt(isInstanceFlagLocal, flagExpr);
         //
-        // ... else ->
-        // objectHolder = proxy.getInstance()
+        // ... else -> objectHolder = proxy.getInstance()
+        // proxyHolderAssignmentStmt        : proxyHolder = (ProxyType) local
+        final Local             objectHolder                = getLocalForType(ObjectType);
+        final Local             proxyHolder                 = getLocalForType(ProxyType);
+        final Stmt              proxyHolderAssignmentStmt   = jimple.newAssignStmt(proxyHolder, jimple.newCastExpr(local, ProxyType));
+        // (getInstExpr: proxyHolder.GetInstance())
         final
 //                VirtualInvokeExpr
                 Value
                 getInstExpr         =
                         tpotifier_netbeans.Main.withGetInstanceCall ?
-                            jimple.newVirtualInvokeExpr(local, ProxyGetInstanceMethod.makeRef()) :
+                            jimple.newVirtualInvokeExpr(proxyHolder, ProxyGetInstanceMethod.makeRef()) :
                             NullConstant.v()
                 ;
-
-        final AssignStmt        objaAsgndProxyStmt  = jimple.newAssignStmt(internalObjectHolder, getInstExpr);
+        // getInstanceResultAssignment      : objectHolder = proxyHolder.GetInstance()
+        final Stmt              getInstanceResultAssignment = jimple.newAssignStmt(objectHolder, getInstExpr);
+        // objaAsgndProxyStmt               : instHolder = (LocalType) objectHolder
+        final Stmt              objaAsgndProxyStmt  = jimple.newAssignStmt(objHolder, jimple.newCastExpr(objectHolder, objHolder.getType()));
         // goto end-of-if (opOnObj)
         final GotoStmt          gotoOpOnObj         = jimple.newGotoStmt(opOnObj);
         //
         // ... then ->
-        // objectHolder = local
+        // instHolder = local
         final
 //                AssignStmt
                 Stmt
                     objoAsgndLocalStmt  =
                     tpotifier_netbeans.Main.withObjoAssign ?
-                        jimple.newAssignStmt(internalObjectHolder, local):
+                        jimple.newAssignStmt(objHolder, local):
                         jimple.newNopStmt();
         //
         // if ...
@@ -558,9 +570,10 @@ final class Transformer {
                 );
         //
         // print $objo
-        final Stmt printObjo = jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), internalObjectHolder));
+        final Stmt printObjo = jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), objHolder));
         //
         //
+        // objHolderInitialisation  : objectHolder = null
         // flagAssignmentStmt       : larkness = (local instanceof ProxyT)
         // ifInstOfStmt             : if larkness == 0 goto objoAsgndLocalStmt
         // objaAsgndProxyStmt       : objectHolder = proxy.getInstance()
@@ -568,21 +581,31 @@ final class Transformer {
         // objoAsgndLocalStmt       : objectHolder = local
         // opOnObj                  : ... [ f(objectHolder) ]
         final HashChain<Unit> patch = new HashChain<>();
-        patch.addLast(flagAssignmentStmt);
-        patch.addLast(ifInstOfStmt);
-        patch.addLast(printBeforeGetInstanceStmt);
-        patch.addLast(objaAsgndProxyStmt);
+        patch.addLast(objHolderInitialisation);             // objectHolder = null
+                                                            // === begin if-else
+        patch.addLast(flagAssignmentStmt);                  // larkness = (local instanceof ProxyT)
+        patch.addLast(ifInstOfStmt);                        // if larkness == 0 goto printBeforeAssignmentStmt
+                                                            // === then
+        patch.addLast(printBeforeGetInstanceStmt);          // println("before calling GetInstance for local ")
+        patch.addLast(proxyHolderAssignmentStmt);           // proxyHolder = (ProxyType) local
+        patch.addLast(getInstanceResultAssignment);         // objectHolder = proxyHolder.GetInstance()
+        patch.addLast(jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), StringConstant.v("Proxy getinstance() result"))));
+        patch.addLast(jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), objectHolder)));
+//        patch.addLast(jimple.newInvokeStmt(jimple.newVirtualInvokeExpr(objectHolder, ValueType.getSootClass().getMethodByName("x").makeRef())));
+        patch.addLast(objaAsgndProxyStmt);                  // instHolder = (LocalType) objectHolder
 //        patch.addLast(gotoOpOnObj);
-        patch.addLast(jimple.newGotoStmt(printObjo));
-        patch.addLast(printBeforeAssignmentStmt);
-        patch.addLast(objoAsgndLocalStmt);
-        patch.addLast(printObjo);
+        patch.addLast(jimple.newGotoStmt(printObjo));       // goto (after-else) print instHolder
+                                                            // === else
+        patch.addLast(printBeforeAssignmentStmt);           // println("before plain assignment for local")
+        patch.addLast(objoAsgndLocalStmt);                  // instHolder = local
+                                                            // === end if-else
+        patch.addLast(printObjo);                           // println(instHolder)
 //        patch.addLast(opOnObj);
         return patch;
     }
-    private HashChain<Unit> generatePatchForProxiedObjectOperation(final Local local) {
+    private HashChain<Unit> generatePatchForProxiedObjectOperation(final Local local, final Local objHolder) {
         final Unit noop = jimple.newNopStmt();
-        final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, noop);
+        final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, objHolder, noop);
         patch.add(noop);
         return patch;
     }

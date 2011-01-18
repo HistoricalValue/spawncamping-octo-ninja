@@ -12,7 +12,8 @@ public class Sample {
         Foo f2 = (Foo) (Object) new SharedMemoryTPO(0x02, new Foo());
 //        f.x_(f2.y);
 //        f.x();
-        f2.x();
+        int tza = f2.x();
+        f2.x_(tza);
 
 //        FA.y = f.x();
 //        f.y = FA.y;

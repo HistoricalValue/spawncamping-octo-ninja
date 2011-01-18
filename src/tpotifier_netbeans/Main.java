@@ -19,8 +19,8 @@ import soot.Transform;
 public class Main {
     static boolean PerformTransformations = true;
     static boolean withGetInstanceCall = true;
+    static boolean withObjoAssign = true;
     static boolean withObjoInvoke = true;
-    static boolean withObjoAssign = false;
     //
     static private boolean WithJimpleOutput = true;
     static private boolean WithClassOutput = true;
@@ -316,7 +316,7 @@ public class Main {
             sootopts.add("sample.Sample");
 //            sootopts.add("tpotifier_netbeans.Main");
             sootopts.add("sample.util.P");
-//            sootopts.add("sample.SharedMemoryTPO");
+            sootopts.add("sample.SharedMemoryTPO");
 
             //
 //            sootopts.add("-help");
