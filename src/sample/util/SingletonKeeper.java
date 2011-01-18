@@ -71,9 +71,9 @@ public class SingletonKeeper {
             { beingInitialised = true; }
     }
     // Database of singletons
-    private Map<Class<?>, SingletonEntry> singletons = new LinkedHashMap<>(1024);
-    private List<SingletonEntry> maidQue = new LinkedList<>();
-    private Deque<SingletonEntry> raisingPile = new LinkedList<>();
+    private Map<Class<?>, SingletonEntry> singletons = new LinkedHashMap<Class<?>, SingletonEntry>(1024);
+    private List<SingletonEntry> maidQue = new LinkedList<SingletonEntry>();
+    private Deque<SingletonEntry> raisingPile = new LinkedList<SingletonEntry>();
 
     public void CleanUpAll () {
         for (final SingletonEntry sentry: maidQue)

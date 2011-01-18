@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SharedMemoryTPO {
-    private static final Map<Integer, Object> instances = new HashMap<>(1024);
+    private static final Map<Integer, Object> instances = new HashMap<Integer, Object>(1024);
 
     private final Integer key;
     public SharedMemoryTPO (int _key, final Object instIfNoInst) {

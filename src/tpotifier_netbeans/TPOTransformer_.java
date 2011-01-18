@@ -135,7 +135,7 @@ final class Transformer {
     private final SootMethod        PrintlnMethod                   = RefType.v("sample.util.P").getSootClass().getMethodByName("println");
     private final PrintStream       out                             = soot.G.v().out;
     private final Jimple            jimple                          = Jimple.v();
-    private final List<Alteration>  alterations                     = new LinkedList<>();
+    private final List<Alteration>  alterations                     = new LinkedList<Alteration>();
     private final IntConstant       IntConstantZero                 = IntConstant.v(0);
     //
     private boolean isAValueType (final Type type) {
@@ -157,7 +157,7 @@ final class Transformer {
         if (tpotifier_netbeans.Main.SootMode.equals(tpotifier_netbeans.Main._SootMode.WholeProgramWithSpark)) {
             final PAG                       points  = (PAG) Scene.v().getPointsToAnalysis();
             final Map<Local, Iterable<Node>>
-                                            aliases = new HashMap<>(locals.size());
+                                            aliases = new HashMap<Local, Iterable<Node>>(locals.size());
         //        final Iterator<?> varNodesObjectsIte = points.getVarNodeNumberer().iterator();
     //        if (varNodesObjectsIte.hasNext())
     //            for (Object varNodeObject = varNodesObjectsIte.next();
@@ -233,7 +233,7 @@ final class Transformer {
     private final Local                         internalObjectHolder;
     private final Local                         tmpMethodResultHolder;
     private final EqExpr                        isInstExpr;
-    private final Map<Type, Local>              holdersLocalsForType = new HashMap<>(20);
+    private final Map<Type, Local>              holdersLocalsForType = new HashMap<Type, Local>(20);
 
     Transformer (final JimpleBody _body) {
 //        body                = _body;
@@ -300,7 +300,7 @@ final class Transformer {
                 stmt.setLeftOp(tmpMethodResultHolder);
 
                 // Patch to be added at the end
-                lhsTaggedLocalPatching = new HashChain<>();
+                lhsTaggedLocalPatching = new HashChain<Unit>();
 
                 // Make patch:
                 // 0: flag = local instanceof ProxyT
@@ -373,7 +373,7 @@ final class Transformer {
                 final Type baseType = local.getType();
                 final boolean baseTypeIsProxyType = isAProxyType(baseType);
                 if (taggedContainsLocal && castTypeIsValueType && baseTypeIsProxyType) {
-                    final HashChain<Unit> patch = new HashChain<>();
+                    final HashChain<Unit> patch = new HashChain<Unit>();
                     lastStmt = jimple.newAssignStmt(lhs, local);
                     patch.add(lastStmt);
                     addReplacementAlteration(stmt, patch);
@@ -513,7 +513,7 @@ final class Transformer {
 
     private HashChain<Unit> generatePatchForProxiedObjectOperation (final Local local, final Local objHolder, final Unit opOnObj) {
         //
-        //
+        // objHolderInitialisation          : instHolder = null
         final Stmt objHolderInitialisation = jimple.newAssignStmt(objHolder, NullConstant.v());
         //
         // printings
@@ -580,7 +580,7 @@ final class Transformer {
         // gotoObjoInvoke           : goto opOnObj
         // objoAsgndLocalStmt       : objectHolder = local
         // opOnObj                  : ... [ f(objectHolder) ]
-        final HashChain<Unit> patch = new HashChain<>();
+        final HashChain<Unit> patch = new HashChain<Unit>();
         patch.addLast(objHolderInitialisation);             // objectHolder = null
                                                             // === begin if-else
         patch.addLast(flagAssignmentStmt);                  // larkness = (local instanceof ProxyT)

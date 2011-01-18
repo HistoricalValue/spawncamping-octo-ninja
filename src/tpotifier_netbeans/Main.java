@@ -31,7 +31,7 @@ public class Main {
         void UnDo ();
     }
     private static class Initialisation {
-        private final Deque<InitialisationAction> actions = new LinkedList<>();
+        private final Deque<InitialisationAction> actions = new LinkedList<InitialisationAction>();
         public void AddAction (final InitialisationAction action) {
             actions.push(action);
         }
@@ -283,7 +283,7 @@ public class Main {
         try {
             _addBasicClasses();
 
-            final ArrayList<String> sootopts = new ArrayList<>(30);
+            final ArrayList<String> sootopts = new ArrayList<String>(30);
             switch (SootMode) {
                 case App:
 //                    sootopts.add("-app");
@@ -307,7 +307,7 @@ public class Main {
 
 //            sootopts.add("-validate");
             sootopts.add("-output-format"); sootopts.add(outputFormat);
-//            sootopts.add("-dump-body"); sootopts.add("jtp");
+            sootopts.add("-dump-body"); sootopts.add("jtp");
 //            sootopts.add("-throw-analysis"); sootopts.add("unit");
             sootopts.add("-exclude"); sootopts.add("java");
             sootopts.add("-trim-cfgs");

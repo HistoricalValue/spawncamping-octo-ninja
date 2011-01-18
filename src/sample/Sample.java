@@ -10,16 +10,17 @@ public class Sample {
 //        Foo f0 = new Foo();//(Foo) (Object) new SharedMemoryTPO(0x01, new Foo());
 //        Foo f  = f0;
         Foo f2 = (Foo) (Object) new SharedMemoryTPO(0x02, new Foo());
+        f2.x();
 //        f.x_(f2.y);
 //        f.x();
-        int tza = f2.x();
-        f2.x_(tza);
+//        int tza = f2.x();
+//        f2.x_(tza);
 
 //        FA.y = f.x();
 //        f.y = FA.y;
 
         // cast to remain
-        Object o = new Sample();
-        Sample s = (Sample) o;
+//        Object o = new Sample();
+//        Sample s = (Sample) o;
     }
 }
