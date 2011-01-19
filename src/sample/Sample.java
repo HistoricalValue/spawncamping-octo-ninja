@@ -8,16 +8,14 @@ public class Sample {
 
     public static void main (final String[] a) {
         Foo f0 = new Foo();//(Foo) (Object) new SharedMemoryTPO(0x01, new Foo());
-        Foo f2 = (Foo) (Object) new SharedMemoryTPO(0x02, new Foo());
+        Foo f2 = (Foo) (Object) new SharedMemoryTPO(0x982379, new Foo());
 
         Foo f = f2;
         f.y = f.x_(f.y, f.x());
-        f.y = f.x_(f.y, f.x());
-        P.println(f.y);
-        f = f0;
-        f.y = f.x_(f.y, f.x());
-        f.y = f.x_(f.y, f.x());
-        P.println(f.y);
+//        P.println(f.y);
+//        f = f0;
+//        f.y = f.x_(f.y, f.x());
+//        P.println(f.y);
 
 
 //        FA.y = f.x();

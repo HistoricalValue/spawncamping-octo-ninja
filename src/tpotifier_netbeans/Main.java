@@ -17,12 +17,12 @@ import soot.Scene;
 import soot.Transform;
 
 public class Main {
-    static boolean PerformTransformations = true;
-    static boolean withGetInstanceCall = true;
-    static boolean withObjoAssign = true;
-    static boolean withObjoInvoke = true;
-    static boolean withDiagnosticPrints = false;
-    static boolean withProxySetInstance = false;
+    static boolean PerformTransformations           = true;
+    static boolean withGetInstanceCall              = true;
+    static boolean withObjoAssign                   = true;
+    static boolean withOriginalOperationPreserved   = false;
+    static boolean withDiagnosticPrints             = false;
+    static boolean withProxySetInstance             = false;
     //
     static private boolean WithJimpleOutput = true;
     static private boolean WithClassOutput = true;
