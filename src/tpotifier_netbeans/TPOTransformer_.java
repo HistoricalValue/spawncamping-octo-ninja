@@ -15,7 +15,9 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import sample.util.AssertionError;
 import soot.Body;
+import soot.IntType;
 import soot.Local;
+import soot.NullType;
 import soot.PatchingChain;
 import soot.PointsToSet;
 import soot.RefType;
@@ -30,6 +32,7 @@ import soot.Value;
 import soot.ValueBox;
 import soot.jimple.AssignStmt;
 import soot.jimple.CastExpr;
+import soot.jimple.Constant;
 import soot.jimple.EqExpr;
 import soot.jimple.Expr;
 import soot.jimple.FieldRef;
@@ -230,8 +233,6 @@ final class Transformer {
     private final Chain<Unit>                   units_nonpatching;
     private final Collection<? extends Local>   tagged;
     private final Local                         isInstanceFlagLocal;
-    private final Local                         internalObjectHolder;
-    private final Local                         tmpMethodResultHolder;
     private final EqExpr                        isInstExpr;
     private final Map<Type, Local>              holdersLocalsForType = new HashMap<Type, Local>(20);
 
@@ -243,17 +244,41 @@ final class Transformer {
         units_nonpatching   = units.getNonPatchingChain();
         tagged              = getTagged(locals, method);
         isInstanceFlagLocal = createAndAddFlagLocal(jimple, locals);
-        internalObjectHolder= createAndAddHolderLocal(jimple, locals);
-        tmpMethodResultHolder=createAndAddTmpHolderLocal(jimple, locals);
         isInstExpr          = jimple.newEqExpr(isInstanceFlagLocal, IntConstantZero);
     }
     private boolean tagged_contains (final Local local) {
         return tagged.contains(local);
     }
+    //
+    private static String getBasenameForType (final Type type) {
+        if (type instanceof RefType) {
+            final RefType reftype = (RefType) type;
+            final String typestr = reftype.getClassName();
+            final String result = "__" + typestr.substring(typestr.lastIndexOf(".") + 1);
+            return result;
+        }
+//        else if (type instanceof NullType) {
+//            final NullType nulltype = (NullType) type;
+//            return "__null";
+//        }
+//        else if (type instanceof IntType) {
+//            final IntType inttype = (IntType) type;
+//            return "__int";
+//        }
+        throw new TPOTransformationException("trying to get a tmp local for a weird type "
+                + type + " : " + type.getClass());
+    }
+    //
     private Local getLocalForType (final Type type) {
+        final String basename = getBasenameForType(type);
         if (!holdersLocalsForType.containsKey(type))
-            holdersLocalsForType.put(type, createAndAddLocal(jimple, locals, "$holdos", type));
+            holdersLocalsForType.put(type, createAndAddLocal(jimple, locals, basename, type));
         return holdersLocalsForType.get(type);
+    }
+    //
+    private Type getOriginalTypeFor (final Local local) {
+        final Type result = local.getType();
+        return result;
     }
 
 
@@ -267,8 +292,7 @@ final class Transformer {
                 tagged
                 );
 
-        units.insertBeforeNoRedirect(jimple.newAssignStmt(internalObjectHolder, NullConstant.v()), body.getFirstNonIdentityStmt());
-
+        // Perform transformations on operations on tagged locals
         final SootMethod body_method = body.getMethod();
         if (body_method.equals(MethodToAnalyse))
             for (final Unit unit: units) {
@@ -293,41 +317,55 @@ final class Transformer {
         final HashChain<Unit> lhsTaggedLocalPatching;
         final Stmt lastStmt;
         //
-        // Field-write (o.x = v)
-        if (false && lhs instanceof Local && !(rhs instanceof NewExpr)) {
+        final String stmtstr = stmt.toString();
+        // Object-ref-assign (o = v)
+        if (tpotifier_netbeans.Main.withProxySetInstance && lhs instanceof Local && !(rhs instanceof NewExpr)) {
             final Local local = (Local) lhs;
             if (tagged_contains(local)) {
-                stmt.setLeftOp(tmpMethodResultHolder);
+                final Local methResultHolderLocal = getLocalForType(getOriginalTypeFor(local));
+                stmt.setLeftOp(methResultHolderLocal);
+                //
+                final Local proxyHolderLocal = getLocalForType(ProxyType);
 
                 // Patch to be added at the end
                 lhsTaggedLocalPatching = new HashChain<Unit>();
 
+                // -1: methTmp = rhs // done by replacing lhs on the assign stmt
                 // Make patch:
                 // 0: flag = local instanceof ProxyT
-                // 1: if flag == 0 goto 4
-                // 2: local.SetInstance(methtmp)
-                // 3: goto 5
-                // 4: local = methtmp
-                // 5: noop
+                // 1: if flag == 0 goto 5
+                // 2: proxyHolder = (ProxyT) local
+                // 3: proxyHolder.SetInstance(methtmp)
+                // 4: goto 6
+                // 5: local = (LocalType) methtmp
+                // 6: noop
                 //
                 // flag = instaceof
                 lhsTaggedLocalPatching.add(jimple.newAssignStmt(isInstanceFlagLocal,
                             jimple.newInstanceOfExpr(local, ProxyType)));
-                // ... then: local.SetInstance(tmpResultHolder)
+                // ... then: proxyHolder = (ProxyType) local; proxyHolder.Set(methTmP)
+                final Stmt assignToProxyHolder = jimple.newAssignStmt(
+                        proxyHolderLocal,
+                        jimple.newCastExpr(local, ProxyType)
+                        );
                 final Stmt invokeSetting = jimple.newInvokeStmt(
                         jimple.newVirtualInvokeExpr(
-                                local,
+                                proxyHolderLocal,
                                 ProxySetInstanceMethod.makeRef(),
-                                tmpMethodResultHolder));
+                                methResultHolderLocal));
 
-                // ... else
-                final Stmt assignSetting = jimple.newAssignStmt(local, tmpMethodResultHolder);
+                // ... else: local = methTmp
+                final Stmt assignSetting = jimple.newAssignStmt(
+                        local,
+                        jimple.newCastExpr(methResultHolderLocal, getOriginalTypeFor(local))
+                        );
 
                 //
                 final Stmt afterElse = jimple.newNopStmt();
 
                 // if (instanceof)
                 lhsTaggedLocalPatching.add(jimple.newIfStmt(jimple.newEqExpr(isInstanceFlagLocal, IntConstantZero), assignSetting));
+                lhsTaggedLocalPatching.add(assignToProxyHolder);
                 lhsTaggedLocalPatching.add(invokeSetting);
                 lhsTaggedLocalPatching.add(jimple.newGotoStmt(afterElse));
                 lhsTaggedLocalPatching.add(assignSetting);
@@ -340,28 +378,31 @@ final class Transformer {
             lhsTaggedLocalPatching = null;
 
         //
-        if (false && lhs instanceof FieldRef) {
+        // Field-write (o.x = v)
+        if (lhs instanceof FieldRef) {
             assert !(lhs instanceof Local);
-            assert rhs instanceof Local;
+            assert rhs instanceof Local || rhs instanceof Constant;
+            // Object-ref-assign (o = v)  must not have happened here
+            assert lhs.equals(stmt.getLeftOp());
             produceFieldRefReplacementPatch(stmt, (FieldRef) lhs);
             lastStmt = stmt;
         }
         else
-        if (false && rhs instanceof FieldRef) {
+        if (rhs instanceof FieldRef) {
             assert lhs instanceof Local;
             produceFieldRefReplacementPatch(stmt, (FieldRef) rhs);
             lastStmt = stmt;
         }
         else
-        if (false && rhs instanceof InvokeExpr) {
+        if (rhs instanceof InvokeExpr) {
             assert lhs instanceof Local;
-            if (rhs instanceof VirtualInvokeExpr)
-                produceInvokeExprReplacementPatch(stmt, (VirtualInvokeExpr) rhs);
+            produceInvokeExprReplacementPatch(stmt, (InvokeExpr) rhs);
             lastStmt = stmt;
         }
         else if (rhs instanceof CastExpr) {
             assert lhs instanceof Local;
-            // if rhs is a local which is tagged (could point to a proxy)
+            // if rhs is a local (of ValueType) which is tagged
+            // (could point to a proxy), and the cast type is ProxyType,
             // then this cast has to be eliminated
             final CastExpr cast = (CastExpr) rhs;
             final Value base = cast.getOp();
@@ -370,11 +411,11 @@ final class Transformer {
                 final boolean taggedContainsLocal = tagged_contains(local);
                 final Type castType = cast.getCastType();
                 final boolean castTypeIsValueType = isAValueType(castType);
-                final Type baseType = local.getType();
+                final Type baseType = getOriginalTypeFor(local);
                 final boolean baseTypeIsProxyType = isAProxyType(baseType);
                 if (taggedContainsLocal && castTypeIsValueType && baseTypeIsProxyType) {
                     final HashChain<Unit> patch = new HashChain<Unit>();
-                    lastStmt = jimple.newAssignStmt(lhs, local);
+                    lastStmt = jimple.newAssignStmt(stmt.getLeftOp(), local);
                     patch.add(lastStmt);
                     addReplacementAlteration(stmt, patch);
                 }
@@ -385,14 +426,15 @@ final class Transformer {
                 throw new TPOTransformationException("base of cast expr is expected to be a Local. We got: "
                         + base + " : " + base.getClass());
         }
-        else if (rhs instanceof NewExpr || rhs instanceof Local || rhs instanceof InstanceOfExpr) {
+        else if (   rhs instanceof NewExpr          || rhs instanceof Local ||
+                    rhs instanceof InstanceOfExpr   || rhs instanceof NullConstant
+        ) {
         // it'sok
             lastStmt = stmt;
         }
         else
-//            throw new TPOTransformationException("What kind of assignment is dis!!! >8-| "
-//                    + stmt + " : " + stmt.getClass())
-                            lastStmt = null;
+            throw new TPOTransformationException("What kind of assignment is dis!!! >8-| "
+                    + stmt + " : " + stmt.getClass());
 
         if (lhsTaggedLocalPatching != null)
             addAppendingAlteration(lastStmt, lhsTaggedLocalPatching);
@@ -402,7 +444,7 @@ final class Transformer {
         if (base instanceof Local) {
             final Local local = (Local) base;
             assert tagged_contains(local);
-            final Local objHolder = getLocalForType(local.getType());
+            final Local objHolder = getLocalForType(getOriginalTypeFor(local));
             base_ic.setBase(objHolder);
             final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, objHolder, jump2stmt);
             final int altid =
@@ -427,7 +469,7 @@ final class Transformer {
             throw new TPOTransformationException("What kind of Field Ref is dis!!: "
                     + fr + " : " + fr.getClass());
     }
-    private void produceInvokeExprReplacementPatch (final Stmt jump2stmt, final InvokeExpr invokeExpr) {
+     private void produceInvokeExprReplacementPatch (final Stmt jump2stmt, final InvokeExpr invokeExpr) {
 //        assert jump2stmt.getUseBoxes().contains(jimple.newInvokeExprBox(invokeExpr));
         if (invokeExpr instanceof InstanceInvokeExpr) {
             if (invokeExpr instanceof VirtualInvokeExpr)
@@ -513,17 +555,20 @@ final class Transformer {
 
     private HashChain<Unit> generatePatchForProxiedObjectOperation (final Local local, final Local objHolder, final Unit opOnObj) {
         //
-        // objHolderInitialisation          : instHolder = null
-        final Stmt objHolderInitialisation = jimple.newAssignStmt(objHolder, NullConstant.v());
-        //
         // printings
         // ---
         // printBeforeGetInstanceStmt       : println("before calling GetInstance for local ")
         // printBeforeAssignmentStmt        : println("before plain assignment for local")
-        final Stmt printBeforeGetInstanceStmt = jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(),
-                StringConstant.v("Before calling GetInstance for local " + local)));
-        final Stmt printBeforeAssignmentStmt = jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(),
-                StringConstant.v("Befoer plain assignment for local " + local)));
+        final Stmt printBeforeGetInstanceStmt =
+                tpotifier_netbeans.Main.withDiagnosticPrints ?
+                    jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(),
+                        StringConstant.v("Before calling GetInstance for local " + local))):
+                    jimple.newNopStmt();
+        final Stmt printBeforeAssignmentStmt =
+                tpotifier_netbeans.Main.withDiagnosticPrints ?
+                    jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(),
+                        StringConstant.v("Befoer plain assignment for local " + local))):
+                    jimple.newNopStmt();
         final Stmt gotoPrintBeforeGetInstanceStmt = jimple.newGotoStmt(printBeforeGetInstanceStmt);
         final Stmt gotoPrintBeforeAssignmentStmt = jimple.newGotoStmt(printBeforeAssignmentStmt);
         //
@@ -548,7 +593,7 @@ final class Transformer {
         // getInstanceResultAssignment      : objectHolder = proxyHolder.GetInstance()
         final Stmt              getInstanceResultAssignment = jimple.newAssignStmt(objectHolder, getInstExpr);
         // objaAsgndProxyStmt               : instHolder = (LocalType) objectHolder
-        final Stmt              objaAsgndProxyStmt  = jimple.newAssignStmt(objHolder, jimple.newCastExpr(objectHolder, objHolder.getType()));
+        final Stmt              objaAsgndProxyStmt  = jimple.newAssignStmt(objHolder, jimple.newCastExpr(objectHolder, getOriginalTypeFor(objHolder)));
         // goto end-of-if (opOnObj)
         final GotoStmt          gotoOpOnObj         = jimple.newGotoStmt(opOnObj);
         //
@@ -559,7 +604,7 @@ final class Transformer {
                 Stmt
                     objoAsgndLocalStmt  =
                     tpotifier_netbeans.Main.withObjoAssign ?
-                        jimple.newAssignStmt(objHolder, local):
+                        jimple.newAssignStmt(objHolder, jimple.newCastExpr(local, getOriginalTypeFor(objHolder))):
                         jimple.newNopStmt();
         //
         // if ...
@@ -570,10 +615,12 @@ final class Transformer {
                 );
         //
         // print $objo
-        final Stmt printObjo = jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), objHolder));
+        final Stmt printObjo =
+                tpotifier_netbeans.Main.withDiagnosticPrints ?
+                    jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), objHolder)):
+                    jimple.newNopStmt();
         //
         //
-        // objHolderInitialisation  : objectHolder = null
         // flagAssignmentStmt       : larkness = (local instanceof ProxyT)
         // ifInstOfStmt             : if larkness == 0 goto objoAsgndLocalStmt
         // objaAsgndProxyStmt       : objectHolder = proxy.getInstance()
@@ -581,7 +628,6 @@ final class Transformer {
         // objoAsgndLocalStmt       : objectHolder = local
         // opOnObj                  : ... [ f(objectHolder) ]
         final HashChain<Unit> patch = new HashChain<Unit>();
-        patch.addLast(objHolderInitialisation);             // objectHolder = null
                                                             // === begin if-else
         patch.addLast(flagAssignmentStmt);                  // larkness = (local instanceof ProxyT)
         patch.addLast(ifInstOfStmt);                        // if larkness == 0 goto printBeforeAssignmentStmt
@@ -589,8 +635,10 @@ final class Transformer {
         patch.addLast(printBeforeGetInstanceStmt);          // println("before calling GetInstance for local ")
         patch.addLast(proxyHolderAssignmentStmt);           // proxyHolder = (ProxyType) local
         patch.addLast(getInstanceResultAssignment);         // objectHolder = proxyHolder.GetInstance()
-        patch.addLast(jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), StringConstant.v("Proxy getinstance() result"))));
-        patch.addLast(jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), objectHolder)));
+        if (tpotifier_netbeans.Main.withDiagnosticPrints) {
+            patch.addLast(jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), StringConstant.v("Proxy getinstance() result"))));
+            patch.addLast(jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethod.makeRef(), objectHolder)));
+        }
 //        patch.addLast(jimple.newInvokeStmt(jimple.newVirtualInvokeExpr(objectHolder, ValueType.getSootClass().getMethodByName("x").makeRef())));
         patch.addLast(objaAsgndProxyStmt);                  // instHolder = (LocalType) objectHolder
 //        patch.addLast(gotoOpOnObj);

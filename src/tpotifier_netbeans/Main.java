@@ -21,6 +21,8 @@ public class Main {
     static boolean withGetInstanceCall = true;
     static boolean withObjoAssign = true;
     static boolean withObjoInvoke = true;
+    static boolean withDiagnosticPrints = false;
+    static boolean withProxySetInstance = false;
     //
     static private boolean WithJimpleOutput = true;
     static private boolean WithClassOutput = true;
@@ -305,6 +307,7 @@ public class Main {
                     break;
             }
 
+//            sootopts.add("-help");
 //            sootopts.add("-validate");
             sootopts.add("-output-format"); sootopts.add(outputFormat);
             sootopts.add("-dump-body"); sootopts.add("jtp");
