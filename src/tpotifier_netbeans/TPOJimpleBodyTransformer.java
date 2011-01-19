@@ -21,8 +21,11 @@ public class TPOJimpleBodyTransformer extends soot.BodyTransformer {
         final boolean enabledIsTrue = ((String) enabledValue).equals("true");
         final boolean phaseNameIsCorrect = phaseName.equals(PhaseName);
         final boolean bodyIsJimple = b instanceof soot.jimple.JimpleBody;
-        if (contains_enabled && enabledIsTrue && phaseNameIsCorrect && bodyIsJimple)
-            new Transformer((JimpleBody)b).transform((JimpleBody) b);
+        if (contains_enabled && enabledIsTrue && phaseNameIsCorrect && bodyIsJimple) {
+            final Transformer trans = new Transformer((JimpleBody)b);
+            applyOptions(trans);
+            trans.transform((JimpleBody) b);
+        }
         else
             logfine("Transformation not applied to {0} because one of the "
                     + "following did not hold: contains_enabled={1}, enabled"
@@ -33,5 +36,21 @@ public class TPOJimpleBodyTransformer extends soot.BodyTransformer {
     private static final Logger LOG = Logger.getLogger(TPOJimpleBodyTransformer.class.getName());
     private static void logfine (final String msg, Object... args) {
         LOG.log(Level.FINE, msg, args);
+    }
+
+    private void applyOptions (final Transformer trans) {
+        for (final String[] optPair: Main.TransformerOptions) {
+            final String key    = optPair[0];
+            final String value  = optPair[1];
+
+            if (key.equals("exclude-class"))
+                trans.addClassNotToTransform(value);
+            else
+            if (key.equals("exclude-method"))
+                trans.addMethodNotToTransform(value);
+            else
+                throw new TPOTransformationException("Unknow option value: "
+                        + key);
+        }
     }
 }

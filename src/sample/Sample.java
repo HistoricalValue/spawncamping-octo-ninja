@@ -4,7 +4,7 @@ import sample.util.P;
 
 public class Sample {
 
-//    private static final Foo FA = (Foo) (Object) new SharedMemoryTPO(0x03, new Foo());
+    private static final Foo FA = (Foo) (Object) new SharedMemoryTPO(0x03, new Foo());
 
     public static void main (final String[] a) {
         Foo f0 = new Foo();//(Foo) (Object) new SharedMemoryTPO(0x01, new Foo());

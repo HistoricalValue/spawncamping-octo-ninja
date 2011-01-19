@@ -288,7 +288,7 @@ public class Main {
             final ArrayList<String> sootopts = new ArrayList<String>(30);
             switch (SootMode) {
                 case App:
-//                    sootopts.add("-app");
+                    sootopts.add("-app");
                     break;
                 case WholeProgramWithSpark:
                     sootopts.add("-whole-program");
@@ -318,8 +318,8 @@ public class Main {
             sootopts.add("sample.Sample");
             sootopts.add("sample.Sample");
 //            sootopts.add("tpotifier_netbeans.Main");
-            sootopts.add("sample.util.P");
-            sootopts.add("sample.SharedMemoryTPO");
+//            sootopts.add("sample.util.P");
+//            sootopts.add("sample.SharedMemoryTPO");
 
             //
 //            sootopts.add("-help");
@@ -338,4 +338,10 @@ public class Main {
 
     private Main () {
     }
+
+    // custom options for out transformer
+    final static String[][] TransformerOptions = new String[][] {
+        new String[] {"exclude-class", "sample.Foo"},
+        new String[] {"exclude-class", "sample.SharedMemoryTPO"}
+    };
 }

@@ -3,9 +3,11 @@ package tpotifier_netbeans;
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sample.util.AssertionError;
@@ -19,6 +21,7 @@ import soot.SootMethodRef;
 import soot.Type;
 import soot.Unit;
 import soot.Value;
+import soot.jimple.AddExpr;
 import soot.jimple.AssignStmt;
 import soot.jimple.CastExpr;
 import soot.jimple.Constant;
@@ -34,6 +37,7 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.InvokeStmt;
 import soot.jimple.Jimple;
 import soot.jimple.JimpleBody;
+import soot.jimple.NewArrayExpr;
 import soot.jimple.NewExpr;
 import soot.jimple.NullConstant;
 import soot.jimple.StaticFieldRef;
@@ -163,10 +167,11 @@ final class Transformer {
     private final SootMethodRef     ProxySetInstanceMethodRef       = ProxySetInstanceMethod.makeRef();
     private final SootMethodRef     PrintlnMethodRef                = PrintlnMethod.makeRef();
     //
-    private final SootMethod        MethodToAnalyse                 = scene.getSootClass("sample.Sample").getMethodByName("main");
-    //
     private final List<Alteration>  alterations                     = new LinkedList<Alteration>();
     private final IntConstant       IntConstantZero                 = IntConstant.v(0);
+    //
+    private final Set<SootClass>    classesNotToTransform           = new HashSet<SootClass>(1024);
+    private final Set<SootMethod>   methodsNotToTransform           = new HashSet<SootMethod>(1024);
 
 
 
@@ -188,8 +193,39 @@ final class Transformer {
 
 
 
+    void addClassNotToTransform (final String klassname) {
+        final SootClass klass = scene.getSootClass(klassname);
+        if (klass == null)
+            throw new TPOTransformationException("Could not find class with name "
+                    + klassname);
+        if (classesNotToTransform.contains(klass))
+            throw new TPOTransformationException("Class " + klass
+                    + " already specified not to be transformed");
+        classesNotToTransform.add(klass);
+    }
+
+    void addMethodNotToTransform (final String methstr) {
+        final SootMethod meth = scene.getMethod(methstr);
+        if (meth == null)
+            throw new TPOTransformationException("Could not find method with signature "
+                    + methstr);
+        if (methodsNotToTransform.contains(meth))
+            throw new TPOTransformationException("Method " + method
+                    + " already specified not to be transformed");
+        methodsNotToTransform.add(meth);
+    }
+
     private boolean methodShouldBeTransformed (final SootMethod method) {
-        final boolean result = MethodToAnalyse.equals(method);
+        final SootClass klass               = method.getDeclaringClass();
+        final boolean   classNotToBeTransed = classesNotToTransform.contains(klass);
+        final boolean   classNotInScene     = !klass.isInScene();
+        final boolean   methodNotToBeTransed= methodsNotToTransform.contains(method);
+        final boolean   mustNotTransformed    = false
+                || classNotToBeTransed
+                || classNotInScene
+                || methodNotToBeTransed
+                ;
+        final boolean   result              = !mustNotTransformed;
         return result;
     }
 
@@ -475,15 +511,18 @@ final class Transformer {
                 throw new TPOTransformationException("base of cast expr is expected to be a Local. We got: "
                         + base + " : " + base.getClass());
         }
-        else if (   rhs instanceof NewExpr          || rhs instanceof Local ||
-                    rhs instanceof InstanceOfExpr   || rhs instanceof NullConstant
+        else if (   rhs instanceof NewExpr          || rhs instanceof Local         ||
+                    rhs instanceof InstanceOfExpr   || rhs instanceof NullConstant  ||
+                    rhs instanceof NewArrayExpr     || rhs instanceof AddExpr
         ) {
         // it'sok
             lastStmt = stmt;
         }
         else
             throw new TPOTransformationException("What kind of assignment is dis!!! >8-| "
-                    + stmt + " : " + stmt.getClass());
+                    + stmt + " : " + stmt.getClass()
+                    + " left: " + stmt.getLeftOp().getClass()
+                    + "right: " + stmt.getRightOp().getClass());
 
         if (lhsTaggedLocalPatching != null)
             addAppendingAlteration(lastStmt, lhsTaggedLocalPatching);
