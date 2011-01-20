@@ -296,6 +296,7 @@ public class Main {
                     sootopts.add(   ""
                                     + "enabled:true"
                                     + ",simple-edges-bidirectional:false"
+                                    + "ignore-types:true"
                                     + ",on-fly-cg:true"
                                     + ",propagator:worklist"
                                     + ",set-impl:double"
