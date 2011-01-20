@@ -1,12 +1,15 @@
 package tpotifier_netbeans;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +19,7 @@ import soot.PatchingChain;
 import soot.RefType;
 import soot.Scene;
 import soot.SootClass;
+import soot.SootField;
 import soot.SootMethod;
 import soot.SootMethodRef;
 import soot.Type;
@@ -45,6 +49,7 @@ import soot.jimple.StaticInvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.StringConstant;
 import soot.jimple.VirtualInvokeExpr;
+import soot.jimple.spark.pag.LocalVarNode;
 import soot.jimple.spark.pag.Node;
 import soot.jimple.spark.pag.PAG;
 import soot.util.Chain;
@@ -153,10 +158,10 @@ final class Transformer {
     private static final RefType    ProxyType                       = RefType.v("sample.SharedMemoryTPO");
     private static final RefType    ValueType                       = RefType.v("sample.Foo");
     private static final RefType    ObjectType                      = RefType.v("java.lang.Object");
+    private static final PrintStream    out                         = soot.G.v().out;
     //
     private final Scene             scene                           = Scene.v();
     private final Jimple            jimple                          = Jimple.v();
-    private final PrintStream       out                             = soot.G.v().out;
     //
     private final SootClass         ProxyClass                      = scene.getSootClass("sample.SharedMemoryTPO");
     //
@@ -172,6 +177,7 @@ final class Transformer {
     //
     private final Set<SootClass>    classesNotToTransform           = new HashSet<SootClass>(1024);
     private final Set<SootMethod>   methodsNotToTransform           = new HashSet<SootMethod>(1024);
+    private boolean                 doNotProcessStaticInits         = false;
 
 
 
@@ -187,11 +193,17 @@ final class Transformer {
 
 
 
-    private boolean isAnyTaggable (final Iterable<Node> node) {
-        return true; // TODO do
+    void setDoNotProcessStaticInitMethods (final boolean doNotProcess) {
+        doNotProcessStaticInits = doNotProcess;
     }
 
+    void setDoNotProcessStaticInitMethods () {
+        setDoNotProcessStaticInitMethods(true);
+    }
 
+    boolean doesNotProcessStaticInitMethods () {
+        return doNotProcessStaticInits;
+    }
 
     void addClassNotToTransform (final String klassname) {
         final SootClass klass = scene.getSootClass(klassname);
@@ -220,10 +232,13 @@ final class Transformer {
         final boolean   classNotToBeTransed = classesNotToTransform.contains(klass);
         final boolean   classNotInScene     = !klass.isInScene();
         final boolean   methodNotToBeTransed= methodsNotToTransform.contains(method);
-        final boolean   mustNotTransformed    = false
+        final boolean   methodIsStaticInit  = method.getName().equals("<clinit>");
+        final boolean   doNotProcessStcInit = doesNotProcessStaticInitMethods();
+        final boolean   mustNotTransformed  = false
                 || classNotToBeTransed
                 || classNotInScene
                 || methodNotToBeTransed
+                || methodIsStaticInit && doNotProcessStcInit
                 ;
         final boolean   result              = !mustNotTransformed;
         return result;
@@ -231,49 +246,77 @@ final class Transformer {
 
 
 
+    private static boolean isAnyTaggable (final Iterable<Node> node) {
+        return true; // TODO do
+    }
+
+
+    
     private static Collection<? extends Local> getTagged (  final Chain<Local>  locals,
                                                             final SootMethod    method)
     {
+         Collection<Local> result;
+         
         if (tpotifier_netbeans.Main.SootMode.equals(tpotifier_netbeans.Main._SootMode.WholeProgramWithSpark)) {
             final PAG                       points  = (PAG) Scene.v().getPointsToAnalysis();
-            final Map<Local, Iterable<Node>>
-                                            aliases = new HashMap<Local, Iterable<Node>>(locals.size());
-        //        final Iterator<?> varNodesObjectsIte = points.getVarNodeNumberer().iterator();
-    //        if (varNodesObjectsIte.hasNext())
-    //            for (Object varNodeObject = varNodesObjectsIte.next();
-    //                 varNodesObjectsIte.hasNext();
-    //                 varNodeObject = varNodesObjectsIte.next()
-    //             ) {
-    //                if (varNodeObject instanceof LocalVarNode) {
-    //                    final LocalVarNode localVarNode = (LocalVarNode) varNodeObject;
-    //                    final SootMethod nodeMethod = localVarNode.getMethod();
-    //                    if (method.equals(nodeMethod)) {
-    //                        final Object varObject = localVarNode.getVariable();
-    //                        out.println(varObject);
-    //                    }
-    //                }
-    //            }
+            final Map<Local, Iterable<Node[]>>
+                                            aliases = new HashMap<Local, Iterable<Node[]>>(locals.size());
+            
+            for (final Local local: locals) {
+                final LocalVarNode localVarNode = points.findLocalVarNode(local);
+                if (localVarNode == null)
+                    LOG.log(Level.WARNING, "Local {0} does not have a LocalVarNode from the points-to analysis", local);
+                final Node[] allocnodes = points.allocInvLookup(localVarNode);
+                final Node[] loadnodes  = points.loadInvLookup(localVarNode);
+                final Node[] simplenodes= points.simpleInvLookup(localVarNode);
+                final List<Node[]> subrs= new ArrayList<Node[]>(3);
+                subrs.add(allocnodes); subrs.add(loadnodes); subrs.add(simplenodes);
+                aliases.put(local, subrs);
+            }
+    
+            final Set<Local> tagged = new HashSet<Local>(20);
+            for (final Entry<Local, Iterable<Node[]>> entry: aliases.entrySet()) {
+                final StringBuilder aliases_str_b = new StringBuilder(1024);
+                {
+                    final Iterator<Node[]> nodes_ite = entry.getValue().iterator();
+                    Node[] nodes;
+                    {
+                        assert nodes_ite.hasNext();
+                        nodes = nodes_ite.next();
+                        aliases_str_b.append("AllocInv=");
+                        aliases_str_b.append(java.util.Arrays.toString(nodes));
+                    }
+                    {
+                        assert nodes_ite.hasNext();
+                        nodes = nodes_ite.next();
+                        aliases_str_b.append("LoadInv=");
+                        aliases_str_b.append(java.util.Arrays.toString(nodes));
+                    }
+                    {
+                        assert nodes_ite.hasNext();
+                        nodes = nodes_ite.next();
+                        aliases_str_b.append("SimpleInv=");
+                        aliases_str_b.append(java.util.Arrays.toString(nodes));
+                    }
+                }
+                
+                final String aliases_str = aliases_str_b.toString();
+                out.printf("%s: %s%n", entry.getKey(), aliases_str);
+//                if (isAnyTaggable(entry.getValue()))
+//                    tagged.add(entry.getKey());
+            }
 
-    //        for (final Local local: locals) {
-    //            final PointsToSet subshit = points.reachingObjects(local);
-    //
-    //            final LocalVarNode localVarNode = points.findLocalVarNode(local);
-    //            final Node[] nodes = points.allocInvLookup(localVarNode);
-    //            final List<Node> subresult = java.util.Arrays.asList(nodes);
-    //            aliases.put(local, subresult);
-    //        }
-    //
-    //        final Set<Local> tagged = new HashSet<>(20);
-    //        for (final Entry<Local, Iterable<Node>> entry: aliases.entrySet()) {
-    //            out.printf("%s: %s%n", entry.getKey(), entry.getValue());
-    //            if (isAnyTaggable(entry.getValue()))
-    //                tagged.add(entry.getKey());
-    //        }
-
-            return java.util.Collections.unmodifiableCollection(locals);
+            result = java.util.Collections.unmodifiableCollection(locals);
         }
         else
-            return java.util.Collections.unmodifiableCollection(locals);
+            result = java.util.Collections.unmodifiableCollection(locals);
+
+         // overwrite all
+         result = new HashSet<Local>(locals.size());
+         for (final Local local: locals)
+             if (local.getType() instanceof RefType)
+                 result.add(local);
+         return result;
     }
 
 
@@ -310,10 +353,12 @@ final class Transformer {
     private final Chain<Local>                  locals;
     private final PatchingChain<Unit>           units;
     private final Chain<Unit>                   units_nonpatching;
-    private final Collection<? extends Local>   tagged;
+    private final Collection<? extends Local>   taggedLocals;
     private final Local                         isInstanceFlagLocal;
     private final EqExpr                        isInstExpr;
-    private final Map<Type, Local>              holdersLocalsForType = new HashMap<Type, Local>(20);
+    private final Map<Type, Local>              holdersLocalsForType = new HashMap<Type, Local>(50);
+    private final Map<Local, Type>              originalTypes = new HashMap<Local, Type>(50);
+    private final Map<SootField, Type>          originalStaticFieldsTypes = new HashMap<SootField, Type>(50);
 
 
 
@@ -322,13 +367,13 @@ final class Transformer {
         locals              = _body.getLocals();
         units               = _body.getUnits();
         units_nonpatching   = units.getNonPatchingChain();
-        tagged              = getTagged(locals, method);
+        taggedLocals        = getTagged(locals, method);
         isInstanceFlagLocal = createAndAddFlagLocal(jimple, locals);
         isInstExpr          = jimple.newEqExpr(isInstanceFlagLocal, IntConstantZero);
     }
 
     private boolean tagged_contains (final Local local) {
-        return tagged.contains(local);
+        return taggedLocals.contains(local);
     }
 
     private static String getBasenameForType (final Type type) {
@@ -350,26 +395,50 @@ final class Transformer {
     }
 
     private Type getOriginalTypeFor (final Local local) {
-        final Type result = local.getType();
+        Type result;
+        if (originalTypes.containsKey(local)) {
+            assert tagged_contains(local);
+            result = originalTypes.get(local);
+        }
+        else
+            result = local.getType();
         return result;
+    }
+
+    private void objectifyTaggedLocal (final Local tagged) {
+        final Type type = tagged.getType();
+        if (type instanceof RefType) {
+            assert tagged_contains(tagged);
+            assert !originalTypes.containsKey(tagged);
+            originalTypes.put(tagged, tagged.getType());
+            tagged.setType(ObjectType);
+        }
+        else
+            throw new TPOTransformationException("Tagged of non-ref type passed as tagged for type change: "
+                    + tagged + " : " + tagged.getClass() + " // type: "
+                    + type + " : " + type.getClass());
     }
 
 
 
     void transform ( final JimpleBody body) {
-        //
-        out.printf( "[%s]%n"
-                +   "locals = %s%n"
-                +   "tagged = %s%n",
-                method,
-                locals,
-                tagged
-                );
-
-        // Perform transformations on operations on tagged locals
         if (Main.PerformTransformations) {
             final SootMethod body_method = body.getMethod();
-            if (methodShouldBeTransformed(body_method))
+            if (methodShouldBeTransformed(body_method)) {
+                //
+                out.printf( "[%s]%n"
+                        +   "locals = %s%n"
+                        +   "tagged = %s%n",
+                        method,
+                        locals,
+                        taggedLocals
+                        );
+
+                // Change the type of all tagged vars to Object
+                for (final Local taggedLocal: taggedLocals)
+                    objectifyTaggedLocal(taggedLocal);
+
+                // Perform transformations on operations on tagged locals
                 for (final Unit unit: units)
                     if (unit instanceof InvokeStmt)
                         produceInvokeStmtPatch((InvokeStmt) unit);
@@ -377,11 +446,15 @@ final class Transformer {
                         if (unit instanceof AssignStmt)
                             produceAssignStmtPatch((AssignStmt) unit);
                         else;
+
+                applyAlterations();
+            }
             else
                 LOG.log(Level.FINE, "Ignoring method {0}", body_method);
         }
-
-        applyAlterations();
+        else
+            LOG.log(Level.FINE, "Not performing any transformations (not even for method {0})",
+                    method);
     }
 
 
@@ -392,6 +465,9 @@ final class Transformer {
         //
         final HashChain<Unit> lhsTaggedLocalPatching;
         final Stmt lastStmt;
+        //
+        boolean lhsIdentified;
+        //
         // Object-ref-assign (o = v)
         if (tpotifier_netbeans.Main.withProxySetInstance && lhs instanceof Local && !(rhs instanceof NewExpr)) {
             final Local local = (Local) lhs;
@@ -454,9 +530,12 @@ final class Transformer {
             }
             else
                 lhsTaggedLocalPatching = null;
+            lhsIdentified = true;
         }
-        else
+        else {
             lhsTaggedLocalPatching = null;
+            lhsIdentified = false;
+        }
 
         //
         // Field-write (o.x = v)
@@ -467,6 +546,7 @@ final class Transformer {
             assert lhs.equals(stmt.getLeftOp());
             produceFieldRefReplacementPatch(stmt, (FieldRef) lhs);
             lastStmt = stmt;
+            lhsIdentified = true;
         }
         else
         // Field-read (... o.x ...)
@@ -474,6 +554,7 @@ final class Transformer {
             assert lhs instanceof Local;
             produceFieldRefReplacementPatch(stmt, (FieldRef) rhs);
             lastStmt = stmt;
+            lhsIdentified = false;
         }
         else
         // Field-invoke (... o.m(...) ...)
@@ -481,6 +562,7 @@ final class Transformer {
             assert lhs instanceof Local;
             produceInvokeExprReplacementPatch(stmt, (InvokeExpr) rhs);
             lastStmt = stmt;
+            lhsIdentified = false;
         }
         else
         // Suspicious cast ( ... (ProxyType) ValueTypeObj ... )
@@ -510,6 +592,8 @@ final class Transformer {
             else
                 throw new TPOTransformationException("base of cast expr is expected to be a Local. We got: "
                         + base + " : " + base.getClass());
+
+            lhsIdentified = false;
         }
         else if (   rhs instanceof NewExpr          || rhs instanceof Local         ||
                     rhs instanceof InstanceOfExpr   || rhs instanceof NullConstant  ||
@@ -517,12 +601,20 @@ final class Transformer {
         ) {
         // it'sok
             lastStmt = stmt;
+            lhsIdentified = false;
         }
         else
             throw new TPOTransformationException("What kind of assignment is dis!!! >8-| "
                     + stmt + " : " + stmt.getClass()
                     + " left: " + stmt.getLeftOp().getClass()
                     + "right: " + stmt.getRightOp().getClass());
+
+        if (!lhsIdentified)
+            if (lhs instanceof Local)
+                {} // itsok
+            else
+                throw new TPOTransformationException("What kind of LHS IS DIS!!! "
+                        + lhs + " : " + lhs.getClass());
 
         if (lhsTaggedLocalPatching != null)
             addAppendingAlteration(lastStmt, lhsTaggedLocalPatching);

@@ -17,16 +17,16 @@ import soot.Scene;
 import soot.Transform;
 
 public class Main {
-    static boolean PerformTransformations           = true;
-    static boolean withGetInstanceCall              = true;
-    static boolean withObjoAssign                   = true;
-    static boolean withOriginalOperationPreserved   = false;
+    static boolean PerformTransformations           = !false;
+    static boolean withGetInstanceCall              = !false;
+    static boolean withObjoAssign                   = !false;
+    static boolean withOriginalOperationPreserved   = !false;
     static boolean withDiagnosticPrints             = false;
     static boolean withProxySetInstance             = false;
     //
-    static private boolean WithJimpleOutput = true;
-    static private boolean WithClassOutput = true;
-    static private boolean WithDavaOutput = false;
+    static private boolean WithJimpleOutput         = !false;
+    static private boolean WithClassOutput          = !false;
+    static private boolean WithDavaOutput           = false;
     //
     private interface InitialisationAction {
         void Do ();
@@ -61,9 +61,9 @@ public class Main {
             // Loggers first
             LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(("\n"
                     + "java.util.logging.ConsoleHandler.level: ALL\n"
-                    + "tpotifier_netbeans.level: ALL\n"
+                    + "tpotifier_netbeans.level: WARNING\n"
                     + "tpotifier_netbeans.handlers: java.util.logging.ConsoleHandler\n"
-                    + "sample.level: ALL\n"
+                    + "sample.level: WARNING\n"
                     + "sample.hanlders: java.util.logging.ConsoleHandler\n"
                     + "sample.util.handlers: java.util.logging.ConsoleHandler\n"
             ).getBytes("iso8859-1")));
@@ -301,18 +301,17 @@ public class Main {
                                     + ",set-impl:double"
                                     + ",double-set-old:hybrid"
                                     + ",double-set-new:hybrid"
-                                    + ",lazy-pts:false"
+                                    + ",lazy-pts:true"
 //                                    + ",dump-html:true"
                                     );
                     break;
             }
 
-//            sootopts.add("-help");
-//            sootopts.add("-validate");
             sootopts.add("-output-format"); sootopts.add(outputFormat);
             sootopts.add("-dump-body"); sootopts.add("jtp");
 //            sootopts.add("-throw-analysis"); sootopts.add("unit");
             sootopts.add("-exclude"); sootopts.add("java");
+            sootopts.add("-exclude"); sootopts.add("sample.util");
             sootopts.add("-trim-cfgs");
             sootopts.add("-main-class");
             sootopts.add("sample.Sample");
@@ -329,6 +328,14 @@ public class Main {
             final String[] sootArgs = new String[sootopts.size()];
             sootopts.toArray(sootArgs);
             soot.Main.main(sootArgs);
+
+//            if (SootMode.equals(_SootMode.WholeProgramWithSpark))
+//                try {
+//                    new PagToDotDumper((PAG)Scene.v().getPointsToAnalysis()).dumpPAGForMethod("sootOutput/pag.dot", "sample.Sample", "main");
+//                    G.v().out.append("PAG dot written");
+//                } catch (FileNotFoundException ex) {
+//                    LOG.log(Level.SEVERE, null, ex);
+//                }
         }
         finally {
             cleanup();

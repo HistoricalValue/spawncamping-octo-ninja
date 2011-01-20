@@ -51,6 +51,8 @@ public class TPOJimpleBodyTransformer extends soot.BodyTransformer {
             else
                 throw new TPOTransformationException("Unknow option value: "
                         + key);
+
+            trans.setDoNotProcessStaticInitMethods();
         }
     }
 }
