@@ -22,6 +22,11 @@ public class SingletonKeeper {
     }
     public interface CleanUpper {
         void CleanUp (Object inst);
+        CleanUpper lazy =   new CleanUpper() {
+                                @Override
+                                public void CleanUp (final Object o) {
+                                }
+                            };
     }
 
     private class SingletonEntry {

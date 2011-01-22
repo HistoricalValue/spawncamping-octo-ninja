@@ -6,14 +6,20 @@ import java.util.logging.Logger;
 import soot.Body;
 import soot.jimple.JimpleBody;
 
-public class TPOJimpleBodyTransformer extends soot.BodyTransformer {
+class TPOJimpleBodyTransformer extends soot.BodyTransformer {
 
     public static final String PhaseName = "jtp.replaceTPOs";
     public static final String ProxyGetInstanceMethodName = "GetInstance";
     public static final String ProxySetInstanceMethodName = "SetInstance";
     
     private static final long serialVersionUID = 237;
-    
+
+    private final TPOJimpleBodyTransformerOptions options;
+    //
+    TPOJimpleBodyTransformer (final TPOJimpleBodyTransformerOptions _options) {
+        options = _options;
+    }
+
     @Override
     protected void internalTransform (final Body b, final String phaseName, final Map options) {
         final boolean contains_enabled = options.containsKey("enabled");
@@ -39,14 +45,14 @@ public class TPOJimpleBodyTransformer extends soot.BodyTransformer {
     }
 
     private void applyOptions (final Transformer trans) {
-        for (final String[] optPair: Main.TransformerOptions) {
+        for (final String[] optPair: options.options) {
             final String key    = optPair[0];
             final String value  = optPair[1];
 
-            if (key.equals("exclude-class"))
+            if (key.equals(TPOJimpleBodyTransformerOptions.EXCLUDE_CLASS))
                 trans.addClassNotToTransform(value);
             else
-            if (key.equals("exclude-method"))
+            if (key.equals(TPOJimpleBodyTransformerOptions.EXCLUDE_METHOD))
                 trans.addMethodNotToTransform(value);
             else
                 throw new TPOTransformationException("Unknow option value: "

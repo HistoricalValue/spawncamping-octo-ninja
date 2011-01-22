@@ -257,7 +257,7 @@ final class Transformer {
     {
          Collection<Local> result;
          
-        if (tpotifier_netbeans.Main.SootMode.equals(tpotifier_netbeans.Main._SootMode.WholeProgramWithSpark)) {
+        if (tpotifier_netbeans.SootSetuper.SootMode.equals(tpotifier_netbeans._SootMode.WholeProgramWithSpark)) {
             final PAG                       points  = (PAG) Scene.v().getPointsToAnalysis();
             final Map<Local, Iterable<Node[]>>
                                             aliases = new HashMap<Local, Iterable<Node[]>>(locals.size());
@@ -422,7 +422,7 @@ final class Transformer {
 
 
     void transform ( final JimpleBody body) {
-        if (Main.PerformTransformations) {
+        if (SootSetuper.PerformTransformations) {
             final SootMethod body_method = body.getMethod();
             if (methodShouldBeTransformed(body_method)) {
                 //
@@ -469,7 +469,7 @@ final class Transformer {
         boolean lhsIdentified;
         //
         // Object-ref-assign (o = v)
-        if (tpotifier_netbeans.Main.withProxySetInstance && lhs instanceof Local && !(rhs instanceof NewExpr)) {
+        if (tpotifier_netbeans.SootSetuper.withProxySetInstance && lhs instanceof Local && !(rhs instanceof NewExpr)) {
             final Local local = (Local) lhs;
             if (tagged_contains(local)) {
                 final Local methResultHolderLocal = getLocalForType(getOriginalTypeFor(local));
@@ -629,7 +629,7 @@ final class Transformer {
             base_ic.setBase(objHolder);
             final HashChain<Unit> patch = generatePatchForProxiedObjectOperation(local, objHolder, jump2stmt);
             final int altid =
-                    tpotifier_netbeans.Main.withOriginalOperationPreserved ?
+                    tpotifier_netbeans.SootSetuper.withOriginalOperationPreserved ?
                             addInsertionAlteration(jump2stmt, patch) :
                             addReplacementAlteration(jump2stmt, patch);
             LOG.log(Level.FINE, "alteration id={0} produced by stmt: {1}",
@@ -752,10 +752,10 @@ final class Transformer {
         // ---
         // printBeforeGetInstanceStmt       : println("before calling GetInstance for local ")
         // printBeforeAssignmentStmt        : println("before plain assignment for local")
-        final Stmt printBeforeGetInstanceStmt               = tpotifier_netbeans.Main.withDiagnosticPrints ?
+        final Stmt printBeforeGetInstanceStmt               = tpotifier_netbeans.SootSetuper.withDiagnosticPrints ?
                 jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethodRef, StringConstant.v("Before calling GetInstance for local " + local))):
                 jimple.newNopStmt();
-        final Stmt printBeforeAssignmentStmt                = tpotifier_netbeans.Main.withDiagnosticPrints ?
+        final Stmt printBeforeAssignmentStmt                = tpotifier_netbeans.SootSetuper.withDiagnosticPrints ?
                 jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethodRef, StringConstant.v("Befoer plain assignment for local " + local))):
                 jimple.newNopStmt();
         final Stmt gotoPrintBeforeGetInstanceStmt           = jimple.newGotoStmt(printBeforeGetInstanceStmt);
@@ -771,7 +771,7 @@ final class Transformer {
         final Local             proxyHolder                 = getLocalForType(ProxyType);
         final Stmt              proxyHolderAssignmentStmt   = jimple.newAssignStmt(proxyHolder, jimple.newCastExpr(local, ProxyType));
         // (getInstExpr: proxyHolder.GetInstance())
-        final Value             getInstExpr                 = tpotifier_netbeans.Main.withGetInstanceCall ?
+        final Value             getInstExpr                 = tpotifier_netbeans.SootSetuper.withGetInstanceCall ?
                 jimple.newVirtualInvokeExpr(proxyHolder, ProxyGetInstanceMethodRef) :
                 NullConstant.v();
         // getInstanceResultAssignment      : objectHolder = proxyHolder.GetInstance()
@@ -783,7 +783,7 @@ final class Transformer {
         //
         // ... then ->
         // instHolder = local
-        final Stmt              objoAsgndLocalStmt  = tpotifier_netbeans.Main.withObjoAssign ?
+        final Stmt              objoAsgndLocalStmt  = tpotifier_netbeans.SootSetuper.withObjoAssign ?
                 jimple.newAssignStmt(objHolder, jimple.newCastExpr(local, getOriginalTypeFor(objHolder))):
                 jimple.newNopStmt();
         //
@@ -792,7 +792,7 @@ final class Transformer {
         final IfStmt            ifInstOfStmt        = jimple.newIfStmt(isInstExpr, printBeforeAssignmentStmt);
         //
         // print $objo
-        final Stmt              printObjo           = tpotifier_netbeans.Main.withDiagnosticPrints ?
+        final Stmt              printObjo           = tpotifier_netbeans.SootSetuper.withDiagnosticPrints ?
                 jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethodRef, objHolder)):
                 jimple.newNopStmt();
         //
@@ -811,7 +811,7 @@ final class Transformer {
         patch.addLast(printBeforeGetInstanceStmt);          // println("before calling GetInstance for local ")
         patch.addLast(proxyHolderAssignmentStmt);           // proxyHolder = (ProxyType) local
         patch.addLast(getInstanceResultAssignment);         // objectHolder = proxyHolder.GetInstance()
-        if (tpotifier_netbeans.Main.withDiagnosticPrints) {
+        if (tpotifier_netbeans.SootSetuper.withDiagnosticPrints) {
             patch.addLast(jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethodRef, StringConstant.v("Proxy getinstance() result"))));
             patch.addLast(jimple.newInvokeStmt(jimple.newStaticInvokeExpr(PrintlnMethodRef, objectHolder)));
         }

@@ -1,355 +1,87 @@
 package tpotifier_netbeans;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-import sample.util.SingletonKeeper;
-import sample.util.SingletonKeeper.CleanUpper;
-import soot.Pack;
-import soot.PackManager;
-import soot.Scene;
-import soot.Transform;
-
 public class Main {
-    static boolean PerformTransformations           = !false;
-    static boolean withGetInstanceCall              = !false;
-    static boolean withObjoAssign                   = !false;
-    static boolean withOriginalOperationPreserved   = !false;
-    static boolean withDiagnosticPrints             = false;
-    static boolean withProxySetInstance             = false;
+    // Options API
+    /** turn transformations on/off */
+    public void SetPerformTransformations         (final boolean set) { sootSetuper.SetPerformTransformations(set); }
+    /** produce instructions to "get" an object instance from a proxy object */
+    public void SetWithGetInstanceCall            (final boolean set) { sootSetuper.SetWithGetInstanceCall(set); }
+    /** produce instructions to reference-copy (assign) from an original object to the tmp-object-holder variable */
+    public void SetWithObjoAssign                 (final boolean set) { sootSetuper.SetWithObjoAssign(set); }
+    /** produce instructions to perform the original operation that was performed on the proxied object */
+    public void SetWithOriginalOperationPreserved (final boolean set) { sootSetuper.SetWithOriginalOperationPreserved(set); }
+    /** inject diagnostic prints about a) the instance acquired from a proxy object b) the object assigned to the tmp object holder in the end (before the original operation) */
+    public void SetWithDiagnosticPrints           (final boolean set) { sootSetuper.SetWithDiagnosticPrints(set); }
+    /** produce instructions to call "setinstance" whenever an object is assigned to a proxy object. This is experimental, does not work, and is off by design */
+    public void SetWithProxySetInstance           (final boolean set) { sootSetuper.SetWithProxySetInstance(set); }
     //
-    static private boolean WithJimpleOutput         = !false;
-    static private boolean WithClassOutput          = !false;
-    static private boolean WithDavaOutput           = false;
+    public void SetWithJimpleOutput               (final boolean set) { sootSetuper.SetWithJimpleOutput(set); }
+    public void SetWithClassOutput                (final boolean set) { sootSetuper.SetWithClassOutput(set); }
+    public void SetWithDavaOutput                 (final boolean set) { sootSetuper.SetWithDavaOutput(set); }
     //
-    private interface InitialisationAction {
-        void Do ();
-        void UnDo ();
-    }
-    private static class Initialisation {
-        private final Deque<InitialisationAction> actions = new LinkedList<InitialisationAction>();
-        public void AddAction (final InitialisationAction action) {
-            actions.push(action);
-        }
-        public void Initialise () {
-            final Iterator<InitialisationAction> ite = actions.descendingIterator();
-            while (ite.hasNext()) {
-                final InitialisationAction action = ite.next();
-                LOG.log(Level.INFO, "Performing initialisation action {0}", action);
-                action.Do();
-            }
-            LOG.log(Level.INFO, "Done with initialisation actions");
-        }
-        public void CleanUp () {
-            for (final InitialisationAction action: actions) {
-                LOG.log(Level.INFO, "Performing cleanup {0}", action);
-                action.UnDo();
-            }
-            LOG.log(Level.INFO, "Dan with cleanups");
-        }
-    }
-    private static Initialisation initialisation;
-
-    private static void init () {
-        try {
-            // Loggers first
-            LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(("\n"
-                    + "java.util.logging.ConsoleHandler.level: ALL\n"
-                    + "tpotifier_netbeans.level: WARNING\n"
-                    + "tpotifier_netbeans.handlers: java.util.logging.ConsoleHandler\n"
-                    + "sample.level: WARNING\n"
-                    + "sample.hanlders: java.util.logging.ConsoleHandler\n"
-                    + "sample.util.handlers: java.util.logging.ConsoleHandler\n"
-            ).getBytes("iso8859-1")));
-        } catch (IOException ex) {
-            throw new AssertionError(ex);
-        } catch (SecurityException ex) {
-            throw new AssertionError(ex);
-        }
-        //
-        //
-        //
-        initialisation = new Initialisation();
-        //
-        initialisation.AddAction(new InitialisationAction() {
-            @Override public String toString () { return "SingletonKeeper"; }
-            private final SingletonKeeper SK = SingletonKeeper.S();
-            @Override
-            public void Do () {
-                final CleanUpper lazyMaid = new SingletonKeeper.CleanUpper() {
-                    @Override public void CleanUp (final Object inst) {}
-                };
-                //
-                SK.Register(TPOJimpleBodyTransformer.class,
-                        new SingletonKeeper.Constructor() {
-                            @Override
-                            public Object Construct () {
-                                return new TPOJimpleBodyTransformer();
-                            }
-                        }, lazyMaid);
-            }
-            @Override
-            public void UnDo () {
-                SK.CleanUpAll();
-            }
-        });
-        //
-        //
-        initialisation.AddAction(new InitialisationAction() {
-            @Override public String toString () { return "Soot"; }
-            @Override
-            public void Do () {
-                final SingletonKeeper SK  = SingletonKeeper.S();
-                final PackManager     PM  = soot.PackManager.v();
-                final Pack            JTP = PM.getPack("jtp");
-                JTP.add(new Transform(TPOJimpleBodyTransformer.PhaseName, SK.Get(TPOJimpleBodyTransformer.class)));
-            }
-            @Override
-            public void UnDo () {
-                soot.G.reset();
-            }
-        });
-        //
-        //
-        //
-        initialisation.Initialise();
+    public void ExcludeClass                      (final String klass){ tpojbto.ExcludeClass(klass); }
+    /** @param meth something like {@literal < some.Class : retType name ( arg1T, arg2T ) >} */
+    public void ExcludeMethod                     (final String meth) { tpojbto.ExcludeMethod(meth); }
+    //
+    public void SetMainClass                      (final String mc)   { mainClass = mc; }
+    public void SetClassToAnalyse                 (final String c2a)  { classToAnalyse = c2a; }
+    //
+    public void SetApplicationModeOn              ()                  { SootSetuper.SootMode = _SootMode.App; }
+    public void SetWholeProgramWithSparkModeOn    ()                  { SootSetuper.SootMode = _SootMode.WholeProgramWithSpark; }
+    //
+    /** Output found in Jimple and Class formats under sootOutput/. A kind offer from the Soot framework.
+     * @throws NullPointerException if main-class, class-to-be-analysed or execution mode has not been set
+     */
+    public void PerformTransformation () throws InterruptedException {
+        if (mainClass == null)
+            throw new NullPointerException("Main-class has not been set");
+        if (classToAnalyse == null)
+            throw new NullPointerException("Class-to-analyse has not been set");
+        if (SootSetuper.SootMode == null)
+            throw new NullPointerException("Execution mode has not been set");
+        
+        final SootSetuper.MainArguments args = sootSetuper. new MainArguments(
+                tpojbto,
+                mainClass,
+                classToAnalyse
+                );
+        sootSetuper.main(args);
     }
 
-    private static void cleanup () {
-        initialisation.CleanUp();
-        initialisation = null;
-    }
-
-    public enum _SootMode {
-        App, WholeProgramWithSpark
-    }
-    public static final _SootMode SootMode = _SootMode.
-            App
-//            WholeProgramWithSpark
-            ;
-    
-    private static final Scene SootScene = Scene.v();
-    private static void abc (final String className, final int level) {
-        switch (SootMode) {
-            case App:   SootScene.addBasicClass(className, level);  break;
-            case WholeProgramWithSpark:                             break;
-        }
-    }
-    private static void abc (final String className) {
-        abc(className, soot.SootClass.SIGNATURES);
-    }
-    private static void abcb (final String className) {
-        abc(className, soot.SootClass.BODIES);
-    }
-    private static void _addBasicClasses () {
-        {
-                abc("java.lang.Thread");
-                abc("java.lang.ThreadGroup");
-                abc("java.lang.ExceptionInInitializerError");
-                abc("java.lang.RuntimeException");
-                abc("java.lang.ClassNotFoundException");
-                abc("java.lang.ArithmeticException");
-                abc("java.lang.ArrayStoreException");
-                abc("java.lang.ClassCastException");
-                abc("java.lang.IllegalMonitorStateException");
-                abc("java.lang.IndexOutOfBoundsException");
-                abc("java.lang.ArrayIndexOutOfBoundsException");
-                abc("java.lang.NegativeArraySizeException");
-                abc("java.lang.NullPointerException");
-                abc("java.lang.InstantiationError");
-                abc("java.lang.InternalError");
-                abc("java.lang.OutOfMemoryError");
-                abc("java.lang.StackOverflowError");
-                abc("java.lang.UnknownError");
-                abc("java.lang.ThreadDeath");
-                abc("java.lang.ClassCircularityError");
-                abc("java.lang.ClassFormatError");
-                abc("java.lang.IllegalAccessError");
-                abc("java.lang.IncompatibleClassChangeError");
-                abc("java.lang.LinkageError");
-                abc("java.lang.VerifyError");
-                abc("java.lang.NoSuchFieldError");
-                abc("java.lang.AbstractMethodError");
-                abc("java.lang.NoSuchMethodError");
-                abc("java.lang.UnsatisfiedLinkError");
-                abc("java.lang.Thread");
-                abc("java.lang.Runnable");
-                abc("java.lang.Cloneable");
-                abc("java.io.Serializable");
-                abc("java.lang.ref.Finalizer");
-                abc("java.lang.ClassLoader");
-                abc("java.security.PrivilegedActionException");
-                abcb("java.lang.Object");
-                abcb("java.lang.Object");
-                abcb("java.lang.Class");
-                abcb("java.lang.Void");
-                abcb("java.lang.Boolean");
-                abcb("java.lang.Byte");
-                abcb("java.lang.Character");
-                abcb("java.lang.Short");
-                abcb("java.lang.Integer");
-                abcb("java.lang.Long");
-                abcb("java.lang.Float");
-                abcb("java.lang.Double");
-                abcb("java.lang.String");
-                abcb("java.lang.StringBuffer");
-                abcb("java.lang.Error");
-                abcb("java.lang.AssertionError");
-                abcb("java.lang.Throwable");
-                abcb("java.lang.NoClassDefFoundError");
-                abcb("java.lang.ExceptionInInitializerError");
-                abcb("java.lang.RuntimeException");
-                abcb("java.lang.ClassNotFoundException");
-                abcb("java.lang.ArithmeticException");
-                abcb("java.lang.ArrayStoreException");
-                abcb("java.lang.ClassCastException");
-                abcb("java.lang.IllegalMonitorStateException");
-                abcb("java.lang.IndexOutOfBoundsException");
-                abcb("java.lang.ArrayIndexOutOfBoundsException");
-                abcb("java.lang.NegativeArraySizeException");
-                abcb("java.lang.NullPointerException");
-                abcb("java.lang.InstantiationError");
-                abcb("java.lang.InternalError");
-                abcb("java.lang.OutOfMemoryError");
-                abcb("java.lang.StackOverflowError");
-                abcb("java.lang.UnknownError");
-                abcb("java.lang.ThreadDeath");
-                abcb("java.lang.ClassCircularityError");
-                abcb("java.lang.ClassFormatError");
-                abcb("java.lang.IllegalAccessError");
-                abcb("java.lang.IncompatibleClassChangeError");
-                abcb("java.lang.LinkageError");
-                abcb("java.lang.VerifyError");
-                abcb("java.lang.NoSuchFieldError");
-                abcb("java.lang.AbstractMethodError");
-                abcb("java.lang.NoSuchMethodError");
-                abcb("java.lang.UnsatisfiedLinkError");
-                abcb("java.lang.Thread");
-                abcb("java.lang.Runnable");
-                abcb("java.lang.Cloneable");
-                abcb("java.io.Serializable");
-                abcb("java.lang.ref.Finalizer");
-                abcb("java.lang.System");
-                abcb("java.lang.ThreadGroup");
-                abcb("java.lang.ClassLoader");
-                abcb("java.security.PrivilegedActionException");
-                abcb("sample.SharedMemoryTPO");
-                abcb("sun.misc.VM");
-                abcb("java.lang.Terminator");
-                abcb("sun.misc.Version");
-                abcb("java.io.BufferedInputStream");
-                abcb("java.io.FileDescriptor");
-                abcb("java.io.FileOutputStream");
-                abcb("java.io.FileInputStream");
-                abcb("java.security.ProtectionDomain");
-            }
-    }
-
-    private static final Object SootThreadsMutex = new Object();
-    private static class SootStarter extends Thread {
-        @Override
-        public void start () {
-            System.out.println("starting thread " + this);
-            super.start();
-        }
-    }
-    private static final class JimpleSootStarter extends SootStarter { @Override public void run(){if(WithJimpleOutput)synchronized(SootThreadsMutex){main0(new String[]{"jimple"});}}}
-    private static final class ClassSootStarter extends SootStarter{@Override public void run(){if(WithClassOutput)synchronized(SootThreadsMutex){main0(new String[]{"class"});}}}
-    private static final class DavaSootStarter extends SootStarter{@Override public void run(){if(WithDavaOutput)synchronized(SootThreadsMutex){main0(new String[]{"dava"});}}}
+    /**
+     * Use this class' public API inside this class' main (or in another one).
+     */
     public static void main (final String[] args) throws InterruptedException {
-        final JimpleSootStarter jss = new JimpleSootStarter();
-        final ClassSootStarter css = new ClassSootStarter();
-        final DavaSootStarter dss = new DavaSootStarter();
-        //
-        // Serialising because of Singleton Keeper not being thread-safe
-        // (or even multithreadedly usable)
-        //
-        dss.start();
-        css.start();
-        jss.start();
-        //
-        jss.join();
-        css.join();
-        dss.join();
-    }
-    public static void main0 (final String[] args) {
-        init();
+        // A sample main, transforming sample.Sample, excluding the proxy and
+        // value types.
+        // ---------------------------------------------------------------------
+        Main mien = new Main();
 
-        final String outputFormat = args[0];
-        try {
-            _addBasicClasses();
+        // Exclude the proxy and proxy value types
+        mien.ExcludeClass("sample.SharedMemoryTPO");
+        mien.ExcludeClass("sample.Foo");
 
-            final ArrayList<String> sootopts = new ArrayList<String>(30);
-            switch (SootMode) {
-                case App:
-                    sootopts.add("-app");
-                    break;
-                case WholeProgramWithSpark:
-                    sootopts.add("-whole-program");
-                    sootopts.add("-phase-option"); sootopts.add("cg.spark");
-                    sootopts.add(   ""
-                                    + "enabled:true"
-                                    + ",simple-edges-bidirectional:false"
-                                    + "ignore-types:true"
-                                    + ",on-fly-cg:true"
-                                    + ",propagator:worklist"
-                                    + ",set-impl:double"
-                                    + ",double-set-old:hybrid"
-                                    + ",double-set-new:hybrid"
-                                    + ",lazy-pts:true"
-//                                    + ",dump-html:true"
-                                    );
-                    break;
-            }
+        // Set execution mode
+        mien.SetApplicationModeOn();
+        
+        // Set significant classes
+        mien.SetMainClass("sample.Sample");
+        mien.SetClassToAnalyse("sample.Sample");
 
-            sootopts.add("-output-format"); sootopts.add(outputFormat);
-            sootopts.add("-dump-body"); sootopts.add("jtp");
-//            sootopts.add("-throw-analysis"); sootopts.add("unit");
-            sootopts.add("-exclude"); sootopts.add("java");
-            sootopts.add("-exclude"); sootopts.add("sample.util");
-            sootopts.add("-trim-cfgs");
-            sootopts.add("-main-class");
-            sootopts.add("sample.Sample");
-            sootopts.add("sample.Sample");
-//            sootopts.add("tpotifier_netbeans.Main");
-//            sootopts.add("sample.util.P");
-//            sootopts.add("sample.SharedMemoryTPO");
-
-            //
-//            sootopts.add("-help");
-//            sootopts.add("-phase-list");
-//            sootopts.add("-phase-help"); sootopts.add("cg.spark");
-
-            final String[] sootArgs = new String[sootopts.size()];
-            sootopts.toArray(sootArgs);
-            soot.Main.main(sootArgs);
-
-//            if (SootMode.equals(_SootMode.WholeProgramWithSpark))
-//                try {
-//                    new PagToDotDumper((PAG)Scene.v().getPointsToAnalysis()).dumpPAGForMethod("sootOutput/pag.dot", "sample.Sample", "main");
-//                    G.v().out.append("PAG dot written");
-//                } catch (FileNotFoundException ex) {
-//                    LOG.log(Level.SEVERE, null, ex);
-//                }
-        }
-        finally {
-            cleanup();
-        }
-    }
-    private static final Logger LOG = Logger.getLogger(Main.class.getName());
-
-    private Main () {
+        // DO IT!
+        mien.PerformTransformation();
     }
 
-    // custom options for out transformer
-    final static String[][] TransformerOptions = new String[][] {
-        new String[] {"exclude-class", "sample.Foo"},
-        new String[] {"exclude-class", "sample.SharedMemoryTPO"}
-    };
+
+
+
+
+
+
+
+    /////////////// Private -- Do not bother
+    private final SootSetuper                       sootSetuper = new SootSetuper();
+    private final TPOJimpleBodyTransformerOptions   tpojbto     = new TPOJimpleBodyTransformerOptions();
+    private       String                            mainClass;
+    private       String                            classToAnalyse;
 }
