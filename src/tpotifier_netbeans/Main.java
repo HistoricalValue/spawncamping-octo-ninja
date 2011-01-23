@@ -29,6 +29,9 @@ public class Main {
     public void SetApplicationModeOn              ()                  { SootSetuper.SootMode = _SootMode.App; }
     public void SetWholeProgramWithSparkModeOn    ()                  { SootSetuper.SootMode = _SootMode.WholeProgramWithSpark; }
     //
+    public void SetProxySuperclass                (final String psc)  { tpojbto.ProxyClass(psc); }
+    public void AddValueClass                     (final String vc)   { tpojbto.ValueClass(vc); }
+    //
     /** Output found in Jimple and Class formats under sootOutput/. A kind offer from the Soot framework.
      * @throws NullPointerException if main-class, class-to-be-analysed or execution mode has not been set
      */
@@ -67,6 +70,8 @@ public class Main {
         // Set significant classes
         mien.SetMainClass("sample.Sample");
         mien.SetClassToAnalyse("sample.Sample");
+        mien.SetProxySuperclass("sample.SharedMemoryTPO");
+        mien.AddValueClass("sample.Foo");
 
         // DO IT!
         mien.PerformTransformation();

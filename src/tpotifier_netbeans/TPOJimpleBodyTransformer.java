@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import soot.Body;
+import soot.RefType;
 import soot.jimple.JimpleBody;
 
 class TPOJimpleBodyTransformer extends soot.BodyTransformer {
@@ -54,6 +55,12 @@ class TPOJimpleBodyTransformer extends soot.BodyTransformer {
             else
             if (key.equals(TPOJimpleBodyTransformerOptions.EXCLUDE_METHOD))
                 trans.addMethodNotToTransform(value);
+            else
+            if (key.equals(TPOJimpleBodyTransformerOptions.PROXY_CLASS))
+                trans.setProxySupertype(RefType.v(value));
+            else
+            if (key.equals(TPOJimpleBodyTransformerOptions.VALUE_CLASS))
+                trans.addAValueType(RefType.v(value));
             else
                 throw new TPOTransformationException("Unknow option value: "
                         + key);

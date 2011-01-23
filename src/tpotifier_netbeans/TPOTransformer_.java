@@ -57,6 +57,7 @@ import soot.util.HashChain;
 
 
 
+@SuppressWarnings("ClassWithoutLogger")
 class Base_ic implements Base_icExpr {
     private VirtualInvokeExpr iie;
     private InstanceFieldRef ifr;
@@ -95,11 +96,13 @@ class Base_ic implements Base_icExpr {
     }
 
     static private Base_ic aBase_ic = new Base_ic((VirtualInvokeExpr) null);
+    @SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
     static Base_ic Base_icFor (final VirtualInvokeExpr b) {
         aBase_ic.iie = b;
         aBase_ic.ifr = null;
         return aBase_ic;
     }
+    @SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
     static Base_ic Base_icFor (final InstanceFieldRef b) {
         aBase_ic.iie = null;
         aBase_ic.ifr = b;
@@ -117,16 +120,20 @@ class Base_ic implements Base_icExpr {
 
 
 enum AlterationType { Insertion, Replacement, Removal, Appending }
+@SuppressWarnings("ClassWithoutLogger")
 final class Alteration {    
     final AlterationType    type;
     final Unit              point;
     final Chain<Unit>       patch;
     final int               id;
+
     Alteration (final AlterationType _type, final Unit _point, final Chain<Unit> _patch) {
         type    = _type;
         point   = _point;
         patch   = _patch;
-        id      = ids++;
+        @SuppressWarnings("ValueOfIncrementOrDecrementUsed")
+        int _id = ids++;
+        id      = _id;
     }
 
     @Override public String toString () {
@@ -155,8 +162,6 @@ final class Alteration {
 final class Transformer {
     private final static Logger     LOG = Logger.getLogger(Transformer.class.getName());
     //
-    private static final RefType    ProxyType                       = RefType.v("sample.SharedMemoryTPO");
-    private static final RefType    ValueType                       = RefType.v("sample.Foo");
     private static final RefType    ObjectType                      = RefType.v("java.lang.Object");
     private static final PrintStream    out                         = soot.G.v().out;
     //
@@ -177,17 +182,21 @@ final class Transformer {
     //
     private final Set<SootClass>    classesNotToTransform           = new HashSet<SootClass>(1024);
     private final Set<SootMethod>   methodsNotToTransform           = new HashSet<SootMethod>(1024);
+    //
     private boolean                 doNotProcessStaticInits         = false;
+    //
+    private Type                    proxyType;
+    private Set<Type>               valueTypes                      = new HashSet<Type>(256);
 
 
 
     private boolean isAValueType (final Type type) {
-        final boolean result = ValueType.equals(type);
+        final boolean result = valueTypes.contains(type);
         return result;
     }
 
     private boolean isAProxyType (final Type type) {
-        final boolean result = ProxyType.equals(type);
+        final boolean result = proxyType.equals(type);
         return result;
     }
 
@@ -226,6 +235,16 @@ final class Transformer {
                     + " already specified not to be transformed");
         methodsNotToTransform.add(meth);
     }
+
+    void setProxySupertype (final Type type) {
+        proxyType = type;
+    }
+
+    void addAValueType (final Type type) {
+        valueTypes.add(type);
+    }
+
+
 
     private boolean methodShouldBeTransformed (final SootMethod method) {
         final SootClass klass               = method.getDeclaringClass();
@@ -328,6 +347,7 @@ final class Transformer {
         return false;
     }
 
+    @SuppressWarnings("NestedAssignment")
     private static String getUniqueLocalName (final Iterable<Local> locals, final String basename) {
         String result;
         for (int i = 0; localsContainLocalNamed(locals, result = basename + i); ++i)
@@ -380,7 +400,7 @@ final class Transformer {
         if (type instanceof RefType) {
             final RefType reftype = (RefType) type;
             final String typestr = reftype.getClassName();
-            final String result = "__" + typestr.substring(typestr.lastIndexOf(".") + 1);
+            final String result = "__" + typestr.substring(typestr.lastIndexOf('.') + 1);
             return result;
         }
         throw new TPOTransformationException("trying to get a tmp local for a non-ref type "
@@ -422,6 +442,11 @@ final class Transformer {
 
 
     void transform ( final JimpleBody body) {
+        if (proxyType == null)
+            throw new NullPointerException("No proxy-type set");
+        if (valueTypes.isEmpty())
+            throw new TPOTransformationException("No value types have been given");
+
         if (SootSetuper.PerformTransformations) {
             final SootMethod body_method = body.getMethod();
             if (methodShouldBeTransformed(body_method)) {
@@ -475,7 +500,7 @@ final class Transformer {
                 final Local methResultHolderLocal = getLocalForType(getOriginalTypeFor(local));
                 stmt.setLeftOp(methResultHolderLocal);
                 //
-                final Local proxyHolderLocal = getLocalForType(ProxyType);
+                final Local proxyHolderLocal = getLocalForType(proxyType);
 
                 // Patch to be added at the end
                 lhsTaggedLocalPatching = new HashChain<Unit>();
@@ -493,12 +518,12 @@ final class Transformer {
                 // flag = instaceof
                 lhsTaggedLocalPatching.add(jimple.newAssignStmt(
                         isInstanceFlagLocal,
-                        jimple.newInstanceOfExpr(local, ProxyType)));
+                        jimple.newInstanceOfExpr(local, proxyType)));
                 //
                 // ... then: proxyHolder = (ProxyType) local; proxyHolder.Set(methTmP)
                 final Stmt assignToProxyHolder = jimple.newAssignStmt(
                         proxyHolderLocal,
-                        jimple.newCastExpr(local, ProxyType));
+                        jimple.newCastExpr(local, proxyType));
                 final Stmt invokeSetInstance = jimple.newInvokeStmt(
                         jimple.newVirtualInvokeExpr(
                                 proxyHolderLocal,
@@ -762,14 +787,14 @@ final class Transformer {
         final Stmt gotoPrintBeforeAssignmentStmt            = jimple.newGotoStmt(printBeforeAssignmentStmt);
         //
         // larkness  = (local instanceof ProxyT)
-        final InstanceOfExpr    flagExpr                    = jimple.newInstanceOfExpr(local, ProxyType);
+        final InstanceOfExpr    flagExpr                    = jimple.newInstanceOfExpr(local, proxyType);
         final AssignStmt        flagAssignmentStmt          = jimple.newAssignStmt(isInstanceFlagLocal, flagExpr);
         //
         // ... else -> objectHolder = proxy.getInstance()
         // proxyHolderAssignmentStmt        : proxyHolder = (ProxyType) local
         final Local             objectHolder                = getLocalForType(ObjectType);
-        final Local             proxyHolder                 = getLocalForType(ProxyType);
-        final Stmt              proxyHolderAssignmentStmt   = jimple.newAssignStmt(proxyHolder, jimple.newCastExpr(local, ProxyType));
+        final Local             proxyHolder                 = getLocalForType(proxyType);
+        final Stmt              proxyHolderAssignmentStmt   = jimple.newAssignStmt(proxyHolder, jimple.newCastExpr(local, proxyType));
         // (getInstExpr: proxyHolder.GetInstance())
         final Value             getInstExpr                 = tpotifier_netbeans.SootSetuper.withGetInstanceCall ?
                 jimple.newVirtualInvokeExpr(proxyHolder, ProxyGetInstanceMethodRef) :
