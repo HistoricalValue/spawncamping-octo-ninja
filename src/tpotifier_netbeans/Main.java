@@ -30,6 +30,7 @@ public class Main {
     public void SetWholeProgramWithSparkModeOn    ()                  { SootSetuper.SootMode = _SootMode.WholeProgramWithSpark; }
     //
     public void SetProxySuperclass                (final String psc)  { tpojbto.ProxyClass(psc); }
+    /** A value class is a class which might be Proxy-ied. */
     public void AddValueClass                     (final String vc)   { tpojbto.ValueClass(vc); }
     //
     /** Output found in Jimple and Class formats under sootOutput/. A kind offer from the Soot framework.

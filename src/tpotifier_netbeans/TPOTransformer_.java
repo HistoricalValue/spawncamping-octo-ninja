@@ -468,9 +468,9 @@ final class Transformer {
                     if (unit instanceof InvokeStmt)
                         produceInvokeStmtPatch((InvokeStmt) unit);
                     else
-                        if (unit instanceof AssignStmt)
-                            produceAssignStmtPatch((AssignStmt) unit);
-                        else;
+                    if (unit instanceof AssignStmt)
+                        produceAssignStmtPatch((AssignStmt) unit);
+                    else;
 
                 applyAlterations();
             }
