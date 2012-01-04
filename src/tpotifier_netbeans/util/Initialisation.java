@@ -18,18 +18,18 @@ public class Initialisation {
         final Iterator<InitialisationAction> ite = actions.descendingIterator();
         while (ite.hasNext()) {
             final InitialisationAction action = ite.next();
-            LOG.log(Level.INFO, "Performing initialisation action {0}", action);
+            LOG.log(Level.INFO, "Initialising: {0}", action);
             action.Do();
         }
-        LOG.log(Level.INFO, "Done with initialisation actions");
+        LOG.log(Level.INFO, "Done initialising");
     }
 
     public void CleanUp () {
         for (final InitialisationAction action : actions) {
-            LOG.log(Level.INFO, "Performing cleanup {0}", action);
+            LOG.log(Level.INFO, "Cleaning up: {0}", action);
             action.UnDo();
         }
-        LOG.log(Level.INFO, "Dan with cleanups");
+        LOG.log(Level.INFO, "Dan cleaning up");
     }
     private static final Logger LOG = Logger.getLogger(Initialisation.class.getName());
 }
