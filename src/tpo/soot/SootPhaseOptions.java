@@ -1,6 +1,5 @@
 package tpo.soot;
 
-import isi.util.Predicate;
 import isi.util.Predicates;
 import java.util.Collections;
 import java.util.LinkedList;

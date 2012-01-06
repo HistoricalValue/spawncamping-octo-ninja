@@ -1,26 +1,37 @@
 package tpo.soot;
 
+import static isi.util.Collections.map;
+import static isi.util.Collections.select;
+import isi.util.OnceSettable.GetUnsetOrSetSetException;
+import isi.util.OnceSettable;
+import isi.util.streams.StreamTokeniserTokenType;
 import java.util.LinkedList;
 import java.util.List;
 import isi.util.Ref;
-import java.util.Map;
+import isi.util.StreamTokenisers;
+import isi.util.ValueMapper;
 import isi.util.logging.AutoLogger;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import soot.G;
 import tpo.Loggers;
+import tpo.soot.SootOption.EnumArgumentValue;
 import tpo.soot.util.OutputCapturer;
 import tpo.soot.util.StoringOutputCapturer;
 import static isi.util.StringBuilders.isEmpty;
 import static isi.util.StringBuilders.reset;
+import static isi.util.Matchers.matches;
 
 public class SootFacade {
 	
@@ -45,11 +56,8 @@ public class SootFacade {
 	
 	///////////////////////////////////////////////////////
 	
-	private final static int RootGroup = 347823;
-	private final static int SubGroup = 38471;
 	public static List<SootPhaseOptions> ListOfPhases () throws SootOptionsParsingException {
-		final Pattern	NEW_GROUP = Pattern.compile("^  ? ? ?([\\w.-]+)\\s*(.*)$"),
-						INDENT = Pattern.compile("^(\\s*).*$");
+		final Pattern NEW_GROUP = Pattern.compile("^  ? ? ?([\\w.-]+)\\s*(.*)$");
 		final Matcher m = INDENT.matcher("");
 		
 		final List<SootPhaseOptions> options = new LinkedList<>();
@@ -60,7 +68,7 @@ public class SootFacade {
 		Ref<SootPhaseOptions> group = Ref.CreateRef(null), subgroup = Ref.CreateRef(null);
 		Ref<Integer> buildingGroupType = Ref.CreateRef(-1);
 		
-		for (final String line: soot.options.Options.v().getPhaseList().split("\n")) {
+		for (final String line: NL.split(soot.options.Options.v().getPhaseList())) {
 			m.usePattern(INDENT);
 			m.reset(line);
 			
@@ -157,6 +165,163 @@ public class SootFacade {
 	}
 
 	///////////////////////////////////////////////////////
+	//
+	
+	public static List<SootOptionGroup> ListOfOptions () throws SootOptionsParsingException {
+		final List<SootOptionGroup> groups = new LinkedList<>();
+		final Matcher m = INDENT.matcher("");
+		final Pattern GROUP_TITLE = Pattern.compile("^(.*):\\s*$");
+		
+		// building state
+		String groupName = null;
+		List<SootOption> group = new LinkedList<>();
+		SootOption optionBeingBuilt = null;
+		
+		for (final String line: NL.split(soot.options.Options.v().getUsage())) {
+			m.usePattern(INDENT);
+			m.reset(line);
+			
+			if (!m.matches())
+				throw new SootOptionsParsingException(line);
+			
+			final int indentLength = m.group(1).length();
+			switch (indentLength) {
+				case 0: {	// new group or empty line
+					if (line.isEmpty()) 
+						{} // nade
+					else {
+						// finalise previous group being built
+						groups.add(new SootOptionGroup(groupName, group));
+						
+						m.usePattern(GROUP_TITLE);
+						if (!matches(m, GROUP_TITLE))
+							throw new SootOptionsParsingException(line + "{{not-a-group-title-line}}");
+						groupName = m.group(1);
+					}
+					break;
+				}
+				case 2: {	// new option
+					group.add(optionBeingBuilt);
+					optionBeingBuilt = ParseOptionLine(line);
+					break;
+				}
+				case 5: {	// new enum argument value
+					final EnumArgumentValue enumValue = ParseEnumValueLine(line);
+					optionBeingBuilt = optionBeingBuilt.AppendEnumValue(enumValue);
+					break;
+				}
+				case 31: {	// description continuation
+					final String description = line.substring(31);
+					optionBeingBuilt = optionBeingBuilt.AppendDescription(description);
+					break;
+				}
+				default:
+					throw new SootOptionsParsingException(line + "{{unrecognisable-leading-whitespace}}");
+			}
+		}
+		
+		return groups;
+	}
+	
+	private static SootOption ParseOptionLine (final String line) throws SootOptionsParsingException {
+		final Pattern	OPTION_NAME = Pattern.compile("-([\\w-]+)"),
+						ARGUMENT_NAME = Pattern.compile("([A-Z:]+)");
+		final Matcher m = OPTION_NAME.matcher("");
+		final StreamTokenizer tok = new StreamTokenizer(new StringReader(line));
+		StreamTokenisers.SetStreamTokeniserWordMode(tok);
+		
+		// building state
+		final OnceSettable<String> shortName = new OnceSettable<>();
+		final List<String> longNames = new LinkedList<>();
+		final ArrayList<OnceSettable<String>> argumentsNames = new ArrayList<>(2);
+		argumentsNames.add(new OnceSettable<String>());
+		argumentsNames.add(new OnceSettable<String>());
+		int argumentIndex = -3000;
+		final OnceSettable<Boolean> descriptionStarted = new OnceSettable<>();
+		String description = null;
+		
+		try {
+			for (StreamTokeniserTokenType tt = StreamTokeniserTokenType.valueOf(tok.nextToken()); tt != StreamTokeniserTokenType.EOF; tt = StreamTokeniserTokenType.valueOf(tok.nextToken())) {
+				if (tt != StreamTokeniserTokenType.WORD)
+					throw new SootOptionsParsingException(line + "{{@" + tok.toString() + "}}");
+
+				final String token = tok.sval;
+
+				if (matches(m, OPTION_NAME, token)) {	// option name
+					if (descriptionStarted.IsSet())
+						throw new SootOptionsParsingException(line + "{{option-name-after-description}}");
+					final String name = m.group(1);
+					
+					if (!shortName.IsSet())
+						shortName.Set(name);
+					else
+						longNames.add(name);
+					
+					argumentIndex = 0;
+				}
+				else
+				if (matches(m, ARGUMENT_NAME, token)) {	// option argument name
+					if (descriptionStarted.IsSet())
+						throw new SootOptionsParsingException(line + "{{option-argument-name-after-description}}");
+					if (!shortName.IsSet())
+						throw new SootOptionsParsingException(line + "{{option-argument-name-without-specified-option}}");
+					
+					final OnceSettable<String> argumentName = argumentsNames.get(argumentIndex);
+					if (argumentName.IsSet())
+						if (!argumentName.Get().equals(token))
+							throw new SootOptionsParsingException(line + "{{" + "different-argument-option-names " + argumentName.Get() + " " + token + "}}");
+						else
+							{}
+					else
+						argumentName.Set(token);
+					
+					++argumentIndex;
+				}
+				else {	// going to description
+					descriptionStarted.Set(Boolean.TRUE);
+					description = StreamTokenisers.GetLine(tok);
+				}
+			}
+		}
+		catch (final GetUnsetOrSetSetException | IOException ex) {
+			throw new AssertionError("", ex);
+		}
+		
+		final List<String> argumentsNamesStrings =
+				select(
+					map(
+						argumentsNames,
+						new ValueMapper<OnceSettable<String>, String>() {
+							@Override
+							public String map (final OnceSettable<String> v) {
+								return v.GetIfSet();
+							}
+						}
+					)
+				);
+		final SootOption.Argument argument = argumentsNamesStrings.isEmpty()?
+				new SootOption.NoArgument() : new SootOption.ListArgument(argumentsNamesStrings);
+				
+		if (description == null)	// could happen for too long first option lines
+			description = "";
+		
+		return new SootOption(shortName.GetIfSet(), longNames, argument, description);
+	}
+	
+	private static SootOption.EnumArgumentValue ParseEnumValueLine (final String line) throws SootOptionsParsingException {
+		final Matcher m = ENUM_VALUE.matcher(line);
+		if (!m.matches())
+			throw new SootOptionsParsingException(line + "{{unparsable-enum-value-line}}");
+	
+		// TODO check for "(default)" and mark default enum value
+		try {
+			return new SootOption.EnumArgumentValue(StreamTokenisers.ReadAllWordTokensToTheEnd(StreamTokenisers.New(m.group(1))));
+		} catch (IOException ex) {
+			throw new AssertionError("", ex);
+		}
+	}
+	
+	///////////////////////////////////////////////////////
 	// Package
 	///////////////////////////////////////////////////////
 	
@@ -180,6 +345,12 @@ public class SootFacade {
 	///////////////////////////////////////////////////////
 	// Static state
 	private static final AutoLogger L = new AutoLogger(Loggers.GetLogger(SootFacade.class));
+	private static final int RootGroup = 347823;
+	private static final int SubGroup = 38471;
+	private static final Pattern	INDENT = Pattern.compile("^(\\s*).*$"),
+									NL = Pattern.compile("\n"),
+									WHITESPACE = Pattern.compile("\\s"),
+									ENUM_VALUE = Pattern.compile("^\\s{5}(.{28})([A-Z].*)$");
 	
 	///////////////////////////////////////////////////////
 	// Constructors
