@@ -5,6 +5,9 @@ import isi.util.html.Element;
 import isi.util.html.ElementBuilder;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import tpo.soot.SootOption.Argument;
+import tpo.soot.SootOption.ArgumentType;
 import tpo.soot.SootOption.EnumArgumentValue;
 
 public class SootHelpHtmlRenderer {
@@ -16,86 +19,76 @@ public class SootHelpHtmlRenderer {
 	///////////////////////////////////////////////////////
 	// constructors
 	public SootHelpHtmlRenderer (final Appendable sink) {
-		this.sink = sink;
+		this.sink = Objects.requireNonNull(sink);
 	}
 	
 	///////////////////////////////////////////////////////
 	//
-	public SootHelpHtmlRenderer WriteOptions () throws SootOptionsParsingException, IOException {
-		final Document doc = new Document("Soot options");
+	public SootHelpHtmlRenderer WriteOptions (final String style) throws SootOptionsParsingException, IOException {
 		final ElementBuilder b = new ElementBuilder();
+		final Document doc = new Document("Soot options");
+		if (style != null)
+			doc.SetStylesheet(style);
 		
 		for (final SootOptionGroup group: SootFacade.ListOfOptions()) {
 			doc.AddElement(b.h1(group.GetName()));
 			
-			final Element ol = new Element("ol");
+			final Element tbody = b.tbody(), table = b.table(tbody);
+			doc.AddElement(table);
 			
 			for (final SootOption opt: group.GetOptions())
-				ol.AddSubelement(b.li(OptionElement(opt)));
-			
-			doc.AddElement(ol);
+				tbody.AddSubelement(b.tr(
+						b.td(OptionNameElement(b, opt)),
+						b.td(OptionArgumentElement(b, opt.GetArgument())),
+						b.td(opt.GetDescription())
+						));
 		}
-		
+
 		doc.WriteTo(sink);
 		
 		return this;
 	}
-
-	private Element OptionElement (final SootOption opt) {
-		final ElementBuilder b = new ElementBuilder();
-		final Element tr = b.tr(b.td(opt.GetShortName()));
-		final Element argument = ArgumentElement(opt.GetArgument());
-		
-		tr.AddSubelement(b.td(argument));
-		
-		return b.table(b.tbody(tr));
+	
+	private Element OptionNameElement (final ElementBuilder b, final SootOption opt) {
+		final Element ol = b.ol_lis(opt.GetShortName());
+		for (final String name: opt.GetLongNames())
+			ol.AddSubelement(b.li(name));
+		return ol;
 	}
 	
-	private Element ArgumentElement (final SootOption.Argument arg) {
-		Element elem;
-		final ElementBuilder b = new ElementBuilder();
+	private Element OptionArgumentElement (final ElementBuilder b, final Argument arg) {
+		return
+				arg.GetType() == ArgumentType.Enum? EnumOptionArgumentElement(b, arg):
+				arg.GetType() == ArgumentType.List? ListOptionArgumentElement(b, arg):
+				arg.GetType() == ArgumentType.None? NoneOptionArgumentElement(b, arg):
+				null;
+	}
+
+	private Element EnumOptionArgumentElement (final ElementBuilder b, final Argument arg) {
+		final Element tbody = b.tbody(), table = b.table(tbody);
 		
-		switch (arg.GetType()) {
-			case List:
-				elem = b.ol();
-				for (final String name: arg.GetNames())
-					elem.AddSubelement(b.li(name));
-				break;
-			case Enum:
-				final Element tbody = b.tbody();
-				elem = b.table(tbody);
-				
-				int maxnames = 0;
-				for (final EnumArgumentValue val: arg.GetValues()) {
-					final int size = val.GetNames().size();
-					if (size > maxnames)
-						maxnames = size;
-				}
-				
-				for (final EnumArgumentValue val: arg.GetValues()) {
-					final List<String> names = val.GetNames();
-					final Element tr = b.tr();
-					Element last = null;
-					int columns = maxnames + 1;
-					for (final String name: names) {
-						last = b.td(name);
-						tr.AddSubelement(last);
-						--columns;
-					}
-					assert columns > 0;
-					if (columns > 1)
-						last.attr("colspan", Integer.toString(columns));
-					tr.AddSubelement(b.td("???"));
-					tbody.AddSubelement(tr);
-				}
-				break;
-			case None:
-				elem = b.text("");
-				break;
-			default:
-				throw new AssertionError();
-		}
+		for (final EnumArgumentValue val: arg.GetValues())
+			tbody.AddSubelement(b.tr(
+					b.td(b.ol(val.GetNames())),
+					b.td(val.GetDescription())
+					));
 		
-		return elem;
+		return table;
+	}
+	
+	private Element ListOptionArgumentElement (final ElementBuilder b, final Argument arg) {
+		Element result;
+		
+		final List<String> names = arg.GetNames();
+		if (names.isEmpty())
+			result = b.text("");
+		else
+			result = b.ol(names);
+		
+		return result;
+	}
+	
+	private Element NoneOptionArgumentElement (final ElementBuilder b, final Argument arg) {
+		return b.text("");
 	}
 }

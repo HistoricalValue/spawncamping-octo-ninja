@@ -2,8 +2,6 @@ package tpo.soot;
 
 import isi.util.Collections;
 import isi.util.Iterators;
-import isi.util.collections.ExternalIteratorIterable;
-import isi.util.collections.IterableConcatenationIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +50,7 @@ public class SootOption {
 		private final List<String> names;
 		
 		ListArgument (final List<String> names) {
-			this.names = Collections.unmodifiableList(new ArrayList<>(names));
+			this.names = Collections.newUnmodifiableList(new ArrayList<>(names));
 		}
 		ListArgument (final String... names) {
 			this(Arrays.asList(names));
@@ -82,7 +80,7 @@ public class SootOption {
 		private final List<EnumArgumentValue> values;
 		
 		EnumArgument (final Iterable<? extends EnumArgumentValue> values) {
-			this.values = Collections.unmodifiableList(values);
+			this.values = Collections.newUnmodifiableList(values);
 		}
 
 		@Override
@@ -106,21 +104,27 @@ public class SootOption {
 	@SuppressWarnings({"PublicInnerClass", "FinalClass"})
 	public static final class EnumArgumentValue {
 		private final List<String> names;
+		private final String description;
 		
-		EnumArgumentValue (final Iterable<? extends String> names) {
-			this.names = Collections.unmodifiableList(names);
+		EnumArgumentValue (final String description, final Iterable<? extends String> names) {
+			this.names = Collections.newUnmodifiableList(names);
+			this.description = description;
 		}
 		
 		@SuppressWarnings("ReturnOfCollectionOrArrayField")
 		public List<String> GetNames () {
 			return names;
 		}
+		
+		public String GetDescription () {
+			return description;
+		}
 	}
 	
 	///////////////////////////////////////////////////////
 	//
 	public SootOption AppendDescription (final String extra) {
-		return new SootOption(shortName, longNames, argument, description + extra);
+		return new SootOption(shortName, longNamesUnmodifiable, argument, description + extra);
 	}
 	
 	public SootOption AppendEnumValue (final EnumArgumentValue enumValue) {
@@ -136,7 +140,7 @@ public class SootOption {
 			default:
 				throw new AssertionError();
 		}
-		return new SootOption(shortName, longNames, newArgument, description);
+		return new SootOption(shortName, longNamesUnmodifiable, newArgument, description);
 	}
 	
 	///////////////////////////////////////////////////////
@@ -145,14 +149,23 @@ public class SootOption {
 		return shortName;
 	}
 	
+	@SuppressWarnings("ReturnOfCollectionOrArrayField")
+	public List<String> GetLongNames () {
+		return longNamesUnmodifiable;
+	}
+	
 	public Argument GetArgument () {
 		return argument;
+	}
+	
+	public String GetDescription () {
+		return description;
 	}
 	
 	///////////////////////////////////////////////////////
 	// state
 	private final String shortName, description;
-	private final List<String> longNames;
+	private final List<String> longNamesUnmodifiable;
 	private final Argument argument;
 	
 	///////////////////////////////////////////////////////
@@ -163,7 +176,7 @@ public class SootOption {
 	// constructors
 	SootOption (final String shortName, final Iterable<? extends String> longNames, final Argument argument, final String description) {
 		this.shortName = shortName;
-		this.longNames = isi.util.Collections.unmodifiableList(longNames);
+		this.longNamesUnmodifiable = isi.util.Collections.newUnmodifiableList(longNames);
 		this.argument = argument;
 		this.description = description;
 	}

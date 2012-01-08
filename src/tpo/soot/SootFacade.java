@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import soot.G;
 import tpo.Loggers;
+import tpo.soot.SootOption.EnumArgumentValue;
 import tpo.soot.util.OutputCapturer;
 import tpo.soot.util.StoringOutputCapturer;
 import static isi.util.StringBuilders.isEmpty;
@@ -330,8 +331,8 @@ public class SootFacade {
 	
 		// TODO check for "(default)" and mark default enum value
 		try {
-			return new SootOption.EnumArgumentValue(StreamTokenisers.ReadAllWordTokensToTheEnd(StreamTokenisers.New(m.group(1))));
-		} catch (IOException ex) {
+			return new EnumArgumentValue(m.group(2), StreamTokenisers.ReadAllWordTokensToTheEnd(StreamTokenisers.New(m.group(1))));
+		} catch (final IOException ex) {
 			throw new AssertionError("", ex);
 		}
 	}

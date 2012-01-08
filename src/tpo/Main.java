@@ -5,12 +5,15 @@ import isi.net.http.RequestHandler;
 import isi.net.http.Response;
 import isi.net.http.Server;
 import isi.net.http.Status;
+import isi.net.http.helpers.Url;
 import isi.util.Ref;
 import isi.util.Throwables;
+import isi.util.html.Helpers;
 import isi.util.logging.AutoLogger;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.ServerSocket;
+import java.nio.file.Files;
 import tpo.soot.SootFacade;
 import tpo.soot.SootHelpHtmlRenderer;
 import tpo.soot.SootOptionsParsingException;
@@ -30,19 +33,26 @@ public class Main {
 		final Ref<Boolean> done = Ref.CreateRef(Boolean.FALSE);
 		s.AddHandler(new RequestHandler() {
 			@Override
+			@SuppressWarnings("fallthrough")
 			public void Handle (final Response response, final Writer client, final Request request) throws IOException {
 				response.SetStatus(Status.OK);
-				
-				switch (request.GetPath()) {
+				final String style = "/" + Url.EscapeUrl(Helpers.h("&\"%' {}[]<>,./"));
+				final String path = request.GetPath();
+				if (path.equals(style)) {
+					System.out.println("serving style");
+					isi.util.Charstreams.transfuse(Files.newBufferedReader(Globals.cwd.resolve("style.css"), Request.CHARSET), client);
+				}
+				else
+				switch (path) {
 					case "/stop":
 					case "/giveup":
 					case "/shutup":
+						System.out.println("giving up");
 						done.Assign(Boolean.TRUE);
-						client.write("GOODBYE!");
-						break;
 					default:
+						System.out.println("serving options");
 						try {
-							new SootHelpHtmlRenderer(client).WriteOptions();
+							new SootHelpHtmlRenderer(client).WriteOptions(style);
 						} catch (final SootOptionsParsingException ex) {
 							client.write(Throwables.toString(ex));
 						}

@@ -32,6 +32,6 @@ public class SootOptionGroup {
 	// constructors
 	SootOptionGroup (final String name, final Iterable<? extends SootOption> options) {
 		this.name = requireNonNull(name);
-		this.options = Collections.unmodifiableList(requireNonNull(options));
+		this.options = Collections.newUnmodifiableList(requireNonNull(options));
 	}
 }
