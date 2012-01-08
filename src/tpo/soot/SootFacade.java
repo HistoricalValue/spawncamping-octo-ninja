@@ -26,12 +26,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import soot.G;
 import tpo.Loggers;
-import tpo.soot.SootOption.EnumArgumentValue;
 import tpo.soot.util.OutputCapturer;
 import tpo.soot.util.StoringOutputCapturer;
 import static isi.util.StringBuilders.isEmpty;
 import static isi.util.StringBuilders.reset;
 import static isi.util.Matchers.matches;
+import static java.util.Objects.requireNonNull;
 
 public class SootFacade {
 	
@@ -173,9 +173,11 @@ public class SootFacade {
 		final Pattern GROUP_TITLE = Pattern.compile("^(.*):\\s*$");
 		
 		// building state
+		boolean firstGroup = true, firstOption = true;
 		String groupName = null;
 		List<SootOption> group = new LinkedList<>();
 		SootOption optionBeingBuilt = null;
+		boolean startedEnumValues = false;
 		
 		for (final String line: NL.split(soot.options.Options.v().getUsage())) {
 			m.usePattern(INDENT);
@@ -191,7 +193,11 @@ public class SootFacade {
 						{} // nade
 					else {
 						// finalise previous group being built
-						groups.add(new SootOptionGroup(groupName, group));
+						if (!firstGroup) {
+							groups.add(new SootOptionGroup(groupName, group));
+							group.clear();
+						}
+						firstGroup = false;
 						
 						m.usePattern(GROUP_TITLE);
 						if (!matches(m, GROUP_TITLE))
@@ -201,16 +207,25 @@ public class SootFacade {
 					break;
 				}
 				case 2: {	// new option
-					group.add(optionBeingBuilt);
+					// "finalise" previously being-built option
+					if (!firstOption)
+						group.add(requireNonNull(optionBeingBuilt));
+					firstOption = false;
+					
+					//
 					optionBeingBuilt = ParseOptionLine(line);
+					startedEnumValues = false;
 					break;
 				}
 				case 5: {	// new enum argument value
-					final EnumArgumentValue enumValue = ParseEnumValueLine(line);
-					optionBeingBuilt = optionBeingBuilt.AppendEnumValue(enumValue);
+					optionBeingBuilt = optionBeingBuilt.AppendEnumValue(ParseEnumValueLine(line));
+					startedEnumValues = true;
 					break;
 				}
 				case 31: {	// description continuation
+					if (startedEnumValues)
+						throw new SootOptionsParsingException(line + "{{cannot-go-back-to-descrition-after-enum-values}}");
+					
 					final String description = line.substring(31);
 					optionBeingBuilt = optionBeingBuilt.AppendDescription(description);
 					break;

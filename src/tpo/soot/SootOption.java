@@ -127,15 +127,26 @@ public class SootOption {
 		Argument newArgument;
 		switch (argument.GetType()) {
 			case None:
+			case List:
 				newArgument = new EnumArgument(Iterators.SingleItem(enumValue));
 				break;
 			case Enum:
-				newArgument = new EnumArgument(Iterators.External(IterableConcatenationIterator.create(argument.GetValues(), Iterators.SingleItem(enumValue))));
+				newArgument = new EnumArgument(Iterators.Concatenate(argument.GetValues(), enumValue));
 				break;
 			default:
-				throw new RuntimeException("Cannot overwrite a non-no-argument and non-enum argument type " + argument.GetType().toString());
+				throw new AssertionError();
 		}
 		return new SootOption(shortName, longNames, newArgument, description);
+	}
+	
+	///////////////////////////////////////////////////////
+	//
+	public String GetShortName () {
+		return shortName;
+	}
+	
+	public Argument GetArgument () {
+		return argument;
 	}
 	
 	///////////////////////////////////////////////////////

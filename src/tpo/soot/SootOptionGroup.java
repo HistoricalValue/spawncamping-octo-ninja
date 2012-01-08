@@ -1,7 +1,9 @@
 package tpo.soot;
 
 import isi.util.Collections;
+import isi.util.Predicates;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 
 public class SootOptionGroup {
 	
@@ -29,7 +31,7 @@ public class SootOptionGroup {
 	///////////////////////////////////////////////////////
 	// constructors
 	SootOptionGroup (final String name, final Iterable<? extends SootOption> options) {
-		this.name = name;
-		this.options = Collections.unmodifiableList(options);
+		this.name = requireNonNull(name);
+		this.options = Collections.unmodifiableList(requireNonNull(options));
 	}
 }
