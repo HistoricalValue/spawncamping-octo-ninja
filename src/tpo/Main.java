@@ -8,7 +8,6 @@ import isi.net.http.Status;
 import isi.net.http.helpers.Url;
 import isi.util.Ref;
 import isi.util.Throwables;
-import isi.util.html.Helpers;
 import isi.util.logging.AutoLogger;
 import java.io.IOException;
 import java.io.Writer;
@@ -36,7 +35,7 @@ public class Main {
 			@SuppressWarnings("fallthrough")
 			public void Handle (final Response response, final Writer client, final Request request) throws IOException {
 				response.SetStatus(Status.OK);
-				final String style = "/" + Url.EscapeUrl(Helpers.h("&\"%' {}[]<>,./"));
+				final String style = "/hello bob";
 				final String path = request.GetPath();
 				if (path.equals(style)) {
 					System.out.println("serving style");

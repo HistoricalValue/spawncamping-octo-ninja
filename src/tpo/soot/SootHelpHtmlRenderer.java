@@ -35,13 +35,14 @@ public class SootHelpHtmlRenderer {
 			
 			final Element tbody = b.tbody(), table = b.table(tbody);
 			doc.AddElement(table);
+			table.attr("class", "options");
 			
 			for (final SootOption opt: group.GetOptions())
 				tbody.AddSubelement(b.tr(
-						b.td(OptionNameElement(b, opt)),
-						b.td(OptionArgumentElement(b, opt.GetArgument())),
-						b.td(opt.GetDescription())
-						));
+						b.td(OptionNameElement(b, opt)).attr("class", "name"),
+						b.td(OptionArgumentElement(b, opt.GetArgument())).attr("class", "argument"),
+						b.td(opt.GetDescription()).attr("class", "description")
+						).attr("class", "option"));
 		}
 
 		doc.WriteTo(sink);
