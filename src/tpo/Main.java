@@ -5,14 +5,20 @@ import isi.net.http.RequestHandler;
 import isi.net.http.Response;
 import isi.net.http.Server;
 import isi.net.http.Status;
-import isi.net.http.helpers.Url;
+import isi.util.Charstreams;
 import isi.util.Ref;
+import isi.util.Strings;
 import isi.util.Throwables;
+import isi.util.charstreams.MultiWriterDelegate;
 import isi.util.logging.AutoLogger;
+import java.io.CharArrayReader;
+import java.io.CharArrayWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import tpo.soot.SootFacade;
 import tpo.soot.SootHelpHtmlRenderer;
 import tpo.soot.SootOptionsParsingException;
@@ -39,7 +45,23 @@ public class Main {
 				final String path = request.GetPath();
 				if (path.equals(style)) {
 					System.out.println("serving style");
-					isi.util.Charstreams.transfuse(Files.newBufferedReader(Globals.cwd.resolve("style.css"), Request.CHARSET), client);
+					final Path csspath = Globals.cwd.resolve("style.css");
+					if (Files.exists(csspath))
+						try (final CharArrayWriter caw = new CharArrayWriter(1 << 19)) {
+							try (final Reader cssfin = Files.newBufferedReader(csspath, Request.CHARSET)) {
+							try (final Writer allouts = new MultiWriterDelegate(caw, client)) {
+								Charstreams.transfuse(cssfin, allouts);
+							}}
+							try (final Writer csslitfout = Files.newBufferedWriter(Globals.cwd.resolve("Css.java"), Request.CHARSET)) {
+							try (final Reader r = new CharArrayReader(caw.toCharArray())) {
+								csslitfout.append(Strings.ToJavaLiteral(r));
+							}}
+						}
+					else
+						try (final Writer w = Files.newBufferedWriter(csspath, Request.CHARSET)) {
+						try (final Writer allouts = new MultiWriterDelegate(client, w)) {
+							allouts.append(SootHelpHtmlRenderer.CSS);
+						}}
 				}
 				else
 				switch (path) {
