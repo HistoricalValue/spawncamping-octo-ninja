@@ -24,17 +24,19 @@ public class SootHelpHtmlRenderer {
 	
 	///////////////////////////////////////////////////////
 	//
-	public SootHelpHtmlRenderer WriteOptions (final String style) throws SootOptionsParsingException, IOException {
+	public SootHelpHtmlRenderer WriteOptions (final String style, final String js) throws SootOptionsParsingException, IOException {
 		final ElementBuilder b = new ElementBuilder();
 		final Document doc = new Document("Soot options");
-		final Element	index_ol = b.ol(),
-						index = b.div(index_ol).SetId("index");
+		final Element	index = b.ol().SetId("index").SetClass("menu");
 		int groupIdSeed = 0;
 		
+		doc.Body().attr("onload", "Initialise()");
 		doc.AddElement(index);
 		
 		if (style != null)
 			doc.SetStylesheet(style);
+		if (js != null)
+			doc.SetJavascript(js);
 		
 		for (final SootOptionGroup group: SootFacade.ListOfOptions()) {
 			final String groupName = group.GetName();
@@ -42,7 +44,7 @@ public class SootHelpHtmlRenderer {
 			++groupIdSeed;
 			
 			doc.AddElement(b.h1(groupName).SetId(groupId));
-			index_ol.AddSubelement(b.li(b.a("#" + groupId, groupName)));
+			index.AddSubelement(b.li(b.a("#" + groupId, groupName)));
 			
 			
 			final Element tbody = b.tbody(), table = b.table(tbody);
@@ -57,6 +59,14 @@ public class SootHelpHtmlRenderer {
 						).attr("class", "option"));
 		}
 
+		for (final SootPhaseOptions opt: SootFacade.ListOfPhases()) {
+			final String groupId = "group" + Integer.toString(groupIdSeed);
+			++groupIdSeed;
+			final String name = opt.GetName();
+			
+			index.AddSubelement(b.li(b.a("#" + groupId, name)));
+		}
+		
 		doc.WriteTo(sink);
 		
 		return this;
@@ -194,45 +204,126 @@ public class SootHelpHtmlRenderer {
 			+ ".options .argument { background-color: #9A9394; }\n"
 			+ ".options .description { background-color: #A7B6A4; }\n"
 			+ "\n"
-			+ "#index {\n"
+			+ ".menu {\n"
 			+ "	background-color: #202020;\n"
 			+ "	font-family: \"verdana\", \"arial\", sans-serif;\n"
 			+ "	font-size: 9px;\n"
 			+ "	color: #707070;\n"
 			+ "	width: 18%;\n"
-			+ "	position: fixed;\n"
-			+ "	top: 5em;\n"
 			+ "	border: 1px solid #505050;\n"
-			+ "}\n"
-			+ "\n"
-			+ "#index > ol {\n"
 			+ "	margin: 0;\n"
 			+ "	padding: 0;\n"
 			+ "	list-style-type: none;\n"
+			+ "	max-height: 80%;\n"
+			+ "	overflow-y: auto;\n"
 			+ "}\n"
 			+ "\n"
-			+ "#index > ol > li {\n"
-			+ "	margin: 0;\n"
-			+ "	padding: 0;\n"
-			+ "}\n"
-			+ "\n"
-			+ "#index > ol > li > a {\n"
-			+ "	margin: 0;\n"
-			+ "	padding: .7em .3em .5em .3em ;\n"
+			+ ".menu > li {\n"
 			+ "	border-style: solid;\n"
 			+ "	border-color: #505050;\n"
 			+ "	border-width: 3px 0 0 0;\n"
+			+ "}\n"
+			+ "\n"
+			+ "\n"
+			+ ".menu > li > * {\n"
+			+ "	margin: 0;\n"
+			+ "	padding: .7em .3em .5em .3em ;\n"
 			+ "	color: inherit;\n"
 			+ "	text-decoration: inherit;\n"
 			+ "	display: block;\n"
 			+ "}\n"
-			+ "#index > ol > li:first-child > a {\n"
+			+ ".menu > li:first-child {\n"
 			+ "	border-top-width: 0;\n"
 			+ "	margin-top: 0;\n"
 			+ "}\n"
-			+ "#index > ol > li > a:hover {\n"
-			+ "	background-color: #101010;\n"
+			+ ".menu > li:hover {\n"
 			+ "	border-color: #406020;\n"
+			+ "	background-color: #101010;\n"
 			+ "	color: #708060;\n"
+			+ "}\n"
+			+ "\n"
+			+ "#index {\n"
+			+ "	position: fixed;\n"
+			+ "	top: 1em;\n"
+			+ "}\n"
+			+ "\n";
+	
+	public static final String Javascript = ""
+			+ "function $ (id)			{ return document.getElementById(id); }\n"
+			+ "function _ (name)		{ return document.getElementsByTagName(name); }\n"
+			+ "function k (elname)		{ return document.createElement(elname); }\n"
+			+ "function kdiv ()		{ return k(\"div\"); }\n"
+			+ "function kol ()			{ return k(\"ol\"); }\n"
+			+ "function kli ()			{ return k(\"li\"); }\n"
+			+ "function kp ()			{ return k(\"p\"); }\n"
+			+ "\n"
+			+ "//////////\n"
+			+ "\n"
+			+ "g = 0;\n"
+			+ "function G () {\n"
+			+ "	this.body = _(\"body\")[0];\n"
+			+ "	this.index = $(\"index\");\n"
+			+ "	this.indeces = this.index.getElementsByTagName(\"a\");\n"
+			+ "	this.windows = [];\n"
+			+ "}\n"
+			+ "\n"
+			+ "//////////\n"
+			+ "\n"
+			+ "function ClearWindows () {\n"
+			+ "	windows = g.windows;\n"
+			+ "	while (windows.length > 0) {\n"
+			+ "		w = windows.pop();\n"
+			+ "		w.parentElement.removeChild(w);\n"
+			+ "	}\n"
+			+ "}\n"
+			+ "\n"
+			+ "function AddListWindow (y, x, htmls) {\n"
+			+ "	w = kol();\n"
+			+ "	w.className = \"menu\";\n"
+			+ "	for (i in htmls) {\n"
+			+ "		li = kli();\n"
+			+ "		p = kp();\n"
+			+ "		\n"
+			+ "		p.innerHTML = htmls[i];\n"
+			+ "		\n"
+			+ "		li.appendChild(p);\n"
+			+ "		w.appendChild(li);\n"
+			+ "	}\n"
+			+ "	\n"
+			+ "	s = w.style;\n"
+			+ "	s.position = \"fixed\";\n"
+			+ "	s.top = y + \"px\";\n"
+			+ "	s.left = x + \"px\";\n"
+			+ "	\n"
+			+ "	g.windows.push(w);\n"
+			+ "	g.body.appendChild(w);\n"
+			+ "	\n"
+			+ "	return w;\n"
+			+ "}\n"
+			+ "\n"
+			+ "//////////\n"
+			+ "\n"
+			+ "function ToString (anything) {\n"
+			+ "	result = [];\n"
+			+ "	for (i in anything)\n"
+			+ "		result.push(i + \":\" + anything[i]);\n"
+			+ "	return result;\n"
+			+ "}\n"
+			+ "\n"
+			+ "//////////\n"
+			+ "\n"
+			+ "function InstallHandlers () {\n"
+			+ "	for (i in g.indeces) {\n"
+			+ "		a = g.indeces[i];\n"
+			+ "		a.onclick = function (e) { AddListWindow(50, 50, ToString(e)); }\n"
+			+ "	}\n"
+			+ "}\n"
+			+ "\n"
+			+ "function Initialise ()	{\n"
+			+ "	g = new G();\n"
+			+ "	\n"
+			+ "	InstallHandlers();\n"
+			+ "	\n"
+			+ "	return alert(\"all loaded\");\n"
 			+ "}\n";
 }
