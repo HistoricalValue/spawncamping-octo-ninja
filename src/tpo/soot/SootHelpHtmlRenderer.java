@@ -27,11 +27,23 @@ public class SootHelpHtmlRenderer {
 	public SootHelpHtmlRenderer WriteOptions (final String style) throws SootOptionsParsingException, IOException {
 		final ElementBuilder b = new ElementBuilder();
 		final Document doc = new Document("Soot options");
+		final Element	index_ol = b.ol(),
+						index = b.div(index_ol).SetId("index");
+		int groupIdSeed = 0;
+		
+		doc.AddElement(index);
+		
 		if (style != null)
 			doc.SetStylesheet(style);
 		
 		for (final SootOptionGroup group: SootFacade.ListOfOptions()) {
-			doc.AddElement(b.h1(group.GetName()));
+			final String groupName = group.GetName();
+			final String groupId = "group" + Integer.toString(groupIdSeed);
+			++groupIdSeed;
+			
+			doc.AddElement(b.h1(groupName).SetId(groupId));
+			index_ol.AddSubelement(b.li(b.a("#" + groupId, groupName)));
+			
 			
 			final Element tbody = b.tbody(), table = b.table(tbody);
 			doc.AddElement(table);
@@ -97,7 +109,7 @@ public class SootHelpHtmlRenderer {
 	//
 	public final static String CSS = ""
 			+ "body {\n"
-			+ "	padding: 0;\n"
+			+ "	padding: 0 0 10em 0;\n"
 			+ "	margin: 0;\n"
 			+ "}\n"
 			+ "\n"
@@ -113,7 +125,9 @@ public class SootHelpHtmlRenderer {
 			+ "table.options {\n"
 			+ "	border-collapse: collapse;\n"
 			+ "	width: 80%;\n"
-			+ "	margin: 0 auto 2em auto;\n"
+			+ "	margin: 0 0 2em 0;\n"
+			+ "	left: 19%;\n"
+			+ "	position: relative;\n"
 			+ "}\n"
 			+ "\n"
 			+ ".options .name { width: 20%; }\n"
@@ -178,5 +192,47 @@ public class SootHelpHtmlRenderer {
 			+ "\n"
 			+ ".options .name { background-color: #7A7E85; }\n"
 			+ ".options .argument { background-color: #9A9394; }\n"
-			+ ".options .description { background-color: #A7B6A4; }\n";
+			+ ".options .description { background-color: #A7B6A4; }\n"
+			+ "\n"
+			+ "#index {\n"
+			+ "	background-color: #202020;\n"
+			+ "	font-family: \"verdana\", \"arial\", sans-serif;\n"
+			+ "	font-size: 9px;\n"
+			+ "	color: #707070;\n"
+			+ "	width: 18%;\n"
+			+ "	position: fixed;\n"
+			+ "	top: 5em;\n"
+			+ "	border: 1px solid #505050;\n"
+			+ "}\n"
+			+ "\n"
+			+ "#index > ol {\n"
+			+ "	margin: 0;\n"
+			+ "	padding: 0;\n"
+			+ "	list-style-type: none;\n"
+			+ "}\n"
+			+ "\n"
+			+ "#index > ol > li {\n"
+			+ "	margin: 0;\n"
+			+ "	padding: 0;\n"
+			+ "}\n"
+			+ "\n"
+			+ "#index > ol > li > a {\n"
+			+ "	margin: 0;\n"
+			+ "	padding: .7em .3em .5em .3em ;\n"
+			+ "	border-style: solid;\n"
+			+ "	border-color: #505050;\n"
+			+ "	border-width: 3px 0 0 0;\n"
+			+ "	color: inherit;\n"
+			+ "	text-decoration: inherit;\n"
+			+ "	display: block;\n"
+			+ "}\n"
+			+ "#index > ol > li:first-child > a {\n"
+			+ "	border-top-width: 0;\n"
+			+ "	margin-top: 0;\n"
+			+ "}\n"
+			+ "#index > ol > li > a:hover {\n"
+			+ "	background-color: #101010;\n"
+			+ "	border-color: #406020;\n"
+			+ "	color: #708060;\n"
+			+ "}\n";
 }
