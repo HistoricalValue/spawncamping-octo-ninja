@@ -1,11 +1,12 @@
 package tpo.soot;
 
+import isi.util.StringBuilders;
 import isi.util.html.Document;
 import isi.util.html.Element;
 import isi.util.html.ElementBuilder;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
-import java.util.Objects;
 import tpo.soot.SootOption.Argument;
 import tpo.soot.SootOption.ArgumentType;
 import tpo.soot.SootOption.EnumArgumentValue;
@@ -14,17 +15,53 @@ public class SootHelpHtmlRenderer {
 	
 	///////////////////////////////////////////////////////
 	// state
-	private final Appendable sink;
+	private final StringBuilder	extraJavascript = new StringBuilder(1 << 14),
+								extraCss = new StringBuilder(1 << 14);
 	
 	///////////////////////////////////////////////////////
 	// constructors
-	public SootHelpHtmlRenderer (final Appendable sink) {
-		this.sink = Objects.requireNonNull(sink);
+	
+	///////////////////////////////////////////////////////
+	//
+	public SootHelpHtmlRenderer AddExtraJavascript (final String script) {
+		this.extraJavascript.append(script);
+		return this;
+	}
+	
+	public SootHelpHtmlRenderer AddExtraCss (final String style) {
+		this.extraCss.append(style);
+		return this;
+	}
+	
+	public String Css () {
+		return standardCSS + extraCss.toString();
+	}
+	
+	public String Javascript () {
+		return standardJavascript + extraJavascript.toString();
+	}
+	
+	public void ResetExtraCss () {
+		StringBuilders.reset(extraCss);
+	}
+	
+	public void ResetExtraJavascript () {
+		StringBuilders.reset(extraJavascript);
 	}
 	
 	///////////////////////////////////////////////////////
 	//
-	public SootHelpHtmlRenderer WriteOptions (final String style, final String js) throws SootOptionsParsingException, IOException {
+	public SootHelpHtmlRenderer WriteOptions (
+			final Writer sink,
+			final String style,
+			final String js)
+		throws
+			SootOptionsParsingException,
+			IOException
+	{
+		ResetExtraCss();
+		ResetExtraJavascript();
+		
 		final ElementBuilder b = new ElementBuilder();
 		final Document doc = new Document("Soot options");
 		final Element	index = b.ol().SetId("index").SetClass("menu");
@@ -65,6 +102,10 @@ public class SootHelpHtmlRenderer {
 			final String name = opt.GetName();
 			
 			index.AddSubelement(b.li(b.a("#" + groupId, name)));
+			
+			final StringBuilder extrajs = new StringBuilder(1 << 14);
+			extrajs.append("function ").append("AddWindowFor").append(groupId).append(" () {}\n");
+			AddExtraJavascript(extrajs.toString());
 		}
 		
 		doc.WriteTo(sink);
@@ -117,7 +158,7 @@ public class SootHelpHtmlRenderer {
 	
 	///////////////////////////////////////////////////////
 	//
-	public final static String CSS = ""
+	private final static String standardCSS = ""
 			+ "body {\n"
 			+ "	padding: 0 0 10em 0;\n"
 			+ "	margin: 0;\n"
@@ -248,7 +289,7 @@ public class SootHelpHtmlRenderer {
 			+ "}\n"
 			+ "\n";
 	
-	public static final String Javascript = ""
+	private static final String standardJavascript = ""
 			+ "function $ (id)			{ return document.getElementById(id); }\n"
 			+ "function _ (name)		{ return document.getElementsByTagName(name); }\n"
 			+ "function k (elname)		{ return document.createElement(elname); }\n"

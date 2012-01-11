@@ -38,6 +38,7 @@ public class Main {
 	private void Run () throws IOException, SootOptionsParsingException, Exception {
 		final Server s = new Server(new ServerSocket(8000));
 		final Ref<Boolean> done = Ref.CreateRef(Boolean.FALSE);
+		final SootHelpHtmlRenderer sootHelpHtmlRenderer = new SootHelpHtmlRenderer();
 		s.AddHandler(new RequestHandler() {
 			@Override
 			@SuppressWarnings({"fallthrough", "ConvertToStringSwitch"})
@@ -47,12 +48,12 @@ public class Main {
 				final String path = request.GetPath();
 				if (path.equals(style)) {
 					response.SetContentType(ContentType.Css);
-					ServeFile("style", style, "style.css", "Css.java", SootHelpHtmlRenderer.CSS, client);
+					ServeFile("style", style, "style.css", "Css.java", sootHelpHtmlRenderer.Css(), client);
 				}
 				else
 				if (path.equals(js)) {
 					response.SetContentType(ContentType.Javascript);
-					ServeFile("javascript", js, "script.js", "Script.java", SootHelpHtmlRenderer.Javascript, client);
+					ServeFile("javascript", js, "script.js", "Script.java", sootHelpHtmlRenderer.Javascript(), client);
 				}
 				else
 				switch (path) {
@@ -63,7 +64,7 @@ public class Main {
 						System.out.println("serving options");
 						try {
 							response.SetContentType(ContentType.Html);
-							new SootHelpHtmlRenderer(client).WriteOptions(style, js);
+							sootHelpHtmlRenderer.WriteOptions(client, style, js);
 						} catch (final SootOptionsParsingException ex) {
 							Document.FromString(Throwables.toString(ex)).WriteTo(client);
 						}
