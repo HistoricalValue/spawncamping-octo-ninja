@@ -1,11 +1,14 @@
 package tpo.soot;
 
+import static isi.util.html.Helpers.h;
 import isi.util.StringBuilders;
 import isi.util.html.Document;
 import isi.util.html.Element;
 import isi.util.html.ElementBuilder;
+import isi.util.html.Helpers;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.LinkedList;
 import java.util.List;
 import tpo.soot.SootOption.Argument;
 import tpo.soot.SootOption.ArgumentType;
@@ -64,7 +67,7 @@ public class SootHelpHtmlRenderer {
 		
 		final ElementBuilder b = new ElementBuilder();
 		final Document doc = new Document("Soot options");
-		final Element	index = b.ol().SetId("index").SetClass("menu");
+		final Element index = b.ol().SetId("index").SetClass("menu");
 		int groupIdSeed = 0;
 		
 		doc.Body().attr("onload", "Initialise()");
@@ -96,17 +99,55 @@ public class SootHelpHtmlRenderer {
 						).attr("class", "option"));
 		}
 
+		final List<String> subphasesIds = new LinkedList<>();
 		for (final SootPhaseOptions opt: SootFacade.ListOfPhases()) {
 			final String groupId = "group" + Integer.toString(groupIdSeed);
+			final String groupIndexId = groupId + "_index";
 			++groupIdSeed;
-			final String name = opt.GetName();
+			final String phaseName = opt.GetName();
 			
-			index.AddSubelement(b.li(b.a("#" + groupId, name)));
+			index.AddSubelement(b.li(b.a("#" + groupId, phaseName).
+					attr("onclick", "ToggleGroup_" + groupIndexId + "()")));
 			
-			final StringBuilder extrajs = new StringBuilder(1 << 14);
-			extrajs.append("function ").append("AddWindowFor").append(groupId).append(" () {}\n");
-			AddExtraJavascript(extrajs.toString());
+			AddExtraJavascript("\n\nfunction ToggleGroup_")
+					.AddExtraJavascript(groupIndexId)
+					.AddExtraJavascript(" ()\n\t{ ToggleSubphasePopUp(\"")
+					.AddExtraJavascript(groupIndexId)
+					.AddExtraJavascript("\"); }");
+					
+			
+			doc.AddElement(b.h1(phaseName).SetId(groupId));
+			doc.AddElement(b.p(soot.options.Options.v().getPhaseHelp(phaseName)));
+			
+			// list of subopts
+			final Element suboptsEl = b.ol().SetId(groupIndexId).SetClass("menu", "popup");
+			subphasesIds.add(groupIndexId);
+			
+			for (final SootPhaseOptions subopt: opt.GetSubphases()) {
+				final String subphaseName = subopt.GetName();
+				
+				if (!subopt.GetSubphases().isEmpty())
+					throw new RuntimeException(subphaseName + " not without subphases");
+				
+				final String subgroupId = groupId + "_" + Integer.toString(groupIdSeed);
+				++groupIdSeed;
+				
+				suboptsEl.AddSubelement(b.li(b.a("#" + subgroupId, subphaseName)));
+				
+				doc.AddElement(b.h2(subphaseName).SetId(subgroupId))
+						.AddElement(b.p(subopt.GetDescription()))
+						.AddElement(b.p(soot.options.Options.v().getPhaseHelp(subphaseName)));
+			}
+			
+			doc.AddElement(suboptsEl);
 		}
+		
+		AddExtraJavascript("\n\nfunction HideAllSubphases () {");
+		for (final String hiddenEl: subphasesIds)
+			AddExtraJavascript("\n\t$(\"")
+					.AddExtraJavascript(hiddenEl)
+					.AddExtraJavascript("\").style.display = \"none\";");
+		AddExtraJavascript("\n}\n");
 		
 		doc.WriteTo(sink);
 		
@@ -287,6 +328,12 @@ public class SootHelpHtmlRenderer {
 			+ "	position: fixed;\n"
 			+ "	top: 1em;\n"
 			+ "}\n"
+			+ "\n"
+			+ ".popup {\n"
+			+ "	position: fixed;\n"
+			+ "	top: 9.126em;\n"
+			+ "	left: 9.126em;\n"
+			+ "}\n"
 			+ "\n";
 	
 	private static final String standardJavascript = ""
@@ -363,8 +410,16 @@ public class SootHelpHtmlRenderer {
 			+ "function Initialise ()	{\n"
 			+ "	g = new G();\n"
 			+ "	\n"
-			+ "	InstallHandlers();\n"
+			+ "	HideAllSubphases();\n"
 			+ "	\n"
 			+ "	return alert(\"all loaded\");\n"
-			+ "}\n";
+			+ "}\n"
+			+ "\n"
+			+ "function ToggleSubphasePopUp (id) {\n"
+			+ "\tif (g.activeSubphaseWindow)\n"
+			+ "\t\t$(g.activeSubphaseWindow).style.display = \"none\";\n"
+			+ "\tg.activeSubphaseWindow = id;\n"
+			+ "\t$(g.activeSubphaseWindow).style.display = \"block\";\n"
+			+ "}\n"
+			+ "\n";
 }
