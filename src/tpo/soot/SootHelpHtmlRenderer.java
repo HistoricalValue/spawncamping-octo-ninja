@@ -1,11 +1,9 @@
 package tpo.soot;
 
-import static isi.util.html.Helpers.h;
 import isi.util.StringBuilders;
 import isi.util.html.Document;
 import isi.util.html.Element;
 import isi.util.html.ElementBuilder;
-import isi.util.html.Helpers;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.LinkedList;
@@ -70,7 +68,7 @@ public class SootHelpHtmlRenderer {
 		final Element index = b.ol().SetId("index").SetClass("menu");
 		int groupIdSeed = 0;
 		
-		doc.Body().attr("onload", "Initialise()");
+		doc.Body().attr("onload", "isi.Initialise()");
 		doc.AddElement(index);
 		
 		if (style != null)
@@ -107,11 +105,14 @@ public class SootHelpHtmlRenderer {
 			final String phaseName = opt.GetName();
 			
 			index.AddSubelement(b.li(b.a("#" + groupId, phaseName).
-					attr("onclick", "ToggleGroup_" + groupIndexId + "()")));
+					attr("onclick", "isi.ToggleGroup_" + groupIndexId + "()")));
 			
-			AddExtraJavascript("\n\nfunction ToggleGroup_")
+			final String toggleGroupFunctionName = "ToggleGroup_" + groupIndexId;
+			AddExtraJavascript("\nisi.")
+					.AddExtraJavascript(toggleGroupFunctionName)
+					.AddExtraJavascript(" = function ToggleGroup_")
 					.AddExtraJavascript(groupIndexId)
-					.AddExtraJavascript(" ()\n\t{ ToggleSubphasePopUp(\"")
+					.AddExtraJavascript(" () { isi.ToggleSubphasePopUp(\"")
 					.AddExtraJavascript(groupIndexId)
 					.AddExtraJavascript("\"); }");
 					
@@ -142,13 +143,14 @@ public class SootHelpHtmlRenderer {
 			doc.AddElement(suboptsEl);
 		}
 		
-		AddExtraJavascript("\n\nfunction HideAllSubphases () {");
+		AddExtraJavascript("\n\nisi.HideAllSubphases = function HideAllSubphases () {");
 		for (final String hiddenEl: subphasesIds)
 			AddExtraJavascript("\n\t$(\"")
 					.AddExtraJavascript(hiddenEl)
 					.AddExtraJavascript("\").style.display = \"none\";");
 		AddExtraJavascript("\n}\n");
 		
+		doc.AddElement(b.div(b.text("X")).SetId("closeButton"));
 		doc.WriteTo(sink);
 		
 		return this;
@@ -214,12 +216,15 @@ public class SootHelpHtmlRenderer {
 			+ "	padding: 0;\n"
 			+ "}\n"
 			+ "\n"
-			+ "table.options {\n"
-			+ "	border-collapse: collapse;\n"
+			+ "h1, table.options {\n"
 			+ "	width: 80%;\n"
-			+ "	margin: 0 0 2em 0;\n"
 			+ "	left: 19%;\n"
 			+ "	position: relative;\n"
+			+ "}\n"
+			+ "\n"
+			+ "table.options {\n"
+			+ "	border-collapse: collapse;\n"
+			+ "	margin: 0 0 2em 0;\n"
 			+ "}\n"
 			+ "\n"
 			+ ".options .name { width: 20%; }\n"
@@ -261,7 +266,6 @@ public class SootHelpHtmlRenderer {
 			+ "	width: 100%;\n"
 			+ "	border-collapse: collapse;\n"
 			+ "}\n"
-			+ "\n"
 			+ "\n"
 			+ "/****************************/\n"
 			+ "\n"
@@ -329,6 +333,15 @@ public class SootHelpHtmlRenderer {
 			+ "	top: 1em;\n"
 			+ "}\n"
 			+ "\n"
+			+ "div#closeButton {\n"
+			+ "	position: fixed;\n"
+			+ "	background-color: red;\n"
+			+ "	color: white;\n"
+			+ "	font-family: \"verdana\", sans-serif;\n"
+			+ "	font-weight: bold;\n"
+			+ "	padding: .3em;\n"
+			+ "}\n"
+			+ "\n"
 			+ ".popup {\n"
 			+ "	position: fixed;\n"
 			+ "	top: 9.126em;\n"
@@ -338,88 +351,57 @@ public class SootHelpHtmlRenderer {
 	
 	private static final String standardJavascript = ""
 			+ "function $ (id)			{ return document.getElementById(id); }\n"
-			+ "function _ (name)		{ return document.getElementsByTagName(name); }\n"
-			+ "function k (elname)		{ return document.createElement(elname); }\n"
-			+ "function kdiv ()		{ return k(\"div\"); }\n"
-			+ "function kol ()			{ return k(\"ol\"); }\n"
-			+ "function kli ()			{ return k(\"li\"); }\n"
-			+ "function kp ()			{ return k(\"p\"); }\n"
 			+ "\n"
-			+ "//////////\n"
-			+ "\n"
-			+ "g = 0;\n"
-			+ "function G () {\n"
-			+ "	this.body = _(\"body\")[0];\n"
-			+ "	this.index = $(\"index\");\n"
-			+ "	this.indeces = this.index.getElementsByTagName(\"a\");\n"
-			+ "	this.windows = [];\n"
-			+ "}\n"
-			+ "\n"
-			+ "//////////\n"
-			+ "\n"
-			+ "function ClearWindows () {\n"
-			+ "	windows = g.windows;\n"
-			+ "	while (windows.length > 0) {\n"
-			+ "		w = windows.pop();\n"
-			+ "		w.parentElement.removeChild(w);\n"
+			+ "//\n"
+			+ "isi = {};\n"
+			+ "	isi.k = {};\n"
+			+ "		isi.k.k		= document.createElement;\n"
+			+ "		isi.k.div	= document.createElement.bind(\"div\"	);\n"
+			+ "		isi.k.ol	= document.createElement.bind(\"ol\"	);\n"
+			+ "		isi.k.li	= document.createElement.bind(\"li\"	);\n"
+			+ "		isi.k.p		= document.createElement.bind(\"p\"	);\n"
+			+ "//\n"
+			+ "	isi.g = 0;\n"
+			+ "	isi.G = function G () {\n"
+			+ "		this.body = $(\"bady\");\n"
+			+ "		this.index = $(\"index\");\n"
+			+ "		this.indeces = this.index.getElementsByTagName(\"a\");\n"
+			+ "		this.activeWindow = null;\n"
+			+ "		this.closeButton = $(\"closeButton\");\n"
+			+ "		this.closeButtonVisible = false;\n"
 			+ "	}\n"
-			+ "}\n"
-			+ "\n"
-			+ "function AddListWindow (y, x, htmls) {\n"
-			+ "	w = kol();\n"
-			+ "	w.className = \"menu\";\n"
-			+ "	for (i in htmls) {\n"
-			+ "		li = kli();\n"
-			+ "		p = kp();\n"
-			+ "		\n"
-			+ "		p.innerHTML = htmls[i];\n"
-			+ "		\n"
-			+ "		li.appendChild(p);\n"
-			+ "		w.appendChild(li);\n"
-			+ "	}\n"
-			+ "	\n"
-			+ "	s = w.style;\n"
-			+ "	s.position = \"fixed\";\n"
-			+ "	s.top = y + \"px\";\n"
-			+ "	s.left = x + \"px\";\n"
-			+ "	\n"
-			+ "	g.windows.push(w);\n"
-			+ "	g.body.appendChild(w);\n"
-			+ "	\n"
-			+ "	return w;\n"
-			+ "}\n"
-			+ "\n"
 			+ "//////////\n"
-			+ "\n"
-			+ "function ToString (anything) {\n"
-			+ "	result = [];\n"
-			+ "	for (i in anything)\n"
-			+ "		result.push(i + \":\" + anything[i]);\n"
-			+ "	return result;\n"
-			+ "}\n"
-			+ "\n"
-			+ "//////////\n"
-			+ "\n"
-			+ "function InstallHandlers () {\n"
-			+ "	for (i in g.indeces) {\n"
-			+ "		a = g.indeces[i];\n"
-			+ "		a.onclick = function (e) { AddListWindow(50, 50, ToString(e)); }\n"
+			+ "	isi.RemoveElement = function RemoveElement (el) {\n"
+			+ "		el.parentElement.removeChild(el);\n"
 			+ "	}\n"
-			+ "}\n"
-			+ "\n"
-			+ "function Initialise ()	{\n"
-			+ "	g = new G();\n"
+			+ "//////////\n"
+			+ "	isi.ObjectToString = function ToString (anything) {\n"
+			+ "		var result = [];\n"
+			+ "		for (i in anything)\n"
+			+ "			result.push(i + \":\" + anything[i]);\n"
+			+ "		return result;\n"
+			+ "	}\n"
+			+ "//////////\n"
+			+ "	isi.Initialise = function Initialise ()	{\n"
+			+ "		isi.g = new isi.G();\n"
+			+ "		isi.HideAllSubphases();\n"
+			+ "		return alert(\"all loaded\");\n"
+			+ "	}\n"
+			+ "//////////\n"
+			+ "	isi.ToggleSubphasePopUp = function ToggleSubphasePopUp (id) {\n"
+			+ "		var g = isi.g;\n"
+			+ "		var prevWindowId = g.activeWindow;\n"
+			+ "		var w = id;\n"
 			+ "	\n"
-			+ "	HideAllSubphases();\n"
+			+ "		g.activeWindow = id;\n"
 			+ "	\n"
-			+ "	return alert(\"all loaded\");\n"
-			+ "}\n"
+			+ "		if (prevWindowId)\n"
+			+ "			$(prevWindowId).style.display = \"none\";\n"
 			+ "\n"
-			+ "function ToggleSubphasePopUp (id) {\n"
-			+ "\tif (g.activeSubphaseWindow)\n"
-			+ "\t\t$(g.activeSubphaseWindow).style.display = \"none\";\n"
-			+ "\tg.activeSubphaseWindow = id;\n"
-			+ "\t$(g.activeSubphaseWindow).style.display = \"block\";\n"
-			+ "}\n"
+			+ "		if (!g.closeButtonVisible)\n"
+			+ "			g.closeButton.style.display = \"block\";\n"
+			+ "\n"
+			+ "		$(id).style.display = \"block\";\n"
+			+ "	}\n"
 			+ "\n";
 }
