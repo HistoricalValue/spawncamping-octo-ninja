@@ -1,5 +1,6 @@
 package tpo.soot;
 
+import isi.util.logging.Loggers;
 import static isi.util.Collections.map;
 import static isi.util.Collections.select;
 import isi.util.OnceSettable.GetUnsetOrSetSetException;
@@ -25,7 +26,6 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import soot.G;
-import tpo.Loggers;
 import tpo.soot.SootOption.EnumArgumentValue;
 import tpo.soot.util.OutputCapturer;
 import tpo.soot.util.StoringOutputCapturer;

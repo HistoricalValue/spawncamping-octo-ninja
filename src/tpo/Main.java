@@ -7,12 +7,15 @@ import isi.net.http.Response;
 import isi.net.http.Server;
 import isi.net.http.Status;
 import isi.util.Charstreams;
+import isi.util.Cwd;
 import isi.util.Ref;
 import isi.util.Strings;
 import isi.util.Throwables;
 import isi.util.charstreams.MultiWriterDelegate;
 import isi.util.html.Document;
 import isi.util.logging.AutoLogger;
+import isi.util.logging.Loggers;
+import isi.util.Runtime;
 import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
 import java.io.IOException;
@@ -28,14 +31,22 @@ import tpo.soot.util.OutputCapturer;
 
 public class Main {
 	
-	public static void main (String[] args) throws IOException, SootOptionsParsingException, Exception {
-		Loggers.Initialise();
-		final OutputCapturer sootOutputCapturer = SootFacade.CaptureOutput(Globals.cwd.resolve("soot_out.txt"), true, false);
-		new Main().Run();
-		Loggers.CleanUp();
+	public static void main (final String[] args) throws SecurityException, IOException {
+		main0(args);
 	}
 	
-	private void Run () throws IOException, SootOptionsParsingException, Exception {
+	public static void main0 (String[] args) throws SecurityException, IOException {
+		Runtime.PushRuntime(new Runtime(new Cwd("./wd")));
+		
+		Loggers.Initialise();
+		final OutputCapturer sootOutputCapturer = SootFacade.CaptureOutput(Runtime.GetCurrentCwd().resolve("soot_out.txt"), true, false);
+		new Main().Run();
+		Loggers.CleanUp();
+		
+		Runtime.PopRuntime();
+	}
+	
+	private void Run () throws IOException {
 		final Server s = new Server(new ServerSocket(8000));
 		final Ref<Boolean> done = Ref.CreateRef(Boolean.FALSE);
 		final SootHelpHtmlRenderer sootHelpHtmlRenderer = new SootHelpHtmlRenderer();
@@ -60,7 +71,7 @@ public class Main {
 					case "/stop": case "/giveup": case "/shutup":
 						System.out.println("giving up through " + path);
 						done.Assign(Boolean.TRUE);
-					default:
+					case "/":
 						System.out.println("serving options");
 						try {
 							response.SetContentType(ContentType.Html);
@@ -68,7 +79,14 @@ public class Main {
 						} catch (final SootOptionsParsingException ex) {
 							Document.FromString(Throwables.toString(ex)).WriteTo(client);
 						}
+						break;
+					default:
+						System.out.println("Not found " + path);
+						response.SetStatus(Status.NotFound);
+						client.close();
 				}
+				
+				System.out.println("DONE HANDLING");
 			}
 			
 			private void ServeFile (
@@ -83,14 +101,14 @@ public class Main {
 			{
 				System.out.println("serving " + servingWhat + " from " + servingPath);
 
-				final Path filepath = Globals.cwd.resolve(filePathStr);
+				final Path filepath = Runtime.GetCurrentCwd().resolve(filePathStr);
 				if (Files.exists(filepath))
 					try (final CharArrayWriter caw = new CharArrayWriter(1 << 19)) {
 						try (final Reader cssfin = Files.newBufferedReader(filepath, Request.CHARSET)) {
 						try (final Writer allouts = new MultiWriterDelegate(caw, client)) {
 							Charstreams.transfuse(cssfin, allouts);
 						}}
-						try (final Writer csslitfout = Files.newBufferedWriter(Globals.cwd.resolve(outFilePathStr), Request.CHARSET)) {
+						try (final Writer csslitfout = Files.newBufferedWriter(Runtime.GetCurrentCwd().resolve(outFilePathStr), Request.CHARSET)) {
 						try (final Reader r = new CharArrayReader(caw.toCharArray())) {
 							csslitfout.append(Strings.ToJavaLiteral(r));
 						}}

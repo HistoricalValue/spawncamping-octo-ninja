@@ -54,7 +54,7 @@ public class SootHelpHtmlRenderer {
 	//
 	public SootHelpHtmlRenderer WriteOptions (
 			final Writer sink,
-			final String style,
+			final String css,
 			final String js)
 		throws
 			SootOptionsParsingException,
@@ -64,17 +64,9 @@ public class SootHelpHtmlRenderer {
 		ResetExtraJavascript();
 		
 		final ElementBuilder b = new ElementBuilder();
-		final Document doc = new Document("Soot options");
-		final Element index = b.ol().SetId("index").SetClass("menu");
+		final Element index = CreateIndexElement(b);
+		final Document doc = CreateDocument(b, index, css, js);
 		int groupIdSeed = 0;
-		
-		doc.Body().attr("onload", "isi.Initialise()");
-		doc.AddElement(index);
-		
-		if (style != null)
-			doc.SetStylesheet(style);
-		if (js != null)
-			doc.SetJavascript(js);
 		
 		for (final SootOptionGroup group: SootFacade.ListOfOptions()) {
 			final String groupName = group.GetName();
@@ -156,6 +148,27 @@ public class SootHelpHtmlRenderer {
 		return this;
 	}
 	
+	private static Document CreateDocument (
+			final ElementBuilder	b,
+			final Element			index,
+			final String			css,
+			final String			js) {
+		final Document doc = new Document("Soot options");
+
+		doc.AddElement(index);
+		
+		if (css != null)
+			doc.SetStylesheet(css);
+		if (js != null)
+			doc.SetJavascript(js);
+		
+		return doc;
+	}
+	
+	private static Element CreateIndexElement (final ElementBuilder b) {
+		return b.ol().SetId("index").SetClass("menu");
+	}
+
 	private Element OptionNameElement (final ElementBuilder b, final SootOption opt) {
 		final Element ol = b.ol_lis(opt.GetShortName());
 		for (final String name: opt.GetLongNames())
