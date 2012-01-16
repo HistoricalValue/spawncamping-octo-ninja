@@ -1,5 +1,6 @@
 package tpo.soot;
 
+import isi.net.http.helpers.Url;
 import isi.util.StringBuilders;
 import isi.util.html.Document;
 import isi.util.html.Element;
@@ -158,9 +159,9 @@ public class SootHelpHtmlRenderer {
 		doc.AddElement(index);
 		
 		if (css != null)
-			doc.SetStylesheet(css);
+			doc.SetStylesheet("/" + Url.EscapeUrl(css));
 		if (js != null)
-			doc.SetJavascript(js);
+			doc.SetJavascript("/" + Url.EscapeUrl(js));
 		
 		return doc;
 	}

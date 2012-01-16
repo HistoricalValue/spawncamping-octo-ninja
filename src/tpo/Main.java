@@ -55,7 +55,8 @@ public class Main {
 			@SuppressWarnings({"fallthrough", "ConvertToStringSwitch"})
 			public void Handle (final Response response, final Writer client, final Request request) throws IOException {
 				response.SetStatus(Status.OK);
-				final String style = "/hello bob", js = "/拉帮结伙";
+				final String stylePathName = "γεια σου μπόμπ", jsPathName = "拉帮结伙";
+				final String style = "/" + stylePathName, js = "/" + jsPathName;
 				final String path = request.GetPath();
 				if (path.equals(style)) {
 					response.SetContentType(ContentType.Css);
@@ -75,7 +76,7 @@ public class Main {
 						System.out.println("serving options");
 						try {
 							response.SetContentType(ContentType.Html);
-							sootHelpHtmlRenderer.WriteOptions(client, style, js);
+							sootHelpHtmlRenderer.WriteOptions(client, stylePathName, jsPathName);
 						} catch (final SootOptionsParsingException ex) {
 							Document.FromString(Throwables.toString(ex)).WriteTo(client);
 						}
