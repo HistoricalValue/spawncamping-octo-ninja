@@ -78,9 +78,11 @@ public class SootHelpHtmlRenderer {
 	{
 		Reset();
 		
+		final String bodyId = "bady";
+		
 		final ElementBuilder b = new ElementBuilder();
 		final Element index = CreateIndexElement(b);
-		final Document doc = CreateDocument(b, index, css, js);
+		final Document doc = CreateDocument(b, index, bodyId, css, js);
 		
 		for (final SootOptionGroup group: SootFacade.ListOfOptions())
 			AppendElementsForOptionsGroup(b, group, doc, index);
@@ -90,11 +92,19 @@ public class SootHelpHtmlRenderer {
 			AppendElementsForPhaseOption(b, opt, doc, index, subphasesIndecesElementsIds);
 		
 		doc.AddElement(CreateClosePopUpElementsButton(b, subphasesIndecesElementsIds));
-		
+		doc.AddElement(CreateJavascriptMainScriptElement(b, bodyId));
 		doc.WriteTo(sink);
 		return this;
 	}
 
+	private static Element CreateJavascriptMainScriptElement (
+			final ElementBuilder	b,
+			final String			bodyId) {
+		final Element script = b.script();
+		script.AddSubelement(b.html("$(\"" + bodyId + "\").onload = isi.Initialise;"));
+		script.attr("type", "text/javascript");
+		return script;
+	}
 	private Element CreateClosePopUpElementsButton (
 			final ElementBuilder		b,
 			final List<String>			subphasesIndecesElementsIds) {
@@ -194,10 +204,12 @@ public class SootHelpHtmlRenderer {
 	private static Document CreateDocument (
 			final ElementBuilder	b,
 			final Element			index,
+			final String			bodyId,
 			final String			css,
 			final String			js) {
 		final Document doc = new Document("Soot options");
 
+		doc.SetBodyId(bodyId);
 		doc.AddElement(index);
 		
 		if (css != null)
