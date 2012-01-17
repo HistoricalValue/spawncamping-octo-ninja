@@ -68,6 +68,7 @@ public class SootHelpHtmlRenderer {
 		String next () { return "group_" + seed++; }
 		void reset () { seed = 0; }
 	}
+	
 	public SootHelpHtmlRenderer WriteOptions (
 			final Writer sink,
 			final String css,
