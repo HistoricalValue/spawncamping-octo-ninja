@@ -151,8 +151,8 @@ public class SootHelpHtmlRenderer {
 		suboptionsIndex.AddSubelement(b.li(b.a("#" + subgroupId, subphaseName)));
 
 		doc.AddElement(b.h2(subphaseName).SetId(subgroupId))
-				.AddElement(b.p(subopt.GetDescription()))
-				.AddElement(b.p(soot.options.Options.v().getPhaseHelp(subphaseName)));
+				.AddElement(b.p(subopt.GetDescription()).SetClass("description"))
+				.AddElement(b.p(soot.options.Options.v().getPhaseHelp(subphaseName)).SetClass("description"));
 	}
 	
 	private void ExtraJavascriptForPhaseOptions (
@@ -216,7 +216,7 @@ public class SootHelpHtmlRenderer {
 	}
 
 	private static Element OptionNamesElement (final ElementBuilder b, final SootOption opt) {
-		final Element ol = b.ol_lis(opt.GetShortName());
+		final Element ol = b.ol(opt.GetShortName());
 		for (final String name: opt.GetLongNames())
 			ol.AddSubelement(b.li(name));
 		return ol;
