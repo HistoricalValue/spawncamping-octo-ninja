@@ -29,9 +29,9 @@ public abstract class Predicate<T> {
             return false;
         }
     };
-    
+
     public static final Predicate TRUE = FALSE.not();
-    
+
     @SuppressWarnings("unchecked")
     public static <T> Predicate<T> truePred() {
         return (Predicate<T>)TRUE;
@@ -41,7 +41,7 @@ public abstract class Predicate<T> {
     public static <T> Predicate<T> falsePred() {
         return (Predicate<T>)FALSE;
     }
-    
+
     /** Test whether an {@link Object} satisfies this {@link Predicate} */
     public abstract boolean test(T obj_);
 

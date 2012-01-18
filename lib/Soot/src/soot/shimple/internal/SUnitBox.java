@@ -37,7 +37,7 @@ public interface SUnitBox extends UnitBox
      * <p> Needed for Shimple internal Unit chain patching.
      **/
     public boolean isUnitChanged();
-    
+
     /**
      * Updates the value of the flag used to indicate whether the
      * contents of the UnitBox may have changed.

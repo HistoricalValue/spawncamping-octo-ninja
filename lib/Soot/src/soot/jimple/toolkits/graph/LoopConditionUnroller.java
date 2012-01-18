@@ -75,7 +75,7 @@ public class LoopConditionUnroller extends BodyTransformer {
     visitedBlocks = new HashSet<Block>();
     this.body = body;
     this.maxSize = PhaseOptions.getInt(options, "maxSize");
-    
+
     BlockGraph bg = new BriefBlockGraph(body);
     Iterator headIter = bg.getHeads().iterator();
     while (headIter.hasNext())
@@ -85,7 +85,7 @@ public class LoopConditionUnroller extends BodyTransformer {
       G.v().out.println("[" + body.getMethod().getName() +
                          "]     Unrolling Loop Conditions done.");
   }
-    
+
   /**
    * inserts a Jimple<code>Goto</code> to <code> target, directly after
    * <code>node</code> in the <code>unitChain</code> of the body.<br>
@@ -168,7 +168,7 @@ public class LoopConditionUnroller extends BodyTransformer {
     }
     return unitsToTraps;
   }
-    
+
   /**
    * puts a copy (clone) of the given block in the unitChain. The
    * block is ensured to have the same exceptions as the original
@@ -193,7 +193,7 @@ public class LoopConditionUnroller extends BodyTransformer {
     boolean first = true;
     Unit copiedHead = null;
     for (Unit currentUnit = block.getHead(); currentUnit != newGoto;
-         currentUnit = (Unit)unitChain.getSuccOf(currentUnit)) { 
+         currentUnit = (Unit)unitChain.getSuccOf(currentUnit)) {
       last = insertCloneAfter(unitChain, last, currentUnit);
       if (first) {
         first = false;
@@ -238,7 +238,7 @@ public class LoopConditionUnroller extends BodyTransformer {
     }
     /* close all open traps */
     Iterator<Trap> openedIterator = openedTraps.iterator();
-    while(openedIterator.hasNext()) {      
+    while(openedIterator.hasNext()) {
       openedIterator.next().setEndUnit(last);
     }
     return copiedHead;

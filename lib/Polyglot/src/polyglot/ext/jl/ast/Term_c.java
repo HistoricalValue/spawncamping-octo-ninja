@@ -16,7 +16,7 @@ public abstract class Term_c extends Node_c implements Term
     public Term_c(Position pos) {
 	super(pos);
     }
-    
+
     protected boolean reachable;
 
     /**
@@ -47,7 +47,7 @@ public abstract class Term_c extends Node_c implements Term
         if (this.reachable == reachability) {
             return this;
         }
-        
+
         Term_c t = (Term_c) copy();
         t.reachable = reachability;
         return t;
@@ -59,19 +59,19 @@ public abstract class Term_c extends Node_c implements Term
         if (c != alt) return c.entry();
         return alt;
     }
-    
+
     protected SubtypeSet exceptions;
-    
+
     public SubtypeSet exceptions() {
         return exceptions;
     }
-    
+
     public Term exceptions(SubtypeSet exceptions) {
         Term_c n = (Term_c) copy();
         n.exceptions = new SubtypeSet(exceptions);
         return n;
     }
-    
+
     public Node exceptionCheck(ExceptionChecker ec) throws SemanticException {
         Term t = (Term) super.exceptionCheck(ec);
         //System.out.println("exceptions for " + t + " = " + ec.throwsSet());

@@ -24,8 +24,8 @@ import soot.jimple.*;
 /** Represents a single context-sensitive edge in a call graph.
  * @author Ondrej Lhotak
  */
-public interface ContextSensitiveEdge 
-{ 
+public interface ContextSensitiveEdge
+{
     /** The context at the source of the call.
      */
     public Context srcCtxt();
@@ -40,7 +40,7 @@ public interface ContextSensitiveEdge
      */
     public Unit srcUnit();
     public Stmt srcStmt();
-    
+
     /** The context at the target of the call.
      */
     public Context tgtCtxt();

@@ -6,9 +6,9 @@ import polyglot.types.Flags;
 
 /**
  * A <code>ConstructorDecl</code> is an immutable representation of a
- * constructor declaration as part of a class body. 
+ * constructor declaration as part of a class body.
  */
-public interface ConstructorDecl extends ProcedureDecl 
+public interface ConstructorDecl extends ProcedureDecl
 {
     /** The constructor's flags. */
     Flags flags();

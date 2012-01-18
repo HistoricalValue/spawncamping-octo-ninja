@@ -13,14 +13,14 @@ public class EncapsulatedObjectAnalysis // extends ForwardFlowAnalysis
 	List cachedClasses;
 	List<SootMethod> objectPureMethods;
 	List<SootMethod> objectPureInitMethods;
-	
+
 	public EncapsulatedObjectAnalysis()
 	{
 		cachedClasses = new ArrayList();
 		objectPureMethods = new ArrayList<SootMethod>();
 		objectPureInitMethods = new ArrayList<SootMethod>();
 	}
-	
+
 	public boolean isMethodPureOnObject(SootMethod sm)
 	{
 		if( !cachedClasses.contains(sm.getDeclaringClass()) && sm.isConcrete() ) // NOT A COMPLETE SOLUTION (ignores subclassing)
@@ -44,7 +44,7 @@ public class EncapsulatedObjectAnalysis // extends ForwardFlowAnalysis
 					}
 				}
 			}
-			
+
 			if(mayBePureMethods.size() == methods.size())
 				objectPureMethods.addAll(mayBePureMethods);
 			else if(initMethod != null)
@@ -52,10 +52,10 @@ public class EncapsulatedObjectAnalysis // extends ForwardFlowAnalysis
 			if(initMethod != null)
 				objectPureInitMethods.add(initMethod);
 		}
-		
+
 		return objectPureMethods.contains(sm);
 	}
-	
+
 	public boolean isInitMethodPureOnObject(SootMethod sm)
 	{
 //		G.v().out.print("Testing Init Method Encapsulation: " + sm + " Encapsulated: ");
@@ -68,7 +68,7 @@ public class EncapsulatedObjectAnalysis // extends ForwardFlowAnalysis
 //		G.v().out.println("false");
 		return false;
 	}
-	
+
 	public List<SootMethod> getObjectPureMethodsSoFar()
 	{
 		return objectPureMethods;

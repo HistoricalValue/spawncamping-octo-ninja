@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -32,18 +32,18 @@ import java.util.List;
 
 // extended by SootClass, SootField, SootMethod, Scene
 
-/** 
+/**
  * This class is the reference implementation for
  * the Host interface, which allows arbitrary taggable
- * data to be stored with Soot objects. 
+ * data to be stored with Soot objects.
  */
-public  class AbstractHost implements Host 
+public  class AbstractHost implements Host
 {
     // avoid creating an empty list for each element, when it is not used
     // use lazy instantiation (in addTag) instead
     private final static List<Tag> emptyList = Collections.emptyList();
     private List<Tag> mTagList = emptyList;
-    
+
     /** get the list of tags. This list should not be modified! */
     public List<Tag> getTags()
     {
@@ -60,7 +60,7 @@ public  class AbstractHost implements Host
     }
 
     /** search for tag named <code>aName</code> */
-    private int searchForTag(String aName) 
+    private int searchForTag(String aName)
     {
         int i = 0;
         Iterator<Tag> it = mTagList.iterator();
@@ -75,25 +75,25 @@ public  class AbstractHost implements Host
 
     /** get the Tag object named <code>aName</code> */
    public Tag getTag(String aName)
-    {      
+    {
         int tagIndex;
         if((tagIndex = searchForTag(aName)) != -1) {
             return mTagList.get(tagIndex);
         }
-        
+
 				return null;
     }
 
-    /** look if this host has a tag named <code>aName</code> */ 
+    /** look if this host has a tag named <code>aName</code> */
     public boolean hasTag(String aName)
     {
         return (searchForTag(aName) != -1);
     }
-    
+
     /** add tag <code>t</code> to this host */
     public void addTag(Tag t)
     {
-        if (mTagList == emptyList) 
+        if (mTagList == emptyList)
             mTagList = new ArrayList<Tag>(1);
         mTagList.add(t);
     }

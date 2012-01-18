@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -145,7 +145,7 @@ class TypeStack
             if(types[i].equals(other.types[i]))
                 newStack.types[i] = types[i];
             else {
-                if((!(types[i] instanceof ArrayType) && !(types[i] instanceof RefType)) || 
+                if((!(types[i] instanceof ArrayType) && !(types[i] instanceof RefType)) ||
                     (!(other.types[i] instanceof RefType) && !(other.types[i] instanceof ArrayType)))
                 {
                     throw new RuntimeException("TypeStack merging failed; incompatible types " + types[i] + " and " + other.types[i]);

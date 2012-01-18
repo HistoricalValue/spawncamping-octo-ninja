@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -52,7 +52,7 @@ public class JReturnStmt extends AbstractStmt implements ReturnStmt
         this.returnValueBox = returnValueBox;
     }
 
-    public Object clone() 
+    public Object clone()
     {
         return new JReturnStmt(Jimple.cloneIfNecessary(getOp()));
     }
@@ -61,13 +61,13 @@ public class JReturnStmt extends AbstractStmt implements ReturnStmt
     {
         return Jimple.RETURN + " "  + returnValueBox.getValue().toString();
     }
-    
+
     public void toString( UnitPrinter up) {
         up.literal(Jimple.RETURN);
         up.literal(" ");
         returnValueBox.toString(up);
     }
-    
+
     public ValueBox getOpBox()
     {
         return returnValueBox;
@@ -101,21 +101,21 @@ public class JReturnStmt extends AbstractStmt implements ReturnStmt
     public void convertToBaf(JimpleToBafContext context, List<Unit> out)
     {
        ((ConvertToBaf)(getOp())).convertToBaf(context, out);
-       
-       
+
+
        Unit u;
        out.add(u = Baf.v().newReturnInst(getOp().getType()));
-     
+
        Unit currentUnit = this;
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}
     }
 
-     
-    public boolean fallsThrough(){return false;}        
+
+    public boolean fallsThrough(){return false;}
     public boolean branches(){return false;}
 
 

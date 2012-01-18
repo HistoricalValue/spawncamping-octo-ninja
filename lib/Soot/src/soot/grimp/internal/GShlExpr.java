@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -42,7 +42,7 @@ public class GShlExpr extends AbstractGrimpIntLongBinopExpr implements ShlExpr
     public int getPrecedence() { return 650; }
     public void apply(Switch sw) { ((ExprSwitch) sw).caseShlExpr(this); }
 
-    public Object clone() 
+    public Object clone()
     {
         return new GShlExpr(Grimp.cloneIfNecessary(getOp1()), Grimp.cloneIfNecessary(getOp2()));
     }

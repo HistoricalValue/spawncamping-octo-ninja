@@ -26,7 +26,7 @@ import soot.toolkits.graph.*;
 import soot.toolkits.scalar.*;
 
 public class ClinitElimAnalysis extends ForwardFlowAnalysis {
-	
+
 	private UnitGraph g;
 
 	public ClinitElimAnalysis(UnitGraph g) {
@@ -37,7 +37,7 @@ public class ClinitElimAnalysis extends ForwardFlowAnalysis {
 	}
 
 	public void merge(Object in1, Object in2, Object out) {
-		
+
 		FlowSet inSet1 = (FlowSet) in1;
 		FlowSet inSet2 = (FlowSet) in2;
 		FlowSet outSet = (FlowSet) out;
@@ -46,20 +46,20 @@ public class ClinitElimAnalysis extends ForwardFlowAnalysis {
 	}
 
 	public void copy(Object src, Object dest) {
-		
+
 		FlowSet srcIn = (FlowSet) src;
 		FlowSet destOut = (FlowSet) dest;
 
 		srcIn.copy(destOut);
 	}
 
-	
+
 	// out(s) = in(s) intersect { target methods of s where edge kind is clinit}
 	protected void flowThrough(Object inVal, Object stmt, Object outVal) {
 		FlowSet in = (FlowSet) inVal;
 		FlowSet out = (FlowSet) outVal;
 		Stmt s = (Stmt) stmt;
-		
+
         in.copy(out);
 
 		CallGraph cg = Scene.v().getCallGraph();
@@ -75,10 +75,10 @@ public class ClinitElimAnalysis extends ForwardFlowAnalysis {
 	}
 
 	protected Object entryInitialFlow(){
-		
+
 		return new ArraySparseSet();
-		
-		
+
+
 	}
 
 	protected Object newInitialFlow(){

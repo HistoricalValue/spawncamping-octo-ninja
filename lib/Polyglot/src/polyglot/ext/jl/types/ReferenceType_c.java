@@ -38,7 +38,7 @@ public abstract class ReferenceType_c extends Type_c implements ReferenceType
      */
     public abstract List fields();
 
-    /** 
+    /**
      * Returns the supertype of this class.  For every class except Object,
      * this is non-null.
      */

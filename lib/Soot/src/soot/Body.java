@@ -140,17 +140,17 @@ public abstract class Body extends AbstractHost implements Serializable
 
         {
 	        Iterator<Unit> it = b.getUnits().iterator();
-	
+
 	        // Clone units in body's statement list
 	        while(it.hasNext()) {
 	            Unit original = it.next();
 	            Unit copy = (Unit) original.clone();
-	
+
 	            copy.addAllTagsOf(original);
-	
+
 	            // Add cloned unit to our unitChain.
 	            unitChain.addLast(copy);
-	
+
 	            // Build old <-> new map to be able to patch up references to other units
 	            // within the cloned units. (these are still refering to the original
 	            // unit objects).
@@ -164,10 +164,10 @@ public abstract class Body extends AbstractHost implements Serializable
 	        while(it.hasNext()) {
 	            Trap original = it.next();
 	            Trap copy = (Trap) original.clone();
-	
+
 	            // Add cloned unit to our trap list.
 	            trapChain.addLast(copy);
-	
+
 	            // Store old <-> new mapping.
 	            bindings.put(original, copy);
 	        }
@@ -179,10 +179,10 @@ public abstract class Body extends AbstractHost implements Serializable
 	        while(it.hasNext()) {
 	            Local original = it.next();
 	            Local copy = (Local) original.clone();
-	
+
 	            // Add cloned unit to our trap list.
 	            localChain.addLast(copy);
-	
+
 	            // Build old <-> new mapping.
 	            bindings.put(original, copy);
 	        }
@@ -194,12 +194,12 @@ public abstract class Body extends AbstractHost implements Serializable
 	        while(it.hasNext()) {
 	            UnitBox box = it.next();
 	            Unit newObject, oldObject = box.getUnit();
-	
+
 	            // if we have a reference to an old object, replace it
 	            // it's clone.
 	            if( (newObject = (Unit)  bindings.get(oldObject)) != null )
 	                box.setUnit(newObject);
-	
+
 	        }
         }
 
@@ -586,7 +586,7 @@ public abstract class Body extends AbstractHost implements Serializable
 	Iterator<Local> it=locals.iterator();
 	while(it.hasNext()) {
 	    Local l=it.next();
-	    if(l.getType() instanceof VoidType) 
+	    if(l.getType() instanceof VoidType)
 		throw new RuntimeException("Local "+l+" in "+method+" defined with void type");
 	}
     }
@@ -608,7 +608,7 @@ public abstract class Body extends AbstractHost implements Serializable
                     Type rightType=Type.toMachineType(astmt.getRightOp().getType());
 
                     checkCopy(leftType,rightType,errorSuffix);
-                    if(astmt.getRightOp() instanceof InvokeExpr) 
+                    if(astmt.getRightOp() instanceof InvokeExpr)
                         iexpr=(InvokeExpr) (astmt.getRightOp());
                 }
 	    }
@@ -627,7 +627,7 @@ public abstract class Body extends AbstractHost implements Serializable
 
 		if(called.parameterTypes().size() != iexpr.getArgCount())
 		    throw new RuntimeException("Warning: Argument count doesn't match up with signature in call"+errorSuffix+" in "+getMethod());
-		else 
+		else
 		    for(int i=0;i<iexpr.getArgCount();i++)
 			checkCopy(Type.toMachineType(called.parameterType(i)),
 				  Type.toMachineType(iexpr.getArg(i).getType()),
@@ -648,7 +648,7 @@ public abstract class Body extends AbstractHost implements Serializable
 	if(rightType instanceof NullType) return;
 	if(leftType instanceof RefType &&
 	   ((RefType) leftType).getClassName().equals("java.lang.Object")) return;
-	
+
 	if(leftType instanceof ArrayType || rightType instanceof ArrayType) {
 	    if(leftType instanceof ArrayType && rightType instanceof ArrayType) return;
 
@@ -658,10 +658,10 @@ public abstract class Body extends AbstractHost implements Serializable
 	if(leftType instanceof RefType && rightType instanceof RefType) {
 	    SootClass leftClass=((RefType) leftType).getSootClass();
 	    SootClass rightClass=((RefType) rightType).getSootClass();
-	    
+
 	    if(leftClass.isInterface()) {
 		if(rightClass.isInterface()) {
-		    if(!(leftClass.getName().equals(rightClass.getName()) || 
+		    if(!(leftClass.getName().equals(rightClass.getName()) ||
 			 Scene.v().getActiveHierarchy().isInterfaceSubinterfaceOf(rightClass,leftClass)))
 			throw new RuntimeException("Warning: Bad use of interface type"+errorSuffix+" in "+getMethod());
 		} else {
@@ -709,7 +709,7 @@ public abstract class Body extends AbstractHost implements Serializable
 	    }
 	}
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -717,7 +717,7 @@ public abstract class Body extends AbstractHost implements Serializable
     public String toString() {
         ByteArrayOutputStream streamOut = new ByteArrayOutputStream();
         PrintWriter writerOut = new PrintWriter(new EscapedWriter(new OutputStreamWriter(streamOut)));
-        try { 
+        try {
             Printer.v().printTo(this, writerOut);
         } catch (RuntimeException e) {
             e.printStackTrace(writerOut);

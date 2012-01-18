@@ -68,11 +68,11 @@ public class MHGDominatorsFinder<N> implements DominatorsFinder<N>
         nodeToFlowSet = new HashMap<N, BitSet>();
         nodeToIndex = new HashMap<N, Integer>();
         indexToNode = new HashMap<Integer,N>();
-    
+
         //build full set
         fullSet = new BitSet(graph.size());
         fullSet.flip(0, graph.size());//set all to true
-        
+
         //set up domain for intersection: head nodes are only dominated by themselves,
         //other nodes are dominated by everything else
         for(Iterator<N> i = graph.iterator(); i.hasNext();){
@@ -86,24 +86,24 @@ public class MHGDominatorsFinder<N> implements DominatorsFinder<N>
                 nodeToFlowSet.put(o, fullSet);
             }
         }
-    
+
         boolean changed = true;
         do{
             changed = false;
             for(Iterator<N> i = graph.iterator(); i.hasNext();){
                 N o = i.next();
                 if(heads.contains(o)) continue;
-    
+
                 //initialize to the "neutral element" for the intersection
                 //this clone() is fast on BitSets (opposed to on HashSets)
 				BitSet predsIntersect = (BitSet) fullSet.clone();
-    
+
                 //intersect over all predecessors
                 for(Iterator<N> j = graph.getPredsOf(o).iterator(); j.hasNext();){
                     BitSet predSet = nodeToFlowSet.get(j.next());
                     predsIntersect.and(predSet);
                 }
-    
+
                 BitSet oldSet = nodeToFlowSet.get(o);
                 //each node dominates itself
                 predsIntersect.set(indexOf(o));
@@ -114,7 +114,7 @@ public class MHGDominatorsFinder<N> implements DominatorsFinder<N>
             }
         } while(changed);
     }
-    
+
     protected int indexOf(N o) {
         Integer index = nodeToIndex.get(o);
         if(index==null) {
@@ -125,12 +125,12 @@ public class MHGDominatorsFinder<N> implements DominatorsFinder<N>
         }
         return index;
     }
-    
+
     public DirectedGraph<N> getGraph()
     {
         return graph;
     }
-    
+
     public List<N> getDominators(Object node)
     {
         //reconstruct list of dominators from bitset
@@ -166,7 +166,7 @@ public class MHGDominatorsFinder<N> implements DominatorsFinder<N>
         }
 
         assert immediateDominator!=null;
-        
+
         return immediateDominator;
     }
 

@@ -37,7 +37,7 @@ import soot.util.queue.QueueReader;
  * @author Ondrej Lhotak
  */
 public final class CallGraphBuilder
-{ 
+{
     private PointsToAnalysis pa;
     private final ReachableMethods reachables;
     private final OnFlyCallGraphBuilder ofcgb;
@@ -86,7 +86,7 @@ public final class CallGraphBuilder
             if( !worklist.hasNext() ) break;
             MethodOrMethodContext momc = (MethodOrMethodContext) worklist.next();
             List receivers = (List) ofcgb.methodToReceivers().get(momc.method());
-            if( receivers != null) for( Iterator receiverIt = receivers.iterator(); receiverIt.hasNext(); ) {     
+            if( receivers != null) for( Iterator receiverIt = receivers.iterator(); receiverIt.hasNext(); ) {
                 final Local receiver = (Local) receiverIt.next();
                 final PointsToSet p2set = pa.reachingObjects( receiver );
                 for( Iterator typeIt = p2set.possibleTypes().iterator(); typeIt.hasNext(); ) {
@@ -95,7 +95,7 @@ public final class CallGraphBuilder
                 }
             }
             List stringConstants = (List) ofcgb.methodToStringConstants().get(momc.method());
-            if( stringConstants != null ) for( Iterator stringConstantIt = stringConstants.iterator(); stringConstantIt.hasNext(); ) {     
+            if( stringConstants != null ) for( Iterator stringConstantIt = stringConstants.iterator(); stringConstantIt.hasNext(); ) {
                 final Local stringConstant = (Local) stringConstantIt.next();
                 PointsToSet p2set = pa.reachingObjects( stringConstant );
                 Collection possibleStringConstants = p2set.possibleStringConstants();

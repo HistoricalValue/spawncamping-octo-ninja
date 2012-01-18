@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ import soot.util.Chain;
  * and handles patching to deal with element insertions and removals.
  * This is done by calling Unit.redirectJumpsToThisTo at strategic
  * times. */
-public class PatchingChain<E extends Unit> extends AbstractCollection<E> implements Chain<E> 
+public class PatchingChain<E extends Unit> extends AbstractCollection<E> implements Chain<E>
 {
     protected Chain<E> innerChain;
 
@@ -58,7 +58,7 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
     {
         return innerChain;
     }
-    
+
     /** Adds the given object to this Chain. */
     public boolean add(E o)
     {
@@ -83,7 +83,7 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
     {
         innerChain.insertAfter(toInsert, point);
     }
-    
+
     public void insertAfter(Chain<E> toInsert, E point)
     {
         innerChain.insertAfter(toInsert, point);
@@ -96,11 +96,11 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
         // Insert toInsert backwards into the list
         {
             Iterator<E> it = toInsert.iterator();
-            
+
             while(it.hasNext())
                 backwardList.addFirst(it.next());
         }
-                
+
         E previousPoint = point;
         Iterator<E> it = backwardList.iterator();
         while (it.hasNext())
@@ -111,7 +111,7 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
         }
         point.redirectJumpsToThisTo(toInsert.get(0));
     }
-    
+
     /** Inserts <code>toInsert</code> in the Chain before <code>point</code>. */
     public void insertBefore(Chain<E> toInsert, E point)
     {
@@ -119,11 +119,11 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
         // Insert toInsert backwards into the list
         {
             Iterator<E> it = toInsert.iterator();
-            
+
             while(it.hasNext())
                 backwardList.addFirst(it.next());
         }
-                
+
         E previousPoint = point;
         Iterator<E> it = backwardList.iterator();
         while (it.hasNext())
@@ -140,7 +140,7 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
         point.redirectJumpsToThisTo(toInsert);
         innerChain.insertBefore(toInsert, point);
     }
-    
+
     /** Inserts <code>toInsert</code> in the Chain before <code>point</code> WITHOUT redirecting jumps. */
     public void insertBeforeNoRedirect(E toInsert, E point)
     {
@@ -162,10 +162,10 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
         if(contains(obj))
         {
             Unit successor;
-            
+
             if((successor = getSuccOf((E) obj)) == null)
-                successor = getPredOf((E) obj); 
-		// Note that redirecting to the last unit in the method 
+                successor = getPredOf((E) obj);
+		// Note that redirecting to the last unit in the method
 		// like this is probably incorrect when dealing with a Trap.
 	        // I.e., let's say that the final unit in the method used to
 	        // be U10, preceded by U9, and that there was a Trap which
@@ -174,13 +174,13 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
 	        // longer cover U9. I know this is incorrect, but I'm not sure how
 	        // to fix it, so I'm leaving this comment in the hopes that some
 	        // future maintainer will see the right course to take.
-            
+
             res = innerChain.remove(obj);
 
             ((E)obj).redirectJumpsToThisTo(successor);
         }
 
-        return res;        
+        return res;
     }
 
     /** Returns true if this patching chain contains the specified element. */
@@ -194,31 +194,31 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
     {
         innerChain.addFirst(u);
     }
-    
+
     /** Adds the given object at the end of the Chain. */
     public void addLast(E u)
     {
         innerChain.addLast(u);
     }
-    
+
     /** Removes the first object from this Chain. */
-    public void removeFirst() 
+    public void removeFirst()
     {
         remove(innerChain.getFirst());
     }
-    
+
     /** Removes the last object from this Chain. */
     public void removeLast()
     {
         remove(innerChain.getLast());
     }
-    
+
     /** Returns the first object in this Chain. */
     public E getFirst() { return innerChain.getFirst(); }
 
     /** Returns the last object in this Chain. */
     public E getLast() { return innerChain.getLast(); }
-    
+
     /** Returns the object immediately following <code>point</code>. */
     public E getSuccOf(E point){return innerChain.getSuccOf(point);}
 
@@ -237,16 +237,16 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
 
         public boolean hasNext() { return innerIterator.hasNext(); }
         public E next() { lastObject = innerIterator.next(); state = true; return lastObject; }
-        public void remove() 
-        { 
+        public void remove()
+        {
             if (!state)
                 throw new IllegalStateException("remove called before first next() call");
 
             Unit successor;
-            
+
               if((successor = getSuccOf(lastObject)) == null)
 		  successor = getPredOf(lastObject);
-		  // Note that redirecting to the last unit in the method 
+		  // Note that redirecting to the last unit in the method
 		  // like this is probably incorrect when dealing with a Trap.
 		  // I.e., let's say that the final unit in the method used to
 		  // be U10, preceded by U9, and that there was a Trap which
@@ -255,24 +255,24 @@ public class PatchingChain<E extends Unit> extends AbstractCollection<E> impleme
 		  // longer cover U9. I know this is incorrect, but I'm not sure how
 		  // to fix it, so I'm leaving this comment in the hopes that some
 		  // future maintainer will see the right course to take.
-            
+
             innerIterator.remove();
 
             lastObject.redirectJumpsToThisTo(successor);
         }
     }
 
-    /** Returns an iterator over a copy of this chain. 
+    /** Returns an iterator over a copy of this chain.
      * This avoids ConcurrentModificationExceptions from being thrown
      * if the underlying Chain is modified during iteration.
      * Do not use this to remove elements which have not yet been
      * iterated over! */
-    public Iterator<E> snapshotIterator() 
+    public Iterator<E> snapshotIterator()
     {
         List<E> l = new ArrayList<E>(); l.addAll(this);
         return l.iterator();
     }
-   
+
     /** Returns an iterator over this Chain. */
     public Iterator<E> iterator() { return new PatchingIterator(innerChain); }
 

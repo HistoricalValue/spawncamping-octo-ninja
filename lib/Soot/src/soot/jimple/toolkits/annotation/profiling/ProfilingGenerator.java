@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -53,15 +53,15 @@ public class ProfilingGenerator extends BodyTransformer
 	    SootClass counterClass = Scene.v().loadClassAndSupport("MultiCounter");
 	    SootMethod reset = counterClass.getMethod("void reset()") ;
 	    SootMethod report = counterClass.getMethod("void report()") ;
-	    
+
 	    boolean isMainMethod= m.getSubSignature().equals(mainSignature);
-	    
+
 	    Chain units = body.getUnits();
 
 	    if (isMainMethod)
 	    {
 	        units.addFirst(Jimple.v().newInvokeStmt(
-			       Jimple.v().newStaticInvokeExpr(reset.makeRef())));		
+			       Jimple.v().newStaticInvokeExpr(reset.makeRef())));
 	    }
 
 	    Iterator stmtIt = body.getUnits().snapshotIterator();
@@ -72,15 +72,15 @@ public class ProfilingGenerator extends BodyTransformer
 		if (stmt instanceof InvokeStmt)
 		{
 		    InvokeExpr iexpr = ((InvokeStmt)stmt).getInvokeExpr() ;
-		
+
 		    if (iexpr instanceof StaticInvokeExpr)
 		    {
 		        SootMethod tempm = ((StaticInvokeExpr)iexpr).getMethod() ;
-			
+
 			if (tempm.getSignature().equals(
 				"<java.lang.System: void exit(int)>"))
 			{
-			    units.insertBefore (Jimple.v().newInvokeStmt( 
+			    units.insertBefore (Jimple.v().newInvokeStmt(
 				    Jimple.v().newStaticInvokeExpr(report.makeRef())), stmt) ;
 
 			}
@@ -88,11 +88,11 @@ public class ProfilingGenerator extends BodyTransformer
 		}
 		else
 		if (isMainMethod
-		    && (  stmt instanceof ReturnStmt 
+		    && (  stmt instanceof ReturnStmt
 			 || stmt instanceof ReturnVoidStmt))
 		{
 		    units.insertBefore(Jimple.v().newInvokeStmt(
-			    Jimple.v().newStaticInvokeExpr(report.makeRef())), stmt);				 
+			    Jimple.v().newStaticInvokeExpr(report.makeRef())), stmt);
 		}
 	    }
 	}

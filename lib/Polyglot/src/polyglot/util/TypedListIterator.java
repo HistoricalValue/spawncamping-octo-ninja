@@ -50,7 +50,7 @@ public class TypedListIterator implements ListIterator {
 
   public void set(Object o) {
     tryIns(o);
-    backing_iterator.set(o);   
+    backing_iterator.set(o);
   }
 
   public boolean hasNext()     { return backing_iterator.hasNext(); }
@@ -59,25 +59,25 @@ public class TypedListIterator implements ListIterator {
   public int nextIndex()       { return backing_iterator.nextIndex(); }
   public Object previous()     { return backing_iterator.previous(); }
   public int previousIndex()   { return backing_iterator.previousIndex(); }
-  public void remove()         { 
-    if (immutable) 
+  public void remove()         {
+    if (immutable)
       throw new UnsupportedOperationException(
 			         "Remove from an immutable TypedListIterator");
-    
+
     backing_iterator.remove();
   }
 
   private final void tryIns(Object o) {
-    if (immutable) 
+    if (immutable)
       throw new UnsupportedOperationException(
 			         "Add to an immutable TypedListIterator");
-    
-    if (allowed_type != null && 
+
+    if (allowed_type != null &&
 	!allowed_type.isAssignableFrom(o.getClass())) {
       String why = "Tried to add a " + o.getClass().getName() +
 	" to a list of type " + allowed_type.getName();
       throw new UnsupportedOperationException(why);
-    }    
+    }
   }
 
   // RI: allowed_type may be null.

@@ -24,7 +24,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public final class MethodContext implements MethodOrMethodContext
-{ 
+{
     private SootMethod method;
     public SootMethod method() { return method; }
     private Context context;

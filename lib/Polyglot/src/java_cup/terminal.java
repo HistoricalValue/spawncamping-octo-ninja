@@ -4,11 +4,11 @@ import java_cup.assoc;
 import java.util.Hashtable;
 import java.util.Enumeration;
 
-/** This class represents a terminal symbol in the grammar.  Each terminal 
- *  has a textual name, an index, and a string which indicates the type of 
- *  object it will be implemented with at runtime (i.e. the class of object 
- *  that will be returned by the scanner and pushed on the parse stack to 
- *  represent it). 
+/** This class represents a terminal symbol in the grammar.  Each terminal
+ *  has a textual name, an index, and a string which indicates the type of
+ *  object it will be implemented with at runtime (i.e. the class of object
+ *  that will be returned by the scanner and pushed on the parse stack to
+ *  represent it).
  *
  * @version last updated: 7/3/96
  * @author  Frank Flannery
@@ -23,7 +23,7 @@ public class terminal extends symbol {
    * @param nm the name of the terminal.
    * @param tp the type of the terminal.
    */
-  public terminal(String nm, String tp, int precedence_side, int precedence_num) 
+  public terminal(String nm, String tp, int precedence_side, int precedence_num)
     {
       /* superclass does most of the work */
       super(nm, tp);
@@ -31,7 +31,7 @@ public class terminal extends symbol {
       /* add to set of all terminals and check for duplicates */
       Object conflict = _all.put(nm,this);
       if (conflict != null)
-	// can't throw an execption here because this is used in static 
+	// can't throw an execption here because this is used in static
 	// initializers, so we do a crash instead
 	// was:
 	// throw new internal_error("Duplicate terminal (" + nm + ") created");
@@ -51,19 +51,19 @@ public class terminal extends symbol {
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** Constructor for non-precedented terminal
-    */ 
+    */
 
-  public terminal(String nm, String tp) 
+  public terminal(String nm, String tp)
     {
       this(nm, tp, assoc.no_prec, -1);
     }
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Constructor with default type. 
+  /** Constructor with default type.
    * @param nm the name of the terminal.
    */
-  public terminal(String nm) 
+  public terminal(String nm)
     {
       this(nm, null);
     }
@@ -79,20 +79,20 @@ public class terminal extends symbol {
   /*--- (Access to) Static (Class) Variables ------------------*/
   /*-----------------------------------------------------------*/
 
-  /** Table of all terminals.  Elements are stored using name strings as 
-   *  the key 
+  /** Table of all terminals.  Elements are stored using name strings as
+   *  the key
    */
   protected static Hashtable _all = new Hashtable();
 
   /** Access to all terminals. */
   public static Enumeration all() {return _all.elements();}
 
-  /** Lookup a terminal by name string. */ 
+  /** Lookup a terminal by name string. */
   public static terminal find(String with_name)
     {
       if (with_name == null)
 	return null;
-      else 
+      else
 	return (terminal)_all.get(with_name);
     }
 
@@ -116,7 +116,7 @@ public class terminal extends symbol {
   public static int number() {return _all.size();}
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
- 
+
   /** Static counter to assign unique index. */
   protected static int next_index = 0;
 
@@ -135,7 +135,7 @@ public class terminal extends symbol {
   /*-----------------------------------------------------------*/
 
   /** Report this symbol as not being a non-terminal. */
-  public boolean is_non_term() 
+  public boolean is_non_term()
     {
       return false;
     }

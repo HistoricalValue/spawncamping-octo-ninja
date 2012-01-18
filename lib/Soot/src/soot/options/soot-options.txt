@@ -215,10 +215,10 @@ old                             new
   -j, --jimp                   -o j, -o jimp
   -J, --jimple                 -o J, -o jimple
   -g, --grimp                  etc.
-  -G, --grimple                
-  -s, --jasmin                 
-  -c, --class                  
-  -X, --xml                    
+  -G, --grimple
+  -s, --jasmin
+  -c, --class
+  -X, --xml
 
   --final-rep grimp            -o class-through-grimp
                                or -o jasmin-through-grimp
@@ -243,9 +243,9 @@ B) Example XML file:
 <options>
 
 	<section>
-		
+
 		<section_name>General Options</section_name>
-		
+
 		<boolean_option>
 			<name>Help</name>
 			<java_name>help</java_name>
@@ -254,7 +254,7 @@ B) Example XML file:
 			<short_desc>display help and exit</short_desc>
 			<long_desc>This option displays the textual help message and exits immediately without doing any further processing</long_desc>
 		</boolean_option>
-		
+
 		<boolean_option>
 			<name>Version</name>
 			<java_name>version</java_name>
@@ -262,7 +262,7 @@ B) Example XML file:
 			<short_desc>output version information and exit</short_desc>
 			<long_desc>This option outputs the Soot version information and exits immediately without doing any further processing</long_desc>
 		</boolean_option>
-		
+
 		<boolean_option>
 			<name>Verbose</name>
 			<java_name>verbose</java_name>
@@ -279,7 +279,7 @@ B) Example XML file:
 			<short_desc>runs in application mode</short_desc>
 			<long_desc>This option ...</long_desc>
 		</boolean_option>
-		
+
 	</section>
 
 	<section>
@@ -294,7 +294,7 @@ B) Example XML file:
 			<short_desc>uses given PATH as the classpath for finding classes for Soot processing</short_desc>
 			<long_desc>This option ...</long_desc>
 		</path_option>
-		
+
 		<multi_option>
 			<name>Input Source Precedence</name>
 			<java_name>srcPrec</java_name>
@@ -315,11 +315,11 @@ B) Example XML file:
 			<short_desc>sets the source precedence for Soot</short_desc>
 			<long_desc>This option ...</long_desc>
 		</multi_option>
-		
+
 	</section>
 
 	<section>
-		
+
 		<section_name>Output Options</section_name>
 
 		<string_option>
@@ -330,75 +330,75 @@ B) Example XML file:
 			<short_desc>store produced files in PATH</short_desc>
 			<long_desc>This option ...</long_desc>
 		</string_option>
-		
+
 		<multi_option>
 			<name>Output Format</name>
 			<java_name>outputFormat</java_name>
 			<alias_name>o</alias_name>
 			<alias_name>output-format</alias_name>
 				<value>
-				
+
 					<value_name>Jimp File</value_name>
 					<java_name>jimpFile</java_name>
 					<alias>j</alias>
 					<alias>jimp</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Njimple File</value_name>
 					<java_name>njimpFile</java_name>
 					<alias>njimple</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Jimple File</value_name>
 					<java_name>jimpleFile</java_name>
 					<alias>J</alias>
 					<alias>jimple</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Baf File</value_name>
 					<java_name>bafFile</java_name>
 					<alias>B</alias>
 					<alias>baf</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Aggregated Baf File</value_name>
 					<java_name>bFile</java_name>
 					<alias>b</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Grimp File</value_name>
 					<java_name>grimpFile</java_name>
 					<alias>g</alias>
 					<alias>grimp</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Grimple File</value_name>
 					<java_name>grimpleFile</java_name>
 					<alias>G</alias>
 					<alias>grimple</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Xml File</value_name>
 					<java_name>xmlFile</java_name>
 					<alias>X</alias>
 					<alias>xml</alias>
 				</value>
 				<value>
-					
+
 					<value_name>No Output File</value_name>
 					<java_name>noneFile</java_name>
 					<alias>n</alias>
 					<alias>none</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Jasmin File</value_name>
 					<java_name>jasminFile</java_name>
 					<alias>s</alias>
@@ -406,13 +406,13 @@ B) Example XML file:
 					<alias>jasmin-through-baf</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Jasmin Through Grimp File</value_name>
 					<java_name>jasminViaGrimpFile</java_name>
 					<alias>jasmin-through-grimp</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Class File</value_name>
 					<java_name>classFile</java_name>
 					<alias>c</alias>
@@ -420,13 +420,13 @@ B) Example XML file:
 					<alias>class-through-baf</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Class Through Grimp File</value_name>
 					<java_name>classViaGrimpFile</java_name>
 					<alias>class-through-grimp</alias>
 				</value>
 				<value>
-					
+
 					<value_name>Dava Decompiled File</value_name>
 					<java_name>davaFile</java_name>
 					<alias>d</alias>
@@ -450,7 +450,7 @@ B) Example XML file:
 			<short_desc>set run-time option KEY to VALUE for PHASE-NAME</short_desc>
 			<long_desc>This option ...</long_desc>
 		</phase_option>
-		
+
 		<macro_option>
 			<name>Optimize</name>
 			<java_name>optimize</java_name>
@@ -471,11 +471,11 @@ B) Example XML file:
 			<long_desc>This option ...</long_desc>
 		</macro_option>
 
-			
+
 	</section>
-	
+
 	<section>
-		
+
 		<section_name>Single File Mode Options</section_name>
 
 		<path_option>
@@ -508,7 +508,7 @@ B) Example XML file:
 			<short_desc>marks classfiles in PACKAGE (e.g. java.) as context classes</short_desc>
 			<long_desc>This option ...</long_desc>
 		</path_option>
-		
+
 		<boolean_option>
 			<name>Analyze Context</name>
 			<java_name>analyzeContext</java_name>
@@ -541,11 +541,11 @@ B) Example XML file:
 			<short_desc>marks classfiles in PACKAGES (separated by commas) as potentially dynamic classes</short_desc>
 			<long_desc>This option ...</long_desc>
 		</path_option>
-		
+
 	</section>
 
 	<section>
-		
+
 		<section_name>Input Attribute Options</section_name>
 
 		<boolean_option>
@@ -555,7 +555,7 @@ B) Example XML file:
 			<short_desc>keep line number tables</short_desc>
 			<long_desc>This option ...</long_desc>
 		</boolean_option>
-		
+
 		<boolean_option>
 			<name>Keep Bytecode Offset</name>
 			<java_name>keepByteOffset</java_name>
@@ -565,11 +565,11 @@ B) Example XML file:
 			<long_desc>This option ...</long_desc>
 		</boolean_option>
 
-		
+
 	</section>
-	
+
 	<section>
-		
+
 		<section_name>Annotaion Options</section_name>
 
 		<macro_option>
@@ -580,7 +580,7 @@ B) Example XML file:
 			<short_desc>turn on the annotation for null pointer</short_desc>
 			<long_desc>This option ...</long_desc>
 		</macro_option>
-		
+
 		<macro_option>
 			<name>Array Bounds Annotation</name>
 			<java_name>arrayBoundsAnn</java_name>
@@ -590,11 +590,11 @@ B) Example XML file:
 			<long_desc>This option ...</long_desc>
 		</macro_option>
 
-		
+
 	</section>
-	
+
 	<section>
-		
+
 		<section_name>Miscellaneous Options</section_name>
 
 		<boolean_option>
@@ -604,7 +604,7 @@ B) Example XML file:
 			<short_desc>print out time statistics about tranformations</short_desc>
 			<long_desc>This option ...</long_desc>
 		</boolean_option>
-		
+
 		<boolean_option>
 			<name>Subtract Garbage Collection Time</name>
 			<java_name>subGC</java_name>
@@ -613,7 +613,7 @@ B) Example XML file:
 			<long_desc>This option ...</long_desc>
 		</boolean_option>
 
-		
+
 	</section>
 </options>
 

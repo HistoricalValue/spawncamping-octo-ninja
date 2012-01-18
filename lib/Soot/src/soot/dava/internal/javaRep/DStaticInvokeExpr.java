@@ -27,7 +27,7 @@ import soot.grimp.internal.*;
 
 public class DStaticInvokeExpr extends GStaticInvokeExpr
 {
-    public DStaticInvokeExpr( SootMethodRef methodRef, java.util.List args) 
+    public DStaticInvokeExpr( SootMethodRef methodRef, java.util.List args)
     {
 	super( methodRef, args);
     }
@@ -38,13 +38,13 @@ public class DStaticInvokeExpr extends GStaticInvokeExpr
         super.toString(up);
     }
 
-    public Object clone() 
+    public Object clone()
     {
         ArrayList clonedArgs = new ArrayList( getArgCount());
 
-        for(int i = 0; i < getArgCount(); i++) 
+        for(int i = 0; i < getArgCount(); i++)
             clonedArgs.add(i, Grimp.cloneIfNecessary(getArg(i)));
-        
+
         return new DStaticInvokeExpr( methodRef, clonedArgs);
     }
 }

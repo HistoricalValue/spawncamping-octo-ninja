@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -52,33 +52,33 @@ public class StronglyConnectedComponents
     private final int[] indexStack;
     private final Object[] nodeStack;
     private int last;
-    
+
     /**
      *  @param g a graph for which we want to compute the strongly
-     *           connected components. 
+     *           connected components.
      *  @see DirectedGraph
      */
     public StronglyConnectedComponents(DirectedGraph g)
     {
 	nodeToColor = new HashMap<Object, Object>((3*g.size())/2,0.7f);
 	indexStack = new int[g.size()];
-	nodeStack = new Object[g.size()];        
+	nodeStack = new Object[g.size()];
 	finishingOrder = new LinkedList<Object>();
-	
+
         // Visit each node
         {
             Iterator nodeIt = g.iterator();
-            
+
             while(nodeIt.hasNext())
             {
                 Object s = nodeIt.next();
-               
+
                 if(nodeToColor.get(s) == null)
-                    visitNode(g, s); 
+                    visitNode(g, s);
             }
         }
 
-	
+
         // Re-color all nodes white
         nodeToColor = new HashMap<Object, Object>((3*g.size()),0.7f);
 
@@ -98,13 +98,13 @@ public class StronglyConnectedComponents
 		    sccGraph.addNode(currentComponent);
 		    componentList.add(currentComponent);
 
-                    visitRevNode(g, s, currentComponent); 
+                    visitRevNode(g, s, currentComponent);
                 }
             }
         }
         componentList = Collections.unmodifiableList(componentList);
 
-        if (Options.v().verbose()) 
+        if (Options.v().verbose())
         {
             G.v().out.println("Done computing scc components");
             G.v().out.println("number of nodes in underlying graph: "+g.size());
@@ -116,7 +116,7 @@ public class StronglyConnectedComponents
     {
         last=0;
         nodeToColor.put(startNode, Visited);
-        
+
         nodeStack[last]=startNode;
         indexStack[last++]= -1;
 
@@ -124,10 +124,10 @@ public class StronglyConnectedComponents
         {
 	    int toVisitIndex = ++indexStack[last-1];
             Object toVisitNode = nodeStack[last-1];
-           
+
 	    if(toVisitIndex >= graph.getSuccsOf(toVisitNode).size())
             {
-                // Visit this node now that we ran out of children 
+                // Visit this node now that we ran out of children
                     finishingOrder.addFirst(toVisitNode);
 
                 // Pop this node off
@@ -136,12 +136,12 @@ public class StronglyConnectedComponents
             else
             {
                 Object childNode = graph.getSuccsOf(toVisitNode).get(toVisitIndex);
-                
+
                 // Visit this child next if not already visited (or on stack)
                     if(nodeToColor.get(childNode) == null)
                     {
                         nodeToColor.put(childNode, Visited);
-                        
+
 			nodeStack[last]=childNode;
 			indexStack[last++]=-1;
                     }
@@ -152,9 +152,9 @@ public class StronglyConnectedComponents
     private void visitRevNode(DirectedGraph graph, Object startNode, List<Object> currentComponent)
     {
 	last=0;
-        
+
         nodeToColor.put(startNode, Visited);
-        
+
 	nodeStack[last]=startNode;
         indexStack[last++]= -1;
 
@@ -162,7 +162,7 @@ public class StronglyConnectedComponents
         {
 	    int toVisitIndex = ++indexStack[last-1];
             Object toVisitNode = nodeStack[last-1];
-            
+
             if(toVisitIndex >= graph.getPredsOf(toVisitNode).size())
             {
                 // No more nodes.  Add toVisitNode to current component.
@@ -175,12 +175,12 @@ public class StronglyConnectedComponents
             else
             {
                 Object childNode = graph.getPredsOf(toVisitNode).get(toVisitIndex);
-                
+
                 // Visit this child next if not already visited (or on stack)
 		if(nodeToColor.get(childNode) == null)
                 {
 		    nodeToColor.put(childNode, Visited);
-		    
+
 		    nodeStack[last]=childNode;
 		    indexStack[last++]=-1;
 		}
@@ -196,7 +196,7 @@ public class StronglyConnectedComponents
     }
 
 
-    /** 
+    /**
      *  Checks if 2 nodes are in the same strongly-connnected component.
      *  @param a some graph node.
      *  @param b some graph node
@@ -228,8 +228,8 @@ public class StronglyConnectedComponents
         return nodeToComponent.get(a);
     }
 
-    /** 
-     *  @return the computed strongly-connnected component graph. 
+    /**
+     *  @return the computed strongly-connnected component graph.
      *  @see DirectedGraph
      */
     public DirectedGraph getSuperGraph()

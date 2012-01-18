@@ -25,7 +25,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public final class Sources implements Iterator
-{ 
+{
     Iterator edges;
     public Sources( Iterator edges ) {
         this.edges = edges;

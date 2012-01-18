@@ -31,14 +31,14 @@ import soot.toolkits.graph.*;
 import soot.jimple.*;
 import java.util.*;
 
-/** 
+/**
  * Computes the earliest points for the given expressions.<br>
  * This basicly finds the highest point in the flow-graph where we can put each
  * computation, without introducing new computations on any path.<br>
  * More technically: A computation is earliest, if at the current point the
  * computation is down-safe, and if either:
  * <ul>
- * <li> any of the predecessors is not transparent, or 
+ * <li> any of the predecessors is not transparent, or
  * <li> if any predecessors is not "safe" (ie. the insertion of
  * this computation would insert it on a path, where it was not before).
  * </ul><br>
@@ -99,7 +99,7 @@ public class EarliestnessComputation {
       List predList = unitGraph.getPredsOf(currentUnit);
       if (predList.size() == 0) { //no predecessor
         /* we are obviously at the earliest position for any downsafe
-         * computation */ 
+         * computation */
         earliest.union(downSafeSet);
       } else {
         Iterator predIt = predList.iterator();

@@ -29,7 +29,7 @@ public class ShimpleMethodSource implements MethodSource
     {
         this.ms = ms;
     }
-    
+
     public Body getBody(SootMethod m, String phaseName)
     {
         Body b = ms.getBody(m, phaseName);
@@ -37,4 +37,3 @@ public class ShimpleMethodSource implements MethodSource
     }
 }
 
-    

@@ -100,7 +100,7 @@ public class ArrayType_c extends ReferenceType_c implements ArrayType
         return s + " > ";
       }
       else
-        return base().translate(c) + "[]"; 
+        return base().translate(c) + "[]";
     }
 
     /** Returns true iff the type is canonical. */

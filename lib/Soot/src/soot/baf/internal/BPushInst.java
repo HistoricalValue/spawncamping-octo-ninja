@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,14 +37,14 @@ import soot.util.*;
 public class BPushInst extends AbstractInst implements PushInst
 {
     private Constant constant;
-    
+
     public BPushInst(Constant c)
     {
         this.constant = c;
     }
 
 
-    public Object clone() 
+    public Object clone()
     {
         return new  BPushInst(getConstant());
     }
@@ -53,7 +53,7 @@ public class BPushInst extends AbstractInst implements PushInst
     final public String getName() { return "push"; }
     final String getParameters()
     {
-        return " "+constant.toString(); 
+        return " "+constant.toString();
     }
 
     protected void getParameters( UnitPrinter up ) {
@@ -70,7 +70,7 @@ public class BPushInst extends AbstractInst implements PushInst
     {
         return 0;
     }
-    
+
     public int getOutCount()
     {
         return 1;
@@ -80,7 +80,7 @@ public class BPushInst extends AbstractInst implements PushInst
     {
         if(constant instanceof LongConstant || constant instanceof DoubleConstant)
             return 2;
-        else 
+        else
             return 1;
     }
 
@@ -88,13 +88,13 @@ public class BPushInst extends AbstractInst implements PushInst
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).casePushInst(this);
-    }   
-    
+    }
+
     public Constant getConstant()
     {
         return constant;
     }
-    
+
     public void setConstant(Constant c)
     {
         this.constant = c;

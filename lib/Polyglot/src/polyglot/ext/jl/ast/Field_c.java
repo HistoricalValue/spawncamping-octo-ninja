@@ -33,8 +33,8 @@ import polyglot.main.Options;
 
 /**
  * A <code>Field</code> is an immutable representation of a Java field
- * access.  It consists of field name and may also have either a 
- * <code>Type</code> or an <code>Expr</code> containing the field being 
+ * access.  It consists of field name and may also have either a
+ * <code>Type</code> or an <code>Expr</code> containing the field being
  * accessed.
  */
 public class Field_c extends Expr_c implements Field
@@ -59,7 +59,7 @@ public class Field_c extends Expr_c implements Field
   }
 
   /** Get the precedence of the field. */
-  public Precedence precedence() { 
+  public Precedence precedence() {
     return Precedence.LITERAL;
   }
 
@@ -152,7 +152,7 @@ public class Field_c extends Expr_c implements Field
   public Node typeCheck(TypeChecker tc) throws SemanticException {
       Context c = tc.context();
       TypeSystem ts = tc.typeSystem();
-      
+
       if (! target.type().isReference()) {
 	  throw new SemanticException("Cannot access field \"" + name +
 				      "\" " + (target instanceof Expr
@@ -161,20 +161,20 @@ public class Field_c extends Expr_c implements Field
 				      "of non-reference type \"" +
 				      target.type() + "\".", target.position());
       }
-      
+
       FieldInstance fi = ts.findField(target.type().toReference(), name, c.currentClass());
-      
+
       if (fi == null) {
 	  throw new InternalCompilerError("Cannot access field on node of type " +
 					  target.getClass().getName() + ".");
       }
-      
+
       Field_c f = (Field_c)fieldInstance(fi).type(fi.type());
       f.checkConsistency(c);
-      
+
       return f;
   }
-  
+
   public Type childExpectedType(Expr child, AscriptionVisitor av)
   {
       if (child == target) {
@@ -194,7 +194,7 @@ public class Field_c extends Expr_c implements Field
 	  else if (target instanceof TypeNode || target instanceof AmbReceiver) {
 	    print(target, w, tr);
 	  }
-	
+
 	  w.write(".");
 	}
 	w.write(name);
@@ -254,7 +254,7 @@ public class Field_c extends Expr_c implements Field
 
     return null;
   }
-  
+
   // check that the implicit target setting is correct.
   protected void checkConsistency(Context c) {
       if (targetImplicit) {
@@ -269,7 +269,7 @@ public class Field_c extends Expr_c implements Field
           throw new InternalCompilerError("Field " + this + " has an " +
                "implicit target, but the name " + name + " resolves to " +
                vi + " instead of " + target, position());
-      }      
+      }
   }
 
 }

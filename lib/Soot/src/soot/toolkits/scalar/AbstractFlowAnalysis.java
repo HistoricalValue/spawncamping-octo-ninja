@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -61,9 +61,9 @@ public abstract class AbstractFlowAnalysis<N,A>
         }
     }
 
-    /** 
+    /**
      * Returns the flow object corresponding to the initial values for
-     * each graph node. 
+     * each graph node.
      */
     protected abstract A newInitialFlow();
 
@@ -81,9 +81,9 @@ public abstract class AbstractFlowAnalysis<N,A>
     /** Returns true if this analysis is forwards. */
     protected abstract boolean isForward();
 
-    /** Compute the merge of the <code>in1</code> and <code>in2</code> sets, putting the result into <code>out</code>. 
+    /** Compute the merge of the <code>in1</code> and <code>in2</code> sets, putting the result into <code>out</code>.
      * The behavior of this function depends on the implementation ( it may be necessary to check whether
-     * <code>in1</code> and <code>in2</code> are equal or aliased ). 
+     * <code>in1</code> and <code>in2</code> are equal or aliased ).
      * Used by the doAnalysis method. */
     protected abstract void merge(A in1, A in2, A out);
 
@@ -96,11 +96,11 @@ public abstract class AbstractFlowAnalysis<N,A>
     	merge(in1,in2,out);
     }
 
-    
+
     /** Creates a copy of the <code>source</code> flow object in <code>dest</code>. */
     protected abstract void copy(A source, A dest);
 
-    /** Carries out the actual flow analysis.  
+    /** Carries out the actual flow analysis.
      * Typically called from a concrete FlowAnalysis's constructor.*/
     protected abstract void doAnalysis();
 

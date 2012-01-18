@@ -180,7 +180,7 @@ public abstract class Node_c implements Node
      * @return A new list with each element from the old list
      *         replaced by the result of visiting that element.
      *         If <code>l</code> is a <code>TypedList</code>, the
-     *         new list will also be typed with the same type as 
+     *         new list will also be typed with the same type as
      *         <code>l</code>.  If <code>l</code> is <code>null</code>,
      *         <code>null</code> is returned.
      */
@@ -211,25 +211,25 @@ public abstract class Node_c implements Node
     /**
      * Push a new scope upon entering this node, and add any declarations to the
      * context that should be in scope when visiting children of this node.
-     * 
+     *
      * @param c the current <code>Context</code>
-     * @return the <code>Context</code> to be used for visiting this node. 
+     * @return the <code>Context</code> to be used for visiting this node.
      */
     public Context enterScope(Context c) { return c; }
 
     /**
-     * Push a new scope for visiting the child node <code>child</code>. 
+     * Push a new scope for visiting the child node <code>child</code>.
      * The default behavior is to delegate the call to the child node, and let
      * it add appropriate declarations that should be in scope. However,
      * this method gives parent nodes have the ability to modify this behavior.
-     * 
+     *
      * @param child the child node about to be entered.
      * @param c the current <code>Context</code>
-     * @return the <code>Context</code> to be used for visiting node 
+     * @return the <code>Context</code> to be used for visiting node
      *           <code>child</code>
      */
-    public Context enterScope(Node child, Context c) { 
-        return child.del().enterScope(c); 
+    public Context enterScope(Node child, Context c) {
+        return child.del().enterScope(c);
     }
 
     /**
@@ -305,7 +305,7 @@ public abstract class Node_c implements Node
 	return ec.push();
     }
 
-    public Node exceptionCheck(ExceptionChecker ec) throws SemanticException { 
+    public Node exceptionCheck(ExceptionChecker ec) throws SemanticException {
         List l = this.del().throwTypes(ec.typeSystem());
         for (Iterator i = l.iterator(); i.hasNext(); ) {
             ec.throwsException((Type)i.next(), position());

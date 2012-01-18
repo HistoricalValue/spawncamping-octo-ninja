@@ -28,11 +28,11 @@ package soot.util;
  * @author Ondrej Lhotak
  */
 public class BitVector
-{ 
+{
     public BitVector() {
         this(64);
     }
-    
+
     /**Copy constructor*/
     //Added by Adam Richard.  More efficient than clone(), and easier to extend
     public BitVector(BitVector other)
@@ -156,7 +156,7 @@ public class BitVector
             bits[j] |= otherBits[j];
         }
     }
-    
+
     /**Count the number of ones in the bitvector.
      * @author Adam Richard
      * This is Brian Kernighan's algorithm from:

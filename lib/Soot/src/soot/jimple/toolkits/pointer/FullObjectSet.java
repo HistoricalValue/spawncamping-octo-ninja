@@ -26,7 +26,7 @@ public class FullObjectSet extends Union {
         this( RefType.v( "java.lang.Object" ) );
     }
     public static FullObjectSet v() { return G.v().soot_jimple_toolkits_pointer_FullObjectSet(); }
-    public static FullObjectSet v( RefType t ) { 
+    public static FullObjectSet v( RefType t ) {
         if( t.getClassName().equals( "java.lang.Object" ) ) {
             return v();
         }
@@ -61,7 +61,7 @@ public class FullObjectSet extends Union {
 
     public Set possibleStringConstants() { return null; }
     public Set possibleClassConstants() { return null; }
-	
+
     /**
 	 * {@inheritDoc}
 	 */

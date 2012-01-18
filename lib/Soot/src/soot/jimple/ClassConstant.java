@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -66,7 +66,7 @@ public class ClassConstant extends Constant
     public String getValue(){
         return value;
     }
-    
+
     public Type getType()
     {
         return RefType.v("java.lang.Class");

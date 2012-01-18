@@ -14,19 +14,19 @@ public class DShortcutIf implements Expr {
 	ValueBox trueExprBox;
 	ValueBox falseExprBox;
 	Type exprType;
-	
+
 	public DShortcutIf(ValueBox test, ValueBox left, ValueBox right){
 		testExprBox = test;
 		trueExprBox = left;
 		falseExprBox = right;
 	}
-	
+
 	public Object clone(){
 		//does not work
 		return this;
 	}
-	
-	
+
+
 	public List getUseBoxes() {
 		List toReturn = new ArrayList();
 		toReturn.addAll(testExprBox.getValue().getUseBoxes());
@@ -52,8 +52,8 @@ public class DShortcutIf implements Expr {
 		return toReturn;
 	}
 
-	
-	
+
+
 	public void toString(UnitPrinter up) {
 		testExprBox.getValue().toString(up);
 		up.literal(" ? ");

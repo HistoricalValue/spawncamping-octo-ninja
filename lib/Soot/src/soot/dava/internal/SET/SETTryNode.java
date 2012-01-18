@@ -39,7 +39,7 @@ public class SETTryNode extends SETNode
     private DavaBody davaBody;
     private AugmentedStmtGraph asg;
     private final HashMap<IterableSet, IterableSet> cb2clone;
-    public SETTryNode( IterableSet body, ExceptionNode en, AugmentedStmtGraph asg, DavaBody davaBody) 
+    public SETTryNode( IterableSet body, ExceptionNode en, AugmentedStmtGraph asg, DavaBody davaBody)
     {
 	super( body);
 	this.en = en;
@@ -66,7 +66,7 @@ public class SETTryNode extends SETNode
 	    it = body.iterator();
 	    while (it.hasNext()) {
 		AugmentedStmt as = (AugmentedStmt) it.next();
-		
+
 		Iterator pit = as.cpreds.iterator();
 		while (pit.hasNext())
 		    if (body.contains( pit.next()) == false) {
@@ -81,7 +81,7 @@ public class SETTryNode extends SETNode
     {
 	if (entryStmt != null)
 	    return entryStmt;
-	else 
+	else
 	    return (AugmentedStmt) (en.get_TryBody()).getFirst();
 
 	// return ((SETNode) ((IterableSet) body2childChain.get( en.get_TryBody())).getFirst()).get_EntryStmt();
@@ -90,7 +90,7 @@ public class SETTryNode extends SETNode
     public IterableSet get_NaturalExits()
     {
 	IterableSet c = new IterableSet();
-	
+
 	Iterator<IterableSet> it = subBodies.iterator();
 	while (it.hasNext()) {
 
@@ -109,7 +109,7 @@ public class SETTryNode extends SETNode
     public ASTNode emit_AST()
     {
 	LinkedList<Object> catchList = new LinkedList<Object>();
-	HashMap<Object, Object> 
+	HashMap<Object, Object>
 	    exceptionMap = new HashMap<Object, Object>(),
 	    paramMap     = new HashMap<Object, Object>();
 
@@ -130,17 +130,17 @@ public class SETTryNode extends SETNode
 		 * 							make sure to get the exception identifier
 		 * 							from the goto target (it's a different block)
 		 */
-		
-		// TODO: HOW the heck do you handle finallys with NO finally? Semantics are 
+
+		// TODO: HOW the heck do you handle finallys with NO finally? Semantics are
 		//			technically incorrect here
-		if (s instanceof GotoStmt) 
+		if (s instanceof GotoStmt)
 		  s = (Stmt)((GotoStmt)s).getTarget();
 		/* 04.04.2006	mbatch end */
-		
+
 		if (s instanceof IdentityStmt) {
 		    IdentityStmt ids = (IdentityStmt) s;
-		    
-		    Value 
+
+		    Value
 			rightOp = ids.getRightOp(),
 			leftOp =  ids.getLeftOp();
 
@@ -148,7 +148,7 @@ public class SETTryNode extends SETNode
 			paramMap.put( astBody, leftOp);
 			break;
 		    }
-		} 
+		}
 	    }
 	}
 
@@ -193,16 +193,16 @@ public class SETTryNode extends SETNode
 			Iterator bit = cb2clone.get( cit.next()).snapshotIterator();
 			while (bit.hasNext()) {
 			    AugmentedStmt as = (AugmentedStmt) bit.next();
-			    
-			    if (childBody.contains( as) == false) 
+
+			    if (childBody.contains( as) == false)
 				remove_AugmentedStmt( as);
-			    
+
 			    else if ((child instanceof SETControlFlowNode) && ((child instanceof SETUnconditionalWhileNode) == false)) {
 				SETControlFlowNode scfn = (SETControlFlowNode) child;
-				
+
 				if ((scfn.get_CharacterizingStmt() == as) ||
 				    ((as.cpreds.size() == 1) && (as.get_Stmt() instanceof GotoStmt) && (scfn.get_CharacterizingStmt() == as.cpreds.get(0))))
-				    
+
 				    remove_AugmentedStmt( as);
 			    }
 			}

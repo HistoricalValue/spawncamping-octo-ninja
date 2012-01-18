@@ -21,7 +21,7 @@ public interface Term extends Node
      * if data flows on that edge.
      */
     public List acceptCFG(CFGBuilder v, List succs);
-    
+
     /**
      * Returns true if the term is reachable.  This attribute is not
      * guaranteed correct until after the reachability pass.
@@ -34,7 +34,7 @@ public interface Term extends Node
      * Set the reachability of this term.
      */
     public Term reachable(boolean reachability);
-    
+
     /**
      * List of Types with all exceptions possibly thrown by this term.
      * The list is not necessarily correct until after exception-checking.

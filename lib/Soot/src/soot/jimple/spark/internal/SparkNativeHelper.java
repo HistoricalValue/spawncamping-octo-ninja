@@ -34,7 +34,7 @@ public class SparkNativeHelper extends NativeHelper {
         pag.addEdge( (Node) rhs, (Node) lhs );
     }
     protected void assignObjectToImpl(ReferenceVariable lhs, AbstractObject obj) {
-	AllocNode objNode = pag.makeAllocNode( 
+	AllocNode objNode = pag.makeAllocNode(
 		new Pair( "AbstractObject", obj.getType() ),
 		 obj.getType(), null );
 
@@ -48,7 +48,7 @@ public class SparkNativeHelper extends NativeHelper {
         pag.addEdge( objNode, var );
     }
     protected void throwExceptionImpl(AbstractObject obj) {
-	AllocNode objNode = pag.makeAllocNode( 
+	AllocNode objNode = pag.makeAllocNode(
 		new Pair( "AbstractObject", obj.getType() ),
 		 obj.getType(), null );
         pag.addEdge( objNode, pag.nodeFactory().caseThrow() );
@@ -87,5 +87,5 @@ public class SparkNativeHelper extends NativeHelper {
         return pag.makeLocalVarNode( new Pair( "TempVar", new Integer( ++G.v().SparkNativeHelper_tempVar ) ),
                                      RefType.v( "java.lang.Object" ) , method);
     }
-    
+
 }

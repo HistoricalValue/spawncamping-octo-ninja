@@ -65,7 +65,7 @@ public abstract class Job
     }
 
     /**
-     * Return the last <code>BarrierPass</code> that this job completed; 
+     * Return the last <code>BarrierPass</code> that this job completed;
      * return <code>null</code> if no <code>BarrierPass</code>es have
      * yet been completed
      */
@@ -84,12 +84,12 @@ public abstract class Job
     public void setRunningPass(Pass pass) {
         // The pass is not-null iff the job is running
         if (pass != null) {
-            // We're starting to run the pass. 
+            // We're starting to run the pass.
             // Record the initial error count.
             this.initialErrorCount = compiler().errorQueue().errorCount();
         }
         else {
-            // We've stopped running a pass. 
+            // We've stopped running a pass.
             // Check if the error count changed.
             int errorCount = compiler().errorQueue().errorCount();
 
@@ -131,30 +131,30 @@ public abstract class Job
     }
 
     /**
-     * By default, a <code>Job</code> does not have a context associated 
+     * By default, a <code>Job</code> does not have a context associated
      * with it. Subclasses may override this method.
      */
     public Context context() {
         return null;
     }
-    
+
     /**
      * Get the <code>SourceJob</code> associated with this <code>Job</code>.
-     * If this <code>Job</code> is a <code>SourceJob</code>, then this 
-     * object should be returned; otherwise the most suitable 
+     * If this <code>Job</code> is a <code>SourceJob</code>, then this
+     * object should be returned; otherwise the most suitable
      * <code>SourceJob</code> should be returned. See subclasses' documentation
      * for more details of what the most suitable <code>SourceJob</code> is.
      */
     public abstract SourceJob sourceJob();
 
     /**
-     * Return the <code>Source</code> associated with the 
+     * Return the <code>Source</code> associated with the
      * <code>SourceJob</code> returned by <code>sourceJob</code>.
      */
     public Source source() {
         return this.sourceJob().source();
     }
-    
+
     /**
      * Returns whether the source for this job was explicitly specified
      * by the user, or if it was drawn into the compilation process due
@@ -165,7 +165,7 @@ public abstract class Job
     }
 
     /**
-     * Get the initial list of passes that this <code>Job</code> should go 
+     * Get the initial list of passes that this <code>Job</code> should go
      * through.
      * This method is called only once, from <code>init</code>.
      */
@@ -173,7 +173,7 @@ public abstract class Job
 
     /**
      * Get the list of passes that this <code>Job</code> needs to go through.
-     * This list is initialized with the list returned by 
+     * This list is initialized with the list returned by
      * <code>getPasses</code>.
      */
     public final List passes() {
@@ -192,7 +192,7 @@ public abstract class Job
     }
 
     /**
-     * Initialize the <code>passes</code> field and the 
+     * Initialize the <code>passes</code> field and the
      * <code>passMap</code> field.
      */
     protected void init() {
@@ -213,9 +213,9 @@ public abstract class Job
 
     /**
      * Return a list of passes that have been completed so far.
-     * The list returned by <code>completedPasses</code> concatenated with the 
+     * The list returned by <code>completedPasses</code> concatenated with the
      * list returned by <code>pendingPasses</code> should be equivalent to the
-     * list returned by <code>passes</code>. 
+     * list returned by <code>passes</code>.
      */
     public List completedPasses() {
 	return passes().subList(0, nextPass);
@@ -223,9 +223,9 @@ public abstract class Job
 
     /**
      * Return a list of passes that still have to be performed.
-     * The list returned by <code>completedPasses</code> concatenated with the 
+     * The list returned by <code>completedPasses</code> concatenated with the
      * list returned by <code>pendingPasses</code> should be equivalent to the
-     * list returned by <code>passes</code>. 
+     * list returned by <code>passes</code>.
      */
     public List pendingPasses() {
 	return passes().subList(nextPass, passes.size());
@@ -262,20 +262,20 @@ public abstract class Job
 
     /**
      * Return the pass immediately before the pass identified by <code>id</code>.
-     * Return <code>null</code> if no such pass exists. 
+     * Return <code>null</code> if no such pass exists.
      */
     public Pass getPreviousTo(Pass.ID id) {
         Integer i = (Integer) passMap().get(id);
 
         if (i != null) {
-            if (i.intValue() == 0) 
+            if (i.intValue() == 0)
                 return null;
             return (Pass) passes().get(i.intValue() - 1);
         }
 
         throw new InternalCompilerError("No pass named \"" + id + "\".");
     }
-    
+
     /**
      * Return the next pass to be performed. Return null if there are no
      * passes left to be performed.
@@ -290,17 +290,17 @@ public abstract class Job
         }
     }
 
-    
+
     public boolean status() {
         return status;
     }
 
     /**
-     * Inform this <code>Job</code> that pass <code>p</code> has finished. 
+     * Inform this <code>Job</code> that pass <code>p</code> has finished.
      * If <code>okay</code> is <code>true</code>, then the pass
      * was completed successfully; if it is <code>false</code> the pass was not
      * completed successfully.
-     * 
+     *
      * Pass <code>p</code> may be any pending pass.
      */
     public void finishPass(Pass p, boolean okay) {
@@ -316,7 +316,7 @@ public abstract class Job
 	      	return;
 	    }
 	}
-    
+
         throw new InternalCompilerError("Pass " + p + " was not a pending " +
                             "pass.");
     }
@@ -333,7 +333,7 @@ public abstract class Job
      * Spawn a new job. All passes between the pass <code>begin</code>
      * and <code>end</code> inclusive will be performed immediately on
      * the AST <code>ast</code>, and the resulting AST returned.
-     * 
+     *
      * Spawn a new job. All passes between the pass <code>begin</code>
      * and <code>end</code> inclusive will be performed immediately on
      * the AST <code>ast</code>.

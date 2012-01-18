@@ -1,8 +1,8 @@
 package polyglot.ext.param.types;
 
 import polyglot.types.*;
-import polyglot.util.Position;  
-import java.util.List;  
+import polyglot.util.Position;
+import java.util.List;
 
 /**
  * Parameterized class.  This class is a wrapper around
@@ -15,13 +15,13 @@ public interface PClass extends Importable {
      * A list of TypeObject.
      */
     List formals();
-    
+
     /**
      * The class associated with <code>this</code>.  Note that
      * <code>this</code> should never be used as a first-class type.
      */
     ClassType clazz();
-    
+
     /**
      * Instantiate <code>this</code>.
      * @param pos The position of the instantiation

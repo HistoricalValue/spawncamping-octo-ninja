@@ -65,7 +65,7 @@ public class AmbKeySetNode_c extends Node_c implements AmbKeySetNode
         n.keySet = s;
         return n;
     }
-        
+
     public Node disambiguate(AmbiguityRemover sc) throws SemanticException {
         CofferTypeSystem ts = (CofferTypeSystem) sc.typeSystem();
         CofferNodeFactory nf = (CofferNodeFactory) sc.nodeFactory();
@@ -126,7 +126,7 @@ public class AmbKeySetNode_c extends Node_c implements AmbKeySetNode
         }
 
         s += "]";
-        
+
         return s;
     }
 }

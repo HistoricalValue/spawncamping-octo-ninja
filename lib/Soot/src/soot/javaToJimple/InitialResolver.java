@@ -31,17 +31,17 @@ import polyglot.util.IdentityKey;
 public class InitialResolver implements IInitialResolver {
 
     private polyglot.ast.Node astNode;  // source node
-    private polyglot.frontend.Compiler compiler; 
+    private polyglot.frontend.Compiler compiler;
     private BiMap anonClassMap;   // maps New to SootClass (name)
     private HashMap<IdentityKey, String> anonTypeMap;    //maps polyglot types to soot types
     private BiMap localClassMap;  // maps LocalClassDecl to SootClass (name)
     private HashMap<IdentityKey, String> localTypeMap;   // maps polyglot types to soot types
     private int privateAccessCounter = 0; // global for whole program because
-                                          // the methods created are static 
+                                          // the methods created are static
     private HashMap<IdentityKey, AnonLocalClassInfo> finalLocalInfo; // new or lcd mapped to list of final locals avail in current meth and the whether its static
     private HashMap<String, Node> sootNameToAST = null;
     private ArrayList hasOuterRefInInit; // list of sootclass types that need an outer class this param in for init
-   
+
     private HashMap<String, String> classToSourceMap;
     private HashMap<SootClass, SootClass> specialAnonMap;
     private HashMap<IdentityKey, SootMethod> privateFieldGetAccessMap;
@@ -49,7 +49,7 @@ public class InitialResolver implements IInitialResolver {
     private HashMap<IdentityKey, SootMethod> privateMethodGetAccessMap;
     private ArrayList<String> interfacesList;
     private ArrayList<Node> cCallList;
-    
+
     private HashMap<New, ConstructorInstance> anonConstructorMap;
 
     public void addToAnonConstructorMap(polyglot.ast.New anonNew, polyglot.types.ConstructorInstance ci){
@@ -58,7 +58,7 @@ public class InitialResolver implements IInitialResolver {
         }
         anonConstructorMap.put(anonNew, ci);
     }
-   
+
     public polyglot.types.ConstructorInstance getConstructorForAnon(polyglot.ast.New anonNew){
         if (anonConstructorMap == null) return null;
         return anonConstructorMap.get(anonNew);
@@ -71,11 +71,11 @@ public class InitialResolver implements IInitialResolver {
     public void setJBBFactory(AbstractJBBFactory jbbFactory){
         this.jbbFactory = jbbFactory;
     }
-    
+
     public AbstractJBBFactory getJBBFactory(){
         return jbbFactory;
     }
-    
+
     /**
      * returns true if there is an AST avail for given soot class
      */
@@ -84,7 +84,7 @@ public class InitialResolver implements IInitialResolver {
        if (sootNameToAST.containsKey(name)) return true;
        return false;
     }
-    
+
     /**
      * sets AST for given soot class if possible
      */
@@ -94,19 +94,19 @@ public class InitialResolver implements IInitialResolver {
         }
         setAst(sootNameToAST.get(name));
     }
-   
+
     public InitialResolver(soot.Singletons.Global g){}
     public static InitialResolver v() {
         return soot.G.v().soot_javaToJimple_InitialResolver();
     }
-    
 
-    
+
+
     /**
      * Invokes polyglot and gets the AST for the source given in fullPath
      */
     public void formAst(String fullPath, List<String> locations, String className){
-    
+
         JavaToJimple jtj = new JavaToJimple();
         polyglot.frontend.ExtensionInfo extInfo = jtj.initExtInfo(fullPath, locations);
         // only have one compiler - for memory issues
@@ -115,7 +115,7 @@ public class InitialResolver implements IInitialResolver {
         }
         // build ast
         astNode = jtj.compile(compiler, fullPath, extInfo);
- 
+
         resolveAST();
 
 
@@ -124,11 +124,11 @@ public class InitialResolver implements IInitialResolver {
     /**
      * if you have a special AST set it here then call resolveFormJavaFile
      * on the soot class
-     */ 
+     */
     public void setAst(polyglot.ast.Node ast) {
         astNode = ast;
     }
-    
+
     /*
      * March 2nd, 2006 Nomair
      * Is it okkay get the ast and send it to the ASTMetrics package????
@@ -153,7 +153,7 @@ public class InitialResolver implements IInitialResolver {
             addNameToAST(Util.getSootType(type).toString());
         }
     }
-    
+
     /**
      * add name to AST to map - used mostly for inner and non public
      * top-level classes
@@ -161,40 +161,40 @@ public class InitialResolver implements IInitialResolver {
     protected void addNameToAST(String name){
         if (sootNameToAST == null){
             sootNameToAST = new HashMap<String, Node>();
-        }   
+        }
         sootNameToAST.put(name, astNode);
     }
-   
+
     public void resolveAST(){
         buildInnerClassInfo();
         if (astNode instanceof polyglot.ast.SourceFile) {
             createClassToSourceMap((polyglot.ast.SourceFile)astNode);
         }
     }
-    
+
     // resolves all types and deals with .class literals and asserts
     public Dependencies resolveFromJavaFile(soot.SootClass sc) {
         Dependencies dependencies = new Dependencies();
         //conservatively load all to signatures
         ClassResolver cr = new ClassResolver(sc, dependencies.typesToSignature);
-        
-        // create class to source map first 
+
+        // create class to source map first
         // create source file
         if (astNode instanceof polyglot.ast.SourceFile) {
             cr.createSource((polyglot.ast.SourceFile)astNode);
         }
-        
+
         cr.addSourceFileTag(sc);
-        
+
         makeASTMap();
-        
-        
+
+
         return dependencies;
     }
-    
+
 
     private void createClassToSourceMap(polyglot.ast.SourceFile src){
-       
+
         String srcName = src.source().path();
         String srcFileName = null;
         if (src.package_() != null){
@@ -209,7 +209,7 @@ public class InitialResolver implements IInitialResolver {
         Iterator it = src.decls().iterator();
         while (it.hasNext()){
             polyglot.ast.ClassDecl nextDecl = (polyglot.ast.ClassDecl)it.next();
-            addToClassToSourceMap(Util.getSootType(nextDecl.type()).toString(), srcFileName); 
+            addToClassToSourceMap(Util.getSootType(nextDecl.type()).toString(), srcFileName);
         }
 
     }
@@ -229,7 +229,7 @@ public class InitialResolver implements IInitialResolver {
         if (anonTypeMap == null) return 1;
         else return anonTypeMap.size()+1;
     }
-    
+
     private void createAnonClassName(polyglot.ast.New nextNew){
         // maybe this anon has already been resolved
         if (anonClassMap == null){
@@ -261,24 +261,24 @@ public class InitialResolver implements IInitialResolver {
                     }
                 }
             }
-            
+
             String realName = outerToMatch.fullName()+"$"+nextAvailNum;
             anonClassMap.put(nextNew, realName);
             anonTypeMap.put(new polyglot.util.IdentityKey(nextNew.anonType()), realName);
             addNameToAST(realName);
-            
+
         }
     }
-    
+
     private void createLocalClassName(polyglot.ast.LocalClassDecl lcd){
-        // maybe this localdecl has already been resolved 
+        // maybe this localdecl has already been resolved
         if (localClassMap == null){
             localClassMap = new BiMap();
         }
         if (localTypeMap == null){
             localTypeMap = new HashMap<IdentityKey, String>();
         }
-        
+
         if (!localClassMap.containsKey(lcd)){
             int nextAvailNum = 1;
             polyglot.types.ClassType outerToMatch = lcd.decl().type().outer();
@@ -311,9 +311,9 @@ public class InitialResolver implements IInitialResolver {
     }
 
     private static final int NO_MATCH = 0;
-    
+
     private int getLocalClassNum(String realName, String simpleName){
-        // a local inner class is named outer$NsimpleName where outer 
+        // a local inner class is named outer$NsimpleName where outer
         // is the very outer most class
         int dIndex = realName.indexOf("$");
         int nIndex = realName.indexOf(simpleName, dIndex);
@@ -327,9 +327,9 @@ public class InitialResolver implements IInitialResolver {
         }
         return (new Integer(numString)).intValue();
     }
-    
+
     private int getAnonClassNum(String realName){
-        // a anon inner class is named outer$N where outer 
+        // a anon inner class is named outer$N where outer
         // is the very outer most class
         int dIndex = realName.indexOf("$");
         if (dIndex == -1) {
@@ -337,20 +337,20 @@ public class InitialResolver implements IInitialResolver {
         }
         return (new Integer(realName.substring(dIndex+1))).intValue();
     }
-    
+
 
     /**
      * ClassToSourceMap is for classes whos names don't match the source file
      * name - ex: multiple top level classes in a single file
      */
     private void addToClassToSourceMap(String className, String sourceName) {
-            
+
         if (classToSourceMap == null){
             classToSourceMap = new HashMap<String, String>();
         }
         classToSourceMap.put(className, sourceName);
     }
-    
+
 
     public boolean hasClassInnerTag(soot.SootClass sc, String innerName){
         Iterator it = sc.getTags().iterator();
@@ -363,21 +363,21 @@ public class InitialResolver implements IInitialResolver {
         }
         return false;
     }
-   
+
     private void buildInnerClassInfo(){
         InnerClassInfoFinder icif = new InnerClassInfoFinder();
         astNode.visit(icif);
         createLocalAndAnonClassNames(icif.anonBodyList(), icif.localClassDeclList());
         buildFinalLocalMap(icif.memberList());
     }
-    
+
     private void buildFinalLocalMap(ArrayList<Node> memberList){
         Iterator<Node> it = memberList.iterator();
         while (it.hasNext()){
             handleFinalLocals((polyglot.ast.ClassMember)it.next());
         }
     }
-    
+
     private void handleFinalLocals(polyglot.ast.ClassMember member){
         MethodFinalsChecker mfc = new MethodFinalsChecker();
         member.visit(mfc);
@@ -418,7 +418,7 @@ public class InitialResolver implements IInitialResolver {
         }
         Iterator<IdentityKey> it = mfc.inners().iterator();
         while (it.hasNext()){
-            
+
             polyglot.types.ClassType cType = (polyglot.types.ClassType)it.next().object();
             // do the comparison about locals avail and locals used here
             HashMap<IdentityKey, ArrayList<IdentityKey>> typeToLocalUsed = mfc.typeToLocalsUsed();
@@ -433,8 +433,8 @@ public class InitialResolver implements IInitialResolver {
                     }
                 }
             }
-                
-            
+
+
             AnonLocalClassInfo info = new AnonLocalClassInfo();
             info.inStaticMethod(alci.inStaticMethod());
             info.finalLocalsAvail(localsUsed);
@@ -443,7 +443,7 @@ public class InitialResolver implements IInitialResolver {
             }
         }
     }
-    
+
     public boolean isAnonInCCall(polyglot.types.ClassType anonType){
         //System.out.println("checking type: "+anonType);
         Iterator<Node> it = cCallList.iterator();
@@ -461,7 +461,7 @@ public class InitialResolver implements IInitialResolver {
         }
         return false;
     }
-    
+
     public BiMap getAnonClassMap(){
         return anonClassMap;
     }
@@ -469,7 +469,7 @@ public class InitialResolver implements IInitialResolver {
     public BiMap getLocalClassMap(){
         return localClassMap;
     }
-    
+
     public HashMap<IdentityKey, String> getAnonTypeMap(){
         return anonTypeMap;
     }
@@ -477,7 +477,7 @@ public class InitialResolver implements IInitialResolver {
     public HashMap<IdentityKey, String> getLocalTypeMap(){
         return localTypeMap;
     }
-  
+
     public HashMap<IdentityKey, AnonLocalClassInfo> finalLocalInfo(){
         return finalLocalInfo;
     }
@@ -507,21 +507,21 @@ public class InitialResolver implements IInitialResolver {
     public void hierarchy(soot.FastHierarchy fh){
         hierarchy = fh;
     }
-    
+
     public soot.FastHierarchy hierarchy(){
         return hierarchy;
     }
 
     private HashMap<SootClass, InnerClassInfo> innerClassInfoMap;
-   
+
     public HashMap<SootClass, InnerClassInfo> getInnerClassInfoMap(){
         return innerClassInfoMap;
     }
- 
+
     public void setInnerClassInfoMap(HashMap<SootClass, InnerClassInfo> map){
         innerClassInfoMap = map;
     }
- 
+
     protected HashMap<String, String> classToSourceMap(){
         return classToSourceMap;
     }
@@ -532,35 +532,35 @@ public class InitialResolver implements IInitialResolver {
         }
         privateFieldGetAccessMap.put(new polyglot.util.IdentityKey(field.fieldInstance()), meth);
     }
-    
+
     public HashMap<IdentityKey, SootMethod> getPrivateFieldGetAccessMap(){
         return privateFieldGetAccessMap;
     }
-    
+
     public void addToPrivateFieldSetAccessMap(polyglot.ast.Field field, soot.SootMethod meth){
         if (privateFieldSetAccessMap == null){
             privateFieldSetAccessMap = new HashMap<IdentityKey, SootMethod>();
         }
         privateFieldSetAccessMap.put(new polyglot.util.IdentityKey(field.fieldInstance()), meth);
     }
-    
+
     public HashMap<IdentityKey, SootMethod> getPrivateFieldSetAccessMap(){
         return privateFieldSetAccessMap;
     }
-    
+
     public void addToPrivateMethodGetAccessMap(polyglot.ast.Call call, soot.SootMethod meth){
         if (privateMethodGetAccessMap == null){
             privateMethodGetAccessMap = new HashMap<IdentityKey, SootMethod>();
         }
         privateMethodGetAccessMap.put(new polyglot.util.IdentityKey(call.methodInstance()), meth);
     }
-    
+
     public HashMap<IdentityKey, SootMethod> getPrivateMethodGetAccessMap(){
         return privateMethodGetAccessMap;
     }
 
     public ArrayList<String> getInterfacesList() {
         return interfacesList;
-    } 
+    }
 }
 

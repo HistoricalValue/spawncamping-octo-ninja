@@ -49,7 +49,7 @@ public class ForLoopCreator extends DepthFirstAdapter{
 	super(verbose);
     }
 
-    
+
     public void caseASTStatementSequenceNode(ASTStatementSequenceNode node){
     }
 
@@ -70,7 +70,7 @@ public class ForLoopCreator extends DepthFirstAdapter{
 	Iterator<Object> sbit = node.get_SubBodies().iterator();
 
 	//onlyASTIfElseNode has 2 subBodies but we need to deal with that
-	int subBodyNumber=0; 
+	int subBodyNumber=0;
 	while (sbit.hasNext()) {
 	    List<Object> subBody = (List<Object>)sbit.next();
 	    Iterator<Object> it = subBody.iterator();
@@ -87,12 +87,12 @@ public class ForLoopCreator extends DepthFirstAdapter{
 			if(temp1 instanceof ASTWhileNode){
 			    //a statement sequence node followed by a while node
 
-			    ForLoopCreationHelper helper = 
+			    ForLoopCreationHelper helper =
 				new ForLoopCreationHelper((ASTStatementSequenceNode)temp,(ASTWhileNode)temp1);
 
 			    if(helper.checkPattern()){
 				//pattern matched
-				
+
 				List<Object> newBody = helper.createNewBody(subBody,nodeNumber);
 				if(newBody!= null){
 				    if(node instanceof ASTIfElseNode){
@@ -124,7 +124,7 @@ public class ForLoopCreator extends DepthFirstAdapter{
 					    G.v().ASTTransformations_modified = true;
 					    //System.out.println("FOR LOOP CREATED");
 					    return;
-					    
+
 					}
 					else if(node instanceof ASTSynchronizedBlockNode){
 					    ((ASTSynchronizedBlockNode)node).replaceBody(newBody);
@@ -169,7 +169,7 @@ public class ForLoopCreator extends DepthFirstAdapter{
 					    return;
 					}
 					else {
-					   throw new RuntimeException("Please report benchmark to programmer.");   
+					   throw new RuntimeException("Please report benchmark to programmer.");
 					}
 				    }
 				}//newBody was not null
@@ -187,7 +187,7 @@ public class ForLoopCreator extends DepthFirstAdapter{
     public void caseASTTryNode(ASTTryNode node){
 	inASTTryNode(node);
 
-	//get try body 
+	//get try body
 	List<Object> tryBody = node.get_TryBody();
 	Iterator<Object> it = tryBody.iterator();
 
@@ -202,13 +202,13 @@ public class ForLoopCreator extends DepthFirstAdapter{
 		    ASTNode temp1 = (ASTNode)tryBody.get(nodeNumber+1);
 		    if(temp1 instanceof ASTWhileNode){
 			//a statement sequence node followed by a while node
-			    
-			ForLoopCreationHelper helper = 
+
+			ForLoopCreationHelper helper =
 			    new ForLoopCreationHelper((ASTStatementSequenceNode)temp,(ASTWhileNode)temp1);
-			    
+
 			if(helper.checkPattern()){
 			    //pattern matched
-			    
+
 			    List<Object> newBody = helper.createNewBody(tryBody,nodeNumber);
 			    if(newBody!= null){
 				//something did not go wrong
@@ -239,10 +239,10 @@ public class ForLoopCreator extends DepthFirstAdapter{
         it = catchList.iterator();
 	while (it.hasNext()) {
 	    ASTTryNode.container catchBody = (ASTTryNode.container)it.next();
-	    
+
 	    SootClass sootClass = ((SootClass)exceptionMap.get(catchBody));
 	    Type type = sootClass.getType();
-	    
+
 	    //apply on type of exception
 	    caseType(type);
 
@@ -266,13 +266,13 @@ public class ForLoopCreator extends DepthFirstAdapter{
 			ASTNode temp1 = (ASTNode)body.get(nodeNumber+1);
 			if(temp1 instanceof ASTWhileNode){
 			    //a statement sequence node followed by a while node
-			    
-			    ForLoopCreationHelper helper = 
+
+			    ForLoopCreationHelper helper =
 				new ForLoopCreationHelper((ASTStatementSequenceNode)temp,(ASTWhileNode)temp1);
-			    
+
 			    if(helper.checkPattern()){
 				//pattern matched
-			    
+
 				List<Object> newBody = helper.createNewBody(body,nodeNumber);
 				if(newBody!= null){
 				    //something did not go wrong
@@ -285,12 +285,12 @@ public class ForLoopCreator extends DepthFirstAdapter{
 			}//the next node was a whilenode
 		    }//there is a next node
 		}//temp is a stmtSeqNode
-		
+
 		temp.apply(this);
 		nodeNumber++;
 	    }
 	}
-	
+
 	outASTTryNode(node);
     }
 
@@ -305,9 +305,9 @@ public class ForLoopCreator extends DepthFirstAdapter{
 	while (it.hasNext()) {//going through all the cases of the switch statement
 	    Object currentIndex = it.next();
 	    List<Object> body = index2BodyList.get( currentIndex);
-	    
+
 	    if (body != null){
-		//this body is a list of ASTNodes 
+		//this body is a list of ASTNodes
 
 		Iterator<Object> itBody = body.iterator();
 		int nodeNumber=0;
@@ -322,13 +322,13 @@ public class ForLoopCreator extends DepthFirstAdapter{
 			    ASTNode temp1 = (ASTNode)body.get(nodeNumber+1);
 			    if(temp1 instanceof ASTWhileNode){
 				//a statement sequence node followed by a while node
-				
-				ForLoopCreationHelper helper = 
+
+				ForLoopCreationHelper helper =
 				    new ForLoopCreationHelper((ASTStatementSequenceNode)temp,(ASTWhileNode)temp1);
-				
+
 				if(helper.checkPattern()){
 				    //pattern matched
-				    
+
 				    List<Object> newBody = helper.createNewBody(body,nodeNumber);
 				    if(newBody!= null){
 					//something did not go wrong

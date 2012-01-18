@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -35,7 +35,7 @@ import soot.util.*;
 
 // future work: fieldrefs.
 
-/** Implements an available expressions analysis on local variables. 
+/** Implements an available expressions analysis on local variables.
  * The current implementation is slow but correct.
  * A better implementation would use an implicit universe and
  * the kill rule would be computed on-the-fly for each statement. */
@@ -47,7 +47,7 @@ public class SlowAvailableExpressionsAnalysis extends ForwardFlowAnalysis
     private final HashMap<Value, EquivalentValue> valueToEquivValue;
 
     FlowSet emptySet;
-    
+
     public SlowAvailableExpressionsAnalysis(DirectedGraph dg)
     {
         super(dg);
@@ -90,7 +90,7 @@ public class SlowAvailableExpressionsAnalysis extends ForwardFlowAnalysis
                     { sibList = new HashChain(); equivValToSiblingList.put(ev, sibList); }
                 else
                     sibList = equivValToSiblingList.get(ev);
-                
+
                 if (!sibList.contains(v)) sibList.add(v);
 
                 if (!(v instanceof Expr))
@@ -202,8 +202,8 @@ public class SlowAvailableExpressionsAnalysis extends ForwardFlowAnalysis
                         Value gen = as.getRightOp();
 
                         boolean cantAdd = false;
-                        if (gen instanceof NewExpr || 
-                               gen instanceof NewArrayExpr || 
+                        if (gen instanceof NewExpr ||
+                               gen instanceof NewArrayExpr ||
                                gen instanceof NewMultiArrayExpr)
                             cantAdd = true;
                         if (gen instanceof InvokeExpr)
@@ -257,12 +257,12 @@ public class SlowAvailableExpressionsAnalysis extends ForwardFlowAnalysis
 
         inSet1.intersection(inSet2, outSet);
     }
-    
+
     protected void copy(Object source, Object dest)
     {
         FlowSet sourceSet = (FlowSet) source,
             destSet = (FlowSet) dest;
-            
+
         sourceSet.copy(destSet);
     }
 }

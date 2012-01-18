@@ -16,16 +16,16 @@ import java.util.*;
 // -Richard L. Halpert, 2006-11-30
 
 public class TargetMethodsFinder{
-	
+
 	public List<SootMethod> find(Unit unit, CallGraph cg, boolean canBeNullList, boolean canBeNative){
 		// target method list can be null during build methodsNeedingInlining, otherwise NOT.
-		Set<SootMethod> clinit = new HashSet<SootMethod>(); 
-		List<SootMethod> target = new ArrayList<SootMethod>(); 
+		Set<SootMethod> clinit = new HashSet<SootMethod>();
+		List<SootMethod> target = new ArrayList<SootMethod>();
 		List<SootMethod> t = new ArrayList<SootMethod>();
 		Iterator it = cg.edgesOutOf(unit);
 		//System.out.println("***unit is: "+unit);
 		while (it.hasNext()){
-			Edge edge = (Edge)it.next();   
+			Edge edge = (Edge)it.next();
 			SootMethod targetMethod = edge.tgt();
 			//System.out.println("kind: "+edge.kind());
 			//System.out.println("isExplicit: "+edge.isExplicit());
@@ -37,15 +37,15 @@ public class TargetMethodsFinder{
 					target.add(targetMethod);
 				else
 					continue;
-				
+
 			}
-			
+
 			if (edge.kind() == Kind.CLINIT ) {
 				clinit.add(targetMethod);
-				
+
 //				continue;
 			}
-			
+
 			//		if (!targetMethod.getName().equals("run") && edge.kind() == 5 ) continue;
 			target.add(targetMethod);
 		}
@@ -62,15 +62,15 @@ public class TargetMethodsFinder{
 		}
 		if (target.size() < 1 && !canBeNullList){
 			throw new RuntimeException("No target method for: "+unit);
-			
-			
+
+
 		}
 		/*		if (t.size() != 1){
-		 System.out.println("t.size(): "+t.size());		
+		 System.out.println("t.size(): "+t.size());
 		 System.out.println("=====t list for: "+unit);
 		 System.out.println(target);
 		 }
-		 */		
+		 */
 		return target;
 	}
 }

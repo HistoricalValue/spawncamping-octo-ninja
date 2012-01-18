@@ -8,7 +8,7 @@ import polyglot.util.*;
 /**
  * <code>Ext</code> is the super type of all node extension objects.
  * It contains a pointer back to the node it is extending and a possibly-null
- * pointer to another extension node. 
+ * pointer to another extension node.
  */
 public abstract class Ext_c implements Ext {
     protected Node node;

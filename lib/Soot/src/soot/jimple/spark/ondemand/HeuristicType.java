@@ -23,7 +23,7 @@ import soot.jimple.spark.internal.TypeManager;
 public enum HeuristicType {
 
     MANUAL, INCR, EVERY, MANUALINCR, NOTHING;
-    
+
     public static FieldCheckHeuristic getHeuristic(HeuristicType type,
             TypeManager tm, int maxPasses) {
         FieldCheckHeuristic ret = null;

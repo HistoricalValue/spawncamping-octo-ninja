@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,7 +31,7 @@ import soot.options.Options;
 import soot.util.*;
 import java.util.*;
 
-/** Represents a type variable. 
+/** Represents a type variable.
  * @deprecated use {@link soot.jimple.toolkits.typing.fast.TypeResolver} instead
  **/
 class TypeVariableBV implements Comparable
@@ -68,11 +68,11 @@ class TypeVariableBV implements Comparable
     this.resolver = resolver;
     this.type = type;
     approx = type;
-    
+
     for( Iterator parentIt = type.parents().iterator(); parentIt.hasNext(); ) {
-    
+
         final TypeNode parent = (TypeNode) parentIt.next();
-	
+
 	addParent(resolver.typeVariable(parent));
       }
 
@@ -89,7 +89,7 @@ class TypeVariableBV implements Comparable
       {
 	return ecr().hashCode();
       }
-   
+
     return id;
   }
 
@@ -109,14 +109,14 @@ class TypeVariableBV implements Comparable
       {
 	return false;
       }
-    
+
     TypeVariableBV ecr = ((TypeVariableBV) obj).ecr();
 
     if(ecr != this)
       {
 	return false;
       }
-    
+
     return true;
   }
 
@@ -129,7 +129,7 @@ class TypeVariableBV implements Comparable
 
     return id - ((TypeVariableBV) o).ecr().id;
   }
-  
+
   private TypeVariableBV ecr()
   {
     if(rep != this)
@@ -155,7 +155,7 @@ class TypeVariableBV implements Comparable
         children.clear(var.ownId());
 	return this;
       }
-    
+
     if(rank > y.rank)
       {
         resolver.invalidateId(y.id());
@@ -224,7 +224,7 @@ class TypeVariableBV implements Comparable
 	ecr().validate();
 	return;
       }
-    
+
     // Validate relations.
     if(type != null)
       {
@@ -265,7 +265,7 @@ class TypeVariableBV implements Comparable
 	  }
       }
   }
-  
+
   public void removeIndirectRelations()
   {
     if(rep != this)
@@ -273,7 +273,7 @@ class TypeVariableBV implements Comparable
 	ecr().removeIndirectRelations();
 	return;
       }
-    
+
     if(indirectAncestors == null)
       {
 	fixAncestors();
@@ -316,13 +316,13 @@ class TypeVariableBV implements Comparable
     this.ancestors = ancestors;
     this.indirectAncestors = indirectAncestors;
   }
-  
+
   private void fixParents()
   {
       if(rep != this) {
           ecr().fixParents();
       }
-      
+
       BitVector invalid = new BitVector(); invalid.or(parents);
       invalid.and(resolver.invalidIds());
       for(BitSetIterator i = invalid.iterator(); i.hasNext();) {
@@ -347,7 +347,7 @@ class TypeVariableBV implements Comparable
   {
     return id;
   }
-  
+
   public void addParent(TypeVariableBV variable)
   {
     if(rep != this)
@@ -357,7 +357,7 @@ class TypeVariableBV implements Comparable
       }
 
     TypeVariableBV var = variable.ecr();
- 
+
     if(var == this)
       {
 	return;
@@ -389,7 +389,7 @@ class TypeVariableBV implements Comparable
       }
 
     TypeVariableBV var = variable.ecr();
- 
+
     if(var == this)
       {
 	return;
@@ -408,7 +408,7 @@ class TypeVariableBV implements Comparable
       }
 
     TypeVariableBV var = variable.ecr();
- 
+
     children.clear(var.id);
     var.parents.clear(var.id);
   }
@@ -464,7 +464,7 @@ class TypeVariableBV implements Comparable
       {
 	return ecr().parents();
       }
-    
+
     return parents;
   }
 
@@ -474,7 +474,7 @@ class TypeVariableBV implements Comparable
       {
 	return ecr().children();
       }
-    
+
     return children;
   }
 
@@ -514,7 +514,7 @@ class TypeVariableBV implements Comparable
       }
   }
 
-  /** Computes approximative types.  The work list must be 
+  /** Computes approximative types.  The work list must be
    *  initialized with all constant type variables. */
   public static void computeApprox(TreeSet<TypeVariableBV> workList) throws TypeException
   {
@@ -538,18 +538,18 @@ class TypeVariableBV implements Comparable
     if(type == null && approx != resolver.hierarchy().NULL)
       {
 	TypeVariableBV element = element();
-	
+
 	if(element != null)
 	  {
 	    if(!approx.hasElement())
 	      {
 		G.v().out.println("*** " + this + " ***");
-		
+
 		error("Type Error(4)");
 	      }
-	    
+
 	    TypeNode temp = approx.element();
-	    
+
 	    if(element.approx == null)
 	      {
 		element.approx = temp;
@@ -576,15 +576,15 @@ class TypeVariableBV implements Comparable
 		  }
 	      }
 	  }
-	
+
 	TypeVariableBV array = array();
-	
+
 	if(array != null &&
 	   approx != resolver.hierarchy().NULL &&
 	   approx != resolver.hierarchy().INT)
 	  {
 	    TypeNode temp = approx.array();
-	    
+
 	    if(array.approx == null)
 	      {
 		array.approx = temp;
@@ -612,7 +612,7 @@ class TypeVariableBV implements Comparable
 	      }
 	  }
       }
-    
+
     for(BitSetIterator i = parents.iterator(); i.hasNext();)
       {
 	TypeVariableBV parent = resolver.typeVariableForId(i.next()).ecr();
@@ -750,13 +750,13 @@ class TypeVariableBV implements Comparable
       {
 	return ecr().toString();
       }
-    
+
     StringBuffer s = new StringBuffer();
     s.append(",[parents:");
 
     {
       boolean comma = false;
-      
+
       for(BitSetIterator i = parents.iterator(); i.hasNext(); )
 	{
 	  if(comma)
@@ -770,12 +770,12 @@ class TypeVariableBV implements Comparable
 	  s.append(i.next());
 	}
     }
-    
+
     s.append("],[children:");
 
     {
       boolean comma = false;
-      
+
       for(BitSetIterator i = children.iterator(); i.hasNext(); )
 	{
 	  if(comma)
@@ -789,9 +789,9 @@ class TypeVariableBV implements Comparable
 	  s.append(i.next());
 	}
     }
-    
+
     s.append("]");
-    return "[id:" + id + ",depth:" + depth + ((type != null) ? (",type:" + type) : "") + ",approx:" + approx + s + 
+    return "[id:" + id + ",depth:" + depth + ((type != null) ? (",type:" + type) : "") + ",approx:" + approx + s +
       (element == null ? "" : ",arrayof:" + element.id()) + "]";
   }
 

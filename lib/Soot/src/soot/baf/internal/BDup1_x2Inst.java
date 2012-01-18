@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -68,7 +68,7 @@ public class BDup1_x2Inst extends BDupInst implements Dup1_x2Inst
         res.add(mOpType);
         return res;
     }
-    
+
     public List<Type> getUnderTypes()
     {
         List<Type> res =  new ArrayList<Type>();
@@ -77,14 +77,14 @@ public class BDup1_x2Inst extends BDupInst implements Dup1_x2Inst
         return res;
     }
 
-    
+
     final public String getName() { return "dup1_x2"; }
 
 
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseDup1_x2Inst(this);
-    }   
+    }
 
 
 
@@ -92,7 +92,7 @@ public class BDup1_x2Inst extends BDupInst implements Dup1_x2Inst
     {
         return "dup1_x2." +  Baf.bafDescriptorOf(mOpType) + "_" +  Baf.bafDescriptorOf(mUnder1Type) + "." + Baf.bafDescriptorOf(mUnder2Type);
     }
-  
+
 }
 
 

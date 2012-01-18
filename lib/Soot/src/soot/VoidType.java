@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ public class VoidType extends Type
     {
         return 0x3A8C1035;
     }
-    
+
     public boolean equals(Object t)
     {
         return this == t;
@@ -47,7 +47,7 @@ public class VoidType extends Type
     {
         return "void";
     }
-    
+
     public void apply(Switch sw)
     {
         ((TypeSwitch) sw).caseVoidType(this);

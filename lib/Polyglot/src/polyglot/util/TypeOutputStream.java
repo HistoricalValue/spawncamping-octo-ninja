@@ -12,8 +12,8 @@ public class TypeOutputStream extends ObjectOutputStream
   protected TypeSystem ts;
   protected Set roots;
   protected Map placeHolders;
-  
-  public TypeOutputStream( OutputStream out, TypeSystem ts, Type root) 
+
+  public TypeOutputStream( OutputStream out, TypeSystem ts, Type root)
     throws IOException
   {
     super( out);
@@ -25,7 +25,7 @@ public class TypeOutputStream extends ObjectOutputStream
     if (Report.should_report(Report.serialize, 2)) {
         Report.report(2, "Began TypeOutputStream with roots: " + roots);
     }
-    
+
     enableReplaceObject( true);
   }
 
@@ -53,7 +53,7 @@ public class TypeOutputStream extends ObjectOutputStream
         if (r != o) {
           Report.report(2, "+ Replacing: " + o + " : " + o.getClass()
 	    + " with " + r);
-        } 
+        }
 	else {
 	  Report.report(2, "+ " + o + " : " + o.getClass());
         }

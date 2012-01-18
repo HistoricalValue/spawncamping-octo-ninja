@@ -27,7 +27,7 @@ import soot.jimple.*;
 import soot.dava.internal.SET.*;
 
 
-public class AugmentedStmt 
+public class AugmentedStmt
 {
     public List bpreds, bsuccs, cpreds, csuccs;
     public SETNode myNode;
@@ -46,7 +46,7 @@ public class AugmentedStmt
 
 	reset_PredsSuccs();
     }
-    
+
     public void set_Stmt( Stmt s)
     {
 	this.s = s;
@@ -75,7 +75,7 @@ public class AugmentedStmt
 	    csuccs.remove( bsucc);
 	    return false;
 	}
-	
+
 	bsuccs.add( bsucc);
 	return true;
     }
@@ -109,11 +109,11 @@ public class AugmentedStmt
 	    bpreds.remove( bpred);
 	    return true;
 	}
-	
+
 	cpreds.add( bpred);
 	return false;
     }
-    
+
     public boolean remove_BSucc( AugmentedStmt bsucc)
     {
 	if (remove_CSucc( bsucc) == false)
@@ -123,7 +123,7 @@ public class AugmentedStmt
 	    bsuccs.remove( bsucc);
 	    return true;
 	}
-	
+
 	csuccs.add( bsucc);
 	return false;
     }

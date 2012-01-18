@@ -11,7 +11,7 @@ import polyglot.visit.*;
 /**
  * A <code>Special</code> is an immutable representation of a
  * reference to <code>this</code> or <code>super</code in Java.  This
- * reference can be optionally qualified with a type such as 
+ * reference can be optionally qualified with a type such as
  * <code>Foo.this</code>.
  */
 public class Special_c extends Expr_c implements Special
@@ -82,7 +82,7 @@ public class Special_c extends Expr_c implements Special
             // an unqualified "this" or "super"
             t = c.currentClass();
         }
-        else {    
+        else {
 	    if (! qualifier.type().isClass()) {
 		throw new SemanticException("Qualified " + kind +
 		    " expression must be of a class type",
@@ -92,7 +92,7 @@ public class Special_c extends Expr_c implements Special
             t = qualifier.type().toClass();
 
             if (!c.currentClass().hasEnclosingInstance(t)) {
-                throw new SemanticException("The nested class \"" + 
+                throw new SemanticException("The nested class \"" +
                             c.currentClass() + "\" does not have " +
                             "an enclosing instance of type \"" +
                             t + "\".", qualifier.position());
@@ -102,7 +102,7 @@ public class Special_c extends Expr_c implements Special
         if (c.inStaticContext() && ts.equals(t, c.currentClass())) {
             // trying to access "this" or "super" from a static context.
             throw new SemanticException("Cannot access a non-static " +
-                "field or method, or refer to \"this\" or \"super\" " + 
+                "field or method, or refer to \"this\" or \"super\" " +
                 "from a static context.",  this.position());
         }
 
@@ -140,7 +140,7 @@ public class Special_c extends Expr_c implements Special
         print(qualifier, w, tr);
         w.write(".");
       }
-      
+
       w.write(kind.toString());
     }
 

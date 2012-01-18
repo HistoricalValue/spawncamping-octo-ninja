@@ -39,11 +39,11 @@ public class JavaClassSource extends ClassSource
     public JavaClassSource( String className ) {
         super( className );
     }
-    
+
     public Dependencies resolve( SootClass sc ) {
         if (Options.v().verbose())
             G.v().out.println("resolving [from .java]: " + className);
-                    
+
         IInitialResolver resolver;
         if(Options.v().polyglot())
         	resolver = InitialResolver.v();
@@ -55,7 +55,7 @@ public class JavaClassSource extends ClassSource
         }
         //System.out.println("about to call initial resolver in j2j: "+sc.getName());
         Dependencies references = resolver.resolveFromJavaFile(sc);
-        
+
         /*
          * 1st March 2006
          * Nomair
@@ -72,7 +72,7 @@ public class JavaClassSource extends ClassSource
 				metrics.apply();
 			}
 		}
-        
+
         return references;
     }
 

@@ -14,7 +14,7 @@ public abstract class Spec implements Unparse
 	protected ParserCode parserCode;
 	protected ScanCode scanCode;
 	protected PPGSpec child;
-	
+
 	public Spec () {
 		initCode = null;
 		actionCode = null;
@@ -22,16 +22,16 @@ public abstract class Spec implements Unparse
 		scanCode = null;
 		child = null;
 	}
-	
+
 	public void setPkgName (String pkgName) {
 		if (pkgName != null)
-			packageName = pkgName; 
+			packageName = pkgName;
 	}
-	
+
 	public void replaceCode (Vector codeParts) {
-		if (codeParts == null) 
+		if (codeParts == null)
 			return;
-		
+
 		Code code=null;
 		for (int i=0; i < codeParts.size(); i++) {
 			try {
@@ -54,20 +54,20 @@ public abstract class Spec implements Unparse
 			}
 		}
 	}
-	
+
 	public void addImports (Vector imp) {
 		if (imp == null)
 			return;
-		
+
 		for (int i=0; i < imp.size(); i++) {
 			imports.addElement(imp.elementAt(i));
 		}
 	}
-	
+
 	public void setChild (PPGSpec childSpec) {
 		child = childSpec;
 	}
-	
+
 	// default action is to do nothing: as CUP does
 	public void parseChain(String basePath) {}
 
@@ -75,5 +75,5 @@ public abstract class Spec implements Unparse
 	 * Combine the chain of inheritance into one CUP spec
 	 */
 	public abstract CUPSpec coalesce() throws PPGError;
-	
+
 }

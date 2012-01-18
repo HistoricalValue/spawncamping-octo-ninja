@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,7 +40,7 @@ import soot.jimple.*;
 
 
 /**
- *    A BodyTransformer that attemps to minimize the number of local variables used in 
+ *    A BodyTransformer that attemps to minimize the number of local variables used in
  *    Body by 'reusing' them when possible. Implemented as a singleton.
  *    For example the code:
  *
@@ -51,12 +51,12 @@ import soot.jimple.*;
  *    for(int i; i < k; i++);
  *    for(int i; i < k; i++);
  *
- *    assuming to further conflicting uses of i and j.   
+ *    assuming to further conflicting uses of i and j.
  *
  *    Note: LocalSplitter is corresponds to the inverse transformation.
- *   
+ *
  *    @see BodyTransformer
- *    @see Body 
+ *    @see Body
  *    @see LocalSplitter
  */
 public class LocalPacker extends BodyTransformer
@@ -67,19 +67,19 @@ public class LocalPacker extends BodyTransformer
     protected void internalTransform(Body body, String phaseName, Map options)
     {
         boolean isUnsplit = PhaseOptions.getBoolean(options, "unsplit-original-locals");
-        
+
         if(Options.v().verbose())
             G.v().out.println("[" + body.getMethod().getName() + "] Packing locals...");
-    
+
         Map<Local, Object> localToGroup = new DeterministicHashMap(body.getLocalCount() * 2 + 1, 0.7f);
             // A group represents a bunch of locals which may potentially intefere with each other
-            // 2 separate groups can not possibly interfere with each other 
+            // 2 separate groups can not possibly interfere with each other
             // (coloring say ints and doubles)
-            
+
         Map<Object, Integer> groupToColorCount = new HashMap<Object, Integer>(body.getLocalCount() * 2 + 1, 0.7f);
         Map<Local, Integer> localToColor = new HashMap<Local, Integer>(body.getLocalCount() * 2 + 1, 0.7f);
         Map localToNewLocal;
-        
+
         // Assign each local to a group, and set that group's color count to 0.
         {
             Iterator localIt = body.getLocals().iterator();
@@ -88,9 +88,9 @@ public class LocalPacker extends BodyTransformer
             {
                 Local l = (Local) localIt.next();
                 Object g = l.getType();
-                
+
                 localToGroup.put(l, g);
-                
+
                 if(!groupToColorCount.containsKey(g))
                 {
                     groupToColorCount.put(g, new Integer(0));
@@ -110,19 +110,19 @@ public class LocalPacker extends BodyTransformer
                     ((IdentityUnit) s).getLeftOp() instanceof Local)
                 {
                     Local l = (Local) ((IdentityUnit) s).getLeftOp();
-                    
+
                     Object group = localToGroup.get(l);
                     int count = groupToColorCount.get(group).intValue();
-                    
+
                     localToColor.put(l, new Integer(count));
-                    
+
                     count++;
-                    
+
                     groupToColorCount.put(group, new Integer(count));
                 }
             }
         }
-        
+
         // Call the graph colorer.
             if(isUnsplit)
                 FastColorer.unsplitAssignColorsToLocals(body, localToGroup,
@@ -131,13 +131,13 @@ public class LocalPacker extends BodyTransformer
                 FastColorer.assignColorsToLocals(body, localToGroup,
                     localToColor, groupToColorCount);
 
-                                    
+
         // Map each local to a new local.
         {
             List originalLocals = new ArrayList();
             localToNewLocal = new HashMap(body.getLocalCount() * 2 + 1, 0.7f);
             Map groupIntToLocal = new HashMap(body.getLocalCount() * 2 + 1, 0.7f);
-            
+
             originalLocals.addAll(body.getLocals());
             body.getLocals().clear();
 
@@ -146,13 +146,13 @@ public class LocalPacker extends BodyTransformer
             while(localIt.hasNext())
             {
                 Local original = (Local) localIt.next();
-                
+
                 Object group = localToGroup.get(original);
                 int color = localToColor.get(original).intValue();
                 GroupIntPair pair = new GroupIntPair(group, color);
-                
+
                 Local newLocal;
-                
+
                 if(groupIntToLocal.containsKey(pair))
                     newLocal = (Local) groupIntToLocal.get(pair);
                 else {
@@ -166,19 +166,19 @@ public class LocalPacker extends BodyTransformer
 		    // Does such a person exist?
 
 		    int signIndex = newLocal.getName().indexOf("#");
-                
+
 		    if(signIndex != -1)
 			newLocal.setName(newLocal.getName().substring(0, signIndex));
-                    
+
                     groupIntToLocal.put(pair, newLocal);
                     body.getLocals().add(newLocal);
                 }
-                
+
                 localToNewLocal.put(original, newLocal);
             }
         }
 
-        
+
         // Go through all valueBoxes of this method and perform changes
         {
             Iterator codeIt = body.getUnits().iterator();

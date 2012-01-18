@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,23 +40,23 @@ public abstract class Pack implements HasPhaseOptions
         this.name = name;
     }
     Chain opts = new HashChain();
-    
+
     public Iterator iterator() { return opts.iterator(); }
 
-    public void add(Transform t) { 
+    public void add(Transform t) {
     	if(!t.getPhaseName().startsWith(getPhaseName()+".")) {
     		throw new RuntimeException("Transforms in pack '"+getPhaseName()+"' must have a phase name " +
     				"that starts with '"+getPhaseName()+".'.");
-    	}    	
+    	}
         PhaseOptions.v().getPM().notifyAddPack();
         if( get( t.getPhaseName() ) != null ) {
             throw new RuntimeException( "Phase "+t.getPhaseName()+" already "
                     +"in pack" );
         }
-        opts.add(t); 
+        opts.add(t);
     }
 
-    public void insertAfter(Transform t, String phaseName) 
+    public void insertAfter(Transform t, String phaseName)
     {
         PhaseOptions.v().getPM().notifyAddPack();
         Iterator it = opts.iterator();

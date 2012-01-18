@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ import java.io.*;
 
 /**
  * This class resolves the type of local variables.
- * 
+ *
  * <b>NOTE:</b> This class has been superseded by {@link soot.jimple.toolkits.typing.fast.TypeResolver}.
  **/
 public class TypeResolver
@@ -96,13 +96,13 @@ public class TypeResolver
 
 	typeVariableList.set(id, result);
 	typeVariableMap.put(local, result);
-	
+
 	if(DEBUG)
 	  {
 	    G.v().out.println("[LOCAL VARIABLE \"" + local + "\" -> " + id + "]");
 	  }
       }
-    
+
     return result;
   }
 
@@ -142,11 +142,11 @@ public class TypeResolver
   {
     int id = typeVariableList.size();
     typeVariableList.add(null);
-    
+
     TypeVariable result = new TypeVariable(id, this);
-    
+
     typeVariableList.set(id, result);
-    
+
     return result;
   }
 
@@ -159,8 +159,8 @@ public class TypeResolver
     NULL = hierarchy.NULL;
     typeVariable(OBJECT);
     typeVariable(NULL);
-    
-    // hack for J2ME library, reported by Stephen Cheng 
+
+    // hack for J2ME library, reported by Stephen Cheng
     if (!Options.v().j2me()) {
       typeVariable(hierarchy.CLONEABLE);
       typeVariable(hierarchy.SERIALIZABLE);
@@ -204,7 +204,7 @@ public class TypeResolver
 		}
 		soot.jimple.toolkits.typing.integer.TypeResolver.resolve(stmtBody);
 	}
-  
+
   private void debug_vars(String message)
   {
     if(DEBUG)
@@ -363,7 +363,7 @@ public class TypeResolver
       }
 
     if(max > 1) {
-      // hack for J2ME library, reported by Stephen Cheng 
+      // hack for J2ME library, reported by Stephen Cheng
       if (!Options.v().j2me()) {
 	typeVariable(ArrayType.v(RefType.v("java.lang.Cloneable"), max - 1));
 	typeVariable(ArrayType.v(RefType.v("java.io.Serializable"), max - 1));
@@ -379,7 +379,7 @@ public class TypeResolver
 
     for (TypeVariable var : typeVariableList) {
         int depth = var.depth();
-	
+
 	lists[depth].add(var);
       }
 
@@ -423,11 +423,11 @@ public class TypeResolver
 			  {
 			    G.v().out.print(".");
 			  }
-	
+
 			var = var.union(parent);
 		      }
 		  }
-		
+
 		children = var.children();
 		if(children.size() != 0)
 		  {
@@ -437,7 +437,7 @@ public class TypeResolver
 			  {
 			    G.v().out.print(".");
 			  }
-	
+
 			var = var.union(child);
 		      }
 		  }
@@ -453,10 +453,10 @@ public class TypeResolver
     List<TypeVariable> list = new LinkedList<TypeVariable>();
     list.addAll(solved);
     list.addAll(unsolved);
-    
+
     StronglyConnectedComponents.merge(list);
   }
-  
+
   private void remove_transitive_constraints() throws TypeException
   {
     refresh_solved();
@@ -477,12 +477,12 @@ public class TypeResolver
     while(true)
       {
 	categorize();
-	
+
 	if(single_child_not_null.size() != 0)
 	  {
 	    finished = false;
 	    modified = true;
-	    
+
             Iterator<TypeVariable> i = single_child_not_null.iterator();
             while( i.hasNext() ) {
                 TypeVariable var = i.next();
@@ -490,7 +490,7 @@ public class TypeResolver
 		if(single_child_not_null.contains(var))
 		  {
 		    TypeVariable child = var.children().get(0);
-		
+
 		    var = var.union(child);
 		  }
 	      }
@@ -502,33 +502,33 @@ public class TypeResolver
 	      {
 		finished = false;
 		modified = true;
-		
+
                 Iterator<TypeVariable> i = single_soft_parent.iterator();
                 while( i.hasNext() ) {
                     TypeVariable var = i.next();
-		    
+
 		    if(single_soft_parent.contains(var))
 		      {
 			TypeVariable parent = var.parents().get(0);
-			
+
 			var = var.union(parent);
 		      }
 		  }
 	      }
-	    
+
 	    if(single_hard_parent.size() != 0)
 	      {
 		finished = false;
 		modified = true;
-		
+
                 Iterator<TypeVariable> i = single_hard_parent.iterator();
                 while( i.hasNext() ) {
                     TypeVariable var = i.next();
-		    
+
 		    if(single_hard_parent.contains(var))
 		      {
 			TypeVariable parent = var.parents().get(0);
-			
+
 			debug_vars("union single parent\n " + var + "\n " + parent);
 			var = var.union(parent);
 		      }
@@ -539,28 +539,28 @@ public class TypeResolver
 	      {
 		finished = false;
 		modified = true;
-		
+
                 Iterator<TypeVariable> i = single_null_child.iterator();
                 while( i.hasNext() ) {
                     TypeVariable var = i.next();
-		    
+
 		    if(single_null_child.contains(var))
 		      {
 			TypeVariable child = var.children().get(0);
-			
+
 			var = var.union(child);
 		      }
 		  }
 	      }
-	    
+
 	    if(finished)
 	      {
 		break;
 	      }
-	    
+
 	    continue;
 	  }
-	
+
 	if(modified)
 	  {
 	    modified = false;
@@ -568,16 +568,16 @@ public class TypeResolver
 	  }
 
 	finished = true;
-	
+
       multiple_children:
 	for (TypeVariable var : multiple_children) {
 	    TypeNode lca = null;
 	    List<TypeVariable> children_to_remove = new LinkedList<TypeVariable>();
-	    
+
 	    var.fixChildren();
-	    
+
 	    for (TypeVariable child : var.children()) {
-	    
+
 	        TypeNode type = child.type();
 
 		if(type != null && type.isNull())
@@ -587,7 +587,7 @@ public class TypeResolver
 		else if(type != null && type.isClass())
 		  {
 		    children_to_remove.add(child);
-		    
+
 		    if(lca == null)
 		      {
 			lca = type;
@@ -602,16 +602,16 @@ public class TypeResolver
 			      {
 				G.v().out.println
 				  ("==++==" +
-				   stmtBody.getMethod().getDeclaringClass().getName() + "." + 
+				   stmtBody.getMethod().getDeclaringClass().getName() + "." +
 				   stmtBody.getMethod().getName());
 			      }
-			    
+
 			    continue multiple_children;
 			  }
 		      }
 		  }
 	      }
-	    
+
 	    if(lca != null)
 	      {
 		for (TypeVariable child : children_to_remove) {
@@ -621,38 +621,38 @@ public class TypeResolver
 		var.addChild(typeVariable(lca));
 	      }
 	  }
-	
+
 	for (TypeVariable var : multiple_parents) {
-	
+
 	    LinkedList<TypeVariable> hp = new LinkedList<TypeVariable>(); // hard parents
-	    
+
 	    var.fixParents();
-	    
+
 	    for (TypeVariable parent : var.parents()) {
-	    
+
 	        TypeNode type = parent.type();
-		
+
 		if(type != null)
 		  {
                     Iterator<TypeVariable> k = hp.iterator();
                     while( k.hasNext() ) {
                         TypeVariable otherparent = k.next();
 			TypeNode othertype = otherparent.type();
-			
+
 			if(type.hasDescendant(othertype))
 			  {
 			    var.removeParent(parent);
 			    type = null;
 			    break;
 			  }
-			
+
 			if(type.hasAncestor(othertype))
 			  {
 			    var.removeParent(otherparent);
 			    k.remove();
 			  }
 		      }
-		    
+
 		    if(type != null)
 		      {
 			hp.add(parent);
@@ -668,7 +668,7 @@ public class TypeResolver
     for( Iterator localIt = stmtBody.getLocals().iterator(); localIt.hasNext(); ) {
         final Local local = (Local) localIt.next();
 	TypeVariable var = typeVariable(local);
-	
+
 	if(var == null)
 	  {
 	    local.setType(RefType.v("java.lang.Object"));
@@ -687,7 +687,7 @@ public class TypeResolver
 	else
 	  {
 	    TypeVariable element = var.element();
-	    
+
 	    for(int j = 1; j < var.depth(); j++)
 	      {
 		element = element.element();
@@ -714,7 +714,7 @@ public class TypeResolver
 		  }
 	      }
 	  }
-	
+
 	if(DEBUG)
 	  {
 	    if((var != null) &&
@@ -735,7 +735,7 @@ public class TypeResolver
     for( Iterator localIt = stmtBody.getLocals().iterator(); localIt.hasNext(); ) {
         final Local local = (Local) localIt.next();
 	TypeVariable var = typeVariable(local);
-	
+
 	if(var == null ||
 	   var.approx() == null ||
 	   var.approx().type() == null)
@@ -840,14 +840,14 @@ public class TypeResolver
 	  }
       }
   }
-  
+
   private void compute_solved()
   {
     Set<TypeVariable> unsolved_set = new TreeSet<TypeVariable>();
     Set<TypeVariable> solved_set = new TreeSet<TypeVariable>();
-    
+
     for (TypeVariable var : typeVariableList) {
-    
+
         if(var.depth() == 0)
 	  {
 	    if(var.type() == null)
@@ -869,9 +869,9 @@ public class TypeResolver
   {
     Set<TypeVariable> unsolved_set = new TreeSet<TypeVariable>();
     Set<TypeVariable> solved_set = new TreeSet<TypeVariable>(solved);
-    
+
     for (TypeVariable var : unsolved) {
-    
+
         if(var.depth() == 0)
 	  {
 	    if(var.type() == null)
@@ -887,27 +887,27 @@ public class TypeResolver
 
     solved = new LinkedList<TypeVariable>(solved_set);
     unsolved = new LinkedList<TypeVariable>(unsolved_set);
-    
+
     // validate();
   }
 
   private void categorize() throws TypeException
   {
     refresh_solved();
-   
+
     single_soft_parent = new LinkedList<TypeVariable>();
     single_hard_parent = new LinkedList<TypeVariable>();
     multiple_parents = new LinkedList<TypeVariable>();
     single_child_not_null = new LinkedList<TypeVariable>();
     single_null_child = new LinkedList<TypeVariable>();
     multiple_children = new LinkedList<TypeVariable>();
-    
+
     for (TypeVariable var : unsolved) {
 	// parent category
 	{
 	  List<TypeVariable> parents = var.parents();
 	  int size = parents.size();
-	  
+
 	  if(size == 0)
 	    {
 	      var.addParent(typeVariable(OBJECT));
@@ -916,7 +916,7 @@ public class TypeResolver
 	  else if(size == 1)
 	    {
 	      TypeVariable parent = parents.get(0);
-	      
+
 	      if(parent.type() == null)
 		{
 		  single_soft_parent.add(var);
@@ -931,12 +931,12 @@ public class TypeResolver
 	      multiple_parents.add(var);
 	    }
 	}
-	
+
 	// child category
 	{
 	  List<TypeVariable> children = var.children();
 	  int size = children.size();
-	  
+
 	  if(size == 0)
 	    {
 	      var.addChild(typeVariable(NULL));
@@ -945,7 +945,7 @@ public class TypeResolver
 	  else if(size == 1)
 	    {
 	      TypeVariable child = children.get(0);
-	      
+
 	      if(child.type() == NULL)
 		{
 		  single_null_child.add(var);
@@ -972,42 +972,42 @@ public class TypeResolver
     Stmt[] stmts = new Stmt[units.size()];
 
     units.toArray(stmts);
-    
+
     for (Stmt stmt : stmts) {
 	if(stmt instanceof InvokeStmt)
 	  {
 	    InvokeStmt invoke = (InvokeStmt) stmt;
-	    
+
 	    if(invoke.getInvokeExpr() instanceof SpecialInvokeExpr)
 	      {
 		SpecialInvokeExpr special = (SpecialInvokeExpr) invoke.getInvokeExpr();
-		
+
 		if(special.getMethodRef().name().equals("<init>"))
 		  {
 		    List<Unit> deflist = defs.getDefsOfAt((Local) special.getBase(), invoke);
-		    
+
 		    while(deflist.size() == 1)
 		      {
 			Stmt stmt2 = (Stmt) deflist.get(0);
-			
+
 			if(stmt2 instanceof AssignStmt)
 			  {
 			    AssignStmt assign = (AssignStmt) stmt2;
-			    
+
 			    if(assign.getRightOp() instanceof Local)
 			      {
 				deflist = defs.getDefsOfAt((Local) assign.getRightOp(), assign);
 				continue;
 			      }
 			    else if(assign.getRightOp() instanceof NewExpr)
-			      {			
+			      {
 				// We split the local.
 				//G.v().out.println("split: [" + assign + "] and [" + stmt + "]");
 				Local newlocal = Jimple.v().newLocal("tmp", null);
 				stmtBody.getLocals().add(newlocal);
-				
+
 				special.setBase(newlocal);
-				
+
 				units.insertAfter(Jimple.v().newAssignStmt(assign.getLeftOp(), newlocal), assign);
 				assign.setLeftOp(newlocal);
 			      }

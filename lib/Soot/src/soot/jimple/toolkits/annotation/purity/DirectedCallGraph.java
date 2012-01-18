@@ -37,7 +37,7 @@ import soot.toolkits.graph.*;
  *
  * This is used in AbstractInterproceduralAnalysis to construct a reverse
  * pseudo topological order on which to iterate.
- * You can specify a SootMethodFilter to trim the graph by cutting 
+ * You can specify a SootMethodFilter to trim the graph by cutting
  * call edges strarting
  *
  * Methods filtered-out by the SootMethodFilter will not appear in the
@@ -76,7 +76,7 @@ public class DirectedCallGraph implements DirectedGraph {
 	}
 
 	this.nodes = new HashSet(filteredHeads);
-	
+
 	MultiMap s = new HashMultiMap();
 	MultiMap p = new HashMultiMap();
 
@@ -90,7 +90,7 @@ public class DirectedCallGraph implements DirectedGraph {
 	    while (it.hasNext()) {
 		SootMethod m = (SootMethod)it.next();
 		Iterator itt = cg.edgesOutOf(m);
-		if (verbose) 
+		if (verbose)
 		    G.v().out.println(" |- "+m.toString()+" calls");
 		while (itt.hasNext())  {
 		    Edge edge = (Edge)itt.next();
@@ -140,7 +140,7 @@ public class DirectedCallGraph implements DirectedGraph {
     public Iterator iterator() { return nodes.iterator(); }
 
     public int size() { return size; }
-    
+
     /** You get a List of SootMethod. */
     public List getSuccsOf(Object s) { return succ.get(s); }
 

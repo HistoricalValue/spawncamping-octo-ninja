@@ -63,7 +63,7 @@ public class Checker {
             throw new RuntimeException( "upstream "+upstream+" is illegal" );
         PointsToSetInternal p2set = container.getP2Set();
         FastHierarchy fh = pag.getTypeManager().getFastHierarchy();
-        if( !p2set.contains( n ) 
+        if( !p2set.contains( n )
                 && ( fh == null || container.getType() == null ||
                 fh.canStoreType( n.getType(), container.getType() ) ) ) {
             G.v().out.println( "Check failure: "+container+" does not have "+n
@@ -95,7 +95,7 @@ public class Checker {
             final SparkField f = fr.getField();
             fr.getBase().getP2Set().forall( new P2SetVisitor() {
             public final void visit( Node n ) {
-                    AllocDotField nDotF = pag.makeAllocDotField( 
+                    AllocDotField nDotF = pag.makeAllocDotField(
                         (AllocNode) n, f );
                     checkAll( nDotF, srcSet, src );
                 }

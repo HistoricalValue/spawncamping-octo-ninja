@@ -8,7 +8,7 @@ public class TransferCmd implements Command
 {
 	private Nonterminal nonterminal;
 	private Vector transferList;
-	
+
 	public TransferCmd(String nt, Vector tlist) {
 		nonterminal = new Nonterminal(nt);
 		transferList = tlist;
@@ -16,7 +16,7 @@ public class TransferCmd implements Command
 
 	public Nonterminal getSource() { return nonterminal; }
 	public Vector getTransferList() { return transferList; }
-	
+
 	public void unparse(CodeWriter cw) {
 		//cw.begin(0);
 		cw.write("TransferCmd");
@@ -29,5 +29,5 @@ public class TransferCmd implements Command
 		}
 		//cw.end();
 	}
-	
+
 }

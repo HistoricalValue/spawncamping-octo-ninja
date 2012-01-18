@@ -3,7 +3,7 @@ package polyglot.frontend;
 import polyglot.util.Enum;
 
 /** A <code>Pass</code> represents a compiler pass.
- * A <code>Job</code> runs a series of passes over the AST. 
+ * A <code>Job</code> runs a series of passes over the AST.
  * Each pass has an ID that is used to identify similar passes across
  * several jobs.  For example, most jobs contain a pass named PARSE
  * that returns an AST for a source file and a pass TYPE_CHECK
@@ -17,7 +17,7 @@ public interface Pass
     }
 
     /** Return the identifier for the pass.
-     * The identifier should be unique within the pass's Job. 
+     * The identifier should be unique within the pass's Job.
      */
     public ID id();
 

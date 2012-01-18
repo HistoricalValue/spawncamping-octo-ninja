@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,9 +36,9 @@ import java.util.*;
 public class GrimpBody extends StmtBody
 {
     /**
-        Construct an empty GrimpBody 
+        Construct an empty GrimpBody
      **/
-     
+
     GrimpBody(SootMethod m)
     {
         super(m);
@@ -61,7 +61,7 @@ public class GrimpBody extends StmtBody
 
         if(Options.v().verbose())
             G.v().out.println("[" + getMethod().getName() + "] Constructing GrimpBody...");
-        
+
         JimpleBody jBody = null;
 
         if (body instanceof JimpleBody)
@@ -201,7 +201,7 @@ public class GrimpBody extends StmtBody
                 }
                 public void caseLookupSwitchStmt(LookupSwitchStmt s)
                 {
-                    LookupSwitchStmt newStmt = 
+                    LookupSwitchStmt newStmt =
                         (LookupSwitchStmt)(oldToNew.get(s));
                     newStmt.setDefaultTarget
                         ((oldToNew.get(newStmt.getDefaultTarget())));
@@ -213,7 +213,7 @@ public class GrimpBody extends StmtBody
                 }
                 public void caseTableSwitchStmt(TableSwitchStmt s)
                 {
-                    TableSwitchStmt newStmt = 
+                    TableSwitchStmt newStmt =
                         (TableSwitchStmt)(oldToNew.get(s));
                     newStmt.setDefaultTarget
                         ((oldToNew.get(newStmt.getDefaultTarget())));

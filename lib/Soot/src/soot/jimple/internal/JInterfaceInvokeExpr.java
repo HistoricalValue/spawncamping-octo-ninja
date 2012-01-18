@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -52,14 +52,14 @@ public class JInterfaceInvokeExpr extends AbstractInterfaceInvokeExpr
             this.argBoxes[i] = Jimple.v().newImmediateBox((Value) args.get(i));
     }
 
-    public Object clone() 
+    public Object clone()
     {
         List argList = new ArrayList(getArgCount());
 
         for(int i = 0; i < getArgCount(); i++) {
             argList.add(i, Jimple.cloneIfNecessary(getArg(i)));
         }
-            
+
         return new  JInterfaceInvokeExpr(Jimple.cloneIfNecessary(getBase()), methodRef, argList);
     }
 

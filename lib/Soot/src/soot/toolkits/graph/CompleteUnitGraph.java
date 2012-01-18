@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2004.  
+ * Modified by the Sable Research Group and others 1997-2004.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -48,7 +48,7 @@ import soot.toolkits.exceptions.PedanticThrowAnalysis;
  *  to and including release 2.1.0.  The known differences include:
  *
  *  <ul>
- * 
+ *
  *  <li>If a <code>Body</code> includes <code>Unit</code>s which
  *  branch into the middle of the region protected by a
  *  <code>Trap</code> this implementation of
@@ -70,7 +70,7 @@ import soot.toolkits.exceptions.PedanticThrowAnalysis;
  *
  *  </ul></p>
  */
-public class CompleteUnitGraph extends ExceptionalUnitGraph 
+public class CompleteUnitGraph extends ExceptionalUnitGraph
 {
     public CompleteUnitGraph(Body b) {
 	super(b, PedanticThrowAnalysis.v(), false);

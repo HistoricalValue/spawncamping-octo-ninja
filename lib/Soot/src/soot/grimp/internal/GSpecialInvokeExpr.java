@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,7 +41,7 @@ public class GSpecialInvokeExpr extends AbstractSpecialInvokeExpr
 {
     public GSpecialInvokeExpr(Value base, SootMethodRef methodRef, List args)
     {
-        super(Grimp.v().newObjExprBox(base), methodRef, 
+        super(Grimp.v().newObjExprBox(base), methodRef,
              new ExprBox[args.size()]);
 
         for(int i = 0; i < args.size(); i++)
@@ -54,8 +54,8 @@ public class GSpecialInvokeExpr extends AbstractSpecialInvokeExpr
     {
         String leftOp = opString;
 
-        if (getBase() instanceof Precedence && 
-            ((Precedence)getBase()).getPrecedence() < getPrecedence()) 
+        if (getBase() instanceof Precedence &&
+            ((Precedence)getBase()).getPrecedence() < getPrecedence())
             leftOp = "(" + leftOp + ")";
         return leftOp + rightString;
     }
@@ -76,7 +76,7 @@ public class GSpecialInvokeExpr extends AbstractSpecialInvokeExpr
 
         buffer.append(")");
 
-        return toString(getBase(), getBase().toString(), 
+        return toString(getBase(), getBase().toString(),
                         buffer.toString());
     }
 
@@ -100,17 +100,17 @@ public class GSpecialInvokeExpr extends AbstractSpecialInvokeExpr
         up.literal(")");
     }
 
-    
-    public Object clone() 
+
+    public Object clone()
     {
         ArrayList clonedArgs = new ArrayList(getArgCount());
 
         for(int i = 0; i < getArgCount(); i++) {
             clonedArgs.add(i, Grimp.cloneIfNecessary(getArg(i)));
         }
-        
-        return new GSpecialInvokeExpr(Grimp.cloneIfNecessary(getBase()), 
+
+        return new GSpecialInvokeExpr(Grimp.cloneIfNecessary(getBase()),
             methodRef, clonedArgs);
     }
 }
- 
+

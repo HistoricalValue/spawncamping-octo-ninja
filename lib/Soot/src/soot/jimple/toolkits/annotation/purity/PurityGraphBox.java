@@ -29,7 +29,7 @@ package soot.jimple.toolkits.annotation.purity;
 
 /**
  * Simple box class that encapsulates a reference to a PurityGraph.
- * 
+ *
  */
 public class PurityGraphBox
 {

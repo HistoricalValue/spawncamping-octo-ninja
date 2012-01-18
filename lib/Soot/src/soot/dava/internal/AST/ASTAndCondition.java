@@ -66,7 +66,7 @@ public class ASTAndCondition extends ASTAggregatedCondition{
 
     public void toString(UnitPrinter up){
 	if(up instanceof DavaUnitPrinter){
-	    
+
 	    if(not){
 		//print !
 		((DavaUnitPrinter)up).addNot();
@@ -76,45 +76,45 @@ public class ASTAndCondition extends ASTAggregatedCondition{
 
 	    if(left instanceof ASTUnaryBinaryCondition){
 		if(right instanceof ASTUnaryBinaryCondition){
-		    
+
 		    left.toString(up);
-		    
+
 		    ((DavaUnitPrinter)up).addAggregatedAnd();
-		    
+
 		    right.toString(up);
 		}
 		else{ //right is ASTAggregatedCondition
-		    
-		    left.toString(up); 
-		    
-		    ((DavaUnitPrinter)up).addAggregatedAnd(); 
-		    
+
+		    left.toString(up);
+
+		    ((DavaUnitPrinter)up).addAggregatedAnd();
+
 		    ((DavaUnitPrinter)up).addLeftParen();
-		    right.toString(up); 
+		    right.toString(up);
 		    ((DavaUnitPrinter)up).addRightParen();
 		}
 	    }
 	    else{ //left is ASTAggregatedCondition
 		if(right instanceof ASTUnaryBinaryCondition){
-		    
+
 		    ((DavaUnitPrinter)up).addLeftParen();
-		    left.toString(up); 
+		    left.toString(up);
 		    ((DavaUnitPrinter)up).addRightParen();
-		    
-		    ((DavaUnitPrinter)up).addAggregatedAnd(); 
-		    
-		    right.toString(up); 
+
+		    ((DavaUnitPrinter)up).addAggregatedAnd();
+
+		    right.toString(up);
 		}
 		else{ //right is ASTAggregatedCondition also
-		    
+
 		    ((DavaUnitPrinter)up).addLeftParen();
-		    left.toString(up); 
+		    left.toString(up);
 		    ((DavaUnitPrinter)up).addRightParen();
-		    
-		    ((DavaUnitPrinter)up).addAggregatedAnd(); 
-		    
+
+		    ((DavaUnitPrinter)up).addAggregatedAnd();
+
 		    ((DavaUnitPrinter)up).addLeftParen();
-		    right.toString(up); 
+		    right.toString(up);
 		    ((DavaUnitPrinter)up).addRightParen();
 		}
 	    }
@@ -127,5 +127,5 @@ public class ASTAndCondition extends ASTAggregatedCondition{
 	else
 	    throw new RuntimeException();
     }
-    
+
 }

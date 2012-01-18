@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,14 +38,14 @@ public class ColorTag implements Tag
      * higlight background */
     private boolean foreground = false;
     private String analysisType = "Unknown";
-    
+
     public static final int RED = 0;
 	public static final int GREEN = 1;
 	public static final int YELLOW = 2;
 	public static final int BLUE = 3;
 	public static final int ORANGE = 4;
 	public static final int PURPLE = 5;
-	
+
 	public ColorTag(int r, int g, int b, boolean fg)
     {
 		red = r;
@@ -53,7 +53,7 @@ public class ColorTag implements Tag
 		blue = b;
         foreground = fg;
     }
-    
+
 	public ColorTag(int r, int g, int b)
     {
 	    this(r, g, b, false);
@@ -62,7 +62,7 @@ public class ColorTag implements Tag
     public ColorTag(int r, int g, int b, String type){
         this(r, g, b, false, type);
     }
-    
+
     public ColorTag(int r, int g, int b, boolean fg, String type){
         this(r, g, b, false);
         analysisType = type;
@@ -71,16 +71,16 @@ public class ColorTag implements Tag
     public ColorTag(int color, String type){
         this(color, false, type);
     }
-    
+
     public ColorTag(int color, boolean fg, String type){
         this(color, fg);
         analysisType = type;
     }
-    
+
     public ColorTag(int color){
         this(color, false);
     }
-    
+
 	public ColorTag(int color, boolean fg){
 		//G.v().out.println("color: "+color);
 		switch (color) {
@@ -133,7 +133,7 @@ public class ColorTag implements Tag
     public String getAnalysisType(){
         return analysisType;
     }
-    
+
 	public int getRed(){
 		return red;
 	}
@@ -145,11 +145,11 @@ public class ColorTag implements Tag
 	public int getBlue(){
 		return blue;
 	}
-   
+
     public boolean isForeground(){
         return foreground;
     }
-    
+
     public String getName()
     {
 		return "ColorTag";

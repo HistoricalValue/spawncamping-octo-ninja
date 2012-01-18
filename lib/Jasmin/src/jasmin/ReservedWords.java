@@ -47,18 +47,18 @@ abstract class ReservedWords {
         reserved_words.put(".no_super", new Symbol(sym.DNOSUPER));
         reserved_words.put(".throws", new Symbol(sym.DTHROWS));
         reserved_words.put(".var", new Symbol(sym.DVAR));
-        
-	reserved_words.put(".class_attribute", new Symbol(sym.DCLASS_ATTR));	
+
+	reserved_words.put(".class_attribute", new Symbol(sym.DCLASS_ATTR));
         reserved_words.put(".field_attribute", new Symbol(sym.DFIELD_ATTR));
         reserved_words.put(".method_attribute", new Symbol(sym.DMETHOD_ATTR));
         reserved_words.put(".code_attribute", new Symbol(sym.DCODE_ATTR));
-        reserved_words.put(".inner_class_attr", new Symbol(sym.DINNER_CLASS_ATTR));	
-        reserved_words.put(".inner_class_spec_attr", new Symbol(sym.DINNER_CLASS_SPEC_ATTR));	
-        reserved_words.put(".synthetic", new Symbol(sym.DSYNTHETIC));	
-        reserved_words.put(".enclosing_method_attr", new Symbol(sym.DENCLOSING_METH));	
-        reserved_words.put(".deprecated", new Symbol(sym.DDEPRECATED));	
-        reserved_words.put(".signature_attr", new Symbol(sym.DSIG_ATTR));	
-        
+        reserved_words.put(".inner_class_attr", new Symbol(sym.DINNER_CLASS_ATTR));
+        reserved_words.put(".inner_class_spec_attr", new Symbol(sym.DINNER_CLASS_SPEC_ATTR));
+        reserved_words.put(".synthetic", new Symbol(sym.DSYNTHETIC));
+        reserved_words.put(".enclosing_method_attr", new Symbol(sym.DENCLOSING_METH));
+        reserved_words.put(".deprecated", new Symbol(sym.DDEPRECATED));
+        reserved_words.put(".signature_attr", new Symbol(sym.DSIG_ATTR));
+
         // annotation related directives
         reserved_words.put(".runtime_visible_annotation", new Symbol(sym.DRUNTIME_VISIBLE));
         reserved_words.put(".runtime_invisible_annotation", new Symbol(sym.DRUNTIME_INVISIBLE));
@@ -84,8 +84,8 @@ abstract class ReservedWords {
         reserved_words.put(".annot_elem", new Symbol(sym.DANNOT_ELEM));
         reserved_words.put(".elem", new Symbol(sym.DELEM));
         reserved_words.put(".annotation_default", new Symbol(sym.DANNOT_DEFAULT));
-        
-        
+
+
         // reserved_words used in Jasmin directives
         reserved_words.put("from", new Symbol(sym.FROM));
         reserved_words.put("method", new Symbol(sym.METHOD));

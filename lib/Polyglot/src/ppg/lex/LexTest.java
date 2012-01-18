@@ -6,9 +6,9 @@ import ppg.parse.*;
 public class LexTest
 {
 	private static final String HEADER = "ppg [lexertest]: ";
-	
+
 	public LexTest() {}
-	
+
 	public static void main(String args[]) {
 		FileInputStream fileInput;
 		String filename = null;

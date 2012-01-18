@@ -24,8 +24,8 @@ import soot.*;
  * a context-sensitive call graph.
  * @author Ondrej Lhotak
  */
-public interface ContextManager 
-{ 
+public interface ContextManager
+{
     public void addStaticEdge( MethodOrMethodContext src, Unit srcUnit, SootMethod target, Kind kind );
     public void addVirtualEdge( MethodOrMethodContext src, Unit srcUnit, SootMethod target, Kind kind, Context typeContext );
     public CallGraph callGraph();

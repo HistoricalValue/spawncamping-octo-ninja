@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -26,7 +26,7 @@
 
 package soot;
 
-/** A MethodSource for methods that don't know where to get Body's from. 
+/** A MethodSource for methods that don't know where to get Body's from.
  * @see soot.jimple.JimpleMethodSource
  * @see soot.coffi.CoffiMethodSource */
 public class UnknownMethodSource implements MethodSource
@@ -36,7 +36,7 @@ public class UnknownMethodSource implements MethodSource
     }
 
     public Body getBody(SootMethod m, String phaseName)
-    {  
+    {
         // we ignore options here.
         // actually we should have default option verbatim,
         // and apply phase options.
@@ -49,11 +49,11 @@ public class UnknownMethodSource implements MethodSource
 
 //          try {
 //              classFileStream = SourceLocator.getInputStreamOf(m.getDeclaringClass().toString());
-//          } 
-//          catch(ClassNotFoundException e) {
-//              throw new RuntimeException("Can't find jimple file: " + e);                    
 //          }
-                
+//          catch(ClassNotFoundException e) {
+//              throw new RuntimeException("Can't find jimple file: " + e);
+//          }
+
 //          Parser.parse(classFileStream,  m.getDeclaringClass());
     }
 }

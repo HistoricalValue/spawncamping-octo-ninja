@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,7 +34,7 @@ import soot.baf.*;
 import soot.jimple.*;
 import java.util.*;
 
-public abstract class AbstractSpecialInvokeExpr extends AbstractInstanceInvokeExpr 
+public abstract class AbstractSpecialInvokeExpr extends AbstractInstanceInvokeExpr
            implements SpecialInvokeExpr, ConvertToBaf
 {
     protected AbstractSpecialInvokeExpr(ValueBox baseBox, SootMethodRef methodRef,
@@ -51,7 +51,7 @@ public abstract class AbstractSpecialInvokeExpr extends AbstractInstanceInvokeEx
         {
             AbstractSpecialInvokeExpr ie = (AbstractSpecialInvokeExpr)o;
             if (!(baseBox.getValue().equivTo(ie.baseBox.getValue()) &&
-                    getMethod().equals(ie.getMethod()) && 
+                    getMethod().equals(ie.getMethod()) &&
                     argBoxes.length == ie.argBoxes.length))
                 return false;
             for (ValueBox element : argBoxes)
@@ -63,7 +63,7 @@ public abstract class AbstractSpecialInvokeExpr extends AbstractInstanceInvokeEx
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return baseBox.getValue().equivHashCode() * 101 + getMethod().equivHashCode() * 17;
     }
@@ -89,7 +89,7 @@ public abstract class AbstractSpecialInvokeExpr extends AbstractInstanceInvokeEx
 
         return buffer.toString();
     }
-    
+
     public void toString(UnitPrinter up)
     {
         up.literal(Jimple.SPECIALINVOKE);
@@ -103,7 +103,7 @@ public abstract class AbstractSpecialInvokeExpr extends AbstractInstanceInvokeEx
         {
             if(i != 0)
                 up.literal(", ");
-                
+
             argBoxes[i].toString(up);
         }
 
@@ -124,13 +124,13 @@ public abstract class AbstractSpecialInvokeExpr extends AbstractInstanceInvokeEx
        for (ValueBox element : argBoxes) {
 	    ((ConvertToBaf)(element.getValue())).convertToBaf(context, out);
 	}
-       
+
        Unit u;
        out.add(u = Baf.v().newSpecialInvokeInst(methodRef));
 
        Unit currentUnit = context.getCurrentUnit();
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}

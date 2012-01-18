@@ -25,14 +25,14 @@ public class FlowGraph {
    * same peer may be used for a node that appears at multiple points in
    * the AST.  These points may have different data flows.
    * </p>
-   */  
+   */
   protected Map peerMap;
-  
+
   /**
    * The root of the AST that this is a flow graph for.
    */
   protected Term root;
-  
+
   /**
    * Is the flow in this flow graph forward or backward?
    */
@@ -74,10 +74,10 @@ public class FlowGraph {
   }
 
   /**
-   * Retrieve the <code>Peer</code> for the <code>Term n</code>, where 
-   * <code>n</code> does not appear in a finally block. If no such Peer 
+   * Retrieve the <code>Peer</code> for the <code>Term n</code>, where
+   * <code>n</code> does not appear in a finally block. If no such Peer
    * exists, then one will be created.
-   * 
+   *
    * @param df unused; for legacy purposes only?
    */
   public Peer peer(Term n, DataFlow df) {
@@ -85,8 +85,8 @@ public class FlowGraph {
   }
 
   /**
-   * Return a collection of all of the <code>Peer</code>s for the given 
-   * <code>Term n</code>. 
+   * Return a collection of all of the <code>Peer</code>s for the given
+   * <code>Term n</code>.
    */
   public Collection peers(Term n) {
     IdentityKey k = new IdentityKey(n);
@@ -98,11 +98,11 @@ public class FlowGraph {
   }
 
   /**
-   * Retrieve the <code>Peer</code> for the <code>Term n</code> that is 
+   * Retrieve the <code>Peer</code> for the <code>Term n</code> that is
    * associated with the given path to the finally block. (A term that occurs
    * in a finally block has one Peer for each possible path to that finally
    * block.) If no such Peer exists, then one will be created.
-   * 
+   *
    * @param df unused; for legacy purposes only?
    */
   public Peer peer(Term n, List path_to_finally, DataFlow df) {
@@ -128,10 +128,10 @@ public class FlowGraph {
    * leaving it (in a forward flow graph): one will have the EdgeKey
    * FlowGraph.EDGE_KEY_TRUE, and is the flow that is taken when the condition
    * evaluates to true, and one will have the EdgeKey FlowGraph.EDGE_KEY_FALSE,
-   * and is the flow that is taken when the condition evaluates to false. 
-   * 
+   * and is the flow that is taken when the condition evaluates to false.
+   *
    * The differentiation of the flow graph edges allows for a finer grain
-   * data flow analysis, as the dataflow equations can incorporate the 
+   * data flow analysis, as the dataflow equations can incorporate the
    * knowledge that a condition is true or false on certain flow paths.
    */
   public static class EdgeKey {
@@ -143,21 +143,21 @@ public class FlowGraph {
           return o.hashCode();
       }
       public boolean equals(Object other) {
-          return (other instanceof EdgeKey) && 
+          return (other instanceof EdgeKey) &&
                   (((EdgeKey)other).o.equals(this.o));
       }
       public String toString() {
           return o.toString();
       }
   }
-  
+
   /**
    * This class extends EdgeKey and is the key for edges that are
    * taken when an exception of type t is thrown. Thus, the flow from
    * line 2 in the example below to the catch block (line 4) would have an
-   * ExceptionEdgeKey constructed with the Type representing 
+   * ExceptionEdgeKey constructed with the Type representing
    * NullPointerExceptions.
-   * 
+   *
    * <pre>
    * ...
    * try {                                      // line 1
@@ -182,13 +182,13 @@ public class FlowGraph {
           return (type().isClass() ? type().toClass().name() : type().toString() );
       }
   }
-  
+
   /**
    * This EdgeKey is the EdgeKey for edges where the expression evaluates
    * to true.
    */
   public static final EdgeKey EDGE_KEY_TRUE = new EdgeKey("true");
-  
+
   /**
    * This EdgeKey is the EdgeKey for edges where the expression evaluates
    * to false.
@@ -196,8 +196,8 @@ public class FlowGraph {
   public static final EdgeKey EDGE_KEY_FALSE = new EdgeKey("false");
 
   /**
-   * This EdgeKey is the EdgeKey for edges where the flow is not suitable 
-   * for EDGE_KEY_TRUE, EDGE_KEY_FALSE or an 
+   * This EdgeKey is the EdgeKey for edges where the flow is not suitable
+   * for EDGE_KEY_TRUE, EDGE_KEY_FALSE or an
    * ExceptionEdgeKey, such as the edges from a switch
    * statement to its cases and
    * the flow from a sink node in the control flow graph.
@@ -206,12 +206,12 @@ public class FlowGraph {
 
   /**
    * This class represents an edge in the flow graph. The target of the edge
-   * is either the head or the tail of the edge, depending on how the Edge is 
+   * is either the head or the tail of the edge, depending on how the Edge is
    * used. Thus, the target field in Edges in the collection Peer.preds is the
-   * source Peer, while the target field in Edges in the collection Peer.succs 
+   * source Peer, while the target field in Edges in the collection Peer.succs
    * is the destination Peer of edges.
-   * 
-   * Each Edge has an EdgeKey, which identifies when flow uses that edge in 
+   *
+   * Each Edge has an EdgeKey, which identifies when flow uses that edge in
    * the flow graph. See EdgeKey for more information.
    */
   public static class Edge {
@@ -230,32 +230,32 @@ public class FlowGraph {
       public String toString() {
           return "(" + key + ")" + target;
       }
-      
+
   }
-  
+
   /**
-   * A <code>Peer</code> is an occurance of an AST node in a flow graph. 
-   * For most AST nodes, there will be only one Peer for each AST node. 
+   * A <code>Peer</code> is an occurance of an AST node in a flow graph.
+   * For most AST nodes, there will be only one Peer for each AST node.
    * However, if the AST node occurs in a finally block, then there will be
    * multiple <code>Peer</code>s for that AST node, one for each possible
-   * path to the finally block. This is becuase flow graphs for finally blocks 
+   * path to the finally block. This is becuase flow graphs for finally blocks
    * are copied, one copy for each possible path to the finally block.
    */
   public static class Peer {
     protected DataFlow.Item inItem;  // Input Item for dataflow analysis
     protected Map outItems; // Output Items for dataflow analysis, a map from EdgeKeys to DataFlowlItems
     protected Term node; // The AST node that this peer is an occurance of.
-    protected List succs; // List of successor Edges 
-    protected List preds; // List of predecessor Edges 
-    protected List path_to_finally; // the path to the finally block that 
+    protected List succs; // List of successor Edges
+    protected List preds; // List of predecessor Edges
+    protected List path_to_finally; // the path to the finally block that
                                     // uniquely distinguishes this Peer
                                     // from the other Peers for the AST node.
 
     /**
-     * Set of all the different EdgeKeys that occur in the Edges in the 
-     * succs. This Set is lazily constructed, as needed, by the 
+     * Set of all the different EdgeKeys that occur in the Edges in the
+     * succs. This Set is lazily constructed, as needed, by the
      * method succEdgeKeys()
-     */     
+     */
     private Set succEdgeKeys;
 
     public Peer(Term node, List path_to_finally) {
@@ -339,13 +339,13 @@ public class FlowGraph {
       return false;
     }
   }
-  
+
   public String toString() {
-    
+
     StringBuffer sb = new StringBuffer();
     Set todo = new HashSet(this.peers());
     LinkedList queue = new LinkedList(this.peers(this.startNode()));
-    
+
     while (!queue.isEmpty()) {
         Peer p = (Peer)queue.removeFirst();
         todo.remove(p);
@@ -360,14 +360,14 @@ public class FlowGraph {
                 queue.addLast(q);
             }
         }
-        
+
         if (queue.isEmpty() && !todo.isEmpty()) {
             sb.append("\n\n***UNREACHABLE***\n");
             queue.addAll(todo);
             todo = Collections.EMPTY_SET;
         }
     }
-    
+
     return sb.toString();
   }
 }

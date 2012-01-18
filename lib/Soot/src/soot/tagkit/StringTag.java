@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,7 +38,7 @@ public class StringTag implements  Tag
         this(s);
         analysisType = type;
     }
-    
+
     public StringTag( String s ) {
         this.s = s;
     }
@@ -59,7 +59,7 @@ public class StringTag implements  Tag
     public String getInfo(){
         return s;
     }
-    
+
     /** Returns the tag raw data. */
     public byte[] getValue() {
         throw new RuntimeException( "StringTag has no value for bytecode" );

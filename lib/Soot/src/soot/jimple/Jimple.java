@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -66,7 +66,7 @@ public class Jimple
     public final static String INTERFACEINVOKE = "interfaceinvoke";
     public final static String LENGTHOF = "lengthof";
     public final static String LOOKUPSWITCH = "lookupswitch";
-    public final static String NEG = "neg";    
+    public final static String NEG = "neg";
     public final static String IF = "if";
     public final static String ABSTRACT = "abstract";
     public final static String BOOLEAN = "boolean";
@@ -123,7 +123,7 @@ public class Jimple
         l.add (ENTERMONITOR); l.add (EXITMONITOR); l.add (INTERFACEINVOKE);
         l.add (LENGTHOF); l.add (LOOKUPSWITCH); l.add (NEG);
         l.add (IF); l.add (ABSTRACT); l.add (BOOLEAN); l.add (BREAK);
-        l.add (BYTE); l.add(CASE); l.add (CATCH); l.add (CHAR); 
+        l.add (BYTE); l.add(CASE); l.add (CATCH); l.add (CHAR);
         l.add (CLASS); l.add (FINAL); l.add (NATIVE); l.add (PUBLIC);
         l.add (PROTECTED); l.add (PRIVATE); l.add (STATIC);
         l.add (SYNCHRONIZED); l.add (TRANSIENT); l.add (VOLATILE);
@@ -131,13 +131,13 @@ public class Jimple
         l.add (INTERFACE); l.add (VOID); l.add (SHORT);
         l.add (INT); l.add (LONG); l.add (FLOAT); l.add (DOUBLE);
         l.add (EXTENDS); l.add (IMPLEMENTS); l.add (BREAKPOINT);
-        l.add (DEFAULT); l.add (GOTO); l.add (INSTANCEOF); 
+        l.add (DEFAULT); l.add (GOTO); l.add (INSTANCEOF);
         l.add (NEW); l.add (RETURN); l.add (THROW); l.add (THROWS);
         l.add (NULL); l.add (FROM); l.add (TO); l.add (WITH);
         l.add (CLS); l.add (TRUE); l.add (FALSE);
         return l;
     }
-  
+
   public static boolean isJavaKeywordType(Type t)
   {
     return !(t instanceof StmtAddressType ||
@@ -149,13 +149,13 @@ public class Jimple
 
 
 
-    public static Value cloneIfNecessary(Value val) 
+    public static Value cloneIfNecessary(Value val)
     {
         if( val instanceof Local || val instanceof Constant )
             return val;
         else
             return (Value) val.clone();
-    } 
+    }
 
     /**
         Constructs a XorExpr(Immediate, Immediate) grammar chunk.
@@ -432,7 +432,7 @@ public class Jimple
     {
         return new JStaticInvokeExpr(method, Arrays.asList(args));
     }
-    
+
     public StaticInvokeExpr newStaticInvokeExpr(SootMethodRef method, List args)
     {
         return new JStaticInvokeExpr(method, args);
@@ -468,7 +468,7 @@ public class Jimple
     }
 
 
-        
+
     /**
         Constructs a NewStaticInvokeExpr(ArrayType, List of Immediate) grammar chunk. (no args)
      */
@@ -508,7 +508,7 @@ public class Jimple
         return new JInterfaceInvokeExpr(base, method, new ArrayList());
     }
 
-    
+
     /**
         Constructs a NewSpecialInvokeExpr(Local base, SootMethodRef method, List of Immediate) grammar chunk.
      */
@@ -538,11 +538,11 @@ public class Jimple
         return new JInterfaceInvokeExpr(base, method, Arrays.asList(new Value[] {arg}));
     }
 
-    
+
     /**
         Constructs a NewStaticInvokeExpr(ArrayType, List of Immediate) grammar chunk.
      */
-     
+
     public StaticInvokeExpr newStaticInvokeExpr(SootMethodRef method, Value arg1, Value arg2)
     {
         return new JStaticInvokeExpr(method, Arrays.asList(new Value[] {arg1, arg2}));
@@ -684,7 +684,7 @@ public class Jimple
     {
         return new JIfStmt(condition, target);
     }
-    
+
     public IfStmt newIfStmt(Value condition, UnitBox target)
     {
         return new JIfStmt(condition, target);
@@ -732,7 +732,7 @@ public class Jimple
 
 
     public TableSwitchStmt newTableSwitchStmt(Value key, int lowIndex, int highIndex, List<Object> targets, UnitBox defaultTarget)
-    {                
+    {
         return new JTableSwitchStmt(key, lowIndex, highIndex, targets, defaultTarget);
     }
 
@@ -744,12 +744,12 @@ public class Jimple
     {
         return new JLookupSwitchStmt(key, lookupValues, targets, defaultTarget);
     }
-    
+
     public LookupSwitchStmt newLookupSwitchStmt(Value key, List<Object> lookupValues, List<Object> targets, UnitBox defaultTarget)
     {
         return new JLookupSwitchStmt(key, lookupValues, targets, defaultTarget);
     }
-    
+
 
     /**
         Constructs a Local with the given name and type.
@@ -934,7 +934,7 @@ public class Jimple
 
     public StaticInvokeExpr newStaticInvokeExpr(SootMethod method, Value arg) {
         return newStaticInvokeExpr(method.makeRef(), arg);
-    } 
+    }
     public SpecialInvokeExpr newSpecialInvokeExpr(Local base, SootMethod method, Value arg) {
         return newSpecialInvokeExpr(base, method.makeRef(), arg);
     }

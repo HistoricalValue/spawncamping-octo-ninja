@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -57,7 +57,7 @@ public interface Unit extends Switchable, Host, Serializable, Context
     public void removeBoxPointingToThis( UnitBox b );
     /** Clears any pointers to and from this Unit's UnitBoxes. */
     public void clearUnitBoxes();
-    
+
     /** Returns a list of Boxes containing any Value either used or defined
      * in this Unit. */
     public List getUseAndDefBoxes();
@@ -68,14 +68,14 @@ public interface Unit extends Switchable, Host, Serializable, Context
      * GotoStmt will return false but IfStmt will return true. */
     public boolean fallsThrough();
     /** Returns true if execution after this statement does not necessarily continue at the following statement. GotoStmt and IfStmt will both return true. */
-    public boolean branches();        
-    
+    public boolean branches();
+
     public void toString(UnitPrinter up);
 
     /**
      * Redirects jumps to this Unit to newLocation.  In general, you shouldn't
      * have to use this directly.
-     * 
+     *
      * @see PatchingChain#getNonPatchingChain()
      * @see soot.shimple.Shimple#redirectToPreds(Chain, Unit)
      * @see soot.shimple.Shimple#redirectPointers(Unit, Unit)

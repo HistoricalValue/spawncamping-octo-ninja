@@ -41,7 +41,7 @@ public class CofferExt_c extends Ext_c implements CofferExt {
     public void checkHeldKeys(KeySet held, KeySet stored) throws SemanticException {
         if (node() instanceof Expr) {
             Expr e = (Expr) node();
-                
+
             if (e.type() instanceof CofferClassType) {
                 Key key = ((CofferClassType) e.type()).key();
 

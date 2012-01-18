@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -39,7 +39,7 @@ class TypeVariable implements Comparable
 
   private TypeNode approx;
   private TypeNode inv_approx;
-  
+
   private TypeNode type;
 
   private List<TypeVariable> parents = Collections.unmodifiableList(new LinkedList());
@@ -64,7 +64,7 @@ class TypeVariable implements Comparable
       {
 	return ecr().hashCode();
       }
-   
+
     return id;
   }
 
@@ -84,14 +84,14 @@ class TypeVariable implements Comparable
       {
 	return false;
       }
-    
+
     TypeVariable ecr = ((TypeVariable) obj).ecr();
 
     if(ecr != this)
       {
 	return false;
       }
-    
+
     return true;
   }
 
@@ -104,7 +104,7 @@ class TypeVariable implements Comparable
 
     return id - ((TypeVariable) o).ecr().id;
   }
-  
+
   private TypeVariable ecr()
   {
     if(rep != this)
@@ -128,7 +128,7 @@ class TypeVariable implements Comparable
       {
 	return this;
       }
-    
+
     if(rank > y.rank)
       {
 	y.rep = this;
@@ -208,7 +208,7 @@ class TypeVariable implements Comparable
       }
 
     TypeVariable var = variable.ecr();
- 
+
     if(var == this)
       {
 	return;
@@ -219,7 +219,7 @@ class TypeVariable implements Comparable
       set.add(var);
       parents = Collections.unmodifiableList(new LinkedList<TypeVariable>(set));
     }
-    
+
     {
       Set<TypeVariable> set = new TreeSet<TypeVariable>(var.children);
       set.add(this);
@@ -236,7 +236,7 @@ class TypeVariable implements Comparable
       }
 
     TypeVariable var = variable.ecr();
- 
+
     {
       Set<TypeVariable> set = new TreeSet<TypeVariable>(parents);
       set.remove(var);
@@ -259,7 +259,7 @@ class TypeVariable implements Comparable
       }
 
     TypeVariable var = variable.ecr();
- 
+
     if(var == this)
       {
 	return;
@@ -287,7 +287,7 @@ class TypeVariable implements Comparable
       }
 
     TypeVariable var = variable.ecr();
- 
+
     {
       Set<TypeVariable> set = new TreeSet<TypeVariable>(children);
       set.remove(var);
@@ -307,7 +307,7 @@ class TypeVariable implements Comparable
       {
 	return ecr().parents();
       }
-    
+
     return parents;
   }
 
@@ -317,7 +317,7 @@ class TypeVariable implements Comparable
       {
 	return ecr().children();
       }
-    
+
     return children;
   }
 
@@ -367,7 +367,7 @@ class TypeVariable implements Comparable
       }
   }
 
-  /** Computes approximative types.  The work list must be 
+  /** Computes approximative types.  The work list must be
    *  initialized with all constant type variables. */
   public static void computeApprox(TreeSet<TypeVariable> workList) throws TypeException
   {
@@ -465,13 +465,13 @@ class TypeVariable implements Comparable
       {
 	return ecr().toString();
       }
-    
+
     StringBuffer s = new StringBuffer();
     s.append(",[parents:");
 
     {
       boolean comma = false;
-      
+
       for (TypeVariable typeVariable : parents) {
 	  if(comma)
 	    {
@@ -484,12 +484,12 @@ class TypeVariable implements Comparable
 	  s.append(typeVariable.id());
 	}
     }
-    
+
     s.append("],[children:");
 
     {
       boolean comma = false;
-      
+
       for (TypeVariable typeVariable : children) {
 	  if(comma)
 	    {
@@ -502,7 +502,7 @@ class TypeVariable implements Comparable
 	  s.append(typeVariable.id());
 	}
     }
-    
+
     s.append("]");
     return "[id:" + id + ((type != null) ? (",type:" + type) : "") + ",approx:" + approx + ",inv_approx:" + inv_approx + s + "]";
   }

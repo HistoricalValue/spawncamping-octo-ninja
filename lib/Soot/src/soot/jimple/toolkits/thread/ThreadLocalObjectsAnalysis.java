@@ -11,17 +11,17 @@ import soot.jimple.*;
 // Runs LocalObjectsAnalysis for the special case where we want to know
 // if a reference is local to all threads from which it is reached.
 
-public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements IThreadLocalObjectsAnalysis 
+public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements IThreadLocalObjectsAnalysis
 {
 	MhpTester mhp;
 	List<AbstractRuntimeThread> threads;
 	InfoFlowAnalysis primitiveDfa;
 	static boolean printDebug = false;
-	
+
 	Map valueCache;
 	Map fieldCache;
 	Map invokeCache;
-	
+
 	public ThreadLocalObjectsAnalysis(MhpTester mhp) // must include main class
 	{
 		super(new InfoFlowAnalysis(false, true, printDebug)); // ref-only, with inner fields
@@ -33,7 +33,7 @@ public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements 
 		fieldCache = new HashMap();
 		invokeCache = new HashMap();
 	}
-	
+
 	// Forces the majority of computation to take place immediately, rather than on-demand
 	// might occasionally compute more than is necessary
 	public void precompute()
@@ -66,10 +66,10 @@ public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements 
 					runMethods.add(runMethod);
 			}
 		}
-		
+
 		return new ClassLocalObjectsAnalysis(loa, dfa, primitiveDfa, uf, sc, runMethods);
 	}
-	
+
 	// Determines if a RefType Local or a FieldRef is Thread-Local
 	public boolean isObjectThreadLocal(Value localOrRef, SootMethod sm)
 	{
@@ -80,7 +80,7 @@ public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements 
 //		{
 //			return ((Boolean) valueCache.get(cacheKey)).booleanValue();
 //		}
-		
+
 		if(printDebug)
 			G.v().out.println("- " + localOrRef + " in " + sm + " is...");
 	    for(AbstractRuntimeThread thread : mhp.getThreads())
@@ -93,8 +93,8 @@ public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements 
 					!isObjectLocalToContext(localOrRef, sm, runMethod))
 				{
 					if(printDebug)
-						G.v().out.println("  THREAD-SHARED (simpledfa " + ClassInfoFlowAnalysis.methodCount + 
-														" smartdfa " + SmartMethodInfoFlowAnalysis.counter + 
+						G.v().out.println("  THREAD-SHARED (simpledfa " + ClassInfoFlowAnalysis.methodCount +
+														" smartdfa " + SmartMethodInfoFlowAnalysis.counter +
 														" smartloa " + SmartMethodLocalObjectsAnalysis.counter + ")");
 //					valueCache.put(cacheKey, Boolean.FALSE);
 //					escapesThrough(localOrRef, sm);
@@ -103,14 +103,14 @@ public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements 
 			}
 		}
 		if(printDebug)
-			G.v().out.println("  THREAD-LOCAL (simpledfa " + ClassInfoFlowAnalysis.methodCount + 
-							 " smartdfa " + SmartMethodInfoFlowAnalysis.counter + 
+			G.v().out.println("  THREAD-LOCAL (simpledfa " + ClassInfoFlowAnalysis.methodCount +
+							 " smartdfa " + SmartMethodInfoFlowAnalysis.counter +
 							 " smartloa " + SmartMethodLocalObjectsAnalysis.counter + ")");// (" + localOrRef + " in " + sm + ")");
 //		valueCache.put(cacheKey, Boolean.TRUE);
 		return true;
 	}
 
-/*	
+/*
 	public boolean isFieldThreadLocal(SootField sf, SootMethod sm) // this is kind of meaningless..., if we're looking in a particular method, we'd use isObjectThreadLocal
 	{
 		G.v().out.println("- Checking if " + sf + " in " + sm + " is thread-local");
@@ -128,7 +128,7 @@ public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements 
 		return true;
 	}
 */
-	
+
 	public boolean hasNonThreadLocalEffects(SootMethod containingMethod, InvokeExpr ie)
 	{
 		if(threads.size() <= 1)
@@ -140,7 +140,7 @@ public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements 
 		{
 			return ((Boolean) invokeCache.get(cacheKey)).booleanValue();
 		}
-			
+
 		G.v().out.print("- " + ie + " in " + containingMethod + " has ");
 		Iterator threadsIt = threads.iterator();
 		while(threadsIt.hasNext())
@@ -153,22 +153,22 @@ public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements 
 				if( runMethod.getDeclaringClass().isApplicationClass() &&
 					hasNonLocalEffects(containingMethod, ie, runMethod))
 				{
-					G.v().out.println("THREAD-VISIBLE (simpledfa " + ClassInfoFlowAnalysis.methodCount + 
-													" smartdfa " + SmartMethodInfoFlowAnalysis.counter + 
+					G.v().out.println("THREAD-VISIBLE (simpledfa " + ClassInfoFlowAnalysis.methodCount +
+													" smartdfa " + SmartMethodInfoFlowAnalysis.counter +
 													" smartloa " + SmartMethodLocalObjectsAnalysis.counter + ")");// (" + ie + " in " + containingMethod + ")");
 					invokeCache.put(cacheKey, Boolean.TRUE);
 					return true;
 				}
 			}
 		}
-		G.v().out.println("THREAD-PRIVATE (simpledfa " + ClassInfoFlowAnalysis.methodCount + 
-												" smartdfa " + SmartMethodInfoFlowAnalysis.counter + 
+		G.v().out.println("THREAD-PRIVATE (simpledfa " + ClassInfoFlowAnalysis.methodCount +
+												" smartdfa " + SmartMethodInfoFlowAnalysis.counter +
 												" smartloa " + SmartMethodLocalObjectsAnalysis.counter + ")");// (" + ie + " in " + containingMethod + ")");
 		invokeCache.put(cacheKey, Boolean.FALSE);
 		return false;
 //*/
 	}
-	
+
     /**
         Returns a list of thread-shared sources and sinks.
         Returns empty list if not actually a shared value.
@@ -176,7 +176,7 @@ public class ThreadLocalObjectsAnalysis extends LocalObjectsAnalysis implements 
 	public List escapesThrough(Value sharedValue, SootMethod containingMethod)
 	{
 		List ret = new ArrayList();
-			
+
 	    // The containingMethod might be called from multiple threads
 	    // It is possible for interestingValue to be thread-shared from some threads but not others,
 	    // so we must look at each thread separately.

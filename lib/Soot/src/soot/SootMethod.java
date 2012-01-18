@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,11 +33,11 @@ import soot.dava.*;
 import soot.dava.toolkits.base.renamer.RemoveFullyQualifiedName;
 
 /**
-    Soot representation of a Java method.  Can be declared to belong to a SootClass. 
+    Soot representation of a Java method.  Can be declared to belong to a SootClass.
     Does not contain the actual code, which belongs to a Body.
     The getActiveBody() method points to the currently-active body.
 */
-public class SootMethod 
+public class SootMethod
     extends AbstractHost
     implements ClassMember, Numberable, MethodOrMethodContext {
     public static final String constructorName = "<init>";
@@ -46,7 +46,7 @@ public class SootMethod
     /** Name of the current method. */
     String name;
 
-    /** A list of parameter types taken by this <code>SootMethod</code> object, 
+    /** A list of parameter types taken by this <code>SootMethod</code> object,
       * in declaration order. */
     List parameterTypes;
 
@@ -111,7 +111,7 @@ public class SootMethod
         this(name, parameterTypes, returnType, modifiers, Collections.<SootClass>emptyList());
     }
 
-    /** Constructs a SootMethod with the given name, parameter types, return type, 
+    /** Constructs a SootMethod with the given name, parameter types, return type,
       * and list of thrown exceptions. */
     public SootMethod(
         String name,
@@ -139,8 +139,8 @@ public class SootMethod
         Scene.v().getMethodNumberer().add(this);
         subsignature =
             Scene.v().getSubSigNumberer().findOrAdd(getSubSignature());
-        
-        
+
+
     }
 
     /** Returns the name of this method. */
@@ -162,7 +162,7 @@ public class SootMethod
 	    //setDeclared(true);
 	}
     }
-    
+
     /** Returns the class which declares the current <code>SootMethod</code>. */
     public SootClass getDeclaringClass() {
         if (!isDeclared)
@@ -319,7 +319,7 @@ public class SootMethod
     }
 
     /**
-        Sets the active body for this method. 
+        Sets the active body for this method.
      */
     public void setActiveBody(Body body) {
         if ((declaringClass != null)
@@ -356,7 +356,7 @@ public class SootMethod
     public void addException(SootClass e) {
     	if(DEBUG)
     		System.out.println("Adding exception "+e);
-    	
+
         if (exceptions == null)
             exceptions = new ArrayList<SootClass>();
         else if (exceptions.contains(e))
@@ -585,8 +585,8 @@ public class SootMethod
         else {
             Type t = this.getReturnType();
 
-            String tempString = t.toString();    
-            
+            String tempString = t.toString();
+
             /*
              * Added code to handle RuntimeExcepotion thrown by getActiveBody
              */
@@ -599,7 +599,7 @@ public class SootMethod
             	}
             	tempString = RemoveFullyQualifiedName.getReducedName(importSet,tempString,t);
             }
-									
+
 			buffer.append(tempString + " ");
 
             buffer.append(Scene.v().quotedNameOf(this.getName()));
@@ -613,13 +613,13 @@ public class SootMethod
         while (typeIt.hasNext()) {
             Type t = (Type) typeIt.next();
 			String tempString = t.toString();
-            
+
             /*
 			 *  Nomair A. Naeem 7th Feb 2006
 			 *  It is nice to remove the fully qualified type names
 			 *  of parameters if the package they belong to have been imported
 			 *  javax.swing.ImageIcon should be just ImageIcon if javax.swing is imported
-			 *  If not imported WHY NOT..import it!! 
+			 *  If not imported WHY NOT..import it!!
 			 */
 			if(hasActiveBody()){
 				DavaBody body = (DavaBody) getActiveBody();
@@ -630,9 +630,9 @@ public class SootMethod
 				}
 				tempString = RemoveFullyQualifiedName.getReducedName(importSet,tempString,t);
 			}
-									
+
 			buffer.append(tempString + " ");
-			
+
             buffer.append(" ");
             if (hasActiveBody()){
                 buffer.append(((DavaBody) getActiveBody()).get_ParamMap().get(new Integer(count++)));
@@ -690,7 +690,7 @@ public class SootMethod
     }
 
     /**
-     * Returns the declaration of this method, as used at the top of textual body representations 
+     * Returns the declaration of this method, as used at the top of textual body representations
      *  (before the {}'s containing the code for representation.)
      */
     public String getDeclaration() {

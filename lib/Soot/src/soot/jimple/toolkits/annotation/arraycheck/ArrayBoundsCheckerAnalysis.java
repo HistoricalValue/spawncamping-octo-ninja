@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -32,7 +32,7 @@ import soot.jimple.* ;
 
 import java.util.* ;
 
-class ArrayBoundsCheckerAnalysis 
+class ArrayBoundsCheckerAnalysis
 {
     protected Map<Block, WeightedDirectedSparseGraph> blockToBeforeFlow;
     protected Map<Unit, WeightedDirectedSparseGraph> unitToBeforeFlow;
@@ -66,7 +66,7 @@ class ArrayBoundsCheckerAnalysis
     private final ArrayIndexLivenessAnalysis ailanalysis;
 
     /* A little bit different from ForwardFlowAnalysis */
-    public ArrayBoundsCheckerAnalysis(Body body, 
+    public ArrayBoundsCheckerAnalysis(Body body,
                                       boolean takeClassField,
                                       boolean takeFieldRef,
                                       boolean takeArrayRef,
@@ -78,20 +78,20 @@ class ArrayBoundsCheckerAnalysis
         arrayin = takeArrayRef;
         csin = takeCSE;
         rectarray = takeRectArray;
-        
+
         SootMethod thismethod = body.getMethod();
 
-        if (Options.v().debug()) 
+        if (Options.v().debug())
             G.v().out.println("ArrayBoundsCheckerAnalysis started on  "+thismethod.getName());
 
         ailanalysis = new ArrayIndexLivenessAnalysis(new ExceptionalUnitGraph(body), fieldin, arrayin, csin, rectarray);
-        
+
         if (fieldin)
         {
             this.localToFieldRef = ailanalysis.getLocalToFieldRef();
             this.fieldToFieldRef = ailanalysis.getFieldToFieldRef();
         }
-        
+
         if (arrayin)
         {
             if (rectarray)
@@ -105,15 +105,15 @@ class ArrayBoundsCheckerAnalysis
                 while (localIt.hasNext())
                 {
                     Local local = localIt.next();
-                    
+
                     MethodLocal mlocal = new MethodLocal(thismethod, local);
-                    
+
                     if (pgbuilder.isRectangular(mlocal))
                         this.rectarrayset.add(local);
                 }
             }
         }
-        
+
         if (csin)
         {
             this.localToExpr = ailanalysis.getLocalToExpr();
@@ -121,22 +121,22 @@ class ArrayBoundsCheckerAnalysis
 
         if (classfieldin)
         {
-            this.cfield = ClassFieldAnalysis.v();    
+            this.cfield = ClassFieldAnalysis.v();
         }
 
         this.graph = new ArrayRefBlockGraph(body);
 
         blockToBeforeFlow = new HashMap<Block, WeightedDirectedSparseGraph>(graph.size()*2+1, 0.7f);
-        
+
         edgeMap = new HashMap<FlowGraphEdge, WeightedDirectedSparseGraph>(graph.size()*2+1, 0.7f);
-        
+
         edgeSet = buildEdgeSet(graph);
-        
+
         doAnalysis();
-        
+
         convertToUnitEntry();
-        
-        if (Options.v().debug()) 
+
+        if (Options.v().debug())
             G.v().out.println("ArrayBoundsCheckerAnalysis finished.");
     }
 
@@ -171,7 +171,7 @@ class ArrayBoundsCheckerAnalysis
             {
                 edges.add(new FlowGraphEdge(s,s));
             }
-            
+
             /* End units has out edge from itself to itself.*/
             if (succs.size() == 0)
             {
@@ -186,10 +186,10 @@ class ArrayBoundsCheckerAnalysis
                 }
             }
         }
-        
+
         return edges;
     }
-    
+
     public Object getFlowBefore(Object s)
     {
         return unitToBeforeFlow.get(s);
@@ -209,13 +209,13 @@ class ArrayBoundsCheckerAnalysis
 
         {
             outgraph.addBoundedAll(ingraphs[0]);
-        
+
             for (int i=1; i<ingraphs.length; i++)
             {
                 outgraph.unionSelf(ingraphs[i]);
                 outgraph.makeShortestPathGraph();
             }
-                
+
             //       if (flowStable)
             /*
             Integer round = (Integer)stableRoundOfUnits.get(s);
@@ -234,8 +234,8 @@ class ArrayBoundsCheckerAnalysis
 
             outgraph.widenEdges(prevgraph);
 
-            //            outgraph.makeShortestPathGraph();        
-            /*        
+            //            outgraph.makeShortestPathGraph();
+            /*
             for (int i=0; i<ins.length; i++)
             {
                 G.v().out.println("in " + i);
@@ -243,7 +243,7 @@ class ArrayBoundsCheckerAnalysis
             }
 
             G.v().out.println("out ");
-            G.v().out.println(out);        
+            G.v().out.println(out);
             */
         }
     }
@@ -257,11 +257,11 @@ class ArrayBoundsCheckerAnalysis
             G.v().out.println("Building PseudoTopological order list on "+start);
 
         LinkedList allUnits = (LinkedList)SlowPseudoTopologicalOrderer.v().newList(this.graph,false);
-                        
-        BoundedPriorityList changedUnits = 
-            new BoundedPriorityList(allUnits);            
 
-        //               LinkedList changedUnits = new LinkedList(allUnits);        
+        BoundedPriorityList changedUnits =
+            new BoundedPriorityList(allUnits);
+
+        //               LinkedList changedUnits = new LinkedList(allUnits);
 
         Date finish = new Date();
         if (Options.v().debug())
@@ -300,7 +300,7 @@ class ArrayBoundsCheckerAnalysis
         /* Set initial values and nodes to visit. */
         {
             stableRoundOfUnits = new HashMap<Block, Integer>();
-            
+
             Iterator it = graph.iterator();
 
             while(it.hasNext())
@@ -312,18 +312,18 @@ class ArrayBoundsCheckerAnalysis
 
                 /* only take out the necessary node set. */
                 HashSet livelocals = (HashSet)ailanalysis.getFlowBefore(block.getHead());
-                
-                blockToBeforeFlow.put(block, new WeightedDirectedSparseGraph(livelocals, false));                
+
+                blockToBeforeFlow.put(block, new WeightedDirectedSparseGraph(livelocals, false));
             }
 
             Iterator<FlowGraphEdge> edgeIt = edgeSet.iterator();
             while (edgeIt.hasNext())
             {
                 FlowGraphEdge edge = edgeIt.next();
-                
+
                 Block target = (Block)edge.to;
                 HashSet livelocals = (HashSet)ailanalysis.getFlowBefore(target.getHead());
-                
+
                 edgeMap.put(edge, new WeightedDirectedSparseGraph(livelocals, false));
             }
         }
@@ -338,17 +338,17 @@ class ArrayBoundsCheckerAnalysis
                 Object head = headIt.next() ;
                 FlowGraphEdge edge = new FlowGraphEdge(head, head);
 
-                WeightedDirectedSparseGraph initgraph = 
+                WeightedDirectedSparseGraph initgraph =
                     edgeMap.get(edge) ;
 
                 initgraph.setTop();
-            }        
+            }
         }
 
         /* Perform fixed point flow analysis.
          */
         {
-            WeightedDirectedSparseGraph beforeFlow = 
+            WeightedDirectedSparseGraph beforeFlow =
                 new WeightedDirectedSparseGraph(null, false);
 
             //            DebugMsg.counter1 += allUnits.size();
@@ -361,9 +361,9 @@ class ArrayBoundsCheckerAnalysis
                 // DebugMsg.counter2++;
 
                 /* previousAfterFlow, old-out, it is null initially */
-                WeightedDirectedSparseGraph previousBeforeFlow = 
+                WeightedDirectedSparseGraph previousBeforeFlow =
                     blockToBeforeFlow.get(s);
-                
+
                 beforeFlow.setVertexes(previousBeforeFlow.getVertexes());
 
                 // Compute and store beforeFlow
@@ -380,17 +380,17 @@ class ArrayBoundsCheckerAnalysis
                     {
                         tmpEdge.changeEndUnits(preds.get(0),s);
                         copy(edgeMap.get(tmpEdge), beforeFlow);
-                        
+
                         //                             widenGraphs(beforeFlow, previousBeforeFlow);
                     }
-                    else 
-                    {                    
+                    else
+                    {
                     /* has 2 or more preds, Updated by Feng. */
                         Object predFlows[] = new Object[preds.size()] ;
- 
+
                         boolean allUnvisited = true;
                         Iterator predIt = preds.iterator();
-                        
+
                         int index = 0 ;
 
                         int lastVisited = 0;
@@ -400,7 +400,7 @@ class ArrayBoundsCheckerAnalysis
                             Object pred = predIt.next();
 
                                   tmpEdge.changeEndUnits(pred,s);
-            
+
                             if (!unvisitedNodes.contains(pred))
                             {
                                 allUnvisited = false;
@@ -422,9 +422,9 @@ class ArrayBoundsCheckerAnalysis
                             predFlows[lastVisited] = tmp;
                         }
 
-                        mergebunch(predFlows, s, previousBeforeFlow, beforeFlow); 
+                        mergebunch(predFlows, s, previousBeforeFlow, beforeFlow);
                     }
-                    
+
                     copy(beforeFlow, previousBeforeFlow);
                 }
 
@@ -449,7 +449,7 @@ class ArrayBoundsCheckerAnalysis
                         }
                     }
                 }
-                
+
                 /* Decide to remove or add unit from/to unvisitedNodes set */
                 {
                     unvisitedNodes.remove(s);
@@ -472,10 +472,10 @@ class ArrayBoundsCheckerAnalysis
      * the changed succ will be in a list to return back.
      */
     private List<Object> flowThrough(Object inValue, Object unit)
-    {        
+    {
         ArrayList<Object> changedSuccs = new ArrayList<Object>();
-      
-        WeightedDirectedSparseGraph ingraph = 
+
+        WeightedDirectedSparseGraph ingraph =
             (WeightedDirectedSparseGraph)inValue;
 
         Block block = (Block)unit ;
@@ -493,7 +493,7 @@ class ArrayBoundsCheckerAnalysis
             /* deal with normal expressions. */
             assertNormalExpr(ingraph, s);
 
-            s = nexts; 
+            s = nexts;
             nexts = block.getSuccOf(nexts);
         }
 
@@ -524,7 +524,7 @@ class ArrayBoundsCheckerAnalysis
 
         /*
         ArrayRef op = null;
-       
+
         Value leftOp = ((AssignStmt)s).getLeftOp();
         Value rightOp = ((AssignStmt)s).getRightOp();
 
@@ -537,12 +537,12 @@ class ArrayBoundsCheckerAnalysis
         if (op == null)
             return;
         */
-        
+
         if (!s.containsArrayRef())
             return;
 
         ArrayRef op = s.getArrayRef();
-        
+
 
         Value base = (op).getBase();
         Value index = (op).getIndex();
@@ -550,7 +550,7 @@ class ArrayBoundsCheckerAnalysis
         HashSet livelocals = (HashSet)ailanalysis.getFlowAfter(s);
         if (!livelocals.contains(base) && !livelocals.contains(index))
             return;
-        
+
         if (index instanceof IntConstant)
         {
             int weight = ((IntConstant)index).value;
@@ -583,7 +583,7 @@ class ArrayBoundsCheckerAnalysis
                 HashSet tokills = new HashSet();
                 Value expr = stmt.getInvokeExpr();
                 List parameters = ((InvokeExpr)expr).getArgs();
-                
+
                 /* kill only the locals in hierarchy. */
                 if (strictness == 0)
                 {
@@ -604,7 +604,7 @@ class ArrayBoundsCheckerAnalysis
                                 Value local = (Value)keyIt.next();
 
                                 Type ltype = local.getType();
-                                
+
                                 SootClass lclass = ((RefType)ltype).getSootClass();
 
                                 if (hierarchy.isClassSuperclassOfIncluding(pclass, lclass) ||
@@ -612,11 +612,11 @@ class ArrayBoundsCheckerAnalysis
                                 {
                                     HashSet toadd = localToFieldRef.get(local);
                                     tokills.addAll(toadd);
-                                }                                    
+                                }
                             }
                         }
                     }
-                    
+
                     if (expr instanceof InstanceInvokeExpr)
                     {
                         Value base = ((InstanceInvokeExpr)expr).getBase();
@@ -632,7 +632,7 @@ class ArrayBoundsCheckerAnalysis
                                 Value local = (Value)keyIt.next();
 
                                 Type ltype = local.getType();
-                                
+
                                 SootClass lclass = ((RefType)ltype).getSootClass();
 
                                 if (hierarchy.isClassSuperclassOfIncluding(pclass, lclass) ||
@@ -640,13 +640,13 @@ class ArrayBoundsCheckerAnalysis
                                 {
                                     HashSet toadd = localToFieldRef.get(local);
                                     tokills.addAll(toadd);
-                                }                                    
+                                }
                             }
                         }
                     }
                 }
                 else
-                    /* kill all instance field reference. */ 
+                    /* kill all instance field reference. */
                 if (strictness == 1)
                 {
                     boolean killall = false;
@@ -672,7 +672,7 @@ class ArrayBoundsCheckerAnalysis
                         {
                             HashSet toadd = localToFieldRef.get(keyIt.next());
                             tokills.addAll(toadd);
-                        }                            
+                        }
                     }
                 }
                 else
@@ -744,7 +744,7 @@ class ArrayBoundsCheckerAnalysis
             if (leftOp instanceof Local)
             {
                 HashSet fieldrefs = localToFieldRef.get(leftOp);
-                
+
                 if (fieldrefs != null)
                 {
                     Iterator refsIt = fieldrefs.iterator();
@@ -760,9 +760,9 @@ class ArrayBoundsCheckerAnalysis
             if (leftOp instanceof InstanceFieldRef)
             {
                 SootField field = ((InstanceFieldRef)leftOp).getField();
-                
+
                 HashSet fieldrefs = fieldToFieldRef.get(field);
-                
+
                 if (fieldrefs != null)
                 {
                     Iterator refsIt = fieldrefs.iterator();
@@ -772,7 +772,7 @@ class ArrayBoundsCheckerAnalysis
                         if (livelocals.contains(ref))
                             ingraph.killNode(ref);
                     }
-                }                
+                }
             }
         }
 
@@ -785,7 +785,7 @@ class ArrayBoundsCheckerAnalysis
             {
                 /*
                 HashSet arrayrefs = (HashSet)localToArrayRef.get(leftOp);
-                
+
                 if (arrayrefs != null)
                 {
                     Iterator refsIt = arrayrefs.iterator();
@@ -805,9 +805,9 @@ class ArrayBoundsCheckerAnalysis
                     {
                         Value base = ((ArrayRef)node).getBase();
                         Value index = ((ArrayRef)node).getIndex();
-                        
+
                         if (base.equals(leftOp) || index.equals(leftOp))
-                            ingraph.killNode(node);                        
+                            ingraph.killNode(node);
                     }
 
                     if (rectarray)
@@ -906,7 +906,7 @@ class ArrayBoundsCheckerAnalysis
                 return;
             }
         }
-        
+
         // i = i - c; is also special
         if (rightOp instanceof SubExpr)
         {
@@ -951,7 +951,7 @@ class ArrayBoundsCheckerAnalysis
             }
 
             if (classfieldin)
-            {            
+            {
                 SootField field = ((FieldRef)rightOp).getField();
                 IntValueContainer flength = (IntValueContainer)cfield.getFieldInfo(field);
 
@@ -961,7 +961,7 @@ class ArrayBoundsCheckerAnalysis
                     {
                         ingraph.addMutualEdges(zero, leftOp, flength.getValue());
                     }
-                }        
+                }
             }
 
             return;
@@ -975,7 +975,7 @@ class ArrayBoundsCheckerAnalysis
             if ((leftType instanceof ArrayType) && (rightOp instanceof ArrayRef))
             {
                 Local base = (Local)((ArrayRef)rightOp).getBase();
-                
+
                 SymbolArrayLength sv = (SymbolArrayLength)lra_analysis.getSymbolLengthAt(base, s);
                 if (sv != null)
                 {
@@ -1031,7 +1031,7 @@ class ArrayBoundsCheckerAnalysis
                     {
                         ingraph.addMutualEdges(rhs, leftOp, 0);
                         return;
-                    }                    
+                    }
                 }
                 else
                 if (rhs instanceof SubExpr)
@@ -1067,7 +1067,7 @@ class ArrayBoundsCheckerAnalysis
             }
         }
 
-        // only i = j - c was considered. 
+        // only i = j - c was considered.
         if (rightOp instanceof SubExpr)
         {
             Value op1 = ((SubExpr)rightOp).getOp1();
@@ -1080,7 +1080,7 @@ class ArrayBoundsCheckerAnalysis
                 return;
             }
         }
-        
+
         // new experessions can also generate relationship
         // a = new A[i]; a = new A[c];
         if (rightOp instanceof NewArrayExpr)
@@ -1190,7 +1190,7 @@ class ArrayBoundsCheckerAnalysis
 
         WeightedDirectedSparseGraph targetgraph = ingraph.dup();
 
-        // EqExpr, GeExpr, GtExpr, LeExpr, LtExpr, NeExpr 
+        // EqExpr, GeExpr, GtExpr, LeExpr, LtExpr, NeExpr
         if ((cmpcond instanceof EqExpr) ||
             (cmpcond instanceof NeExpr) )
         {
@@ -1209,7 +1209,7 @@ class ArrayBoundsCheckerAnalysis
 
             if (node1 == node2)
                 return false;
-            
+
             if (cmpcond instanceof EqExpr)
                 targetgraph.addMutualEdges(node1, node2, weight);
             else
@@ -1223,7 +1223,7 @@ class ArrayBoundsCheckerAnalysis
         {
             Object node1 = op1, node2 = op2;
             int weight = 0;
-            
+
             if (node1 instanceof IntConstant)
             {
                 weight += ((IntConstant)node1).value;
@@ -1235,7 +1235,7 @@ class ArrayBoundsCheckerAnalysis
                 weight -= ((IntConstant)node2).value;
                 node2 = zero;
             }
-            
+
             if (node1 == node2)
                 return false;
 
@@ -1247,17 +1247,17 @@ class ArrayBoundsCheckerAnalysis
             else
             {
                 targetgraph.addEdge(node1, node2, weight);
-                ingraph.addEdge(node2, node1, -weight-1);                                
+                ingraph.addEdge(node2, node1, -weight-1);
             }
         }
         else
-            // i < j 
+            // i < j
         if ((cmpcond instanceof LtExpr) ||
             (cmpcond instanceof LeExpr) )
         {
             Object node1 = op1, node2 = op2;
             int weight = 0;
-            
+
             if (node1 instanceof IntConstant)
             {
                 weight -= ((IntConstant)node1).value;
@@ -1272,7 +1272,7 @@ class ArrayBoundsCheckerAnalysis
 
             if (node1 == node2)
                 return false;
-            
+
             if (cmpcond instanceof LtExpr)
             {
                 targetgraph.addEdge(node2, node1, weight-1);
@@ -1310,7 +1310,7 @@ class ArrayBoundsCheckerAnalysis
         if (changed)
             changedSuccs.add(targetBlock);
 
-        
+
         // ingraph -> nextBlock
         FlowGraphEdge nextEdge = new FlowGraphEdge(current, nextBlock);
         WeightedDirectedSparseGraph prevnext = edgeMap.get(nextEdge);
@@ -1319,7 +1319,7 @@ class ArrayBoundsCheckerAnalysis
                ingraph.makeShortestPathGraph();
 
         tmpgraph = new WeightedDirectedSparseGraph(prevnext.getVertexes(), true);
-            
+
         copy(ingraph, tmpgraph);
 
         if (!tmpgraph.equals(prevnext))
@@ -1329,7 +1329,7 @@ class ArrayBoundsCheckerAnalysis
         }
 
         if (changed)
-            changedSuccs.add(nextBlock);                
+            changedSuccs.add(nextBlock);
 
         return true;
 
@@ -1348,13 +1348,13 @@ class ArrayBoundsCheckerAnalysis
         {
             Object next = succs.get(i);
             FlowGraphEdge nextEdge = new FlowGraphEdge(current, next);
-            
+
             WeightedDirectedSparseGraph prevs = edgeMap.get(nextEdge);
             boolean changed = false;
 
             /* equals should be used to take out sub graph first */
-            
-            WeightedDirectedSparseGraph tmpgraph = 
+
+            WeightedDirectedSparseGraph tmpgraph =
                 new WeightedDirectedSparseGraph(prevs.getVertexes(), true);
 
             copy(ingraph, tmpgraph);
@@ -1383,7 +1383,7 @@ class ArrayBoundsCheckerAnalysis
 
     protected void widenGraphs(Object current, Object before)
     {
-        WeightedDirectedSparseGraph curgraphs = 
+        WeightedDirectedSparseGraph curgraphs =
             (WeightedDirectedSparseGraph)current;
         WeightedDirectedSparseGraph pregraphs =
             (WeightedDirectedSparseGraph)before;

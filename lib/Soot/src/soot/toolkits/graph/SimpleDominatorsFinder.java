@@ -49,7 +49,7 @@ public class SimpleDominatorsFinder implements DominatorsFinder
         // build node to dominators map
         {
             nodeToDominators = new HashMap<Object, FlowSet>(graph.size() * 2 + 1, 0.7f);
-            
+
             for(Iterator nodeIt = graph.iterator(); nodeIt.hasNext();) {
                 Object node = nodeIt.next();
                 FlowSet set = (FlowSet) analysis.getFlowAfter(node);
@@ -62,7 +62,7 @@ public class SimpleDominatorsFinder implements DominatorsFinder
     {
         return graph;
     }
-    
+
     public List getDominators(Object node)
     {
         // non-backed list since FlowSet is an ArrayPackedFlowSet
@@ -92,7 +92,7 @@ public class SimpleDominatorsFinder implements DominatorsFinder
 
         if(immediateDominator == null)
             throw new RuntimeException("Assertion failed.");
-        
+
         return immediateDominator;
     }
 
@@ -122,7 +122,7 @@ class SimpleDominatorsAnalysis extends ForwardFlowAnalysis
 {
     FlowSet emptySet;
     Map<Object, FlowSet> nodeToGenerateSet;
-    
+
     SimpleDominatorsAnalysis(DirectedGraph graph)
     {
         super(graph);
@@ -133,7 +133,7 @@ class SimpleDominatorsAnalysis extends ForwardFlowAnalysis
 
             for(Iterator nodesIt = graph.iterator(); nodesIt.hasNext();)
                 nodes.add(nodesIt.next());
-            
+
             FlowUniverse nodeUniverse = new CollectionFlowUniverse(nodes);
             emptySet = new ArrayPackedSet(nodeUniverse);
         }
@@ -149,7 +149,7 @@ class SimpleDominatorsAnalysis extends ForwardFlowAnalysis
                 nodeToGenerateSet.put(s, genSet);
             }
         }
-        
+
         doAnalysis();
     }
 

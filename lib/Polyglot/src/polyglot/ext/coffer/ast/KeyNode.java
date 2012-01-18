@@ -7,7 +7,7 @@ import polyglot.ext.jl.ast.*;
 import polyglot.ext.coffer.types.*;
 
 /**
- * An AST node for a <code>Key</code>.  The key may be ambiguous. 
+ * An AST node for a <code>Key</code>.  The key may be ambiguous.
  */
 public interface KeyNode extends Node
 {

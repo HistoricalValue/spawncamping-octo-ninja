@@ -10,7 +10,7 @@ public:
 	Number() { };
 
 	virtual int intValue() = 0;
-	
+
 	virtual String *toString() { return new String("Number"); };
 };
 

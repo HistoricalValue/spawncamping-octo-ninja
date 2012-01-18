@@ -25,12 +25,12 @@ package soot.toolkits.astmetrics;
 public class MetricData {
 	String metricName;
 	Object value;
-	
+
 	public MetricData(String name, Object val){
 		metricName=name;
 		value=val;
 	}
-	
+
 	public String toString(){
 		StringBuffer b = new StringBuffer();
 		b.append("<Metric>\n");

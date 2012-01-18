@@ -28,7 +28,7 @@ import soot.util.queue.*;
  * @author Ondrej Lhotak
  */
 public final class VirtualCalls
-{ 
+{
     public VirtualCalls( Singletons.Global g ) {}
     public static VirtualCalls v() { return G.v().soot_jimple_toolkits_callgraph_VirtualCalls(); }
 
@@ -42,8 +42,8 @@ public final class VirtualCalls
                 .canStoreType( container.getDeclaringClass().getType(),
                     target.getDeclaringClass().getType() )
             && container.getDeclaringClass().getType() !=
-                target.getDeclaringClass().getType() 
-            && !target.getName().equals( "<init>" ) 
+                target.getDeclaringClass().getType()
+            && !target.getName().equals( "<init>" )
             && subSig != sigClinit ) {
 
             return resolveNonSpecial(
@@ -142,7 +142,7 @@ public final class VirtualCalls
             throw new RuntimeException( "oops "+t );
         }
     }
-    
+
     public final NumberedString sigClinit =
         Scene.v().getSubSigNumberer().findOrAdd("void <clinit>()");
     public final NumberedString sigStart =

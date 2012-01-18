@@ -62,9 +62,9 @@ public class StaticDefinitionFinder extends DepthFirstAdapter{
 		finalFieldDefined=true;
 	    }
 	}
-	
+
     }
-		
+
     public boolean anyFinalFieldDefined(){
 	return finalFieldDefined;
     }

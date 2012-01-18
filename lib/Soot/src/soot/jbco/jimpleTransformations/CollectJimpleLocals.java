@@ -27,7 +27,7 @@ import soot.util.Chain;
 
 /**
  * @author Michael Batchelder
- * 
+ *
  * Created on 7-Feb-2006
  */
 public class CollectJimpleLocals extends BodyTransformer implements IJbcoTransform {
@@ -39,18 +39,18 @@ public class CollectJimpleLocals extends BodyTransformer implements IJbcoTransfo
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "jtp.jbco_jl";
-  
+
   public String getName() {
     return name;
   }
-  
+
   protected void internalTransform(Body body, String phaseName, Map options) {
     Chain locals = body.getLocals();
     ArrayList locs = new ArrayList();
     locs.addAll(locals);
-    
+
     soot.jbco.Main.methods2JLocals.put(body.getMethod(), locs);
   }
 }

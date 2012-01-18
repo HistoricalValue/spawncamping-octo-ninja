@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -49,17 +49,17 @@ abstract public class AbstractGrimpIntBinopExpr
 
     abstract public int getPrecedence();
 
-    private String toString(Value op1, Value op2, 
+    private String toString(Value op1, Value op2,
                             String leftOp, String rightOp)
     {
-        if (op1 instanceof Precedence && 
-            ((Precedence)op1).getPrecedence() < getPrecedence()) 
+        if (op1 instanceof Precedence &&
+            ((Precedence)op1).getPrecedence() < getPrecedence())
             leftOp = "(" + leftOp + ")";
 
 	if (op2 instanceof Precedence) {
 	    int opPrec = ((Precedence) op2).getPrecedence(),
 		myPrec = getPrecedence();
-	    
+
 	    if ((opPrec < myPrec) ||
 		((opPrec == myPrec) && ((this instanceof SubExpr) || (this instanceof DivExpr) ||
 					(this instanceof DCmpExpr) || (this instanceof DCmpgExpr) || (this instanceof DCmplExpr))))

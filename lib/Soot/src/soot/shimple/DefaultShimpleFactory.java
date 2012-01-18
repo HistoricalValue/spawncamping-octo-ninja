@@ -45,11 +45,11 @@ public class DefaultShimpleFactory implements ShimpleFactory
     protected DominatorTree rdTree;
     protected DominanceFrontier rdFrontier;
     protected DominatorsFinder rdFinder;
-    
+
     public DefaultShimpleFactory()
     {
     }
-    
+
     public void clearCache()
     {
         bg = null;
@@ -66,11 +66,11 @@ public class DefaultShimpleFactory implements ShimpleFactory
         rdFinder = null;
         rdFrontier = null;
     }
-    
+
     public void setBody(Body body)
     {
         this.body = body;
-        clearCache();        
+        clearCache();
     }
 
     public Body getBody()
@@ -85,7 +85,7 @@ public class DefaultShimpleFactory implements ShimpleFactory
     {
         if(rbg != null)
             return rbg;
-        
+
         BlockGraph bg = getBlockGraph();
         rbg = new HashReversibleGraph(bg);
         rbg.reverse();
@@ -118,7 +118,7 @@ public class DefaultShimpleFactory implements ShimpleFactory
         rdFrontier = new CytronDominanceFrontier(getReverseDominatorTree());
         return rdFrontier;
     }
-    
+
     public BlockGraph getBlockGraph()
     {
         if(bg != null)
@@ -137,7 +137,7 @@ public class DefaultShimpleFactory implements ShimpleFactory
         ug = new ExceptionalUnitGraph(getBody());
         return ug;
     }
-    
+
     public DominatorsFinder getDominatorsFinder()
     {
         if(dFinder != null)
@@ -155,7 +155,7 @@ public class DefaultShimpleFactory implements ShimpleFactory
         dTree = new DominatorTree(getDominatorsFinder());
         return dTree;
     }
-    
+
     public DominanceFrontier getDominanceFrontier()
     {
         if(dFrontier != null)
@@ -169,7 +169,7 @@ public class DefaultShimpleFactory implements ShimpleFactory
     {
         if(gvn != null)
             return gvn;
-        
+
         gvn = new SimpleGlobalValueNumberer(getBlockGraph());
         return gvn;
     }

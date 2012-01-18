@@ -24,7 +24,7 @@ import soot.jimple.toolkits.callgraph.*;
 import soot.jimple.*;
 
 public class SideEffectTagger extends BodyTransformer
-{ 
+{
     public SideEffectTagger( Singletons.Global g ) {}
     public static SideEffectTagger v() { return G.v().soot_jimple_toolkits_pointer_SideEffectTagger(); }
 
@@ -36,7 +36,7 @@ public class SideEffectTagger extends BodyTransformer
     public Date startTime = null;
     boolean optionNaive = false;
     private CallGraph cg;
-    
+
     protected class UniqueRWSets {
 	protected ArrayList<RWSet> l = new ArrayList<RWSet>();
 	RWSet getUnique( RWSet s ) {
@@ -99,11 +99,11 @@ public class SideEffectTagger extends BodyTransformer
 	HashMap<Object, RWSet> stmtToReadSet = new HashMap<Object, RWSet>();
 	HashMap<Object, RWSet> stmtToWriteSet = new HashMap<Object, RWSet>();
 	UniqueRWSets sets = new UniqueRWSets();
-	boolean justDoTotallyConservativeThing = 
+	boolean justDoTotallyConservativeThing =
 	    body.getMethod().getName().equals( "<clinit>" );
 	for( Iterator stmtIt = body.getUnits().iterator(); stmtIt.hasNext(); ) {
 	    final Stmt stmt = (Stmt) stmtIt.next();
-	    if( justDoTotallyConservativeThing 
+	    if( justDoTotallyConservativeThing
 	    || ( optionNaive && stmt.containsInvokeExpr() ) ) {
 		stmtToReadSet.put( stmt, sets.getUnique( new FullRWSet() ) );
 		stmtToWriteSet.put( stmt, sets.getUnique( new FullRWSet() ) );

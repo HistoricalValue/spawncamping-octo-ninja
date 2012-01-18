@@ -25,7 +25,7 @@
  * CHANGE LOG:   23rd November, 2005: Added explicit check for DVariableDeclarationStmt in checking stmts
  *                       This is essential because to get complete code coverage the traversal routine needs
  *                       to go into the DVariableDeclarationStmt and invoke applies on the defs or local
- *                       being declared in there. 
+ *                       being declared in there.
  */
 package soot.dava.toolkits.base.AST.analysis;
 
@@ -87,7 +87,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 		 MArch 18th, 2006: since getLocal returns a local always dont need a valuebox for this
 		 */
 		Value local = node.getLocal();
-		
+
 		decideCaseExprOrRef(local);
 
 		/*
@@ -152,7 +152,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 		 * decideCaseExprOrRef(key);
 		 */
 		caseExprOrRefValueBox(node.getKeyBox());
-				
+
 		/*
 		 Apply on bodies of switch cases
 		 */
@@ -345,7 +345,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 	public void caseASTTryNode(ASTTryNode node) {
 		inASTTryNode(node);
 
-		//get try body 
+		//get try body
 		List<Object> tryBody = node.get_TryBody();
 		Iterator<Object> it = tryBody.iterator();
 
@@ -420,7 +420,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 
 		ConditionExpr condition = bc.getConditionExpr();
 		//calling decideCaseExprOrRef although we know for sure this is an Expr but doesnt matter
-		
+
 		decideCaseExprOrRef(condition);
 
 		outASTBinaryCondition(bc);
@@ -514,7 +514,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 			/*
 			 Do a case by case check of possible statements and invoke
 			 the case methods from within this method.
-			 
+
 			 cant use apply since the Statements are defined in some other
 			 package and dont want to change code all over the place
 			 */
@@ -548,7 +548,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 
 	public void caseDefinitionStmt(DefinitionStmt s) {
 		inDefinitionStmt(s);
-		
+
 		/*
 		 * March 18th, 2006 introducing level of indirection
 		 * decideCaseExprOrRef(s.getRightOp());
@@ -556,7 +556,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 		 */
 		caseExprOrRefValueBox(s.getRightOpBox());
 		caseExprOrRefValueBox(s.getLeftOpBox());
-		
+
 
 		outDefinitionStmt(s);
 	}
@@ -670,7 +670,7 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 		outStmt(s);
 	}
 
-	
+
 	/*
 	 * March 18th 2006, Adding new indirection
 	 */
@@ -679,22 +679,22 @@ public class DepthFirstAdapter extends AnalysisAdapter {
 		decideCaseExprOrRef(vb.getValue());
 		outExprOrRefValueBox(vb);
 	}
-	
+
 	public void inExprOrRefValueBox(ValueBox vb){
-		if (verbose) 
+		if (verbose)
 			System.out.println("inExprOrRefValueBox" + vb);
-		
+
 	}
 
-		
+
 	public void outExprOrRefValueBox(ValueBox vb){
-		if (verbose) 
+		if (verbose)
 			System.out.println("outExprOrRefValueBox" + vb);
-			
+
 	}
 
-	
-	
+
+
 	public void decideCaseExprOrRef(Value v) {
 		if (v instanceof Expr)
 			caseExpr((Expr) v);

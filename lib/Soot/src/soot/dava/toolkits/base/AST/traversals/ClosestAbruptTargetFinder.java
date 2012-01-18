@@ -17,13 +17,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/* 
+/*
  * Maintained by Nomair A. Naeem
  */
 
 /*
  * CHANGLE LOG:
- * 
+ *
  */
 package soot.dava.toolkits.base.AST.traversals;
 
@@ -38,19 +38,19 @@ import soot.dava.toolkits.base.AST.analysis.*;
 
 /**
  * This class has been created because we need the immediate
- * target of a implicit break/continue statement i.e. a break/continue 
+ * target of a implicit break/continue statement i.e. a break/continue
  * statement which does not break/continue a particular label explicitly.
 
- * Notice that this is only allowed for 
- *    while 
- *    do while, 
- *    unconditional loop 
+ * Notice that this is only allowed for
+ *    while
+ *    do while,
+ *    unconditional loop
  *    for loop
  *    switch construct.
 
  *  Notice continue is not allowed for switch also
 
- * Explicit breaks can on the other hand break any label (that on a construct) which we are not 
+ * Explicit breaks can on the other hand break any label (that on a construct) which we are not
  * worried about in this analysis
 */
 public class ClosestAbruptTargetFinder extends DepthFirstAdapter{
@@ -128,13 +128,13 @@ public class ClosestAbruptTargetFinder extends DepthFirstAdapter{
 	    throw new RuntimeException("trying to remove node from empty stack: ClosestBreakTargetFinder");
 	nodeStack.remove(nodeStack.size()-1);
     }
-    
+
 
     public void inStmt(Stmt s){
 	if(s instanceof DAbruptStmt){
 	    //breaks and continues are abrupt statements
 	    DAbruptStmt ab = (DAbruptStmt)s;
-	    
+
 	    SETNodeLabel label = ab.getLabel();
 	    if(label != null){
 		if(label.toString() != null){
@@ -186,6 +186,6 @@ public class ClosestAbruptTargetFinder extends DepthFirstAdapter{
 	    DAbruptStmt ab = (DAbruptStmt)it.next();
 	    System.out.println("Closest to "+ab+" is "+((ASTNode)closestNode.get(ab)).toString()+"\n\n");
 	}
-	
+
 	}*/
 }

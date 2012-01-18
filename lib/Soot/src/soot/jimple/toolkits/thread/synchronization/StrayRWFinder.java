@@ -42,7 +42,7 @@ public class StrayRWFinder extends BackwardFlowAnalysis
 		sea.findNTRWSets( body.getMethod() );
         doAnalysis();
 	}
-    	
+
     /**
      * All INs are initialized to the empty set.
      **/
@@ -70,19 +70,19 @@ public class StrayRWFinder extends BackwardFlowAnalysis
 
     	RWSet stmtRead = sea.readSet( body.getMethod(), (Stmt) unit );
     	RWSet stmtWrite = sea.writeSet( body.getMethod(), (Stmt) unit );
-        
+
     	Boolean addSelf = Boolean.FALSE;
-    	
+
     	Iterator tnIt = tns.iterator();
     	while(tnIt.hasNext())
     	{
     		CriticalSection tn = (CriticalSection) tnIt.next();
-    		if(stmtRead.hasNonEmptyIntersection(tn.write) || 
+    		if(stmtRead.hasNonEmptyIntersection(tn.write) ||
     			stmtWrite.hasNonEmptyIntersection(tn.read) ||
     			stmtWrite.hasNonEmptyIntersection(tn.write))
     			addSelf = Boolean.TRUE;
     	}
-    	
+
         in.copy(out);
     	if(addSelf.booleanValue())
     	{
@@ -117,7 +117,7 @@ public class StrayRWFinder extends BackwardFlowAnalysis
             	break;
             }
         }
-        
+
         boolean hasANull2 = false;
         Transaction tn2 = null;
         Iterator inIt2 = inSet2.iterator();

@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * An immutable representation of a Java language <code>if</code> statement.
- * Contains an expression whose value is tested, a ``then'' statement 
+ * Contains an expression whose value is tested, a ``then'' statement
  * (consequent), and optionally an ``else'' statement (alternate).
  */
 public class If_c extends Stmt_c implements If
@@ -110,11 +110,11 @@ public class If_c extends Stmt_c implements If
     }
 
     /** Write the statement to an output file. */
-    public void prettyPrint(CodeWriter w, PrettyPrinter tr) {    
+    public void prettyPrint(CodeWriter w, PrettyPrinter tr) {
 	w.write("if (");
 	printBlock(cond, w, tr);
 	w.write(")");
-       
+
 	printSubStmt(consequent, w, tr);
 
 	if (alternative != null) {
@@ -137,7 +137,7 @@ public class If_c extends Stmt_c implements If
 
     public List acceptCFG(CFGBuilder v, List succs) {
         if (alternative == null) {
-            v.visitCFG(cond, FlowGraph.EDGE_KEY_TRUE, consequent.entry(), 
+            v.visitCFG(cond, FlowGraph.EDGE_KEY_TRUE, consequent.entry(),
                              FlowGraph.EDGE_KEY_FALSE, this);
             v.visitCFG(consequent, this);
         }

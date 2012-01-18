@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -51,20 +51,20 @@ public class EscapedWriter extends FilterWriter
         write(ch);
         throw new RuntimeException();
     }
-  
+
     /** Write a segment of the given String. */
     public void write(String s, int off, int len) throws IOException
     {
         for(int i = off; i < off + len; i++)
             write(s.charAt(i));
     }
-  
+
     /** Write a single character. */
     public void write(int ch) throws IOException
     {
         if (ch >= 32 && ch <= 126 || ch == cr || ch == lf || ch == ' ')
             { super.write(ch); return; }
-        
+
         mini.setLength(0);
         mini.append(Integer.toHexString(ch));
 

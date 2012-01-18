@@ -9,7 +9,7 @@ public class Production implements Unparse
 	private Nonterminal lhs;
 	private Vector rhs;
 	private static String HEADER = "ppg [nterm]: ";
-	
+
 	public Production (Nonterminal lhs, Vector rhs) {
 		this.lhs = lhs;
 		this.rhs = rhs;
@@ -18,12 +18,12 @@ public class Production implements Unparse
 	public Nonterminal getLHS() { return lhs; }
 	public void setLHS(Nonterminal nt) { lhs = nt; }
 	public Vector getRHS() { return rhs; }
-	
+
 	public Object clone() {
 		return new Production((Nonterminal) lhs.clone(),
 							  (Vector) rhs.clone());
 	}
-	
+
 	public void drop (Production prod) {
 		//assertSameLHS(prod, "drop");
 		Vector toDrop = prod.getRHS();
@@ -42,14 +42,14 @@ public class Production implements Unparse
 					System.err.println(HEADER+"no match found for production:");
 					System.err.print(prod.getLHS() + " ::= ");
 					for (int k=0; k < target.size(); k++) {
-						System.err.print(target.elementAt(k)+" ");	
+						System.err.print(target.elementAt(k)+" ");
 					}
 					System.exit(1);
 				}
 			}
 		}
 	}
-	
+
 	public static boolean isSameProduction (Vector u, Vector v) {
 		int uIdx = 0, vIdx = 0;
 		GrammarPart ug = null, vg = null;
@@ -66,20 +66,20 @@ public class Production implements Unparse
 				vIdx++;
 				continue;
 			}
-			
-			if (! ug.equals(vg)) 
+
+			if (! ug.equals(vg))
 				return false;
 			else {
 				uIdx++;
 				vIdx++;
 			}
 		}
-		
+
 		if (uIdx == u.size() && vIdx == v.size()) {
 			// got through all the way, they are the same
 			return true;
 		} else {
-			// one of the lists was not seen all the way, 
+			// one of the lists was not seen all the way,
 			// must check that only semantic actions are left
 			if (uIdx < u.size()) {
 				for (; uIdx < u.size(); uIdx++) {
@@ -98,12 +98,12 @@ public class Production implements Unparse
 			}
 		}
 	}
-	
+
 	public void union (Production prod) {
 		Vector additional = prod.getRHS();
 		union(additional);
 	}
-	
+
 	public void union (Vector prodList) {
 		Vector toAdd, current;
 		for (int i=0; i < prodList.size(); i++) {
@@ -117,18 +117,18 @@ public class Production implements Unparse
 			}
 		}
 	}
-	
+
 	public void add (Production prod) {
 		//assertSameLHS(prod, "add");
 		Vector additional = prod.getRHS();
 		for (int i=0; i < additional.size(); i++) {
-			rhs.addElement( additional.elementAt(i) );	
+			rhs.addElement( additional.elementAt(i) );
 		}
 	}
 	public void addToRHS (Vector rhsPart) {
 		rhs.addElement(rhsPart);
 	}
-	
+
 	private void assertSameLHS(Production prod, String function) {
 		if (! (prod.getLHS().equals(lhs)) ) {
 			System.err.println(HEADER + "nonterminals do not match in Production."+
@@ -151,14 +151,14 @@ public class Production implements Unparse
 			if (i < rhs.size() - 1) {
 				cw.allowBreak(0);
 				cw.write(" | ");
-			}			
+			}
 		}
 		cw.write(";");
 		cw.newline(); cw.newline();
-	
+
 		cw.end();
 	}
-	
+
 	public String toString() {
 		String result = lhs.toString();
 		Vector rhs_part;

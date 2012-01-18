@@ -25,11 +25,11 @@ class InsnInfo {
     public String args;     // the argument code
 
     public static InsnInfo get(String name) {
-	return (InsnInfo)infoTable.get(name);	
+	return (InsnInfo)infoTable.get(name);
     }
 
     public static boolean contains(String name) {
-	return infoTable.get(name) != null;	
+	return infoTable.get(name) != null;
     }
 
     //

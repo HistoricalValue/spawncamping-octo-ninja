@@ -24,9 +24,9 @@ import java.util.*;
 /** Represents a context-sensitive call graph for querying by client analyses.
  * @author Ondrej Lhotak
  */
-public interface ContextSensitiveCallGraph 
-{ 
-    /** Returns all MethodOrMethodContext's (context,method pairs) that are 
+public interface ContextSensitiveCallGraph
+{
+    /** Returns all MethodOrMethodContext's (context,method pairs) that are
      * the source of some edge.
      */
     public Iterator edgeSources();

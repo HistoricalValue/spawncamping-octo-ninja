@@ -52,7 +52,7 @@ public class BlockGraphConverter
 
             if(heads.size() == 0)
                 break ADDSTART;
-            
+
             if((heads.size() == 1) && (heads.get(0) instanceof DummyBlock))
                 break ADDSTART;
 
@@ -61,7 +61,7 @@ public class BlockGraphConverter
             head.makeHeadBlock(heads);
 
             graph.mHeads = new SingletonList(head);
-            
+
             {
                 Iterator blocksIt = blocks.iterator();
                 while(blocksIt.hasNext()){
@@ -69,7 +69,7 @@ public class BlockGraphConverter
                     block.setIndexInMethod(block.getIndexInMethod() + 1);
                 }
             }
-            
+
 	    List newBlocks = new ArrayList();
 	    newBlocks.add(head);
 	    newBlocks.addAll(blocks);
@@ -82,7 +82,7 @@ public class BlockGraphConverter
 
             if(tails.size() == 0)
                 break ADDSTOP;
-            
+
             if((tails.size() == 1) && (tails.get(0) instanceof DummyBlock))
                 break ADDSTOP;
 
@@ -129,7 +129,7 @@ public class BlockGraphConverter
     public static void main(String[] args)
     {
         // assumes 2 args:  Class + Method
-        
+
         Scene.v().loadClassAndSupport(args[0]);
         SootClass sc = Scene.v().getSootClass(args[0]);
         SootMethod sm = sc.getMethod(args[1]);
@@ -141,7 +141,7 @@ public class BlockGraphConverter
         BlockGraphConverter.reverse(cfg);
         System.out.println(cfg);
     }
-    
+
 }
 
 /**
@@ -171,7 +171,7 @@ class DummyBlock extends Block
             List oldPreds = oldHead.getPreds();
             if(oldPreds != null)
                 newPreds.addAll(oldPreds);
-            
+
             oldHead.setPreds(newPreds);
         }
     }
@@ -194,7 +194,7 @@ class DummyBlock extends Block
 
             oldTail.setSuccs(newSuccs);
         }
-    }    
+    }
 
     public Iterator iterator()
     {

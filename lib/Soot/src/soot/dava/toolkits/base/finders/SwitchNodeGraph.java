@@ -27,7 +27,7 @@ class SwitchNodeGraph implements DirectedGraph
     private LinkedList body;
 	private final LinkedList heads, tails;
     private final HashMap binding;
-    
+
 
     public SwitchNodeGraph( List body)
     {
@@ -46,7 +46,7 @@ class SwitchNodeGraph implements DirectedGraph
 	    binding.put( sn.get_AugStmt().bsuccs.get(0), sn);
 	    sn.reset();
 	}
-	
+
 	it = body.iterator();
 	while (it.hasNext())
 	    ((SwitchNode) it.next()).setup_Graph( binding);

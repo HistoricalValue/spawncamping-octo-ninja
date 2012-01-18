@@ -54,10 +54,10 @@ public class Translator extends PrettyPrinter implements Copy
     protected Context context;
     protected ClassType outerClass = null;
 
-    
+
     private static HashMap createdFiles = new HashMap();
     public static HashMap getFileNames() { return createdFiles; }
-    
+
     /**
      * Create a Translator.  The output of the visitor is a collection of files
      * whose names are added to the collection <code>outputFiles</code>.
@@ -79,10 +79,10 @@ public class Translator extends PrettyPrinter implements Copy
     /**
      * Return the job associated with this Translator.
      */
-    public Job job() { 
+    public Job job() {
         return job;
     }
-    
+
     /** Create a new <code>Translator</code> identical to <code>this</code> but
      * with new context <code>c</code> */
     public Translator context(Context c) {
@@ -93,7 +93,7 @@ public class Translator extends PrettyPrinter implements Copy
         tr.context = c;
         return tr;
     }
-    
+
     /** Copy the translator. */
     public Object copy() {
         try {
@@ -103,8 +103,8 @@ public class Translator extends PrettyPrinter implements Copy
             throw new InternalCompilerError("Java clone() weirdness.");
         }
     }
-    
-    
+
+
     /** Create a new <code>Translator</code> identical to <code>this</code>,
      * except: a) wrapped inside a HeaderTranslator object, and b) with
      * a new context <code>c</code>
@@ -114,8 +114,8 @@ public class Translator extends PrettyPrinter implements Copy
     public HeaderTranslator headerContext(Context c) {
       HeaderTranslator ht = new HeaderTranslator(this);
       ht.context = c;
-      return ht;      
-    } 
+      return ht;
+    }
 
     /** Set the outer class context of the translator.  This class is used when
      * translating "new" expressions for nested classes.  For the expression
@@ -147,10 +147,10 @@ public class Translator extends PrettyPrinter implements Copy
         return nf;
     }
 
-    public TargetFactory targetFactory() { 
+    public TargetFactory targetFactory() {
       return tf;
     }
-    
+
     /** Print an ast node using the given code writer.  This method should not
      * be called directly to translate a source file AST; use
      * <code>translate(Node)</code> instead.  This method should only be called
@@ -217,7 +217,7 @@ public class Translator extends PrettyPrinter implements Copy
 
         try {
             File of, headerFile;
-            Writer ofw, headerWriter = null;            
+            Writer ofw, headerWriter = null;
             CodeWriter w;
             CodeWriter wH = null;
 
@@ -248,12 +248,12 @@ public class Translator extends PrettyPrinter implements Copy
             createdFiles.put(of.getPath(), null);
 
             if(Options.global.cppBackend()) {
-              //if we're generating a c++ class, we need to also generate 
-              //the .h file              
+              //if we're generating a c++ class, we need to also generate
+              //the .h file
               headerFile = new File(tf.headerNameForFileName(of.getPath()));
               headerWriter = tf.outputWriter(headerFile);
               wH = new CodeWriter(headerWriter, outputWidth);
-              
+
               String className = null;
               if(!exports.isEmpty())
               {
@@ -264,9 +264,9 @@ public class Translator extends PrettyPrinter implements Copy
               {
             	String name;
             	name = sfn.source().name();
-            	className = name.substring(0, name.lastIndexOf('.'));                
+            	className = name.substring(0, name.lastIndexOf('.'));
               }
-              
+
               writeHFileHeader(sfn, className, wH);
             }
 
@@ -275,7 +275,7 @@ public class Translator extends PrettyPrinter implements Copy
             for (Iterator i = sfn.decls().iterator(); i.hasNext(); ) {
                 TopLevelDecl decl = (TopLevelDecl) i.next();
 
-                if (decl.flags().isPublic() && decl != first 
+                if (decl.flags().isPublic() && decl != first
                     && !(Options.global.cppBackend())) {
                     // We hit a new exported declaration, open a new file.
                     // But, first close the old file.
@@ -291,7 +291,7 @@ public class Translator extends PrettyPrinter implements Copy
                 }
 
                 decl.del().translate(w, this.context(c));
-                
+
                 if(Options.global.cppBackend())
                   decl.del().translate(wH, this.headerContext(c));
 
@@ -307,7 +307,7 @@ public class Translator extends PrettyPrinter implements Copy
               wH.flush();
               headerWriter.close();
             }
-            
+
             w.flush();
             ofw.close();
             return true;
@@ -318,9 +318,9 @@ public class Translator extends PrettyPrinter implements Copy
             return false;
         }
     }
-    
 
-    
+
+
     /**
      * "Escapes" an input string "s" so that it can be used as a macro.
      * Removes all '.' and ':' chars and substitutes in '_' instead.
@@ -330,7 +330,7 @@ public class Translator extends PrettyPrinter implements Copy
     public static String macroEscape(String s)
     {
       String out = "_";
-      
+
       for(int i = 0; i < s.length(); i++)
       {
         char c = s.charAt(i);
@@ -339,12 +339,12 @@ public class Translator extends PrettyPrinter implements Copy
         else
           out = out + c;
       }
-      
+
       return out;
     }
-    
+
     /**
-     * Turns a package or class name from Java "x.y.z" format 
+     * Turns a package or class name from Java "x.y.z" format
      * into a C-style scope ("x::y::z")
      * @param s the input package or class name
      * @return A c-scoped version of s
@@ -352,7 +352,7 @@ public class Translator extends PrettyPrinter implements Copy
     public static String cScope(String s)
     {
       String out = "";
-      
+
       for(int i = 0; i < s.length(); i++)
       {
         char c = s.charAt(i);
@@ -361,13 +361,13 @@ public class Translator extends PrettyPrinter implements Copy
         else
           out = out + c;
       }
-      
-      return out;      
-    }    
-    
 
-    
-    /** 
+      return out;
+    }
+
+
+
+    /**
      * Write the opening lines of the header file for a given class
      * @param sfn - representation of the source file we're compiling; used for Imports.
      * @param className - The name of the class we're describing
@@ -375,16 +375,16 @@ public class Translator extends PrettyPrinter implements Copy
      */
     protected void writeHFileHeader(SourceFile sfn, String className, CodeWriter w) {
       String pkg = null;
-      
+
       if(sfn.package_() != null)
       {
         Package p = sfn.package_().package_();
         pkg = p.fullName();
       }
-      
+
       if(pkg == null || pkg.equals(""))
         pkg = "jmatch_primary";
-      
+
       String macroName = "_" + macroEscape(pkg) + "_" + macroEscape(className) + "_H";
       w.write("#ifndef " + macroName);
       w.newline(0);
@@ -395,38 +395,38 @@ public class Translator extends PrettyPrinter implements Copy
         sfn.package_().del().translate(w, this);
       else
         w.write("namespace " + cScope(pkg) + " {");
-      w.newline(0);      
-      
+      w.newline(0);
+
       w.write("using namespace jmatch_primary;");
       w.newline(0);
       w.write("using namespace java::lang;");
       w.newline(0);
-      
+
       //now make any more imports.
       for(Iterator i = sfn.imports().iterator(); i.hasNext(); ) {
         Import imp = (Import)i.next();
         imp.del().translate(w, this);
         w.newline(0);
-      }      
+      }
     }
-    
+
     /**
      * Write the footer of the .h file if we're in C++ mode
      * @param w
      */
     protected void writeHFileFooter(SourceFile sfn, CodeWriter w) {
-     
-      
+
+
       int packageDepth = 0;
       int i;
       if(null != sfn.package_())
-      {          
+      {
         Package p = sfn.package_().package_();
         String pkgName = p.toString();
 
         if(pkgName.length() > 0)
           packageDepth++;
-        
+
         for(i = 0; i < pkgName.length(); i++)
           if(pkgName.charAt(i) == '.')
             packageDepth++;
@@ -438,8 +438,8 @@ public class Translator extends PrettyPrinter implements Copy
 
         w.newline(0);
         w.newline(0);
-      }        
-      
+      }
+
       if(packageDepth == 0)
       {
         w.newline(0);
@@ -447,13 +447,13 @@ public class Translator extends PrettyPrinter implements Copy
         w.newline(0);
         w.newline(0);
       }
-      
+
       w.write("#endif");
       w.newline(0);
       w.newline(0);
     }
 
-    /** 
+    /**
      * C++ files also require a footer terminal '}' because they
      * need to close the namespace they're opening.
      */
@@ -462,13 +462,13 @@ public class Translator extends PrettyPrinter implements Copy
         int packageDepth = 0;
         int i;
         if(null != sfn.package_())
-        {          
+        {
           Package p = sfn.package_().package_();
           String pkgName = p.toString();
 
           if(pkgName.length() > 0)
             packageDepth++;
-          
+
           for(i = 0; i < pkgName.length(); i++)
             if(pkgName.charAt(i) == '.')
               packageDepth++;
@@ -480,8 +480,8 @@ public class Translator extends PrettyPrinter implements Copy
 
           w.newline(0);
           w.newline(0);
-        }        
-        
+        }
+
         if(packageDepth == 0)
         {
           w.newline(0);
@@ -491,36 +491,36 @@ public class Translator extends PrettyPrinter implements Copy
         }
       }
     }
-    
+
     /** Write the package and import declarations for a source file. */
     protected void writeHeader(SourceFile sfn, CodeWriter w) {
       if(Options.global.cppBackend())
       {
         //package --> namespace and imports --> header includes
-        
+
         String pkg = "";
 
         if (sfn.package_() != null) {
             Package p = sfn.package_().package_();
             pkg = p.toString() + ".";
         }
-        
+
         int i = 0;
         int dots = 0;
         for(i = 0; i < pkg.length(); i++)
           if(pkg.charAt(i) == '.')
             dots++;
-        
+
         //start out with global project include
         w.write("#include\"");
         for(i = 0; i < dots; i++)
-          w.write("../");        
+          w.write("../");
         w.write("mainproj.h\"");
         w.newline(0);
-        
+
         //in C++, open the package (namespace), and then 'using' others:
         if(null != sfn.package_())
-        {          
+        {
 	        sfn.package_().del().translate(w, this);
 	        w.newline(0);
 	        w.newline(0);
@@ -531,23 +531,23 @@ public class Translator extends PrettyPrinter implements Copy
           w.newline(0);
           w.newline(0);
         }
-        
+
         //we always are using the global jmatch namespace
         w.write("using namespace jmatch_primary;");
         w.newline(0);
-        
+
         //and java.lang.*;
         w.write("using namespace java::lang;");
         w.newline(0);
-        
+
         //now make any more imports.
         for(Iterator it = sfn.imports().iterator(); it.hasNext(); ) {
           Import imp = (Import)it.next();
           imp.del().translate(w, this);
           w.newline(0);
         }
-        
-        
+
+
       }
       else
       {
@@ -559,15 +559,15 @@ public class Translator extends PrettyPrinter implements Copy
 		    w.newline(0);
 		    w.newline(0);
 		}
-	
+
 		boolean newline = false;
-	
+
 		for (Iterator i = sfn.imports().iterator(); i.hasNext(); ) {
 		    Import imp = (Import) i.next();
 		    imp.del().translate(w, this);
 		    newline = true;
 		}
-	
+
 		if (newline) {
 		    w.newline(0);
 		}

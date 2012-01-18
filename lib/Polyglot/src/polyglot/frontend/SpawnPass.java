@@ -1,5 +1,5 @@
 package polyglot.frontend;
- 
+
 import polyglot.ast.*;
 import polyglot.util.InternalCompilerError;
 
@@ -11,14 +11,14 @@ public class SpawnPass extends AbstractPass {
     Job job;
     Pass.ID begin;
     Pass.ID end;
-     
+
     public SpawnPass(Pass.ID id, Job job, Pass.ID begin, Pass.ID end) {
         super(id);
 	this.job = job;
 	this.begin = begin;
 	this.end = end;
     }
-       
+
     public boolean run() {
         if (job.ast() == null) {
             throw new InternalCompilerError("Null AST.");

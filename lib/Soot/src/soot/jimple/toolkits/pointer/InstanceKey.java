@@ -37,8 +37,8 @@ import soot.jimple.toolkits.pointer.LocalMustNotAliasAnalysis;
  * is guaranteed to represent a single runtime object within a
  * its declared method. If based on a (non-strong) {@link LocalMustAliasAnalysis},
  * it represents the value of a variable at a single location, which itself can
- * represent multiple runtime objects, if the location is contained in a loop. 
- * 
+ * represent multiple runtime objects, if the location is contained in a loop.
+ *
  * See Sable TR 2007-8 for details.
  *
  * @author Eric Bodden
@@ -73,7 +73,7 @@ public class InstanceKey {
         this.pts = new PointsToSetEqualsWrapper((EqualsSupportingPointsToSet) pta.reachingObjects(local));
         this.hashCode = computeHashCode();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -84,7 +84,7 @@ public class InstanceKey {
         }
         return lmaa.mustAlias(assignedLocal,stmtAfterAssignStmt,otherKey.assignedLocal,otherKey.stmtAfterAssignStmt);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -93,22 +93,22 @@ public class InstanceKey {
             if(lnma.notMayAlias(assignedLocal, stmtAfterAssignStmt, otherKey.assignedLocal, otherKey.stmtAfterAssignStmt)) {
             	return true;
             }
-        } 
+        }
         //different methods or local not-may-alias was not successful: get points-to info
         PointsToAnalysis pta = Scene.v().getPointsToAnalysis();
         if(pta==null) return false; //no info; hence don't know for sure
-        //may not alias if we have an empty intersection 
+        //may not alias if we have an empty intersection
         return !pts.hasNonEmptyIntersection(otherKey.pts);
     }
-    
+
     public PointsToSet getPointsToSet() {
         return pts;
     }
-    
+
     public Local getLocal() {
         return assignedLocal;
     }
-    
+
     public boolean haveLocalInformation() {
         return stmtAfterAssignStmt!=null;
     }
@@ -125,7 +125,7 @@ public class InstanceKey {
     public int hashCode() {
         return hashCode;
     }
-    
+
     /**
      * (Pre)computes the hash code.
      */
@@ -166,7 +166,7 @@ public class InstanceKey {
         //or if both have no statement set but the same local
         return (stmtAfterAssignStmt==null && other.stmtAfterAssignStmt==null && pts.equals(other.pts));
     }
-    
+
     public boolean isOfReferenceType() {
     	assert assignedLocal.getType() instanceof RefLikeType;
     	return true;

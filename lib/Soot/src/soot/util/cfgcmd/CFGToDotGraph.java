@@ -49,7 +49,7 @@ public class CFGToDotGraph {
   private DotGraphAttribute exceptionEdgeAttr;
   private DotGraphAttribute headAttr;
   private DotGraphAttribute tailAttr;
-    
+
   /**
    * <p>Returns a CFGToDotGraph converter which will draw the graph
    * as a single arbitrarily-sized page, with full-length node labels.</p>
@@ -92,7 +92,7 @@ public class CFGToDotGraph {
    * node labels contain only a numeric label for the block, while
    * unabbreviated labels contain the code of its instructions.
    *
-   * @param useBrief indicates whether to abbreviate the text of 
+   * @param useBrief indicates whether to abbreviate the text of
    * node labels.
    */
   public void setBriefLabels(boolean useBrief) {
@@ -180,7 +180,7 @@ public class CFGToDotGraph {
 
 
   /**
-   * Specify the dot graph attribute to use for tail nodes (in addition 
+   * Specify the dot graph attribute to use for tail nodes (in addition
    * to filling in the nodes).
    *
    * @param id The attribute name, for example "fillcolor".
@@ -206,7 +206,7 @@ public class CFGToDotGraph {
    *
    * @param comp The comparator for the ordering.
    *
-   * @return An iterator which presents the elements of <code>coll</code> 
+   * @return An iterator which presents the elements of <code>coll</code>
    * in the order specified by <code>comp</code>.
    */
   private static Iterator sortedIterator(Collection coll, Comparator comp) {
@@ -220,7 +220,7 @@ public class CFGToDotGraph {
   }
 
   /**
-   * Comparator used to order a list of nodes by the order in 
+   * Comparator used to order a list of nodes by the order in
    * which they were labeled.
    */
   private static class NodeComparator implements java.util.Comparator {
@@ -271,10 +271,10 @@ public class CFGToDotGraph {
 
 
   /**
-   * Create a <code>DotGraph</code> whose nodes and edges depict 
+   * Create a <code>DotGraph</code> whose nodes and edges depict
    * a control flow graph without distinguished
    * exceptional edges.
-   * 
+   *
    * @param graph a <code>DirectedGraph</code> representing a CFG
    *              (probably an instance of {@link UnitGraph}, {@link BlockGraph},
    *              or one of their subclasses).
@@ -310,21 +310,21 @@ public class CFGToDotGraph {
     }
     setStyle(graph.getHeads(), canvas, namer,
 	     DotGraphConstants.NODE_STYLE_FILLED, headAttr);
-    setStyle(graph.getTails(), canvas, namer, 
+    setStyle(graph.getTails(), canvas, namer,
 	     DotGraphConstants.NODE_STYLE_FILLED, tailAttr);
     if (! isBrief) {
       formatNodeText(body, canvas, namer);
     }
 
     return canvas;
-  } 
+  }
 
 
   /**
    * Create a <code>DotGraph</code> whose nodes and edges depict the
-   * control flow in a <code>ExceptionalGraph</code>, with 
+   * control flow in a <code>ExceptionalGraph</code>, with
    * distinguished edges for exceptional control flow.
-   * 
+   *
    * @param graph the control flow graph
    *
    * @return a visualization of <code>graph</code>.
@@ -347,16 +347,16 @@ public class CFGToDotGraph {
       canvas.drawNode(namer.getName(node));
 
       for (Iterator succsIt = sortedIterator(graph.getUnexceptionalSuccsOf(node),
-					     nodeComparator); 
+					     nodeComparator);
 	   succsIt.hasNext(); ) {
         Object succ = succsIt.next();
-        DotGraphEdge edge = canvas.drawEdge(namer.getName(node), 
+        DotGraphEdge edge = canvas.drawEdge(namer.getName(node),
 					    namer.getName(succ));
 	edge.setAttribute(unexceptionalControlFlowAttr);
       }
 
       for (Iterator succsIt = sortedIterator(graph.getExceptionalSuccsOf(node),
-					     nodeComparator); 
+					     nodeComparator);
 	   succsIt.hasNext(); ) {
 	Object succ = succsIt.next();
 	DotGraphEdge edge = canvas.drawEdge(namer.getName(node),
@@ -380,7 +380,7 @@ public class CFGToDotGraph {
 		  return "Esc";
 		}
 	      };
-	    DotGraphNode escapeNode = 
+	    DotGraphNode escapeNode =
 	      canvas.drawNode(namer.getName(handlerStart));
 	    escapeNode.setStyle(DotGraphConstants.NODE_STYLE_INVISIBLE);
 	  }
@@ -393,7 +393,7 @@ public class CFGToDotGraph {
     }
     setStyle(graph.getHeads(), canvas, namer,
 	     DotGraphConstants.NODE_STYLE_FILLED, headAttr);
-    setStyle(graph.getTails(), canvas, namer, 
+    setStyle(graph.getTails(), canvas, namer,
 	     DotGraphConstants.NODE_STYLE_FILLED, tailAttr);
     if (! isBrief) {
       formatNodeText(graph.getBody(), canvas, namer);
@@ -403,7 +403,7 @@ public class CFGToDotGraph {
 
 
   /**
-   * A utility method that initializes a DotGraph object for use in any 
+   * A utility method that initializes a DotGraph object for use in any
    * variety of drawCFG().
    *
    * @param body The <code>Body</code> that the graph will represent
@@ -416,7 +416,7 @@ public class CFGToDotGraph {
     String graphname = "cfg";
     if (body != null) {
       graphname = body.getMethod().getSubSignature();
-    } 
+    }
     DotGraph canvas = new DotGraph(graphname);
     canvas.setGraphLabel(graphname);
     if (!onePage) {
@@ -470,7 +470,7 @@ public class CFGToDotGraph {
 
 
   /**
-   * A utility method which formats the text for each node in 
+   * A utility method which formats the text for each node in
    * a <code>DotGraph</code> representing a CFG.
    *
    * @param body the <code>Body</code> whose control flow is visualized in
@@ -534,7 +534,7 @@ public class CFGToDotGraph {
   /**
    * Utility routine for setting some common formatting style for the
    * {@link DotGraphNode}s corresponding to some collection of objects.
-   * 
+   *
    * @param objects is the collection of {@link Object}s whose
    *        nodes are to be styled.
    * @param canvas the {@link DotGraph} containing nodes corresponding
@@ -545,7 +545,7 @@ public class CFGToDotGraph {
    * @param attrib if non-null, an additional attribute to associate
    *        with each of the nodes.
    */
-  private void setStyle(Collection objects, DotGraph canvas, 
+  private void setStyle(Collection objects, DotGraph canvas,
 			DotNamer namer, String style,
 			DotGraphAttribute attrib) {
     // Fill the entry and exit nodes.
@@ -558,7 +558,7 @@ public class CFGToDotGraph {
   }
 
   /**
-   * Utility routine to format the list of names in 
+   * Utility routine to format the list of names in
    * a ThrowableSet into a label for the edge showing where those
    * Throwables are handled.
    */

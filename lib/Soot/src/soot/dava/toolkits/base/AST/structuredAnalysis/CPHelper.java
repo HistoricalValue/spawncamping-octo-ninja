@@ -11,9 +11,9 @@ import soot.jimple.LongConstant;
 public class CPHelper {
 
 	/*
-	 * The helper class just checks the type of the 
+	 * The helper class just checks the type of the
 	 * data being sent and create a clone of it
-	 * 
+	 *
 	 *  If it is not a data of interest a null is send back
 	 */
 	public static Object wrapperClassCloner(Object value){
@@ -23,26 +23,26 @@ public class CPHelper {
 			return new Float(   ((Float)value).floatValue() ) ;
 		else if (value instanceof Long)
 			return new Long(   ((Long)value).longValue() ) ;
-		else if (value instanceof Boolean) 	
+		else if (value instanceof Boolean)
 			return new Boolean(   ((Boolean)value).booleanValue() ) ;
 		else if (value instanceof Integer)
 			return new Integer(   ((Integer)value).intValue() ) ;
 		else
 			return null;
 	}
-	
-	
-	
+
+
+
 	/*
 	 * isAConstantValue(Value toCheck)
 	 *    it will check whether toCheck is one of the interesting Constants IntConstant FloatConstant etc etc
 	 *    if yes return the Integer/Long/float/Double
-	 *    
+	 *
 	 *    Notice for integer the callee has to check whether what is required is a Boolean!!!!
-	 */	
+	 */
 	public static Object isAConstantValue(Value toCheck){
 		Object value=null;
-		
+
 		if(toCheck instanceof LongConstant){
 			value = new Long(((LongConstant)toCheck).value);
 		}
@@ -54,14 +54,14 @@ public class CPHelper {
 		}
 		else if(toCheck instanceof IntConstant){
 			int val = ((IntConstant)toCheck).value;
-			value = new Integer(val);			
+			value = new Integer(val);
 		}
 		return value;
 	}
 
-	
-	
-	
+
+
+
 	public static Value createConstant(Object toConvert){
 		if(toConvert instanceof Long){
 			return LongConstant.v( ((Long)toConvert).longValue() );
@@ -75,7 +75,7 @@ public class CPHelper {
 				return DIntConstant.v(1,BooleanType.v());
 			else
 				return DIntConstant.v(0,BooleanType.v());
-		}	
+		}
 		else if(toConvert instanceof Float){
 			return FloatConstant.v( ((Float)toConvert).floatValue());
 		}
@@ -86,6 +86,6 @@ public class CPHelper {
 			return null;
 	}
 
-	
-	
+
+
 }

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,27 +41,27 @@ public class BIncInst extends AbstractInst implements IncInst
     ValueBox defLocalBox;
     List useBoxes;
   Constant mConstant;
-  List mDefBoxes;  
+  List mDefBoxes;
 
     public BIncInst(Local local, Constant constant)
     {
       mConstant = constant;
-      
+
       localBox = new BafLocalBox(local);
-      
+
       useBoxes = new ArrayList();
       useBoxes.add(localBox);
       useBoxes = Collections.unmodifiableList(useBoxes);
 
       defLocalBox = new BafLocalBox(local);
-      
+
       //((LinkedBafLocalBox) defLocalBox).setOtherBox(localBox);
       //((LinkedBafLocalBox) localBox).setOtherBox(defLocalBox);
 
       mDefBoxes = new ArrayList();
       mDefBoxes.add(defLocalBox);
       mDefBoxes = Collections.unmodifiableList(mDefBoxes);
-      
+
     }
 
     public int getInCount()
@@ -69,7 +69,7 @@ public class BIncInst extends AbstractInst implements IncInst
         return 0;
     }
 
-    public Object clone() 
+    public Object clone()
     {
       return new  BIncInst( getLocal(), getConstant());
     }
@@ -78,7 +78,7 @@ public class BIncInst extends AbstractInst implements IncInst
   {
     return 0;
   }
-    
+
   public int getOutCount()
   {
     return 0;
@@ -88,16 +88,16 @@ public class BIncInst extends AbstractInst implements IncInst
     {
         return 0;
     }
-    
-   
 
-  
-  public Constant getConstant() 
+
+
+
+  public Constant getConstant()
   {
     return mConstant;
   }
-  
-  public void setConstant(Constant aConstant) 
+
+  public void setConstant(Constant aConstant)
   {
     mConstant = aConstant;
   }
@@ -111,33 +111,33 @@ public class BIncInst extends AbstractInst implements IncInst
         up.literal(" ");
         localBox.toString(up);
     }
-    
+
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseIncInst(this);
-    }   
- 
+    }
+
     public void setLocal(Local l)
     {
         localBox.setValue(l);
-    }   
-    
+    }
+
     public Local getLocal()
     {
         return (Local) localBox.getValue();
     }
 
-    public List getUseBoxes() 
+    public List getUseBoxes()
     {
         return useBoxes;
     }
-    
-    public List getDefBoxes() 
+
+    public List getDefBoxes()
     {
         return mDefBoxes;
     }
 
-  
+
   public String toString()
   {
     return "inc.i" + " " +getLocal() + " " + getConstant() ;
@@ -151,5 +151,5 @@ public class BIncInst extends AbstractInst implements IncInst
       up.constant( mConstant );
   }
 
-    
+
 }

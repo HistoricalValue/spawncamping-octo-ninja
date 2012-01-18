@@ -304,7 +304,7 @@ public class KeyChecker extends DataFlow
 
         List excepts;
         ProcedureDeclExt_c ext = null;
-        
+
         if (graph.exitNode() instanceof ProcedureDecl) {
             ProcedureDecl pd = (ProcedureDecl)graph.exitNode();
             CofferProcedureInstance pi = (CofferProcedureInstance)pd.procedureInstance();

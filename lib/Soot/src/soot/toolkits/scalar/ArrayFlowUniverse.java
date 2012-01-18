@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -28,7 +28,7 @@ package soot.toolkits.scalar;
 
 import java.util.*;
 
-/** 
+/**
  * Provides an implementation of a flow universe, wrapping arrays.
  */
 public class ArrayFlowUniverse<E> implements FlowUniverse<E> {

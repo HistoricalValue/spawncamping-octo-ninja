@@ -15,8 +15,8 @@ import soot.jimple.spark.sets.EqualsSupportingPointsToSet;
  * Then the test is repeated. Once context information is computed it is stored in this wrapper object so that it does not have to be computed again.
  * Objects of this type should only be compared to other {@link LazyContextSensitivePointsToSet} objects using the equals method.
  * Checking for non-empty intersection with points-to sets of other types should be possible but it is recommended to consistently use
- * {@link LazyContextSensitivePointsToSet} nevertheless. 
- * 
+ * {@link LazyContextSensitivePointsToSet} nevertheless.
+ *
  * @author Eric Bodden
  */
 public class LazyContextSensitivePointsToSet implements EqualsSupportingPointsToSet {
@@ -38,25 +38,25 @@ public class LazyContextSensitivePointsToSet implements EqualsSupportingPointsTo
 	}
 
 	public boolean hasNonEmptyIntersection(PointsToSet other) {
-		PointsToSet otherInner; 
+		PointsToSet otherInner;
 		if(other instanceof LazyContextSensitivePointsToSet)
 			otherInner = ((LazyContextSensitivePointsToSet)other).delegate;
 		else
 			otherInner = other;
-		
-		if(delegate.hasNonEmptyIntersection(otherInner)) {		
+
+		if(delegate.hasNonEmptyIntersection(otherInner)) {
 			if(other instanceof LazyContextSensitivePointsToSet) {
 				((LazyContextSensitivePointsToSet) other).computeContextSensitiveInfo();
 				otherInner = ((LazyContextSensitivePointsToSet)other).delegate;
-			} 
+			}
 			computeContextSensitiveInfo();
-			
+
 			return delegate.hasNonEmptyIntersection(otherInner);
 		} else {
 			return false;
 		}
 	}
-	
+
 	public void computeContextSensitiveInfo() {
 		if(!isContextSensitive) {
 			delegate = (EqualsSupportingPointsToSet) demandCSPointsTo.doReachingObjects(local);
@@ -64,7 +64,7 @@ public class LazyContextSensitivePointsToSet implements EqualsSupportingPointsTo
 		}
 	}
 
-	public boolean isEmpty() {		
+	public boolean isEmpty() {
 		return delegate.isEmpty();
 	}
 
@@ -88,9 +88,9 @@ public class LazyContextSensitivePointsToSet implements EqualsSupportingPointsTo
 	public int pointsToSetHashCode() {
 		return delegate.pointsToSetHashCode();
 	}
-	
+
 	public EqualsSupportingPointsToSet getDelegate() {
 		return delegate;
 	}
-	
+
 }

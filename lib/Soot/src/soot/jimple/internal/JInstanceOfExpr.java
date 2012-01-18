@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -53,17 +53,17 @@ public class JInstanceOfExpr extends AbstractInstanceOfExpr
 
 	Unit currentUnit = context.getCurrentUnit();
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}
     }
-    
 
-  
-    public Object clone() 
+
+
+    public Object clone()
     {
         return new JInstanceOfExpr(Jimple.cloneIfNecessary(getOp()), checkType);
     }
-    
+
 }

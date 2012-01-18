@@ -31,27 +31,27 @@ import soot.Unit;
 import soot.tagkit.LineNumberTag;
 
 public class LineNumberGenerator {
-  
+
   BafLineNumberer bln = new BafLineNumberer();
-  
+
   public static void main(String[] argv)
   {
     // if you do not want soot to output new class files, run with comman line option "-f n"
-    
+
     // if you want the source code line numbers for jimple statements, use this:
     PackManager.v().getPack("jtp").add(new Transform("jtp.lnprinter",new LineNumberGenerator().bln));
-    
+
     // if you want the source code line numbers for baf instructions, use this:
     PackManager.v().getPack("bb").add(new Transform("bb.lnprinter",new LineNumberGenerator().bln));
-    
+
     soot.Main.main(argv);
   }
-  
+
   class BafLineNumberer extends BodyTransformer {
     protected void internalTransform(Body b, String phaseName, Map options) {
-      
+
       System.out.println("Printing Line Numbers for: " + b.getMethod().getSignature());
-      
+
       PatchingChain units = b.getUnits(); // get the method code
       Iterator it = units.iterator();
       while (it.hasNext()) { // for each jimple statement or baf instruction
@@ -63,7 +63,7 @@ public class LineNumberGenerator {
           System.out.println(u + " has no Line Number");
         }
       }
-      
+
       System.out.println("\n");
     }
   }

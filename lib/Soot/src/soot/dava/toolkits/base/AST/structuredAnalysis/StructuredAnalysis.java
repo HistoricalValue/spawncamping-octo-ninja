@@ -27,12 +27,12 @@
  *     November 21st, 2005: Reasoning about correctness of implementation.
  *     November 22nd, 2005: Found bug in process_DoWhile while implementing ReachingCopies..
  *                          see method for details
- *     January 30th, 2006:  Found bug in handling of breaks inside the ASTTryNode while implementing 
+ *     January 30th, 2006:  Found bug in handling of breaks inside the ASTTryNode while implementing
  *                          MustMayinitialize...see ASTTryNode method for details
  *     January 30th, 2006:  Found bug in handling of switchNode while implementing MustMayInitialize
  *                          NEEDS THOROUGH TESTING!!!
  *
- */ 
+ */
 
 
 /**
@@ -123,8 +123,8 @@ public abstract class StructuredAnalysis{
      * Notice this has to be a DavaFlowSet or a set extending DavaFlowSet (hopefully constantpropagationFlowSET??)
      */
     public abstract DavaFlowSet emptyFlowSet();
-    
-    
+
+
     /**
      * Make a clone of the flowset
      * The implementor should know when they want a shallow or deep clone
@@ -199,7 +199,7 @@ public abstract class StructuredAnalysis{
 
 
 
-    /*     
+    /*
      * The parameter body contains the body to be analysed
      * It can be an ASTNode, a Stmt, an augmentedStmt or a list of ASTNodes
      * The input is any data that is gathered plus any info needed for making
@@ -310,7 +310,7 @@ public abstract class StructuredAnalysis{
 
     /**
      * This method is called from the specialized ASTNodes.
-     * The purpose was to deal with different ASTNodes with similar structure in one 
+     * The purpose was to deal with different ASTNodes with similar structure in one
      * go. The method will deal with retrieve the body of the ASTNode which are known
      * to have only one subBody
      */
@@ -349,7 +349,7 @@ public abstract class StructuredAnalysis{
      * This is to remove the tedious work of adding code to deal with abrupt control flow
      * from the programmer of the analysis.
      * The method invokes the processStatement method for all other statements
-     * 
+     *
      * A programmer can decide to override this method if they want to do something specific
      */
     public Object processAbruptStatements(Stmt s, DavaFlowSet input){
@@ -359,14 +359,14 @@ public abstract class StructuredAnalysis{
     	}
     	else if(s instanceof DAbruptStmt){
     	    DAbruptStmt abStmt = (DAbruptStmt)s;
-    	    
+
     	    //see if its a break or continue
     	    if(!(abStmt.is_Continue()|| abStmt.is_Break())){
     		//DAbruptStmt is of only two kinds
     		throw new RuntimeException("Found a DAbruptStmt which is neither break nor continue!!");
-    	    }		    
-    	    
-    	    
+    	    }
+
+
     	    DavaFlowSet temp = NOPATH;
     	    SETNodeLabel nodeLabel = abStmt.getLabel();
     	    //System.out.println("here");
@@ -375,7 +375,7 @@ public abstract class StructuredAnalysis{
     		if(abStmt.is_Continue())
     		    temp.addToContinueList(nodeLabel.toString(),input);
     		else if (abStmt.is_Break())
-    		    temp.addToBreakList(nodeLabel.toString(),input);		
+    		    temp.addToBreakList(nodeLabel.toString(),input);
     		else
     		    throw new RuntimeException("Found abruptstmt which is neither break nor continue");
     	    }
@@ -437,7 +437,7 @@ public abstract class StructuredAnalysis{
     	Iterator<Object> it = statements.iterator();
 
     	Object output = cloneFlowSet(input);//needed if there are no stmts
-		
+
     	while(it.hasNext()){
     		AugmentedStmt as = (AugmentedStmt)it.next();
     		Stmt s = as.get_Stmt();
@@ -448,7 +448,7 @@ public abstract class StructuredAnalysis{
     		output=process(s,output);
         	if(DEBUG_STATEMENTS){
         		System.out.println("After Processing statement "+s +output.toString());;
-        	 }		
+        	 }
     	}
     	return output;
     }
@@ -465,7 +465,7 @@ public abstract class StructuredAnalysis{
     //reasoned about this....seems right!!
     public Object processASTLabeledBlockNode(ASTLabeledBlockNode node,Object input){
 	Object output1 = processSingleSubBodyNode(node,input);
-	
+
 	//handle break
 	String label = getLabel(node);
 	return handleBreak(label,output1,node);
@@ -504,15 +504,15 @@ public abstract class StructuredAnalysis{
     	input = processCondition(node.get_Condition(),input);
 
     	Object output1 = processSingleSubBodyNode(node,input);
-	
+
     	//merge with input which tells if the cond did not evaluate to true
     	Object output2 = merge(input,output1);
 
     	//handle break
     	String label = getLabel(node);
-	
+
     	Object temp= handleBreak(label,output2,node);
-	
+
     	if(DEBUG_IF){
     		System.out.println("Exiting if node"+temp.toString());;
     	}
@@ -553,7 +553,7 @@ public abstract class StructuredAnalysis{
     	//notice we handle breaks only once since these are breaks to the same label or same node
     	String label = getLabel(node);
     	output1 = handleBreak(label,temp,node);
-    	
+
     	return output1;
     }
 
@@ -579,7 +579,7 @@ public abstract class StructuredAnalysis{
     public Object processASTWhileNode(ASTWhileNode node,Object input){
     	Object lastin=null;
     	Object initialInput = cloneFlowSet(input);
-    	
+
     	String label = getLabel(node);
     	Object output=null;
 
@@ -619,7 +619,7 @@ public abstract class StructuredAnalysis{
 
     public Object processASTDoWhileNode(ASTDoWhileNode node, Object input){
 	Object lastin=null,output=null;
-	Object initialInput = cloneFlowSet(input);	
+	Object initialInput = cloneFlowSet(input);
 	String label = getLabel(node);
 	if(DEBUG_WHILE)
 		System.out.println("Going into do-while: "+initialInput.toString());
@@ -714,13 +714,13 @@ public abstract class StructuredAnalysis{
     	//finished processing the init part of the for loop
     	Object initialInput = cloneFlowSet(input);
 
-    	input = processCondition(node.get_Condition(),input);	
+    	input = processCondition(node.get_Condition(),input);
     	Object lastin = null;
     	String label = getLabel(node);
     	Object output2=null;
     	do{
     	    lastin = cloneFlowSet(input);
-    	    
+
     	    //process body
     	    Object output1 = processSingleSubBodyNode(node,input);
 
@@ -728,7 +728,7 @@ public abstract class StructuredAnalysis{
     	    output1 = handleContinue(label,output1,node);
 
     	    //notice that we dont merge with the initial output1 from processing singleSubBody
-    	    //the handlecontinue function takes care of it 
+    	    //the handlecontinue function takes care of it
 
     	    //handle update
     	    output2 = cloneFlowSet(output1);//if there is nothing in update
@@ -746,10 +746,10 @@ public abstract class StructuredAnalysis{
     	    }
 
     	    //output2 is the final result
-    	    
+
     	    //merge this with the input
     	    input = merge(initialInput,output2);
-    	    input = processCondition(node.get_Condition(),input);	
+    	    input = processCondition(node.get_Condition(),input);
     	}while(isDifferent(lastin,input));
 
     	//handle break
@@ -785,14 +785,14 @@ public abstract class StructuredAnalysis{
 	Map<Object, List<Object>> index2BodyList = node.getIndex2BodyList();
 
 	Iterator<Object> it = indexList.iterator();
-	
+
 
 	input=processSwitchKey(node.get_Key(),input);
 	Object initialIn = cloneFlowSet(input);
 
 	Object out = null;
 	Object defaultOut = null;
-	
+
 	List<Object> toMergeBreaks = new ArrayList<Object>();
 
 	while (it.hasNext()) {//going through all the cases of the switch statement
@@ -803,10 +803,10 @@ public abstract class StructuredAnalysis{
 	    //Reported by Steffen Pingel 14th Jan 2006 on the soot mailing list
 	    if(body != null){
 		out=process(body,input);
-		
+
 		//	    System.out.println("Breaklist for this out is"+out.getBreakList());
 		toMergeBreaks.add(cloneFlowSet(out));
-		
+
 		if(currentIndex instanceof String){
 		    //this is the default
 		    defaultOut=out;
@@ -842,7 +842,7 @@ public abstract class StructuredAnalysis{
 
 	}
 	else
-	    output = initialIn; 
+	    output = initialIn;
 
 	//handle break
 	String label = getLabel(node);
@@ -850,10 +850,10 @@ public abstract class StructuredAnalysis{
 	//have to handleBreaks for all the different cases
 
 	List<Object> outList = new ArrayList<Object>();
-	
+
 	//handling breakLists of each of the toMergeBreaks
 	it = toMergeBreaks.iterator();
-	
+
 
 	while(it.hasNext()){
 	    outList.add(handleBreak(label,it.next(),node));
@@ -891,7 +891,7 @@ public abstract class StructuredAnalysis{
 
 
     public Object processASTTryNode(ASTTryNode node,Object input){
-    	
+
 		if(DEBUG_TRY)
 			System.out.println("TRY START is:"+input);
 
@@ -914,7 +914,7 @@ public abstract class StructuredAnalysis{
 
 	while (it.hasNext()) {
 	    ASTTryNode.container catchBody = (ASTTryNode.container)it.next();
-	    
+
 	    List body = (List)catchBody.o;
 	    //list of ASTNodes
 
@@ -923,29 +923,29 @@ public abstract class StructuredAnalysis{
 	    //System.out.println("TempResult going through body"+tempResult);
 	    catchOutput.add(tempResult);
 	}
-		
+
 	//handle breaks
 	String label = getLabel(node);
 
 
 
 	/*
-	 * 30th Jan 2005, 
+	 * 30th Jan 2005,
 	 * Found bug in handling out breaks
 	 * what was being done was that handleBreak was invoked using just handleBreak(label,tryBodyoutput,node)
 	 * Now what it does is that it looks for the breakList stored in the tryBodyOutput node
 	 * What might happen is that there might be some breaks in the catchOutput which would have gotten
 	 * stored in the breakList of the respective catchoutput
-	 * 
+	 *
 	 * The correct way to handle this is create a list of handledBreak objects (in the outList)
 	 * And then to merge them
 	 */
 	List<Object> outList = new ArrayList<Object>();
-	
+
 	//handle breaks out of tryBodyOutput
 	outList.add(handleBreak(label,tryBodyOutput,node));
 	//System.out.println("After handling break from tryBodyOutput"+outList.get(0));
-	
+
 	//handling breakLists of each of the catchOutputs
 	it = catchOutput.iterator();
 	while(it.hasNext()){
@@ -977,7 +977,7 @@ public abstract class StructuredAnalysis{
 	}
 	if(DEBUG_TRY)
 		System.out.println("TRY END RESULT is:"+out);
-	
+
 	return out;
     }
 
@@ -1012,7 +1012,7 @@ public abstract class StructuredAnalysis{
 	      System.out.println("obj1 is a davaflowset");
 	      else
 	      System.out.println("obj1 is NOT a davaflowset");
-	      
+
 	      if(obj2 instanceof DavaFlowSet)
 	      System.out.println("obj2 is a davaflowset");
 	      else
@@ -1024,8 +1024,8 @@ public abstract class StructuredAnalysis{
 
 	DavaFlowSet in1 = (DavaFlowSet)obj1;
 	DavaFlowSet in2 = (DavaFlowSet)obj2;
-	
-	DavaFlowSet out;  
+
+	DavaFlowSet out;
 	if(in1 == NOPATH && in2 != NOPATH){
 	    out = in2.clone();
 	    out.copyInternalDataFrom(in1);
@@ -1116,10 +1116,10 @@ public abstract class StructuredAnalysis{
     	//getting the implicit list now
     	if(node ==null)
     	    throw new RuntimeException("ASTNode sent to handleBreak was null");
-    	
+
     	List implicitSet = out.getImplicitlyBrokenSets(node);
     	//System.out.println("\n\nImplicit set is"+implicitSet);
-    	    
+
     	//invoke mergeExplicitAndImplicit
     	return mergeExplicitAndImplicit(label,out,explicitSet,implicitSet);
         }
@@ -1144,13 +1144,13 @@ public abstract class StructuredAnalysis{
 
 	//get the explicit list with this label from the continueList
 	List explicitSet = out.getContinueSet(label);
-	
+
 	//getting the implicit list now
 	if(node ==null)
 	    throw new RuntimeException("ASTNode sent to handleContinue was null");
-	
+
 	List implicitSet = out.getImplicitlyContinuedSets(node);
-	    
+
 	//invoke mergeExplicitAndImplicit
 	return mergeExplicitAndImplicit(label,out,explicitSet,implicitSet);
     }
@@ -1183,11 +1183,11 @@ public abstract class StructuredAnalysis{
 	else{
 	    //breakSet is a list of DavaFlowSets
 	    Iterator it = breakSet.iterator();
-	    
+
 	    //we know there is atleast one element
 	    //making sure we dont send NOPATH
 	    toReturn = it.next();
-	    
+
 	    while(it.hasNext()){
 		//merge this with toReturn
 		toReturn = merge(toReturn,it.next());
@@ -1232,12 +1232,12 @@ public abstract class StructuredAnalysis{
  	    throw new RuntimeException("isDifferent not implemented for other flowSet types");
      }
 
-    
+
     /*
      * The before set contains the before set of an ASTNode , a Stmt , and AugmentedStmt,
-     * Notice for instance for a for loop 
+     * Notice for instance for a for loop
      * we will get a before set before the loop and an after set after the loop
-     * 
+     *
      * we dont have info about before set before executing a particular stmt
      * that kind of info is available if you know which stmt u want e.g. the update stmt
      */
@@ -1248,18 +1248,18 @@ public abstract class StructuredAnalysis{
     public Object getAfterSet(Object afterThis){
     	return afterSets.get(afterThis);
     }
-    
-    
-	public void debug(String methodName, String debug){		
+
+
+	public void debug(String methodName, String debug){
 		if(DEBUG)
 			System.out.println("Class: StructuredAnalysis MethodName: "+ methodName+ "    DEBUG: "+debug);
 	}
 
-	
-	public void debug(String debug){		
+
+	public void debug(String debug){
 		if(DEBUG)
 			System.out.println("Class: StructuredAnalysis DEBUG: "+debug);
 	}
 
-    
+
 }

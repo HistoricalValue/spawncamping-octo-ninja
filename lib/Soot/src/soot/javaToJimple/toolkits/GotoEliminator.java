@@ -25,7 +25,7 @@ import java.util.*;
 
 public class GotoEliminator extends BodyTransformer {
     public GotoEliminator (Singletons.Global g) {}
-    public static GotoEliminator v() { 
+    public static GotoEliminator v() {
         return G.v().soot_javaToJimple_toolkits_GotoEliminator();
     }
 
@@ -37,11 +37,11 @@ public class GotoEliminator extends BodyTransformer {
          * the idea is to look for groups of statements of the form
          *      goto L0
          * L0:  goto L1
-         * 
+         *
          * and transform to
          *      goto L1
          */
-        
+
         Iterator it = b.getUnits().iterator();
         while (it.hasNext()){
             Stmt s = (Stmt)it.next();
@@ -53,7 +53,7 @@ public class GotoEliminator extends BodyTransformer {
                 target = ((GotoStmt)s).getTarget();
             }
             else continue;
-            
+
         }
     }
 

@@ -1,8 +1,8 @@
 package java_cup;
 
-/** This class represents a transition in an LALR viable prefix recognition 
+/** This class represents a transition in an LALR viable prefix recognition
  *  machine.  Transitions can be under terminals for non-terminals.  They are
- *  internally linked together into singly linked lists containing all the 
+ *  internally linked together into singly linked lists containing all the
  *  transitions out of a single state via the _next field.
  *
  * @see     java_cup.lalr_state
@@ -38,7 +38,7 @@ public class lalr_transition {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Constructor with null next. 
+  /** Constructor with null next.
    * @param on_sym  symbol we are transitioning on.
    * @param to_st   state we transition to.
    */

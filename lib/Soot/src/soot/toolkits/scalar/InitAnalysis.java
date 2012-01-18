@@ -1,7 +1,7 @@
 /* Soot - a J*va Optimization Framework
  * Copyright (C) 2004 Ganesh Sittampalam
  * Copyright (C) 2007 Eric Bodden
- * 
+ *
  * This compiler is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -32,7 +32,7 @@ import soot.util.Chain;
 
 /**
  * An analysis to check whether or not local variables have been initialised.
- * 
+ *
  * @author Ganesh Sittampalam
  * @author Eric Bodden
  */

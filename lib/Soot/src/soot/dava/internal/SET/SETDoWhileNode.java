@@ -50,8 +50,8 @@ public class SETDoWhileNode extends SETCycleNode
 
     public ASTNode emit_AST()
     {
-	return new ASTDoWhileNode( get_Label(), 
-				   (ConditionExpr) ((IfStmt) get_CharacterizingStmt().get_Stmt()).getCondition(), 
+	return new ASTDoWhileNode( get_Label(),
+				   (ConditionExpr) ((IfStmt) get_CharacterizingStmt().get_Stmt()).getCondition(),
 				   emit_ASTBody( body2childChain.get( subBodies.get(0))));
     }
 

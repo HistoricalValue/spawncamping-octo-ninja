@@ -26,7 +26,7 @@ public class CallLocalityContext
 			isNodeLocal.add(i, Boolean.FALSE);
 		}
 	}
-	
+
 	public void setFieldLocal(EquivalentValue fieldRef)
 	{
 		List ret = new ArrayList();
@@ -44,7 +44,7 @@ public class CallLocalityContext
 //		throw new RuntimeException("Field " + fieldRef + " is not present in CallLocalityContext\n" + toString());
 //		return false;
 	}
-	
+
 	public void setFieldShared(EquivalentValue fieldRef)
 	{
 		List ret = new ArrayList();
@@ -62,7 +62,7 @@ public class CallLocalityContext
 //		throw new RuntimeException("Field " + fieldRef + " is not present in CallLocalityContext\n" + toString());
 //		return false;
 	}
-	
+
 	public void setAllFieldsLocal()
 	{
 		for(int i = 0; i < nodes.size(); i++)
@@ -88,7 +88,7 @@ public class CallLocalityContext
 			}
 		}
 	}
-	
+
 	public void setParamLocal(int index)
 	{
 		for(int i = 0; i < nodes.size(); i++)
@@ -105,7 +105,7 @@ public class CallLocalityContext
 			}
 		}
 	}
-	
+
 	public void setParamShared(int index)
 	{
 		for(int i = 0; i < nodes.size(); i++)
@@ -122,7 +122,7 @@ public class CallLocalityContext
 			}
 		}
 	}
-	
+
 	public void setAllParamsLocal()
 	{
 		for(int i = 0; i < nodes.size(); i++)
@@ -139,7 +139,7 @@ public class CallLocalityContext
 			}
 		}
 	}
-	
+
 	public void setAllParamsShared()
 	{
 		for(int i = 0; i < nodes.size(); i++)
@@ -156,7 +156,7 @@ public class CallLocalityContext
 			}
 		}
 	}
-	
+
 	public void setThisLocal()
 	{
 		for(int i = 0; i < nodes.size(); i++)
@@ -169,7 +169,7 @@ public class CallLocalityContext
 			}
 		}
 	}
-	
+
 	public void setThisShared()
 	{
 		for(int i = 0; i < nodes.size(); i++)
@@ -182,17 +182,17 @@ public class CallLocalityContext
 			}
 		}
 	}
-	
+
 	public void setReturnLocal()
 	{
 		setParamLocal(-1);
 	}
-	
+
 	public void setReturnShared()
 	{
 		setParamShared(-1);
 	}
-	
+
 	public List<Object> getLocalRefs()
 	{
 		List<Object> ret = new ArrayList<Object>();
@@ -203,7 +203,7 @@ public class CallLocalityContext
 		}
 		return ret;
 	}
-	
+
 	public List<Object> getSharedRefs()
 	{
 		List<Object> ret = new ArrayList<Object>();
@@ -214,7 +214,7 @@ public class CallLocalityContext
 		}
 		return ret;
 	}
-	
+
 	public boolean isFieldLocal(EquivalentValue fieldRef)
 	{
 		List ret = new ArrayList();
@@ -227,7 +227,7 @@ public class CallLocalityContext
 //		throw new RuntimeException("Field " + fieldRef + " is not present in CallLocalityContext\n" + toString());
 //		return false;
 	}
-	
+
 	public boolean containsField(EquivalentValue fieldRef)
 	{
 		List ret = new ArrayList();
@@ -238,7 +238,7 @@ public class CallLocalityContext
 		}
 		return false;
 	}
-	
+
 	// merges two contexts into one... shared fields in either context are shared in the merged context
 	// return true if merge causes this context to change
 	public boolean merge(CallLocalityContext other)
@@ -263,7 +263,7 @@ public class CallLocalityContext
 		}
 		return isChanged;
 	}
-	
+
 	public boolean equals(Object o)
 	{
 		if(o instanceof CallLocalityContext)
@@ -273,12 +273,12 @@ public class CallLocalityContext
 		}
 		return false;
 	}
-	
+
 	public int hashCode()
 	{
 		return isNodeLocal.hashCode();
 	}
-	
+
 	public boolean isAllShared(boolean refsOnly)
 	{
 		for(int i = 0; i < nodes.size(); i++)
@@ -294,7 +294,7 @@ public class CallLocalityContext
 		}
 		return true;
 	}
-	
+
 	public String toString()
 	{
 		String fieldrefs = "";
@@ -319,7 +319,7 @@ public class CallLocalityContext
 		}
 		return "Call Locality Context: \n" + fieldrefs + paramrefs + thisref + staticrefs;
 	}
-	
+
 	public String toShortString()
 	{
 		String ret = "[";

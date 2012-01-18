@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,13 +41,13 @@ import java.util.*;
 public interface LocalUses
 {
     /**
-     *   Returns a list of the Units that use the Local that is 
-     *   defined by a given Unit. 
-     *   
+     *   Returns a list of the Units that use the Local that is
+     *   defined by a given Unit.
+     *
      *   @param s  the unit we wish to query for the use of the Local
      *             it defines.
      *   @return  a list of the Local's uses.
-     */    
+     */
     public List getUsesOf(Unit s);
 }
 

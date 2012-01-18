@@ -5,49 +5,49 @@ import java.util.Stack;
 import java.util.Enumeration;
 import java.util.Date;
 
-/** 
+/**
  * This class handles emitting generated code for the resulting parser.
- * The various parse tables must be constructed, etc. before calling any 
- * routines in this class.<p>  
+ * The various parse tables must be constructed, etc. before calling any
+ * routines in this class.<p>
  *
  * Three classes are produced by this code:
  *   <dl>
  *   <dt> symbol constant class
- *   <dd>   this contains constant declarations for each terminal (and 
+ *   <dd>   this contains constant declarations for each terminal (and
  *          optionally each non-terminal).
  *   <dt> action class
- *   <dd>   this non-public class contains code to invoke all the user actions 
+ *   <dd>   this non-public class contains code to invoke all the user actions
  *          that were embedded in the parser specification.
  *   <dt> parser class
- *   <dd>   the specialized parser class consisting primarily of some user 
+ *   <dd>   the specialized parser class consisting primarily of some user
  *          supplied general and initialization code, and the parse tables.
  *   </dl><p>
  *
  *  Three parse tables are created as part of the parser class:
  *    <dl>
  *    <dt> production table
- *    <dd>   lists the LHS non terminal number, and the length of the RHS of 
+ *    <dd>   lists the LHS non terminal number, and the length of the RHS of
  *           each production.
  *    <dt> action table
  *    <dd>   for each state of the parse machine, gives the action to be taken
  *           (shift, reduce, or error) under each lookahead symbol.<br>
  *    <dt> reduce-goto table
- *    <dd>   when a reduce on a given production is taken, the parse stack is 
- *           popped back a number of elements corresponding to the RHS of the 
- *           production.  This reveals a prior state, which we transition out 
+ *    <dd>   when a reduce on a given production is taken, the parse stack is
+ *           popped back a number of elements corresponding to the RHS of the
+ *           production.  This reveals a prior state, which we transition out
  *           of under the LHS non terminal symbol for the production (as if we
- *           had seen the LHS symbol rather than all the symbols matching the 
- *           RHS).  This table is indexed by non terminal numbers and indicates 
- *           how to make these transitions. 
+ *           had seen the LHS symbol rather than all the symbols matching the
+ *           RHS).  This table is indexed by non terminal numbers and indicates
+ *           how to make these transitions.
  *    </dl><p>
- * 
- * In addition to the method interface, this class maintains a series of 
- * public global variables and flags indicating how misc. parts of the code 
- * and other output is to be produced, and counting things such as number of 
- * conflicts detected (see the source code and public variables below for
- * more details).<p> 
  *
- * This class is "static" (contains only static data and methods).<p> 
+ * In addition to the method interface, this class maintains a series of
+ * public global variables and flags indicating how misc. parts of the code
+ * and other output is to be produced, and counting things such as number of
+ * conflicts detected (see the source code and public variables below for
+ * more details).<p>
+ *
+ * This class is "static" (contains only static data and methods).<p>
  *
  * @see java_cup.main
  * @version last update: 11/25/95
@@ -55,12 +55,12 @@ import java.util.Date;
  */
 
 /* Major externally callable routines here include:
-     symbols               - emit the symbol constant class 
+     symbols               - emit the symbol constant class
      parser                - emit the parser class
 
    In addition the following major internal routines are provided:
      emit_package          - emit a package declaration
-     emit_action_code      - emit the class containing the user's actions 
+     emit_action_code      - emit the class containing the user's actions
      emit_production_table - emit declaration and init for the production table
      do_action_table       - emit declaration and init for the action table
      do_reduce_table       - emit declaration and init for the reduce-goto table
@@ -70,22 +70,22 @@ import java.util.Date;
    as well as to report counts of various things (such as number of conflicts
    detected).  These include:
 
-   prefix                  - a prefix string used to prefix names that would 
+   prefix                  - a prefix string used to prefix names that would
 			     otherwise "pollute" someone else's name space.
-   package_name            - name of the package emitted code is placed in 
+   package_name            - name of the package emitted code is placed in
 			     (or null for an unnamed package.
    symbol_const_class_name - name of the class containing symbol constants.
    parser_class_name       - name of the class for the resulting parser.
-   action_code             - user supplied declarations and other code to be 
+   action_code             - user supplied declarations and other code to be
 			     placed in action class.
-   parser_code             - user supplied declarations and other code to be 
+   parser_code             - user supplied declarations and other code to be
 			     placed in parser class.
-   init_code               - user supplied code to be executed as the parser 
+   init_code               - user supplied code to be executed as the parser
 			     is being initialized.
    scan_code               - user supplied code to get the next Symbol.
    start_production        - the start production for the grammar.
    import_list             - list of imports for use with action class.
-   num_conflicts           - number of conflicts detected. 
+   num_conflicts           - number of conflicts detected.
    nowarn                  - true if we are not to issue warning messages.
    not_reduced             - count of number of productions that never reduce.
    unused_term             - count of unused terminal symbols.
@@ -223,7 +223,7 @@ public class emit {
   /*--- General Methods ---------------------------------------*/
   /*-----------------------------------------------------------*/
 
-  /** Build a string with the standard prefix. 
+  /** Build a string with the standard prefix.
    * @param str string to prefix.
    */
   protected static String pre(String str) {
@@ -232,7 +232,7 @@ public class emit {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Emit a package spec if the user wants one. 
+  /** Emit a package spec if the user wants one.
    * @param out stream to produce output on.
    */
   protected static void emit_package(PrintWriter out)
@@ -246,12 +246,12 @@ public class emit {
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** Emit code for the symbol constant class, optionally including non terms,
-   *  if they have been requested.  
+   *  if they have been requested.
    * @param out            stream to produce output on.
    * @param emit_non_terms do we emit constants for non terminals?
    * @param sym_interface  should we emit an interface, rather than a class?
    */
-  public static void symbols(PrintWriter out, 
+  public static void symbols(PrintWriter out,
 			     boolean emit_non_terms, boolean sym_interface)
     {
       terminal term;
@@ -262,18 +262,18 @@ public class emit {
 
       /* top of file */
       out.println();
-      out.println("//----------------------------------------------------"); 
-      out.println("// The following code was generated by " + 
+      out.println("//----------------------------------------------------");
+      out.println("// The following code was generated by " +
 							   version.title_str);
       out.println("// " + new Date());
-      out.println("//----------------------------------------------------"); 
+      out.println("//----------------------------------------------------");
       out.println();
       emit_package(out);
 
       /* class header */
-      out.println("/** CUP generated " + class_or_interface + 
+      out.println("/** CUP generated " + class_or_interface +
 		  " containing symbol constants. */");
-      out.println("public " + class_or_interface + " " + 
+      out.println("public " + class_or_interface + " " +
 		  symbol_const_class_name + " {");
 
       out.println("  /* terminals */");
@@ -284,7 +284,7 @@ public class emit {
 	  term = (terminal)e.nextElement();
 
 	  /* output a constant decl for the terminal */
-	  out.println("  public static final int " + term.name() + " = " + 
+	  out.println("  public static final int " + term.name() + " = " +
 		      term.index() + ";");
 	}
 
@@ -298,9 +298,9 @@ public class emit {
           for (Enumeration e = non_terminal.all(); e.hasMoreElements(); )
 	    {
 	      nt = (non_terminal)e.nextElement();
-    
+
 	      /* output a constant decl for the terminal */
-	      out.println("  static final int " + nt.name() + " = " + 
+	      out.println("  static final int " + nt.name() + " = " +
 		          nt.index() + ";");
 	    }
 	}
@@ -314,7 +314,7 @@ public class emit {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Emit code for the non-public class holding the actual action code. 
+  /** Emit code for the non-public class holding the actual action code.
    * @param out           stream to produce output on.
    * @param start_prod    the start production of the grammar.
    * @param max_actions   max number of actions per method in generated code
@@ -331,7 +331,7 @@ public class emit {
       out.println();
       out.println(
        "/** Cup generated class to encapsulate user supplied action code.*/"
-      );  
+      );
       out.println("class " +  pre("actions") + " {");
 
       /* user supplied code */
@@ -393,7 +393,7 @@ public class emit {
       /* action method head */
       out.println();
       out.println("  /** Method with the actual generated action code. */");
-      out.println("  public final java_cup.runtime.Symbol " + 
+      out.println("  public final java_cup.runtime.Symbol " +
 		     pre("do_action" + suffix) + "(");
       out.println("    int                        " + pre("act_num,"));
       out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
@@ -468,7 +468,7 @@ public class emit {
 
           /* case label */
           out.println("          /*. . . . . . . . . . . . . . . . . . . .*/");
-          out.println("          case " + prod.index() + ": // " + 
+          out.println("          case " + prod.index() + ": // " +
                                           prod.to_simple_string());
 
           emit_production_block(out, prod, start_prod);
@@ -537,36 +537,36 @@ public class emit {
           !prod.action().equals(""))
         out.println(prod.action().code_string());
 
-      /* here we have the left and right values being propagated.  
+      /* here we have the left and right values being propagated.
             must make this a command line option.
           frankf 6/18/96 */
 
       /* Create the code that assigns the left and right values of
         the new Symbol that the production is reducing to */
-      if (emit.lr_values()) {	    
+      if (emit.lr_values()) {
         int loffset;
         String leftstring, rightstring;
         int roffset = 0;
-        rightstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + ".elementAt(" + 
-          emit.pre("top") + "-" + roffset + ")).right";	  
-        if (prod.rhs_length() == 0) 
+        rightstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + ".elementAt(" +
+          emit.pre("top") + "-" + roffset + ")).right";
+        if (prod.rhs_length() == 0)
           leftstring = rightstring;
         else {
           loffset = prod.rhs_length() - 1;
-          leftstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + ".elementAt(" + 
-            emit.pre("top") + "-" + loffset + ")).left";	  
+          leftstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + ".elementAt(" +
+            emit.pre("top") + "-" + loffset + ")).left";
         }
-        out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" + 
+        out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" +
                     prod.lhs().the_symbol().index() + "/*" +
-                    prod.lhs().the_symbol().name() + "*/" + 
+                    prod.lhs().the_symbol().name() + "*/" +
                     ", " + leftstring + ", " + rightstring + ", RESULT);");
       } else {
-        out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" + 
+        out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" +
                     prod.lhs().the_symbol().index() + "/*" +
-                    prod.lhs().the_symbol().name() + "*/" + 
+                    prod.lhs().the_symbol().name() + "*/" +
                     ", RESULT);");
       }
-      
+
       /* end of their block */
       out.println("            }");
 
@@ -584,7 +584,7 @@ public class emit {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Emit the production table. 
+  /** Emit the production table.
    * @param out stream to produce output on.
    */
   protected static void emit_production_table(PrintWriter out)
@@ -622,7 +622,7 @@ public class emit {
       /* do the public accessor method */
       out.println();
       out.println("  /** Access to production table. */");
-      out.println("  public short[][] production_table() " + 
+      out.println("  public short[][] production_table() " +
 						 "{return _production_table;}");
 
       production_table_time = System.currentTimeMillis() - start_time;
@@ -630,14 +630,14 @@ public class emit {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Emit the action table. 
+  /** Emit the action table.
    * @param out             stream to produce output on.
    * @param act_tab         the internal representation of the action table.
    * @param compact_reduces do we use the most frequent reduce as default?
    * @param max_actions     max number of actions per method in generated code
    */
   protected static void do_action_table(
-    PrintWriter        out, 
+    PrintWriter        out,
     parse_action_table act_tab,
     boolean            compact_reduces,
     int                max_actions)
@@ -703,7 +703,7 @@ public class emit {
 		      }
 		  /* shouldn't be anything else */
 		  else
-		    throw new internal_error("Unrecognized action code " + 
+		    throw new internal_error("Unrecognized action code " +
 					     act.kind() + " found in parse table");
 		}
 	    }
@@ -723,7 +723,7 @@ public class emit {
       /* finish off the init of the table */
       out.println();
       out.println("  /** Parse-action table. */");
-      out.println("  protected static final short[][] _action_table = "); 
+      out.println("  protected static final short[][] _action_table = ");
       out.print  ("    unpackFromStrings(");
       do_table_as_string(out, action_table);
       out.println(");");
@@ -738,12 +738,12 @@ public class emit {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Emit the reduce-goto table. 
+  /** Emit the reduce-goto table.
    * @param out     stream to produce output on.
    * @param red_tab the internal representation of the reduce-goto table.
    */
   protected static void do_reduce_table(
-    PrintWriter out, 
+    PrintWriter out,
     parse_reduce_table red_tab)
     {
       lalr_state       goto_st;
@@ -785,7 +785,7 @@ public class emit {
       /* emit the table. */
       out.println();
       out.println("  /** <code>reduce_goto</code> table. */");
-      out.println("  protected static final short[][] _reduce_table = "); 
+      out.println("  protected static final short[][] _reduce_table = ");
       out.print  ("    unpackFromStrings(");
       do_table_as_string(out, reduce_goto_table);
       out.println(");");
@@ -858,7 +858,7 @@ public class emit {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Emit the parser subclass with embedded tables. 
+  /** Emit the parser subclass with embedded tables.
    * @param out             stream to produce output on.
    * @param action_table    internal representation of the action table.
    * @param reduce_table    internal representation of the reduce-goto table.
@@ -869,7 +869,7 @@ public class emit {
    * @param suppress_scanner should scanner be suppressed for compatibility?
    */
   public static void parser(
-    PrintWriter        out, 
+    PrintWriter        out,
     parse_action_table action_table,
     parse_reduce_table reduce_table,
     int                start_st,
@@ -883,11 +883,11 @@ public class emit {
 
       /* top of file */
       out.println();
-      out.println("//----------------------------------------------------"); 
-      out.println("// The following code was generated by " + 
+      out.println("//----------------------------------------------------");
+      out.println("// The following code was generated by " +
 							version.title_str);
       out.println("// " + new Date());
-      out.println("//----------------------------------------------------"); 
+      out.println("//----------------------------------------------------");
       out.println();
       emit_package(out);
 
@@ -906,7 +906,7 @@ public class emit {
       else out.println(extendsimpls);
 
       /* constructors [CSA/davidm, 24-jul-99] */
-	
+
       out.println("{");
       if (extendsimpls.equals("")) {
         out.println("  /** Default constructor. */");
@@ -914,7 +914,7 @@ public class emit {
 	if (!suppress_scanner) {
 	    out.println();
 	    out.println("  /** Constructor which sets the default scanner. */");
-	    out.println("  public " + parser_class_name + 
+	    out.println("  public " + parser_class_name +
 			"(java_cup.runtime.Scanner s) {super(s);}");
 	}
       }
@@ -959,13 +959,13 @@ public class emit {
 
       /* method to indicate start production */
       out.println("  /** Indicates start production. */");
-      out.println("  public int start_production() {return " + 
+      out.println("  public int start_production() {return " +
 		     start_production.index() + ";}");
       out.println();
 
       /* methods to indicate EOF and error symbol indexes */
       out.println("  /** <code>EOF</code> Symbol index. */");
-      out.println("  public int EOF_sym() {return " + terminal.EOF.index() + 
+      out.println("  public int EOF_sym() {return " + terminal.EOF.index() +
 					  ";}");
       out.println();
       out.println("  /** <code>error</code> Symbol index. */");

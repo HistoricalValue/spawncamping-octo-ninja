@@ -8,7 +8,7 @@ import java.util.*;
 import polyglot.frontend.*;
 
 /**
- * ClassFile basically represents a Java classfile as it is found on 
+ * ClassFile basically represents a Java classfile as it is found on
  * disk.  The classfile is modeled according to the Java Virtual Machine
  * Specification.  Methods are provided to edit the classfile at a very
  * low level.
@@ -24,18 +24,18 @@ import polyglot.frontend.*;
 public class ClassFile implements LazyClassInitializer {
     protected Constant[] constants;       // The constant pool
     int modifiers;      // This class's modifer bit field
-    int thisClass;              
-    int superClass;             
-    int[] interfaces;           
+    int thisClass;
+    int superClass;
+    int[] interfaces;
     protected Field[] fields;
     protected Method[] methods;
     protected Attribute[] attrs;
     protected InnerClasses innerClasses;
     File classFileSource;
     private ExtensionInfo extensionInfo;
-    
+
     static Collection verbose = ClassFileLoader.verbose;
-  
+
     /**
      * Constructor.  This constructor parses the class file from the byte array
      *
@@ -83,8 +83,8 @@ public class ClassFile implements LazyClassInitializer {
     public Constant[] constants() {
         return constants;
     }
-   
-    public boolean fromClassFile() { 
+
+    public boolean fromClassFile() {
       return true;
     }
 
@@ -231,7 +231,7 @@ public class ClassFile implements LazyClassInitializer {
                         Report.report(3, "adding member " + t + " to " + ct);
 
                     ct.addMemberClass(t);
-                    
+
                     // HACK: set the access flags of the member class
                     // using the modifier bits of the InnerClass attribute.
                     if (t instanceof ParsedClassType) {
@@ -267,7 +267,7 @@ public class ClassFile implements LazyClassInitializer {
         // Add the "class" field.
         LazyClassInitializer init = ts.defaultClassInitializer();
         init.initFields(ct);
-  
+
         for (int i = 0; i < fields.length; i++) {
             if (! fields[i].name().startsWith("jlc$") &&
                 ! fields[i].isSynthetic()) {
@@ -433,8 +433,8 @@ public class ClassFile implements LazyClassInitializer {
 
         // Create the ClassType.
         ParsedClassType ct = ts.createClassType(this);
-                
-        
+
+
 
         ct.flags(ts.flagsForBits(modifiers));
         ct.position(position());
@@ -490,7 +490,7 @@ public class ClassFile implements LazyClassInitializer {
         ClassType.Kind kind = ClassType.TOP_LEVEL;
 
         if (innerName != null) {
-            // A nested class.  Parse the class name to determine what kind. 
+            // A nested class.  Parse the class name to determine what kind.
             StringTokenizer st = new StringTokenizer(className, "$");
 
             while (st.hasMoreTokens()) {
@@ -571,10 +571,10 @@ public class ClassFile implements LazyClassInitializer {
 	}
       }
     }
-    
-    throw new ClassFormatError("Couldn't find class name in file"); 
+
+    throw new ClassFormatError("Couldn't find class name in file");
   }
-  
+
   /**
    * Read a constant from the constant pool.
    *
@@ -590,8 +590,8 @@ public class ClassFile implements LazyClassInitializer {
   {
     int tag = in.readUnsignedByte();
     Object value;
-    
-    switch (tag) 
+
+    switch (tag)
       {
       case Constant.CLASS:
       case Constant.STRING:
@@ -626,10 +626,10 @@ public class ClassFile implements LazyClassInitializer {
       default:
 	throw new ClassFormatError("Invalid constant tag: " + tag);
       }
-    
+
     return new Constant(tag, value);
   }
-  
+
   /**
    * Read the class file header.
    *
@@ -642,15 +642,15 @@ public class ClassFile implements LazyClassInitializer {
        throws IOException
   {
     int magic = in.readInt();
-    
+
     if (magic != 0xCAFEBABE) {
       throw new ClassFormatError("Bad magic number.");
     }
-    
+
     int major = in.readUnsignedShort();
     int minor = in.readUnsignedShort();
   }
-  
+
   /**
    * Read the class's constant pool.  Constants in the constant pool
    * are modeled by an array of <tt>reflect.Constant</tt>/
@@ -667,16 +667,16 @@ public class ClassFile implements LazyClassInitializer {
        throws IOException
   {
     int count = in.readUnsignedShort();
-    
+
     constants = new Constant[count];
-    
+
     // The first constant is reserved for internal use by the JVM.
     constants[0] = null;
-    
+
     // Read the constants.
     for (int i = 1; i < count; i++) {
       constants[i] = readConstant(in);
-      
+
       switch (constants[i].tag()) {
 	case Constant.LONG:
 	case Constant.DOUBLE:
@@ -686,7 +686,7 @@ public class ClassFile implements LazyClassInitializer {
       }
     }
   }
-  
+
   /**
    * Read the class's access flags.
    *
@@ -700,7 +700,7 @@ public class ClassFile implements LazyClassInitializer {
   {
     modifiers = in.readUnsignedShort();
   }
-  
+
   /**
    * Read the class's name, superclass, and interfaces.
    *
@@ -713,19 +713,19 @@ public class ClassFile implements LazyClassInitializer {
        throws IOException
   {
     int index;
-    
+
     thisClass = in.readUnsignedShort();
     superClass = in.readUnsignedShort();
-    
+
     int numInterfaces = in.readUnsignedShort();
-    
+
     interfaces = new int[numInterfaces];
-    
+
     for (int i = 0; i < numInterfaces; i++) {
       interfaces[i] = in.readUnsignedShort();
     }
   }
-  
+
   /**
    * Read the class's fields.
    *
@@ -738,14 +738,14 @@ public class ClassFile implements LazyClassInitializer {
        throws IOException
   {
     int numFields = in.readUnsignedShort();
-    
+
     fields = new Field[numFields];
-    
+
     for (int i = 0; i < numFields; i++) {
       fields[i] = createField(in);
     }
   }
-  
+
   /**
    * Read the class's methods.
    *
@@ -758,14 +758,14 @@ public class ClassFile implements LazyClassInitializer {
        throws IOException
   {
     int numMethods = in.readUnsignedShort();
-    
+
     methods = new Method[numMethods];
-    
+
     for (int i = 0; i < numMethods; i++) {
       methods[i] = createMethod(in);
     }
   }
-  
+
   /**
    * Read the class's attributes.  Since none of the attributes
    * are required, just read the length of each attribute and
@@ -780,9 +780,9 @@ public class ClassFile implements LazyClassInitializer {
        throws IOException
   {
     int numAttributes = in.readUnsignedShort();
-    
+
     attrs = new Attribute[numAttributes];
-    
+
     for (int i = 0; i < numAttributes; i++) {
       int nameIndex = in.readUnsignedShort();
       int length = in.readInt();

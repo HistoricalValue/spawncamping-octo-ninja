@@ -9,8 +9,8 @@ import polyglot.ext.coffer.ast.*;
 
 import java.util.*;
 
-/** The Coffer extension of the <code>ProcedureDecl</code> node. 
- * 
+/** The Coffer extension of the <code>ProcedureDecl</code> node.
+ *
  *  @see polyglot.ast.ProcedureDecl
  */
 public class ProcedureDeclExt_c extends CofferExt_c {
@@ -19,16 +19,16 @@ public class ProcedureDeclExt_c extends CofferExt_c {
 
         CofferProcedureInstance pi =
             (CofferProcedureInstance) n.procedureInstance();
-            
+
         checkHeldKeys(held, pi.returnKeys(), n.position());
 
     }
-    public void checkHeldKeysThrowConstraint(ThrowConstraint tc, KeySet held, KeySet stored) 
+    public void checkHeldKeysThrowConstraint(ThrowConstraint tc, KeySet held, KeySet stored)
     throws SemanticException {
         checkHeldKeys(held, tc.keys(), tc.throwType().position());
-        
+
     }
-    
+
     private void checkHeldKeys(KeySet held, KeySet returnKeys, Position pos) throws SemanticException {
         if (! held.equals(returnKeys)) {
             KeySet too_much = held.removeAll(returnKeys);
@@ -52,6 +52,6 @@ public class ProcedureDeclExt_c extends CofferExt_c {
                                             " not held at return.",
                                             n.position());
                                             */
-        }        
+        }
     }
 }

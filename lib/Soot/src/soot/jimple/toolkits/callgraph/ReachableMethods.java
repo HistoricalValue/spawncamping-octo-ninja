@@ -28,7 +28,7 @@ import soot.util.queue.*;
  * @author Ondrej Lhotak
  */
 public class ReachableMethods
-{ 
+{
     private CallGraph cg;
     private Iterator<Edge> edgeSource;
     private final ChunkedQueue<MethodOrMethodContext> reachables = new ChunkedQueue<MethodOrMethodContext>();

@@ -42,14 +42,14 @@ import java.util.*;
 
 
 /**
- * CHANGE LOG:  2nd February 2006: 
+ * CHANGE LOG:  2nd February 2006:
  *
- */ 
+ */
 
 /*
  * Both static and non-static BUT FINAL fields if initialized with constants get inlined
  * A final initialized with an object (even if its a string) is NOT inlined
- *  e.g. 
+ *  e.g.
  *      public static final String temp = "hello";   //use of temp will get inlined
  *      public static final String temp1 = new String("hello");   //use of temp will NOT get inlined
  *
@@ -68,23 +68,23 @@ import java.util.*;
  * d, CAN BE USED in a switch             TICK
  * e, CAN BE USED in a stmt    TICK
  *
- * These are the exact places to look for constants...a constant is 
+ * These are the exact places to look for constants...a constant is
  * StringConstant
  * DoubleConstant
  * FloatConstant
  * IntConstant   (shortype, booltype, charType intType, byteType
  * LongConstant
- * 
+ *
  */
 
 
 public class DeInliningFinalFields extends DepthFirstAdapter{
     SootClass sootClass=null;
-    SootMethod sootMethod=null; 
-    DavaBody davaBody=null;  
+    SootMethod sootMethod=null;
+    DavaBody davaBody=null;
 
     HashMap<Comparable, SootField> finalFields;
-    
+
     //ASTParentNodeFinder parentFinder;
 
     public DeInliningFinalFields(){
@@ -107,17 +107,17 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
 	Chain appClasses = Scene.v().getApplicationClasses();
 	Iterator it = appClasses.iterator();
 	while(it.hasNext()){
-		SootClass tempClass = (SootClass)it.next(); 
+		SootClass tempClass = (SootClass)it.next();
 		//System.out.println("DeInlining"+tempClass.getName());
 		Chain tempChain = tempClass.getFields();
 		Iterator tempIt = tempChain.iterator();
 		while(tempIt.hasNext()){
 			fieldChain.add(tempIt.next());
 		}
-			
+
 	}
-	
-	
+
+
 //	Iterator fieldIt = sootClass.getFields().iterator();
 	Iterator fieldIt = fieldChain.iterator();
 	while(fieldIt.hasNext()){
@@ -149,7 +149,7 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
 		    else
 			finalFields.put(new Boolean(true),f);
 		}
-		else if ( (fieldType instanceof IntType || fieldType instanceof ByteType || fieldType instanceof ShortType) && 
+		else if ( (fieldType instanceof IntType || fieldType instanceof ByteType || fieldType instanceof ShortType) &&
 			  f.hasTag("IntegerConstantValueTag")){
 		    int val = ((IntegerConstantValueTag)f.getTag("IntegerConstantValueTag")).getIntValue();
 		    finalFields.put(new Integer(val),f);
@@ -200,12 +200,12 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
     	Object finalField = check(val);
     	if(finalField!=null){
     		//System.out.println("Final field with this value exists"+finalField);
-		
+
     		/*
     		 * If the final field belongs to the same class then we should supress declaring class
     		 */
     		SootField field = (SootField)finalField;
-    		
+
     		if(sootClass.declaresField(field.getName(),field.getType())){
     			//this field is of this class so supress the declaring class
     			if(valBox.canContainValue(new DStaticFieldRef(field.makeRef(),true))){
@@ -229,7 +229,7 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
 	Object finalField=null;
 	if(isConstant(val)){
 	    //System.out.println("Found constant in code"+val);
-	    
+
 	    //can be a byte or short or char......or an int ...in the case of int you also have to check for Booleans
 	    if(val instanceof StringConstant){
 		String myString = ((StringConstant)val).toString();
@@ -239,17 +239,17 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
 	    }
 	    else if(val instanceof DoubleConstant){
 		String myString = ((DoubleConstant)val).toString();
-		
+
 		finalField = finalFields.get(new Double(myString));
 	    }
 	    else if(val instanceof FloatConstant){
 		String myString = ((FloatConstant)val).toString();
-		
+
 		finalField = finalFields.get(new Float(myString));
-	    } 
+	    }
 	    else if(val instanceof LongConstant){
 		String myString = ((LongConstant)val).toString();
-		
+
 		finalField = finalFields.get(new Long(myString.substring(0,myString.length()-1)));
 	    }
 	    else if(val instanceof IntConstant){
@@ -257,7 +257,7 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
 		if(myString.length()==0)
 		    return null;
 
-		Type valType = ((IntConstant)val).getType();		
+		Type valType = ((IntConstant)val).getType();
 
 
 		Integer myInt=null;
@@ -288,7 +288,7 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
 		    else {
 			finalField = finalFields.get(myInt);
 		    }
-		} 
+		}
 		else if(valType instanceof ShortType){
 		    finalField = finalFields.get(myInt);
 		}
@@ -324,7 +324,7 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
 	    return;
 	}
 	//val is not a constant but it might have other constants in it
-	
+
 	Iterator it = val.getUseBoxes().iterator();
 	while(it.hasNext()){
 	    ValueBox tempBox = (ValueBox)it.next();
@@ -349,7 +349,7 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
     public void inASTStatementSequenceNode(ASTStatementSequenceNode node){
     	List<Object> statements = node.getStatements();
     	Iterator<Object> it = statements.iterator();
-	
+
     	while(it.hasNext()){
     		AugmentedStmt as = (AugmentedStmt)it.next();
     		Stmt s = as.get_Stmt();
@@ -389,7 +389,7 @@ public class DeInliningFinalFields extends DepthFirstAdapter{
 	ASTCondition cond = node.get_Condition();
 	checkConditionalUses(cond,node);
 
-	
+
 	//checking uses in update
 	List<Object> update = node.getUpdate();
 	it = update.iterator();

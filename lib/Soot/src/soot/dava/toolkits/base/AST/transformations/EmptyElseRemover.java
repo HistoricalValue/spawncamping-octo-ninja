@@ -143,10 +143,10 @@ public class EmptyElseRemover{
     public static List<Object> createNewNodeBody(List<Object> oldSubBody,int nodeNumber,ASTIfElseNode ifElseNode){
 	//create a new SubBody
 	List<Object> newSubBody = new ArrayList<Object>();
-	
+
 	//this is an iterator of ASTNodes
 	Iterator<Object> it = oldSubBody.iterator();
-	
+
 	//copy to newSubBody all nodes until you get to nodeNumber
 	int index=0;
 	while(index!=nodeNumber ){
@@ -161,7 +161,7 @@ public class EmptyElseRemover{
 	//just to make sure check this
 	ASTNode toRemove = (ASTNode)it.next();
 	if(!(toRemove instanceof ASTIfElseNode)){
-	    //something is wrong 
+	    //something is wrong
 	    return null;
 	}
 	else{
@@ -173,7 +173,7 @@ public class EmptyElseRemover{
 		//something is wrong we cant remove a non empty elsebody
 		return null;
 	    }
-	    
+
 	    //so this is the ElseBody to remove
 
 	    //need to create an ASTIfNode from the ASTIfElseNode

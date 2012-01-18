@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -45,7 +45,7 @@ public class AnySubType extends RefLikeType
         }
         return base.getAnySubType();
     }
-    
+
     public String toString()
     {
         return "Any_subtype_of_"+base;
@@ -57,7 +57,7 @@ public class AnySubType extends RefLikeType
     }
 
     public Type getArrayElementType() {
-	throw new RuntimeException( "Attempt to get array base type of a non-array" );  
+	throw new RuntimeException( "Attempt to get array base type of a non-array" );
     }
     public RefType getBase() { return base; }
     public void setBase( RefType base ) { this.base = base; }

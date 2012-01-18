@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -38,35 +38,35 @@ import soot.toolkits.scalar.*;
  * Kawa, Scala and tools.jar.
  * The mean execution time improvement is around 10 times,
  * but for the longest methods (abc parser methods and havoc with
- * >9000 statements) the improvement is between 200 and 500 times.  
- * 
+ * >9000 statements) the improvement is between 200 and 500 times.
+ *
  * @author Ben Bellamy
  */
 public class TypeResolver
 {
 	private JimpleBody jb;
-	
+
 	private List<DefinitionStmt> assignments;
 	private HashMap<Local, List<DefinitionStmt>> depends;
-	
+
 	public TypeResolver(JimpleBody jb)
 	{
 		this.jb = jb;
-		
+
 		this.assignments = new LinkedList<DefinitionStmt>();
 		this.depends = new HashMap<Local, List<DefinitionStmt>>();
 		for ( Local v : this.jb.getLocals() )
 			this.addLocal(v);
 		this.initAssignments();
 	}
-	
+
 	private void initAssignments()
 	{
 		for ( Unit stmt : this.jb.getUnits() )
 			if ( stmt instanceof DefinitionStmt )
 				this.initAssignment((DefinitionStmt)stmt);
 	}
-	
+
 	private void initAssignment(DefinitionStmt ds)
 	{
 		Value lhs = ds.getLeftOp(), rhs = ds.getRightOp();
@@ -94,17 +94,17 @@ public class TypeResolver
 				this.addDepend((Local)((ArrayRef)rhs).getBase(), ds);
 		}
 	}
-	
+
 	private void addLocal(Local v)
 	{
 		this.depends.put(v, new LinkedList<DefinitionStmt>());
 	}
-	
+
 	private void addDepend(Local v, DefinitionStmt stmt)
 	{
 		this.depends.get(v).add(stmt);
 	}
-	
+
 	public void inferTypes()
 	{
 		AugEvalFunction ef = new AugEvalFunction(this.jb);
@@ -122,7 +122,7 @@ public class TypeResolver
 			tg = this.minCasts(sigma, bh, castCount);
 		}
 		this.insertCasts(tg, bh, false);
-		
+
 		for ( Local v : this.jb.getLocals() )
 		{
 			Type t = tg.get(v);
@@ -133,7 +133,7 @@ public class TypeResolver
 			}
 			v.setType(t);
 		}
-			
+
 		tg = this.typePromotion(tg);
 		if ( tg  == null )
 			// Use original soot algorithm for inserting casts
@@ -142,36 +142,36 @@ public class TypeResolver
 			for ( Local v : this.jb.getLocals() )
 				v.setType(tg.get(v));
 	}
-	
+
 	private class CastInsertionUseVisitor implements IUseVisitor
 	{
 		private JimpleBody jb;
 		private Typing tg;
 		private IHierarchy h;
-		
+
 		private boolean countOnly;
 		private int count;
-		
+
 		public CastInsertionUseVisitor(boolean countOnly, JimpleBody jb,
 			Typing tg, IHierarchy h)
 		{
 			this.jb = jb;
 			this.tg = tg;
 			this.h = h;
-			
+
 			this.countOnly = countOnly;
 			this.count = 0;
 		}
-		
+
 		public Value visit(Value op, Type useType, Stmt stmt)
 		{
 			Type t = AugEvalFunction.eval_(this.tg, op, stmt, this.jb);
-			
+
 			if ( this.h.ancestor(useType, t) )
 				return op;
-			
+
 			this.count++;
-			
+
 			if ( countOnly )
 				return op;
 			else
@@ -190,7 +190,7 @@ public class TypeResolver
 				}
 				else
 					vold = (Local)op;
-				
+
 				Local vnew = Jimple.v().newLocal("tmp", useType);
 				this.tg.set(vnew, useType);
 				this.jb.getLocals().add(vnew);
@@ -200,29 +200,29 @@ public class TypeResolver
 				return vnew;
 			}
 		}
-		
+
 		public int getCount() { return this.count; }
-		
+
 		public boolean finish() { return false; }
 	}
-	
+
 	private class TypePromotionUseVisitor implements IUseVisitor
 	{
 		private JimpleBody jb;
 		private Typing tg;
-		
+
 		public boolean fail;
 		public boolean typingChanged;
-		
+
 		public TypePromotionUseVisitor(JimpleBody jb, Typing tg)
 		{
 			this.jb = jb;
 			this.tg = tg;
-			
+
 			this.fail = false;
 			this.typingChanged = false;
 		}
-		
+
 		private Type promote(Type tlow, Type thigh)
 		{
 			if ( tlow instanceof Integer1Type )
@@ -262,14 +262,14 @@ public class TypeResolver
 			}
 			else throw new RuntimeException();
 		}
-		
+
 		public Value visit(Value op, Type useType, Stmt stmt)
 		{
 			if ( this.finish() )
 				return op;
-			
+
 			Type t = AugEvalFunction.eval_(this.tg, op, stmt, this.jb);
-			
+
 			if ( !AugHierarchy.ancestor_(useType, t) )
 				this.fail = true;
 			else if ( op instanceof Local &&
@@ -288,13 +288,13 @@ public class TypeResolver
 					}
 				}
 			}
-			
+
 			return op;
 		}
-		
+
 		public boolean finish() { return this.typingChanged || this.fail; }
 	}
-	
+
 	private Typing typePromotion(Typing tg)
 	{
 		AugEvalFunction ef = new AugEvalFunction(this.jb);
@@ -307,13 +307,13 @@ public class TypeResolver
 				= this.applyAssignmentConstraints(tg, ef, h);
 			if ( sigma.isEmpty() )
 				return null;
-			tg = sigma.iterator().next();			
+			tg = sigma.iterator().next();
 			uv.typingChanged = false;
 			uc.check(tg, uv);
 			if ( uv.fail )
 				return null;
 		} while ( uv.typingChanged );
-		
+
 		for ( Local v : this.jb.getLocals() )
 		{
 			Type t = tg.get(v);
@@ -333,10 +333,10 @@ public class TypeResolver
 				return this.typePromotion(tg);
 			}
 		}
-		
+
 		return tg;
 	}
-	
+
 	private int insertCasts(Typing tg, IHierarchy h, boolean countOnly)
 	{
 		UseChecker uc = new UseChecker(this.jb);
@@ -345,7 +345,7 @@ public class TypeResolver
 		uc.check(tg, uv);
 		return uv.getCount();
 	}
-	
+
 	private Typing minCasts(Collection<Typing> sigma, IHierarchy h, int[] count)
 	{
 		Typing r = null;
@@ -366,7 +366,7 @@ public class TypeResolver
 		else
 			return null;
 	}
-	
+
 	private Collection<Typing> applyAssignmentConstraints(Typing tg,
 		IEvalFunction ef, IHierarchy h)
 	{
@@ -374,12 +374,12 @@ public class TypeResolver
 			r = new LinkedList<Typing>();
 		HashMap<Typing, QueuedSet<DefinitionStmt>> worklists
 			= new HashMap<Typing, QueuedSet<DefinitionStmt>>();
-			
+
 		sigma.add(tg);
 		QueuedSet<DefinitionStmt> wl = new QueuedSet<DefinitionStmt>(
 			this.assignments);
 		worklists.put(tg, wl);
-		
+
 		while ( !sigma.isEmpty() )
 		{
 			tg = sigma.element();
@@ -394,18 +394,18 @@ public class TypeResolver
 			{
 				DefinitionStmt stmt = wl.removeFirst();
 				Value lhs = stmt.getLeftOp(), rhs = stmt.getRightOp();
-				
+
 				Local v;
 				if ( lhs instanceof Local )
 					v = (Local)lhs;
 				else
 					v = (Local)((ArrayRef)lhs).getBase();
-				
+
 				Type told = tg.get(v);
-				
+
 				boolean keep = false;
 				Collection<Type> eval = ef.eval(tg, rhs, stmt);
-				
+
 				for ( Type t_ : eval )
 				{
 					if ( lhs instanceof ArrayRef )
@@ -420,12 +420,12 @@ public class TypeResolver
 							keep = true;
 							continue;
 						}
-							
+
 						t_ = t_.makeArrayType();
 					}
-					
+
 					Collection<Type> lcas = h.lcas(told, t_);
-				
+
 					for ( Type t : lcas )
 						if ( typesEqual(t, told) )
 							keep = true;
@@ -457,11 +457,11 @@ public class TypeResolver
 				}
 			}
 		}
-		
+
 		Typing.minimize(r, h);
 		return r;
 	}
-	
+
 	// The ArrayType.equals method seems odd in Soot 2.2.5
 	public static boolean typesEqual(Type a, Type b)
 	{
@@ -471,10 +471,10 @@ public class TypeResolver
 			return a_.numDimensions == b_.numDimensions &&
 				a_.baseType.equals(b_.baseType);
 		}
-			
+
 		return a.equals(b);
 	}
-	
+
 	/* Taken from the soot.jimple.toolkits.typing.TypeResolver class of Soot
 	version 2.2.5. */
 	private void split_new()
@@ -484,33 +484,33 @@ public class TypeResolver
 		// SimpleLocalUses uses = new SimpleLocalUses(graph, defs);
 		PatchingChain<Unit> units = this.jb.getUnits();
 		Stmt[] stmts = new Stmt[units.size()];
-		
+
 		units.toArray(stmts);
-		
+
 		for ( Stmt stmt : stmts )
 		{
 			if ( stmt instanceof InvokeStmt )
 			{
 				InvokeStmt invoke = (InvokeStmt)stmt;
-				
+
 				if ( invoke.getInvokeExpr() instanceof SpecialInvokeExpr )
 				{
 					SpecialInvokeExpr special
 						= (SpecialInvokeExpr)invoke.getInvokeExpr();
-					
+
 					if ( special.getMethodRef().name().equals("<init>") )
 					{
 						List<Unit> deflist = defs.getDefsOfAt(
 							(Local)special.getBase(), invoke);
-						
+
 						while ( deflist.size() == 1 )
 						{
 							Stmt stmt2 = (Stmt)deflist.get(0);
-							
+
 							if ( stmt2 instanceof AssignStmt )
 							{
 								AssignStmt assign = (AssignStmt)stmt2;
-								
+
 								if ( assign.getRightOp() instanceof Local )
 								{
 									deflist = defs.getDefsOfAt(
@@ -523,15 +523,15 @@ public class TypeResolver
 									Local newlocal = Jimple.v().newLocal(
 										"tmp", null);
 									this.jb.getLocals().add(newlocal);
-									
+
 									special.setBase(newlocal);
-									
+
 									DefinitionStmt assignStmt
 										= Jimple.v().newAssignStmt(
 										assign.getLeftOp(), newlocal);
 									units.insertAfter(assignStmt, assign);
 									assign.setLeftOp(newlocal);
-									
+
 									this.addLocal(newlocal);
 									this.initAssignment(assignStmt);
 								}

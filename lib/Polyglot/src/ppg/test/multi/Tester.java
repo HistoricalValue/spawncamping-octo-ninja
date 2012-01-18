@@ -22,14 +22,14 @@ public class Tester {
 		}
 
 		File file = new File(filename);
-		String simpleName = file.getName(); 
+		String simpleName = file.getName();
 		Lexer lex = new Lexer(fileInput, simpleName);
-		
+
 		Parser parser = new Parser(filename, lex);
 		Expr e1 = null, e2 = null;
 		Object o=null;
 		Symbol s;
-		
+
 		try {
 			/*
 			o = parser.parse_expr();
@@ -38,7 +38,7 @@ public class Tester {
 			} else if (o instanceof Symbol) {
 				System.out.println("blah");
 			} else {
-				Class c = o.getClass(); 
+				Class c = o.getClass();
 				System.out.println(c.toString());
 			}
 			*/

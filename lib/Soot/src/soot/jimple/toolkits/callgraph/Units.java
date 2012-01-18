@@ -25,7 +25,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public final class Units implements Iterator
-{ 
+{
     Iterator edges;
     public Units( Iterator edges ) {
         this.edges = edges;

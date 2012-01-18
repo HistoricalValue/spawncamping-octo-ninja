@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -53,7 +53,7 @@ public class EscapedReader extends FilterReader
         }
 
         int ch = super.read();
-        
+
         if (ch != '\\')
             return ch;
 
@@ -66,7 +66,7 @@ public class EscapedReader extends FilterReader
             nextF = true; nextch = ch;
             return '\\';
           }
-        
+
         mini.append("\\u");
         while (mini.length() < 6)
         {

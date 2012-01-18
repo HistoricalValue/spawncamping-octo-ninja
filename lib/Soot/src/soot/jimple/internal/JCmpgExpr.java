@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,8 +41,8 @@ public class JCmpgExpr extends AbstractJimpleIntBinopExpr implements CmpgExpr
     public final String getSymbol() { return " " + Jimple.CMPG + " " ; }
     public void apply(Switch sw) { ((ExprSwitch) sw).caseCmpgExpr(this); }
     Object makeBafInst(Type opType) { return Baf.v().newCmpgInst(this.getOp1().getType()); }
-    
-    public Object clone() 
+
+    public Object clone()
     {
         return new JCmpgExpr(Jimple.cloneIfNecessary(getOp1()), Jimple.cloneIfNecessary(getOp2()));
     }

@@ -26,14 +26,14 @@ import polyglot.visit.NodeVisitor;
 public class NumLocalsMetric extends ASTMetric {
 
 	int numLocals; //store the current number of locals for this CLASS
-	
+
 	public NumLocalsMetric(polyglot.ast.Node node){
 		super(node);
 	}
-	
+
 	/*
 	 * Will be invoked by the super as well as whenever a new class is entered
-	 * 
+	 *
 	 */
 	public void reset() {
 		numLocals = 0;
@@ -45,7 +45,7 @@ public class NumLocalsMetric extends ASTMetric {
 	public void addMetrics(ClassData data) {
 		data.addMetric(new MetricData("Number-Locals",new Integer(numLocals)));
 	}
-	
+
 	public NodeVisitor enter(Node parent, Node n){
 		if(n instanceof LocalDecl){
 			//System.out.println("Local declared is"+ ((LocalDecl)n).name()  );

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ public abstract class Type implements Switchable, Serializable, Numberable
     }
     /** Returns a textual representation of this type. */
     public abstract String toString();
-    
+
     /** Converts the int-like types (short, byte, boolean and char) to IntType. */
     public static Type toMachineType(Type t)
     {
@@ -54,7 +54,7 @@ public abstract class Type implements Switchable, Serializable, Numberable
     /** Returns the least common superclass of this type and other. */
     public Type merge(Type other, Scene cm)
     {
-        // method overriden in subclasses UnknownType and RefType 
+        // method overriden in subclasses UnknownType and RefType
         throw new RuntimeException("illegal type merge: "
                                    + this + " and " + other);
     }

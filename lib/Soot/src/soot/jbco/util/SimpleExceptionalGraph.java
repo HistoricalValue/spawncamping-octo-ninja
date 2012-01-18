@@ -27,9 +27,9 @@ import soot.Unit;
 import soot.toolkits.graph.TrapUnitGraph;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 15-Jun-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 15-Jun-2006
  */
 public class SimpleExceptionalGraph extends TrapUnitGraph {
 
@@ -44,14 +44,14 @@ public class SimpleExceptionalGraph extends TrapUnitGraph {
 	unitToPreds = new HashMap(size * 2 + 1, 0.7f);
 	buildUnexceptionalEdges(unitToSuccs, unitToPreds);
 	buildSimpleExceptionalEdges(unitToSuccs, unitToPreds);
-	
+
 	makeMappedListsUnmodifiable(unitToSuccs);
 	makeMappedListsUnmodifiable(unitToPreds);
 	buildHeadsAndTails();
   }
 
   protected void buildSimpleExceptionalEdges(Map unitToSuccs, Map unitToPreds) {
-	for (Iterator trapIt = body.getTraps().iterator(); 
+	for (Iterator trapIt = body.getTraps().iterator();
 	     	trapIt.hasNext(); ) {
 	    Trap trap = (Trap) trapIt.next();
 

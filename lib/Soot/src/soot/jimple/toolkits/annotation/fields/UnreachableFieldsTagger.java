@@ -26,7 +26,7 @@ import soot.jimple.*;
 
 /** A scene transformer that adds tags to unused fields. */
 public class UnreachableFieldsTagger extends SceneTransformer
-{ 
+{
     public UnreachableFieldsTagger (Singletons.Global g) {}
     public static UnreachableFieldsTagger v() { return G.v().soot_jimple_toolkits_annotation_fields_UnreachableFieldsTagger();}
 
@@ -34,11 +34,11 @@ public class UnreachableFieldsTagger extends SceneTransformer
 
         // make list of all fields
         ArrayList<SootField> fieldList = new ArrayList<SootField>();
-        
+
         Iterator getClassesIt = Scene.v().getApplicationClasses().iterator();
         while (getClassesIt.hasNext()) {
             SootClass appClass = (SootClass)getClassesIt.next();
-            //System.out.println("class to check: "+appClass); 
+            //System.out.println("class to check: "+appClass);
             Iterator getFieldsIt = appClass.getFields().iterator();
             while (getFieldsIt.hasNext()) {
                 SootField field = (SootField)getFieldsIt.next();
@@ -46,7 +46,7 @@ public class UnreachableFieldsTagger extends SceneTransformer
                 fieldList.add(field);
             }
         }
-        
+
         // from all bodies get all use boxes and eliminate used fields
         getClassesIt = Scene.v().getApplicationClasses().iterator();
         while (getClassesIt.hasNext()) {
@@ -72,19 +72,19 @@ public class UnreachableFieldsTagger extends SceneTransformer
                             fieldList.remove(index);
                             //System.out.println("removed field: "+f);
                         }
-                    
+
                     }
                 }
-            
+
             }
         }
-        
+
         // tag unused fields
         Iterator<SootField> unusedIt = fieldList.iterator();
         while (unusedIt.hasNext()) {
             SootField unusedField = unusedIt.next();
             unusedField.addTag(new StringTag("Field "+unusedField.getName()+" is not used!", "Unreachable Fields"));
-            unusedField.addTag(new ColorTag(ColorTag.RED, true, "Unreachable Fields"));   
+            unusedField.addTag(new ColorTag(ColorTag.RED, true, "Unreachable Fields"));
             //System.out.println("tagged field: "+unusedField);
 
         }

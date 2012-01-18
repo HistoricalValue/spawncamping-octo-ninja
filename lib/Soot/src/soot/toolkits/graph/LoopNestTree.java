@@ -36,7 +36,7 @@ import soot.jimple.toolkits.annotation.logic.LoopFinder;
  * @author Eric Bodden
  */
 public class LoopNestTree extends TreeSet<Loop> {
-	
+
 	/**
 	 * Comparator, stating that a loop l1 is smaller than a loop l2 if l2 contains all statements of l1.
 	 *
@@ -57,7 +57,7 @@ public class LoopNestTree extends TreeSet<Loop> {
 			} else if(stmts2.containsAll(stmts1)) {
 				//1 subset of 2
 				return -1;
-			} 
+			}
 			//overlap (?) or disjoint: order does not matter;
 			//however we must *not* return 0 as this would only keep one of the two loops;
 			//hence, return 1
@@ -69,7 +69,7 @@ public class LoopNestTree extends TreeSet<Loop> {
 	 * Builds a loop nest tree from a method body using {@link LoopFinder}.
 	 */
 	public LoopNestTree(Body b) {
-		this(computeLoops(b));		
+		this(computeLoops(b));
 	}
 
 	/**
@@ -84,11 +84,11 @@ public class LoopNestTree extends TreeSet<Loop> {
 	private static Collection<Loop> computeLoops(Body b) {
 		LoopFinder loopFinder = new LoopFinder();
 		loopFinder.transform(b);
-		
+
 		Collection<Loop> loops = loopFinder.loops();
 		return loops;
 	}
-    
+
     public boolean hasNestedLoops() {
         //TODO could be speeded up by just comparing two consecutive
         //loops returned by the iterator
@@ -102,6 +102,6 @@ public class LoopNestTree extends TreeSet<Loop> {
         }
         return false;
     }
-	
+
 
 }

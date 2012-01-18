@@ -51,24 +51,24 @@ import soot.jimple.Stmt;
  *      BodyA
  *      break label1
  *    }
- *    
+ *
  *    As in the above code the break stmt is absolutely unnessary as the code
  *    will itself flow to the required position.
- *    
- *    However, remember that breaks and continues are also used to 
+ *
+ *    However, remember that breaks and continues are also used to
  *    exit or repeat a loop in which case we should keep the break and continue!!!
- *    
+ *
  *    TODO Also if we do decide to remove an abrupt stmt make sure that the
  *    stmt seq node has not become empty. If it has remove the node and see
- *    if the construct carrying this node has become empty and so on..... 
+ *    if the construct carrying this node has become empty and so on.....
  */
 public class UselessAbruptStmtRemover extends DepthFirstAdapter {
 	public static boolean DEBUG=false;
-	
+
 	ASTParentNodeFinder finder;
 	ASTMethodNode methodNode;
 	LabelToNodeMapper mapper;
-	
+
 	public UselessAbruptStmtRemover(){
 		finder=null;
 	}
@@ -83,8 +83,8 @@ public class UselessAbruptStmtRemover extends DepthFirstAdapter {
 		mapper = new LabelToNodeMapper();
 		methodNode.apply(mapper);
 	}
-	
-	
+
+
 	public void caseASTStatementSequenceNode(ASTStatementSequenceNode node) {
 		Iterator<Object> it = node.getStatements().iterator();
 		AugmentedStmt remove = null;
@@ -97,7 +97,7 @@ public class UselessAbruptStmtRemover extends DepthFirstAdapter {
 			if(! (s instanceof DAbruptStmt)){
 				continue;
 			}
-			
+
 			DAbruptStmt abrupt = (DAbruptStmt)s;
 			String label = abrupt.getLabel().toString();
 			if(label == null){
@@ -105,22 +105,22 @@ public class UselessAbruptStmtRemover extends DepthFirstAdapter {
 				//analysis with implicit abrupt flow but not needed currently
 				continue;
 			}
-			
+
 			if(it.hasNext()){
 				//there is an abrupt stmt and this stmt seq node has something
 				//afterwards...that is for sure dead code
 				throw new DecompilationException("Dead code detected. Report to developer");
 			}
-			
+
 			//get the target node
 			Object temp = mapper.getTarget(label);
 			if(temp == null){
 				continue;
 				//throw new DecompilationException("Could not find target for abrupt stmt"+abrupt.toString());
 			}
-		
+
 			target = (ASTLabeledNode)temp;
-			
+
 			//will need to find parents of ancestors see if we need to initialize the finder
 			if(finder==null){
 				finder = new ASTParentNodeFinder();
@@ -129,30 +129,30 @@ public class UselessAbruptStmtRemover extends DepthFirstAdapter {
 
 			if(DEBUG)
 				System.out.println("Starting useless check for abrupt stmt: "+abrupt);
-			
+
 			//start condition is that ancestor is the stmt seq node
-			ASTNode ancestor = node; 	
-			
+			ASTNode ancestor = node;
+
 			while(ancestor != target){
 				Object tempParent = finder.getParentOf(ancestor);
 				if(tempParent == null)
 					throw new DecompilationException("Parent found was null!!. Report to Developer");
-				
-				ASTNode ancestorsParent = (ASTNode)tempParent; 
+
+				ASTNode ancestorsParent = (ASTNode)tempParent;
 				if(DEBUG)
 					System.out.println("\tCurrent ancestorsParent has type"+ancestorsParent.getClass());
-				
+
 				//ancestor should be last child of ancestorsParent
 				if(!checkChildLastInParent(ancestor,ancestorsParent)){
 					if(DEBUG)
 						System.out.println("\t\tCurrent ancestorParent has more children after this ancestor");
-					
+
 					//return from the method since this is the last stmt and we cant do anything
 					return;
 				}
-				
+
 				//ancestorsParent should not be a loop of any kind OR A SWITCH
-				if(ancestorsParent instanceof ASTWhileNode || ancestorsParent instanceof ASTDoWhileNode || 
+				if(ancestorsParent instanceof ASTWhileNode || ancestorsParent instanceof ASTDoWhileNode ||
 						ancestorsParent instanceof ASTUnconditionalLoopNode || ancestorsParent instanceof ASTForLoopNode
 						|| ancestorsParent instanceof ASTSwitchNode){
 					if(DEBUG)
@@ -164,10 +164,10 @@ public class UselessAbruptStmtRemover extends DepthFirstAdapter {
 
 			if(DEBUG)
 				System.out.println("\tGot to target without returning means we can remove stmt");
-			
-			remove = as;			
+
+			remove = as;
 		}//end of while going through the statement sequence
-		
+
 		if(remove != null){
 			List<Object> stmts = node.getStatements();
 			stmts.remove(remove);
@@ -181,8 +181,8 @@ public class UselessAbruptStmtRemover extends DepthFirstAdapter {
 			}
 			//TODO what if we just emptied a stmt seq block??
 			//not doing this for the moment
-			
-			
+
+
 			//set modified flag make finder null
 			G.v().ASTTransformations_modified=true;
 			finder=null;
@@ -192,7 +192,7 @@ public class UselessAbruptStmtRemover extends DepthFirstAdapter {
 	public boolean checkChildLastInParent(ASTNode child, ASTNode parent){
 		List<Object> subBodies = parent.get_SubBodies();
 		Iterator<Object> it = subBodies.iterator();
-		
+
 		while(it.hasNext()){
 			List subBody = null;
 		    if (parent instanceof ASTTryNode)
@@ -207,7 +207,7 @@ public class UselessAbruptStmtRemover extends DepthFirstAdapter {
 		    		return true;
 		    }
 		}
-			    
+
 		return false;
 	}
 }

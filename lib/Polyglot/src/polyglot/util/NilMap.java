@@ -19,14 +19,14 @@ public final class NilMap implements Map {
 
   public boolean containsKey(Object key)   { return false; }
   public boolean containsValue(Object val) { return false; }
-  public Set entrySet()                    { return Collections.EMPTY_SET; } 
+  public Set entrySet()                    { return Collections.EMPTY_SET; }
   public int hashCode()                    { return 0; }
   public boolean isEmpty()                 { return true; }
   public Set keySet()                      { return Collections.EMPTY_SET; }
   public int size()                        { return 0; }
   public Collection values()               { return Collections.EMPTY_SET; }
   public Object get(Object k)              { return null; }
-  public boolean equals(Object o) 
+  public boolean equals(Object o)
     { return (o instanceof Map) && ((Map) o).size() == 0 ; }
 
 

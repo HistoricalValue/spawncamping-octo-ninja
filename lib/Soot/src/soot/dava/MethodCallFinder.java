@@ -103,7 +103,7 @@ public class MethodCallFinder extends DepthFirstAdapter{
     		//not to inline
     		return;
     	}
-    	else{//yes we want to inline 
+    	else{//yes we want to inline
     		// we know that the method to be inlined has no declarations.
     		List<Object> subBodies = toInlineASTMethod.get_SubBodies();
     		if(subBodies.size() != 1){
@@ -111,16 +111,16 @@ public class MethodCallFinder extends DepthFirstAdapter{
     		}
     		List body = (List)subBodies.get(0);
 
-	    
+
     		ASTParentNodeFinder finder = new ASTParentNodeFinder();
     		underAnalysis.apply(finder);
-	    
+
     		List<ASTStatementSequenceNode> newChangedBodyPart = createChangedBodyPart(s,body,finder);
 
 
     		boolean replaced = replaceSubBody(s,newChangedBodyPart,finder);
 
-	    
+
     		if(replaced){
     			//so the invoke stmt has been replaced with the body of the method invoked
 
@@ -130,7 +130,7 @@ public class MethodCallFinder extends DepthFirstAdapter{
     			 */
     			StaticDefinitionFinder defFinder = new StaticDefinitionFinder(maybeInline);
     			toInlineASTMethod.apply(defFinder);
-    			
+
     			if(defFinder.anyFinalFieldDefined()){
     				//create throw stmt to be added to inlined method
 
@@ -144,11 +144,11 @@ public class MethodCallFinder extends DepthFirstAdapter{
 								     "Dava inlined the definition into the static initializer");
 			List list = new ArrayList();
 			list.add(tempString);
-			
+
 			GNewInvokeExpr newInvokeExpr = new GNewInvokeExpr(myRefType,methodRef,list);
 
 			GThrowStmt throwStmt = new GThrowStmt(newInvokeExpr);
-						
+
 			AugmentedStmt augStmt = new AugmentedStmt(throwStmt);
 			List<Object> sequence = new ArrayList<Object>();
 			sequence.add(augStmt);
@@ -194,7 +194,7 @@ public class MethodCallFinder extends DepthFirstAdapter{
 	while(it.hasNext()){
 	    newBody.add(it.next());
 	}
-	
+
 	return newBody;
     }
 
@@ -203,18 +203,18 @@ public class MethodCallFinder extends DepthFirstAdapter{
 
 	//get the stmt seq node of invoke stmt
 	Object stmtSeqNode = finder.getParentOf(s);
-	
+
 	// find the parent node of the stmt seq node
 	Object ParentOfStmtSeq = finder.getParentOf(stmtSeqNode);
-	
+
 	if(ParentOfStmtSeq ==null){
 	    throw new RuntimeException ("MethodCall FInder: parent of stmt seq node not found");
 	}
-	
+
 	ASTNode node = (ASTNode)ParentOfStmtSeq;
 
 	//the decision what to replace and how to replace depends on the type of ASTNode
-	
+
 	if(node instanceof ASTMethodNode){
 	    //get the subBody to replace
 	    List<Object> subBodyToReplace = getSubBodyFromSingleSubBodyNode(node);
@@ -298,7 +298,7 @@ public class MethodCallFinder extends DepthFirstAdapter{
 		    }
 		}
 	    }
-	    
+
 	    List<Object> subBodyToReplace = null;
 	    if(subBodyNumber==0)
 		subBodyToReplace=ifBody;
@@ -306,7 +306,7 @@ public class MethodCallFinder extends DepthFirstAdapter{
 		subBodyToReplace=elseBody;
 	    else
 		throw new RuntimeException("Could not find the related ASTNode in the method");
-		
+
 	    List<Object> newBody = createNewSubBody(subBodyToReplace,newChangedBodyPart,stmtSeqNode);
 
 	    if(subBodyNumber==0){
@@ -322,11 +322,11 @@ public class MethodCallFinder extends DepthFirstAdapter{
 
 	    //NOTE THAT method INLINING Is currently only done in the tryBody and not the catchBody
 	    //THe only reason for this being that mostly method calls are made in the try and not the catch
-				    
-	    //get try body 
+
+	    //get try body
 	    List<Object> tryBody = ((ASTTryNode)node).get_TryBody();
 	    Iterator<Object> it = tryBody.iterator();
-		
+
 	    //find whether stmtSeqNode is in the tryBody
 	    boolean inTryBody = false;
 	    while (it.hasNext()){
@@ -340,8 +340,8 @@ public class MethodCallFinder extends DepthFirstAdapter{
 		//return without making any changes
 		return false;
 	    }
-	    
-	    
+
+
 	    List<Object> newBody = createNewSubBody(tryBody,newChangedBodyPart,stmtSeqNode);
 	    ((ASTTryNode)node).replaceTryBody(newBody);
 	    return true;
@@ -350,14 +350,14 @@ public class MethodCallFinder extends DepthFirstAdapter{
 
 	    List<Object> indexList = ((ASTSwitchNode)node).getIndexList();
 	    Map<Object, List<Object>> index2BodyList = ((ASTSwitchNode)node).getIndex2BodyList();
-				    
+
 	    Iterator<Object> it = indexList.iterator();
 	    while (it.hasNext()) {//going through all the cases of the switch statement
 		Object currentIndex = it.next();
 		List<Object> body = index2BodyList.get( currentIndex);
-					
+
 		if (body != null){
-		    //this body is a list of ASTNodes 
+		    //this body is a list of ASTNodes
 
 		    //see if it contains stmtSeqNode
 		    boolean found=false;
@@ -393,19 +393,19 @@ public class MethodCallFinder extends DepthFirstAdapter{
      * The first part contains stmts till above the invoke stmt. The second part contains the body argument which is the
      * body of the inlined method and the third part are the stmts below the invoke stmt
      */
-    
+
     public List<ASTStatementSequenceNode> createChangedBodyPart(InvokeStmt s, List body, ASTParentNodeFinder finder){
 	//get parent node of invoke stmt
 	Object parent = finder.getParentOf(s);
 	if(parent == null){
 	    throw new RuntimeException ("MethodCall FInder: parent of invoke stmt not found");
 	}
-	
+
 	ASTNode parentNode = (ASTNode)parent;
 	if(!(parentNode instanceof ASTStatementSequenceNode)){
 	    throw new RuntimeException ("MethodCall FInder: parent node not a stmt seq node");
-	}    
-	
+	}
+
 	ASTStatementSequenceNode orignal = (ASTStatementSequenceNode)parentNode;
 
 
@@ -423,27 +423,27 @@ public class MethodCallFinder extends DepthFirstAdapter{
 	    	break;
 	    }
 	}
-	
+
 	//copy remaining stmts into the AFTER stmt sequence node
 	List<Object> newSecondNode = new ArrayList<Object>();
 	while(it.hasNext()){
 	    newSecondNode.add(it.next());
 	}
-	
+
 	List<ASTStatementSequenceNode> toReturn = new ArrayList<ASTStatementSequenceNode>();
 
 	if(newInitialNode.size()!=0)
 	    toReturn.add(new ASTStatementSequenceNode(newInitialNode));
-	
+
 	//add inline methods body
 	toReturn.addAll(body);
-	
+
 	if(newSecondNode.size()!=0)
 	    toReturn.add(new ASTStatementSequenceNode(newSecondNode));
-	
-	return toReturn;
-    }	
 
-		
+	return toReturn;
+    }
+
+
 
 }

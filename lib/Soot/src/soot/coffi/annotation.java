@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,7 +31,7 @@
 
 package soot.coffi;
 
-/** There can be many annotations in each Visibility attribute 
+/** There can be many annotations in each Visibility attribute
  * @see attribute_info
  * @author Jennifer Lhotak
  */
@@ -40,7 +40,7 @@ public class annotation extends attribute_info {
    public int type_index;
    /** num_element_value_pairs */
    public int num_element_value_pairs;
-   /** 
+   /**
     * Each entry represents a single runtime visible annotation.
     */
    public element_value element_value_pairs[];

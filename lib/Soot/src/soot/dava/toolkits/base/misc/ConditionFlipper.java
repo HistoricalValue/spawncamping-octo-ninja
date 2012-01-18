@@ -26,7 +26,7 @@ public class ConditionFlipper
 {
     public static ConditionExpr flip( ConditionExpr ce)
     {
-	if (ce instanceof EqExpr) 
+	if (ce instanceof EqExpr)
 	    return new GNeExpr( ce.getOp1(), ce.getOp2());
 
 	if (ce instanceof NeExpr)

@@ -26,7 +26,7 @@ public class DependenceTag implements Tag
     protected short read = -1;
     protected short write = -1;
     protected boolean callsNative = false;
-    
+
     public boolean setCallsNative() {
 	boolean ret = !callsNative;
 	callsNative = true;

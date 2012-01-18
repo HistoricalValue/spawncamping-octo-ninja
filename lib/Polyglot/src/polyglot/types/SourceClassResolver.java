@@ -139,7 +139,7 @@ public class SourceClassResolver extends LoadedClassResolver
     // Now, try and find the source file.
     source = ext.sourceLoader().classSource(name);
     if (Report.should_report(report_topics, 4)) {
-        if (source == null) 
+        if (source == null)
             Report.report(4, "Class " + name + " not found in source file");
         else
             Report.report(4, "Class " + name + " found in source " + source);
@@ -221,11 +221,11 @@ public class SourceClassResolver extends LoadedClassResolver
 
     if (clazz != null && !this.allowRawClasses) {
         // We have a raw class only. We do not have the source code,
-        // or encoded class information. 
+        // or encoded class information.
         throw new SemanticException("Class \"" + name + "\" not found."
-            + " A class file was found, but it did not contain appropriate" 
-            + " information for the Polyglot-based compiler " + 
-            ext.compilerName() + ". Try using " + ext.compilerName() 
+            + " A class file was found, but it did not contain appropriate"
+            + " information for the Polyglot-based compiler " +
+            ext.compilerName() + ". Try using " + ext.compilerName()
             + " to recompile the source code.");
     }
     throw new NoClassException(name);
@@ -239,7 +239,7 @@ public class SourceClassResolver extends LoadedClassResolver
   {
     // Compile the source file just enough to get the type information out.
     ext.readSource(source);
-    
+
     // Even if there was an error when compiling the source file, we may
     // as well keep trying to compile the current class, as the error may
     // have been with something source depended on, that we do not.

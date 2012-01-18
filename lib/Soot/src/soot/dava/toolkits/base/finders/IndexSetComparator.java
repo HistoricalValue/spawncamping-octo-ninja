@@ -30,7 +30,7 @@ class IndexSetComparator implements Comparator
 
 	o1 = ((TreeSet) o1).last();
 	o2 = ((TreeSet) o2).last();
-	
+
 	if (o1 instanceof String)
 	    return 1;
 

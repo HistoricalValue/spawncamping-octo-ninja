@@ -36,14 +36,14 @@ public class StrengthenByIf{
 	String label = isItOnlyBreak(ifBody);
 	if(label != null){
 	    //only one break statement and it is breaking some label
-	    
+
 	    //make sure its breaking the label on the loop
 	    if(((ASTLabeledNode)loopNode).get_Label().toString()!=null){
 
 		if(((ASTLabeledNode)loopNode).get_Label().toString().compareTo(label)==0){
 		    //the if has a single break breaking the loop
 		    //pattern 1 matched
-		    
+
 		    if(loopNode instanceof ASTWhileNode){
 			ASTCondition outerCond = ((ASTWhileNode)loopNode).get_Condition();
 			//flip the inner condition
@@ -62,7 +62,7 @@ public class StrengthenByIf{
 			List<ASTNode> toReturn = new ArrayList<ASTNode>();
 			toReturn.add(new ASTWhileNode(newLabel,newCond,newWhileBody));
 			return toReturn;
-			
+
 		    }
 		    else if(loopNode instanceof ASTDoWhileNode){
 			/*
@@ -75,7 +75,7 @@ public class StrengthenByIf{
 			/*
 			  An UnconditionalLoopNode has a single If Condition
 			  which breaks the loop
-			  In this case 
+			  In this case
 			  Create an ASTWhileLoop Node with the flipped Condition
 			  of the If statement
 			*/
@@ -90,7 +90,7 @@ public class StrengthenByIf{
 
 			// dont need any label name since the body of the while is empty
 			SETNodeLabel newLabel = new SETNodeLabel();
-			
+
 			//make new ASTWhileNode
 			List<ASTNode> toReturn = new ArrayList<ASTNode>();
 			toReturn.add(new ASTWhileNode(newLabel,innerCond,newWhileBody));
@@ -120,20 +120,20 @@ public class StrengthenByIf{
 			    String breakLabel= abStmt.getLabel().toString();
 			    if(loopLabel != null && breakLabel!=null){
 				if(loopLabel.compareTo(breakLabel)==0){
-				    
+
 				    //pattern matched
 				    //flip the inner condition
 				    ASTCondition innerCond = ifNode.get_Condition();
 				    innerCond.flip();
-				    
+
 				    //make empty body
 				    List<Object> newWhileBody = new ArrayList<Object>();
 				    SETNodeLabel newLabel = ((ASTUnconditionalLoopNode)loopNode).get_Label();
-				    
+
 				    //make new ASTWhileNode
 				    List<ASTNode> toReturn = new ArrayList<ASTNode>();
 				    toReturn.add(new ASTWhileNode(newLabel,innerCond,newWhileBody));
-				    
+
 				    //  Add the statementSequenceNode AFTER the whileNode except for the laststmt
 				    Iterator<Object> tempIt = statements.iterator();
 				    List<Object> newStmts = new ArrayList<Object>();
@@ -155,11 +155,11 @@ public class StrengthenByIf{
 			    //flip cond
 			    ASTCondition innerCond = ifNode.get_Condition();
 			    innerCond.flip();
-			    
+
 			    //make empty body
 			    List<Object> newWhileBody = new ArrayList<Object>();
 			    //SETNodeLabel newLabel = ((ASTUnconditionalLoopNode)loopNode).get_Label();
-			    
+
 
 			    // dont need any label name since the body of the while is empty
 			    SETNodeLabel newLabel = new SETNodeLabel();
@@ -167,7 +167,7 @@ public class StrengthenByIf{
 			    //make new ASTWhileNode
 			    List<ASTNode> toReturn = new ArrayList<ASTNode>();
 			    toReturn.add(new ASTWhileNode(newLabel,innerCond,newWhileBody));
-			    
+
 			    //  Add the statementSequenceNode AFTER the whileNode except for the laststmt
 			    Iterator<Object> tempIt = statements.iterator();
 			    List<Object> newStmts = new ArrayList<Object>();
@@ -207,7 +207,7 @@ public class StrengthenByIf{
 	    //not a stmtSeq
 	    return null;
 	}
-	  
+
 	List<Object> statements = ((ASTStatementSequenceNode)tempNode).getStatements();
 	if(statements.size()!=1){
 	    //we need one break

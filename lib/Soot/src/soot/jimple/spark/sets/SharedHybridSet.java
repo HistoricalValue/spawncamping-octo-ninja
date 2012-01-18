@@ -15,29 +15,29 @@ import java.util.*;
  * pointing to another node.  Why not just take that node's bitvector as a base?
  * -addAll could probably use many improvements.
  * -Cast masking - calling typeManager.get
- * -An interesting problem is that when merging a bitvector into an overflow list, if 
+ * -An interesting problem is that when merging a bitvector into an overflow list, if
  * the one being merged
  * in has a bitvector, the mask or exclude might mask it down to a bitvector with very
  * few ones.  (In fact, this might even result in one with 0 ones!)
  * Should that new bitvector stay as a bitvector, or be converted to an
  * overflow list?  And how can we tell when it will have few ones?  (Modify BitVector?)
- * 
+ *
  */
 /**
  * A shared representation of a points-to set which uses a bit vector + a list
  * of extra elements, an "overflow list", to make adding single elements fast in
  * most cases.
- * 
+ *
  * The bit vector may be shared by multiple points-to sets, while the overflow
  * list is specific to each points-to set.
- * 
+ *
  * To facilitate sharing of the bitvectors, there is a "hash table" of all
  * existing bitvectors kept, called BitVectorLookupMap, where the ith element
  * contains a list of all existing bitvectors of cardinality i (i.e. has i one
  * bits).
- * 
+ *
  * @author Adam Richard
- * 
+ *
  */
 
 public class SharedHybridSet extends PointsToSetInternal {
@@ -110,7 +110,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 	private void findAppropriateBitVector(PointsToBitVector newBitVector, PointsToBitVector otherBitVector, int otherSize, int szBitvector) {
 		//First check "other" and "this"'s bitvector, to maximize sharing and
 		//minimize searching for a new bitvector
-		if (otherBitVector != null && 
+		if (otherBitVector != null &&
 				otherSize <= numElements &&
 				otherSize + OVERFLOW_THRESHOLD >= numElements &&
 				otherBitVector.isSubsetOf(newBitVector))
@@ -118,7 +118,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 			setNewBitVector(szBitvector, otherBitVector);
 			overflow = remainder(newBitVector, otherBitVector);
 		}
-		else if (bitVector != null && 
+		else if (bitVector != null &&
 				szBitvector <= numElements &&
 				szBitvector + OVERFLOW_THRESHOLD >= numElements &&
 				bitVector.isSubsetOf(newBitVector))
@@ -127,14 +127,14 @@ public class SharedHybridSet extends PointsToSetInternal {
 		}
 		else
 		{
-			for (int overFlowSize = 0; overFlowSize < OVERFLOW_THRESHOLD; ++overFlowSize) 
+			for (int overFlowSize = 0; overFlowSize < OVERFLOW_THRESHOLD; ++overFlowSize)
 			{
 				int bitVectorCardinality = numElements - overFlowSize;
 				if (bitVectorCardinality < 0) break;   //We might be trying to add a bitvector
 					//with <OVERFLOW_THRESHOLD ones (in fact, there might be bitvectors with 0
 					//ones).  This results from merging bitvectors and masking out certain values.
 				if (bitVectorCardinality < AllSharedHybridNodes.v().lookupMap.map.length
-						&& AllSharedHybridNodes.v().lookupMap.map[bitVectorCardinality] != null) 
+						&& AllSharedHybridNodes.v().lookupMap.map[bitVectorCardinality] != null)
 				{
 					ListIterator i = AllSharedHybridNodes.v().lookupMap.map[bitVectorCardinality]
 							.listIterator();
@@ -164,10 +164,10 @@ public class SharedHybridSet extends PointsToSetInternal {
 	private void setNewBitVector(int size, PointsToBitVector newBitVector)
 	{
 		newBitVector.incRefCount();
-		if (bitVector != null) 
+		if (bitVector != null)
 		{
 			bitVector.decRefCount();
-		
+
 			if (bitVector.unused())
 			{
 				//delete bitVector from lookupMap
@@ -176,8 +176,8 @@ public class SharedHybridSet extends PointsToSetInternal {
 		}
 		bitVector = newBitVector;
 	}
-	
-	public boolean add(Node n) 
+
+	public boolean add(Node n)
 	{
 		/*
 		 * This algorithm is described in the paper "IBM Research Report: Fast
@@ -200,7 +200,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 				newBitVector = new PointsToBitVector(bitVector);
 			newBitVector.add(n); // add n to it
 			add(newBitVector, overflow);
-			
+
 			// Now everything is in newBitVector, and it must have numElements
 			// ones
 
@@ -226,7 +226,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 
 		if (exclude != null)
 		{
-			if (exclude.overflow.size() > 0) 
+			if (exclude.overflow.size() > 0)
 			{
 				// Make exclude only a bitvector, for simplicity
 				PointsToBitVector newBitVector;
@@ -246,8 +246,8 @@ public class SharedHybridSet extends PointsToSetInternal {
 			//in that case.
 			else if (exclude.bitVector == null) exclude = null;
 		}
-		
-		int originalSize = size(), 
+
+		int originalSize = size(),
 		    originalOnes = originalSize - overflow.size(),
 		    otherBitVectorSize = other.size() - other.overflow.size();
 
@@ -270,14 +270,14 @@ public class SharedHybridSet extends PointsToSetInternal {
 				// removing elements that are there?
 				OverflowList toReAdd = overflow;
 				overflow = new OverflowList();
-				
+
 				boolean newBitVectorCreated = false;  //whether a new bit vector
 					//was created, which is used to decide whether to re-add the
 					//overflow list as an overflow list again or merge it into the
 					//new bit vector.
-				
+
 				numElements = otherBitVectorSize;
-				if (exclude != null || mask != null) 
+				if (exclude != null || mask != null)
 				{
 					PointsToBitVector result = new PointsToBitVector(bitVector);
 					if (exclude != null) result.andNot(exclude.bitVector);
@@ -285,7 +285,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 					if (!result.equals(bitVector))
 					{
 						add(result, toReAdd);
-						int newBitVectorSize = result.cardinality(); 
+						int newBitVectorSize = result.cardinality();
 						numElements = newBitVectorSize;
 						findAppropriateBitVector(result, other.bitVector, otherBitVectorSize, otherBitVectorSize);
 						newBitVectorCreated = true;
@@ -297,7 +297,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 				{
 					for (OverflowList.ListNode i = toReAdd.overflow; i != null; i = i.next) {
 						add(i.elem);
-					}					
+					}
 				}
 			}
 		} else if (other.bitVector != null) {
@@ -306,7 +306,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 			if (exclude != null)
 				newBitVector.andNot(exclude.bitVector);
 			if (mask != null) newBitVector.and(mask);
-			
+
 			newBitVector.or(bitVector);
 
 			if (!newBitVector.equals(bitVector)) // if some elements were
@@ -314,10 +314,10 @@ public class SharedHybridSet extends PointsToSetInternal {
 			{
 
 				//At this point newBitVector is bitVector + some new bits
-				
+
 				// Have to make a tough choice - is it better at this point to
 				// put both overflow lists into this bitvector (which involves
-				// recalculating bitVector.cardinality() again since there might 
+				// recalculating bitVector.cardinality() again since there might
 				// have been overlap), or is it better to re-add both the
 				// overflow lists to the set?
 				// I suspect the former, so I'll do that.
@@ -330,7 +330,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 				// already there.
 
 				if (other.overflow.size() != 0) {
-					PointsToBitVector toAdd = 
+					PointsToBitVector toAdd =
 						new PointsToBitVector(newBitVector.size());
 					add(toAdd, other.overflow);
 					if (mask != null) toAdd.and(mask);
@@ -339,11 +339,11 @@ public class SharedHybridSet extends PointsToSetInternal {
 				}
 				//At this point newBitVector is still bitVector + some new bits
 
-				int numOnes = newBitVector.cardinality();  //# of bits in the 
+				int numOnes = newBitVector.cardinality();  //# of bits in the
 					//new bitvector
 				int numAdded = add(newBitVector, overflow);
 				numElements += numOnes - originalOnes   //number of new bits
-					+ numAdded - overflow.size();   //might be negative due to 
+					+ numAdded - overflow.size();   //might be negative due to
 						//elements in overflow already being in the new bits
 
 				if (size() > originalSize)
@@ -352,7 +352,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 					//checkSize();
 					return true;
 				}
-				else 
+				else
 				{
 					//checkSize();
 					return false;   //It might happen that the bitvector being merged in adds some bits
@@ -385,7 +385,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 	/**@
 	 * Adds the Nodes in arr to this bitvector.
 	 * @return The number of new nodes actually added.
-	 */ 
+	 */
 	private int add(PointsToBitVector p, OverflowList arr) {
 		//assert size <= arr.length;
 		int retVal = 0;
@@ -414,7 +414,7 @@ public class SharedHybridSet extends PointsToSetInternal {
 		}
 	}
 	*/
-	
+
 	public boolean addAll(PointsToSetInternal other,
 			final PointsToSetInternal exclude) {
 		// Look at the sort of craziness we have to do just because of a lack of

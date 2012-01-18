@@ -4,8 +4,8 @@ import polyglot.main.Report;
 
 /**
  * A <code>BarrierPass</code> is a special pass that ensures that
- * all jobs that a given job <code>J</code> depends on have completed at 
- * least up to the last <code>BarrierPass</code> that <code>J</code> has 
+ * all jobs that a given job <code>J</code> depends on have completed at
+ * least up to the last <code>BarrierPass</code> that <code>J</code> has
  * completed.
  */
 public class BarrierPass extends AbstractPass
@@ -22,7 +22,7 @@ public class BarrierPass extends AbstractPass
         if (Report.should_report(Report.frontend, 1))
 	    Report.report(1, job + " at barrier " + id);
         if (Report.should_report(Report.frontend, 2))
-	    Report.report(2, "dependencies of " + job.sourceJob() + 
+	    Report.report(2, "dependencies of " + job.sourceJob() +
                         " = " + job.sourceJob().dependencies());
 
         return true;

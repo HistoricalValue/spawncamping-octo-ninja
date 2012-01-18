@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -43,13 +43,13 @@ public class JimpleBodyPack extends BodyPack
 
 
     /** Applies the transformations corresponding to the given options. */
-    private void applyPhaseOptions(JimpleBody b, Map opts) 
-    { 
+    private void applyPhaseOptions(JimpleBody b, Map opts)
+    {
         JBOptions options = new JBOptions( opts );
-        
+
         if(options.use_original_names())
             PhaseOptions.v().setPhaseOptionIfUnset( "jb.lns", "only-stack-locals");
-        
+
         if(Options.v().time()) Timers.v().splitTimer.start();
 
         PackManager.v().getTransform( "jb.tt" ).apply( b );
@@ -64,11 +64,11 @@ public class JimpleBodyPack extends BodyPack
         if(Options.v().time()) Timers.v().assignTimer.start();
 
         PackManager.v().getTransform( "jb.tr" ).apply( b );
-        
+
         if(Options.v().time()) Timers.v().assignTimer.end();
 
         if(options.use_original_names())
-        {   
+        {
             PackManager.v().getTransform( "jb.ulp" ).apply( b );
         }
         PackManager.v().getTransform( "jb.lns" ).apply( b );
@@ -78,7 +78,7 @@ public class JimpleBodyPack extends BodyPack
         PackManager.v().getTransform( "jb.lp" ).apply( b );
         PackManager.v().getTransform( "jb.ne" ).apply( b );
         PackManager.v().getTransform( "jb.uce" ).apply( b );
-                    
+
         if(Options.v().time())
             Timers.v().stmtCount += b.getUnits().size();
     }

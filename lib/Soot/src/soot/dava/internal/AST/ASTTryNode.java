@@ -57,7 +57,7 @@ public class ASTTryNode extends ASTLabeledNode
 	Iterator<Object> cit = catchList.iterator();
 	while (cit.hasNext())
 	    this.catchList.add( new container( cit.next()));
-	
+
 	this.exceptionMap = new HashMap<Object, Object>();
 	cit = this.catchList.iterator();
 	while (cit.hasNext()) {
@@ -71,7 +71,7 @@ public class ASTTryNode extends ASTLabeledNode
 	    container c = (container) cit.next();
 	    this.paramMap.put( c, paramMap.get( c.o));
 	}
-	
+
 	subBodies.add( tryBodyContainer);
 	cit = this.catchList.iterator();
 	while (cit.hasNext())
@@ -86,7 +86,7 @@ public class ASTTryNode extends ASTLabeledNode
     public void replaceTryBody(List<Object> tryBody){
 	this.tryBody = tryBody;
 	tryBodyContainer = new container( tryBody);
-	
+
 	List<Object> oldSubBodies=subBodies;
 	subBodies=new ArrayList<Object>();
 
@@ -98,7 +98,7 @@ public class ASTTryNode extends ASTLabeledNode
 
 	while (oldIt.hasNext())
 	    subBodies.add( oldIt.next());
-	
+
     }
 
     protected void perform_AnalysisOnSubBodies( ASTAnalysis a)
@@ -111,7 +111,7 @@ public class ASTTryNode extends ASTLabeledNode
 		Iterator it = ((List) subBody.o).iterator();
 		while (it.hasNext()) {
 		    ASTNode n = (ASTNode) it.next();
-		    
+
 		    n.perform_Analysis( a);
 		    TryContentsFinder.v().add_ExceptionSet( subBody, TryContentsFinder.v().get_ExceptionSet( n));
 		}
@@ -119,7 +119,7 @@ public class ASTTryNode extends ASTLabeledNode
 
 	    a.analyseASTNode( this);
 	}
-	else 
+	else
 	    super.perform_AnalysisOnSubBodies( a);
     }
 
@@ -184,7 +184,7 @@ public class ASTTryNode extends ASTLabeledNode
 
 	up.literal( "try");
         up.newline();
-	
+
         up.literal( "{" );
         up.newline();
 
@@ -225,12 +225,12 @@ public class ASTTryNode extends ASTLabeledNode
     public String toString()
     {
 	StringBuffer b = new StringBuffer();
-	
+
 	b.append( label_toString( ));
 
 	b.append( "try");
 	b.append( NEWLINE);
-	
+
 	b.append( "{");
 	b.append( NEWLINE);
 

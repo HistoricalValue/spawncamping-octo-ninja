@@ -32,17 +32,17 @@ public class DCmplExpr extends AbstractGrimpIntBinopExpr implements CmplExpr
     public final int getPrecedence() { return 700; }
     public void apply(Switch sw) { ((ExprSwitch) sw).caseCmplExpr(this); }
 
-    public Object clone() 
+    public Object clone()
     {
         return new DCmplExpr(Grimp.cloneIfNecessary(getOp1()), Grimp.cloneIfNecessary(getOp2()));
     }
-    
-    
+
+
     public Type getType(){
     	if (getOp1().getType().equals(getOp2().getType())){
     		return getOp1().getType();
     	}
-    		
+
         return IntType.v();
     }
 }

@@ -23,13 +23,13 @@ import soot.*;
 import soot.jimple.*;
 import java.util.*;
 
-//  ArrayRef, 
-//  CaughtExceptionRef, 
-//  FieldRef, 
-//  IdentityRef, 
-//  InstanceFieldRef, 
-//  InstanceInvokeExpr, 
-//  Local,  
+//  ArrayRef,
+//  CaughtExceptionRef,
+//  FieldRef,
+//  IdentityRef,
+//  InstanceFieldRef,
+//  InstanceInvokeExpr,
+//  Local,
 //  StaticFieldRef
 
 public class PASideEffectTester implements SideEffectTester
@@ -73,11 +73,11 @@ public class PASideEffectTester implements SideEffectTester
 	}
 	return ret;
     }
-    
+
     protected PointsToSet reachingObjects( Local l ) {
 	PointsToSet ret = localToReachingObjects.get( l );
 	if( ret == null ) {
-	    localToReachingObjects.put( l, 
+	    localToReachingObjects.put( l,
 		    ret = pa.reachingObjects( l ) );
 	}
 	return ret;

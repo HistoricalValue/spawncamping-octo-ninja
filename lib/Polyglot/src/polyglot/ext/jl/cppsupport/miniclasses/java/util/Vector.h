@@ -12,7 +12,7 @@ class Vector : public Collection
 public:
 	Vector();
 	Vector(int initialCap);
-	
+
 	virtual bool add(Object *o);
 	virtual void clear();
 	virtual bool equals(Object *o);
@@ -22,7 +22,7 @@ public:
 	virtual bool isEmpty();
 	virtual int size();
 	virtual jmatch_array<Object * > *toArray();
-	virtual String *toString() { return new String("Vector"); }; 
+	virtual String *toString() { return new String("Vector"); };
 
 private:
 	void enlarge(int newCapacity);

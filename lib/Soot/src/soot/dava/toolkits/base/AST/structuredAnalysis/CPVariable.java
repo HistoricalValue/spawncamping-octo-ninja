@@ -9,44 +9,44 @@ import soot.dava.DavaFlowAnalysisException;
  * Needed since we want to track locals and SootFields (not FieldRefs)
  */
 public class CPVariable{
-	
+
 	private Local local;
 	private SootField field;
 
-	
+
 	public CPVariable(SootField field){
 		this.field=field;
 		this.local=null;
-		
+
 		if(! (field.getType() instanceof PrimType))
 			throw new DavaFlowAnalysisException("Variables managed for CP should only be primitives");
 	}
 
-	
+
 	public CPVariable(Local local){
 		this.field=null;
 		this.local=local;
-		
+
 		if(! (local.getType() instanceof PrimType))
 			throw new DavaFlowAnalysisException("Variables managed for CP should only be primitives");
 
 	}
-	
+
 	public boolean containsLocal(){
 		return (local != null);
 	}
-	
+
 	public boolean containsSootField(){
 		return (field != null);
 	}
-	
+
 	public SootField getSootField(){
 		if(containsSootField())
 			return field;
 		else
-			throw new DavaFlowAnalysisException("getsootField invoked when variable is not a sootfield!!!");		
+			throw new DavaFlowAnalysisException("getsootField invoked when variable is not a sootfield!!!");
 	}
-	
+
 	public Local getLocal(){
 		if(containsLocal())
 			return local;
@@ -72,10 +72,10 @@ public class CPVariable{
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public String toString(){
 		if(containsLocal())
 			return "Local: "+getLocal().getName();

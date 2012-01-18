@@ -109,13 +109,13 @@ public class StmtRWSet extends RWSet {
     }
 
     public boolean addGlobal( SootField global ) {
-	if( field != null || base != null ) 
+	if( field != null || base != null )
 	    throw new RuntimeException( "Can't do that" );
 	field = global;
 	return true;
     }
     public boolean addFieldRef( PointsToSet otherBase, Object field ) {
-	if( this.field != null || base != null ) 
+	if( this.field != null || base != null )
 	    throw new RuntimeException( "Can't do that" );
 	this.field = field;
 	base = otherBase;

@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -47,9 +47,9 @@ public class GNewInvokeExpr extends AbstractInvokeExpr
         if( methodRef.isStatic() ) throw new RuntimeException("wrong static-ness");
 
         this.methodRef = methodRef;
-        this.argBoxes = new ExprBox[args.size()]; 
+        this.argBoxes = new ExprBox[args.size()];
         this.type = type;
-        
+
         for(int i = 0; i < args.size(); i++)
             this.argBoxes[i] = Grimp.v().newExprBox((Value) args.get(i));
     }
@@ -61,12 +61,12 @@ public class GNewInvokeExpr extends AbstractInvokeExpr
         this.argBoxes = argBoxes;
     }
     */
-    
+
     public RefType getBaseType()
     {
         return type;
     }
-    
+
     public void setBaseType(RefType type)
     {
         this.type = type;
@@ -75,8 +75,8 @@ public class GNewInvokeExpr extends AbstractInvokeExpr
     public Type getType()
     {
         return type;
-    }    
-    
+    }
+
     public int getPrecedence() { return 850; }
 
     public String toString()
@@ -125,7 +125,7 @@ public class GNewInvokeExpr extends AbstractInvokeExpr
             list.addAll(element.getValue().getUseBoxes());
             list.add(element);
         }
-        
+
         return list;
     }
 
@@ -133,16 +133,16 @@ public class GNewInvokeExpr extends AbstractInvokeExpr
     {
         ((GrimpValueSwitch) sw).caseNewInvokeExpr(this);
     }
-    
-    public Object clone() 
+
+    public Object clone()
     {
         ArrayList clonedArgs = new ArrayList(getArgCount());
 
         for(int i = 0; i < getArgCount(); i++) {
             clonedArgs.add(i, Grimp.cloneIfNecessary(getArg(i)));
-            
+
         }
-        
+
         return new  GNewInvokeExpr(getBaseType(), methodRef, clonedArgs);
     }
     public boolean equivTo(Object o)
@@ -150,7 +150,7 @@ public class GNewInvokeExpr extends AbstractInvokeExpr
         if (o instanceof GNewInvokeExpr)
         {
             GNewInvokeExpr ie = (GNewInvokeExpr)o;
-            if (!(getMethod().equals(ie.getMethod()) && 
+            if (!(getMethod().equals(ie.getMethod()) &&
                   argBoxes.length == ie.argBoxes.length))
                 return false;
             for (ValueBox element : argBoxes)
@@ -161,7 +161,7 @@ public class GNewInvokeExpr extends AbstractInvokeExpr
         }
         return false;
     }
- 
+
     /** Returns a hash code for this object, consistent with structural equality. */
     public int equivHashCode()
     {

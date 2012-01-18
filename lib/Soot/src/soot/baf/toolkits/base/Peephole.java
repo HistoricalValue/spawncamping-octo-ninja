@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -32,7 +32,7 @@ import soot.*;
 
 
 /**
- *   Interface to be implemented by peepholes acting on the Baf IR. 
+ *   Interface to be implemented by peepholes acting on the Baf IR.
  *
  *   @see PeepholeOptimizer
  *   @see ExamplePeephole
@@ -41,7 +41,7 @@ import soot.*;
 public interface Peephole
 {
     /**
-     *   Entry point for a peephole. This method is 
+     *   Entry point for a peephole. This method is
      *   repeatly called by the peephole driver, until
      *   a fixed-point is reached over all peepholes.
      *

@@ -65,7 +65,7 @@ import soot.tagkit.Tag;
  * @author Ondrej Lhotak
  */
 public class SparkTransformer extends SceneTransformer
-{ 
+{
     public SparkTransformer( Singletons.Global g ) {}
     public static SparkTransformer v() { return G.v().soot_jimple_spark_SparkTransformer(); }
 
@@ -154,7 +154,7 @@ public class SparkTransformer extends SceneTransformer
         reportTime( "Solution found", startSimplify, endProp );
 
         if( opts.force_gc() ) doGC();
-        
+
         if( !opts.on_fly_cg() || opts.vta() ) {
             CallGraphBuilder cgb = new CallGraphBuilder( pag );
             cgb.build();
@@ -184,7 +184,7 @@ public class SparkTransformer extends SceneTransformer
         		Scene.v().setPointsToAnalysis(onDemandAnalysis);
         }
     }
-    
+
     protected void addTags( PAG pag ) {
         final Tag unknown = new StringTag( "Untagged Spark node" );
         final Map<Node, Tag> nodeToTag = pag.getNodeTags();

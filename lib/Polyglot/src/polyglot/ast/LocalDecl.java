@@ -5,7 +5,7 @@ import polyglot.types.Flags;
 import polyglot.types.LocalInstance;
 import polyglot.types.SemanticException;
 
-/** 
+/**
  * A local variable declaration statement: a type, a name and an optional
  * initializer.
  */

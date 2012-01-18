@@ -16,7 +16,7 @@ public class PPGSpec extends Spec
 	private Vector commands, code;
 	private Spec parent;
 	private Vector startSyms;
-	
+
 	/**
 	 * PPG spec
 	 *
@@ -36,7 +36,7 @@ public class PPGSpec extends Spec
 		parent = null;
 	}
 	*/
-	
+
 	public PPGSpec (String incFile, String pkg, Vector imp,
 					  Vector codeParts, Vector syms,
 					  Vector precedence, Vector startList, Vector cmds)
@@ -52,22 +52,22 @@ public class PPGSpec extends Spec
 		commands = cmds;
 		parent = null;
 	}
-	
+
 	public boolean isMultiStartSymbol() {
 		return (startSyms.size() > 1);
 	}
-	
+
 	/*
 		Token curr_sym;
-		
+
 		// for each [start_sym, method, token] create code:
 		method () {
 			curr_sym = token;
 			parse();
 		}
 
-		// ^^^^ parse code ^^^^ 
-	
+		// ^^^^ parse code ^^^^
+
 		// in front of scanner, add code:
 		// return the "fake" symbol only once after it's set
 		if (curr_sym != null)
@@ -75,18 +75,18 @@ public class PPGSpec extends Spec
 			curr_sym = null;
 			return result;
 		}
-		
+
 		// ^^^^ scan code ^^^^
-	
+
 		// code added to grammar:
 		start with new_unique_start_symbol;
-		
+
 		new_unique_start_symbol ::=
 			token_1 start_sym_1:s {: RESULT = s; :}
 		|	token_2 start_sym_2:s {: RESULT = s; :}
 		|	...
 		;
-	
+
 		// ^^^^ grammar ^^^^
 	*/
 
@@ -101,13 +101,13 @@ public class PPGSpec extends Spec
 		// should it be dynamically generated?
 		String currSymbolName = "ppg_curr_sym";
 		parseCode += "Symbol " + currSymbolName + ";\n\n";
-		
+
 		// Generate token names
 		Vector tokens = new Vector();
 		for (int i=0; i < startSyms.size(); i+=2) {
 			tokens.addElement(new String("JLGEN_TOKEN_"+String.valueOf(i/2)));
 		}
-		
+
 		String startSym, method, token;
 		for (int i=0; i < startSyms.size(); i += 2) {
 			startSym = (String) startSyms.elementAt(i);
@@ -136,36 +136,36 @@ public class PPGSpec extends Spec
 			cupSpec.scanCode.prepend(scanCodeAdd);
 		else
 			cupSpec.scanCode = new ScanCode(scanCodeAdd);
-		
+
 		/************************************/
 
 		// create a new start symbol
 		String newStartSym = "multi_start_symbool";
-				
+
 		// set start symbol
 		cupSpec.setStart(newStartSym);
 		Nonterminal startNT = new Nonterminal(newStartSym, null);
 		Vector newSymbols = new Vector();
 		newSymbols.addElement(newStartSym);
-		
+
 		// add start symbol to the grammar
 		SymbolList sl = new SymbolList(SymbolList.NONTERMINAL, null, newSymbols);
 		Vector addedSymbols = new Vector(); addedSymbols.addElement(sl);
 		cupSpec.addSymbols(addedSymbols);
-		
+
 		// add token declaration to the grammar
 		SymbolList tokenList = new SymbolList(SymbolList.TERMINAL, "Symbol", tokens);
 		Vector addedTokens = new Vector(); addedTokens.addElement(tokenList);
 		cupSpec.addSymbols(addedTokens);
-		
+
 		Vector rhs = new Vector();
-		
+
 		//String grammarPatch = newStartSym + " ::=\n";
 		Vector rhsPart;
 		for (int i=0; i < startSyms.size(); i += 2) {
 			rhsPart = new Vector();
 			startSym = (String) startSyms.elementAt(i);
-			token = (String) tokens.elementAt(i/2); //startSyms.elementAt(i+2); 
+			token = (String) tokens.elementAt(i/2); //startSyms.elementAt(i+2);
 			//if (i > 0) grammarPatch += "|";
 			//grammarPatch += "\t"+token+" "+startSym+":s {: RESULT = s; :}\n";
 			// add new symbols into vector
@@ -180,7 +180,7 @@ public class PPGSpec extends Spec
 		Production p = new Production(startNT, rhs);
 		cupSpec.addProductions(p);
 	}
-	
+
 
         /**
          * Parse the chain of inheritance via include files
@@ -192,7 +192,7 @@ public class PPGSpec extends Spec
             try {
                 // first look on the classpath.
                 is = ClassLoader.getSystemResourceAsStream(include);
-                if (is != null) {    
+                if (is != null) {
                     PPG.DEBUG("found " + include + " as a resource");
                 }
                 else {
@@ -227,22 +227,22 @@ public class PPGSpec extends Spec
             if (file != null) {
                 parentDir = file.getParent();
             }
-            parent.parseChain(parentDir == null ? "" : parentDir);            
+            parent.parseChain(parentDir == null ? "" : parentDir);
         }
 
 	public CUPSpec coalesce() throws PPGError {
 		// parent cannot be null by definition
 		CUPSpec combined = parent.coalesce();
-		
+
 		// work with a copy so we have the unmodified original to refer to
 		CUPSpec newSpec = (CUPSpec) combined.clone();
-		
+
 		// override package name
 		newSpec.setPkgName(packageName);
-		
+
 		// add imported classes
 		newSpec.addImports(imports);
-		
+
 		/* override precedence, using these rules:
 		 *
 		 * precedence list null: delete precedence list of parent
@@ -251,7 +251,7 @@ public class PPGSpec extends Spec
 		 */
 		//TODO: test precedence inheritance/overriding/ignoring
 		if (prec == null) {
-			newSpec.prec.removeAllElements();	
+			newSpec.prec.removeAllElements();
 		} else if (prec.size() == 0) {
 			// do nothing to parent's precedence list
 		} else {
@@ -259,18 +259,18 @@ public class PPGSpec extends Spec
 			newSpec.prec.removeAllElements();
 			newSpec.prec.addAll(prec);
 		}
-		
+
 		// override action/parser/init/scan code
 		newSpec.replaceCode(code);
-		
+
 		// add in (non)terminals
 		newSpec.addSymbols(symbols);
-		
+
 		// override start symbol(s), patch grammar (if multi-start-symbol)
 		if (child == null)
 			patchMultiStartSymbols(newSpec);
-		
-		// combine this spec with the rest 
+
+		// combine this spec with the rest
 		// of the chain and return the result
 		processTransferL(combined, newSpec);
 		processDrop(combined, newSpec);
@@ -278,13 +278,13 @@ public class PPGSpec extends Spec
 		processTransferR(combined, newSpec);
 		processExtend(combined, newSpec);
 		processNew(combined, newSpec);
-		
+
 		// clean the spec, remove nonterminals with no productions
 		newSpec.removeEmptyProductions();
-		
+
 		return newSpec;
 	}
-	
+
 	private void processDrop (CUPSpec combined, CUPSpec newSpec) throws PPGError {
 		// DROP
 		Command cmd;
@@ -297,7 +297,7 @@ public class PPGSpec extends Spec
 					// remove all productions that have NT as lhs
 					newSpec.dropProductions(drop.getProduction());
 				} else { /* symbol Drop */
-					Vector symbols = drop.getSymbols(); 
+					Vector symbols = drop.getSymbols();
 					String sym;
 					for (int j=0; j < symbols.size(); j++) {
 						sym = (String) symbols.elementAt(j);
@@ -324,7 +324,7 @@ public class PPGSpec extends Spec
 			}
 		}
 	}
-	
+
 	private void processExtend (CUPSpec combined, CUPSpec newSpec) {
 		// EXTEND
 		Command cmd;
@@ -337,7 +337,7 @@ public class PPGSpec extends Spec
 			}
 		}
 	}
-	
+
 	private void processTransferL (CUPSpec combined, CUPSpec newSpec) {
 		// TRANSFER_L
 		Command cmd;
@@ -351,22 +351,22 @@ public class PPGSpec extends Spec
 				transfer = (TransferCmd) cmd;
 				source = transfer.getSource();
 				prodList = transfer.getTransferList();
-				
+
 				// there must be at least one production by the grammar definition
 				prod = (Production) prodList.elementAt(0);
 				prod = (Production) prod.clone();
 				for (int j=1; j < prodList.size(); j++) {
 					Production prodNew = (Production) prodList.elementAt(j);
-					prod.union( (Production) prodNew.clone() );	
-					//prod.union( (Production) prodList.elementAt(j) );	
+					prod.union( (Production) prodNew.clone() );
+					//prod.union( (Production) prodList.elementAt(j) );
 				}
-				
+
 				prod.setLHS(transfer.getSource());
 				newSpec.dropProductions(prod);
 			}
 		}
 	}
-	
+
 	private void processTransferR (CUPSpec combined, CUPSpec newSpec) {
 		// TRANSFER_R
 		Command cmd;
@@ -394,7 +394,7 @@ public class PPGSpec extends Spec
 			}
 		}
 	}
-	
+
 	private void processNew (CUPSpec combined, CUPSpec newSpec) {
 		// NEW PRODUCTIONS
 		NewProdCmd newProd;
@@ -407,7 +407,7 @@ public class PPGSpec extends Spec
 			}
 		}
 	}
-	
+
 	/**
 	 * Write out contents to a CodeWriter
 	 */

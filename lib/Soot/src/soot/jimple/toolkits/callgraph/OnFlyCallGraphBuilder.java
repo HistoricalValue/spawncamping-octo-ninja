@@ -88,11 +88,11 @@ import soot.util.queue.QueueReader;
  * @author Ondrej Lhotak
  */
 public final class OnFlyCallGraphBuilder
-{ 
+{
 	public class DefaultReflectionModel implements ReflectionModel {
-		
+
 	    protected CGOptions options = new CGOptions( PhaseOptions.v().getPhaseOptions("cg") );
-	    
+
 	    protected HashSet<SootMethod> warnedAlready = new HashSet<SootMethod>();
 
 		public void classForName(SootMethod source, Stmt s) {
@@ -124,7 +124,7 @@ public final class OnFlyCallGraphBuilder
 	                }
 	                sites.add(site);
 	            }
-	        }        
+	        }
 		}
 
 		public void classNewInstance(SootMethod source, Stmt s) {
@@ -145,7 +145,7 @@ public final class OnFlyCallGraphBuilder
 							" graph will be incomplete!"+
 					" Use safe-newinstance option for a conservative result." );
 				}
-			} 
+			}
 		}
 
 		public void contructorNewInstance(SootMethod source, Stmt s) {
@@ -167,7 +167,7 @@ public final class OnFlyCallGraphBuilder
 							" graph will be incomplete!"+
 					" Use safe-newinstance option for a conservative result." );
 				}
-			} 
+			}
 		}
 
 		public void methodInvoke(SootMethod container, Stmt invokeStmt) {
@@ -191,9 +191,9 @@ public final class OnFlyCallGraphBuilder
 
 	}
 
-	
+
 	public class TraceBasedReflectionModel implements ReflectionModel {
-		
+
 		class Guard {
 			public Guard(SootMethod container, Stmt stmt, String message) {
 				this.container = container;
@@ -204,16 +204,16 @@ public final class OnFlyCallGraphBuilder
 			final Stmt stmt;
 			final String message;
 		}
-		
+
 		protected Set<Guard> guards;
-		
+
 		protected ReflectionTraceInfo reflectionInfo;
 
 		private boolean registeredTransformation = false;
-		
+
 		private TraceBasedReflectionModel() {
 			guards = new HashSet<Guard>();
-			
+
 			String logFile = options.reflection_log();
 			if(logFile==null) {
 				throw new InternalError("Trace based refection model enabled but no trace file given!?");
@@ -256,13 +256,13 @@ public final class OnFlyCallGraphBuilder
 			}
 		}
 
-		/** 
+		/**
 		 * Adds a special edge of kind {@link Kind#REFL_CONSTR_NEWINSTANCE} to all possible target constructors
 		 * of this call to {@link Constructor#newInstance(Object...)}.
 		 * Those kinds of edges are treated specially in terms of how parameters are assigned,
 		 * as parameters to the reflective call are passed into the argument array of
 		 * {@link Constructor#newInstance(Object...)}.
-		 * @see PAG#addCallTarget(Edge) 
+		 * @see PAG#addCallTarget(Edge)
 		 */
 		public void contructorNewInstance(SootMethod container, Stmt newInstanceInvokeStmt) {
 			Set<String> constructorSignatures = reflectionInfo.constructorNewInstanceSignatures(container);
@@ -276,13 +276,13 @@ public final class OnFlyCallGraphBuilder
 			}
 		}
 
-		/** 
+		/**
 		 * Adds a special edge of kind {@link Kind#REFL_INVOKE} to all possible target methods
 		 * of this call to {@link Method#invoke(Object, Object...)}.
 		 * Those kinds of edges are treated specially in terms of how parameters are assigned,
 		 * as parameters to the reflective call are passed into the argument array of
 		 * {@link Method#invoke(Object, Object...)}.
-		 * @see PAG#addCallTarget(Edge) 
+		 * @see PAG#addCallTarget(Edge)
 		 */
 		public void methodInvoke(SootMethod container, Stmt invokeStmt) {
 			Set<String> methodSignatures = reflectionInfo.methodInvokeSignatures(container);
@@ -314,11 +314,11 @@ public final class OnFlyCallGraphBuilder
 					throw new RuntimeException("Invalid value for phase option (guarding): "+options.guards());
 				}
 			}
-			
+
 			if(!registeredTransformation) {
 				registeredTransformation=true;
 				PackManager.v().getPack("wjap").add(new Transform("wjap.guards",new SceneTransformer() {
-					
+
 					@Override
 					protected void internalTransform(String phaseName, Map options) {
 						for (Guard g : guards) {
@@ -329,17 +329,17 @@ public final class OnFlyCallGraphBuilder
 				PhaseOptions.v().setPhaseOption("wjap.guards", "enabled");
 			}
 		}
-		
+
 		private void insertGuard(Guard guard) {
 			if(options.guards().equals("ignore")) return;
-			
+
 			SootMethod container = guard.container;
 			Stmt insertionPoint = guard.stmt;
 			if(!container.hasActiveBody()) {
 				G.v().out.println("WARNING: Tried to insert guard into "+container+" but couldn't because method has no body.");
 			} else {
 				Body body = container.getActiveBody();
-				
+
 				//exc = new Error
 				RefType runtimeExceptionType = RefType.v("java.lang.Error");
 				NewExpr newExpr = Jimple.v().newNewExpr(runtimeExceptionType);
@@ -347,13 +347,13 @@ public final class OnFlyCallGraphBuilder
 				Local exceptionLocal = lg.generateLocal(runtimeExceptionType);
 				AssignStmt assignStmt = Jimple.v().newAssignStmt(exceptionLocal, newExpr);
 				body.getUnits().insertBefore(assignStmt, insertionPoint);
-				
+
 				//exc.<init>(message)
 				SootMethodRef cref = runtimeExceptionType.getSootClass().getMethod("<init>", Collections.singletonList(RefType.v("java.lang.String"))).makeRef();
 				SpecialInvokeExpr constructorInvokeExpr = Jimple.v().newSpecialInvokeExpr(exceptionLocal, cref, StringConstant.v(guard.message));
 				InvokeStmt initStmt = Jimple.v().newInvokeStmt(constructorInvokeExpr);
 				body.getUnits().insertAfter(initStmt, assignStmt);
-				
+
 				if(options.guards().equals("print")) {
 					//exc.printStackTrace();
 					VirtualInvokeExpr printStackTraceExpr = Jimple.v().newVirtualInvokeExpr(exceptionLocal, Scene.v().getSootClass("java.lang.Throwable").getMethod("printStackTrace", Collections.emptyList()).makeRef());
@@ -368,7 +368,7 @@ public final class OnFlyCallGraphBuilder
 		}
 
 	}
-	
+
     /** context-insensitive stuff */
     private final CallGraph cicg = new CallGraph();
     private final HashSet<SootMethod> analyzedMethods = new HashSet<SootMethod>();
@@ -403,7 +403,7 @@ public final class OnFlyCallGraphBuilder
         if( !options.verbose() ) {
             G.v().out.println( "[Call Graph] For information on where the call graph may be incomplete, use the verbose option to the cg phase." );
         }
-        
+
         if(options.reflection_log()==null || options.reflection_log().length()==0) {
         	reflectionModel = new DefaultReflectionModel();
         } else {
@@ -435,12 +435,12 @@ public final class OnFlyCallGraphBuilder
         for( Iterator siteIt = ((Collection) receiverToSites.get( receiver )).iterator(); siteIt.hasNext(); ) {
             final VirtualCallSite site = (VirtualCallSite) siteIt.next();
             InstanceInvokeExpr iie = site.iie();
-            if( site.kind() == Kind.THREAD 
+            if( site.kind() == Kind.THREAD
             && !fh.canStoreType( type, clRunnable ) )
                 continue;
 
             if( site.iie() instanceof SpecialInvokeExpr && site.kind != Kind.THREAD ) {
-            	targetsQueue.add( VirtualCalls.v().resolveSpecial( 
+            	targetsQueue.add( VirtualCalls.v().resolveSpecial(
                             (SpecialInvokeExpr) site.iie(),
                             site.subSig(),
                             site.container() ) );
@@ -448,7 +448,7 @@ public final class OnFlyCallGraphBuilder
                 VirtualCalls.v().resolve( type,
                         receiver.getType(),
                         site.subSig(),
-                        site.container(), 
+                        site.container(),
                         targetsQueue );
             }
             while(targets.hasNext()) {
@@ -477,7 +477,7 @@ public final class OnFlyCallGraphBuilder
                 }
             } else {
                 if( constant.length() > 0 && constant.charAt(0) == '[' ) {
-                    if( constant.length() > 1 && constant.charAt(1) == 'L' 
+                    if( constant.length() > 1 && constant.charAt(1) == 'L'
                     && constant.charAt(constant.length()-1) == ';' ) {
                         constant = constant.substring(2,constant.length()-1);
                     } else continue;
@@ -536,7 +536,7 @@ public final class OnFlyCallGraphBuilder
                 if (ie instanceof InstanceInvokeExpr) {
                     InstanceInvokeExpr iie = (InstanceInvokeExpr) ie;
                     Local receiver = (Local) iie.getBase();
-                    NumberedString subSig = 
+                    NumberedString subSig =
                         iie.getMethodRef().getSubSignature();
                     addVirtualCallSite( s, m, receiver, iie, subSig,
                             Edge.ieToKind(iie) );
@@ -551,18 +551,18 @@ public final class OnFlyCallGraphBuilder
                 			||  tgt.getSignature().equals( "<java.security.AccessController: java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction)>" )
                 			||  tgt.getSignature().equals( "<java.security.AccessController: java.lang.Object doPrivileged(java.security.PrivilegedAction,java.security.AccessControlContext)>" )
                 			||  tgt.getSignature().equals( "<java.security.AccessController: java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction,java.security.AccessControlContext)>" ) ) {
-                		
+
                 		Local receiver = (Local) ie.getArg(0);
                 		addVirtualCallSite( s, m, receiver, null, sigObjRun,
                 				Kind.PRIVILEGED );
-                	}                    	
+                	}
                 }
             }
         }
     }
-    
+
     ReflectionModel reflectionModel;
-    
+
     private void getImplicitTargets( SootMethod source ) {
         final SootClass scl = source.getDeclaringClass();
         if( source.isNative() || source.isPhantom() ) return;
@@ -691,6 +691,6 @@ public final class OnFlyCallGraphBuilder
     protected final NumberedString sigForName = Scene.v().getSubSigNumberer().
         findOrAdd( "java.lang.Class forName(java.lang.String)" );
     protected final RefType clRunnable = RefType.v("java.lang.Runnable");
-    
+
 }
 

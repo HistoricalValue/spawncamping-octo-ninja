@@ -11,13 +11,13 @@ import polyglot.types.MethodInstance;
 import polyglot.types.Type;
 
 /**
- * The <code>PaoExt</code> implementation for the 
+ * The <code>PaoExt</code> implementation for the
  * <code>Cast</code> AST node.
  */
 public class PaoCastExt_c extends PaoExt_c {
     /**
      * Insert boxing and unboxing code for the casts inserted by the
-     * <code>PaoBoxer</code>. 
+     * <code>PaoBoxer</code>.
      * @see PaoExt_c#rewrite(PaoTypeSystem, NodeFactory)
      * @see polyglot.ext.pao.visit.PaoBoxer
      */
@@ -29,9 +29,9 @@ public class PaoCastExt_c extends PaoExt_c {
 
         if (ltype.isPrimitive() && rtype.isReference()) {
         	// We have an expression with reference type being cast to
-        	// a primitive type, added by the PaoBoxer visitor. 
+        	// a primitive type, added by the PaoBoxer visitor.
         	// We need to unbox.
-        	
+
         	// e.g., "(int)e", where e is of type Integer gets rewritten to
         	// "((polyglot.ext.pao.runtime.Integer)e).getInt()"
 
@@ -50,9 +50,9 @@ public class PaoCastExt_c extends PaoExt_c {
         }
         else if (ltype.isReference() && rtype.isPrimitive()) {
         	// We have an expression with primitive type being cast to
-        	// a reference type, added by the PaoBoxer visitor. 
+        	// a reference type, added by the PaoBoxer visitor.
         	// We need to box.
-        	
+
         	// e.g., "(Integer)e", where e is of type int gets rewritten to
         	// "new polyglot.ext.pao.runtime.Integer(e)"
 

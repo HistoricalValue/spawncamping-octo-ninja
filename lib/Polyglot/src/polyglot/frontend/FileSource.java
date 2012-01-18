@@ -14,11 +14,11 @@ public class FileSource extends Source
     public FileSource(File file) throws IOException {
         this(file, false);
     }
-    
+
     public FileSource(File file, boolean userSpecified) throws IOException {
         super(file.getName(), userSpecified);
         this.file = file;
-    
+
         if (! file.exists()) {
             throw new FileNotFoundException(file.getName());
         }

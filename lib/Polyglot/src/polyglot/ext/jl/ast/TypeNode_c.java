@@ -7,7 +7,7 @@ import polyglot.types.*;
 import polyglot.visit.*;
 
 /**
- * A <code>TypeNode</code> is the syntactic representation of a 
+ * A <code>TypeNode</code> is the syntactic representation of a
  * <code>Type</code> within the abstract syntax tree.
  */
 public abstract class TypeNode_c extends Node_c implements TypeNode

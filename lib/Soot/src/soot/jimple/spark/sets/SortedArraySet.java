@@ -35,7 +35,7 @@ public final class SortedArraySet extends PointsToSetInternal {
     public final boolean isEmpty() {
         return size == 0;
     }
-    /** Adds contents of other into this set, returns true if this set 
+    /** Adds contents of other into this set, returns true if this set
      * changed. */
     public final boolean addAll( final PointsToSetInternal other,
             final PointsToSetInternal exclude ) {

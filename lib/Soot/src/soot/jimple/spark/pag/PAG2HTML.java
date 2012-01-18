@@ -76,12 +76,12 @@ public class PAG2HTML {
         jarOut.putNextEntry( new ZipEntry( "nodes/n"+v.getNumber()+".html" ) );
         final PrintWriter out = new PrintWriter( jarOut );
         out.println( "<html>" );
-        
+
         out.println( "Green node for:" );
         out.println( varNodeReps( v ) );
 
         out.println( "Declared type: "+v.getType() );
-        
+
         out.println( "<hr>Reaching blue nodes:" );
         out.println( "<ul>" );
         v.getP2Set().forall( new P2SetVisitor() {
@@ -97,7 +97,7 @@ public class PAG2HTML {
             VarNode succ = (VarNode) element;
             out.println( varNodeReps( succ ) );
         }
-        
+
         out.println( "<hr>Incoming edges: " );
         succs = pag.simpleInvLookup( v );
         for (Node element : succs) {
@@ -151,11 +151,11 @@ public class PAG2HTML {
         return b.toString();
     }
     protected void dumpMethod( SootMethod m, JarOutputStream jarOut ) throws IOException {
-        jarOut.putNextEntry( new ZipEntry( 
+        jarOut.putNextEntry( new ZipEntry(
                     ""+toFileName( m.toString() )+".html" ) );
         final PrintWriter out = new PrintWriter( jarOut );
         out.println( "<html>" );
-        
+
         out.println( "This is method "+htmlify( m.toString() )+"<hr>" );
         for( Iterator it = methodToNodes.get( m ).iterator(); it.hasNext(); ) {
             out.println( varNode( "nodes/", (VarNode) it.next() ) );

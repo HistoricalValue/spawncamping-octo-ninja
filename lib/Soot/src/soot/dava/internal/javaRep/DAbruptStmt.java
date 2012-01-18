@@ -69,7 +69,7 @@ public class DAbruptStmt extends AbstractStmt
 
 	return b.toString();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(command);
         if ((surpressDestinationLabel == false) && (label.toString() != null)) {

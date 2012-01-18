@@ -25,12 +25,12 @@ import soot.util.*;
 
 public class SETBasicBlock implements Comparable
 {
-    
+
     private SETNode entryNode, exitNode;
     private final IterableSet predecessors, successors, body;
     private int priority;
 
-    
+
     public SETBasicBlock()
     {
 	predecessors = new IterableSet();
@@ -70,15 +70,15 @@ public class SETBasicBlock implements Comparable
 			priority = sucScore;
 		}
 
-		priority++;		
+		priority++;
 	    }
 	}
 
 	return priority;
     }
-    
 
-    /* 
+
+    /*
      *  adds must be done in order such that the entry node is done first and the exit is done last.
      */
 
@@ -90,34 +90,34 @@ public class SETBasicBlock implements Comparable
 	body.add( sn);
 	G.v().SETBasicBlock_binding.put( sn, this);
 
-	exitNode = sn;	
+	exitNode = sn;
     }
-    
+
     public SETNode get_EntryNode()
     {
 	return entryNode;
     }
-    
+
     public SETNode get_ExitNode()
     {
 	return exitNode;
     }
-    
+
     public IterableSet get_Predecessors()
     {
 	return predecessors;
     }
-    
+
     public IterableSet get_Successors()
     {
 	return successors;
     }
-    
+
     public IterableSet get_Body()
     {
 	return body;
     }
-    
+
     public static SETBasicBlock get_SETBasicBlock( SETNode o)
     {
 	return G.v().SETBasicBlock_binding.get( o);

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -74,7 +74,7 @@ class LocalVariableTypeTable_attribute extends attribute_info {
 	      (code>=e.start_pc && code<=e.start_pc+e.length))){
 	      //  (code>=e.start_pc && code<e.start_pc+e.length))) {
             // found the variable, now find its name.
-            
+
             //G.v().out.println("found entry: " + i);
 
             if (constant_pool[e.signature_index] instanceof CONSTANT_Utf8_info)
@@ -94,16 +94,16 @@ class LocalVariableTypeTable_attribute extends attribute_info {
       }
       return null;
    }
-   
+
    public String toString()
    {
         StringBuffer buffer = new StringBuffer();
-        
+
         for(int i = 0; i < local_variable_type_table_length; i++)
         {
             buffer.append(local_variable_type_table[i].toString() + "\n");
         }
-        
+
         return buffer.toString();
    }
 }

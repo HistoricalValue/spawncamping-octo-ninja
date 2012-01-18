@@ -30,24 +30,24 @@ import tpo.soot.SootOptionsParsingException;
 import tpo.soot.util.OutputCapturer;
 
 public class Main {
-	
+
 	public static void main (final String[] args) throws SecurityException, IOException {
 		Runtime.PushDefault();
 		TpoMain(args);
 		Runtime.PopRuntime();
 	}
-	
+
 	public static void TpoMain (String[] args) throws SecurityException, IOException {
 		Runtime.cd("wd");
-		
+
 		Loggers.Initialise();
 		final OutputCapturer sootOutputCapturer = SootFacade.CaptureOutput(Runtime.GetCurrentCwd().resolve("soot_out.txt"), true, false);
 		new Main().Run();
 		Loggers.CleanUp();
-		
+
 		Runtime.PopRuntime();
 	}
-	
+
 	private void Run () throws IOException {
 		final Server s = new Server(new InetSocketAddress(InetAddress.getLoopbackAddress(), 8000), 1);
 		final Ref<Boolean> done = Ref.CreateRef(Boolean.FALSE);
@@ -88,10 +88,10 @@ public class Main {
 						response.SetStatus(Status.NotFound);
 						client.close();
 				}
-				
+
 				System.out.println("DONE HANDLING");
 			}
-			
+
 			private void ServeFile (
 					final String		servingWhat,
 					final String		servingPath,
@@ -123,16 +123,16 @@ public class Main {
 					}}
 			}
 		});
-		
+
 		L.fff(soot.options.Options.v().getUsage());
 		while (!done.Deref())
 			s.Serve();
 	}
-	
+
 
 	private Main () {
 		L = new AutoLogger(Loggers.GetLogger(Main.class));
 	}
-	
+
 	private final AutoLogger L;
 }

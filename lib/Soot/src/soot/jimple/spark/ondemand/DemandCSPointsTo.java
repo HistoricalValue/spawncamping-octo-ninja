@@ -73,9 +73,9 @@ import soot.util.NumberedString;
 /**
  * Tries to find imprecision in points-to sets from a previously run analysis.
  * Requires that all sub-results of previous analysis were cached.
- * 
+ *
  * @author Manu Sridharan
- * 
+ *
  */
 public final class DemandCSPointsTo implements PointsToAnalysis {
 
@@ -201,12 +201,12 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 	 * if <code>true</code>, refine the pre-computed call graph
 	 */
 	private boolean refineCallGraph = true;
-	
+
 	protected static final ImmutableStack<Integer> EMPTY_CALLSTACK = ImmutableStack.<Integer> emptyStack();
 
   /**
 	 * Make a default analysis. Assumes Spark has already run.
-	 * 
+	 *
 	 * @return
 	 */
 	public static DemandCSPointsTo makeDefault() {
@@ -243,7 +243,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 	protected FieldCheckHeuristic fieldCheckHeuristic;
 
 	protected HeuristicType heuristicType;
-	
+
 	protected FieldToEdgesMap fieldToLoads;
 
 	protected FieldToEdgesMap fieldToStores;
@@ -255,7 +255,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 	protected int nesting = 0;
 
 	protected int numNodesTraversed;
-	
+
 	protected int numPasses = 0;
 
 	protected final PAG pag;
@@ -273,7 +273,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 	protected Map<VarContextAndUp, Map<AllocAndContext, CallingContextSet>> upContextCache = new HashMap<VarContextAndUp, Map<AllocAndContext, CallingContextSet>>();
 
 	protected ValidMatches vMatches;
-	
+
 	protected Map<Local,PointsToSet> reachingObjectsCache, reachingObjectsCacheNoCGRefinement;
 
     protected boolean useCache;
@@ -309,7 +309,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 			 * create a lazy points-to set; this will not actually compute context information until we ask whether this points-to set
 			 * has a non-empty intersection with another points-to set and this intersection appears to be non-empty; when this is the case
 			 * then the points-to set will call doReachingObjects(..) to refine itself
-			 */			
+			 */
 			return new LazyContextSensitivePointsToSet(l,new WrappedPointsToSet((PointsToSetInternal) pag.reachingObjects(l)),this);
 		else
 			return doReachingObjects(l);
@@ -322,18 +322,18 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 		}
 		PointsToSet result;
         Map<Local, PointsToSet> cache;
-	    if(refineCallGraph) {  //we use different caches for different settings  
+	    if(refineCallGraph) {  //we use different caches for different settings
             cache = reachingObjectsCache;
 	    } else {
             cache = reachingObjectsCacheNoCGRefinement;
 	    }
-        result = cache.get(l);           
+        result = cache.get(l);
 	    if(result==null) {
     		result = computeReachingObjects(l);
     		if(useCache) {
 	            cache.put(l, result);
     		}
-	    } 	    
+	    }
 	    assert consistentResult(l,result);
 	    return result;
 	}
@@ -350,7 +350,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
         }
         EqualsSupportingPointsToSet eq1 = (EqualsSupportingPointsToSet) result;
         EqualsSupportingPointsToSet eq2 = (EqualsSupportingPointsToSet) result2;
-        return new PointsToSetEqualsWrapper(eq1).equals(new PointsToSetEqualsWrapper(eq2)); 
+        return new PointsToSetEqualsWrapper(eq1).equals(new PointsToSetEqualsWrapper(eq2));
     }
 
     /**
@@ -367,7 +367,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
             //had to abort; return Spark's points-to set in a wrapper
             return new WrappedPointsToSet(v.getP2Set());
         } else {
-            return contextSensitiveResult;    		    
+            return contextSensitiveResult;
         }
     }
 
@@ -480,7 +480,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 
 	/**
 	 * check the computed points-to set of a variable against some predicate
-	 * 
+	 *
 	 * @param v
 	 *            the variable
 	 * @param heuristic
@@ -558,7 +558,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 	// protected ImmutableStack<Integer> fixUpContext(ImmutableStack<Integer>
 	// context, AllocAndContext allocAndContext, VarContextAndUp
 	// varContextAndUp) {
-	//        
+	//
 	// return null;
 	// }
 
@@ -596,7 +596,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 	 * compute a flows-to set for an allocation site. for now, we use a simple
 	 * refinement strategy; just refine as much as possible, maintaining the
 	 * smallest set of flows-to vars
-	 * 
+	 *
 	 * @param alloc
 	 * @param heuristic
 	 * @return
@@ -648,7 +648,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see AAA.summary.Refiner#dumpPathForBadLoc(soot.jimple.spark.pag.VarNode,
 	 *      soot.jimple.spark.pag.AllocNode)
 	 */
@@ -2034,7 +2034,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see AAA.summary.Refiner#refineP2Set(soot.jimple.spark.pag.VarNode,
 	 *      soot.jimple.spark.sets.PointsToSetInternal)
 	 */
@@ -2087,7 +2087,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 
 	/**
 	 * Currently not implemented.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             always
 	 */
@@ -2097,7 +2097,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 
 	/**
 	 * Currently not implemented.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             always
 	 */
@@ -2107,7 +2107,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 
 	/**
 	 * Currently not implemented.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             always
 	 */
@@ -2117,7 +2117,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 
 	/**
 	 * Currently not implemented.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             always
 	 */
@@ -2127,7 +2127,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 
 	/**
 	 * Currently not implemented.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             always
 	 */
@@ -2137,7 +2137,7 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 
 	/**
 	 * Currently not implemented.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             always
 	 */
@@ -2151,28 +2151,28 @@ public final class DemandCSPointsTo implements PointsToAnalysis {
 	public PAG getPAG() {
 		return pag;
 	}
-	
+
 	/**
 	 * @return <code>true</code> is caching is enabled
 	 */
 	public boolean usesCache() {
 	    return useCache;
 	}
-	
+
 	/**
-	 * enables caching 
+	 * enables caching
 	 */
 	public void enableCache() {
 	    useCache = true;
 	}
-	
+
 	/**
 	 * disables caching
 	 */
 	public void disableCache() {
 	    useCache = false;
 	}
-	
+
 	/**
 	 * clears the cache
 	 */

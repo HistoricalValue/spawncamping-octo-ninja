@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -47,7 +47,7 @@ public class BThrowInst extends AbstractInst implements ThrowInst
     {
         return 1;
     }
-    
+
     public int getOutCount()
     {
         return 0;
@@ -57,15 +57,15 @@ public class BThrowInst extends AbstractInst implements ThrowInst
     {
         return 0;
     }
-    
+
     final public String getName() { return "athrow"; }
 
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseThrowInst(this);
-    }   
+    }
 
-    public Object clone() 
+    public Object clone()
     {
         return new BThrowInst();
     }

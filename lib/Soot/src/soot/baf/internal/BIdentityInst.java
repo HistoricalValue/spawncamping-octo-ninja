@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,22 +34,22 @@ import soot.baf.*;
 import soot.util.*;
 import java.util.*;
 
-public class BIdentityInst extends AbstractInst 
+public class BIdentityInst extends AbstractInst
     implements IdentityInst
 {
     ValueBox leftBox;
     ValueBox rightBox;
 
     List defBoxes;
-    
-   
-    
+
+
+
 
     public Value getLeftOp()
     {
         return leftBox.getValue();
     }
-  
+
   public int getInCount()
   {
         return 0;
@@ -59,7 +59,7 @@ public class BIdentityInst extends AbstractInst
   {
         return 0;
     }
-    
+
     public int getOutCount()
     {
         return 0;
@@ -115,7 +115,7 @@ public class BIdentityInst extends AbstractInst
     }
 
 
-    public Object clone() 
+    public Object clone()
     {
             return new BIdentityInst(getLeftOp(), getRightOp());
     }
@@ -146,7 +146,7 @@ public class BIdentityInst extends AbstractInst
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseIdentityInst(this);
-    }    
+    }
 }
 
 

@@ -86,7 +86,7 @@ class GuaranteedDefsAnalysis extends ForwardFlowAnalysis
         for(Iterator unitIt = graph.iterator(); unitIt.hasNext();){
             Unit s = (Unit) unitIt.next();
             FlowSet genSet = emptySet.clone();
-            
+
             for(Iterator domsIt = df.getDominators(s).iterator(); domsIt.hasNext();){
                 Unit dom = (Unit) domsIt.next();
                 for(Iterator boxIt = dom.getDefBoxes().iterator(); boxIt.hasNext();){
@@ -95,7 +95,7 @@ class GuaranteedDefsAnalysis extends ForwardFlowAnalysis
                         genSet.add(box.getValue(), genSet);
                 }
             }
-            
+
             unitToGenerateSet.put(s, genSet);
         }
 

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2003.  
+ * Modified by the Sable Research Group and others 1997-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -58,7 +58,7 @@ import soot.util.dot.DotGraph;
 
 public class PhaseDumper {
     // As a minor optimization, we leave these lists null in the
-    // case were no phases at all are to be dumped, which is the 
+    // case were no phases at all are to be dumped, which is the
     // most likely case.
     private List bodyDumpingPhases = null;
     private List cfgDumpingPhases = null;
@@ -94,7 +94,7 @@ public class PhaseDumper {
 	    return phaseName;
 	}
     }
-    private final PhaseStack phaseStack = new PhaseStack(); 
+    private final PhaseStack phaseStack = new PhaseStack();
     final static String allWildcard = "ALL";
 
 
@@ -113,14 +113,14 @@ public class PhaseDumper {
      *
      * @return Soot's <code>PhaseDumper</code>.
      */
-    public static PhaseDumper v() { 
-	return G.v().soot_util_PhaseDumper(); 
+    public static PhaseDumper v() {
+	return G.v().soot_util_PhaseDumper();
     }
 
 
     private boolean isBodyDumpingPhase(String phaseName) {
 	return ((bodyDumpingPhases != null)
-		&& (bodyDumpingPhases.contains(phaseName) || 
+		&& (bodyDumpingPhases.contains(phaseName) ||
 		    bodyDumpingPhases.contains(allWildcard)));
     }
 
@@ -150,9 +150,9 @@ public class PhaseDumper {
     }
 
 
-    private static java.io.File makeDirectoryIfMissing(Body b) 
+    private static java.io.File makeDirectoryIfMissing(Body b)
 	throws java.io.IOException {
-	StringBuffer buf = 
+	StringBuffer buf =
 	    new StringBuffer(soot.SourceLocator.v().getOutputDir());
 	buf.append(File.separatorChar);
 	String className = b.getMethod().getDeclaringClass().getName();
@@ -173,11 +173,11 @@ public class PhaseDumper {
     }
 
 
-    private static PrintWriter openBodyFile(Body b, String baseName) 
+    private static PrintWriter openBodyFile(Body b, String baseName)
 	throws java.io.IOException {
 	File dir = makeDirectoryIfMissing(b);
 	String filePath = dir.toString() + File.separatorChar + baseName;
-	return 
+	return
 	    new PrintWriter(new java.io.FileOutputStream(filePath));
     }
 
@@ -186,7 +186,7 @@ public class PhaseDumper {
      * Returns the next available name for a graph file.
      */
 
-    private static String nextGraphFileName(Body b, String baseName) 
+    private static String nextGraphFileName(Body b, String baseName)
 	throws java.io.IOException {
 	// We number output files to allow multiple graphs per phase.
 	File dir = makeDirectoryIfMissing(b);
@@ -207,7 +207,7 @@ public class PhaseDumper {
 	    final File dir = makeDirectoryIfMissing(b);
 	    final File[] toDelete = dir.listFiles(new java.io.FilenameFilter() {
 		    public boolean accept(File dir, String name) {
-			return name.startsWith(phaseName) && 
+			return name.startsWith(phaseName) &&
 			    name.endsWith(DotGraph.DOT_EXTENSION);
 		    }
 		});
@@ -226,14 +226,14 @@ public class PhaseDumper {
     // soot.Printer itself needs to create a BriefUnitGraph in order
     // to format the text for a method's instructions, so this flag is
     // a hack to avoid dumping graphs that we create in the course of
-    // dumping bodies or other graphs.  
+    // dumping bodies or other graphs.
     //
     // Note that this hack would not work if a PhaseDumper might be
     // accessed by multiple threads.  So long as there is a single
     // active PhaseDumper accessed through soot.G, it seems
     // safe to assume it will be accessed by only a single thread.
     private boolean alreadyDumping = false;
-    
+
     public void dumpBody(Body b, String baseName) {
 	try {
 	    alreadyDumping = true;
@@ -251,7 +251,7 @@ public class PhaseDumper {
 	}
     }
 
-    private void dumpAllBodies(String baseName, 
+    private void dumpAllBodies(String baseName,
 				      boolean deleteGraphFiles) {
 	List<SootClass> classes = Scene.v().getClasses(SootClass.BODIES);
 	for (SootClass cls : classes) {
@@ -303,7 +303,7 @@ public class PhaseDumper {
     public void dumpAfter(Body b, String phaseName) {
 	String poppedPhaseName = phaseStack.pop();
 	if (poppedPhaseName != phaseName) {
-	    throw new IllegalArgumentException("dumpAfter(" + phaseName + 
+	    throw new IllegalArgumentException("dumpAfter(" + phaseName +
 					       ") when poppedPhaseName == " +
 					       poppedPhaseName);
 	}
@@ -343,7 +343,7 @@ public class PhaseDumper {
     public void dumpAfter(String phaseName) {
 	String poppedPhaseName = phaseStack.pop();
 	if (poppedPhaseName != phaseName) {
-	    throw new IllegalArgumentException("dumpAfter(" + phaseName + 
+	    throw new IllegalArgumentException("dumpAfter(" + phaseName +
 					       ") when poppedPhaseName == " +
 					       poppedPhaseName);
 	}
@@ -368,17 +368,17 @@ public class PhaseDumper {
 	try {
 	    alreadyDumping = true;
 	    String phaseName = phaseStack.currentPhase();
-	    if (isCFGDumpingPhase(phaseName)) { 
+	    if (isCFGDumpingPhase(phaseName)) {
 		try {
-		    String outputFile = nextGraphFileName(b, phaseName + "-" + 
+		    String outputFile = nextGraphFileName(b, phaseName + "-" +
 							  getClassIdent(g) + "-");
 		    DotGraph dotGraph = new CFGToDotGraph().drawCFG(g, b);
 		    dotGraph.plot(outputFile);
 
 		} catch (java.io.IOException e) {
-		    // Don't abort execution because of an I/O error, but 
+		    // Don't abort execution because of an I/O error, but
 		    // report the error.
-		    G.v().out.println("PhaseDumper.dumpBody() caught: " + 
+		    G.v().out.println("PhaseDumper.dumpBody() caught: " +
 				      e.toString());
 		    e.printStackTrace(G.v().out);
 		}
@@ -404,8 +404,8 @@ public class PhaseDumper {
 	    String phaseName = phaseStack.currentPhase();
 	    if (isCFGDumpingPhase(phaseName)) {
 		try {
-		    String outputFile = nextGraphFileName(g.getBody(), 
-							  phaseName + "-" + 
+		    String outputFile = nextGraphFileName(g.getBody(),
+							  phaseName + "-" +
 							  getClassIdent(g) + "-");
 		    CFGToDotGraph drawer = new CFGToDotGraph();
 		    drawer.setShowExceptions(Options.v().show_exception_dests());
@@ -413,9 +413,9 @@ public class PhaseDumper {
 		    dotGraph.plot(outputFile);
 
 		} catch (java.io.IOException e) {
-		    // Don't abort execution because of an I/O error, but 
+		    // Don't abort execution because of an I/O error, but
 		    // report the error.
-		    G.v().out.println("PhaseDumper.dumpBody() caught: " + 
+		    G.v().out.println("PhaseDumper.dumpBody() caught: " +
 				      e.toString());
 		    e.printStackTrace(G.v().out);
 		}
@@ -437,7 +437,7 @@ public class PhaseDumper {
 	return qualifiedName.substring(lastDotIndex+1);
     }
 
-	
+
     /**
      * Prints the current stack trace, as a brute force tool for
      * program understanding. This method appeared in response to the

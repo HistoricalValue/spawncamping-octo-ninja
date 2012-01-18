@@ -26,21 +26,21 @@ public class LocalObjectsAnalysis
 	CallGraph cg;
 
 	Map<SootClass, ClassLocalObjectsAnalysis> classToClassLocalObjectsAnalysis;
-	
+
 	Map mergedContextsCache;
 	Map<SootMethod, SmartMethodLocalObjectsAnalysis> mloaCache;
-	
+
 	public LocalObjectsAnalysis(InfoFlowAnalysis dfa)
 	{
 		this.dfa = dfa;
 		this.uf = new UseFinder();
 		this.cg = Scene.v().getCallGraph();
-		
+
 		classToClassLocalObjectsAnalysis = new HashMap<SootClass, ClassLocalObjectsAnalysis>();
 		mergedContextsCache = new HashMap();
 		mloaCache = new HashMap<SootMethod, SmartMethodLocalObjectsAnalysis>();
 	}
-	
+
 	public ClassLocalObjectsAnalysis getClassLocalObjectsAnalysis(SootClass sc)
 	{
 		if(!classToClassLocalObjectsAnalysis.containsKey(sc))
@@ -50,13 +50,13 @@ public class LocalObjectsAnalysis
 		}
 		return classToClassLocalObjectsAnalysis.get(sc);
 	}
-	
+
 	// meant to be overridden by specialty local objects analyses
 	protected ClassLocalObjectsAnalysis newClassLocalObjectsAnalysis(LocalObjectsAnalysis loa, InfoFlowAnalysis dfa, UseFinder uf, SootClass sc)
 	{
 		return new ClassLocalObjectsAnalysis(loa, dfa, uf, sc);
 	}
-	
+
 	public boolean isObjectLocalToParent(Value localOrRef, SootMethod sm)
 	{
 		// Handle obvious case
@@ -66,7 +66,7 @@ public class LocalObjectsAnalysis
 		ClassLocalObjectsAnalysis cloa = getClassLocalObjectsAnalysis(sm.getDeclaringClass());
 		return cloa.isObjectLocal(localOrRef, sm);
 	}
-	
+
 	public boolean isFieldLocalToParent(SootField sf) // To parent class!
 	{
 		// Handle obvious case
@@ -76,21 +76,21 @@ public class LocalObjectsAnalysis
 		ClassLocalObjectsAnalysis cloa = getClassLocalObjectsAnalysis(sf.getDeclaringClass());
 		return cloa.isFieldLocal(sf);
 	}
-	
+
 	public boolean isObjectLocalToContext(Value localOrRef, SootMethod sm, SootMethod context)
-	{		
+	{
 		// Handle special case
 		if(sm == context)
 		{
 //			G.v().out.println("      Directly Reachable: ");
 			boolean isLocal = isObjectLocalToParent(localOrRef, sm);
 			if(dfa.printDebug())
-				G.v().out.println("    " + (isLocal ? 
+				G.v().out.println("    " + (isLocal ?
 					"LOCAL  (Directly Reachable from " + context.getDeclaringClass().getShortName() + "." + context.getName() + ")" :
 					"SHARED (Directly Reachable from " + context.getDeclaringClass().getShortName() + "." + context.getName() + ")"));
 			return isLocal;
 		}
-	
+
 		// Handle obvious case
 		if( localOrRef instanceof StaticFieldRef )
 		{
@@ -120,7 +120,7 @@ public class LocalObjectsAnalysis
 		{
 			UnitGraph g = new ExceptionalUnitGraph(b);
 			mloa = new SmartMethodLocalObjectsAnalysis(g, dfa);
-//			G.v().out.println("        Caching mloa (smdfa " + SmartMethodInfoFlowAnalysis.counter + 
+//			G.v().out.println("        Caching mloa (smdfa " + SmartMethodInfoFlowAnalysis.counter +
 //				" smloa " + SmartMethodLocalObjectsAnalysis.counter + ") for " + sm.getName() + " on goal:");
 			mloaCache.put(sm, mloa);
 		}
@@ -139,11 +139,11 @@ public class LocalObjectsAnalysis
 		if( localOrRef instanceof InstanceFieldRef )
 		{
 			InstanceFieldRef ifr = (InstanceFieldRef) localOrRef;
-			
+
 			Local thisLocal = null;
 			try{ thisLocal = b.getThisLocal(); }
 			catch(RuntimeException re) { /* Couldn't get thisLocal */ }
-			
+
 			if(ifr.getBase() == thisLocal)
 			{
 				boolean isLocal = mergedContext.isFieldLocal(InfoFlowAnalysis.getNodeForFieldRef(sm, ifr.getField()));
@@ -156,7 +156,7 @@ public class LocalObjectsAnalysis
 					}
 					else
 					{
-						G.v().out.println("      SHARED (this  .sharedField from " + context.getDeclaringClass().getShortName() + "." 
+						G.v().out.println("      SHARED (this  .sharedField from " + context.getDeclaringClass().getShortName() + "."
 																				   + context.getName() + ")");
 					}
 				}
@@ -198,7 +198,7 @@ public class LocalObjectsAnalysis
 		if(dfa.printDebug())
 		{
 			if(isLocal)
-			{	
+			{
 				G.v().out.println("      LOCAL  ( local             from " + context.getDeclaringClass().getShortName() + "."
 																		   + context.getName() + ")");
 			}
@@ -211,7 +211,7 @@ public class LocalObjectsAnalysis
 		return isLocal;
 	}
 
-/*	BROKEN	
+/*	BROKEN
 	public boolean isFieldLocalToContext(SootField sf, SootMethod sm, SootClass context)
 	{
 		G.v().out.println("    Checking if " + sf + " in " + sm + " is local to " + context + ":");
@@ -222,14 +222,14 @@ public class LocalObjectsAnalysis
 			G.v().out.println("      Directly Reachable: " + (isLocal ? "LOCAL" : "SHARED"));
 			return isLocal;
 		}
-	
+
 		// The rest of the time, we must find all call chains from context to sm
 		// if it's local on all of them, then return true.
-		
+
 		// Find Call Chains (separate chains for separate possible virtual call targets)
 		// TODO right now we discard reentrant call chains... but this is UNSAFE
 		// TODO right now we are stupid about virtual calls... but this is UNSAFE
-		
+
 		// for each method in the context class (OR JUST FROM THE RUN METHOD IF IT'S A THREAD?)
 		List classMethods = getAllMethodsForClass(context); // gets methods in context class and superclasses
 		List callChains = new ArrayList();
@@ -246,7 +246,7 @@ public class LocalObjectsAnalysis
 				startingMethods.add(classMethod); // need to add this once for each method call chain being added
 			}
 		}
-		
+
 		if(callChains.size() == 0)
 		{
 			G.v().out.println("      Unreachable: treat as local.");
@@ -255,7 +255,7 @@ public class LocalObjectsAnalysis
 		G.v().out.println("      Found " + callChains.size() + " Call Chains...");
 //		for(int i = 0; i < callChains.size(); i++)
 //			G.v().out.println("      " + callChains.get(i));
-		
+
 		// Check Call Chains
 		for(int i = 0; i < callChains.size(); i++)
 		{
@@ -271,7 +271,7 @@ public class LocalObjectsAnalysis
 	}
 */
 	Map<SootMethod, ReachableMethods> rmCache = new HashMap<SootMethod, ReachableMethods>();
-	
+
 	public CallChain getNextCallChainBetween(SootMethod start, SootMethod goal, List previouslyFound)
 	{
 //		callChains.add(new LinkedList()); // Represents the one way to get from goal to goal (which is to already be there)
@@ -290,14 +290,14 @@ public class LocalObjectsAnalysis
 			rm.update();
 			rmCache.put(start, rm);
 		}
-		
+
 		if(rm.contains(goal))
 		{
 //			Set methodsInAnyChain = new HashSet();
 //			methodsInAnyChain.add(goal);
 			return getNextCallChainBetween(rm, start, goal, null, null, previouslyFound);
 		}
-		
+
 		return null; // new ArrayList();
 	}
 
@@ -372,7 +372,7 @@ public class LocalObjectsAnalysis
 		return null;
 	}
 
-/*	
+/*
 	// callChains go from current to goal
 	public void getCallChainsBetween(SootMethod start, SootMethod current, SootMethod goal, ReachableMethods rm, List callChains, Set methodsInAnyChain)
 	{
@@ -396,9 +396,9 @@ public class LocalObjectsAnalysis
 					callChains.add(cachedChain.cloneAndExtend(oldChain));
 				}
 			}
-			
+
 			// We now have chains from start to goal
-			
+
 			G.v().out.print("C");
 			return;
 		}
@@ -410,7 +410,7 @@ public class LocalObjectsAnalysis
 			Edge e = (Edge) edgeIt.next();
 //			Stmt currentCallerStmt = e.srcStmt();
 			SootMethod currentCaller = e.src();
-			
+
 			// If the source of this edge is unreachable, ignore it
 			if( !rm.contains(currentCaller) )
 			{
@@ -430,7 +430,7 @@ public class LocalObjectsAnalysis
 					break;
 				}
 			}
-				
+
 			if( ( currentCaller == goal ) || currentCallerIsAlreadyInAChain) // methodsInAnyChain.contains(goalCaller) )
 			{
 				G.v().out.print("S");
@@ -443,7 +443,7 @@ public class LocalObjectsAnalysis
 				// Make a copy of all call chains
 //				List newCallChains = cloneCallChains(oldCallChains);
 				List newCallChains = new ArrayList();
-				
+
 				if(oldCallChains.size() == 0)
 				{
 					newCallChains.add(new CallChain(e, null));
@@ -458,9 +458,9 @@ public class LocalObjectsAnalysis
 						newCallChains.add(new CallChain(e, oldCallChain));
 					}
 				}
-				
+
 //				methodsInAnyChain.add(goalCaller);
-					
+
 				// If the call chains don't now start from start, then get ones that do (recursively)
 				if(currentCaller != start)
 				{
@@ -473,7 +473,7 @@ public class LocalObjectsAnalysis
 				{
 					G.v().out.print("F");
 				}
-				
+
 				// Add all the new call chains to our set
 				callChains.addAll(newCallChains);
 			}
@@ -493,7 +493,7 @@ public class LocalObjectsAnalysis
 			ret.add( ((LinkedList) callChainsIt.next()).clone() ); // add a clone of each call chain
 		return ret;
 	}
-*/	
+*/
 /*
 	public List getCallChainsBetween(SootMethod start, SootMethod goal)
 	{
@@ -551,7 +551,7 @@ public class LocalObjectsAnalysis
 			if(rm.contains(scopeMethod))
 				scopeMethods.add(scopeMethod);
 		}
-		
+
 		// Add reachable methods and fields declared in superclasses
 		SootClass superclass = sootClass;
 		if(superclass.hasSuperclass())
@@ -569,12 +569,12 @@ public class LocalObjectsAnalysis
 		}
 		return scopeMethods;
 	}
-	
+
 	public boolean hasNonLocalEffects(SootMethod containingMethod, InvokeExpr ie, SootMethod context)
 	{
 		SootMethod target = ie.getMethodRef().resolve();
 		MutableDirectedGraph dataFlowGraph = dfa.getMethodInfoFlowSummary(target); // TODO actually we want a graph that is sensitive to scalar data, too
-		
+
 		// For a static invoke, check if any fields or any shared params are read/written
 		if(ie instanceof StaticInvokeExpr)
 		{

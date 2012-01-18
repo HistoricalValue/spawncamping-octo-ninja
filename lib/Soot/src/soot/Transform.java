@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2003.  
+ * Modified by the Sable Research Group and others 1997-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ public class Transform implements HasPhaseOptions
     final private boolean DEBUG = true;
     String phaseName;
     Transformer t;
-    
+
     public Transform(String phaseName, Transformer t)
     {
         this.phaseName = phaseName;
@@ -49,17 +49,17 @@ public class Transform implements HasPhaseOptions
 
     private String declaredOpts;
     private String defaultOpts;
-    public String getDeclaredOptions() { 
+    public String getDeclaredOptions() {
         if( declaredOpts != null ) return declaredOpts;
         return Options.getDeclaredOptionsForPhase( phaseName );
     }
-    public String getDefaultOptions() { 
+    public String getDefaultOptions() {
         if( defaultOpts != null ) return defaultOpts;
         return Options.getDefaultOptionsForPhase( phaseName );
     }
 
     /** Allows user-defined phases to have options other than just enabled
-     * without having to mess with the XML. 
+     * without having to mess with the XML.
      * Call this method with a space-separated list of options declared
      * for this Transform.  Only declared options may be passed to this
      * transform as a phase option. */

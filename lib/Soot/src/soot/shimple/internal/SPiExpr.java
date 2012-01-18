@@ -38,17 +38,17 @@ public class SPiExpr implements PiExpr
         argBox = new SValueUnitPair(v, u);
         this.targetKey = o;
     }
-    
+
     public ValueUnitPair getArgBox()
     {
         return argBox;
     }
-        
+
     public Value getValue()
     {
         return argBox.getValue();
     }
-    
+
     public Unit getCondStmt()
     {
         return argBox.getUnit();
@@ -58,12 +58,12 @@ public class SPiExpr implements PiExpr
     {
         return targetKey;
     }
-    
+
     public void setValue(Value value)
     {
         argBox.setValue(value);
     }
-    
+
     public void setCondStmt(Unit pred)
     {
         argBox.setUnit(pred);
@@ -73,7 +73,7 @@ public class SPiExpr implements PiExpr
     {
         this.targetKey = targetKey;
     }
-    
+
     public List getUnitBoxes()
     {
         return Collections.singletonList(argBox);
@@ -84,7 +84,7 @@ public class SPiExpr implements PiExpr
         System.out.println("clear unit boxes");
         argBox.setUnit(null);
     }
-    
+
     public boolean equivTo(Object o)
     {
         if(!(o instanceof SPiExpr))
@@ -97,7 +97,7 @@ public class SPiExpr implements PiExpr
     {
         return getArgBox().equivHashCode() * 17;
     }
-    
+
     public void apply(Switch sw)
     {
         // *** FIXME:
@@ -114,7 +114,7 @@ public class SPiExpr implements PiExpr
         String s = Shimple.PI + "(" + getValue() + ")";
         return s;
     }
-    
+
     public void toString(UnitPrinter up)
     {
         up.literal(Shimple.PI);
@@ -129,7 +129,7 @@ public class SPiExpr implements PiExpr
     {
         return getValue().getType();
     }
-    
+
     public List getUseBoxes()
     {
         return Collections.singletonList(argBox);

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,14 +31,14 @@ import soot.jimple.*;
 import java.util.*;
 
 /**
- * 
+ *
  * @deprecated use {@link soot.jimple.toolkits.typing.fast.TypeResolver} instead
  */
 class ConstraintCollectorBV extends AbstractStmtSwitch
 {
   private TypeResolverBV resolver;
   private boolean uses;  // if true, include use contraints
-  
+
   private JimpleBody stmtBody;
 
   public ConstraintCollectorBV(TypeResolverBV resolver, boolean uses)
@@ -60,21 +60,21 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
     if(ie instanceof InterfaceInvokeExpr)
       {
 	InterfaceInvokeExpr invoke = (InterfaceInvokeExpr) ie;
-	
+
 	SootMethodRef method = invoke.getMethodRef();
 	Value base = invoke.getBase();
-	
+
 	if(base instanceof Local)
 	  {
 	    Local local = (Local) base;
-	    
+
 	    TypeVariableBV localType = resolver.typeVariable(local);
-	    
+
 	    localType.addParent(resolver.typeVariable(method.declaringClass()));
 	  }
-	
+
 	int count = invoke.getArgCount();
-	
+
 	for(int i = 0; i < count; i++)
 	  {
 	    if(invoke.getArg(i) instanceof Local)
@@ -198,11 +198,11 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	ArrayRef ref = (ArrayRef) l;
 	Value base = ref.getBase();
 	Value index = ref.getIndex();
-	
+
 	TypeVariableBV baseType = resolver.typeVariable((Local) base);
 	baseType.makeElement();
 	left = baseType.element();
-	
+
 	if(index instanceof Local)
 	  {
 	    if(uses)
@@ -218,12 +218,12 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
     else if(l instanceof InstanceFieldRef)
       {
 	InstanceFieldRef ref = (InstanceFieldRef) l;
-	
+
 	if(uses)
 	  {
 	    TypeVariableBV baseType = resolver.typeVariable((Local) ref.getBase());
 	    baseType.addParent(resolver.typeVariable(ref.getField().getDeclaringClass()));
-	   
+
 	    left = resolver.typeVariable(ref.getField().getType());
 	  }
       }
@@ -232,7 +232,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	if(uses)
 	  {
 	    StaticFieldRef ref = (StaticFieldRef) l;
-	    
+
 	    left = resolver.typeVariable(ref.getField().getType());
 	  }
       }
@@ -248,11 +248,11 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	ArrayRef ref = (ArrayRef) r;
 	Value base = ref.getBase();
 	Value index = ref.getIndex();
-	
+
 	TypeVariableBV baseType = resolver.typeVariable((Local) base);
 	baseType.makeElement();
 	right = baseType.element();
-	
+
 	if(index instanceof Local)
 	  {
 	    if(uses)
@@ -292,12 +292,12 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
     else if(r instanceof BinopExpr)
       {
 	//******** BINOP EXPR ********
-	
+
 	BinopExpr be = (BinopExpr) r;
 
 	Value lv = be.getOp1();
 	Value rv = be.getOp2();
-	
+
 	TypeVariableBV lop;
 	TypeVariableBV rop;
 
@@ -338,7 +338,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	  {
 	    throw new RuntimeException("Unhandled binary expression left operand type: " + lv.getClass());
 	  }
-	
+
 	//******** RIGHT ********
 	if(rv instanceof Local)
 	  {
@@ -376,7 +376,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	  {
 	    throw new RuntimeException("Unhandled binary expression right operand type: " + rv.getClass());
 	  }
-	
+
 	if((be instanceof AddExpr) ||
 	   (be instanceof SubExpr) ||
 	   (be instanceof MulExpr) ||
@@ -392,7 +392,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 		rop.addParent(common);
 		lop.addParent(common);
 	      }
-	    
+
 	    if(left != null)
 	      {
 		rop.addParent(left);
@@ -407,7 +407,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	      {
 		rop.addParent(resolver.typeVariable(IntType.v()));
 	      }
-	    
+
 	    right = lop;
 	  }
 	else if((be instanceof CmpExpr) ||
@@ -426,7 +426,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 		rop.addParent(common);
 		lop.addParent(common);
 	      }
-	    
+
 	    right = resolver.typeVariable(IntType.v());
 	  }
 	else
@@ -460,7 +460,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 
 	if(baseType instanceof ArrayType)
 	  {
-	    right = resolver.typeVariable(ArrayType.v(((ArrayType) baseType).baseType, 
+	    right = resolver.typeVariable(ArrayType.v(((ArrayType) baseType).baseType,
 						      ((ArrayType) baseType).numDimensions + 1));
 	  }
 	else
@@ -559,7 +559,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	    TypeVariableBV baseType = resolver.typeVariable((Local) ref.getBase());
 	    baseType.addParent(resolver.typeVariable(ref.getField().getDeclaringClass()));
 	  }
-	
+
 	right = resolver.typeVariable(ref.getField().getType());
       }
     else if(r instanceof StaticFieldRef)
@@ -620,7 +620,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	if(stmt.getOp() instanceof Local)
 	  {
 	    TypeVariableBV op = resolver.typeVariable((Local) stmt.getOp());
-	    
+
 	    op.addParent(resolver.typeVariable(RefType.v("java.lang.Object")));
 	  }
       }
@@ -633,7 +633,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	if(stmt.getOp() instanceof Local)
 	  {
 	    TypeVariableBV op = resolver.typeVariable((Local) stmt.getOp());
-	    
+
 	    op.addParent(resolver.typeVariable(RefType.v("java.lang.Object")));
 	  }
       }
@@ -648,11 +648,11 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
     if(uses)
       {
 	ConditionExpr cond = (ConditionExpr) stmt.getCondition();
-	
+
 	BinopExpr expr = cond;
 	Value lv = expr.getOp1();
 	Value rv = expr.getOp2();
-	
+
 	TypeVariableBV lop;
 	TypeVariableBV rop;
 
@@ -693,7 +693,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	  {
 	    throw new RuntimeException("Unhandled binary expression left operand type: " + lv.getClass());
 	  }
-	
+
 	//******** RIGHT ********
 	if(rv instanceof Local)
 	  {
@@ -776,7 +776,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
     if(uses)
       {
 	Value key = stmt.getKey();
-	
+
 	if(key instanceof Local)
 	  {
 	    resolver.typeVariable((Local) key).addParent(resolver.typeVariable(IntType.v()));
@@ -791,7 +791,7 @@ class ConstraintCollectorBV extends AbstractStmtSwitch
 	if(stmt.getOp() instanceof Local)
 	  {
 	    TypeVariableBV op = resolver.typeVariable((Local) stmt.getOp());
-	    
+
 	    op.addParent(resolver.typeVariable(RefType.v("java.lang.Throwable")));
 	  }
       }

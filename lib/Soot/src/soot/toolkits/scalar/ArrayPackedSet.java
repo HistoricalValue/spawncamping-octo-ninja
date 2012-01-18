@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,7 +31,7 @@ import java.util.*;
 
 
 /**
- *   Reference implementation for a BoundedFlowSet. Items are stored in an Array.  
+ *   Reference implementation for a BoundedFlowSet. Items are stored in an Array.
  */
 public class ArrayPackedSet extends AbstractBoundedFlowSet
 {
@@ -50,7 +50,7 @@ public class ArrayPackedSet extends AbstractBoundedFlowSet
 
         this(map, new int[map.size() / 32 + (((map.size() % 32) != 0) ? 1 : 0)]);
     }
-    
+
     ArrayPackedSet(ObjectIntMapper map, int[] bits)
     {
         this.map = map;
@@ -196,14 +196,14 @@ public class ArrayPackedSet extends AbstractBoundedFlowSet
 
         for(int i = 0; i < bits.length; i++)
             dest.bits[i] = ~(this.bits[i]);
-            
+
         // Clear the bits which are outside of this universe
             if(bits.length >= 1)
             {
                 int lastValidBitCount = map.size() % 32;
-                
+
                 if(lastValidBitCount != 0)
-                    dest.bits[bits.length - 1] &= ~(0xFFFFFFFF << lastValidBitCount);  
+                    dest.bits[bits.length - 1] &= ~(0xFFFFFFFF << lastValidBitCount);
             }
       } else
         super.complement(destFlow);
@@ -241,13 +241,13 @@ public class ArrayPackedSet extends AbstractBoundedFlowSet
 
         if(!(other instanceof ArrayPackedSet) || bits.length != other.bits.length)
             throw new RuntimeException("Incompatible other set for union");
-            
+
         for(int i = 0; i < bits.length; i++)
             dest.bits[i] = this.bits[i] & ~other.bits[i];
       } else
         super.difference(otherFlow, destFlow);
     }
-    
+
     public void intersection(FlowSet otherFlow, FlowSet destFlow)
     {
       if (sameType(otherFlow) &&

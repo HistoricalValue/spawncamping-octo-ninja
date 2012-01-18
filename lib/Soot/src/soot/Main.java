@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2008.  
+ * Modified by the Sable Research Group and others 1997-2008.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -147,7 +147,7 @@ public class Main {
         }
     }
 
-    /** 
+    /**
      *  Entry point to the soot's compilation process.
      */
     public void run(String[] args) {
@@ -159,7 +159,7 @@ public class Main {
             Timers.v().totalTimer.start();
 
             processCmdLine(cmdLineArgs);
-            
+
             autoSetOptions();
 
             G.v().out.println("Soot started on " + start);
@@ -168,7 +168,7 @@ public class Main {
 
             /*
              * By this all the java to jimple has occured so we just check ast-metrics flag
-             * 
+             *
              * If it is set......print the astMetrics.xml file and stop executing soot
              */
             if(Options.v().ast_metrics()){
@@ -176,8 +176,8 @@ public class Main {
             		OutputStream streamOut = new FileOutputStream("../astMetrics.xml");
             		PrintWriter writerOut = new PrintWriter(new OutputStreamWriter(streamOut));
             		writerOut.println("<?xml version='1.0'?>");
-            		writerOut.println("<ASTMetrics>");		 		
-            		
+            		writerOut.println("<ASTMetrics>");
+
             		Iterator<ClassData> it = G.v().ASTMetricsData.iterator();
             		while(it.hasNext()){
             			//each is a classData object
@@ -193,14 +193,14 @@ public class Main {
             	}
                 return;
             }
-            
-            
+
+
             PackManager.v().runPacks();
             PackManager.v().writeOutput();
 
             Timers.v().totalTimer.end();
 
-            // Print out time stats.				
+            // Print out time stats.
             if (Options.v().time())
                 Timers.v().printProfilingInformation();
 
@@ -208,7 +208,7 @@ public class Main {
             Timers.v().totalTimer.end();
             if(e.getStatus()!=CompilationDeathException.COMPILATION_SUCCEEDED)
             	throw e;
-            else 
+            else
             	return;
         }
 
@@ -224,15 +224,15 @@ public class Main {
                 + " sec.");
 
     }
-    
+
 	private void autoSetOptions() {
-		//when reflection log is enabled, also enable phantom refs	
+		//when reflection log is enabled, also enable phantom refs
 	    CGOptions cgOptions = new CGOptions( PhaseOptions.v().getPhaseOptions("cg") );
 	    String log = cgOptions.reflection_log();
 	    if(log!=null && log.length()>0) {
 	    	Options.v().set_allow_phantom_refs(true);
 	    }
-	    
+
 	    //if phantom refs enabled,  ignore wrong staticness in type assigner
 	    if(Options.v().allow_phantom_refs()) {
 	    	PhaseOptions.v().setPhaseOption("jb.tr", "ignore-wrong-staticness:true");

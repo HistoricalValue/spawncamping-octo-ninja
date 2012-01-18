@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,23 +36,23 @@ public class Timer
     private long duration;
     private long startTime;
     private boolean hasStarted;
-		
+
     private String name;
-		
-    
+
+
     /** Creates a new timer with the given name. */
     public Timer(String name)
     {
         this.name = name;
         duration = 0;
     }
-    
+
     /** Creates a new timer. */
     public Timer()
     {
         this("unnamed");
     }
-    
+
     /** Starts the given timer. */
     public void start()
     {
@@ -60,56 +60,56 @@ public class Timer
 				if(!G.v().Timer_isGarbageCollecting && Options.v() != null && Options.v().subtract_gc() && ((G.v().Timer_count++ % 4) == 0))
             {
                 // garbage collects only every 4 calls to avoid round off errors
-                
+
                 G.v().Timer_isGarbageCollecting = true;
-            
+
                 G.v().Timer_forcedGarbageCollectionTimer.start();
-                
+
                 // Stop all outstanding timers
                 {
                     Iterator<Timer> timerIt = G.v().Timer_outstandingTimers.iterator();
-                    
+
                     while(timerIt.hasNext())
                     {
                         Timer t = timerIt.next();
-                        
+
                         t.end();
                     }
                 }
-                
+
                 System.gc();
-        
+
                 // Start all outstanding timers
                 {
                     Iterator<Timer> timerIt = G.v().Timer_outstandingTimers.iterator();
-                    
+
                     while(timerIt.hasNext())
                     {
                         Timer t = timerIt.next();
-                        
+
                         t.start();
                     }
                 }
-                
+
                 G.v().Timer_forcedGarbageCollectionTimer.end();
-                
+
                 G.v().Timer_isGarbageCollecting = false;
             }
-                        
-        
+
+
         startTime = System.currentTimeMillis();
-        
+
         if(hasStarted)
             throw new RuntimeException("timer " + name + " has already been started!");
         else
             hasStarted = true;
-        
-        
-        if(!G.v().Timer_isGarbageCollecting) 
+
+
+        if(!G.v().Timer_isGarbageCollecting)
         {
             G.v().Timer_outstandingTimers.add(this);
         }
-            
+
     }
 
     /** Returns the name of the current timer. */
@@ -117,18 +117,18 @@ public class Timer
     {
         return name;
     }
-    
+
     /** Stops the current timer. */
     public void end()
-    {   
+    {
         if(!hasStarted)
             throw new RuntimeException("timer " + name + " has not been started!");
         else
             hasStarted = false;
-        
+
         duration += System.currentTimeMillis() - startTime;
-        
-        
+
+
         if(!G.v().Timer_isGarbageCollecting)
         {
             G.v().Timer_outstandingTimers.remove(this);

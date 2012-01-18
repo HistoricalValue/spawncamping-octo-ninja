@@ -35,7 +35,7 @@ public class JavaIoObjectOutputStreamNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -63,10 +63,10 @@ public class JavaIoObjectOutputStreamNative extends NativeMethodClass {
   /**
    * The object in field is retrieved out by field ID.
    *
-   * private static native 
+   * private static native
    *         java.lang.Object getObjectFieldValue(java.lang.Object, long);
    */
-  public 
+  public
     void java_io_ObjectOutputStream_getObjectFieldValue(
 				    SootMethod method,
 				    ReferenceVariable thisVar,
@@ -79,11 +79,11 @@ public class JavaIoObjectOutputStreamNative extends NativeMethodClass {
    * Following three native methods have no side effects.
    *
    * private static native void floatsToBytes(float[], int, byte[], int, int);
-   * private static native void doublesToBytes(double[], int, 
+   * private static native void doublesToBytes(double[], int,
    *                                           byte[], int, int);
-   * private static native void getPrimitiveFieldValues(java.lang.Object, 
-   *                                                    long[], 
-   *                                                    char[], 
+   * private static native void getPrimitiveFieldValues(java.lang.Object,
+   *                                                    long[],
+   *                                                    char[],
    *                                                    byte[]);
    * @see default(...)
    */

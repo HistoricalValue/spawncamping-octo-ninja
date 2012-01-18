@@ -27,18 +27,18 @@ import soot.grimp.internal.*;
 
 public class DNewInvokeExpr extends GNewInvokeExpr
 {
-    public DNewInvokeExpr( RefType type, SootMethodRef methodRef, java.util.List args) 
+    public DNewInvokeExpr( RefType type, SootMethodRef methodRef, java.util.List args)
     {
 	super( type, methodRef, args);
     }
 
-    public Object clone() 
+    public Object clone()
     {
         ArrayList clonedArgs = new ArrayList( getArgCount());
 
-        for(int i = 0; i < getArgCount(); i++) 
+        for(int i = 0; i < getArgCount(); i++)
             clonedArgs.add(i, Grimp.cloneIfNecessary(getArg(i)));
-        
+
         return new DNewInvokeExpr( (RefType) getType(), methodRef, clonedArgs);
     }
 }

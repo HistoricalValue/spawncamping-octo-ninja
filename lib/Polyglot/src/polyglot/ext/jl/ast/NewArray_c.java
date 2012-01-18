@@ -156,7 +156,7 @@ public class NewArray_c extends Expr_c implements NewArray
       if (init != null) {
         w.write(" ");
         print(init, w, tr);
-      }        
+      }
     }
 
     public Term entry() {

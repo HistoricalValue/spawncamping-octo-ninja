@@ -49,10 +49,10 @@ import soot.dava.toolkits.base.AST.analysis.*;
              |                   |
              |  Nothing here     |
              |___________________|
-         }//end of label_1  
+         }//end of label_1
 
 
-The important thing to note in this case is that the node which uses breaks 
+The important thing to note in this case is that the node which uses breaks
 extends ASTLabeledNode so that we can move the label down. Obviously there shouldnt be
 an already existing label on this node. Once the node containing the break is detected
 there should be no node following this in the body of the labeled block. This is so because
@@ -71,9 +71,9 @@ if the break is moved down that code will get executed and thats a wrong transfo
              |                   |
              |  Nothing here     |
              |___________________|
-         }//end of label_1  
+         }//end of label_1
 
-If the previous pattern did not match because the node on which we wanted to push the label 
+If the previous pattern did not match because the node on which we wanted to push the label
 inwards already had a label we can try to use the label on the inner node. This is only possible
 if there is only a single node in the labeledBlocks subBody, to make sure that we break and jump
 to exactly the same point as we were jumping before.
@@ -108,14 +108,14 @@ public class PushLabeledBlockIn extends DepthFirstAdapter{
 	    //found some break for this label
 	    //retrieve element at this nodeNumber
 	    if(subBody.size()<nodeNumber){
-		//something is wrong 
+		//something is wrong
 		throw new RuntimeException("Please submit this benchmark as a bug");
 	    }
 
 	    //check that this is the last node in the list
 	    //since otherwise we cant change anything
 	    if(nodeNumber+1!=subBody.size()){
-		//it is not the last 
+		//it is not the last
 		return;
 	    }
 
@@ -125,7 +125,7 @@ public class PushLabeledBlockIn extends DepthFirstAdapter{
 		//does not extend labeledNode hence cannot give it a label
 		return;
 	    }
-	    
+
 	    ASTLabeledNode tempNode = (ASTLabeledNode)temp;
 	    //shouldnt already have a label
 	    String innerLabel = tempNode.get_Label().toString();
@@ -138,18 +138,18 @@ public class PushLabeledBlockIn extends DepthFirstAdapter{
 		    /*
 		      The situation is that there is a labeled block whic has only one
 		      node that also has a label on it.
-		      
+
 		      There is some statement deep down which breaks the outer label
-		      
+
 		      No reason why it cant break the inner label since there is nothing after that!!!
-		      
+
 		      label has the outer label whose break we found
 		      innerLabel has the label of the inner node which contains the break
-		    
-		      replace all occurances of break of outer label 
+
+		      replace all occurances of break of outer label
 		      with that of break of inner label
 		    */
-		    
+
 		    //we know that the breaks occur within the subtree rooted at temp
 		    boolean done=replaceBreakLabels(temp,label,innerLabel);
 		    if(done){
@@ -268,7 +268,7 @@ public class PushLabeledBlockIn extends DepthFirstAdapter{
 	    }
 	    nodeNumber++;
 	}//end of while
-    
+
 	return -1;
     }
 
@@ -308,7 +308,7 @@ public class PushLabeledBlockIn extends DepthFirstAdapter{
 	    SETNodeLabel label = abStmt.getLabel();
 	    return label.toString();
 	}
-	else 
+	else
 	    return null;
     }
 

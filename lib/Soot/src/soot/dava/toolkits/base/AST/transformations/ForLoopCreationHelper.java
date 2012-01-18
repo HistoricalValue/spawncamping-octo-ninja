@@ -49,7 +49,7 @@ public class ForLoopCreationHelper{
     List<Object> myStmts;//stores the statementseq list of statements whose last stmt has to be removed
     boolean removeLast=false;//the last stmt in the above stmts is removed if this boolean is true
 
-    
+
 
     public ForLoopCreationHelper(ASTStatementSequenceNode stmtSeqNode, ASTWhileNode whileNode){
 	this.stmtSeqNode=stmtSeqNode;
@@ -89,7 +89,7 @@ public class ForLoopCreationHelper{
 	temp = (ASTNode)oldIt.next();
 	if(!(temp instanceof ASTWhileNode))
 	    return null;
-	
+
 	//add new stmtseqnode to the newSubBody
 	if(newStmtSeqNode!=null){
 	    newSubBody.add(newStmtSeqNode);
@@ -106,7 +106,7 @@ public class ForLoopCreationHelper{
 	while(oldIt.hasNext()){
 	    newSubBody.add(oldIt.next());
 	}
-	
+
 	return newSubBody;
     }
 
@@ -117,16 +117,16 @@ public class ForLoopCreationHelper{
       and collect all defs
 
       Important: if a def is followed by a non def stmt
-      clear def list and continue 
+      clear def list and continue
 
-      i.e. we are conservatively checking when a def can be 
+      i.e. we are conservatively checking when a def can be
       moved into a for loop body
     */
     private List<String> getDefs(){
 	if(stmtSeqNode==null){
 	    return null;
 	}
-	
+
 	List<String> toReturn= new ArrayList<String>();
 
 	List<Object> statements = stmtSeqNode.getStatements();
@@ -135,7 +135,7 @@ public class ForLoopCreationHelper{
 	while(stmtIt.hasNext()){
 	    AugmentedStmt as = (AugmentedStmt)stmtIt.next();
 	    Stmt s = as.get_Stmt();
-	    
+
 	    //check if this is a def
 	    if(s instanceof DefinitionStmt){
 		Value left = ((DefinitionStmt)s).getLeftOp();
@@ -167,7 +167,7 @@ public class ForLoopCreationHelper{
 
     private List<String> getCond(ASTCondition cond){
 	List<String> toReturn=new ArrayList<String>();
-	
+
 	if(cond instanceof ASTUnaryCondition){
 	    toReturn.add(((ASTUnaryCondition)cond).toString());
 	}
@@ -196,7 +196,7 @@ public class ForLoopCreationHelper{
 	    Iterator<String> condIt = condUses.iterator();
 	    while(condIt.hasNext()){
 		String condString = condIt.next();
-		
+
 		if(condString.compareTo(defString)==0){
 		    //match
 		    toReturn.add(defString);
@@ -212,7 +212,7 @@ public class ForLoopCreationHelper{
     /*
       Given the StmtSequenceNode and the while Node
       Check if the while can be converted to a for
-      
+
       If this can be done. create the replacement stmt sequence node
       and the new for loop and return TRUE;
 
@@ -256,8 +256,8 @@ public class ForLoopCreationHelper{
 	    //System.out.println("Aborting because of commonVars");
 	    return false;
 	}
-	
-	//there are some vars which are 
+
+	//there are some vars which are
 	//1, defined in the stmtseq node
 	//2, used in the condition
 	//System.out.println(commonVars);
@@ -281,11 +281,11 @@ public class ForLoopCreationHelper{
 
 	/*
 	  Check that anything in init is not a first time initialization
-	  if it is and it is not used outside the for loop then 
+	  if it is and it is not used outside the for loop then
 	  we need to declare it as int i = bla bla instead of i = bla bla
 	*/
 	//init=analyzeInit(init);
-	
+
 	//about to create loop make sure to remove the update stmt
 	if(removeLast){
 	    //System.out.println("Removing"+myStmts.get(myStmts.size()-1));
@@ -353,7 +353,7 @@ public class ForLoopCreationHelper{
 		    myStmts=stmts;
 		    removeLast=true;
 		    //stmts.remove(stmts.size()-1);
-		    
+
 		    //see if commonUses has this otherwise add it
 		    Iterator<String> coIt = commonUses.iterator();
 		    boolean matched=false;
@@ -366,7 +366,7 @@ public class ForLoopCreationHelper{
 			//it is not in commonUses
 			commonUses.add(defString);
 		    }
-		    
+
 		    return toReturn;
 		}
 	    }
@@ -380,9 +380,9 @@ public class ForLoopCreationHelper{
 		    toReturn.add(last);
 
 		    myStmts=stmts;
-		    removeLast=true;		    
+		    removeLast=true;
 		    //stmts.remove(stmts.size()-1);
-		    
+
 		    //see if commonUses has this otherwise add it
 		    Iterator<String> coIt = commonUses.iterator();
 		    boolean matched=false;
@@ -399,7 +399,7 @@ public class ForLoopCreationHelper{
 		}
 	    }
 	}//going through ASTNodes
-	
+
 	return toReturn;
     }
 
@@ -419,8 +419,8 @@ public class ForLoopCreationHelper{
 	}
 
 	List<Object> stmts = new ArrayList<Object>();
-	
-	
+
+
 	List<Object> statements = stmtSeqNode.getStatements();
 	Iterator<Object> stmtIt = statements.iterator();
 	int stmtNum=0;
@@ -442,7 +442,7 @@ public class ForLoopCreationHelper{
 	while(stmtIt.hasNext()){
 	    init.add(stmtIt.next());
 	}
-	
+
 	return init;
     }
 
@@ -455,7 +455,7 @@ public class ForLoopCreationHelper{
 	    Stmt s = as.get_Stmt();
 	    if(!(s instanceof DefinitionStmt)){
 		//there is something wrong so dont do anything fancy
-		return init; 
+		return init;
 	    }
 	    else{
 		//get the local being initialized

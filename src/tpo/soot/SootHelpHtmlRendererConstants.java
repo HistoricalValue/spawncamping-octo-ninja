@@ -1,7 +1,7 @@
 package tpo.soot;
 
 public class SootHelpHtmlRendererConstants {
-	
+
 	///////////////////////////////////////////////////////
 	//
 	public final static String StandardCSS = ""
@@ -240,10 +240,10 @@ public class SootHelpHtmlRendererConstants {
 			+ "		$(id).style.display = \"block\";\n"
 			+ "	}\n"
 			+ "\n";
-	
+
 	///////////////////////////////////////////////////////
 	// private
 	private SootHelpHtmlRendererConstants () {
 	}
-	
+
 }

@@ -16,7 +16,7 @@ public class SourceJob extends Job
      */
     protected Source source;
 
-    /** 
+    /**
      * Set of <code>Source</code>s that this SourceJob depends upon.
      * This will include, but is not limited to, the other Sources that
      * this SourceJob caused to load.
@@ -28,12 +28,12 @@ public class SourceJob extends Job
      */
     protected Set dependents;
 
-    /** 
-     * Constructor 
+    /**
+     * Constructor
      */
-    public SourceJob(ExtensionInfo lang, 
-                     JobExt ext, 
-                     Source source, 
+    public SourceJob(ExtensionInfo lang,
+                     JobExt ext,
+                     Source source,
                      Node ast) {
         super(lang, ext, ast);
 
@@ -46,7 +46,7 @@ public class SourceJob extends Job
     public Set dependencies() {
         return dependencies;
     }
-    
+
     public Set dependents() {
         return dependents;
     }

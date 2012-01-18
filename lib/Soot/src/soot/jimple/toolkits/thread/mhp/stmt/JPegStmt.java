@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -51,11 +51,11 @@ import soot.toolkits.graph.*;
 public abstract class JPegStmt extends AbstractHost
 
 //public class JPegStmt implements CommunicationStmt
-//public class JPegStmt extends AbstractStmt implements CommunicationStm 
-//public class JPegStmt extends AbstractStm 
+//public class JPegStmt extends AbstractStmt implements CommunicationStm
+//public class JPegStmt extends AbstractStm
 
 {
-	
+
 	protected String object;
 	protected String name;
 	protected String caller;
@@ -67,7 +67,7 @@ public abstract class JPegStmt extends AbstractHost
 	protected JPegStmt(){}
 	protected JPegStmt(String obj, String na, String ca )
 	{
-		
+
 		this.object = obj;
 		this.name = na;
 		this.caller = ca;
@@ -96,7 +96,7 @@ public abstract class JPegStmt extends AbstractHost
 		this.unitGraph = ug;
 		this.sootMethod = sm;
 	}
-	
+
 	protected void setUnit(Unit un)
 	{
 		unit = un;
@@ -109,8 +109,8 @@ public abstract class JPegStmt extends AbstractHost
 	{
 		if (!containUnitGraph())
 			throw new RuntimeException("This statement does not contain UnitGraph!");
-		
-		return unitGraph;	
+
+		return unitGraph;
 	}
 	public boolean containUnitGraph()
 	{
@@ -123,8 +123,8 @@ public abstract class JPegStmt extends AbstractHost
 	{
 		if (!containUnit())
 			throw new RuntimeException("This statement does not contain Unit!");
-		
-		return unit;	
+
+		return unit;
 	}
 	public boolean containUnit()
 	{
@@ -137,17 +137,17 @@ public abstract class JPegStmt extends AbstractHost
 	{
 		return object;
 	}
-	
+
 	protected void setObject(String ob)
 	{
 		object = ob;
 	}
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	protected void setName(String na)
 	{
 		name = na;
@@ -156,41 +156,41 @@ public abstract class JPegStmt extends AbstractHost
 	{
 		return caller;
 	}
-	
+
 	protected void setCaller(String ca)
 	{
 		caller = ca;
 	}
-	
+
 	public SootMethod getMethod()
 	{
 		return sootMethod;
 	}
-	
+
 	/* public void apply(Switch sw)
 	 {
 	 ((StmtSwitch) sw).caseCommunicationStmt(this);
 	 }
 	 */
-	
-	/* public Object clone() 
+
+	/* public Object clone()
 	 {
 	 if (containUnit()){
 	 }
 	 return new JPegStmt(object,name,caller, );
 	 }
 	 */
-	
+
 	public String toString()
 	{
-		
+
 		if (sootMethod != null)
 			return "("+ getObject()+ ", " + getName() + ", " + getCaller()+","+ sootMethod+")";
 		else
 			return "("+ getObject()+ ", " + getName() + ", " + getCaller()+")";
-		
+
 	}
-	
+
 	public String testToString()
 	{
 		if (containUnit()){
@@ -203,10 +203,10 @@ public abstract class JPegStmt extends AbstractHost
 		}
 		else
 			return  "("+ getObject()+ ", " + getName() + ", " + getCaller()+")";
-		
+
 	}
-	
-	
-	
-	
+
+
+
+
 }

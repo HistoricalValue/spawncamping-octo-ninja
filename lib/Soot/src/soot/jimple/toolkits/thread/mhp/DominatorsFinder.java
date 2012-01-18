@@ -1,7 +1,7 @@
 
 package soot.jimple.toolkits.thread.mhp;
 
-import soot.toolkits.scalar.*; 
+import soot.toolkits.scalar.*;
 import soot.toolkits.graph.*;
 import soot.util.*;
 import java.util.*;
@@ -20,31 +20,31 @@ import java.util.*;
 public class DominatorsFinder{
 	private final Map<Object, FlowSet> unitToDominators;
 	private final DirectedGraph peg;
-	
+
 	DominatorsFinder(Chain chain, DirectedGraph pegGraph){
-		unitToDominators = new HashMap<Object, FlowSet>(); 
+		unitToDominators = new HashMap<Object, FlowSet>();
 		peg = pegGraph;
 		find(chain);
 		//testUnitToDominators();
 	}
-	
+
 	private void find(Chain chain) {
-		
+
 		boolean change = true;
-		
+
 		Iterator chainIt;
-		
+
 		FlowSet fullSet = new ArraySparseSet();
 		FlowSet temp = new ArraySparseSet();
-		
+
 		{
 			chainIt = chain.iterator();
 			while (chainIt.hasNext()){
 				fullSet.add(chainIt.next());
-				
+
 			}
 		}
-		
+
 		List heads = peg.getHeads();
 		if (heads.size() != 1){
 			System.err.println("The size of heads of peg is not equal to 1!");
@@ -68,9 +68,9 @@ public class DominatorsFinder{
 		}
 		System.out.println("===finish init unitToDominators===");
 		System.err.println("===finish init unitToDominators===");
-		
+
 		// testUnitToDominators();
-		
+
 		do {
 			change = false;
 			Iterator it = chain.iterator();
@@ -79,11 +79,11 @@ public class DominatorsFinder{
 				if (heads.contains(n)) continue;
 				else{
 					fullSet.copy(temp);
-					
+
 					Iterator predsIt = peg.getPredsOf(n).iterator();
 					while (predsIt.hasNext()){
 						Object p = predsIt.next();
-						FlowSet dom = getDominatorsOf(p); 
+						FlowSet dom = getDominatorsOf(p);
 						temp.intersection(dom);
 					}
 					FlowSet d = new ArraySparseSet();
@@ -98,14 +98,14 @@ public class DominatorsFinder{
 				}
 			}
 		}while(!change);
-		
-		
+
+
 	}
 	public FlowSet getDominatorsOf(Object s){
 		if(!unitToDominators.containsKey(s))
 			throw new RuntimeException("Invalid stmt" + s);
 		return unitToDominators.get(s);
-		
+
 	}
-	
+
 }

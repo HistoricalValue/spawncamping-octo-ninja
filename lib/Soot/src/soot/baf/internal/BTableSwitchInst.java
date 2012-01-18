@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,7 +40,7 @@ public class BTableSwitchInst extends AbstractInst implements TableSwitchInst
     public BTableSwitchInst(Unit defaultTarget, int lowIndex,
                              int highIndex, List targets)
     {
-        this.defaultTargetBox = Baf.v().newInstBox(defaultTarget); 
+        this.defaultTargetBox = Baf.v().newInstBox(defaultTarget);
 
         this.targetBoxes = new UnitBox[targets.size()];
 
@@ -61,16 +61,16 @@ public class BTableSwitchInst extends AbstractInst implements TableSwitchInst
         }
     }
 
-    public Object clone() 
-    {        
+    public Object clone()
+    {
         List list = new ArrayList();
         for (UnitBox element : targetBoxes) {
             list.add(element.getUnit());
         }
-    
-        return new  BTableSwitchInst(defaultTargetBox.getUnit(), lowIndex, highIndex, list);                
+
+        return new  BTableSwitchInst(defaultTargetBox.getUnit(), lowIndex, highIndex, list);
     }
-    
+
 
 
 
@@ -85,7 +85,7 @@ public class BTableSwitchInst extends AbstractInst implements TableSwitchInst
     {
         return 1;
     }
-    
+
     public int getOutCount()
     {
         return 0;
@@ -95,7 +95,7 @@ public class BTableSwitchInst extends AbstractInst implements TableSwitchInst
     {
         return 0;
     }
-    
+
     public Unit getDefaultTarget()
     {
         return defaultTargetBox.getUnit();
@@ -118,7 +118,7 @@ public class BTableSwitchInst extends AbstractInst implements TableSwitchInst
     public int getHighIndex() { return highIndex; }
 
     public int getTargetCount() { return targetBoxes.length; }
-    
+
     public Unit getTarget(int index)
     {
         return targetBoxes[index].getUnit();
@@ -156,15 +156,15 @@ public class BTableSwitchInst extends AbstractInst implements TableSwitchInst
     {
         StringBuffer buffer = new StringBuffer();
         String endOfLine = " ";
-        
+
         buffer.append("tableswitch" + endOfLine);
-            
+
         buffer.append("{" + endOfLine);
-        
+
         for(int i = lowIndex; i <= highIndex; i++)
         {
-            buffer.append("    case " + i + ": goto " + 
-                getTarget(i - lowIndex) + ";" 
+            buffer.append("    case " + i + ": goto " +
+                getTarget(i - lowIndex) + ";"
                           + endOfLine);
         }
 
@@ -179,7 +179,7 @@ public class BTableSwitchInst extends AbstractInst implements TableSwitchInst
         up.newline();
         up.literal("{");
         up.newline();
-        
+
         for(int i = lowIndex; i <= highIndex; i++)
         {
             up.literal("    case ");
@@ -217,6 +217,6 @@ public class BTableSwitchInst extends AbstractInst implements TableSwitchInst
         return true;
     }
 
-    
+
 
 }

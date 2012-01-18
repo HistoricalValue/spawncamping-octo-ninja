@@ -52,7 +52,7 @@ public class Dava
     private Writer iOut = null;
     private IterableSet currentPackageContext = null;
     private String currentPackage;
-    
+
     public void set_CurrentPackage( String cp)
     {
 	currentPackage = cp;
@@ -83,7 +83,7 @@ public class Dava
     {
         return new DavaBody(b);
     }
-    
+
     public Local newLocal(String name, Type t)
     {
         return Jimple.v().newLocal(name, t);
@@ -97,7 +97,7 @@ public class Dava
 	}
 
 	if (LOG_TO_FILE != null) {
-	    if (iOut == null) 
+	    if (iOut == null)
 		try {
 		    iOut = new BufferedWriter( new OutputStreamWriter( new FileOutputStream( LOG_TO_FILE), "US-ASCII"));
 		}

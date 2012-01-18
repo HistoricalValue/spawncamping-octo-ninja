@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * A <code>SourceFile</code> is an immutable representations of a Java
- * language source file.  It consists of a package name, a list of 
+ * language source file.  It consists of a package name, a list of
  * <code>Import</code>s, and a list of <code>GlobalDecl</code>s.
  */
 public interface SourceFile extends Node
@@ -42,7 +42,7 @@ public interface SourceFile extends Node
 
     /** Set the source's import table. */
     SourceFile importTable(ImportTable importTable);
- 
+
     /** Get the source file. */
     Source source();
 

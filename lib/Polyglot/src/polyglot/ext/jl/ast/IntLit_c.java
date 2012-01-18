@@ -11,7 +11,7 @@ import polyglot.util.*;
  */
 public class IntLit_c extends NumLit_c implements IntLit
 {
-    /** The kind of literal: INT or LONG. */ 
+    /** The kind of literal: INT or LONG. */
     protected Kind kind;
 
     public IntLit_c(Position pos, Kind kind, long value) {

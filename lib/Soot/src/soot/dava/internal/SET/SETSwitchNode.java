@@ -43,7 +43,7 @@ public class SETSwitchNode extends SETDagNode
 
 	add_SubBody( junkBody);
     }
-    
+
 
     public IterableSet get_NaturalExits()
     {
@@ -54,7 +54,7 @@ public class SETSwitchNode extends SETDagNode
     {
 	LinkedList<Object> indexList = new LinkedList<Object>();
 	Map<Object, List<Object>> index2ASTBody = new HashMap<Object, List<Object>>();
-	
+
 	Iterator<SwitchNode> it = switchNodeList.iterator();
 	while (it.hasNext()) {
 	    SwitchNode sn = it.next();
@@ -66,7 +66,7 @@ public class SETSwitchNode extends SETDagNode
 
 		indexList.addLast( index);
 
-		if (index != lastIndex) 
+		if (index != lastIndex)
 		    index2ASTBody.put( index, null);
 		else
 		    index2ASTBody.put( index, emit_ASTBody( get_Body2ChildChain().get( sn.get_Body())));

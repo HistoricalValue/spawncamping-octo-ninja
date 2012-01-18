@@ -20,7 +20,7 @@ import soot.toolkits.graph.*;
 public class OtherStmt extends JPegStmt
 
 {
-	
+
 	public OtherStmt(String obj, String na, String ca, Unit un, UnitGraph ug, SootMethod sm)
 	{
 		this.object = obj;
@@ -30,6 +30,6 @@ public class OtherStmt extends JPegStmt
 		this.unitGraph = ug;
 		this.sootMethod = sm;
 	}
-	
-	
+
+
 }

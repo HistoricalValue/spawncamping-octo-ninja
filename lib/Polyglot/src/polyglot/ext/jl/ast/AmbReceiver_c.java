@@ -40,7 +40,7 @@ public class AmbReceiver_c extends AmbPrefix_c implements AmbReceiver
 	}
 
 	throw new SemanticException("Could not find type, field, or " +
-	    "local variable \"" + 
+	    "local variable \"" +
             (prefix == null ? name : prefix.toString() + "." + name) +
             "\".", position());
     }

@@ -35,7 +35,7 @@ public class JavaSecurityAccessControllerNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -46,22 +46,22 @@ public class JavaSecurityAccessControllerNative extends NativeMethodClass {
     String subSignature = method.getSubSignature();
 
     if (subSignature.equals("java.lang.Object doPrivileged(java.security.PrivilegedAction)")){
-      java_security_AccessController_doPrivileged(method, thisVar, 
+      java_security_AccessController_doPrivileged(method, thisVar,
 						  returnVar, params);
       return;
 
     } else if (subSignature.equals("java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction)")){
-      java_security_AccessController_doPrivileged(method, thisVar, 
+      java_security_AccessController_doPrivileged(method, thisVar,
 						  returnVar, params);
       return;
 
     } else if (subSignature.equals("java.lang.Object doPrivileged(java.security.PrivilegedAction,java.security.AccessControlContext)")){
-      java_security_AccessController_doPrivileged(method, thisVar, 
+      java_security_AccessController_doPrivileged(method, thisVar,
 						  returnVar, params);
       return;
 
     } else if (subSignature.equals("java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction,java.security.AccessControlContext)")){
-      java_security_AccessController_doPrivileged(method, thisVar, 
+      java_security_AccessController_doPrivileged(method, thisVar,
 						  returnVar, params);
       return;
 
@@ -89,24 +89,24 @@ public class JavaSecurityAccessControllerNative extends NativeMethodClass {
 
   /************************ java.security.AccessController ************/
   /* The return value of doPrivileged depends on the implementation.
-   * 
-   * public static native 
+   *
+   * public static native
    *   java.lang.Object doPrivileged(java.security.PrivilegedAction);
    *
-   * public static native 
-   *   java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction) 
+   * public static native
+   *   java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction)
    *                    throws java.security.PrivilegedActionException;
    *
-   * public static native 
-   *   java.lang.Object doPrivileged(java.security.PrivilegedAction, 
+   * public static native
+   *   java.lang.Object doPrivileged(java.security.PrivilegedAction,
    *                                  java.security.AccessControlContext);
    *
-   * public static native 
-   *   java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction, 
-   *                                 java.security.AccessControlContext) 
+   * public static native
+   *   java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction,
+   *                                 java.security.AccessControlContext)
    *                    throws java.security.PrivilegedActionException;
    */
-  public 
+  public
     void java_security_AccessController_doPrivileged(
 				 SootMethod method,
 				 ReferenceVariable thisVar,
@@ -121,10 +121,10 @@ public class JavaSecurityAccessControllerNative extends NativeMethodClass {
   /**
    * Creates an access control context object.
    *
-   * private static native 
+   * private static native
    *   java.security.AccessControlContext getStackAccessControlContext();
    */
-  public 
+  public
     void java_security_AccessController_getStackAccessControlContext(
 					    SootMethod method,
 					    ReferenceVariable thisVar,
@@ -137,10 +137,10 @@ public class JavaSecurityAccessControllerNative extends NativeMethodClass {
   /**
    * NOTE: not documented and not called by anyone
    *
-   * static native 
+   * static native
    *   java.security.AccessControlContext getInheritedAccessControlContext();
    */
-  public 
+  public
     void java_security_AccessController_getInheritedAccessControlContext(
 					   SootMethod method,
 					   ReferenceVariable thisVar,

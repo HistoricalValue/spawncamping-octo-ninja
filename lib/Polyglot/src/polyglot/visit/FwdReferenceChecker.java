@@ -19,7 +19,7 @@ import polyglot.util.InternalCompilerError;
 /** Visitor which ensures that field intializers and initializers do not
  * make illegal forward references to fields.
  *  This is an implementation of the rules of the Java Language Spec, 2nd
- * Edition, Section 8.3.2.3 
+ * Edition, Section 8.3.2.3
  */
 public class FwdReferenceChecker extends ContextVisitor
 {
@@ -31,12 +31,12 @@ public class FwdReferenceChecker extends ContextVisitor
     private boolean inStaticInit = false;
     private Field fieldAssignLHS = null;
     private Set declaredFields = new HashSet();
-    
+
     protected NodeVisitor enterCall(Node n) throws SemanticException {
         if (n instanceof FieldDecl) {
             FieldDecl fd = (FieldDecl)n;
             declaredFields.add(fd.fieldInstance());
-            
+
             FwdReferenceChecker frc = (FwdReferenceChecker)this.copy();
             frc.inInitialization = true;
             frc.inStaticInit = fd.flags().isStatic();
@@ -62,26 +62,26 @@ public class FwdReferenceChecker extends ContextVisitor
             else if (inInitialization) {
                 // we need to check if this is an illegal fwd reference.
                 Field f = (Field)n;
-                
-                // an illegal fwd reference if a usage of an instance 
+
+                // an illegal fwd reference if a usage of an instance
                 // (resp. static) field occurs in an instance (resp. static)
-                // initialization, and the innermost enclosing class or 
+                // initialization, and the innermost enclosing class or
                 // interface of the usage is the same as the container of
                 // the field, and we have not yet seen the field declaration.
                 //
-                // In addition, if a field is not accessed as a simple name, 
+                // In addition, if a field is not accessed as a simple name,
                 // then all is ok
 
                 if (inStaticInit == f.fieldInstance().flags().isStatic() &&
                     context().currentClass().equals(f.fieldInstance().container()) &&
                    !declaredFields.contains(f.fieldInstance()) &&
                    f.isTargetImplicit()) {
-                    throw new SemanticException("Illegal forward reference", 
+                    throw new SemanticException("Illegal forward reference",
                                                 f.position());
                 }
             }
         }
-        return this;        
+        return this;
     }
 }
 

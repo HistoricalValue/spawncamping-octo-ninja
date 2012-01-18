@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -29,23 +29,23 @@ import soot.*;
 public class Typing
 {
 	private HashMap<Local, Type> map;
-	
+
 	public Typing(Collection<Local> vs)
 	{
 		this.map = new HashMap<Local, Type>();
 		for ( Local v : vs )
 			this.map.put(v, BottomType.v());
 	}
-	
+
 	public Typing(Typing tg)
 	{
 		this.map = new HashMap<Local, Type>(tg.map);
 	}
-	
+
 	public Type get(Local v) { return this.map.get(v); }
-	
+
 	public Type set(Local v, Type t) { return this.map.put(v, t); }
-	
+
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
@@ -60,7 +60,7 @@ public class Typing
 		sb.append('}');
 		return sb.toString();
 	}
-	
+
 	public static void minimize(List<Typing> tgs, IHierarchy h)
 	{
 		for ( ListIterator<Typing> i = tgs.listIterator(); i.hasNext(); )
@@ -77,14 +77,14 @@ public class Typing
 			}
 		}
 	}
-	
+
 	public static int compare(Typing a, Typing b, IHierarchy h)
 	{
 		int r = 0;
 		for ( Local v : a.map.keySet() )
 		{
 			Type ta = a.get(v), tb = b.get(v);
-			
+
 			int cmp;
 			if ( TypeResolver.typesEqual(ta, tb) )
 				cmp = 0;
@@ -94,7 +94,7 @@ public class Typing
 				cmp = -1;
 			else
 				return -2;
-			
+
 			if ( (cmp == 1 && r == -1) || (cmp == -1 && r == 1) )
 				return 2;
 			if ( r == 0 )

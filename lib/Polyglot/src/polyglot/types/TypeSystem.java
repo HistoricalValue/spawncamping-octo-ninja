@@ -44,7 +44,7 @@ public interface TypeSystem {
 
     /** Create an import table for the source file.
      * @param sourceName Name of the source file to import into.  This is used
-     * mainly for error messages and for debugging. 
+     * mainly for error messages and for debugging.
      * @param pkg The package of the source file in which to import.
      */
     ImportTable importTable(String sourceName, Package pkg);
@@ -67,13 +67,13 @@ public interface TypeSystem {
 
     /** Get the named type object with the following name.
      * @param name The name of the type object to look for.
-     * @exception SemanticException when object is not found.    
+     * @exception SemanticException when object is not found.
      */
     Named forName(String name) throws SemanticException;
-    
+
     /** Get the  type with the following name.
      * @param name The name to create the type for.
-     * @exception SemanticException when type is not found.    
+     * @exception SemanticException when type is not found.
      */
     Type typeForName(String name) throws SemanticException;
 
@@ -130,7 +130,7 @@ public interface TypeSystem {
 
     /** Create a default constructor instance.
      * @param pos Position of the constructor.
-     * @param container Containing class of the constructor. 
+     * @param container Containing class of the constructor.
      */
     ConstructorInstance defaultConstructor(Position pos, ClassType container);
 
@@ -221,23 +221,23 @@ public interface TypeSystem {
 
     /**
      * Returns whether an object of the inner class <code>inner</code> has an
-     * enclosing instance of class <code>encl</code>. 
+     * enclosing instance of class <code>encl</code>.
      */
     boolean hasEnclosingInstance(ClassType inner, ClassType encl);
-    
+
     ////
     // Various one-type predicates.
     ////
 
     /**
-     * Returns true iff the type t can be coerced to a String in the given 
-     * Context. If a type can be coerced to a String then it can be 
+     * Returns true iff the type t can be coerced to a String in the given
+     * Context. If a type can be coerced to a String then it can be
      * concatenated with Strings, e.g. if o is of type T, then the code snippet
      *         "" + o
      * would be allowed.
      */
     boolean canCoerceToString(Type t, Context c);
-    
+
     /**
      * Returns true iff an object of type <code>type</code> may be thrown.
      */
@@ -256,12 +256,12 @@ public interface TypeSystem {
     Collection uncheckedExceptions();
 
     /** Unary promotion for numeric types.
-     * @exception SemanticException if the type cannot be promoted. 
+     * @exception SemanticException if the type cannot be promoted.
      */
     PrimitiveType promote(Type t) throws SemanticException;
 
     /** Binary promotion for numeric types.
-     * @exception SemanticException if the types cannot be promoted. 
+     * @exception SemanticException if the types cannot be promoted.
      */
     PrimitiveType promote(Type t1, Type t2) throws SemanticException;
 
@@ -672,7 +672,7 @@ public interface TypeSystem {
     boolean methodCallValid(MethodInstance mi, String name, List argTypes);
 
     /**
-     * Return true if <code>pi</code> can be called with 
+     * Return true if <code>pi</code> can be called with
      * actual parameters of types <code>actualTypes</code>.
      */
     boolean callValid(ProcedureInstance mi, List argTypes);
@@ -690,7 +690,7 @@ public interface TypeSystem {
     boolean canOverride(MethodInstance mi, MethodInstance mj);
 
     /**
-     * Throw a SemanticException if <code>mi</code> cannot override 
+     * Throw a SemanticException if <code>mi</code> cannot override
      * <code>mj</code>.
      */
     void checkOverride(MethodInstance mi, MethodInstance mj) throws SemanticException;
@@ -700,7 +700,7 @@ public interface TypeSystem {
      * specified order.
      */
     List implemented(MethodInstance mi);
-    
+
     /**
      * Return the primitive with the given name.
      */
@@ -758,7 +758,7 @@ public interface TypeSystem {
     void checkCycles(ReferenceType t) throws SemanticException;
 
     /**
-     * Assert that <code>ct</code> implements all abstract methods that it 
+     * Assert that <code>ct</code> implements all abstract methods that it
      * has to; that is, if it is a concrete class, then it must implement all
      * interfaces and abstract methods that it or its superclasses declare.
      */
@@ -774,7 +774,7 @@ public interface TypeSystem {
      * Given the JVM encoding of a set of flags, returns the Flags object
      * for that encoding.
      */
-    public Flags flagsForBits(int bits); 
+    public Flags flagsForBits(int bits);
 
     /**
      * Create a new unique Flags object.

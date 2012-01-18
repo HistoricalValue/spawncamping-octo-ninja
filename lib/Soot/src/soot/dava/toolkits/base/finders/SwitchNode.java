@@ -104,11 +104,11 @@ public class SwitchNode implements Comparable
 	Iterator rit = ((AugmentedStmt) as.bsuccs.get(0)).get_Reachers().iterator();
 	while (rit.hasNext()) {
 	    SwitchNode pred = binding.get( rit.next());
-	    
+
 	    if (pred != null) {
 		if (preds.contains( pred) == false)
 		    preds.add( pred);
-		
+
 		if (pred.succs.contains( this) == false)
 		    pred.succs.add( this);
 	    }
@@ -131,7 +131,7 @@ public class SwitchNode implements Comparable
 	if (o instanceof String)
 	    return -1;
 
-	if (o instanceof Integer) 
+	if (o instanceof Integer)
 	    return ((Integer) indexSet.last()).intValue() - ((Integer) o).intValue();
 
 	if (o instanceof TreeSet) {
@@ -142,7 +142,7 @@ public class SwitchNode implements Comparable
 
 	    return ((Integer) indexSet.last()).intValue() - ((Integer) other.last()).intValue();
 	}
-	
+
 	SwitchNode other = (SwitchNode) o;
 
 	if (other.indexSet.last() instanceof String)

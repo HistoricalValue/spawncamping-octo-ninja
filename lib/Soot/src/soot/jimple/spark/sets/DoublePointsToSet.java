@@ -51,7 +51,7 @@ public class DoublePointsToSet extends PointsToSetInternal {
         ret.addAll(newSet.possibleTypes());
         return ret;
     }
-    /** Adds contents of other into this set, returns true if this set 
+    /** Adds contents of other into this set, returns true if this set
      * changed. */
     public boolean addAll( PointsToSetInternal other,
             PointsToSetInternal exclude ) {

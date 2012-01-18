@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,18 +31,18 @@
 
 package soot.coffi;
 
-/** There should be at most one RuntimeVisibleAnnotations attribute in 
+/** There should be at most one RuntimeVisibleAnnotations attribute in
  * every method, field and class
  * indicating the list of annotations.
  * @see attribute_info
- * @see method_info#attributes, @see field_info#attributes, 
+ * @see method_info#attributes, @see field_info#attributes,
  * @see coffi_class#attributes
  * @author Jennifer Lhotak
  */
 public class RuntimeVisibleAnnotations_attribute extends attribute_info {
    /** Length of annotations table array. */
    public int number_of_annotations;
-   /** 
+   /**
     * Each entry represents a single runtime visible annotation.
     */
    public annotation annotations[];

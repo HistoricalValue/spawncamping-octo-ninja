@@ -29,7 +29,7 @@ public interface FieldCheckHeuristic {
 	public boolean runNewPass();
 
 	public boolean validateMatchesForField(SparkField field);
-	
+
 	public boolean validFromBothEnds(SparkField field);
-	
+
 }

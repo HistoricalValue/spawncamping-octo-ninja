@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,7 +31,7 @@ import java.io.*;
 import java.util.*;
 
 /* Graph edges are the major elements of a graph
- * @author Feng Qian 
+ * @author Feng Qian
  */
 public class DotGraphEdge implements Renderable {
   private boolean isDirected;
@@ -86,7 +86,7 @@ public class DotGraphEdge implements Renderable {
    * @param value, the attribute value
    */
   public void setAttribute(String id, String value) {
-    this.setAttribute(new DotGraphAttribute(id, value));    
+    this.setAttribute(new DotGraphAttribute(id, value));
   }
 
   /**
@@ -98,8 +98,8 @@ public class DotGraphEdge implements Renderable {
     if (this.attributes == null) {
       this.attributes = new LinkedList<DotGraphAttribute>();
     }
-    
-    this.attributes.add(attr);    
+
+    this.attributes.add(attr);
   }
 
   public void render(OutputStream out, int indent) throws IOException {
@@ -108,7 +108,7 @@ public class DotGraphEdge implements Renderable {
     line.append(end.getName());
 
     if (this.attributes != null) {
-      
+
       line.append(" [");
       Iterator<DotGraphAttribute> attrIt = this.attributes.iterator();
       while (attrIt.hasNext()) {

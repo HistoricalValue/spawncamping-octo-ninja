@@ -35,9 +35,9 @@ public class JimpleClassSource extends ClassSource
     public Dependencies resolve( SootClass sc ) {
         if(Options.v().verbose())
             G.v().out.println("resolving [from .jimple]: " + className );
-        
+
         soot.jimple.parser.JimpleAST jimpAST =
-            new soot.jimple.parser.JimpleAST(classFile);                
+            new soot.jimple.parser.JimpleAST(classFile);
         jimpAST.getSkeleton(sc);
         JimpleMethodSource mtdSrc = new JimpleMethodSource(jimpAST);
 
@@ -46,7 +46,7 @@ public class JimpleClassSource extends ClassSource
             SootMethod sm = (SootMethod) mtdIt.next();
             sm.setSource(mtdSrc);
         }
-        
+
         Dependencies deps = new Dependencies();
         deps.typesToSignature.addAll(jimpAST.getCstPool());
 

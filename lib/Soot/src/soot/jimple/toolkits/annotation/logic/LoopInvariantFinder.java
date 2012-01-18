@@ -30,7 +30,7 @@ import soot.tagkit.*;
 
 public class LoopInvariantFinder extends BodyTransformer {
 
-    private ArrayList constants; 
+    private ArrayList constants;
 
     public LoopInvariantFinder(Singletons.Global g){}
     public static LoopInvariantFinder v() { return G.v().soot_jimple_toolkits_annotation_logic_LoopInvariantFinder();}
@@ -39,20 +39,20 @@ public class LoopInvariantFinder extends BodyTransformer {
      *  this one uses the side effect tester
      */
     protected void internalTransform (Body b, String phaseName, Map options){
-   
+
         UnitGraph g = new ExceptionalUnitGraph(b);
         LocalDefs sld = new SmartLocalDefs(g, new SimpleLiveLocals(g));
         NaiveSideEffectTester nset = new NaiveSideEffectTester();
-        
+
         LoopFinder lf = new LoopFinder();
         lf.internalTransform(b, phaseName, options);
 
         Collection<Loop> loops = lf.loops();
         constants = new ArrayList();
-        
+
         // no loop invariants if no loops
         if (loops.isEmpty()) return;
-        
+
         Iterator<Loop> lIt = loops.iterator();
         while (lIt.hasNext()){
             Loop loop = lIt.next();
@@ -70,9 +70,9 @@ public class LoopInvariantFinder extends BodyTransformer {
 
     private void handleLoopBodyStmt(Stmt s, NaiveSideEffectTester nset, Collection<Stmt> loopStmts){
         // need to do some checks for arrays - when there is an multi-dim array
-        // --> for defs there is a get of one of the dims that claims to be 
+        // --> for defs there is a get of one of the dims that claims to be
         // loop invariant
-       
+
         // handle constants
         if (s instanceof DefinitionStmt) {
             DefinitionStmt ds = (DefinitionStmt)s;
@@ -85,15 +85,15 @@ public class LoopInvariantFinder extends BodyTransformer {
                 }
             }
         }
-        
+
         // ignore goto stmts
         if (s instanceof GotoStmt) return;
 
         // ignore invoke stmts
-        if (s instanceof InvokeStmt) return; 
-       
+        if (s instanceof InvokeStmt) return;
+
         G.v().out.println("s : "+s+" use boxes: "+s.getUseBoxes()+" def boxes: "+s.getDefBoxes());
-        // just use boxes here 
+        // just use boxes here
         Iterator useBoxesIt = s.getUseBoxes().iterator();
         boolean result = true;
         uses: while (useBoxesIt.hasNext()){
@@ -115,7 +115,7 @@ public class LoopInvariantFinder extends BodyTransformer {
             }
             // side effect tester doesn't handle expr
             if (v instanceof Expr) continue;
-            
+
             G.v().out.println("test: "+v+" of kind: "+v.getClass());
             Iterator loopStmtsIt = loopStmts.iterator();
             while (loopStmtsIt.hasNext()){
@@ -128,10 +128,10 @@ public class LoopInvariantFinder extends BodyTransformer {
                     }
                 }
             }
-            
+
         }
 
-        Iterator defBoxesIt = s.getDefBoxes().iterator(); 
+        Iterator defBoxesIt = s.getDefBoxes().iterator();
         defs: while (defBoxesIt.hasNext()){
             ValueBox vb = (ValueBox)defBoxesIt.next();
             Value v = vb.getValue();
@@ -149,9 +149,9 @@ public class LoopInvariantFinder extends BodyTransformer {
             }
             // side effect tester doesn't handle expr
             if (v instanceof Expr) continue;
-            
+
             G.v().out.println("test: "+v+" of kind: "+v.getClass());
-        
+
             Iterator loopStmtsIt = loopStmts.iterator();
             while (loopStmtsIt.hasNext()){
                 Stmt next = (Stmt)loopStmtsIt.next();
@@ -164,7 +164,7 @@ public class LoopInvariantFinder extends BodyTransformer {
                     }
                 }
             }
-            
+
         }
         G.v().out.println("stmt: "+s+" result: "+result);
         if (result){
@@ -172,14 +172,14 @@ public class LoopInvariantFinder extends BodyTransformer {
             s.addTag(new ColorTag(ColorTag.RED, "Loop Invariant Analysis"));
         }
         else {
-            // if loops are nested it might be invariant in one of them 
+            // if loops are nested it might be invariant in one of them
             // so remove tag
             //if (s.hasTag("LoopInvariantTag")) {
             //    s.removeTag("LoopInvariantTag");
             //}
         }
     }
-    
+
     private boolean isConstant(Stmt s){
         if (s instanceof DefinitionStmt){
             DefinitionStmt ds = (DefinitionStmt)s;

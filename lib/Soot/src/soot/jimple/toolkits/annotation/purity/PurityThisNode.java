@@ -30,21 +30,21 @@ package soot.jimple.toolkits.annotation.purity;
 /**
  * A node representing the this parameter.
  * (should we make it a singleton ?)
- */ 
+ */
 public class PurityThisNode extends PurityParamNode
 {
     private PurityThisNode() { super(-1); }
-    
+
     public static PurityThisNode node = new PurityThisNode();
 
     public String toString() { return "this"; }
 
-    public boolean isInside() 
+    public boolean isInside()
     { return false; }
 
     public boolean isLoad()
     { return false; }
 
-    public boolean isParam() 
+    public boolean isParam()
     { return true; }
 }

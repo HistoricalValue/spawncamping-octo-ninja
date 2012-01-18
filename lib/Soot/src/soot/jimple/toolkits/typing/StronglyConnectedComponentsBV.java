@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,22 +37,22 @@ class StronglyConnectedComponentsBV
   BitVector variables;
   Set<TypeVariableBV> black;
   LinkedList<TypeVariableBV> finished;
-  
+
   TypeResolverBV resolver;
-  
+
   LinkedList<LinkedList<TypeVariableBV>> forest = new LinkedList<LinkedList<TypeVariableBV>>();
   LinkedList<TypeVariableBV> current_tree;
-  
+
   private static final boolean DEBUG = false;
-  
+
   public StronglyConnectedComponentsBV(BitVector typeVariableList, TypeResolverBV resolver) throws TypeException
   {
     this.resolver = resolver;
     variables = typeVariableList;
-    
+
     black = new TreeSet<TypeVariableBV>();
     finished = new LinkedList<TypeVariableBV>();
-    
+
     for(BitSetIterator i = variables.iterator(); i.hasNext(); )
       {
 	TypeVariableBV var = resolver.typeVariableForId(i.next());
@@ -63,9 +63,9 @@ class StronglyConnectedComponentsBV
 	    dfsg_visit(var);
 	  }
       }
-    
+
     black = new TreeSet<TypeVariableBV>();
-    
+
     for (TypeVariableBV var : finished) {
 	if(!black.contains(var))
 	  {
@@ -75,7 +75,7 @@ class StronglyConnectedComponentsBV
 	    dfsgt_visit(var);
 	  }
       }
-    
+
     for(Iterator<LinkedList<TypeVariableBV>> i = forest.iterator(); i.hasNext();)
       {
 	LinkedList list = i.next();
@@ -85,11 +85,11 @@ class StronglyConnectedComponentsBV
 	  {
 	    s = new StringBuffer("scc:\n");
 	  }
-	
+
 	for(Iterator j = list.iterator(); j.hasNext();)
 	  {
 	    TypeVariableBV current = (TypeVariableBV) j.next();
-	   
+
 	    if(DEBUG)
 	      {
 		s.append(" " + current + "\n");
@@ -117,11 +117,11 @@ class StronglyConnectedComponentsBV
 	  }
       }
   }
-  
+
   private void dfsg_visit(TypeVariableBV var)
   {
     BitVector parents = var.parents();
-    
+
     for(BitSetIterator i = parents.iterator(); i.hasNext(); )
       {
 	TypeVariableBV parent = resolver.typeVariableForId(i.next());
@@ -132,16 +132,16 @@ class StronglyConnectedComponentsBV
 	    dfsg_visit(parent);
 	  }
       }
-    
+
     finished.add(0, var);
   }
-  
+
   private void dfsgt_visit(TypeVariableBV var)
   {
     current_tree.add(var);
-    
+
     BitVector children = var.children();
-    
+
     for(BitSetIterator i = children.iterator(); i.hasNext(); )
       {
 	TypeVariableBV child = resolver.typeVariableForId(i.next());

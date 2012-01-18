@@ -35,7 +35,7 @@ public class JavaLangRuntimeNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -62,13 +62,13 @@ public class JavaLangRuntimeNative extends NativeMethodClass {
    *
    * NOTE: creates a Process object.
    *
-   * private native 
-   *   java.lang.Process execInternal(java.lang.String[], 
-   *                                  java.lang.String[], 
-   *                                  java.lang.String) 
+   * private native
+   *   java.lang.Process execInternal(java.lang.String[],
+   *                                  java.lang.String[],
+   *                                  java.lang.String)
    *                          throws java.io.IOException;
    */
-  public 
+  public
     void java_lang_Runtime_execInternal(SootMethod method,
 					ReferenceVariable thisVar,
 					ReferenceVariable returnVar,

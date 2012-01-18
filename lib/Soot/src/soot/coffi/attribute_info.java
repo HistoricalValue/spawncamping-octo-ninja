@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -67,11 +67,11 @@ class attribute_info {
     * @see Synthetic_attribute
     */
    public static final String Synthetic = "Synthetic";
-   
+
    /**
     * the following tags are added for java1.5
     */
-   
+
    /** String by which a Synthetic attribute is recognized.
     * @see Signature_attribute
     */
@@ -86,12 +86,12 @@ class attribute_info {
     * @see EnclosingMethod_attribute
     */
    public static final String EnclosingMethod = "EnclosingMethod";
-   
+
    /** String by which a LocalVariableTypeTable attribute is recognized.
     * @see LocalVariableTypeTable_attribute
     */
    public static final String LocalVariableTypeTable = "LocalVariableTypeTable";
-   
+
    /** String by which a runtime visible annotation attribute is recognized.
     * @see RuntimeVisibleAnnotations_attribute
     */
@@ -102,19 +102,19 @@ class attribute_info {
     */
    public static final String RuntimeInvisibleAnnotations = "RuntimeInvisibleAnnotations";
 
-   /** String by which a runtime visible parameter annotation attribute 
+   /** String by which a runtime visible parameter annotation attribute
     * is recognized.
     * @see RuntimeVisibleParameterAnnotations_attribute
     */
    public static final String RuntimeVisibleParameterAnnotations = "RuntimeVisibleParameterAnnotations";
 
-   /** String by which a runtime invisible parameter annotation attribute 
+   /** String by which a runtime invisible parameter annotation attribute
     * is recognized.
     * @see RuntimeInvisibleParameterAnnotations_attribute
     */
    public static final String RuntimeInvisibleParameterAnnotations = "RuntimeInvisibleParameterAnnotations";
 
-   /** String by which an annotation default attribute 
+   /** String by which an annotation default attribute
     * is recognized.
     * @see AnnotationDefault_attribute
     */

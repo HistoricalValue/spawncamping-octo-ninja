@@ -42,16 +42,16 @@ public class heuristicTuple{
     	this.castStrings.add(castString);
     	setHeuristic(infoGatheringAnalysis.CAST);
     }
-    
+
     public List<String> getCastStrings(){
     	return castStrings;
     }
-    
+
     public void setFieldName(String fieldName){
 	this.fieldName.add(fieldName);
 	setHeuristic(infoGatheringAnalysis.FIELDASSIGN);
     }
-    
+
     public List<String> getFieldName(){
 	return fieldName;
     }
@@ -60,7 +60,7 @@ public class heuristicTuple{
 	this.objectClassName.add(objectClassName);
 	setHeuristic(infoGatheringAnalysis.CLASSNAME);
     }
-    
+
     public List<String> getObjectClassName(){
 	return objectClassName;
     }
@@ -71,7 +71,7 @@ public class heuristicTuple{
     	if(methodName.startsWith("get") || methodName.startsWith("set"))
     		setHeuristic(infoGatheringAnalysis.GETSET);
     }
-    
+
     public List<String> getMethodName(){
 	return methodName;
     }

@@ -15,14 +15,14 @@ public class EqualLocalsAnalysis extends ForwardFlowAnalysis
 {
 	Local l;
 	Stmt s;
-	
+
 	public EqualLocalsAnalysis(UnitGraph g)
 	{
 		super(g);
-		
+
 		l = null;
 		s = null;
-		
+
 		// analysis is done on-demand, not now
 	}
 
@@ -47,18 +47,18 @@ public class EqualLocalsAnalysis extends ForwardFlowAnalysis
 		FlowSet inSet1 = (FlowSet) in1;
 		FlowSet inSet2 = (FlowSet) in2;
 		FlowSet outSet = (FlowSet) out;
-		
-		
+
+
 		inSet1.intersection(inSet2, outSet);
 	}
-	
+
 	protected void flowThrough(Object inValue, Object unit,
 			Object outValue)
 	{
 		FlowSet in  = (FlowSet) inValue;
 		FlowSet out = (FlowSet) outValue;
 		Stmt stmt = (Stmt) unit;
-		
+
 		in.copy(out);
 
 		// get list of definitions at this unit
@@ -68,7 +68,7 @@ public class EqualLocalsAnalysis extends ForwardFlowAnalysis
 		{
 			newDefs.add( new EquivalentValue( ((ValueBox) newDefBoxesIt.next()).getValue()) );
 		}
-		
+
 		// If the local of interest was defined in this statement, then we must
 		// generate a new list of aliases to it starting here
 		if( newDefs.contains(new EquivalentValue(l)) )
@@ -92,7 +92,7 @@ public class EqualLocalsAnalysis extends ForwardFlowAnalysis
 					 out.add( new EquivalentValue(((DefinitionStmt)stmt).getRightOp()) );
 				}
 			}
-			
+
 			Iterator<Object> existingDefIt = existingDefStmts.iterator();
 			while(existingDefIt.hasNext())
 			{
@@ -149,25 +149,25 @@ public class EqualLocalsAnalysis extends ForwardFlowAnalysis
 			}
 		}
 	}
-	
+
 	protected void copy(Object source, Object dest)
 	{
-		
+
 		FlowSet sourceSet = (FlowSet) source;
 		FlowSet destSet   = (FlowSet) dest;
-		
+
 		sourceSet.copy(destSet);
-		
+
 	}
-	
+
 	protected Object entryInitialFlow()
 	{
 		return new ArraySparseSet();
 	}
-	
+
 	protected Object newInitialFlow()
 	{
 		return new ArraySparseSet();
-	}	
+	}
 }
 

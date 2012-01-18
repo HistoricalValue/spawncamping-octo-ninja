@@ -31,33 +31,33 @@ import soot.jimple.toolkits.callgraph.*;
 /*
  * Nomair A. Naeem 7th April 2006
  * This class detects and propagates whether the signature of a method should have some throws Exception constructs.
- * 
+ *
  * The reason we need to do this is since the JVM does not force all compilers to store throws information
  * as attributes (javac does it ) but other compilers are not forced to do it
- * 
+ *
  * Hence if we are coming from javac we dont need to perform this analysis since we already have the information
  * if we are not coming from javac then we need to perform this analysis to say what the checked exceptions are for this method.
- * 
+ *
  * Alls good until u try to decompile code like this
  *   try{
  *    synchronized(bla){
  *      bla
  *      bla
- *    } 
+ *    }
  *   }catch(InterruptedException e){
  *       bla
  *   }
- *   
+ *
  *   If you create bytecode for this you will notice that because exitmointer has to be invoked if an exception occurs
  *   this is done by catching a Throwable(all possible exceptions) exiting the monitor and rethrowing the exception.
- *   
- *   Now that is alright the problem occurs because InterruptedExceptions will be caught but since we are throwing the 
+ *
+ *   Now that is alright the problem occurs because InterruptedExceptions will be caught but since we are throwing the
  *   general Throwable exception this algorithm says that the method should state in its signature that it throws
  *   java.lang,Throwable.
  *   CHANGE LOG: current fix is to hack into the algo find the place where we are about to add the java.lang.Throwable
  *   and if it is near an exit monitor we know dava is going to convert this to a synch and hence not add this exception!!
- * 
- * 
+ *
+ *
  */
 public class ThrowFinder
 {
@@ -68,7 +68,7 @@ public class ThrowFinder
     private HashMap<Stmt, HashSet<SootClass>> protectionSet;
 
     public static boolean DEBUG=false;
-    
+
     public void find()
     {
 	G.v().out.print( "Verifying exception handling.. ");
@@ -79,7 +79,7 @@ public class ThrowFinder
         CallGraph cg;
         if( Scene.v().hasCallGraph() ) {
             cg = Scene.v().getCallGraph();
-        } 
+        }
         else {
             new CallGraphBuilder().build();
             cg = Scene.v().getCallGraph();
@@ -106,7 +106,7 @@ public class ThrowFinder
 
 
 	// Build the subClass and superClass mappings.
-	HashMap<SootClass, IterableSet> 
+	HashMap<SootClass, IterableSet>
 	    subClassSet = new HashMap<SootClass, IterableSet>(),
 	    superClassSet = new HashMap<SootClass, IterableSet>();
 
@@ -116,7 +116,7 @@ public class ThrowFinder
 	classIt = Scene.v().getApplicationClasses().iterator();
 	while (classIt.hasNext()) {
 	    SootClass c = (SootClass) classIt.next();
-	    
+
 	    IterableSet superClasses =  superClassSet.get( c);
 	    if (superClasses == null) {
 		superClasses = new IterableSet();
@@ -154,7 +154,7 @@ public class ThrowFinder
 		superClasses.add( interfaceClass);
 	    }
 	}
-	
+
 	// Build the subMethod and superMethod mappings.
 	HashMap<SootMethod, IterableSet> agreementMethodSet = new HashMap<SootMethod, IterableSet>();
 
@@ -168,22 +168,22 @@ public class ThrowFinder
 		List<SootClass> exceptionList = m.getExceptions();
 		IterableSet exceptionSet = new IterableSet( exceptionList);
 		boolean changed = false;
-		
+
 		Iterator it = m.retrieveActiveBody().getUnits().iterator();
 		while (it.hasNext()) {
 		    Unit u = (Unit) it.next();
 		    HashSet handled = protectionSet.get(u);
-		    
+
 		    if (u instanceof ThrowStmt) {
 		    	Type t = ((ThrowStmt) u).getOp().getType();
-			
+
 		    	if (t instanceof RefType) {
 		    		SootClass c = ((RefType) t).getSootClass();
-			    
+
 		    		if ((handled_Exception( handled, c) == false) && (exceptionSet.contains( c) == false)) {
 		    			/*
 		    			 * Nomair A Naeem 7th April
-		    			 * HACK TRYING TO MATCH PATTERN 
+		    			 * HACK TRYING TO MATCH PATTERN
 		    			 *  label0:
 		    			        r3 = r0;
 		    			        entermonitor r0;
@@ -211,7 +211,7 @@ public class ThrowFinder
         				 catch java.lang.Throwable from label1 to label2 with label3;
         				 catch java.lang.Throwable from label4 to label5 with label3;
         				 catch java.lang.InterruptedException from label0 to label6 with label7;
-		    			 * 
+		    			 *
 		    			 */
 		    			PatchingChain list = m.retrieveActiveBody().getUnits();
 		    			Unit pred = (Unit)list.getPredOf(u);
@@ -249,7 +249,7 @@ public class ThrowFinder
                         }
                     }
 		}
-		
+
 		if (changed) {
 		    exceptionList.clear();
 		    exceptionList.addAll( exceptionSet);
@@ -272,10 +272,10 @@ public class ThrowFinder
 	    	Iterator amit = agreementMethods.iterator();
 	    	while (amit.hasNext()) {
 	    		SootMethod otherMethod = (SootMethod) amit.next();
-	    		
+
 	    		List<SootClass> otherExceptionsList = otherMethod.getExceptions();
 	    		IterableSet otherExceptionSet = new IterableSet( otherExceptionsList);
-	    		boolean changed = false;		    
+	    		boolean changed = false;
 
 	    		Iterator<SootClass> exceptionIt = m.getExceptions().iterator();
 	    		while (exceptionIt.hasNext()) {
@@ -301,9 +301,9 @@ public class ThrowFinder
 	    while (it.hasNext()) {
 	    	Edge e = (Edge) it.next();
 	    	Stmt callingSite = e.srcStmt();
-	    	if( callingSite == null ) 
+	    	if( callingSite == null )
 	    		continue;
-	    	
+
 	    	SootMethod callingMethod = e.src();
 	    	List<SootClass> exceptionList = callingMethod.getExceptions();
 	    	IterableSet exceptionSet = new IterableSet( exceptionList);
@@ -319,7 +319,7 @@ public class ThrowFinder
 	    			changed = true;
 	    		}
 	    	}
-		
+
 	    	if (changed) {
 	    		exceptionList.clear();
 	    		exceptionList.addAll( exceptionSet);
@@ -405,7 +405,7 @@ public class ThrowFinder
 		    handled = new HashSet<SootClass>();
 		    protectionSet.put( s, handled);
 		}
-		
+
 		if (handled.contains( exception) == false)
 		    handled.add( exception);
 	    }
@@ -425,7 +425,7 @@ public class ThrowFinder
 	while (true) {
 	    if (handledExceptions.contains( thrownException))
 		return true;
-	    
+
 	    if (thrownException.hasSuperclass() == false)
 		return false;
 
@@ -435,15 +435,15 @@ public class ThrowFinder
 
     private boolean is_HandledByRuntime( SootClass c)
     {
-	SootClass 
+	SootClass
 	    thrownException = c,
 	    runtimeException = Scene.v().getSootClass( "java.lang.RuntimeException"),
 	    error = Scene.v().getSootClass( "java.lang.Error");
-	
+
 	while (true) {
 	    if ((thrownException == runtimeException) || (thrownException == error))
 		return true;
-	    
+
 	    if (thrownException.hasSuperclass() == false)
 		return false;
 

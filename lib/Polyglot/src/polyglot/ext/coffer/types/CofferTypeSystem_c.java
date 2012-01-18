@@ -14,7 +14,7 @@ public class CofferTypeSystem_c extends ParamTypeSystem_c
         // java.lang.Object.
     }
 
-    public ParsedClassType createClassType(LazyClassInitializer init, 
+    public ParsedClassType createClassType(LazyClassInitializer init,
                                            Source fromSource)
     {
         if (! init.fromClassFile()) {

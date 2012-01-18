@@ -87,12 +87,12 @@ public class AltClassLoader extends ClassLoader {
    * Sets the list of locations in the alternate classpath.
    *
    * @param classPath A list of directories and jar files to
-   * search for class files, delimited by 
+   * search for class files, delimited by
    * {@link File#pathSeparator}.
    */
   public void setAltClassPath(String altClassPath) {
     List<String> locationList = new LinkedList<String>();
-    for (StringTokenizer tokens = 
+    for (StringTokenizer tokens =
 	   new StringTokenizer(altClassPath, File.pathSeparator, false);
 	 tokens.hasMoreTokens() ; ) {
 	String location = tokens.nextToken();
@@ -105,7 +105,7 @@ public class AltClassLoader extends ClassLoader {
 
   /**
    * Specifies the set of class names that the <code>AltClassLoader</code>
-   * should load from the alternate classpath instead of the 
+   * should load from the alternate classpath instead of the
    * regular classpath.
    *
    * @param classNames[] an array containing the names of classes to
@@ -128,7 +128,7 @@ public class AltClassLoader extends ClassLoader {
    * The heuristic requires that <code>origName</code> include at least
    * two dots (i.e., the class must be in a package, where
    * the package name has at least two components). More sophisticated
-   * possibilities certainly exist, but they would require 
+   * possibilities certainly exist, but they would require
    * more thorough parsing of the class file.
    *
    * @param origName the name to be mangled.
@@ -136,14 +136,14 @@ public class AltClassLoader extends ClassLoader {
    * @throws IllegalArgumentException if <code>origName</code> is not
    * amenable to our crude mangling.
    */
-  private static String mangleName(String origName) 
+  private static String mangleName(String origName)
   throws IllegalArgumentException {
     final char dot = '.';
     final char dotReplacement = '_';
     StringBuffer mangledName = new StringBuffer(origName);
     int replacements = 0;
     int lastDot = origName.lastIndexOf(dot);
-    for (int nextDot = lastDot; 
+    for (int nextDot = lastDot;
 	 (nextDot = origName.lastIndexOf(dot, nextDot - 1)) >= 0; ) {
       mangledName.setCharAt(nextDot, dotReplacement);
       replacements++;
@@ -153,7 +153,7 @@ public class AltClassLoader extends ClassLoader {
     }
     return mangledName.toString();
   }
-      
+
 
   /**
    * <p>
@@ -222,12 +222,12 @@ public class AltClassLoader extends ClassLoader {
    * regular system classpath otherwise.  When a alternate class is
    * loaded, its references to other alternate classes are also
    * resolved to the alternate classpath.
-   * 
+   *
    * @param name the name of the class to load.
    * @return the loaded class.
    * @throws ClassNotFoundException if the class cannot be loaded.
    */
-  public Class loadClass(String name) 
+  public Class loadClass(String name)
   throws ClassNotFoundException {
     if (DEBUG) {
       G.v().out.println("AltClassLoader.loadClass(" + name + ")");
@@ -240,7 +240,7 @@ public class AltClassLoader extends ClassLoader {
     }
 
     if (DEBUG) {
-      G.v().out.println("AltClassLoader.loadClass asking parent for " + 
+      G.v().out.println("AltClassLoader.loadClass asking parent for " +
 			nameForParent);
     }
     return super.loadClass(nameForParent, false);
@@ -263,15 +263,15 @@ public class AltClassLoader extends ClassLoader {
       origName = origName.replace('.', '/');
       String mangledName = (String) entry.getValue();
       mangledName = mangledName.replace('.', '/');
-      findAndReplace(classBytes, stringToUtf8Pattern(origName), 
+      findAndReplace(classBytes, stringToUtf8Pattern(origName),
 		     stringToUtf8Pattern(mangledName));
-      findAndReplace(classBytes, stringToTypeStringPattern(origName), 
+      findAndReplace(classBytes, stringToTypeStringPattern(origName),
 		     stringToTypeStringPattern(mangledName));
     }
   }
 
   /**
-   * Returns the bytes that correspond to a 
+   * Returns the bytes that correspond to a
    * CONSTANT_Utf8 constant pool entry containing
    * the passed string.
    */
@@ -308,12 +308,12 @@ public class AltClassLoader extends ClassLoader {
 
   /**
    * Replaces all occurrences of the <code>pattern</code> in <code>text</code>
-   * with <code>replacement</code>. 
+   * with <code>replacement</code>.
    * @throws IllegalArgumentException if the lengths of <code>text</code>
    * and <code>replacement</code> differ.
    */
-  private static void findAndReplace(byte[] text, byte[] pattern, 
-			      byte[] replacement) 
+  private static void findAndReplace(byte[] text, byte[] pattern,
+			      byte[] replacement)
   throws IllegalArgumentException {
     int patternLength = pattern.length;
     if (patternLength != replacement.length) {
@@ -329,7 +329,7 @@ public class AltClassLoader extends ClassLoader {
 
   /**
    * A naive string-searching algorithm for finding a pattern
-   * in a byte array. 
+   * in a byte array.
    *
    * @param text the array to search in.
    * @param pattern the string of bytes to search for.
@@ -365,7 +365,7 @@ public class AltClassLoader extends ClassLoader {
       text[t] = replacement[p];
     }
   }
-    
+
   /**
    * <p>A main() entry for basic unit testing.</p>
    *
@@ -381,5 +381,5 @@ public class AltClassLoader extends ClassLoader {
       AltClassLoader.v().loadClass(argv[i]);
     }
   }
-    
+
 }

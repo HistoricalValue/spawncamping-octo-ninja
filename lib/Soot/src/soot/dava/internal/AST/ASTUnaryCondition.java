@@ -25,11 +25,11 @@ import soot.dava.toolkits.base.AST.analysis.*;
 
 public class ASTUnaryCondition extends ASTUnaryBinaryCondition{
       Value value;
-	
+
       public ASTUnaryCondition(Value value){
     	  this.value=value;
       }
-    
+
       public void apply(Analysis a){
     	  a.caseASTUnaryCondition(this);
       }
@@ -38,7 +38,7 @@ public class ASTUnaryCondition extends ASTUnaryBinaryCondition{
     	  return value;
       }
 
-      
+
       public void setValue(Value value){
     	  this.value=value;
       }
@@ -52,7 +52,7 @@ public class ASTUnaryCondition extends ASTUnaryBinaryCondition{
     	  value.toString(up);
       }
 
-    
+
       public void flip(){
     	  /*
     	   Since its a unarycondition we know this is a flag
@@ -66,8 +66,8 @@ public class ASTUnaryCondition extends ASTUnaryBinaryCondition{
     		  this.value=new DNotExpr(value);
     	  }
       }
-      
+
       public boolean isNotted(){
-    	  return (value instanceof DNotExpr);   		  
+    	  return (value instanceof DNotExpr);
       }
 }

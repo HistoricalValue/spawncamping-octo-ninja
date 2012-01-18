@@ -1,5 +1,5 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2004 Jennifer Lhotak 
+ * Copyright (C) 2004 Jennifer Lhotak
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -28,14 +28,14 @@ package soot.jimple.toolkits.scalar;
 import soot.*;
 import soot.toolkits.graph.*;
 
-/** Implements an available expressions analysis on local variables. 
+/** Implements an available expressions analysis on local variables.
  * pessimistic analysis - for teaching 621*/
-public class PessimisticAvailableExpressionsAnalysis extends SlowAvailableExpressionsAnalysis 
+public class PessimisticAvailableExpressionsAnalysis extends SlowAvailableExpressionsAnalysis
 {
     public PessimisticAvailableExpressionsAnalysis(DirectedGraph dg, SootMethod m, SideEffectTester st){
         super(dg);
     }
-    
+
     protected Object newInitialFlow()
     {
         Object newSet = emptySet.clone();

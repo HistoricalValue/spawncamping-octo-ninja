@@ -9,11 +9,11 @@ public class CharacterLiteral extends Literal {
 
   public CharacterLiteral(Position position, char c, int sym)
   {
-    super(position, sym); 
-    this.val = new Character(c); 
+    super(position, sym);
+    this.val = new Character(c);
   }
-  
-  public Character getValue() 
+
+  public Character getValue()
   {
     return val;
   }
@@ -23,7 +23,7 @@ public class CharacterLiteral extends Literal {
     return Token.escape( String.valueOf( val));
   }
 
-  public String toString() 
+  public String toString()
   {
     return "char literal '" + getEscapedValue() + "'";
   }

@@ -27,17 +27,17 @@ public class DIncrementStmt extends GAssignStmt{
     public DIncrementStmt(Value variable, Value rvalue){
 	super(variable,rvalue);
     }
-    
-    public Object clone() { 
-	return new DIncrementStmt(Grimp.cloneIfNecessary(getLeftOp()), 
+
+    public Object clone() {
+	return new DIncrementStmt(Grimp.cloneIfNecessary(getLeftOp()),
 				  Grimp.cloneIfNecessary(getRightOp()));
     }
 
-    
+
     public String toString(){
         return getLeftOpBox().getValue().toString() + "++";
     }
-    
+
     public void toString(UnitPrinter up) {
         getLeftOpBox().toString(up);
         up.literal("++");

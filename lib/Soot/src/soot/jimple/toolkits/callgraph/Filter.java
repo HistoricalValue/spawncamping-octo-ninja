@@ -25,7 +25,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public class Filter implements Iterator<Edge>
-{ 
+{
     private Iterator<Edge> source;
     private EdgePredicate pred;
     private Edge next = null;
@@ -55,7 +55,7 @@ public class Filter implements Iterator<Edge>
         return ret;
     }
     public void remove() {
-        throw new UnsupportedOperationException(); 
+        throw new UnsupportedOperationException();
     }
 }
 

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -43,7 +43,7 @@ public abstract class AbstractNewMultiArrayExpr implements NewMultiArrayExpr, Co
     protected ValueBox[] sizeBoxes;
 
     public abstract Object clone();
-    
+
     protected AbstractNewMultiArrayExpr(ArrayType type, ValueBox[] sizeBoxes)
     {
         this.baseType = type; this.sizeBoxes = sizeBoxes;
@@ -54,7 +54,7 @@ public abstract class AbstractNewMultiArrayExpr implements NewMultiArrayExpr, Co
         if (o instanceof AbstractNewMultiArrayExpr)
         {
             AbstractNewMultiArrayExpr ae = (AbstractNewMultiArrayExpr)o;
-            if (!baseType.equals(ae.baseType) || 
+            if (!baseType.equals(ae.baseType) ||
                     sizeBoxes.length != ae.sizeBoxes.length)
                 return false;
             for (ValueBox element : sizeBoxes)
@@ -66,7 +66,7 @@ public abstract class AbstractNewMultiArrayExpr implements NewMultiArrayExpr, Co
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return baseType.hashCode();
     }
@@ -86,11 +86,11 @@ public abstract class AbstractNewMultiArrayExpr implements NewMultiArrayExpr, Co
 
         return buffer.toString();
     }
-    
+
     public void toString(UnitPrinter up)
     {
         Type t = baseType.baseType;
-        
+
         up.literal(Jimple.NEWMULTIARRAY);
         up.literal(" (");
         up.type(t);
@@ -101,7 +101,7 @@ public abstract class AbstractNewMultiArrayExpr implements NewMultiArrayExpr, Co
             element.toString(up);
             up.literal("]");
         }
-        
+
         for(int i = 0; i < baseType.numDimensions - sizeBoxes.length; i++) {
             up.literal("[]");
         }
@@ -175,15 +175,15 @@ public abstract class AbstractNewMultiArrayExpr implements NewMultiArrayExpr, Co
 
         for(int i = 0; i < sizes.size(); i++)
             ((ConvertToBaf)(sizes.get(i))).convertToBaf(context, out);
-	
+
 	Unit u;
         out.add(u = Baf.v().newNewMultiArrayInst(getBaseType(), sizes.size()));
 
 	Unit currentUnit = context.getCurrentUnit();
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}
-	
+
     }
 }

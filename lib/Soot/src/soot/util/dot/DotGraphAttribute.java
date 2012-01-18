@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -29,7 +29,7 @@ package soot.util.dot;
 /**
  * A class for specifying Dot graph attributes.
  *
- * @author Feng Qian 
+ * @author Feng Qian
  */
 public class DotGraphAttribute {
   String id;
@@ -39,7 +39,7 @@ public class DotGraphAttribute {
     this.id = id;
     this.value = v;
   }
-  
+
   public String toString(){
     StringBuffer line = new StringBuffer();
     line.append(this.id);

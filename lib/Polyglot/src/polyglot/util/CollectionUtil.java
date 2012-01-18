@@ -20,12 +20,12 @@ public class CollectionUtil
 		if (a == b) {
 			return true;
 		}
-		
+
 		// the case where both are null is handled in the previous if.
 		if (a == null ^ b == null) {
 			return false;
 		}
-		
+
 		Iterator i = a.iterator();
 		Iterator j = b.iterator();
 
@@ -97,13 +97,13 @@ public class CollectionUtil
 
 	/**
 	 * Apply <code>t</code> to each element of <code>l</code>.
-	 * <code>l</code> is not modified.  
+	 * <code>l</code> is not modified.
 	 * @return A list containing the result of each transformation,
 	 * in the same order as the original elements.
 	 */
 	public static List map(List l, Transformation t) {
 		List m = new ArrayList(l.size());
-		for (Iterator i = new TransformingIterator(l.iterator(), t); 
+		for (Iterator i = new TransformingIterator(l.iterator(), t);
 			i.hasNext(); )
 		{
 			m.add(i.next());

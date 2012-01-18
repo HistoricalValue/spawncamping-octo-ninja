@@ -52,7 +52,7 @@ import soot.toolkits.graph.interaction.*;
 import soot.options.*;
 
 /** Abstract class providing an engine for branched forward flow analysis.
- *  WARNING: This does not handle exceptional flow as branches! 
+ *  WARNING: This does not handle exceptional flow as branches!
  * */
 public abstract class ForwardBranchedFlowAnalysis<A> extends BranchedFlowAnalysis<Unit, A>
 {
@@ -70,14 +70,14 @@ public abstract class ForwardBranchedFlowAnalysis<A> extends BranchedFlowAnalysi
     private void accumulateAfterFlowSets(Unit s, A[] flowRepositories, List<Object> previousAfterFlows)
     {
         int repCount = 0;
-        
+
         previousAfterFlows.clear();
         if (s.fallsThrough())
         {
             copy(unitToAfterFallFlow.get(s).get(0), flowRepositories[repCount]);
             previousAfterFlows.add(flowRepositories[repCount++]);
         }
-        
+
         if (s.branches())
         {
             List<A> l = (unitToAfterBranchFlow.get(s));
@@ -119,7 +119,7 @@ public abstract class ForwardBranchedFlowAnalysis<A> extends BranchedFlowAnalysi
         int numNodes = graph.size();
         int numComputations = 0;
         int maxBranchSize = 0;
-        
+
         // initialize unitToIncomingFlowSets
         {
             Iterator it = graph.iterator();
@@ -154,7 +154,7 @@ public abstract class ForwardBranchedFlowAnalysis<A> extends BranchedFlowAnalysi
                     unitToAfterFallFlow.put(s, fl);
 
 		    Unit succ=(Unit) sl.getSuccOf(s);
-		    // it's possible for someone to insert some (dead) 
+		    // it's possible for someone to insert some (dead)
 		    // fall through code at the very end of a method body
 		    if(succ!=null) {
 			List<Object> l = (unitToIncomingFlowSets.get(sl.getSuccOf(s)));
@@ -177,7 +177,7 @@ public abstract class ForwardBranchedFlowAnalysis<A> extends BranchedFlowAnalysi
                         l.add(f);
                         Unit ss = ((UnitBox) (boxIt.next())).getUnit();
                         incList = (unitToIncomingFlowSets.get(ss));
-                                          
+
                         incList.add(f);
                     }
                     unitToAfterBranchFlow.put(s, l);
@@ -215,7 +215,7 @@ public abstract class ForwardBranchedFlowAnalysis<A> extends BranchedFlowAnalysi
 
         // Perform fixed point flow analysis
         {
-            List<Object> previousAfterFlows = new ArrayList<Object>(); 
+            List<Object> previousAfterFlows = new ArrayList<Object>();
             List<Object> afterFlows = new ArrayList<Object>();
             A[] flowRepositories = (A[]) new Object[maxBranchSize+1];
             for (int i = 0; i < maxBranchSize+1; i++)
@@ -283,7 +283,7 @@ public abstract class ForwardBranchedFlowAnalysis<A> extends BranchedFlowAnalysi
                         if (!((List)afterBranchFlow).isEmpty()){
                             l.addAll((List)afterBranchFlow);
                         }
-                        
+
                         /*if (s instanceof soot.jimple.IfStmt){
                             l.addAll((List)afterFallFlow);
                             l.addAll((List)afterBranchFlow);
@@ -307,16 +307,16 @@ public abstract class ForwardBranchedFlowAnalysis<A> extends BranchedFlowAnalysi
                     while(succIt.hasNext())
                     {
                         Unit succ = (Unit) succIt.next();
-                            
+
                         changedUnits.add(succ);
                     }
                 }
             }
         }
-        
-        // G.v().out.println(graph.getBody().getMethod().getSignature() + " numNodes: " + numNodes + 
+
+        // G.v().out.println(graph.getBody().getMethod().getSignature() + " numNodes: " + numNodes +
         //    " numComputations: " + numComputations + " avg: " + Main.truncatedOf((double) numComputations / numNodes, 2));
-        
+
         Timers.v().totalFlowNodes += numNodes;
         Timers.v().totalFlowComputations += numComputations;
 

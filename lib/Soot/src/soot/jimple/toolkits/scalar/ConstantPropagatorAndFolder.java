@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,7 +34,7 @@ import soot.jimple.*;
 import java.util.*;
 import soot.toolkits.graph.*;
 
-/** Does constant propagation and folding. 
+/** Does constant propagation and folding.
  * Constant folding is the compile-time evaluation of constant
  * expressions (i.e. 2 * 3). */
 public class ConstantPropagatorAndFolder extends BodyTransformer
@@ -54,7 +54,7 @@ public class ConstantPropagatorAndFolder extends BodyTransformer
 
         ExceptionalUnitGraph unitGraph = new ExceptionalUnitGraph(stmtBody);
         LocalDefs localDefs;
-        
+
         localDefs = new SmartLocalDefs(unitGraph, new SimpleLiveLocals(unitGraph));
 
         // Perform a constant/local propagation pass.
@@ -85,7 +85,7 @@ public class ConstantPropagatorAndFolder extends BodyTransformer
                     }
                 }
             }
-                
+
             // folding pass
             useBoxIt = stmt.getUseBoxes().iterator();
 
@@ -112,7 +112,7 @@ public class ConstantPropagatorAndFolder extends BodyTransformer
     } // optimizeConstants
 
 }
-    
+
 
 
 

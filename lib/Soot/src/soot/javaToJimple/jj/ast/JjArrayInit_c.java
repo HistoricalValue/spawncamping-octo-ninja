@@ -27,7 +27,7 @@ import polyglot.ext.jl.ast.*;
 import java.util.*;
 
 public class JjArrayInit_c extends ArrayInit_c {
-    
+
     public JjArrayInit_c(Position pos, List elements) {
         super(pos, elements);
     }
@@ -59,6 +59,6 @@ public class JjArrayInit_c extends ArrayInit_c {
             }
         }
 
-       return child.type(); 
+       return child.type();
     }
 }

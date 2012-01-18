@@ -13,7 +13,7 @@ import polyglot.util.TypedList;
 /**
  * ParsedClassType
  *
- * Overview: 
+ * Overview:
  * A ParsedClassType represents a information that has been parsed (but not
  * necessarily type checked) from a .java file.
  **/
@@ -39,7 +39,7 @@ public class ParsedClassType_c extends ClassType_c implements ParsedClassType
 	super();
     }
 
-    public ParsedClassType_c(TypeSystem ts, LazyClassInitializer init, 
+    public ParsedClassType_c(TypeSystem ts, LazyClassInitializer init,
                              Source fromSource) {
 	super(ts);
         this.init = init;
@@ -53,7 +53,7 @@ public class ParsedClassType_c extends ClassType_c implements ParsedClassType
     public Source fromSource() {
         return fromSource;
     }
-    
+
     public Kind kind() {
         return kind;
     }
@@ -65,13 +65,13 @@ public class ParsedClassType_c extends ClassType_c implements ParsedClassType
     public boolean inStaticContext() {
         return inStaticContext;
     }
-    
+
     public ClassType outer() {
         if (isTopLevel())
             return null;
         if (outer == null)
             throw new InternalCompilerError("Nested classes must have outer classes.");
-            
+
         return outer;
     }
 

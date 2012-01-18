@@ -95,9 +95,9 @@ public class Try_c extends Stmt_c implements Try
     /**
      * Performs exceptionChecking. This is a special method that is called
      * via the exceptionChecker's override method (i.e, doesn't follow the
-     * standard model for visitation.  
+     * standard model for visitation.
      *
-     * @param ec The ExceptionChecker that was run against the 
+     * @param ec The ExceptionChecker that was run against the
      * child node. It contains the exceptions that can be thrown by the try
      * block.
      */
@@ -110,14 +110,14 @@ public class Try_c extends Stmt_c implements Try
         ec = ec.push();
 	Block tryBlock = (Block) visitChild(this.tryBlock, ec);
 	// First, get exceptions from the try block.
-	SubtypeSet thrown = ec.throwsSet(); 
+	SubtypeSet thrown = ec.throwsSet();
         SubtypeSet caught = new SubtypeSet(ts.Throwable());
         ec = ec.pop();
 
 	// Add the unchecked exceptions.
 	thrown.addAll(ts.uncheckedExceptions());
 
-	// Walk through our catch blocks, making sure that they each can 
+	// Walk through our catch blocks, making sure that they each can
 	// catch something.
 	for (Iterator i = this.catchBlocks.iterator(); i.hasNext(); ) {
 	    Catch cb = (Catch) i.next();
@@ -140,14 +140,14 @@ public class Try_c extends Stmt_c implements Try
 	    if (! match) {
 		throw new SemanticException("The exception \"" +
 		    catchType + "\" is not thrown in the try block.",
-		    cb.position()); 
+		    cb.position());
 	    }
 
 	    // Check if the exception has already been caught.
 	    if (caught.contains(catchType)) {
 		throw new SemanticException("The exception \"" +
 		    catchType + "\" has been caught by an earlier catch block.",
-		    cb.position()); 
+		    cb.position());
 	    }
 
 	    caught.add(catchType);
@@ -197,19 +197,19 @@ public class Try_c extends Stmt_c implements Try
                 if (false) {
                       // don't warn the user; javac doesn't
                       ec.errorQueue().enqueue(ErrorInfo.WARNING,
-                            "The finally block cannot complete normally", 
+                            "The finally block cannot complete normally",
                             finallyBlock.position());
                 }
-                
+
                 thrown.clear();
             }
             thrown.addAll(ec.throwsSet());
-            
+
             ec = ec.pop();
 	}
-    
+
         // "thrown" now contains any exceptions which were not caught,
-        // and any exceptions thrown by the catch blocks and finallyBlock 
+        // and any exceptions thrown by the catch blocks and finallyBlock
         // Add these exceptions to the exception checker's throw set.
         ec.throwsSet().addAll(thrown);
 

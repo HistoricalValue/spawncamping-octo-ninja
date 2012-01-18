@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -26,9 +26,9 @@
 package soot.tagkit;
 
 
-/** 
+/**
  * Represents the base class of annotation elements
- * each annotation can have several elements 
+ * each annotation can have several elements
  * for Java 1.5.
  */
 
@@ -43,7 +43,7 @@ public class AnnotationEnumElem extends AnnotationElem
         this.typeName = t;
         this.constantName = c;
     }
-    
+
     public String toString(){
         return super.toString()+" type name: "+typeName+" constant name: "+constantName;
     }
@@ -51,7 +51,7 @@ public class AnnotationEnumElem extends AnnotationElem
     public String getTypeName(){
         return typeName;
     }
-    
+
     public String getConstantName(){
         return constantName;
     }

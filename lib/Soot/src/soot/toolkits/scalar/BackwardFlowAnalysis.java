@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -45,7 +45,7 @@ import soot.toolkits.graph.interaction.InteractionHandler;
 /**
  *   Abstract class that provides the fixed point iteration functionality
  *   required by all BackwardFlowAnalyses.
- *  
+ *
  */
 public abstract class BackwardFlowAnalysis<N,A> extends FlowAnalysis<N,A>
 {
@@ -90,12 +90,12 @@ public abstract class BackwardFlowAnalysis<N,A> extends FlowAnalysis<N,A>
         }
 
         List<N> tails = graph.getTails();
-        
+
         // Feng Qian: March 07, 2002
         // init entry points
         {
             Iterator<N> it = tails.iterator();
-            
+
             while (it.hasNext()) {
                 N s = it.next();
                 // this is a backward flow analysis
@@ -185,14 +185,14 @@ public abstract class BackwardFlowAnalysis<N,A> extends FlowAnalysis<N,A>
                         while(predIt.hasNext())
                         {
                             N pred = predIt.next();
-                            
+
                             changedUnits.add(pred);
                         }
                     }
             }
         }
     }
-    
+
 	protected Collection<N> constructWorklist(final Map<N, Integer> numbers) {
 		return new TreeSet<N>( new Comparator<N>() {
             public int compare(N o1, N o2) {

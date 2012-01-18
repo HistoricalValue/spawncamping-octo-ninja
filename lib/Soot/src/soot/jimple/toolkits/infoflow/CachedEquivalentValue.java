@@ -26,25 +26,25 @@ import soot.Value;
 
 /**
  * An {@link EquivalentValue} with cached hash code and equals-relation.
- * @author Eric Bodden 
+ * @author Eric Bodden
  */
 public class CachedEquivalentValue extends EquivalentValue {
 
 	protected int code = Integer.MAX_VALUE;
-	
+
 	protected WeakHashMap<Value, Boolean> isEquivalent = new WeakHashMap<Value, Boolean>();
-	
+
 	public CachedEquivalentValue(Value e) {
 		super(e);
 	}
-	
+
 	public int hashCode() {
 		if(code==Integer.MAX_VALUE) {
 			code = super.hashCode();
-		}		
-		return code; 
+		}
+		return code;
 	}
-	
+
 	public boolean equals(Object o) {
 		if(this.getClass()!=o.getClass()) {
 			return false;
@@ -55,7 +55,7 @@ public class CachedEquivalentValue extends EquivalentValue {
 		if(b==null) {
 			b = super.equals(o);
 			isEquivalent.put(v,b);
-		} 		
+		}
 		return b;
 	}
 

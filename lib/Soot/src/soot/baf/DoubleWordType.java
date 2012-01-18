@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,17 +41,17 @@ public class DoubleWordType extends Type
     {
         return this == t;
     }
-    
+
     public int hashCode()
     {
         return 0xA247839F;
     }
-    
+
     public String toString()
     {
         return "dword";
     }
-    
+
     public void apply(Switch sw)
     {
         throw new RuntimeException("invalid switch case");

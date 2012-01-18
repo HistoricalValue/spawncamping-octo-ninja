@@ -10,9 +10,9 @@ public class Token /*extends Symbol */implements LexerResult {
     private int lineno;
     private Object value;	// String, Boolean, Integer, Vector, null
 	//private Position position;
-	
+
 	static int lastID;
-	
+
     public Token (String filename, int lineno, Object value/*, Position pos*/) {
 		this (-1, filename, lineno, -1, -1, value/*, pos*/);
     }
@@ -20,7 +20,7 @@ public class Token /*extends Symbol */implements LexerResult {
     public Token (int id, String filename, int lineno, int left, int right,
 		  Object value/*, Position pos*/) {
 		// super(id, left, right, value);
-		
+
 		symbol = new Symbol (id, left, right, this);
 		lastID=id;
 		this.filename = filename;
@@ -28,19 +28,19 @@ public class Token /*extends Symbol */implements LexerResult {
 		this.value = value;
 		//position = pos;
     }
-	
+
 	public Token (int i) {
-		this(i, "sdf", -1, -1, -1, null);	
+		this(i, "sdf", -1, -1, -1, null);
 	}
 
     public int getCode () {
-		return symbol.sym; 
+		return symbol.sym;
 	}
-	
+
     public Symbol getSymbol () {
 		return symbol;
 	}
-	
+
     public Object getValue () {
 		return value;
 	}
@@ -57,7 +57,7 @@ public class Token /*extends Symbol */implements LexerResult {
 			case Constant.NUM:					return "num";
 			case Constant.LPAREN:				return "lparen";
 			case Constant.RPAREN:				return "rparen";
-						
+
 			case Constant.EOF:					return "EOF";
 			case Constant.error:				return "ERROR";
 
@@ -75,7 +75,7 @@ public class Token /*extends Symbol */implements LexerResult {
     }
 
     public void unparse (java.io.OutputStream o) {
-		
+
 		if (value != null) {
 			try {
 				o.write ((filename + ":" + lineno + ": " + this.getID()+ ": \"" +value + "\"").getBytes());
@@ -89,15 +89,15 @@ public class Token /*extends Symbol */implements LexerResult {
     public String getFilename () {
 		return filename;
 	}
-	
+
     public int lineNumber () {
 		return lineno;
 	}
-	
+
 	public int getLineno() {
 		return lineno;
 	}
-	
+
     public void setLineno (int i) {
 		lineno = i;
 	}

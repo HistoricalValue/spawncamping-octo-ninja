@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2003.  
+ * Modified by the Sable Research Group and others 1997-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ import soot.util.Chain;
      *  <p>
      *  Represents the control flow graph of a {@link Body} at the basic
      *  block level. Each node of the graph is a {@link Block} while the
-     *  edges represent the flow of control from one basic block to 
+     *  edges represent the flow of control from one basic block to
      *  the next.</p>
      *
      *  <p> This is an abstract base class for different variants of
@@ -47,7 +47,7 @@ import soot.util.Chain;
      *  block leaders (represented by overriding <code>BlockGraph</code>'s
      *  definition of {@link computeLeaders()}.
      */
-public abstract class BlockGraph implements DirectedGraph<Block> 
+public abstract class BlockGraph implements DirectedGraph<Block>
 {
     protected Body mBody;
     protected Chain<Unit> mUnits;
@@ -55,7 +55,7 @@ public abstract class BlockGraph implements DirectedGraph<Block>
     protected List<Block> mHeads = new ArrayList<Block>();
     protected List<Block> mTails = new ArrayList<Block>();
 
-   
+
     /**
      *  Create a <code>BlockGraph</code> representing at the basic block
      *  level the control flow specified, at the <code>Unit</code> level,
@@ -64,7 +64,7 @@ public abstract class BlockGraph implements DirectedGraph<Block>
      *   @param unitGraph  A representation of the control flow at
      *                     the level of individual {@link Unit}s.
      */
-    protected BlockGraph(UnitGraph unitGraph) 
+    protected BlockGraph(UnitGraph unitGraph)
     {
         mBody = unitGraph.getBody();
         mUnits = mBody.getUnits();
@@ -160,7 +160,7 @@ public abstract class BlockGraph implements DirectedGraph<Block>
      * <code>buildBlocks()</code> which splits the {@link Unit}s in
      * <code>unitGraph</code> so that each <code>Unit</code> in the
      * passed set of block leaders is the first unit in a block. It
-     * defines as heads the blocks which begin with 
+     * defines as heads the blocks which begin with
      * <code>Unit</code>s which are heads in <code>unitGraph</code>,
      * and defines as tails the blocks which end with
      * <code>Unit</code>s which are tails in <code>unitGraph</code>.
@@ -179,7 +179,7 @@ public abstract class BlockGraph implements DirectedGraph<Block>
      */
     protected Map<Unit, Block> buildBlocks(Set<Unit> leaders, UnitGraph unitGraph) {
 	List<Block> blockList = new ArrayList<Block>(leaders.size());
-	Map<Unit, Block> unitToBlock = new HashMap<Unit, Block>(); // Maps head and tail units to 
+	Map<Unit, Block> unitToBlock = new HashMap<Unit, Block>(); // Maps head and tail units to
 					 // their blocks, for building
 					 // predecessor and successor lists.
 	Unit blockHead = null;
@@ -209,7 +209,7 @@ public abstract class BlockGraph implements DirectedGraph<Block>
 	}
 	if (blockLength > 0) {
 	    // Add final block.
-	    addBlock(blockHead, blockTail, indexInMethod, blockLength, 
+	    addBlock(blockHead, blockTail, indexInMethod, blockLength,
 		     blockList, unitToBlock);
 	}
 
@@ -232,7 +232,7 @@ public abstract class BlockGraph implements DirectedGraph<Block>
 		throw new RuntimeException("BlockGraph(): tail Unit is not the last unit in the corresponding Block!");
 	    }
 	}
-	
+
 	for (Iterator<Block> blockIt = blockList.iterator(); blockIt.hasNext(); ) {
 	    Block block = blockIt.next();
 
@@ -259,7 +259,7 @@ public abstract class BlockGraph implements DirectedGraph<Block>
 		    // Note that a block can be a head even if it has
 		    // predecessors: a handler that might catch an exception
 		    // thrown by the first Unit in the method.
-		} 
+		}
 		*/
 	    } else {
 		block.setPreds(Collections.unmodifiableList(predBlocks));
@@ -314,14 +314,14 @@ public abstract class BlockGraph implements DirectedGraph<Block>
      *                    add mappings from <code>head</code> and <code>tail</code>
      *                    to the new block
      */
-    private void addBlock(Unit head, Unit tail, int index, int length, 
+    private void addBlock(Unit head, Unit tail, int index, int length,
 			  List<Block> blockList, Map<Unit, Block> unitToBlock) {
 	Block block = new Block(head, tail, mBody, index, length, this);
 	blockList.add(block);
 	unitToBlock.put(tail, block);
 	unitToBlock.put(head, block);
     }
-     
+
     /**
      *  Returns the {@link Body}  this {@link BlockGraph} is derived from.
      *  @return The {@link Body}  this {@link BlockGraph} is derived from.
@@ -343,17 +343,17 @@ public abstract class BlockGraph implements DirectedGraph<Block>
         return mBlocks;
     }
 
-               
+
     public String toString() {
-       
+
         Iterator<Block> it = mBlocks.iterator();
         StringBuffer buf = new StringBuffer();
         while(it.hasNext()) {
             Block someBlock = it.next();
-            
+
             buf.append(someBlock.toString() + '\n');
         }
-        
+
         return buf.toString();
     }
 

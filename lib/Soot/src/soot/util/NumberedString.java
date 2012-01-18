@@ -35,7 +35,7 @@ public final class NumberedString implements Numberable {
         if( number == 0 ) throw new RuntimeException( "oops" );
         return s;
     }
-    public final void setNumber( int number ) { 
+    public final void setNumber( int number ) {
         this.number = number;
     }
     public final int getNumber() { return number; }

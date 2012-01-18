@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -29,10 +29,10 @@ package soot.tagkit;
 public class StdTagPrinter implements TagPrinter
 {
     /** Prints out the given tag. */
-    public String print(String aClassName, String aFieldOrMtdSignature, 
+    public String print(String aClassName, String aFieldOrMtdSignature,
                         Tag aTag)
     {
-	return aTag.toString();	
+	return aTag.toString();
     }
 }
 

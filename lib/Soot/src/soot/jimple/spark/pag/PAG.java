@@ -129,7 +129,7 @@ public class PAG implements PointsToAnalysis {
         }
         return n.getP2Set();
     }
-    
+
     /** Returns the set of objects pointed to by variable l in context c. */
     public PointsToSet reachingObjects( Context c, Local l ) {
         VarNode n = findContextVarNode( l, c );
@@ -177,7 +177,7 @@ public class PAG implements PointsToAnalysis {
             throw new RuntimeException( "The alias edge propagator does not compute points-to information for instance fields! Use a different propagator." );
         }
         PointsToSetInternal bases = (PointsToSetInternal) s;
-        final PointsToSetInternal ret = setFactory.newSet( 
+        final PointsToSetInternal ret = setFactory.newSet(
                 (f instanceof SootField) ? ((SootField)f).getType() : null, this );
         bases.forall( new P2SetVisitor() {
         public final void visit( Node n ) {
@@ -259,7 +259,7 @@ public class PAG implements PointsToAnalysis {
                 Node[] a1 = (Node[]) os[0];
                 Node[] a2 = (Node[]) os[1];
                 Node[] ret = new Node[size1+size2];
-                System.arraycopy( a1, 0, ret, 0, a1.length ); 
+                System.arraycopy( a1, 0, ret, 0, a1.length );
                 int j = a1.length;
                 outer: for (Node rep : a2) {
                     for( int k = 0; k < j; k++ )
@@ -295,7 +295,7 @@ public class PAG implements PointsToAnalysis {
 	}
 	if( valueList instanceof Set ) {
             try {
-	    m.put( key, valueList = 
+	    m.put( key, valueList =
 		    ( (Set) valueList ).toArray( EMPTY_NODE_ARRAY ) );
             } catch( Exception e ) {
                 for( Iterator it = ((Set)valueList).iterator(); it.hasNext(); ) {
@@ -342,21 +342,21 @@ public class PAG implements PointsToAnalysis {
 	return ret;
     }
 
-    public Node[] simpleLookup( VarNode key ) 
+    public Node[] simpleLookup( VarNode key )
     { return lookup( simple, key ); }
-    public Node[] simpleInvLookup( VarNode key ) 
+    public Node[] simpleInvLookup( VarNode key )
     { return lookup( simpleInv, key ); }
-    public Node[] loadLookup( FieldRefNode key ) 
+    public Node[] loadLookup( FieldRefNode key )
     { return lookup( load, key ); }
-    public Node[] loadInvLookup( VarNode key ) 
+    public Node[] loadInvLookup( VarNode key )
     { return lookup( loadInv, key ); }
-    public Node[] storeLookup( VarNode key ) 
+    public Node[] storeLookup( VarNode key )
     { return lookup( store, key ); }
-    public Node[] storeInvLookup( FieldRefNode key ) 
+    public Node[] storeInvLookup( FieldRefNode key )
     { return lookup( storeInv, key ); }
-    public Node[] allocLookup( AllocNode key ) 
+    public Node[] allocLookup( AllocNode key )
     { return lookup( alloc, key ); }
-    public Node[] allocInvLookup( VarNode key ) 
+    public Node[] allocInvLookup( VarNode key )
     { return lookup( allocInv, key ); }
     public Set<Object> simpleSources() { return simple.keySet(); }
     public Set<Object> allocSources() { return alloc.keySet(); }
@@ -474,7 +474,7 @@ public class PAG implements PointsToAnalysis {
         }
         GlobalVarNode ret = valToGlobalVarNode.get( value );
         if( ret == null ) {
-            valToGlobalVarNode.put( value, 
+            valToGlobalVarNode.put( value,
                     ret = new GlobalVarNode( this, value, type ) );
             addNodeTag( ret, null );
         } else if( !( ret.getType().equals( type ) ) ) {
@@ -505,7 +505,7 @@ public class PAG implements PointsToAnalysis {
         }
         LocalVarNode ret = valToLocalVarNode.get( value );
         if( ret == null ) {
-            valToLocalVarNode.put( value, 
+            valToLocalVarNode.put( value,
                     ret = new LocalVarNode( this, value, type, method ) );
             addNodeTag( ret, method );
         } else if( !( ret.getType().equals( type ) ) ) {
@@ -636,7 +636,7 @@ public class PAG implements PointsToAnalysis {
 
     public boolean addAllocEdge( AllocNode from, VarNode to ) {
         FastHierarchy fh = typeManager.getFastHierarchy();
-        if( fh == null || to.getType() == null 
+        if( fh == null || to.getType() == null
         || fh.canStoreType( from.getType(), to.getType() ) ) {
             if( doAddAllocEdge( from, to ) ) {
                 edgeQueue.add( from );
@@ -678,7 +678,7 @@ public class PAG implements PointsToAnalysis {
     public void setOnFlyCallGraph( OnFlyCallGraph ofcg ) { this.ofcg = ofcg; }
     public OnFlyCallGraph getOnFlyCallGraph() { return ofcg; }
     public OnFlyCallGraph ofcg() { return ofcg; }
-    /** Adds the base of a dereference to the list of dereferenced 
+    /** Adds the base of a dereference to the list of dereferenced
      * variables. */
     public void addDereference( VarNode base ) {
         dereferences.add( base );
@@ -786,7 +786,7 @@ public class PAG implements PointsToAnalysis {
                 // to this of target, (2) from the contents of the second (array) parameter
             	// to all parameters of the target, and (3)  from return of target to the
                 // return of invoke(..)
-            	
+
             	//(1)
                 InvokeExpr ie = e.srcStmt().getInvokeExpr();
 
@@ -796,11 +796,11 @@ public class PAG implements PointsToAnalysis {
 					Node parm0 = srcmpag.nodeFactory().getNode( arg0 );
 	                parm0 = srcmpag.parameterize( parm0, e.srcCtxt() );
 	                parm0 = parm0.getReplacement();
-	
+
 	                Node thiz = tgtmpag.nodeFactory().caseThis();
 	                thiz = tgtmpag.parameterize( thiz, e.tgtCtxt() );
 	                thiz = thiz.getReplacement();
-	
+
 	                addEdge( parm0, thiz );
 	                callAssigns.put(ie, new Pair(parm0, thiz));
 	                callToMethod.put(ie, srcmpag.getMethod());
@@ -815,15 +815,15 @@ public class PAG implements PointsToAnalysis {
 	                parm1 = srcmpag.parameterize( parm1, e.srcCtxt() );
 	                parm1 = parm1.getReplacement();
 	                FieldRefNode parm1contents = makeFieldRefNode( (VarNode) parm1, ArrayElement.v() );
-	                
+
 	                for(int i=0;i<tgt.getParameterCount(); i++) {
 	                	//if no reference type, create no edge
 	                	if(!(tgt.getParameterType(i) instanceof RefLikeType)) continue;
-	                	
+
 	                    Node tgtParmI = tgtmpag.nodeFactory().caseParm( i );
 	                    tgtParmI = tgtmpag.parameterize( tgtParmI, e.tgtCtxt() );
 	                    tgtParmI = tgtParmI.getReplacement();
-	
+
 	                    addEdge( parm1contents, tgtParmI );
 	                    callAssigns.put(ie, new Pair(parm1contents, tgtParmI));
 	                }
@@ -854,7 +854,7 @@ public class PAG implements PointsToAnalysis {
             	//     to all possible parameters of the target
             	// (4) if we are inside an assign statement,
             	//     assign the fresh object from (1) to the LHS of the assign statement
-            	
+
                 Stmt s = (Stmt) e.srcUnit();
                 InstanceInvokeExpr iie = (InstanceInvokeExpr) s.getInvokeExpr();
 
@@ -863,10 +863,10 @@ public class PAG implements PointsToAnalysis {
                 cls = srcmpag.parameterize( cls, e.srcCtxt() );
                 cls = cls.getReplacement();
                 if( cls instanceof ContextVarNode ) cls = findLocalVarNode( ((VarNode)cls).getVariable() );
-                
+
                 VarNode newObject = makeGlobalVarNode( cls, RefType.v( "java.lang.Object" ) );
                 SootClass tgtClass = e.getTgt().method().getDeclaringClass();
-				RefType tgtType = tgtClass.getType();                
+				RefType tgtType = tgtClass.getType();
                 AllocNode site = makeAllocNode( new Pair(cls, tgtClass), tgtType, null );
                 addEdge( site, newObject );
 
@@ -875,7 +875,7 @@ public class PAG implements PointsToAnalysis {
                 initThis = tgtmpag.parameterize( initThis, e.tgtCtxt() );
                 initThis = initThis.getReplacement();
                 addEdge( newObject, initThis );
-                
+
                 //(3)
                 if(e.kind() == Kind.REFL_CONSTR_NEWINSTANCE) {
 	                Value arg = iie.getArg(0);
@@ -886,21 +886,21 @@ public class PAG implements PointsToAnalysis {
 		                parm0 = srcmpag.parameterize( parm0, e.srcCtxt() );
 		                parm0 = parm0.getReplacement();
 		                FieldRefNode parm1contents = makeFieldRefNode( (VarNode) parm0, ArrayElement.v() );
-		                
+
 		                for(int i=0;i<tgt.getParameterCount(); i++) {
 		                	//if no reference type, create no edge
 		                	if(!(tgt.getParameterType(i) instanceof RefLikeType)) continue;
-		                	
+
 		                    Node tgtParmI = tgtmpag.nodeFactory().caseParm( i );
 		                    tgtParmI = tgtmpag.parameterize( tgtParmI, e.tgtCtxt() );
 		                    tgtParmI = tgtParmI.getReplacement();
-		
+
 		                    addEdge( parm1contents, tgtParmI );
 		                    callAssigns.put(iie, new Pair(parm1contents, tgtParmI));
 		                }
 	                }
                 }
-                
+
                 //(4)
                 if (s instanceof AssignStmt) {
                     AssignStmt as = (AssignStmt)s;
@@ -917,7 +917,7 @@ public class PAG implements PointsToAnalysis {
         }
     }
 
-    
+
     /** Adds method target as a possible target of the invoke expression in s.
      * If target is null, only creates the nodes for the call site,
      * without actually connecting them to any target method.
@@ -948,7 +948,7 @@ public class PAG implements PointsToAnalysis {
             addEdge( argNode, parm );
             callAssigns.put(ie, new Pair(argNode, parm));
             callToMethod.put(ie, srcmpag.getMethod());
-            
+
         }
         if( ie instanceof InstanceInvokeExpr ) {
             InstanceInvokeExpr iie = (InstanceInvokeExpr) ie;
@@ -1040,8 +1040,8 @@ public class PAG implements PointsToAnalysis {
     public NativeMethodDriver nativeMethodDriver;
 
     public HashMultiMap /* InvokeExpr -> Set[Pair] */ callAssigns = new HashMultiMap();
-    public Map<InvokeExpr, SootMethod> callToMethod = new HashMap<InvokeExpr, SootMethod>(); 
+    public Map<InvokeExpr, SootMethod> callToMethod = new HashMap<InvokeExpr, SootMethod>();
     public Map<InvokeExpr, Node> virtualCallsToReceivers = new HashMap<InvokeExpr, Node>();
-    
+
 }
 

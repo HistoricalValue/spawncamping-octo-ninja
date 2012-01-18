@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2003.  
+ * Modified by the Sable Research Group and others 1997-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ import soot.*;
  *  forest where each exception handler constitutes a disjoint
  *  subgraph.</p>
  */
-public class BriefBlockGraph extends BlockGraph 
+public class BriefBlockGraph extends BlockGraph
 {
     /**
      *  Constructs a {@link BriefBlockGraph} from a given {@link Body}.

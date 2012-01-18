@@ -60,7 +60,7 @@ public class ClassFileLoader
                 dir.getName().endsWith(".zip")) {
 
                 String entryName = name.replace('.', '/');
-		
+
 		if (packageCache.contains(entryName)) {
 		    return true;
 		}
@@ -68,7 +68,7 @@ public class ClassFileLoader
 		// load the zip file, forcing the package cache to be initialized
 		// with its contents.
                 loadZip(dir);
-    		
+
 		return packageCache.contains(entryName);
 	    }
             else {
@@ -99,7 +99,7 @@ public class ClassFileLoader
 	    Report.report(3, "looking in " + dir + " for " +
                              name.replace('.', File.separatorChar) + ".class");
         }
-	
+
         try {
             if (dir.getName().endsWith(".jar") ||
                 dir.getName().endsWith(".zip")) {
@@ -147,19 +147,19 @@ public class ClassFileLoader
 			zip = new ZipFile(dir);
 		    }
 		    zipCache.put(dir, zip);
-		    
+
 		    // Load the package cache.
 		    for (Enumeration i = zip.entries(); i.hasMoreElements(); ) {
 			ZipEntry ei = (ZipEntry) i.nextElement();
 			String n = ei.getName();
-			
+
 			int index = n.indexOf('/');
 			while (index >= 0) {
 			    packageCache.add(n.substring(0, index));
 			    index = n.indexOf('/', index+1);
 			}
 		    }
-		    
+
                     return zip;
                 }
             }

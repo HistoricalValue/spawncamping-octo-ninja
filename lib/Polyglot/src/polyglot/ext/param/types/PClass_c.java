@@ -28,36 +28,36 @@ public abstract class PClass_c extends TypeObject_c implements PClass {
     /////////////////////////////////////////////////////////////////////////
     // Implement PClass
 
-    public ClassType instantiate(Position pos, List actuals) 
+    public ClassType instantiate(Position pos, List actuals)
         throws SemanticException
     {
 	ParamTypeSystem pts = (ParamTypeSystem) typeSystem();
         return pts.instantiate(pos, this, actuals);
     }
-    
-    
+
+
     /////////////////////////////////////////////////////////////////////////
     // Implement TypeObject
-    
+
     public boolean isCanonical() {
         if (!clazz().isCanonical()) {
             return false;
-        } 
-     
+        }
+
         for (Iterator i = formals().iterator(); i.hasNext(); ) {
             Param p = (Param) i.next();
             if (!p.isCanonical()) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Implement Named
-   
+
     public String name() {
         return clazz().name();
     }
@@ -66,12 +66,12 @@ public abstract class PClass_c extends TypeObject_c implements PClass {
         return clazz().fullName();
     }
 
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Implement Importable
 
     public Package package_() {
         return clazz().package_();
     }
-    
+
 }

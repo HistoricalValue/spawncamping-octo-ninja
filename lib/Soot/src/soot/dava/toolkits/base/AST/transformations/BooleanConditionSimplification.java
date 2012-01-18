@@ -42,7 +42,7 @@ public class BooleanConditionSimplification extends DepthFirstAdapter{
     public BooleanConditionSimplification(){
     }
     /*
-      The method checks whether a particular ASTBinaryCondition 
+      The method checks whether a particular ASTBinaryCondition
       is a comparison of a local with a boolean
       If so the ASTBinaryCondition is replaced by a ASTUnaryCondition
     */
@@ -107,7 +107,7 @@ public class BooleanConditionSimplification extends DepthFirstAdapter{
 		    return decideCondition(op1,((DIntConstant)op2).toString(),condition);
 		}
 	    }
-	    
+
 	    else
 		return null;//meaning no Value used as boolean found
 	}
@@ -133,13 +133,13 @@ public class BooleanConditionSimplification extends DepthFirstAdapter{
 	else
 	    throw new RuntimeException();
 
-	
+
 
 	//find out whether the comparison operator is != or ==
 	if(condition instanceof NeExpr ){
 	    notEqual=true;
 	}
-	else if( condition instanceof EqExpr){	
+	else if( condition instanceof EqExpr){
 	    notEqual=false;
 	}
 	else
@@ -151,14 +151,14 @@ public class BooleanConditionSimplification extends DepthFirstAdapter{
 	    return A;
 	}
 	else if(notEqual && truthValue==1){//A != true --> !A
-	    if(A instanceof DNotExpr){//A is actually !B 
+	    if(A instanceof DNotExpr){//A is actually !B
 		return ((DNotExpr)A).getOp();
 	    }
 	    else
 		return (new DNotExpr(A));
 	}
 	else if(!notEqual && truthValue==0){//A == false --> !A
-	    if(A instanceof DNotExpr){//A is actually !B 
+	    if(A instanceof DNotExpr){//A is actually !B
 		return ((DNotExpr)A).getOp();
 	    }
 	    else

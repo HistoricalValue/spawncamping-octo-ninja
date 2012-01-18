@@ -28,7 +28,7 @@ import soot.tagkit.*;
 /** The aggregator for ArrayNullCheckAttribute. */
 
 public class ArrayNullTagAggregator extends TagAggregator
-{    
+{
     public ArrayNullTagAggregator( Singletons.Global g ) {}
     public static ArrayNullTagAggregator v() { return G.v().soot_jimple_toolkits_annotation_tags_ArrayNullTagAggregator(); }
 
@@ -51,10 +51,10 @@ public class ArrayNullTagAggregator extends TagAggregator
         ArrayNullCheckTag anct = (ArrayNullCheckTag) tags.getLast();
         anct.accumulate(obct.getValue()[0]);
     }
-    
+
     public String aggregatedName()
     {
-        return "ArrayNullCheckAttribute"; 
+        return "ArrayNullCheckAttribute";
     }
 }
 

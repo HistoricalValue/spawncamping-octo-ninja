@@ -30,26 +30,26 @@ import soot.toolkits.graph.DominatorsFinder;
 
 /**
  * Constructs a multi-headed dominator tree. This is mostly the same as the DominatorTree
- * but the buildTree method is changed to allow mutilple heads. This can be used for 
+ * but the buildTree method is changed to allow mutilple heads. This can be used for
  * graphs that are multi-headed and cannot be augmented to become single-headed.
  *
  * @author Hossein Sadat-Mohtasham
  * March 2009
- * 
+ *
  **/
 @SuppressWarnings("unchecked")
 public class MHGDominatorTree extends DominatorTree
 {
-   
+
 	protected ArrayList<DominatorNode> heads;
 
- 
+
 	public MHGDominatorTree(DominatorsFinder dominators)
     {
 		super(dominators);
     }
 
- 
+
     /**
      * Returns the root(s)!!! of the dominator tree.
      **/
@@ -61,27 +61,27 @@ public class MHGDominatorTree extends DominatorTree
     /**
      * This overrides the parent buildTree to allow multiple heads.
      * Mostly copied from the super class and modified.
-     * 
+     *
      **/
     protected void buildTree()
     {
         // hook up children with parents and vice-versa
     	this.heads = null;
-    	
+
         for(Iterator godesIt = graph.iterator(); godesIt.hasNext();)
         {
-        	
+
             Object gode = godesIt.next();
 
             DominatorNode dode = fetchDode(gode);
             DominatorNode parent = fetchParent(gode);
 
             if(parent == null){
-               
+
             	//make sure the array is created!
             	if(heads == null)
                 	heads = new ArrayList();
-            	
+
                 heads.add(dode);
             }
             else{
@@ -89,10 +89,10 @@ public class MHGDominatorTree extends DominatorTree
                 dode.setParent(parent);
             }
         }
-      
+
         head = (DominatorNode) heads.get(0);
         // identify the tail nodes
-        
+
         for(Iterator dodesIt = this.iterator(); dodesIt.hasNext();)
         {
             DominatorNode dode = (DominatorNode) dodesIt.next();
@@ -100,8 +100,8 @@ public class MHGDominatorTree extends DominatorTree
             if(dode.isTail())
                 tails.add(dode);
         }
-    
+
     }
 
- 
+
 }

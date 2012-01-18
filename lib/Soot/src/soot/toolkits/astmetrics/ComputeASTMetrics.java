@@ -28,7 +28,7 @@ import soot.options.Options;
  * Add all metrics to be computed here.
  */
 public class ComputeASTMetrics {
-	
+
 	ArrayList<ASTMetric> metrics;
 	/*
 	 * New metrics should be added into the metrics linked list
@@ -37,7 +37,7 @@ public class ComputeASTMetrics {
 		metrics = new ArrayList<ASTMetric>();
 		//add new metrics below this line
 		//REMEMBER ALL METRICS NEED TO implement MetricInterface
-		
+
 		//abrupt edges metric calculator
 		metrics.add(new AbruptEdgesMetric(astNode));
 		metrics.add(new NumLocalsMetric(astNode));
@@ -47,15 +47,15 @@ public class ComputeASTMetrics {
 		metrics.add(new ExpressionComplexityMetric(astNode));
 		metrics.add(new IdentifiersMetric(astNode));
 	}
-	
+
 	public void apply(){
 		if(!Options.v().ast_metrics()){
 			return;
 		}
-				
+
 		Iterator<ASTMetric> metricIt = metrics.iterator();
 		while(metricIt.hasNext())
 			metricIt.next().execute();
-		
+
 	}
 }

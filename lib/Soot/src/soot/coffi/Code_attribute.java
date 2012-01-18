@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -76,9 +76,9 @@ class Code_attribute extends attribute_info {
       }
       return null;
    }
-   
+
    /** Locates the LocalVariableTypeTable attribute, if one is present.
-    * @return the local variable type table attribute, or <i>null</i> 
+    * @return the local variable type table attribute, or <i>null</i>
     * if not found.
     * @see LocalVariableTypeTable_attribute
     * @see method_info#makeLocals

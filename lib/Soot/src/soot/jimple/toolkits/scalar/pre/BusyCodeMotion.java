@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ import soot.util.*;
 import soot.jimple.toolkits.pointer.PASideEffectTester;
 import soot.options.BCMOptions;
 
-/** 
+/**
  * Performs a partial redundancy elimination (= code motion). This is
  * done, by moving <b>every</b>computation as high as possible (it is
  * easy to show, that they are computationally optimal), and then

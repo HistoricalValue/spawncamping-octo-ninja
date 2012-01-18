@@ -18,12 +18,12 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
 
- 
+
 
 
 
@@ -40,18 +40,18 @@ public class PlaceholderStmt extends AbstractStmt
     {
         return "<placeholder: " + source.toString() + ">";
     }
-    
+
     public void toString( UnitPrinter up ) {
         up.literal("<placeholder: ");
         source.toString(up);
         up.literal(">");
     }
-    
+
     PlaceholderStmt(Unit source)
     {
         this.source = source;
     }
-    
+
     public Unit getSource()
     {
         return source;

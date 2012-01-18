@@ -36,7 +36,7 @@ public class SourceLnNamePosTag extends SourceLnPosTag {
 	public String getFileName() {
 		return fileName;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -27,32 +27,32 @@ import soot.jimple.*;
 
 /**
  * This checks all uses against the rules in Jimple, except some uses are not
- * checked where the bytecode verifier guarantees use validity. 
+ * checked where the bytecode verifier guarantees use validity.
  * @author Ben Bellamy
  */
 public class UseChecker extends AbstractStmtSwitch
 {
 	private JimpleBody jb;
-	
+
 	private Typing tg;
 	private IUseVisitor uv;
-	
+
 	public UseChecker(JimpleBody jb)
 	{
 		this.jb = jb;
 	}
-	
+
 	public void check(Typing tg, IUseVisitor uv)
 	{
 		try {
-			this.tg = tg;	
+			this.tg = tg;
 			this.uv = uv;
 			if (this.tg == null) throw new Exception("null typing passed to useChecker");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
+
 		for ( Iterator<Unit> i = this.jb.getUnits().snapshotIterator();
 			i.hasNext(); )
 		{
@@ -61,29 +61,29 @@ public class UseChecker extends AbstractStmtSwitch
 			((Stmt)i.next()).apply(this);
 		}
 	}
-	
+
 	private void handleInvokeExpr(InvokeExpr ie, Stmt stmt)
 	{
 		SootMethodRef m = ie.getMethodRef();
-		
+
 		if ( ie instanceof InstanceInvokeExpr )
 		{
 			InstanceInvokeExpr iie = (InstanceInvokeExpr)ie;
 			iie.setBase(this.uv.visit(
 				iie.getBase(),m.declaringClass().getType(), stmt));
 		}
-		
+
 		for ( int i = 0; i < ie.getArgCount(); i++ )
 			ie.setArg(i, this.uv.visit(
 				ie.getArg(i), m.parameterType(i), stmt));
 	}
-	
+
 	private void handleBinopExpr(BinopExpr be, Stmt stmt, Type tlhs)
 	{
 		Value opl = be.getOp1(), opr = be.getOp2();
 		Type tl = AugEvalFunction.eval_(this.tg, opl, stmt, this.jb),
 			tr = AugEvalFunction.eval_(this.tg, opr, stmt, this.jb);
-	
+
 		if ( be instanceof AddExpr
 			|| be instanceof SubExpr
 			|| be instanceof MulExpr
@@ -130,12 +130,12 @@ public class UseChecker extends AbstractStmtSwitch
 			}
 		}
 	}
-	
+
 	private void handleArrayRef(ArrayRef ar, Stmt stmt)
 	{
 		ar.setIndex(this.uv.visit(ar.getIndex(), IntType.v(), stmt));
 	}
-	
+
 	private void handleInstanceFieldRef(InstanceFieldRef ifr, Stmt stmt)
 	{
 		ifr.setBase(this.uv.visit(ifr.getBase(),
@@ -143,19 +143,19 @@ public class UseChecker extends AbstractStmtSwitch
 	}
 
 	public void caseBreakpointStmt(BreakpointStmt stmt) { }
-	
+
 	public void caseInvokeStmt(InvokeStmt stmt)
 	{
 		this.handleInvokeExpr(stmt.getInvokeExpr(), stmt);
 	}
-	
+
 	public void caseAssignStmt(AssignStmt stmt)
 	{
 		Value lhs = stmt.getLeftOp();
 		Type tlhs = null;
-		
-		
-		
+
+
+
 		if ( lhs instanceof Local )
 			tlhs = this.tg.get((Local)lhs);
 		else if ( lhs instanceof ArrayRef )
@@ -176,9 +176,9 @@ public class UseChecker extends AbstractStmtSwitch
 			if ( lhs instanceof InstanceFieldRef )
 				this.handleInstanceFieldRef((InstanceFieldRef)lhs, stmt);
 		}
-			
+
 		Value rhs = stmt.getRightOp();
-		
+
 		if ( rhs instanceof Local )
 			stmt.setRightOp(this.uv.visit(rhs, tlhs, stmt));
 		else if ( rhs instanceof ArrayRef )
@@ -231,55 +231,55 @@ public class UseChecker extends AbstractStmtSwitch
 				((NegExpr)rhs).getOp(), tlhs, stmt));
 		}
 	}
-	
+
 	public void caseIdentityStmt(IdentityStmt stmt) { }
-	
+
 	public void caseEnterMonitorStmt(EnterMonitorStmt stmt)
 	{
 		stmt.setOp(this.uv.visit(
 			stmt.getOp(), RefType.v("java.lang.Object"), stmt));
 	}
-	
+
 	public void caseExitMonitorStmt(ExitMonitorStmt stmt)
 	{
 		stmt.setOp(this.uv.visit(
 			stmt.getOp(), RefType.v("java.lang.Object"), stmt));
 	}
-	
+
 	public void caseGotoStmt(GotoStmt stmt) { }
-	
+
 	public void caseIfStmt(IfStmt stmt)
 	{
 		this.handleBinopExpr((BinopExpr)stmt.getCondition(), stmt,
 			BooleanType.v());
 	}
-	
+
 	public void caseLookupSwitchStmt(LookupSwitchStmt stmt)
 	{
 		stmt.setKey(this.uv.visit(stmt.getKey(), IntType.v(), stmt));
 	}
-	
+
 	public void caseNopStmt(NopStmt stmt) { }
-	
+
 	public void caseReturnStmt(ReturnStmt stmt)
 	{
 		stmt.setOp(this.uv.visit(
 			stmt.getOp(), this.jb.getMethod().getReturnType(), stmt));
 	}
-	
+
 	public void caseReturnVoidStmt(ReturnVoidStmt stmt) { }
-	
+
 	public void caseTableSwitchStmt(TableSwitchStmt stmt)
 	{
 		stmt.setKey(this.uv.visit(stmt.getKey(), IntType.v(), stmt));
 	}
-	
+
 	public void caseThrowStmt(ThrowStmt stmt)
 	{
 		stmt.setOp(this.uv.visit(
 			stmt.getOp(), RefType.v("java.lang.Throwable"), stmt));
 	}
-	
+
 	public void defaultCase(Stmt stmt)
 	{
 		throw new RuntimeException(

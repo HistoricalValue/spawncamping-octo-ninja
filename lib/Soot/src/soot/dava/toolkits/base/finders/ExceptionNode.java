@@ -54,7 +54,7 @@ public class ExceptionNode
     public boolean add_TryStmts( Collection c)
     {
 	Iterator it = c.iterator();
-	while (it.hasNext()) 
+	while (it.hasNext())
 	    if (add_TryStmt( (AugmentedStmt) it.next()) == false)
 		return false;
 
@@ -65,7 +65,7 @@ public class ExceptionNode
     {
 	if ((body.contains( as)) || (tryBody.contains( as)))
 	    return false;
-	
+
 	body.add( as);
 	tryBody.add( as);
 
@@ -86,7 +86,7 @@ public class ExceptionNode
     {
 	return body;
     }
-    
+
     public IterableSet get_TryBody()
     {
 	return tryBody;
@@ -137,7 +137,7 @@ public class ExceptionNode
 		    }
 	    }
 	}
-	
+
 	return exitList;
     }
 
@@ -169,7 +169,7 @@ public class ExceptionNode
 		while (it.hasNext())
 		    b.append( "\n" + ((AugmentedStmt) it.next()).toString());
 		b.append( "\n-");
-		
+
 		throw new RuntimeException( "Tried to split off a new try body that isn't in the old one.\n"+ as +"\n - " + b.toString());
 	    }
 	}
@@ -195,22 +195,22 @@ public class ExceptionNode
 	    as.remove_CSucc( newCatchTarget);
 	    newCatchTarget.remove_CPred( as);
 	}
-	
+
 	Iterator enlit = enlist.snapshotIterator();
 	while (enlit.hasNext()) {
 	    ExceptionNode en = (ExceptionNode) enlit.next();
-	    
+
 	    if (this == en)
 		continue;
-	    
+
 	    if (catchBody.isSupersetOf( en.get_Body())) {
-		
+
 		IterableSet clonedTryBody = new IterableSet();
-		
+
 		Iterator trit = en.get_TryBody().iterator();
 		while (trit.hasNext())
 		    clonedTryBody.add( asg.get_CloneOf( (AugmentedStmt) trit.next()));
-		
+
 		enlist.addLast( new ExceptionNode( clonedTryBody, en.exception, asg.get_CloneOf( en.handlerAugmentedStmt)));
 	    }
 	}
@@ -220,7 +220,7 @@ public class ExceptionNode
 	enlit = enlist.iterator();
 	while (enlit.hasNext())
 	    ((ExceptionNode) enlit.next()).refresh_CatchBody( ExceptionFinder.v());
-	
+
 	asg.find_Dominators();
     }
 
@@ -274,7 +274,7 @@ public class ExceptionNode
 	    m = new HashMap();
 	    m.put( catchBody, exception);
 	}
-	
+
 	return m;
     }
 
@@ -298,17 +298,17 @@ public class ExceptionNode
 	while (tit.hasNext())
 	    G.v().out.println( "\t" + tit.next());
 	G.v().out.println( "}");
-	
+
 	Iterator cit = get_CatchList().iterator();
 	while (cit.hasNext()) {
 	    IterableSet catchBody = (IterableSet) cit.next();
-	    
+
 	    G.v().out.println( "catch " + get_ExceptionMap().get( catchBody) + " {");
 	    Iterator cbit = catchBody.iterator();
-	    while (cbit.hasNext()) 
+	    while (cbit.hasNext())
 		G.v().out.println( "\t" + cbit.next());
 	    G.v().out.println("}");
-	    
+
 	}
     }
 }

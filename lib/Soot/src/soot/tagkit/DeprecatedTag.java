@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -26,8 +26,8 @@
 package soot.tagkit;
 
 
-/** 
- * Represents the deprecated attribute used by fields, methods and classes 
+/**
+ * Represents the deprecated attribute used by fields, methods and classes
  */
 
 public class DeprecatedTag implements  Tag
@@ -35,7 +35,7 @@ public class DeprecatedTag implements  Tag
 
     public DeprecatedTag(){
     }
-    
+
     public String toString() {
         return "Deprecated";
     }
@@ -48,7 +48,7 @@ public class DeprecatedTag implements  Tag
     public String getInfo(){
         return "Deprecated";
     }
-    
+
     /** Returns the tag raw data. */
     public byte[] getValue() {
         throw new RuntimeException( "DeprecatedTag has no value for bytecode" );

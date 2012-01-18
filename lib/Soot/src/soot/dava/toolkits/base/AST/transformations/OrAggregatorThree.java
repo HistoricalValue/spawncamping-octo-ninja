@@ -29,12 +29,12 @@ import soot.dava.internal.javaRep.*;
 /*
   Nomair A. Naeem 21-FEB-2005
   The class is responsible to do the following transformation on the AST
-  if(cond1){              if(cond1 || cond2)       
-     A                            A                
-  }                       }                        
-  if(cond2){         
-     A              
-  }                 
+  if(cond1){              if(cond1 || cond2)
+     A                            A
+  }                       }
+  if(cond2){
+     A
+  }
 
   Notice that this kind of conversion is only possible if A is an
   abrupt edge like:
@@ -68,7 +68,7 @@ public class OrAggregatorThree {
 	      The onlySubBody contains the Two consective if nodes
 	      at location given by nodeNumber and nodeNumber+1
 	    */
-	    
+
 	    //match the pattern and get the newBody
 	    List<Object> newBody = createNewNodeBody(onlySubBody,nodeNumber,ifOne,ifTwo);
 
@@ -177,13 +177,13 @@ public class OrAggregatorThree {
 	    //pattern did not match
 	    return null;
 	}
-	
+
 	//create a new SubBody
 	List<Object> newSubBody = new ArrayList<Object>();
-	
+
 	//this is an iterator of ASTNodes
 	Iterator<Object> it = oldSubBody.iterator();
-	
+
 	//copy to newSubBody all nodes until you get to nodeNumber
 	int index=0;
 	while(index!=nodeNumber ){
@@ -199,14 +199,14 @@ public class OrAggregatorThree {
 	ASTNode isItIfOne = (ASTNode)it.next();
 
 	if(!(isItIfOne instanceof ASTIfNode)){
-	    //something is wrong 
+	    //something is wrong
 	    return null;
 	}
 
 	//get the next node that should also be an ASTIfNode
 	ASTNode isItIfTwo = (ASTNode)it.next();
 	if(!(isItIfTwo instanceof ASTIfNode)){
-	    //something is wrong 
+	    //something is wrong
 	    return null;
 	}
 
@@ -217,13 +217,13 @@ public class OrAggregatorThree {
 	    //pattern did not match
 	    return null;
 	}
-	
+
 	//we are sure that we have the two nodes
 
 	//create new node
 	ASTIfNode firstOne = (ASTIfNode)isItIfOne;
 	ASTIfNode secondOne = (ASTIfNode)isItIfTwo;
-	
+
 	//create new condition
 	ASTCondition firstCond = firstOne.get_Condition();
 	ASTCondition secondCond = secondOne.get_Condition();
@@ -231,7 +231,7 @@ public class OrAggregatorThree {
 	ASTCondition newCond = new ASTOrCondition(firstCond,secondCond);
 
 	ASTIfNode newNode = new ASTIfNode(firstOne.get_Label(),newCond,firstOne.getIfBody());
-	
+
 	//add the new node
 	newSubBody.add(newNode);
 
@@ -256,7 +256,7 @@ public class OrAggregatorThree {
     private static boolean matchPattern(ASTIfNode one, ASTIfNode two){
 	List<Object> subBodiesOne=one.get_SubBodies();
 	List<Object> subBodiesTwo=two.get_SubBodies();
-	
+
 	if(subBodiesOne.size()!=1 || subBodiesTwo.size()!=1){
 	    //these are both if nodes they should always have one subBody
 	    return false;
@@ -268,7 +268,7 @@ public class OrAggregatorThree {
 	    //these subBodies are expected to have a single StatementSequenceNode
 	    return false;
 	}
-	
+
 	ASTNode onlyASTNodeOne = (ASTNode)onlySubBodyOne.get(0);
 	ASTNode onlyASTNodeTwo = (ASTNode)onlySubBodyTwo.get(0);
 

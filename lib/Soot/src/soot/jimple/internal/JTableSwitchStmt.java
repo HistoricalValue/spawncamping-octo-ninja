@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ import soot.baf.*;
 import soot.util.*;
 import java.util.*;
 
-public class JTableSwitchStmt extends AbstractStmt 
+public class JTableSwitchStmt extends AbstractStmt
     implements TableSwitchStmt
 {
     UnitBox defaultTargetBox;
@@ -48,8 +48,8 @@ public class JTableSwitchStmt extends AbstractStmt
 
     List stmtBoxes;
 
-  
-    public Object clone() 
+
+    public Object clone()
     {
         return new JTableSwitchStmt(Jimple.v().newImmediateBox(Jimple.cloneIfNecessary(getKey())), lowIndex, highIndex, getTargetBoxesArray(getTargets()), Jimple.v().newStmtBox(getDefaultTarget()));
     }
@@ -68,37 +68,37 @@ public class JTableSwitchStmt extends AbstractStmt
 
     public JTableSwitchStmt(Value key, int lowIndex, int highIndex, List targets, Unit defaultTarget)
     {
-        this(Jimple.v().newImmediateBox(key), lowIndex, highIndex, 
-             getTargetBoxesArray(targets), 
+        this(Jimple.v().newImmediateBox(key), lowIndex, highIndex,
+             getTargetBoxesArray(targets),
              Jimple.v().newStmtBox(defaultTarget));
     }
-    
-    
-    
+
+
+
     public JTableSwitchStmt(Value key, int lowIndex, int highIndex, List<Object> targets, UnitBox defaultTarget)
     {
-        this(Jimple.v().newImmediateBox(key), lowIndex, highIndex, 
-             unitBoxListToArray(targets), 
+        this(Jimple.v().newImmediateBox(key), lowIndex, highIndex,
+             unitBoxListToArray(targets),
              defaultTarget);
     }
-   
+
     private static UnitBox[] unitBoxListToArray(List<Object> targets) {
         UnitBox[] targetBoxes = new UnitBox[targets.size()];
-        
+
         for(int i = 0; i < targetBoxes.length; i++)
             targetBoxes[i] = (UnitBox) targets.get(i);
         return targetBoxes;
     }
-    
 
-    protected JTableSwitchStmt(ValueBox keyBox, int lowIndex, int highIndex, 
+
+    protected JTableSwitchStmt(ValueBox keyBox, int lowIndex, int highIndex,
                                UnitBox[] targetBoxes, UnitBox defaultTargetBox)
     {
         this.keyBox = keyBox;
         this.defaultTargetBox = defaultTargetBox;
 
         if(lowIndex > highIndex)
-            throw new RuntimeException("Error creating tableswitch: lowIndex(" 
+            throw new RuntimeException("Error creating tableswitch: lowIndex("
                                        + lowIndex +  ") can't be greater than highIndex(" + highIndex + ").");
 
         this.lowIndex = lowIndex;
@@ -122,28 +122,28 @@ public class JTableSwitchStmt extends AbstractStmt
     {
         StringBuffer buffer = new StringBuffer();
         String endOfLine = " ";
-        
+
         buffer.append(Jimple.TABLESWITCH + "(" +
             keyBox.getValue().toString() + ")" + endOfLine);
-            
+
         buffer.append("{" + endOfLine);
-        
+
         for(int i = lowIndex; i <= highIndex; i++)
         {
             buffer.append(
-                          "    " + Jimple.CASE + " " + i + ": " + Jimple.GOTO + 
+                          "    " + Jimple.CASE + " " + i + ": " + Jimple.GOTO +
                           " " + getTarget(i - lowIndex) + ";" + endOfLine);
         }
 
-        buffer.append("    " +  Jimple.DEFAULT + 
-                      ": " +  Jimple.GOTO + " " 
+        buffer.append("    " +  Jimple.DEFAULT +
+                      ": " +  Jimple.GOTO + " "
                       + getDefaultTarget() + ";" + endOfLine);
-        
+
         buffer.append("}");
 
         return buffer.toString();
     }
-    
+
     public void toString(UnitPrinter up)
     {
         up.literal(Jimple.TABLESWITCH);
@@ -165,7 +165,7 @@ public class JTableSwitchStmt extends AbstractStmt
             up.literal(";");
             up.newline();
         }
-        
+
         up.literal("    ");
         up.literal(Jimple.DEFAULT);
         up.literal(": ");
@@ -277,10 +277,10 @@ public class JTableSwitchStmt extends AbstractStmt
     public void apply(Switch sw)
     {
         ((StmtSwitch) sw).caseTableSwitchStmt(this);
-    }    
+    }
 
 
-  
+
     public void convertToBaf(JimpleToBafContext context, List<Unit> out)
     {
         ArrayList targetPlaceholders = new ArrayList();
@@ -292,23 +292,23 @@ public class JTableSwitchStmt extends AbstractStmt
             targetPlaceholders.add(Baf.v().newPlaceholderInst
                                    (getTarget(i)));
         }
-	
+
 	Unit u;
         out.add(u = Baf.v().newTableSwitchInst
                 (Baf.v().newPlaceholderInst(getDefaultTarget()),
                  lowIndex, highIndex, targetPlaceholders));
-	
+
 	Unit currentUnit = this;
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}
-	
+
     }
 
 
-     
+
     public boolean fallsThrough() {return false;}
     public boolean branches(){return true;}
 

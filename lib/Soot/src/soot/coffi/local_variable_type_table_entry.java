@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -45,18 +45,18 @@ class local_variable_type_table_entry {
     * @see CONSTANT_Utf8_info
     */
    public int name_index;
-   /** Constant pool index of string giving this local variable's 
+   /** Constant pool index of string giving this local variable's
     * signature
     * @see CONSTANT_Utf8_info
     */
    public int signature_index;
    /** The index in the local variable array of this local variable. */
    public int index;
-   
+
    public String toString()
    {
         return "start: " + start_pc + "length: " + length + "name_index: " + name_index + "signature_index: " + signature_index + "index: " + index ;
-        
-        
+
+
    }
 }

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -102,7 +102,7 @@ public class Timers
      public Timer assembleJasminTimer = new Timer("assembling jasmin");
 
      public Timer resolverTimer = new Timer("resolver");
-        
+
 
      public int conversionLocalCount;
 
@@ -141,16 +141,16 @@ public class Timers
 	public Timer locatorTimer = new soot.Timer();
 
 	public Timer readTimer = new soot.Timer();
-	
+
 	public Timer orderComputation = new soot.Timer("orderComputation");
 
     public void printProfilingInformation()
-    {                                                   
+    {
         long totalTime = totalTimer.getTime();
-                
+
         G.v().out.println("Time measurements");
         G.v().out.println();
-                
+
         G.v().out.println("      Building graphs: " + toTimeString(graphTimer, totalTime));
         G.v().out.println("  Computing LocalDefs: " + toTimeString(defsTimer, totalTime));
 	//                G.v().out.println("                setup: " + toTimeString(defsSetupTimer, totalTime));
@@ -167,18 +167,18 @@ public class Timers
 	//                G.v().out.println("                setup: " + toTimeString(liveSetupTimer, totalTime));
 	//                G.v().out.println("             analysis: " + toTimeString(liveAnalysisTimer, totalTime));
 	//                G.v().out.println("                 post: " + toTimeString(livePostTimer, totalTime));
-                
+
         G.v().out.println("Coading coffi structs: " + toTimeString(resolveTimer, totalTime));
 
-                
+
         G.v().out.println();
 
         // Print out time stats.
         {
             float timeInSecs;
 
-            G.v().out.println("       Resolving classfiles: " + toTimeString(resolverTimer, totalTime)); 
-            G.v().out.println(" Bytecode -> jimple (naive): " + toTimeString(conversionTimer, totalTime)); 
+            G.v().out.println("       Resolving classfiles: " + toTimeString(resolverTimer, totalTime));
+            G.v().out.println(" Bytecode -> jimple (naive): " + toTimeString(conversionTimer, totalTime));
             G.v().out.println("        Splitting variables: " + toTimeString(splitTimer, totalTime));
             G.v().out.println("            Assigning types: " + toTimeString(assignTimer, totalTime));
             G.v().out.println("  Propagating copies & csts: " + toTimeString(propagatorTimer, totalTime));
@@ -187,14 +187,14 @@ public class Timers
             G.v().out.println("            Coloring locals: " + toTimeString(packTimer, totalTime));
             G.v().out.println("     Generating jasmin code: " + toTimeString(buildJasminTimer, totalTime));
             G.v().out.println("          .jasmin -> .class: " + toTimeString(assembleJasminTimer, totalTime));
-            
-                                            
+
+
 	    //                    G.v().out.println("           Cleaning up code: " + toTimeString(cleanup1Timer, totalTime) +
 	    //                        "\t" + cleanup1LocalCount + " locals  " + cleanup1StmtCount + " stmts");
-                    
+
 	    //                    G.v().out.println("               Split phase1: " + toTimeString(splitPhase1Timer, totalTime));
 	    //                    G.v().out.println("               Split phase2: " + toTimeString(splitPhase2Timer, totalTime));
-                
+
 	    /*
 	      G.v().out.println("cleanup2Timer:   " + cleanup2Time +
 	      "(" + (cleanup2Time * 100 / totalTime) + "%) " +
@@ -203,20 +203,20 @@ public class Timers
 
             timeInSecs = totalTime / 1000.0f;
             float memoryUsed = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000.0f;
-            
+
             G.v().out.println("totalTime:" + toTimeString(totalTimer, totalTime));
-            
+
             if(Options.v().subtract_gc())
 		{
 		    G.v().out.println("Garbage collection was subtracted from these numbers.");
-		    G.v().out.println("           forcedGC:" + 
+		    G.v().out.println("           forcedGC:" +
 				       toTimeString(G.v().Timer_forcedGarbageCollectionTimer, totalTime));
 		}
 
             G.v().out.println("stmtCount: " + stmtCount + "(" + toFormattedString(stmtCount / timeInSecs) + " stmt/s)");
-                    
-            G.v().out.println("totalFlowNodes: " + totalFlowNodes + 
-                               " totalFlowComputations: " + totalFlowComputations + " avg: " + 
+
+            G.v().out.println("totalFlowNodes: " + totalFlowNodes +
+                               " totalFlowComputations: " + totalFlowComputations + " avg: " +
                                truncatedOf((double) totalFlowComputations / totalFlowNodes, 2));
         }
     }
@@ -226,14 +226,14 @@ public class Timers
     {
         DecimalFormat format = new DecimalFormat("00.0");
         DecimalFormat percFormat = new DecimalFormat("00.0");
-        
+
         long time = timer.getTime();
-        
+
         String timeString = format.format(time / 1000.0); // paddedLeftOf(new Double(truncatedOf(time / 1000.0, 1)).toString(), 5);
-        
-        return (timeString + "s" + " (" + percFormat.format(time * 100.0 / totalTime) + "%" + ")");   
+
+        return (timeString + "s" + " (" + percFormat.format(time * 100.0 / totalTime) + "%" + ")");
     }
-    
+
 
     private  String toFormattedString(double value)
     {
@@ -244,13 +244,13 @@ public class Timers
     public  double truncatedOf(double d, int numDigits)
     {
         double multiplier = 1;
-        
+
         for(int i = 0; i < numDigits; i++)
             multiplier *= 10;
-            
+
         return ((long) (d * multiplier)) / multiplier;
     }
-    
+
 
     public  String paddedLeftOf(String s, int length)
     {
@@ -259,12 +259,12 @@ public class Timers
         else {
             int diff = length - s.length();
             char[] padding = new char[diff];
-            
+
             for(int i = 0; i < diff; i++)
                 padding[i] = ' ';
-            
+
             return new String(padding) + s;
-        }    
+        }
     }
 
 }

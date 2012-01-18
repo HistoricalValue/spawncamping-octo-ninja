@@ -111,7 +111,7 @@ public class Main
       if (!invokePostCompiler(options, compiler, eq)) {
           throw new TerminationException(1);
       }
-      
+
       if (Report.should_report(verbose, 1)) {
           reportTime("Finished compiling Java output files. time=" +
                   (System.currentTimeMillis() - start_time), 1);

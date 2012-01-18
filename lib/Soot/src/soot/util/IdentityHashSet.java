@@ -30,9 +30,9 @@ import java.util.Set;
 public class IdentityHashSet<E> extends AbstractSet<E> implements Set<E> {
 
     protected IdentityHashMap<E,E> delegate;
-    
+
     /**
-     * Creates a new, empty IdentityHashSet. 
+     * Creates a new, empty IdentityHashSet.
      */
     @SuppressWarnings("unchecked")
     public IdentityHashSet() {
@@ -81,7 +81,7 @@ public class IdentityHashSet<E> extends AbstractSet<E> implements Set<E> {
         delegate.entrySet().clear();
     }
 
-	/* 
+	/*
 	 * Equality based on identity.
 	 */
 	public int hashCode() {
@@ -91,7 +91,7 @@ public class IdentityHashSet<E> extends AbstractSet<E> implements Set<E> {
 		return result;
 	}
 
-	/* 
+	/*
 	 * Hash code based on identity.
 	 */
 	public boolean equals(Object obj) {
@@ -109,12 +109,12 @@ public class IdentityHashSet<E> extends AbstractSet<E> implements Set<E> {
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public String toString() {
 		return delegate.keySet().toString();
 	}
-    
+
 }

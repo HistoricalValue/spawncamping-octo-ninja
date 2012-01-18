@@ -19,7 +19,7 @@ public class Nonterminal extends GrammarSymbol
 	public Object clone() {
 		return new Nonterminal(name, label);
 	}
-	
+
 	public boolean equals(Object o) {
 		if (o instanceof Nonterminal) {
 			return name.equals( ((Nonterminal)o).getName() );

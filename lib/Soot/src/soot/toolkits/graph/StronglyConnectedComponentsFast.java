@@ -27,9 +27,9 @@ import java.util.Stack;
 /**
  *  Identifies and provides an interface to query the strongly-connected
  *  components of DirectedGraph instances.
- *  
+ *
  *  Uses Tarjan's algorithm.
- *  
+ *
  *  @see DirectedGraph
  *  @author Eric Bodden
  */
@@ -38,18 +38,18 @@ public class StronglyConnectedComponentsFast<N>
 {
     protected final List<List<N>> componentList = new ArrayList<List<N>>();
     protected final List<List<N>> trueComponentList = new ArrayList<List<N>>();
-    
+
     protected int index = 0;
-    
+
     protected Map<N,Integer> indexForNode, lowlinkForNode;
-    
+
     protected Stack<N> s;
 
 	protected DirectedGraph<N> g;
-    
+
     /**
      *  @param g a graph for which we want to compute the strongly
-     *           connected components. 
+     *           connected components.
      *  @see DirectedGraph
      */
     public StronglyConnectedComponentsFast(DirectedGraph<N> g)
@@ -57,15 +57,15 @@ public class StronglyConnectedComponentsFast<N>
     	this.g = g;
 		s = new Stack<N>();
     	List<N> heads = g.getHeads();
-    	
+
     	if(heads.size()>1)
     		throw new RuntimeException("Cannot compute SCCs for graph with number of heads = "+heads.size());
-    	
+
     	indexForNode = new HashMap<N, Integer>();
     	lowlinkForNode = new HashMap<N, Integer>();
-    	
+
     	recurse(heads.get(0));
-    	
+
     	//free memory
     	indexForNode = null;
     	lowlinkForNode = null;
@@ -84,7 +84,7 @@ public class StronglyConnectedComponentsFast<N>
 				lowlinkForNode.put(v, Math.min(lowlinkForNode.get(v), lowlinkForNode.get(succ)));
 			} else if(s.contains(v)) {
 				lowlinkForNode.put(v, Math.min(lowlinkForNode.get(v), indexForNode.get(succ)));
-			}			
+			}
 		}
 		if(lowlinkForNode.get(v)==indexForNode.get(v)) {
 			List<N> scc = new ArrayList<N>();
@@ -92,7 +92,7 @@ public class StronglyConnectedComponentsFast<N>
 			do {
 				v2 = s.pop();
 				scc.add(v2);
-			}while(v!=v2);			
+			}while(v!=v2);
 			componentList.add(scc);
 			if(scc.size()>1) {
 				trueComponentList.add(scc);
@@ -103,7 +103,7 @@ public class StronglyConnectedComponentsFast<N>
 			}
 		}
 	}
-	
+
     /**
      *   @return the list of the strongly-connected components
      */
@@ -111,11 +111,11 @@ public class StronglyConnectedComponentsFast<N>
     {
         return componentList;
     }
-    
+
     /**
      *   @return the list of the strongly-connected components, but only those
      *   that are true components, i.e. components which have more than one element
-     *   or consists of one node that has itself as a successor 
+     *   or consists of one node that has itself as a successor
      */
     public List<List<N>> getTrueComponents()
     {

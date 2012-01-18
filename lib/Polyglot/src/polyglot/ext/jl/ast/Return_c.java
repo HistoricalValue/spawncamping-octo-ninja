@@ -103,7 +103,7 @@ public class Return_c extends Stmt_c implements Return
 
 	throw new InternalCompilerError("Unrecognized code type.");
     }
-  
+
     public Type childExpectedType(Expr child, AscriptionVisitor av) {
         if (child == expr) {
             Context c = av.context();

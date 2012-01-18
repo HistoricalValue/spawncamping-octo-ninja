@@ -60,7 +60,7 @@ class SootInitialisationAction implements InitialisationAction {
         final SingletonKeeper SK  = SingletonKeeper.S();
         final PackManager     PM  = soot.PackManager.v();
         final Pack            JTP = PM.getPack("jtp");
-        
+
         final TPOJimpleBodyTransformer tpoJimpleTransformerSingletonInstance =
                 SK.Get(TPOJimpleBodyTransformer.class);
         final Transform bodyTransformation =
@@ -69,7 +69,7 @@ class SootInitialisationAction implements InitialisationAction {
 
         JTP.add(bodyTransformation);
     }
-    
+
     @Override
     public void UnDo () {
         soot.G.reset();
@@ -77,7 +77,7 @@ class SootInitialisationAction implements InitialisationAction {
 }
 
 class SootSetuperInitialisation extends Initialisation {
-    
+
     SootSetuperInitialisation (final  TPOJimpleBodyTransformerOptions tpopojbto) {
         AddAction(new SingletonKeeperInitialisationAction(tpopojbto));
         AddAction(new SootInitialisationAction());

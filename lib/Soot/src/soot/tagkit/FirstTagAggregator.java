@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,7 +33,7 @@ import soot.*;
 /** A tag aggregator that associates a tag with the <b>first</b> instruction
  * that is tagged with it. */
 public abstract class FirstTagAggregator extends TagAggregator
-{    
+{
     /** Decide whether this tag should be aggregated by this aggregator. */
     public abstract boolean wantTag( Tag t );
 

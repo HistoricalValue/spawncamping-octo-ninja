@@ -2,7 +2,7 @@
  * CodeWriter -- Andrew C. Myers, May 2005
  *   Originally developed for use in Cornell University Computer Science
  *   412/413, April 2001.
- * 
+ *
  * The pretty-printing algorithm is loosely based on the Modula-3
  * pretty-printer, and on notes by Greg Nelson. It was extended to support
  * breaks at multiple levels.
@@ -25,7 +25,7 @@ import java.util.Map;
  * characters if possible. Newlines occur in the output only at places where a
  * line break is permitted by the use of <code>allowBreak</code> and
  * <code>unifiedBreak</code>.
- * 
+ *
  * Line breaks can have different levels, which is useful for implementing
  * things like Scheme's "miser mode".
  */
@@ -62,8 +62,8 @@ public class CodeWriter
         width = width_;
         current = input = new BlockItem(null, 0);
     }
-        
-        
+
+
     /**
      * Print the string <code>s</code> verbatim on the output stream.
      * @param the string to print.
@@ -76,7 +76,7 @@ public class CodeWriter
      * has width <code>length</code> even if it has a different number of
      * characters. This is useful when the string contains escape sequences,
      * HTML character entity references, etc.
-     * 
+     *
      * @param s
      * @param length
      */
@@ -100,18 +100,18 @@ public class CodeWriter
      * inserted breaks. The first line is printed at the current cursor
      * position <code>pos</code>, all the following lines are printed at the
      * position <code>pos+n</code>.
-     * 
+     *
      * @param n
      *            the number of characters increased on indentation (relative
      *            to the current position) for all lines in the block.
      *            Requires: n >= 0.
-     */         
+     */
     public void begin(int n) {
         BlockItem b = new BlockItem(current, n);
         current.add(b);
         current = b;
     }
-        
+
     /**
      * Terminate the most recent outstanding <code>begin</code>.
      */
@@ -129,7 +129,7 @@ public class CodeWriter
      * root" rule: if a break is broken, breaks of equal or lower level in all
      * containing blocks must also be broken, and breaks of strictly lower
      * level in the same block must also be broken.
-     * 
+     *
      * @param n
      *            indentation relative to the current block if the newline is
      *            inserted. Requires: n >= 0
@@ -138,7 +138,7 @@ public class CodeWriter
      *            output instead. Requires: alt != null
      * @param level
      *            the level of the break. Requires: level >= 0
-     */ 
+     */
     public void allowBreak(int n, int level, String alt, int altlen) {
         current.add(new AllowBreak(n, level, alt, altlen, false));
     }
@@ -149,7 +149,7 @@ public class CodeWriter
      * not necessarily break in this case. That is, unified breaks act as if
      * they were slightly lower level that other breaks of the same level
      * (including other unified breaks!).
-     * 
+     *
      * @param n
      *            the relative indentation
      * @param level
@@ -161,11 +161,11 @@ public class CodeWriter
     public void unifiedBreak(int n, int level, String alt, int altlen) {
         current.add(new AllowBreak(n, level, alt, altlen, true));
     }
-    
+
     /**
      * The most common use of "allowBreak": level 1, with an alternative of a
      * single space.
-     * 
+     *
      * @param n
      *            the indentation relative to the current block.
      */
@@ -182,7 +182,7 @@ public class CodeWriter
      * used sparingly; usually a call to <code>allowBreak</code> is preferable
      * because forcing a newline also causes all breaks in containing blocks to
      * be broken.
-     *  
+     *
      */
     public void newline() {
         current.add(new AllowBreak(0, 0, "", 0, false));
@@ -221,7 +221,7 @@ public class CodeWriter
                     new MaxLevels(Integer.MAX_VALUE, Integer.MAX_VALUE), 0, 0);
 	    } catch (Overrun o) { success = false; }
 	} else success = false;
-	
+
         input.sendOutput(output, 0, 0, success, null);
         output.flush();
         if (CodeWriter.debug) {
@@ -241,8 +241,8 @@ public class CodeWriter
 
     BlockItem input;
     BlockItem current;
-    
-    static Item top;    
+
+    static Item top;
 
     PrintWriter output;
     int width;
@@ -257,7 +257,7 @@ public class CodeWriter
  * sameLine, the overrun occurred on the first line of the requested
  * formatting; otherwise, it occurred on a subsequent line.
  */
-class Overrun extends Exception 
+class Overrun extends Exception
 {
     int amount;
     int type;
@@ -281,7 +281,7 @@ class Overrun extends Exception
  * An <code>Item</code> is a piece of input handed to the formatter. It
  * contains a reference to a possibly empty list of items that follow it.
  */
-abstract class Item 
+abstract class Item
 {
     /** next is null if this is the last item in the list. */
     Item next;
@@ -290,11 +290,11 @@ abstract class Item
 
     /**
      * Try to format this and subsequent items.
-     * 
+     *
      * @return the final cursor position (which may overrun rmargin, fin, or
      *         both), and set any contained breaks accordingly.
      *         </p>
-     * 
+     *
      * @param lmargin
      *            is the current left margin.
      * @param pos
@@ -314,7 +314,7 @@ abstract class Item
      *            is the minimum level at which breaks must be broken.
      * @param minLevelUnified
      *            is the minimum level at which unified breaks must be broken.
-     * 
+     *
      * <p>
      * Breaks may be broken up to level maxLevel, which is set whenever a break
      * is not broken. Not breaking an ordinary break means that equal or
@@ -324,7 +324,7 @@ abstract class Item
      * level in the same block must not also be broken. The parameter
      * maxLevelInner controls the maxLevel in nested blocks; it is equal to
      * either maxLevel or maxLevel-1.
-     * 
+     *
      * <p>
      * <dl>
      * <dt>Example 1:
@@ -333,14 +333,14 @@ abstract class Item
      * maxLevel is set to 2 and maxLevelInner is set to 1. This permits further
      * breaks of level 1 or 2 in the same block, but only level-1 breaks in
      * inner blocks.
-     * 
+     *
      * <dt>Example 2:</dt>
      * <dd>Suppose we have a current maxLevel of 4, and a unified break of
      * level 2 is not broken. Then for that block, maxLevel and maxLevelInner
      * are set to 1. This permits no breaks in this block or in any nested
      * blocks.</dd>
      * </dl>
-     * 
+     *
      * <p>
      * When a break is broken in a nested block, it means that all equal or
      * higher-level breaks in containing blocks must be broken. However, these
@@ -351,14 +351,14 @@ abstract class Item
      * minLevelUnified</code> is the minimum level at which unified breaks must
      * be broken.  minLevelUnified is equal to either minLevel or minLevel+1.
      * </p>
-     * 
+     *
      * <dl>
      * <dt>Example 3:
      * <dd>Suppose we have a current maxLevel of 4, and a break of level 2 is
      * broken. Then for its block, minLevel is at least 1, and minLevelUnified
      * is at least 2. For containing blocks, minLevel is at least 2.</dd>
      * </dl>
-     * 
+     *
      * <b>Note: </b> It is important that formatN not necessarily convert
      * overruns in its final position into exceptions. This allows the calling
      * routine to distinguish between 'internal' overruns and ones that it can
@@ -366,7 +366,7 @@ abstract class Item
      * list will make the overrun go up by. Also, it simplifies the coding of
      * formatN.
      * </p>
-     * 
+     *
      * Requires: rmargin &lt; lmargin, pos &lt;= rmargin, lmargin &lt; rmargin,
      * pos &le; rmargin, lmargin &ge; 0
      */
@@ -376,12 +376,12 @@ abstract class Item
     /**
      * Send the output associated with this item to <code>o</code>, using the
      * current break settings.
-     * 
+     *
      * @param success
      */
     abstract int sendOutput(PrintWriter o, int lmargin, int pos, boolean success, Item last)
       throws IOException;
-    
+
     // XXX
     // the getminwidth etc. code is starting to duplicate the logic of the main
     // formatting code. This suggests they should be merged. format can take
@@ -395,7 +395,7 @@ abstract class Item
      * way that overruns are checked!). The item <code>it</code> may be also
      * null, signifying an empty list. Requires: lmargin < rmargin, pos <=
      * rmargin, lmargin >= 0.
-     * 
+     *
      * @see formatN
      */
     static FormatResult format(Item it, int lmargin, int pos, int rmargin, int fin,
@@ -405,7 +405,7 @@ abstract class Item
 	    if (it != null && it != CodeWriter.top) {
 	        System.err.println("SNAPSHOT:");
 	        PrintWriter w = new PrintWriter(new OutputStreamWriter(System.err));
-	        try {	            	            
+	        try {
 	            CodeWriter.top.sendOutput(w, 0, 0, true, it);
 	        }
 	        catch (IOException e) {  }
@@ -417,12 +417,12 @@ abstract class Item
 		" max break levels: " + m +
 		" min break levels: " + minLevel + "/" + minLevelUnified);
 
-	    if (CodeWriter.debug) {	    
+	    if (CodeWriter.debug) {
 	        System.err.println("  MinWidth = " + getMinWidth(it, m));
 	        System.err.println("  MinPosWidth = " + getMinPosWidth(it, m));
 	        System.err.println("  MinIndent = " + getMinIndent(it, m));
 	    }
-	
+
 	    System.err.flush();
 	}
 	if (it == null) { // no items to format. Check against final position.
@@ -433,16 +433,16 @@ abstract class Item
 	    }
 	    else return new FormatResult(pos, minLevelUnified);
 	}
-	
+
 	int amount2 = lmargin + getMinWidth(it, m) - rmargin; // lmargin is too far
                                                        // right
 	if (amount2 > 0) {
 	    if (CodeWriter.debug)
 	        System.err.println("Width overrun: " + amount2);
-	 
+
 	    throw Overrun.overrun(amount2, Overrun.WIDTH);
 	}
-	
+
 	int amount = pos + getMinPosWidth(it, m) - rmargin; // overrun on first line
 	if (amount > 0) {
 	    if (CodeWriter.debug)
@@ -450,7 +450,7 @@ abstract class Item
 
 	    throw Overrun.overrun(amount, Overrun.POS);
 	}
-	
+
 
 	int amount3 = lmargin + getMinIndent(it, m) - fin;   // overrun on last line
 	if (amount3 > 0) {
@@ -458,7 +458,7 @@ abstract class Item
 	        System.err.println("Final position (predicted) overrun: " + amount3);
 
 	    throw Overrun.overrun(amount3, Overrun.FIN);
-	}	
+	}
 
 	return it.formatN(lmargin, pos, rmargin, fin, m, minLevel, minLevelUnified);
     }
@@ -468,7 +468,7 @@ abstract class Item
  * with an item and its following items, if all breaks are broken. The purpose
  * is to more aggressively tighten bounds when an overrun occurs. Formatting is
  * measured relative to both "lmargin" and to "pos". T
- * 
+ *
  * lmargin | pos | | | xxxxx xxxxxxxx xxxxxx <------> min_width (at least
  * min_pos_width): distance from lmargin to rightmost char <---> min_pos_width:
  * distance from initial pos to end of first line <----> min_indent (at most
@@ -476,20 +476,20 @@ abstract class Item
  */
 
     //@ invariant min_indent <= min_width
-    
-    static final int NO_WIDTH = -9999;    
 
-    /** Minimum lmargin-rhs width on second and following lines. 
+    static final int NO_WIDTH = -9999;
+
+    /** Minimum lmargin-rhs width on second and following lines.
      * A map from max levels to Integer(width). */
 
     Map min_widths = new HashMap();
-    
+
     /** Minimum lmargin-final offset */
     Map min_indents = new HashMap();
 
     /** Minimum pos-rhs width (i.e., min width up to first break) */
     Map min_pos_width = new HashMap();
-    
+
     /** Are there any breaks in this items and following items? */
     boolean contains_brks;
     boolean cb_init = false;
@@ -498,11 +498,11 @@ abstract class Item
 	if (it == null) return NO_WIDTH;
 	if (it.min_widths.containsKey(m))
 	    return ((Integer)it.min_widths.get(m)).intValue();
-	int p1 = it.selfMinWidth(m);	  
-	int p2 = it.selfMinIndent(m);	
-	int p3 = (p2 != NO_WIDTH) ? getMinPosWidth(it.next, m) + p2 : NO_WIDTH;	
+	int p1 = it.selfMinWidth(m);
+	int p2 = it.selfMinIndent(m);
+	int p3 = (p2 != NO_WIDTH) ? getMinPosWidth(it.next, m) + p2 : NO_WIDTH;
 	int p4 = getMinWidth(it.next, m);
-	
+
 	if (CodeWriter.debug)
 	System.err.println("minwidth: item = " + it + m + ":  p1 = " + p1 + ", p2 = " + p2 + ", p3 = " + p3 + ", p4 = " + p4);
 	int result = Math.max(Math.max(p1, p3), p4);
@@ -540,7 +540,7 @@ abstract class Item
 	int result;
 	if (containsBreaks(it.next, m))
 	    result = getMinIndent(it.next, m);
-	else 
+	else
 	    result = getMinPosWidth(it.next, m);
 	it.min_indents.put(m, new Integer(result));
 	return result;
@@ -580,10 +580,10 @@ abstract class Item
 /** A simple string. */
 class TextItem extends Item {
     String s;		//@ invariant s != null
-    int length;    
-    
+    int length;
+
     TextItem(String s_, int length_) { s = s_; length = length_; }
-        
+
     FormatResult formatN(int lmargin, int pos, int rmargin, int fin,
             MaxLevels m, int minLevel, int minLevelUnified)
       throws Overrun {
@@ -614,7 +614,7 @@ class TextItem extends Item {
      */
     public void appendTextItem(TextItem item) {
         s += item.s;
-        length += item.length;       
+        length += item.length;
     }
 }
 
@@ -625,7 +625,7 @@ class AllowBreak extends Item {
     final String alt;
     final int altlen;
     boolean broken = false;
-        
+
     //@ invariant indent >= 0
     //@ invariant alt != null
 
@@ -634,7 +634,7 @@ class AllowBreak extends Item {
     AllowBreak(int n_, int level_, String alt_, int altlen_, boolean u) {
         indent = n_; alt = alt_; altlen = altlen_;
         level = level_; unified = u; }
-        
+
     FormatResult formatN(int lmargin, int pos, int rmargin, int fin,
             MaxLevels m, int minLevel, int minLevelUnified) throws Overrun {
         if (canLeaveUnbroken(minLevel, minLevelUnified)) {
@@ -690,7 +690,7 @@ class AllowBreak extends Item {
         }
         throw new IllegalArgumentException("could not either break or not break");
     }
-        
+
     int sendOutput(PrintWriter o, int lmargin, int pos, boolean success, Item last)
         throws IOException {
         if (broken || !success) {
@@ -739,7 +739,7 @@ class BlockItem extends Item {
     Item first;
     Item last;
     int indent;	    //@ invariant indent >= 0
-        
+
     BlockItem(BlockItem parent_, int indent_) {
         parent = parent_;
         first = last = null;
@@ -786,7 +786,7 @@ class BlockItem extends Item {
                     throw o;
                 }
                 childfin -= o.amount;
-            }          
+            }
         }
     }
 
@@ -815,18 +815,18 @@ class BlockItem extends Item {
         return getMinIndent(first,
                 new MaxLevels(m.maxLevelInner, m.maxLevelInner));
     }
-    
+
     /**
      * Map from maxlevels to either null or non-null, the latter if it can
      * contain breaks at those maxlevels.
      */
     Map containsBreaks = new HashMap();
-    
+
     boolean selfContainsBreaks(MaxLevels m) {
 	if (containsBreaks.containsKey(m)) {
 	    return (containsBreaks.get(m) != null);
 	}
-	boolean result = containsBreaks(first, new MaxLevels(m.maxLevelInner, m.maxLevelInner));	
+	boolean result = containsBreaks(first, new MaxLevels(m.maxLevelInner, m.maxLevelInner));
 	containsBreaks.put(m, result ? m : null);
 	return result;
     }

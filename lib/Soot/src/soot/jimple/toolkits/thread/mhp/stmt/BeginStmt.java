@@ -19,7 +19,7 @@ import soot.toolkits.graph.*;
 
 public class BeginStmt extends JPegStmt
 {
-	
+
 	public BeginStmt(String obj, String ca,  UnitGraph ug, SootMethod sm)
 	{
 		this.object = obj;
@@ -28,9 +28,9 @@ public class BeginStmt extends JPegStmt
 		this.unitGraph = ug;
 		this.sootMethod = sm;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }

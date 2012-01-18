@@ -35,7 +35,7 @@ public class JavaLangDoubleNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,

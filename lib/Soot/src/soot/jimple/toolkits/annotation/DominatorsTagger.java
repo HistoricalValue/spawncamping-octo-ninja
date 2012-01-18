@@ -31,10 +31,10 @@ import soot.tagkit.LinkTag;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.MHGDominatorsFinder;
 
-/** A body transformer that records avail expression 
+/** A body transformer that records avail expression
  * information in tags.  - both pessimistic and optimistic options*/
 public class DominatorsTagger extends BodyTransformer
-{ 
+{
 	public DominatorsTagger( Singletons.Global g ) {}
     public static DominatorsTagger v() { return G.v().soot_jimple_toolkits_annotation_DominatorsTagger(); }
 
@@ -42,7 +42,7 @@ public class DominatorsTagger extends BodyTransformer
             Body b, String phaseName, Map opts)
     {
 
-       
+
         MHGDominatorsFinder analysis = new MHGDominatorsFinder(new ExceptionalUnitGraph(b));
         Iterator it = b.getUnits().iterator();
         while (it.hasNext()){

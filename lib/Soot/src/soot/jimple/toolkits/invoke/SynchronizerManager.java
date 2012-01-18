@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -92,8 +92,8 @@ public class SynchronizerManager
         Local l = Jimple.v().newLocal(lName, RefType.v("java.lang.Class"));
         jb.getLocals().add(l);
         Chain units = jb.getUnits();
-        units.insertBefore(Jimple.v().newAssignStmt(l, 
-                                  Jimple.v().newStaticFieldRef(classCacher.makeRef())), 
+        units.insertBefore(Jimple.v().newAssignStmt(l,
+                                  Jimple.v().newStaticFieldRef(classCacher.makeRef())),
                            target);
 
         IfStmt ifStmt;
@@ -114,7 +114,7 @@ public class SynchronizerManager
     }
 
     /** Finds a method which calls java.lang.Class.forName(String).
-     * Searches for names class$, _class$, __class$, etc. 
+     * Searches for names class$, _class$, __class$, etc.
      * If no such method is found, creates one and returns it.
      *
      * Uses dumb matching to do search.  Not worth doing symbolic
@@ -139,11 +139,11 @@ public class SynchronizerManager
             b = m.retrieveActiveBody();
 
             Iterator unitsIt = b.getUnits().iterator();
-            
+
             /* we now look for the following fragment: */
             /*    r0 := @parameter0: java.lang.String;
              *    $r2 = .staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r0);
-             *    .return $r2; 
+             *    .return $r2;
              *
              * Ignore the catching code; this is enough. */
 
@@ -176,7 +176,7 @@ public class SynchronizerManager
 
             if (!ie.toString().equals(".staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("+lo+")"))
                 continue;
-           
+
             if (!unitsIt.hasNext())
                 continue;
 
@@ -194,7 +194,7 @@ public class SynchronizerManager
         }
     }
 
-    /** Creates a method which calls java.lang.Class.forName(String). 
+    /** Creates a method which calls java.lang.Class.forName(String).
      *
      * The method should look like the following:
 <pre>
@@ -223,24 +223,24 @@ public class SynchronizerManager
          }
 </pre>
     */
-    public SootMethod createClassFetcherFor(SootClass c, 
+    public SootMethod createClassFetcherFor(SootClass c,
                                                    String methodName)
     {
         // Create the method
-            SootMethod method = new SootMethod(methodName, 
+            SootMethod method = new SootMethod(methodName,
                 Arrays.asList(new Type[] {RefType.v("java.lang.String")}),
                 RefType.v("java.lang.Class"), Modifier.STATIC);
-        
+
            c.addMethod(method);
-           
+
         // Create the method body
-        {    
+        {
             JimpleBody body = Jimple.v().newBody(method);
-            
+
             method.setActiveBody(body);
             Chain units = body.getUnits();
             Local l_r0, l_r1, l_r2, l_r3, l_r4, l_r5;
-            
+
             // Add some locals
                 l_r0 = Jimple.v().newLocal
                     ("r0", RefType.v("java.lang.String"));
@@ -263,17 +263,17 @@ public class SynchronizerManager
                 body.getLocals().add(l_r5);
 
             // add "r0 := @parameter0: java.lang.String"
-                units.add(Jimple.v().newIdentityStmt(l_r0, 
+                units.add(Jimple.v().newIdentityStmt(l_r0,
                       Jimple.v().newParameterRef
                         (RefType.v("java.lang.String"), 0)));
-            
-            // add "$r2 = .staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r0); 
+
+            // add "$r2 = .staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r0);
                 AssignStmt asi;
-                units.add(asi = Jimple.v().newAssignStmt(l_r2, 
+                units.add(asi = Jimple.v().newAssignStmt(l_r2,
                     Jimple.v().newStaticInvokeExpr(
                           Scene.v().getMethod(
                                "<java.lang.Class: java.lang.Class"+
-                               " forName(java.lang.String)>").makeRef(), 
+                               " forName(java.lang.String)>").makeRef(),
                           Arrays.asList(new Value[] {l_r0}))));
 
             // insert "return $r2;"
@@ -281,12 +281,12 @@ public class SynchronizerManager
 
             // add "r3 := @caughtexception;"
                 Stmt handlerStart;
-                units.add(handlerStart = Jimple.v().newIdentityStmt(l_r3, 
+                units.add(handlerStart = Jimple.v().newIdentityStmt(l_r3,
                         Jimple.v().newCaughtExceptionRef()));
 
             // add "r1 = r3;"
                 units.add(Jimple.v().newAssignStmt(l_r1, l_r3));
-                            
+
             // add "$r4 = .new java.lang.NoClassDefFoundError;"
                 units.add(Jimple.v().newAssignStmt(l_r4,
                     Jimple.v().newNewExpr(RefType.v
@@ -303,21 +303,21 @@ public class SynchronizerManager
                      Jimple.v().newSpecialInvokeExpr(l_r4,
                           Scene.v().getMethod(
                                "<java.lang.NoClassDefFoundError: void"+
-                               " <init>(java.lang.String)>").makeRef(), 
+                               " <init>(java.lang.String)>").makeRef(),
                           Arrays.asList(new Value[] {l_r5}))));
 
             // add .throw $r4;
                 units.add(Jimple.v().newThrowStmt(l_r4));
 
             body.getTraps().add(Jimple.v().newTrap
-                  (Scene.v().getSootClass("java.lang.ClassNotFoundException"), 
+                  (Scene.v().getSootClass("java.lang.ClassNotFoundException"),
                     asi, handlerStart, handlerStart));
         }
 
         return method;
     }
 
-    /** Wraps stmt around a monitor associated with local lock. 
+    /** Wraps stmt around a monitor associated with local lock.
      * When inlining or static method binding, this is the former
      * base of the invoke expression. */
     public void synchronizeStmtOn(Stmt stmt, JimpleBody b, Local lock)
@@ -371,7 +371,7 @@ public class SynchronizerManager
             l.add(Jimple.v().newThrowStmt(eRef));
             units.insertAfter(l, newGoto);
 
-            Trap newTrap = Jimple.v().newTrap(Scene.v().getSootClass("java.lang.Throwable"), 
+            Trap newTrap = Jimple.v().newTrap(Scene.v().getSootClass("java.lang.Throwable"),
                                               stmt, (Stmt)units.getSuccOf(stmt),
                                               handlerStmt);
             b.getTraps().addFirst(newTrap);

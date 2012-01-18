@@ -38,7 +38,7 @@ import soot.dava.toolkits.base.AST.analysis.*;
      A                            A                      A
   }                       }                         }
   else{          --->     else{               --->
-     if(cond2){              empty else body           
+     if(cond2){              empty else body
         A                 }
      }
   }
@@ -53,7 +53,7 @@ we need a reference to the parent node of this if
   if(cond1){                   if(!cond1){
      break label_1;                   Body1
   }                   ---->    }
-  else{                        else{ 
+  else{                        else{
       Body1                          break label_1
   }                            }
 
@@ -65,8 +65,8 @@ we need a reference to the parent node of this if
 */
 public class OrAggregatorTwo extends DepthFirstAdapter{
 
-	
-	
+
+
     public OrAggregatorTwo(){
     	DEBUG=false;
     }
@@ -85,7 +85,7 @@ public class OrAggregatorTwo extends DepthFirstAdapter{
 	List<Object> elseBody = node.getElseBody();
 
 	List<Object> innerIfBody=checkElseHasOnlyIf(elseBody);
-	
+
 	if(innerIfBody==null){
 	    //pattern 1 did not match
 
@@ -114,11 +114,11 @@ public class OrAggregatorTwo extends DepthFirstAdapter{
 	  the two bodies would not have been the same since the outerifbody could not have
 	  the same label.
 
-	  We therefore keep the outerIfElse label 
+	  We therefore keep the outerIfElse label
 	*/
 	//System.out.println("OR AGGREGATOR TWO");
 	node.set_Condition(newCond);
-	
+
 	/*
 	  Always have to follow with a parse to remove unwanted empty ElseBodies
 	*/
@@ -176,7 +176,7 @@ public class OrAggregatorTwo extends DepthFirstAdapter{
 	    return;
 	}
 
-	//there is only one statement 
+	//there is only one statement
 	AugmentedStmt as = (AugmentedStmt)statements.get(0);
 	Stmt stmt = as.get_Stmt();
 
@@ -195,14 +195,14 @@ public class OrAggregatorTwo extends DepthFirstAdapter{
 	ASTCondition cond = node.get_Condition();
 	cond.flip();
 
-	List<Object> elseBody = node.getElseBody();	
+	List<Object> elseBody = node.getElseBody();
 	SETNodeLabel label = node.get_Label();
 
 	node.replace(label,cond,elseBody,ifBody);
 	debug("","","REVERSED CONDITIONS AND BODIES");
 	debug("","","elseBody is"+elseBody);
 	debug("","","ifBody is"+ifBody);
-	
+
 	G.v().ASTIfElseFlipped = true;
     }
 

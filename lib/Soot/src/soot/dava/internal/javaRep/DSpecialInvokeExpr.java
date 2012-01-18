@@ -27,7 +27,7 @@ import soot.grimp.internal.*;
 
 public class DSpecialInvokeExpr extends GSpecialInvokeExpr
 {
-    public DSpecialInvokeExpr( Value base, SootMethodRef methodRef, java.util.List args) 
+    public DSpecialInvokeExpr( Value base, SootMethodRef methodRef, java.util.List args)
     {
 	super( base, methodRef, args);
     }
@@ -39,7 +39,7 @@ public class DSpecialInvokeExpr extends GSpecialInvokeExpr
             up.literal( "((" );
             up.type( methodRef.declaringClass().getType() );
             up.literal( ") " );
-	    
+
             if( PrecedenceTest.needsBrackets( baseBox, this ) ) up.literal("(");
             baseBox.toString( up );
             if( PrecedenceTest.needsBrackets( baseBox, this ) ) up.literal(")");
@@ -53,7 +53,7 @@ public class DSpecialInvokeExpr extends GSpecialInvokeExpr
 	    for (int i=0; i<argBoxes.length; i++) {
 		if(i != 0)
                     up.literal( ", " );
-		
+
                 argBoxes[i].toString(up);
 	    }
 
@@ -72,7 +72,7 @@ public class DSpecialInvokeExpr extends GSpecialInvokeExpr
 	    b.append( "((");
 	    b.append( methodRef.declaringClass().getJavaStyleName());
 	    b.append( ") ");
-	    
+
 	    String baseStr = ( getBase()).toString();
 	    if ((getBase() instanceof Precedence) && ( ((Precedence) getBase()).getPrecedence() < getPrecedence()))
 		baseStr = "(" + baseStr + ")";
@@ -86,7 +86,7 @@ public class DSpecialInvokeExpr extends GSpecialInvokeExpr
 	    for (int i=0; i<argBoxes.length; i++) {
 		if(i != 0)
 		    b.append(", ");
-		
+
 		b.append( ( argBoxes[i].getValue()).toString());
 	    }
 
@@ -98,13 +98,13 @@ public class DSpecialInvokeExpr extends GSpecialInvokeExpr
 	return super.toString();
     }
 
-    public Object clone() 
+    public Object clone()
     {
         ArrayList clonedArgs = new ArrayList( getArgCount());
 
-        for(int i = 0; i < getArgCount(); i++) 
+        for(int i = 0; i < getArgCount(); i++)
             clonedArgs.add(i, Grimp.cloneIfNecessary(getArg(i)));
-        
+
         return new DSpecialInvokeExpr( getBase(), methodRef, clonedArgs);
     }
 }

@@ -62,7 +62,7 @@ public final class PropWorklist extends Propagator {
                     final FieldRefNode target = (FieldRefNode) element0;
                     target.getBase().makeP2Set().forall( new P2SetVisitor() {
                     public final void visit( Node n ) {
-                            AllocDotField nDotF = pag.makeAllocDotField( 
+                            AllocDotField nDotF = pag.makeAllocDotField(
                                 (AllocNode) n, target.getField() );
                             nDotF.makeP2Set().addAll( src.getP2Set(), null );
                         }
@@ -162,7 +162,7 @@ public final class PropWorklist extends Propagator {
             final SparkField f = fr.getField();
             ret = fr.getBase().getP2Set().forall( new P2SetVisitor() {
             public final void visit( Node n ) {
-                    AllocDotField nDotF = pag.makeAllocDotField( 
+                    AllocDotField nDotF = pag.makeAllocDotField(
                         (AllocNode) n, f );
                     if( nDotF.makeP2Set().addAll( newP2Set, null ) ) {
                         returnValue = true;
@@ -231,7 +231,7 @@ public final class PropWorklist extends Propagator {
 
     /** Propagates new points-to information of node src to all its
      * successors. */
-    protected final void handleFieldRefNode( FieldRefNode src, 
+    protected final void handleFieldRefNode( FieldRefNode src,
             final HashSet<Object[]> edgesToPropagate ) {
 	final Node[] loadTargets = pag.loadLookup( src );
 	if( loadTargets.length == 0 ) return;
@@ -240,7 +240,7 @@ public final class PropWorklist extends Propagator {
 	src.getBase().getP2Set().forall( new P2SetVisitor() {
 
 	public final void visit( Node n ) {
-                AllocDotField nDotF = pag.findAllocDotField( 
+                AllocDotField nDotF = pag.findAllocDotField(
                     (AllocNode) n, field );
                 if( nDotF != null ) {
                     PointsToSetInternal p2Set = nDotF.getP2Set();
@@ -254,7 +254,7 @@ public final class PropWorklist extends Propagator {
 	    }
 	} );
     }
-    
+
     protected PAG pag;
     protected OnFlyCallGraph ofcg;
 }

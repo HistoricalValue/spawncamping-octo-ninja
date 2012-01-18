@@ -16,13 +16,13 @@ public class FakeJimpleLocal extends JimpleLocal
 {
 	Local realLocal;
 	Object info; // whatever you want to attach to it...
-	
+
     /** Constructs a FakeJimpleLocal of the given name and type. */
     public FakeJimpleLocal(String name, Type t, Local realLocal)
     {
     	this(name, t, realLocal, null);
     }
-    
+
     public FakeJimpleLocal(String name, Type t, Local realLocal, Object info)
     {
     	super(name, t);
@@ -35,7 +35,7 @@ public class FakeJimpleLocal extends JimpleLocal
     {
     	if(o == null)
     		return false;
-    	if(o instanceof JimpleLocal) 
+    	if(o instanceof JimpleLocal)
     	{
     		if(getName() != null && getType() != null)
 	        	return getName().equals(((Local) o).getName()) && getType().equals(((Local) o).getType());
@@ -48,7 +48,7 @@ public class FakeJimpleLocal extends JimpleLocal
     	}
         return false;
     }
-    
+
     public boolean equals(Object o)
     {
     	return equivTo(o);
@@ -59,17 +59,17 @@ public class FakeJimpleLocal extends JimpleLocal
     {
         return new FakeJimpleLocal(getName(), getType(), realLocal, info);
     }
-    
+
     public Local getRealLocal()
     {
     	return realLocal;
     }
-    
+
     public Object getInfo()
     {
     	return info;
     }
-    
+
     public void setInfo(Object o)
     {
     	info = o;

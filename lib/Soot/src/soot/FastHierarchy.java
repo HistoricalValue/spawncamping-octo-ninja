@@ -24,7 +24,7 @@ import soot.util.*;
 import java.util.*;
 
 /** Represents the class hierarchy.  It is closely linked to a Scene,
- * and must be recreated if the Scene changes. 
+ * and must be recreated if the Scene changes.
  *
  * This version supercedes the old soot.Hierarchy class.
  *
@@ -37,22 +37,22 @@ public class FastHierarchy
         if( l == null ) m.put( key, l = new ArrayList<Object>() );
         l.add( value );
     }
-    
-    /** This map holds all key,value pairs such that 
+
+    /** This map holds all key,value pairs such that
      * value.getSuperclass() == key. This is one of the three maps that hold
      * the inverse of the relationships given by the getSuperclass and
      * getInterfaces methods of SootClass. */
     protected Map<Object, List> classToSubclasses = new HashMap<Object, List>();
 
-    /** This map holds all key,value pairs such that value is an interface 
-     * and key is in value.getInterfaces(). This is one of the three maps 
-     * that hold the inverse of the relationships given by the getSuperclass 
+    /** This map holds all key,value pairs such that value is an interface
+     * and key is in value.getInterfaces(). This is one of the three maps
+     * that hold the inverse of the relationships given by the getSuperclass
      * and getInterfaces methods of SootClass. */
     protected MultiMap interfaceToSubinterfaces = new HashMultiMap();
 
-    /** This map holds all key,value pairs such that value is a class 
-     * (NOT an interface) and key is in value.getInterfaces(). This is one of 
-     * the three maps that hold the inverse of the relationships given by the 
+    /** This map holds all key,value pairs such that value is a class
+     * (NOT an interface) and key is in value.getInterfaces(). This is one of
+     * the three maps that hold the inverse of the relationships given by the
      * getSuperclass and getInterfaces methods of SootClass. */
     protected MultiMap interfaceToImplementers = new HashMultiMap();
 
@@ -154,7 +154,7 @@ public class FastHierarchy
                 interfaceToAllImplementers.putAll(parent,
                     getAllImplementersOfInterface( subinterface ) );
             }
-            interfaceToAllImplementers.putAll(parent, 
+            interfaceToAllImplementers.putAll(parent,
                     interfaceToImplementers.get( parent ) );
         }
         return interfaceToAllImplementers.get( parent );
@@ -167,7 +167,7 @@ public class FastHierarchy
         if( !interfaceToAllSubinterfaces.containsKey( parent ) ) {
             interfaceToAllSubinterfaces.put( parent, parent );
             for( Iterator it = interfaceToSubinterfaces.get( parent ).iterator(); it.hasNext(); ) {
-                interfaceToAllSubinterfaces.putAll(parent, 
+                interfaceToAllSubinterfaces.putAll(parent,
                     getAllSubinterfaces( (SootClass) it.next() ) );
             }
         }
@@ -228,7 +228,7 @@ public class FastHierarchy
                 while(!worklist.isEmpty()) {
                     SootClass cl = (SootClass) worklist.removeFirst();
                     if( !workset.add(cl) ) continue;
-                    if( cl.isConcrete() 
+                    if( cl.isConcrete()
                     &&  canStoreClass(cl, parentClass) ) return true;
                     worklist.addAll(getSubclassesOf(cl));
                 }
@@ -243,7 +243,7 @@ public class FastHierarchy
                 || parent.equals( RefType.v( "java.lang.Cloneable" ) );
             }
             ArrayType aparent = (ArrayType) parent;
-                                                
+
             // You can store a int[][] in a Object[]. Yuck!
             // Also, you can store a Interface[] in a Object[]
             if( achild.numDimensions == aparent.numDimensions ) {
@@ -341,7 +341,7 @@ public class FastHierarchy
             } else if( t instanceof ArrayType ) {
                 SootMethod concreteM = null;
                 try {
-                    concreteM = resolveConcreteDispatch( 
+                    concreteM = resolveConcreteDispatch(
                         RefType.v( "java.lang.Object" ).getSootClass(), m );
                 } catch( Exception e ) {
                     concreteM = null;
@@ -392,7 +392,7 @@ public class FastHierarchy
                 SootMethod concreteM = resolveConcreteDispatch( concreteClass, m );
                 if( concreteM != null ) ret.add( concreteM );
             } else if( t instanceof ArrayType ) {
-                SootMethod concreteM = resolveConcreteDispatch( 
+                SootMethod concreteM = resolveConcreteDispatch(
                         RefType.v( "java.lang.Object" ).getSootClass(), m );
                 if( concreteM != null ) ret.add( concreteM );
             } else throw new RuntimeException( "Unrecognized reaching type "+t );
@@ -450,7 +450,7 @@ public class FastHierarchy
                             break;
                         }
                     }
-                    if( !concreteType.hasSuperclass() ) 
+                    if( !concreteType.hasSuperclass() )
                         throw new RuntimeException("could not resolve abstract dispatch!\nAbstract Type: "+abstractType+"\nConcrete Type: "+savedConcreteType+"\nMethod: "+m);
                     concreteType = concreteType.getSuperclass();
                 }

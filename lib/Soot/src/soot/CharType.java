@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -53,9 +53,9 @@ public class CharType extends PrimType implements IntegerType
     {
         return 0x739EA474;
     }
-    
+
     public void apply(Switch sw)
     {
-        ((TypeSwitch) sw).caseCharType(this);	
+        ((TypeSwitch) sw).caseCharType(this);
     }
 }

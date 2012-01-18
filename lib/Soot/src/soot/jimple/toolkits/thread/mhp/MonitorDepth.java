@@ -14,7 +14,7 @@ package soot.jimple.toolkits.thread.mhp;
 public class MonitorDepth{
 	private String objName;
 	private int depth;
-	
+
 	MonitorDepth(String s, int d){
 		objName = s;
 		depth = d;
@@ -39,5 +39,5 @@ public class MonitorDepth{
 	protected void increaseDepth(){
 		depth++;
 	}
-	
+
 }

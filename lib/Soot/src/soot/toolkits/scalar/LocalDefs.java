@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -44,13 +44,13 @@ public interface LocalDefs
 {
     /**
      *   Returns the definition sites for a Local at a certain
-     *   point (Unit) in a method. 
+     *   point (Unit) in a method.
      *
      *   @param l the Local in question.
-     *   @param s  a unit that specifies the method context (location) 
-     *             to query for the definitions of the Local. 
+     *   @param s  a unit that specifies the method context (location)
+     *             to query for the definitions of the Local.
      *   @return a list of Units where the local is defined in the current
-     *            method context.         
+     *            method context.
      */
     public List<Unit> getDefsOfAt(Local l, Unit s);
 }

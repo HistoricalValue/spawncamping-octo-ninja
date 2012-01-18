@@ -53,7 +53,7 @@ public class Shimple
     public static final String PHI = "Phi";
     public static final String PI = "Pi";
     public static final String PHASE = "shimple";
-    
+
     public Shimple(Singletons.Global g) {}
 
     public static Shimple v()
@@ -112,7 +112,7 @@ public class Shimple
     {
         return new SPiExpr(local, predicate, targetKey);
     }
-    
+
     /**
      * Create a PhiExpr with the provided list of Values (Locals or
      * Constants) and the corresponding control flow predecessor
@@ -141,7 +141,7 @@ public class Shimple
     {
         return (value instanceof PhiExpr);
     }
-    
+
     /**
      * Returns true if the unit is a Phi node, false otherwise.
      **/
@@ -161,7 +161,7 @@ public class Shimple
             return null;
 
         Value right = ((AssignStmt)unit).getRightOp();
-        
+
         if(isPhiExpr(right))
             return (PhiExpr) right;
 
@@ -201,7 +201,7 @@ public class Shimple
             return null;
 
         Value right = ((AssignStmt)unit).getRightOp();
-        
+
         if(right instanceof ShimpleExpr){
             Value left = ((AssignStmt)unit).getLeftOp();
             return (Local) left;
@@ -226,7 +226,7 @@ public class Shimple
         boolean debug = Options.v().debug();
         if(body instanceof ShimpleBody)
             debug |= ((ShimpleBody)body).getOptions().debug();
-            
+
         Chain units = body.getUnits();
 
         /* Determine whether we should continue processing or not. */
@@ -251,10 +251,10 @@ public class Shimple
         }
 
         /* Ok, continuing... */
-            
+
         Set<Unit> preds = new HashSet<Unit>();
         Set<PhiExpr> phis  = new HashSet<PhiExpr>();
-        
+
         // find fall-through pred
         if(!remove.equals(units.getFirst())){
             Unit possiblePred = (Unit) units.getPredOf(remove);
@@ -269,7 +269,7 @@ public class Shimple
             Iterator targetsIt = unit.getUnitBoxes().iterator();
             while(targetsIt.hasNext()){
                 UnitBox targetBox = (UnitBox) targetsIt.next();
-                
+
                 if(remove.equals(targetBox.getUnit())){
                     if(targetBox.isBranchTarget())
                         preds.add(unit);
@@ -283,7 +283,7 @@ public class Shimple
         }
 
         /* sanity check */
-        
+
         if(phis.size() == 0){
             if(debug)
                 G.v().out.println("Warning: Orphaned UnitBoxes to " + remove + "? Shimple.redirectToPreds is giving up.");
@@ -320,7 +320,7 @@ public class Shimple
 
             if(argBox == null)
                 throw new RuntimeException("Assertion failed.");
-            
+
             // now we've got the value!
             Value arg = argBox.getValue();
             phiExpr.removeArg(argBox);
@@ -353,7 +353,7 @@ public class Shimple
 
             if(box.getUnit() != oldLocation)
                 throw new RuntimeException("Something weird's happening");
-            
+
             if(!box.isBranchTarget())
                 box.setUnit(newLocation);
         }

@@ -35,7 +35,7 @@ public class CytronDominanceFrontier implements DominanceFrontier
 {
     protected DominatorTree dt;
     protected Map<DominatorNode, List<DominatorNode>> nodeToFrontier;
-    
+
     public CytronDominanceFrontier(DominatorTree dt)
     {
         this.dt = dt;
@@ -57,7 +57,7 @@ public class CytronDominanceFrontier implements DominanceFrontier
     {
         return nodeToFrontier.containsKey(node);
     }
-    
+
     /**
      * Make sure we visit children first.  This is reverse topological
      * order.
@@ -67,7 +67,7 @@ public class CytronDominanceFrontier implements DominanceFrontier
         // *** FIXME: It's annoying that this algorithm is so
         // *** inefficient in that in traverses the tree from the head
         // *** to the tail before it does anything.
-        
+
         if(isFrontierKnown(node))
             return;
 
@@ -82,7 +82,7 @@ public class CytronDominanceFrontier implements DominanceFrontier
 
         processNode(node);
     }
-    
+
     /**
      * Calculate dominance frontier for a set of basic blocks.
      *
@@ -105,14 +105,14 @@ public class CytronDominanceFrontier implements DominanceFrontier
     protected void processNode(DominatorNode node)
     {
         List<DominatorNode> dominanceFrontier = new ArrayList<DominatorNode>();
-        
+
         // local
         {
             Iterator<DominatorNode> succsIt = dt.getSuccsOf(node).iterator();
-            
+
             while(succsIt.hasNext()){
                 DominatorNode succ = succsIt.next();
-                
+
                 if(!dt.isImmediateDominatorOf(node, succ))
                     dominanceFrontier.add(succ);
             }
@@ -121,21 +121,21 @@ public class CytronDominanceFrontier implements DominanceFrontier
         // up
         {
             Iterator childIt = dt.getChildrenOf(node).iterator();
-            
+
             while(childIt.hasNext()){
                 DominatorNode child = (DominatorNode) childIt.next();
-                
+
                 Iterator childFrontIt = getDominanceFrontierOf(child).iterator();
 
                 while(childFrontIt.hasNext()){
                     DominatorNode childFront = (DominatorNode) childFrontIt.next();
-                    
+
                     if(!dt.isImmediateDominatorOf(node, childFront))
                         dominanceFrontier.add(childFront);
                 }
             }
         }
-        
+
         nodeToFrontier.put(node, dominanceFrontier);
     }
 }

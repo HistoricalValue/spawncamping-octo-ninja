@@ -29,7 +29,7 @@ public class CodeBlockRWSet extends MethodRWSet
 				return globals.size() + fields.size();
 		}
 	}
-	
+
     public String toString()
     {
 		boolean empty = true;
@@ -43,8 +43,8 @@ public class CodeBlockRWSet extends MethodRWSet
 				if(baseObj instanceof PointsToSetInternal)
 				{
 /*					PointsToSetInternal base = (PointsToSetInternal) fields.get(field);
-					base.forall( 
-						new P2SetVisitor() 
+					base.forall(
+						new P2SetVisitor()
 						{
 	    					public void visit( Node n )
 	    					{
@@ -52,7 +52,7 @@ public class CodeBlockRWSet extends MethodRWSet
 	    					}
 						}
 					);
-*/					
+*/
 					int baseSize = ((PointsToSetInternal)baseObj).size();
 					ret.append(baseSize + (baseSize == 1 ? " Node]\n" : " Nodes]\n"));
 				}
@@ -85,7 +85,7 @@ public class CodeBlockRWSet extends MethodRWSet
 		if( other instanceof MethodRWSet )
 		{
 			MethodRWSet o = (MethodRWSet) other;
-			if( o.getCallsNative() ) 
+			if( o.getCallsNative() )
 			{
 				ret = !getCallsNative() | ret;
 				setCallsNative();
@@ -118,15 +118,15 @@ public class CodeBlockRWSet extends MethodRWSet
 				    ret = addFieldRef( os, field ) | ret;
 				}
 		    }
-		} 
+		}
 		else if( other instanceof StmtRWSet )
 		{
 		    StmtRWSet oth = (StmtRWSet) other;
-		    if( oth.base != null ) 
+		    if( oth.base != null )
 		    {
 		    	ret = addFieldRef( oth.base, oth.field ) | ret;
 		    }
-		    else if( oth.field != null ) 
+		    else if( oth.field != null )
 		    {
 		    	ret = addGlobal( (SootField) oth.field ) | ret;
 		    }
@@ -145,13 +145,13 @@ public class CodeBlockRWSet extends MethodRWSet
 		}
 		return ret;
     }
-    
+
     public boolean containsField( Object field )
     {
     	if(fields == null) return false;
     	return fields.containsKey(field);
     }
-    
+
     public CodeBlockRWSet intersection( MethodRWSet other )
     {// May run slowly... O(n^2)
 		CodeBlockRWSet ret = new CodeBlockRWSet();
@@ -165,18 +165,18 @@ public class CodeBlockRWSet extends MethodRWSet
 		    for( Iterator it = other.globals.iterator(); it.hasNext(); )
 		    {
 		    	SootField sg = (SootField) it.next();
-				if( globals.contains(sg) ) 
+				if( globals.contains(sg) )
 					ret.addGlobal(sg);
 		    }
 		}
-		
+
 		if( fields != null && other.fields != null
 			&& !fields.isEmpty() && !other.fields.isEmpty() )
 		{
 		    for (Object element : other.fields.keySet()) {
 		        final Object field = element;
-		        
-				if( fields.containsKey( field ) ) 
+
+				if( fields.containsKey( field ) )
 				{
 					PointsToSet pts1 = getBaseForField( field );
 					PointsToSet pts2 = other.getBaseForField( field );
@@ -192,8 +192,8 @@ public class CodeBlockRWSet extends MethodRWSet
 							final PointsToSetInternal pti2 = (PointsToSetInternal) pts2;
 							final PointsToSetInternal newpti = new HashPointsToSet(pti1.getType(), (PAG) Scene.v().getPointsToAnalysis());
 
-							pti1.forall( 
-								new P2SetVisitor() 
+							pti1.forall(
+								new P2SetVisitor()
 								{
     	        					public void visit( Node n )
     	        					{
@@ -201,7 +201,7 @@ public class CodeBlockRWSet extends MethodRWSet
     	        					}
     	    					}
     	    				);
-    	    				
+
 							ret.addFieldRef(newpti, field);
     	    			}
 			    	}
@@ -216,7 +216,7 @@ public class CodeBlockRWSet extends MethodRWSet
 		boolean ret = false;
 		if( fields == null )
 			fields = new HashMap();
-		
+
 		// Get our points-to set, merge with other
 		PointsToSet base = getBaseForField( field );
 		if( base instanceof FullObjectSet )
@@ -229,13 +229,13 @@ public class CodeBlockRWSet extends MethodRWSet
 		if( otherBase.equals( base ) )
 			return false;
 		if( base == null )
-		{			
+		{
 			// NOTE: this line makes unsafe assumptions about the PTA
 			PointsToSetInternal newpti = new HashPointsToSet(((PointsToSetInternal)otherBase).getType(), (PAG) Scene.v().getPointsToAnalysis());
 			base = newpti;
 			fields.put( field, base );
-		} 
-		
+		}
+
 		ret = ((PointsToSetInternal)base).addAll((PointsToSetInternal) otherBase, null) | ret;
 		return ret;
 	}

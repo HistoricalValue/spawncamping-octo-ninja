@@ -14,7 +14,7 @@ import polyglot.visit.AscriptionVisitor;
 import polyglot.visit.NodeVisitor;
 
 /**
- * Visitor that inserts boxing and unboxing code into the AST. 
+ * Visitor that inserts boxing and unboxing code into the AST.
  * <code>PaoBoxer</code> accomplishes this task by first inserting explicit
  * casts into the AST, where primitive values need to be treated as objects,
  * and then uses the {@link PaoExt#rewrite(PaoTypeSystem, NodeFactory) PaoExt.rewrite(PaoTypeSystem, NodeFactory)}
@@ -56,7 +56,7 @@ public class PaoBoxer extends AscriptionVisitor
     /**
      * Calls the
      * {@link PaoExt#rewrite(PaoTypeSystem, NodeFactory) PaoExt.rewrite(PaoTypeSystem, NodeFactory)}
-     * method to rewrite the explicit casts inserted by the 
+     * method to rewrite the explicit casts inserted by the
      * <code>ascribe</code> method into correct boxing and unboxing code.
      */
     public Node leaveCall(Node old, Node n, NodeVisitor v) throws SemanticException {

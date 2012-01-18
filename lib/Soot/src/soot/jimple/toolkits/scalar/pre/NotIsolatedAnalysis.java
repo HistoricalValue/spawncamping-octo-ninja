@@ -30,7 +30,7 @@ import soot.toolkits.scalar.*;
 import soot.toolkits.graph.*;
 import java.util.*;
 
-/** 
+/**
  * Performs a Not-Isolated-analysis on the given graph, which is basicly the
  * same as an Isolated-analysis (we just return the complement, as it's easier
  * to calculate it).

@@ -33,9 +33,9 @@ import soot.jimple.internal.*;
 import soot.dava.internal.AST.*;
 
 public class infoGatheringAnalysis extends DepthFirstAdapter {
-	
+
 	public boolean DEBUG=false;
-	
+
 	public final static int CLASSNAME = 0;  //used by renamer
 
 	public final static int METHODNAME = 1;
@@ -55,8 +55,8 @@ public class infoGatheringAnalysis extends DepthFirstAdapter {
 	public final static int FIELDASSIGN = 8; //used by renamer
 
 	public final static int FORLOOPUPDATE = 9; //used by renamer
-	
-	public final static int CAST = 10; 
+
+	public final static int CAST = 10;
 
 	public final static int NUMBITS = 11;
 
@@ -139,9 +139,9 @@ public class infoGatheringAnalysis extends DepthFirstAdapter {
 	/*
 	 This can be either an assignment or an identity statement.
 	 We are however only concerned with stmts which assign values to locals
-	 
+
 	 The method sets the inDefinitionStmt flag to true and if this is a local assignment
-	 The ref to the local is stored in definedLocal 
+	 The ref to the local is stored in definedLocal
 	 */
 	public void inDefinitionStmt(DefinitionStmt s) {
 		inDefinitionStmt = true;
@@ -159,8 +159,8 @@ public class infoGatheringAnalysis extends DepthFirstAdapter {
 				definedLocal = (Local) v;
 			else
 				definedLocal = null;
-			
-			
+
+
 		} else {
 			//System.out.println("Not a local"+v);
 		}
@@ -177,8 +177,8 @@ public class infoGatheringAnalysis extends DepthFirstAdapter {
 		definedLocal = null;
 	}
 
-	
-	
+
+
 	/*
 	 Deals with cases in which a local is assigned a value from a static field
 	 int local = field
@@ -214,7 +214,7 @@ public class infoGatheringAnalysis extends DepthFirstAdapter {
 	 * while renaming because this could be a subtype
 	 */
 	public void outInvokeExpr(InvokeExpr ie) {
-		//If this is within a definitionStmt of a local 
+		//If this is within a definitionStmt of a local
 		if (inDefinitionStmt && (definedLocal != null)) {
 			//if its a new object being created
 			if (ie instanceof NewInvokeExpr) {
@@ -223,7 +223,7 @@ public class infoGatheringAnalysis extends DepthFirstAdapter {
 				String className = ref.getClassName();
 				debug("outInvokeExpr","defined local is"+definedLocal);
 				info.setObjectClassName(definedLocal, className);
-				
+
 			} else {
 				SootMethodRef methodRef = ie.getMethodRef();
 				String name = methodRef.name();
@@ -374,7 +374,7 @@ public class infoGatheringAnalysis extends DepthFirstAdapter {
 	}
 
 	/*
-	 The method checks whether a particular ConditionExpr 
+	 The method checks whether a particular ConditionExpr
 	 is a comparison of a local with a boolean
 	 If so the local is returned
 	 */
@@ -410,9 +410,9 @@ public class infoGatheringAnalysis extends DepthFirstAdapter {
 	public heuristicSet getHeuristicSet() {
 		return info;
 	}
-	
+
 	public void debug(String methodName, String debug){
-		
+
 		if(DEBUG)
 			System.out.println(methodName+ "    DEBUG: "+debug);
 	}

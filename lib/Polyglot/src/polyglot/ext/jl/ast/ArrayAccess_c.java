@@ -25,7 +25,7 @@ public class ArrayAccess_c extends Expr_c implements ArrayAccess
     }
 
     /** Get the precedence of the expression. */
-    public Precedence precedence() { 
+    public Precedence precedence() {
 	return Precedence.LITERAL;
     }
 

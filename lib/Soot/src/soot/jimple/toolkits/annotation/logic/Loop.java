@@ -29,12 +29,12 @@ import soot.toolkits.graph.UnitGraph;
 /**
  * A (natural) loop in Jimple. A back-edge (t,h) is a control-flog edge for which
  * h dominates t. In this case h is the header and the loop consists of all statements
- * s which reach t without passing through h. 
+ * s which reach t without passing through h.
  *
  * @author Eric Bodden
  */
 public class Loop {
-    
+
     protected final Stmt header;
     protected final Stmt backJump;
     protected final List<Stmt> loopStatements;
@@ -56,10 +56,10 @@ public class Loop {
         //put header to the top
         loopStatements.remove(head);
         loopStatements.add(0, head);
-        
+
         //last statement
         this.backJump = loopStatements.get(loopStatements.size()-1);
-        
+
         assert g.getSuccsOf(this.backJump).contains(head); //must branch back to the head
 
         this.loopStatements = loopStatements;
@@ -87,7 +87,7 @@ public class Loop {
     public List<Stmt> getLoopStatements() {
         return loopStatements;
     }
-    
+
     /**
      * Returns all loop exists.
      * A loop exit is a statement which has a successor that is not contained in the loop.
@@ -105,7 +105,7 @@ public class Loop {
         }
         return loopExists;
     }
-    
+
     /**
      * Computes all targets of the given loop exit, i.e. statements that the exit jumps to but which are not
      * part of this loop.
@@ -116,12 +116,12 @@ public class Loop {
         Collection<Stmt> res = new HashSet<Stmt>();
         for (Unit u : succs) {
             Stmt s = (Stmt)u;
-            res.add(s);            
+            res.add(s);
         }
         res.removeAll(loopStatements);
         return res;
     }
-    
+
     /**
      * Returns <code>true</code> if this loop certainly loops forever, i.e. if it has not exit.
      * @see #getLoopExits()

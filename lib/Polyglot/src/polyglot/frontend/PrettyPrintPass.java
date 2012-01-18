@@ -27,7 +27,7 @@ public class PrettyPrintPass extends AbstractPass
         this.pp = pp;
         this.w = w;
     }
-    
+
     public boolean run() {
         Node ast = job.ast();
 

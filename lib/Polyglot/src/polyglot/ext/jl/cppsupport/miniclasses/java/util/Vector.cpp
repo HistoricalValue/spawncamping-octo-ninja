@@ -81,7 +81,7 @@ jmatch_array<Object*> *Vector::toArray()
 	jmatch_array<Object *> *ar = new jmatch_array<Object *>(m_size);
 	for(int i = 0; i < m_size; i++)
 		(*ar)[i] = elements[i];
-	return ar;	
+	return ar;
 }
 
 void Vector::enlarge(int newCapacity)

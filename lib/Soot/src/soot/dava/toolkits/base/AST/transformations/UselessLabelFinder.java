@@ -32,8 +32,8 @@ public class UselessLabelFinder{
     public UselessLabelFinder( Singletons.Global g ) {}
     public static UselessLabelFinder v() { return G.v().soot_dava_toolkits_base_AST_transformations_UselessLabelFinder(); }
 
-	
-    //check whether label on a node is useless 
+
+    //check whether label on a node is useless
     public boolean findAndKill(ASTNode node){
     	if(!(node instanceof ASTLabeledNode)){
     		if(DEBUG)
@@ -48,13 +48,13 @@ public class UselessLabelFinder{
     	if(label==null)
     		return false;
     	if(DEBUG) System.out.println("dealing with labeled node"+label);
-	
-	
+
+
     	List<Object> subBodies = node.get_SubBodies();
     	Iterator<Object> it = subBodies.iterator();
     	while(it.hasNext()){
     		List subBodyTemp = null;
-    		
+
     		if(node instanceof ASTTryNode){
     			//an astTryNode
     			ASTTryNode.container subBody = (ASTTryNode.container)it.next();
@@ -65,17 +65,17 @@ public class UselessLabelFinder{
     			//System.out.println("not try node in findAndkill");
     			subBodyTemp = (List)it.next();
     		}
-    			
+
     		if(checkForBreak(subBodyTemp,label)){
     			//found a break
     			return false;
     		}
     	}
-    	
+
     	// only if all bodies dont contain a break can we remove the label
-    	
+
 		//means break was not found so we can remove
-		((ASTLabeledNode)node).set_Label(new SETNodeLabel());		    
+		((ASTLabeledNode)node).set_Label(new SETNodeLabel());
 		if (DEBUG) System.out.println("USELESS LABEL DETECTED");
 		return true;
     }
@@ -123,7 +123,7 @@ public class UselessLabelFinder{
     				else{
     					subBodyTemp = (List)subIt.next();
     				}
-    					
+
     				if(checkForBreak(subBodyTemp,outerLabel)){
     					//if this is true there was a break found
     					return true;
@@ -131,7 +131,7 @@ public class UselessLabelFinder{
     			}
     		}
     	}
-    	
+
     	return false;
     }
 

@@ -35,8 +35,8 @@ public interface VarInstance extends TypeObject
      * Destructively set the type of the variable.
      * This method should be deprecated.
      */
-    void setType(Type type); //destructive update   
-    
+    void setType(Type type); //destructive update
+
     /**
      * Destructively set the flags of the variable.
      */

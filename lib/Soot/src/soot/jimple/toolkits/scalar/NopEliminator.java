@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,28 +38,28 @@ public class NopEliminator extends BodyTransformer
     public static NopEliminator v() { return G.v().soot_jimple_toolkits_scalar_NopEliminator(); }
 
     /** Removes {@link NopStmt}s from the passed body (which must be
-	a {@link JimpleBody}).  Complexity is linear 
+	a {@link JimpleBody}).  Complexity is linear
         with respect to the statements.
     */
-    
+
     protected void internalTransform(Body b, String phaseName, Map options)
     {
         JimpleBody body = (JimpleBody)b;
-        
+
         if(Options.v().verbose())
             G.v().out.println("[" + body.getMethod().getName() +
                 "] Removing nops...");
-                
+
         Chain units = body.getUnits();
-        
+
         // Just do one trivial pass.
         {
             Iterator stmtIt = units.snapshotIterator();
-            
-            while(stmtIt.hasNext()) 
+
+            while(stmtIt.hasNext())
             {
                 Stmt s = (Stmt) stmtIt.next();
-                
+
                 if(s instanceof NopStmt)
                     units.remove(s);
             }

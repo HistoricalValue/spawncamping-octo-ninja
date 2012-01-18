@@ -104,7 +104,7 @@ public class ClassBody_c extends Term_c implements ClassBody
                     Job sj = j.spawn(ar.context(), n,
                                      Pass.CLEAN_SUPER, Pass.CLEAN_SUPER_ALL);
 
-                    if (! sj.status()) {                       
+                    if (! sj.status()) {
                         if (! sj.reportedErrors()) {
                             throw new SemanticException("Could not disambiguate " +
                                                         "class member.",
@@ -258,7 +258,7 @@ public class ClassBody_c extends Term_c implements ClassBody
         return succs;
     }
 
-    private static final Collection TOPICS = 
+    private static final Collection TOPICS =
                 CollectionUtil.list(Report.types, Report.context);
-     
+
 }

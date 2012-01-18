@@ -38,7 +38,7 @@ public class CallData {
         //sb.append(outputs);
         return sb.toString();
     }
-    
+
     public void addChild(CallData cd){
         children.add(cd);
     }
@@ -51,7 +51,7 @@ public class CallData {
 
     public void setData(String d){
         data = d;
-    } 
+    }
 
     public String getData(){
         return data;

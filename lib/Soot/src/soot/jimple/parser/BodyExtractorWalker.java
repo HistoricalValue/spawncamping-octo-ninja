@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,31 +34,31 @@ import java.util.*;
 
 
 /**
- *  Walks a jimple AST and constructs the method bodies for all the methods of 
- *  the SootClass associated with this walker (see constructor). 
+ *  Walks a jimple AST and constructs the method bodies for all the methods of
+ *  the SootClass associated with this walker (see constructor).
  *  note: Contrary to the plain "Walker", this walker does not create a SootClass,
  *  or interact with the scene. It merely adds method bodies for each of the methods of
  *  the SootClass it was initialized with.
  */
 
 /* Modified By Marc Berndl May 17th */
-   
+
 public class BodyExtractorWalker extends Walker
 {
     Map<SootMethod, JimpleBody> methodToParsedBodyMap;
 
     /** Constructs a walker, and attaches it to the given SootClass, sending bodies to
      * the given methodToParsedBodyMap. */
-    public BodyExtractorWalker(SootClass sc, SootResolver resolver, Map<SootMethod, JimpleBody> methodToParsedBodyMap) 
+    public BodyExtractorWalker(SootClass sc, SootResolver resolver, Map<SootMethod, JimpleBody> methodToParsedBodyMap)
     {
         super(sc, resolver);
         this.methodToParsedBodyMap = methodToParsedBodyMap;
     }
-    
+
     /*
-      file = 
-      modifier* file_type class_name extends_clause? implements_clause? file_body; 
-    */       
+      file =
+      modifier* file_type class_name extends_clause? implements_clause? file_body;
+    */
     public void caseAFile(AFile node)
     {
         inAFile(node);
@@ -76,7 +76,7 @@ public class BodyExtractorWalker extends Walker
         {
             node.getClassName().apply(this);
         }
-        
+
 	String className = (String) mProductions.removeLast();
         if(!className.equals(mSootClass.getName()))
             throw new RuntimeException("expected:  " + className + ", but got: " + mSootClass.getName());
@@ -93,27 +93,27 @@ public class BodyExtractorWalker extends Walker
         {
             node.getFileBody().apply(this);
         }
-        outAFile(node);        
+        outAFile(node);
     }
 
     public void outAFile(AFile node)
-    {        
-        if(node.getImplementsClause() != null) 
+    {
+        if(node.getImplementsClause() != null)
 	    mProductions.removeLast(); // implements_clause
-        
-        if(node.getExtendsClause() != null) 
+
+        if(node.getExtendsClause() != null)
 	    mProductions.removeLast(); // extends_clause
-        
+
 	mProductions.removeLast(); // file_type
 	mProductions.addLast(mSootClass);
-    } 
+    }
 
 
     /*
       member =
       {field}  modifier* type name semicolon |
       {method} modifier* type name l_paren parameter_list? r_paren throws_clause? method_body;
-    */    
+    */
     public void outAFieldMember(AFieldMember node)
     {
 	mProductions.removeLast(); // name
@@ -130,10 +130,10 @@ public class BodyExtractorWalker extends Walker
 
         if(node.getMethodBody() instanceof AFullMethodBody)
 	    methodBody = (JimpleBody) mProductions.removeLast();
-        
+
         if(node.getThrowsClause() != null)
 	    throwsClause = (List) mProductions.removeLast();
-        
+
         if(node.getParameterList() != null)
 	    parameterList = (List) mProductions.removeLast();
 
@@ -150,29 +150,29 @@ public class BodyExtractorWalker extends Walker
         {
             G.v().out.println("[!!! Couldn't parse !!] " + SootMethod.getSubSignature(name, parameterList, type));
 
-	    
+
             G.v().out.println("[!] Methods in class are:");
             Iterator it = mSootClass.methodIterator();
             while(it.hasNext()) {
                 SootMethod next = (SootMethod) it.next();
                 G.v().out.println(next.getSubSignature());
             }
-            
+
         }
 
-        if(sm.isConcrete()) 
+        if(sm.isConcrete())
         {
           if (Options.v().verbose())
               G.v().out.println("[Parsed] "+sm.getDeclaration());
 
           methodBody.setMethod(sm);
           methodToParsedBodyMap.put(sm, methodBody);
-        } 
+        }
         else if(node.getMethodBody() instanceof AFullMethodBody) {
             if(sm.isPhantom() && Options.v().verbose())
                G.v().out.println("[jimple parser] phantom method!");
-            throw new RuntimeException("Impossible: !concrete => ! instanceof " + sm.getName() );        
+            throw new RuntimeException("Impossible: !concrete => ! instanceof " + sm.getName() );
         }
     }
-  
-} 
+
+}

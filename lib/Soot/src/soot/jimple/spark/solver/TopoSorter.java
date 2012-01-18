@@ -39,7 +39,7 @@ public class TopoSorter {
         //this.visited = new NumberedSet( pag.getVarNodeNumberer() );
         this.visited = new HashSet<VarNode>();
     }
-    
+
     /* End of public methods. */
     /* End of package methods. */
 
@@ -52,7 +52,7 @@ public class TopoSorter {
         visited.add( n );
         Node[] succs = pag.simpleLookup( n );
         for (Node element : succs) {
-            if( ignoreTypes 
+            if( ignoreTypes
             || pag.getTypeManager().castNeverFails(
                     n.getType(), element.getType() ) ) {
                 dfsVisit( (VarNode) element );

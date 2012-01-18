@@ -9,7 +9,7 @@ import ppg.util.*;
 public class ParseTest
 {
 	private static final String HEADER = "ppg [parsetest]: ";
-	
+
 	private ParseTest() {}
 
 	public static void main(String args[]) {
@@ -33,7 +33,7 @@ public class ParseTest
 		String simpleName = f.getName();
 
 		Lexer lex = new Lexer(fileInput, simpleName);
-		
+
 		Parser parser = new Parser(filename, lex);
 		try {
 			parser.parse();
@@ -42,8 +42,8 @@ public class ParseTest
 			return;
 		}
 		Spec spec = (Spec)parser.getProgramNode();
-					
-		CodeWriter cw = new CodeWriter(System.out, 72); 
+
+		CodeWriter cw = new CodeWriter(System.out, 72);
 		try {
 			spec.unparse(cw);
 			cw.flush();

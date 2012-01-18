@@ -2,7 +2,7 @@ package polyglot.ast;
 
 import polyglot.types.LocalInstance;
 
-/** 
+/**
  * A local variable expression.
  */
 public interface Local extends Variable

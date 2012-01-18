@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -44,7 +44,7 @@ public abstract class AbstractLengthExpr extends AbstractUnopExpr implements Len
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return opBox.getValue().equivHashCode();
     }
@@ -55,7 +55,7 @@ public abstract class AbstractLengthExpr extends AbstractUnopExpr implements Len
     {
         return Jimple.LENGTHOF + " " + opBox.getValue().toString();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(Jimple.LENGTHOF);
         up.literal(" ");

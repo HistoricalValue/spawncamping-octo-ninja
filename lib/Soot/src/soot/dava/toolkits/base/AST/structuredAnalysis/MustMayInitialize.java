@@ -46,7 +46,7 @@ import soot.dava.internal.AST.*;
           Set of initialized locals/SootField
   Step 2:
           A local or SootField is MUST initialized at a program point p if on all paths from the start to this
-	  point the local or SootField is assigned a value. 
+	  point the local or SootField is assigned a value.
 
 	  Similarly a local or SootField is MAY initialized at a program point p if there is a path from the start
 	  to this point on wich the local or SootField is assigned
@@ -57,7 +57,7 @@ import soot.dava.internal.AST.*;
   Step 5:
          x = expr
 	 kill = {}
-	 
+
 	 if x is a local or SootField, gen(x) = {x}
   Step 6:
          out(start) = {}
@@ -71,7 +71,7 @@ import soot.dava.internal.AST.*;
 public class MustMayInitialize extends StructuredAnalysis{
     HashMap<Object, List> mapping;
     DavaFlowSet finalResult;
-    
+
     public static final int MUST=0;
     public static final int MAY=1;
 
@@ -81,7 +81,7 @@ public class MustMayInitialize extends StructuredAnalysis{
 	super();
 	mapping = new HashMap<Object, List>();
 	MUSTMAY=MUSTorMAY;
-	
+
 	//System.out.println("MustOrMay value is"+MUSTorMAY);
 	setMergeType();
 	//the input to the process method is an empty DavaFlow Set meaning out(start) ={} (no var initialized)
@@ -94,7 +94,7 @@ public class MustMayInitialize extends StructuredAnalysis{
     public DavaFlowSet emptyFlowSet(){
     	return new DavaFlowSet();
     }
-    
+
     public void setMergeType(){
 	//System.out.println("here"+MUSTMAY);
 	if(MUSTMAY == MUST){
@@ -116,7 +116,7 @@ public class MustMayInitialize extends StructuredAnalysis{
     public Object newInitialFlow(){
 	return new DavaFlowSet();
     }
-    
+
     public Object cloneFlowSet(Object flowSet){
 	if(flowSet instanceof DavaFlowSet){
 	    return ((DavaFlowSet)flowSet).clone();
@@ -221,13 +221,13 @@ public class MustMayInitialize extends StructuredAnalysis{
 	    else if(leftOp instanceof FieldRef){
 		field = ((FieldRef)leftOp).getField();
 		toReturn.add(field);
-	    
+
 		/*
 		 * Gather more information just in case someone might need the def points
 		 */
 		Object temp = mapping.get(field);
 		List<Stmt> defs;
-		
+
 		if(temp == null){
 		    //first definition
 		    defs = new ArrayList<Stmt>();

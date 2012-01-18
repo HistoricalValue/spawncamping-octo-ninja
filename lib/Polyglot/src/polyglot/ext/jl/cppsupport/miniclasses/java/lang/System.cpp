@@ -4,7 +4,7 @@
 namespace java {
 namespace lang {
 
-void System::arraycopy(jmatch_array<Object *> *src, int srcOff, 
+void System::arraycopy(jmatch_array<Object *> *src, int srcOff,
 	jmatch_array<Object *> *tgt, int tgtOff, int len)
 {
 	int base = tgtOff;

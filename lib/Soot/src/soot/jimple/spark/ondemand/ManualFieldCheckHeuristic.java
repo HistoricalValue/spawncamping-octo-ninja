@@ -24,9 +24,9 @@ import soot.jimple.spark.pag.SparkField;
 
 /**
  * for hacking around with stuff
- * 
+ *
  * @author manu
- * 
+ *
  */
 public class ManualFieldCheckHeuristic implements FieldCheckHeuristic {
 

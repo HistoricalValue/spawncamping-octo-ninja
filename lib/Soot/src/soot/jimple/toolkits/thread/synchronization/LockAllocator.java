@@ -19,37 +19,37 @@ import soot.toolkits.graph.*;
 public class LockAllocator extends SceneTransformer
 {
     public LockAllocator(Singletons.Global g){}
-    public static LockAllocator v() 
-	{ 
+    public static LockAllocator v()
+	{
 		return G.v().soot_jimple_toolkits_thread_synchronization_LockAllocator();
 	}
-    
+
     List<CriticalSection> criticalSections = null;
     CriticalSectionInterferenceGraph interferenceGraph = null;
     DirectedGraph deadlockGraph = null;
-	
+
 	// Lock options
 	boolean optionOneGlobalLock = false;
 	boolean optionStaticLocks = false;
 	boolean optionUseLocksets = false;
 	boolean optionLeaveOriginalLocks = false;
 	boolean optionIncludeEmptyPossibleEdges = false;
-	
+
 	// Semantic options
 	boolean optionAvoidDeadlock = true;
-	boolean optionOpenNesting = true;	
-	
+	boolean optionOpenNesting = true;
+
 	// Analysis options
 	boolean optionDoMHP = false;
 	boolean optionDoTLO = false;
 	boolean optionOnFlyTLO = false; // not a CLI option yet // on-fly is more efficient, but harder to measure in time
-	
+
 	// Output options
 	boolean optionPrintMhpSummary = true; // not a CLI option yet
 	boolean optionPrintGraph = false;
 	boolean optionPrintTable = false;
 	boolean optionPrintDebug = false;
-	
+
     protected void internalTransform(String phaseName, Map options)
 	{
 		// Get phase options
@@ -96,7 +96,7 @@ public class LockAllocator extends SceneTransformer
 			optionUseLocksets = false;
 			optionLeaveOriginalLocks = true;
 		}
-		
+
 		optionAvoidDeadlock = PhaseOptions.getBoolean( options, "avoid-deadlock" );
 		optionOpenNesting = PhaseOptions.getBoolean( options, "open-nesting" );
 
@@ -108,9 +108,9 @@ public class LockAllocator extends SceneTransformer
 		optionPrintGraph = PhaseOptions.getBoolean( options, "print-graph" );
 		optionPrintTable = PhaseOptions.getBoolean( options, "print-table" );
 		optionPrintDebug = PhaseOptions.getBoolean( options, "print-debug" );
-		
+
 //		optionIncludeEmptyPossibleEdges = PhaseOptions.getBoolean( options, "include-empty-edges" ); // not a real option yet
-		
+
 		// *** Build May Happen In Parallel Info ***
 		MhpTester mhp = null;
 		if(optionDoMHP && Scene.v().getPointsToAnalysis() instanceof PAG)
@@ -122,7 +122,7 @@ public class LockAllocator extends SceneTransformer
 				mhp.printMhpSummary();
 			}
 		}
-		
+
 
 
 		// *** Find Thread-Local Objects ***
@@ -147,7 +147,7 @@ public class LockAllocator extends SceneTransformer
 
     	// *** Find and Name Transactions ***
     	// The transaction finder finds the start, end, and preparatory statements
-    	// for each transaction. It also calculates the non-transitive read/write 
+    	// for each transaction. It also calculates the non-transitive read/write
     	// sets for each transaction.
     	// For all methods, run the intraprocedural analysis (TransactionAnalysis)
 		Date start = new Date();
@@ -155,7 +155,7 @@ public class LockAllocator extends SceneTransformer
     	Map<SootMethod, FlowSet> methodToFlowSet = new HashMap<SootMethod, FlowSet>();
     	Map<SootMethod, ExceptionalUnitGraph> methodToExcUnitGraph = new HashMap<SootMethod, ExceptionalUnitGraph>();
     	Iterator runAnalysisClassesIt = Scene.v().getApplicationClasses().iterator();
-    	while (runAnalysisClassesIt.hasNext()) 
+    	while (runAnalysisClassesIt.hasNext())
     	{
     	    SootClass appClass = (SootClass) runAnalysisClassesIt.next();
     	    Iterator methodsIt = appClass.getMethods().iterator();
@@ -167,19 +167,19 @@ public class LockAllocator extends SceneTransformer
 	    	    	Body b = method.retrieveActiveBody();
 	    	    	ExceptionalUnitGraph eug = new ExceptionalUnitGraph(b);
     		    	methodToExcUnitGraph.put(method, eug);
-    		    	
+
     	    		// run the intraprocedural analysis
     				SynchronizedRegionFinder ta = new SynchronizedRegionFinder(eug, b, optionPrintDebug, optionOpenNesting, tlo);
     				Chain units = b.getUnits();
     				Unit lastUnit = (Unit) units.getLast();
     				FlowSet fs = (FlowSet) ta.getFlowBefore(lastUnit);
-    			
+
     				// add the results to the list of results
     				methodToFlowSet.put(method, fs);
 				}
     	    }
-    	}    	
-    	
+    	}
+
     	// Create a composite list of all transactions
     	criticalSections = new Vector<CriticalSection>();
     	for(FlowSet fs : methodToFlowSet.values())
@@ -197,7 +197,7 @@ public class LockAllocator extends SceneTransformer
     		G.v().out.println("[wjtp.tn] TLO so far (#analyzed/#encountered): " + SmartMethodInfoFlowAnalysis.counter + "/" + ClassInfoFlowAnalysis.methodCount);
     	}
 
-    	
+
 
     	// *** Find Transitive Read/Write Sets ***
     	// Finds the transitive read/write set for each transaction using a given
@@ -206,7 +206,7 @@ public class LockAllocator extends SceneTransformer
     	PointsToAnalysis pta = Scene.v().getPointsToAnalysis();
     	CriticalSectionAwareSideEffectAnalysis tasea = null;
 		tasea = new CriticalSectionAwareSideEffectAnalysis(
-					pta, 
+					pta,
 					Scene.v().getCallGraph(), (optionOpenNesting ? criticalSections : null), tlo);
     	Iterator<CriticalSection> tnIt = criticalSections.iterator();
     	while(tnIt.hasNext())
@@ -219,7 +219,7 @@ public class LockAllocator extends SceneTransformer
     			RWSet stmtRead = tasea.readSet(tn.method, stmt, tn, uses);
     			if(stmtRead != null)
 	    			tn.read.union(stmtRead);
-    			
+
     			RWSet stmtWrite = tasea.writeSet(tn.method, stmt, tn, uses);
 				if(stmtWrite != null)
 					tn.write.union(stmtWrite);
@@ -243,7 +243,7 @@ public class LockAllocator extends SceneTransformer
     	// methodToFlowSet or if a loop and new body transformer are used for methodToStrayRWSet
 /*    	Map methodToStrayRWSet = new HashMap();
     	Iterator runRWFinderClassesIt = Scene.v().getApplicationClasses().iterator();
-    	while (runRWFinderClassesIt.hasNext()) 
+    	while (runRWFinderClassesIt.hasNext())
     	{
     	    SootClass appClass = (SootClass) runRWFinderClassesIt.next();
     	    Iterator methodsIt = appClass.getMethods().iterator();
@@ -252,40 +252,40 @@ public class LockAllocator extends SceneTransformer
     	    	SootMethod method = (SootMethod) methodsIt.next();
     	    	Body b = method.retrieveActiveBody();
 				UnitGraph g = (UnitGraph) methodToExcUnitGraph.get(method);
-    	    	
+
     	    	// run the interprocedural analysis
 //    			PTFindStrayRW ptfrw = new PTFindStrayRW(new ExceptionalUnitGraph(b), b, AllTransactions);
     			PTFindStrayRW ptfrw = new PTFindStrayRW(g, b, AllTransactions);
     			Chain units = b.getUnits();
     			Unit firstUnit = (Unit) units.iterator().next();
     			FlowSet fs = (FlowSet) ptfrw.getFlowBefore(firstUnit);
-    			
+
     			// add the results to the list of results
     			methodToStrayRWSet.put(method, fs);
     	    }
     	}
-//*/    	
-		
+//*/
+
 
 
     	// *** Calculate Locking Groups ***
     	// Search for data dependencies between transactions, and split them into disjoint sets
     	G.v().out.println("[wjtp.tn] *** Calculate Locking Groups *** " + (new Date()));
-    	CriticalSectionInterferenceGraph ig = 
+    	CriticalSectionInterferenceGraph ig =
     		new CriticalSectionInterferenceGraph(
     				criticalSections, mhp, optionOneGlobalLock,
     				optionLeaveOriginalLocks, optionIncludeEmptyPossibleEdges);
     	interferenceGraph = ig; // save in field for later retrieval
-    	
-    	
-    	
+
+
+
 		// *** Detect the Possibility of Deadlock ***
 		G.v().out.println("[wjtp.tn] *** Detect the Possibility of Deadlock *** " + (new Date()));
 		DeadlockDetector dd = new DeadlockDetector(optionPrintDebug, optionAvoidDeadlock, true, criticalSections);
 		if(!optionUseLocksets) // deadlock detection for all single-lock-per-region allocations
 			deadlockGraph = dd.detectComponentBasedDeadlock();
 
-		
+
 
 		// *** Calculate Locking Objects ***
     	// Get a list of all dependencies for each group
@@ -338,8 +338,8 @@ public class LockAllocator extends SceneTransformer
 			}
 		}
 
-		
-		
+
+
 		// *** Detect the Possibility of Deadlock for Locksets ***
 		if(optionUseLocksets) // deadlock detection and lock ordering for lockset allocations
 		{
@@ -347,11 +347,11 @@ public class LockAllocator extends SceneTransformer
 			deadlockGraph = dd.detectLocksetDeadlock(lockToLockNum, lockPTSets);
 			if(optionPrintDebug)
 				((HashMutableEdgeLabelledDirectedGraph) deadlockGraph).printGraph();
-		
+
 			G.v().out.println("[wjtp.tn] *** Reorder Locksets to Avoid Deadlock *** " + (new Date()));
 			dd.reorderLocksets(lockToLockNum, (HashMutableEdgeLabelledDirectedGraph) deadlockGraph);
 		}
-		
+
 		// *** Print Output and Transform Program ***
     	G.v().out.println("[wjtp.tn] *** Print Output and Transform Program *** " + (new Date()));
 
@@ -377,7 +377,7 @@ public class LockAllocator extends SceneTransformer
 				CriticalSectionGroup tnGroup = ig.groups().get(i);
 				insertedGlobalLock[i] = (!optionOneGlobalLock) && (tnGroup.useDynamicLock || tnGroup.useLocksets);
 			}
-			
+
 			for(SootClass appClass : Scene.v().getApplicationClasses())
 			{
 	    	    for(SootMethod method : appClass.getMethods())
@@ -386,36 +386,36 @@ public class LockAllocator extends SceneTransformer
 					{
 	    		    	FlowSet fs = methodToFlowSet.get(method);
 	    	    		if(fs != null) // (newly added methods need not be transformed)
-	    	    			LockAllocationBodyTransformer.v().internalTransform(method.getActiveBody(), fs, ig.groups(), insertedGlobalLock); 
+	    	    			LockAllocationBodyTransformer.v().internalTransform(method.getActiveBody(), fs, ig.groups(), insertedGlobalLock);
 					}
 	    	    }
 	    	}
 	    }
 	}
-    
+
 	protected void findLockableReferences(List<CriticalSection> AllTransactions,
 			PointsToAnalysis pta, CriticalSectionAwareSideEffectAnalysis tasea,
 			Map<Value, Integer> lockToLockNum,
 			List<PointsToSetInternal> lockPTSets) {
-		// For each transaction, if the group's R/Ws may be fields of the same object, 
+		// For each transaction, if the group's R/Ws may be fields of the same object,
 		// then check for the transaction if they must be fields of the same RUNTIME OBJECT
 		Iterator<CriticalSection> tnIt9 = AllTransactions.iterator();
 		while(tnIt9.hasNext())
 		{
 			CriticalSection tn = tnIt9.next();
-			
+
 			int group = tn.setNumber - 1;
 			if(group < 0)
 				continue;
-					
+
 			if(tn.group.useDynamicLock || tn.group.useLocksets) // if attempting to use a dynamic lock or locksets
 			{
-				
+
 				// Get list of objects (FieldRef or Local) to be locked (lockset analysis)
 				G.v().out.println("[wjtp.tn] * " + tn.name + " *");
 				LockableReferenceAnalysis la = new LockableReferenceAnalysis(new BriefUnitGraph(tn.method.retrieveActiveBody()));
 				tn.lockset = la.getLocksetOf(tasea, tn.group.rwSet, tn);
-				
+
 				// Determine if list is suitable for the selected locking scheme
 				// TODO check for nullness
 				if(optionUseLocksets)
@@ -425,7 +425,7 @@ public class LockAllocator extends SceneTransformer
 					{
 						// If the lockset is invalid, revert the entire group to static locks:
 						tn.group.useLocksets = false;
-						
+
 						// Create a lockset containing a single placeholder static lock for each tn in the group
 						Value newStaticLock = new NewStaticLock(tn.method.getDeclaringClass());
 						EquivalentValue newStaticLockEqVal = new EquivalentValue(newStaticLock);
@@ -450,7 +450,7 @@ public class LockAllocator extends SceneTransformer
 						for( EquivalentValue lockEqVal : tn.lockset )
 						{
 							Value lock = lockEqVal.getValue();
-							
+
 							// Get reaching objects for this lock
 							PointsToSetInternal lockPT;
 							if(lock instanceof Local)
@@ -469,7 +469,7 @@ public class LockAllocator extends SceneTransformer
 								lockPT = null;
 							else
 								lockPT = null;
-								
+
 							if( lockPT != null )
 							{
 								// Assign an existing lock number if possible
@@ -486,7 +486,7 @@ public class LockAllocator extends SceneTransformer
 										break;
 									}
 								}
-								
+
 								// Assign a brand new lock number otherwise
 								if(!foundLock)
 								{
@@ -533,7 +533,7 @@ public class LockAllocator extends SceneTransformer
 					{// Found exactly one lock
 						// Use it!
 						tn.lockObject = (Value) tn.lockset.get(0);
-						
+
 						// If it's the best lock we've found in the group yet, use it for display
 						if(tn.group.lockObject == null || tn.lockObject instanceof Ref)
 							tn.group.lockObject = tn.lockObject;
@@ -600,7 +600,7 @@ public class LockAllocator extends SceneTransformer
 		{
 			CriticalSectionGroup tnGroup = ig.groups().get(group + 1);
 			tnGroup.isDynamicLock = false;
-			tnGroup.useDynamicLock = false; 
+			tnGroup.useDynamicLock = false;
 			tnGroup.lockObject = null;
 		}
 	}
@@ -608,8 +608,8 @@ public class LockAllocator extends SceneTransformer
     private void analyzeExistingLocks(List<CriticalSection> AllTransactions,
 			CriticalSectionInterferenceGraph ig) {
 		setFlagsForStaticAllocations(ig);
-		
-		// if for any lock there is any def to anything other than a static field, then it's a local lock.			
+
+		// if for any lock there is any def to anything other than a static field, then it's a local lock.
 		// for each transaction, check every def of the lock
 		Iterator<CriticalSection> tnAIt = AllTransactions.iterator();
 		while(tnAIt.hasNext())
@@ -664,7 +664,7 @@ public class LockAllocator extends SceneTransformer
 			}
 		}
 	}
-    
+
 	public static String locksetToLockNumString(List<EquivalentValue> lockset, Map<Value, Integer> lockToLockNum)
 	{
 		if( lockset == null ) return "null";
@@ -679,16 +679,16 @@ public class LockAllocator extends SceneTransformer
 		}
 		return ret + "]";
 	}
-    
+
     public void assignNamesToTransactions(List<CriticalSection> AllTransactions)
     {
        	// Give each method a unique, deterministic identifier
        	// Sort transactions into bins... one for each method name
-       	
+
        	// Get list of method names
     	List<String> methodNamesTemp = new ArrayList<String>();
     	Iterator<CriticalSection> tnIt5 = AllTransactions.iterator();
-    	while (tnIt5.hasNext()) 
+    	while (tnIt5.hasNext())
     	{
     	    CriticalSection tn1 = tnIt5.next();
     	    String mname = tn1.method.getSignature(); //tn1.method.getSignature() + "." + tn1.method.getName();
@@ -710,7 +710,7 @@ public class LockAllocator extends SceneTransformer
 				identMatrix[i][j] = 50000;
 			}
 		}
-		
+
 		// Put transactions into bins
     	Iterator<CriticalSection> tnIt0 = AllTransactions.iterator();
     	while(tnIt0.hasNext())
@@ -720,7 +720,7 @@ public class LockAllocator extends SceneTransformer
 			identMatrix[methodNum][0]++;
 			identMatrix[methodNum][identMatrix[methodNum][0]] = tn1.IDNum;
     	}
-    	
+
     	// Sort bins by transaction IDNum
     	// IDNums vary, but always increase in code-order within a method
     	for(int j = 0; j < methodNames.length; j++)
@@ -728,7 +728,7 @@ public class LockAllocator extends SceneTransformer
     		identMatrix[j][0] = 0; // set the counter to 0 so it sorts out (into slot 0).
     		Arrays.sort(identMatrix[j]); // sort this subarray
 		}
-		
+
 		// Generate a name based on the bin number and location within the bin
     	Iterator<CriticalSection> tnIt4 = AllTransactions.iterator();
     	while(tnIt4.hasNext())
@@ -738,7 +738,7 @@ public class LockAllocator extends SceneTransformer
 			int tnNum = Arrays.binarySearch(identMatrix[methodNum], tn1.IDNum) - 1;
     		tn1.name = "m" + (methodNum < 10? "00" : (methodNum < 100? "0" : "")) + methodNum + "n" + (tnNum < 10? "0" : "") + tnNum;
     	}
-	}	
+	}
 
 	public void printGraph(Collection<CriticalSection> AllTransactions, CriticalSectionInterferenceGraph ig, Map<Value, Integer> lockToLockNum)
 	{
@@ -747,7 +747,7 @@ public class LockAllocator extends SceneTransformer
 		Map<Integer, String> lockColors = new HashMap<Integer, String>();
 		int colorNum = 0;
 		HashSet<CriticalSection> visited = new HashSet<CriticalSection>();
-		
+
 		G.v().out.println("[transaction-graph]" + (optionUseLocksets ? "" : " strict") + " graph transactions {"); // "\n[transaction-graph] start=1;");
 
 		for(int group = 0; group < ig.groups().size(); group++)
@@ -849,12 +849,12 @@ public class LockAllocator extends SceneTransformer
 						}
 					}
 				}
-				
+
 			}
 			if(printedHeading)
 				G.v().out.println("[transaction-graph] }");
 		}
-		
+
 		// Print nodes with no group
 		{
 			boolean printedHeading = false;
@@ -890,7 +890,7 @@ public class LockAllocator extends SceneTransformer
 		}
 
 		G.v().out.println("[transaction-graph] }");
-	}	
+	}
 
 	public void printTable(Collection<CriticalSection> AllTransactions, MhpTester mhp)
 	{
@@ -899,7 +899,7 @@ public class LockAllocator extends SceneTransformer
 		while(tnIt7.hasNext())
 		{
 			CriticalSection tn = tnIt7.next();
-			
+
 			// Figure out if it's reachable, and if it MHP itself
 			boolean reachable = false;
 			boolean mhpself = false;
@@ -917,12 +917,12 @@ public class LockAllocator extends SceneTransformer
 			G.v().out.print("[transaction-table] End  : early:" + tn.earlyEnds.toString() + " exc:" + tn.exceptionalEnd + " through:" + tn.end + " \n");
 			G.v().out.println("[transaction-table] Size : " + tn.units.size());
 			if(tn.read.size() < 100)
-				G.v().out.print("[transaction-table] Read : " + tn.read.size() + "\n[transaction-table] " + 
+				G.v().out.print("[transaction-table] Read : " + tn.read.size() + "\n[transaction-table] " +
 					tn.read.toString().replaceAll("\\[", "     : [").replaceAll("\n", "\n[transaction-table] "));
 			else
 				G.v().out.print("[transaction-table] Read : " + tn.read.size() + "  \n[transaction-table] ");
 			if(tn.write.size() < 100)
-				G.v().out.print("Write: " + tn.write.size() + "\n[transaction-table] " + 
+				G.v().out.print("Write: " + tn.write.size() + "\n[transaction-table] " +
 					tn.write.toString().replaceAll("\\[", "     : [").replaceAll("\n", "\n[transaction-table] ")); // label provided by previous print statement
 			else
 				G.v().out.print("Write: " + tn.write.size() + "\n[transaction-table] "); // label provided by previous print statement
@@ -933,14 +933,14 @@ public class LockAllocator extends SceneTransformer
 			if(tn.group != null && tn.group.useLocksets)
 			{
 				G.v().out.println("\n[transaction-table] Locks: " + tn.lockset);
-				
+
 			}
 			else
 				G.v().out.println("\n[transaction-table] Lock : " + (tn.setNumber == -1 ? "-" : (tn.lockObject == null ? "Global" : (tn.lockObject.toString() + (tn.lockObjectArrayIndex == null ? "" : "[" + tn.lockObjectArrayIndex + "]")) )));
 			G.v().out.println("[transaction-table] Group: " + tn.setNumber + "\n[transaction-table] ");
 		}
 	}
-	
+
 	public void printGroups(Collection<CriticalSection> AllTransactions, CriticalSectionInterferenceGraph ig)
 	{
 			G.v().out.print("[transaction-groups] Group Summaries\n[transaction-groups] ");
@@ -959,7 +959,7 @@ public class LockAllocator extends SceneTransformer
 						if(tn.setNumber == group + 1)
 							G.v().out.print(tn.name + " ");
 					}
-					G.v().out.print("\n[transaction-groups] " + 
+					G.v().out.print("\n[transaction-groups] " +
 	    							tnGroup.rwSet.toString().replaceAll("\\[", "     : [").replaceAll("\n", "\n[transaction-groups] "));
 	    		}
 	    	}

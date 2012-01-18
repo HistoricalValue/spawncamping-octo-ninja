@@ -11,7 +11,7 @@ import soot.jimple.*;
 // Determines if a set of uses of locals all use the same value
 // whenever they occur together.  Can accept a set of boundary
 // statements which define a region which, if exited, counts
-// 
+//
 // The locals being used need not be the same
 
 public class EqualUsesAnalysis extends ForwardFlowAnalysis
@@ -25,20 +25,20 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 	// Calculated by flow analysis
 	List<Stmt> redefStmts;
 	Map<Stmt, List> firstUseToAliasSet;
-	
+
 	EqualLocalsAnalysis el;
-	
+
 	public EqualUsesAnalysis(UnitGraph g)
 	{
 		super(g);
-		
+
 		useStmts = null;
 		useLocals = null;
 		boundaryStmts = null;
 
 		redefStmts = null;
 		firstUseToAliasSet = null;
-		
+
 		// analysis is done on-demand, not now
 
 		this.el= new EqualLocalsAnalysis(g); // also on-demand
@@ -51,7 +51,7 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 		stmtToLocal.put(secondStmt, secondLocal);
 		return areEqualUses(stmtToLocal, new ArrayList());
 	}
-	
+
 	public boolean areEqualUses(Stmt firstStmt, Local firstLocal, Stmt secondStmt, Local secondLocal, List boundaryStmts)
 	{
 		Map<Stmt, Local> stmtToLocal = new HashMap<Stmt, Local>();
@@ -59,12 +59,12 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 		stmtToLocal.put(secondStmt, secondLocal);
 		return areEqualUses(stmtToLocal, boundaryStmts);
 	}
-	
+
 	public boolean areEqualUses(Map<Stmt, Local> stmtToLocal)
 	{
 		return areEqualUses(stmtToLocal, new ArrayList());
 	}
-	
+
 	public boolean areEqualUses(Map<Stmt, Local> stmtToLocal, List boundaryStmts)
 	{// You may optionally specify start and end statements... for if you're interested only in a certain part of the method
 		this.stmtToLocal = stmtToLocal;
@@ -110,7 +110,7 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 //		G.v().out.print("LIF = true ");
 		return true;
 	}
-	
+
 	public Map<Stmt, List> getFirstUseToAliasSet()
 	{
 		return firstUseToAliasSet;
@@ -121,8 +121,8 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 		FlowSet inSet1 = (FlowSet) in1;
 		FlowSet inSet2 = (FlowSet) in2;
 		FlowSet outSet = (FlowSet) out;
-		
-		
+
+
 		inSet1.union(inSet2, outSet);
 		List aliases1 = null;
 		List aliases2 = null;
@@ -150,14 +150,14 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 			}
 		}
 	}
-	
+
 	protected void flowThrough(Object inValue, Object unit,
 			Object outValue)
 	{
 		FlowSet in  = (FlowSet) inValue;
 		FlowSet out = (FlowSet) outValue;
 		Stmt stmt = (Stmt) unit;
-		
+
 		in.copy(out);
 
 		// get list of definitions at this unit
@@ -167,7 +167,7 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 		{
 			newDefs.add( ((ValueBox) newDefBoxesIt.next()).getValue() );
 		}
-		
+
 		// check if any locals of interest were redefined here
 		Iterator<Local> useLocalsIt = useLocals.iterator();
 		while(useLocalsIt.hasNext())
@@ -194,7 +194,7 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 		{
 			out.add(stmt);
 		}
-		
+
 		// if this is a boundary statement, clear everything but aliases from the flow set
 		if( boundaryStmts.contains(stmt) )
 		{
@@ -207,13 +207,13 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 				if( o instanceof List )
 					aliases = (List) o;
 			}
-*/			
+*/
 			// clear the flow set, and add aliases back in
 			out.clear();
 //			if(aliases != null)
 //				out.add(aliases);
 		}
-		
+
 		// if this is a use statement (of interest), flow it forward
 		// if it's the first use statement, get an alias list
 		if( useStmts.contains(stmt) )
@@ -233,7 +233,7 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 			}
 			out.add(stmt);
 		}
-		
+
 		// update the alias list if this is a definition statement
 		if( stmt instanceof DefinitionStmt )
 		{
@@ -261,27 +261,27 @@ public class EqualUsesAnalysis extends ForwardFlowAnalysis
 				}
 			}
 		}
-			
+
 	}
-	
+
 	protected void copy(Object source, Object dest)
 	{
-		
+
 		FlowSet sourceSet = (FlowSet) source;
 		FlowSet destSet   = (FlowSet) dest;
-		
+
 		sourceSet.copy(destSet);
-		
+
 	}
-	
+
 	protected Object entryInitialFlow()
 	{
 		return new ArraySparseSet();
 	}
-	
+
 	protected Object newInitialFlow()
 	{
 		return new ArraySparseSet();
-	}	
+	}
 }
 

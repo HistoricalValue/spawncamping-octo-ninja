@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,9 +34,9 @@ import java.util.*;
 public class JimpleBody extends StmtBody
 {
     /**
-        Construct an empty JimpleBody 
+        Construct an empty JimpleBody
      **/
-    
+
     JimpleBody(SootMethod m)
     {
         super(m);
@@ -46,7 +46,7 @@ public class JimpleBody extends StmtBody
        Construct an extremely empty JimpleBody, for parsing into.
     **/
 
-    JimpleBody() 
+    JimpleBody()
     {
     }
 
@@ -59,14 +59,14 @@ public class JimpleBody extends StmtBody
     }
 
     /** Make sure that the JimpleBody is well formed.  If not, throw
-     *  an exception.  Right now, performs only a handful of checks.  
+     *  an exception.  Right now, performs only a handful of checks.
      */
     public void validate()
     {
         super.validate();
         validateIdentityStatements();
     }
-    
+
     /**
      * Checks the following invariants on this Jimple body:
      * <ol>
@@ -79,20 +79,20 @@ public class JimpleBody extends StmtBody
     public void validateIdentityStatements() {
 		if (method.isAbstract())
 			return;
-		
+
 		Body body=method.getActiveBody();
 		Chain<Unit> units=body.getUnits().getNonPatchingChain();
 
 		boolean foundNonThisOrParamIdentityStatement = false;
 		boolean firstStatement = true;
-		
+
 		for (Unit unit : units) {
 			if(unit instanceof IdentityStmt) {
 				IdentityStmt identityStmt = (IdentityStmt) unit;
-				if(identityStmt.getRightOp() instanceof ThisRef) {					
+				if(identityStmt.getRightOp() instanceof ThisRef) {
 					if(method.isStatic()) {
 						throw new RuntimeException("@this-assignment in a static method!");
-					}					
+					}
 					if(!firstStatement) {
 						throw new RuntimeException("@this-assignment statement should precede all other statements");
 					}
@@ -101,7 +101,7 @@ public class JimpleBody extends StmtBody
 						throw new RuntimeException("@param-assignment statements should precede all non-identity statements");
 					}
 				} else {
-					//@caughtexception statement					
+					//@caughtexception statement
 					foundNonThisOrParamIdentityStatement = true;
 				}
 			} else {
@@ -111,7 +111,7 @@ public class JimpleBody extends StmtBody
 			firstStatement = false;
 		}
     }
-    
+
     /** Inserts usual statements for handling this & parameters into body. */
     public void insertIdentityStmts()
     {
@@ -126,11 +126,11 @@ public class JimpleBody extends StmtBody
             getUnits().addFirst(Jimple.v().newIdentityStmt(l, Jimple.v().newParameterRef(l.getType(), i)));
             i++;
         }
-        
+
         //add this-ref before everything else
         if (!getMethod().isStatic())
         {
-        	Local l = Jimple.v().newLocal("this", 
+        	Local l = Jimple.v().newLocal("this",
         			RefType.v(getMethod().getDeclaringClass()));
         	getLocals().add(l);
         	getUnits().addFirst(Jimple.v().newIdentityStmt(l, Jimple.v().newThisRef((RefType)l.getType())));

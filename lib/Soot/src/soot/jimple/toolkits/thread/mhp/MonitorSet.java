@@ -17,25 +17,25 @@ import soot.toolkits.scalar.*;
 
 
 public class MonitorSet extends ArraySparseSet{
-	
+
 	//    int size = 0;
-	
+
 	MonitorSet(){
 		super();
 	}
-	
+
 	public Object getMonitorDepth(String objName){
 		Iterator it = iterator();
 		while (it.hasNext()){
 			Object obj = it.next();
-			if (obj instanceof MonitorDepth){		    
+			if (obj instanceof MonitorDepth){
 				MonitorDepth md = (MonitorDepth)obj;
 				if (md.getObjName().equals(objName)) return md;
 			}
 		}
 		return null;
 	}
-	
+
 	public MonitorSet clone(){
 		MonitorSet newSet = new MonitorSet();
 		newSet.union(this);
@@ -49,7 +49,7 @@ public class MonitorSet extends ArraySparseSet{
 	 Object obj = iterator.next();
 	 if (obj instanceof MonitorDepth) {
 	 System.out.println("obj: "+((MonitorDepth)obj).getObjName());
-	 System.out.println("depth: "+((MonitorDepth)obj).getDepth());	
+	 System.out.println("depth: "+((MonitorDepth)obj).getDepth());
 	 }
 	 else
 	 System.out.println("obj: "+obj);
@@ -59,15 +59,15 @@ public class MonitorSet extends ArraySparseSet{
 	 System.out.println("===finish copy===");
 	 }
 	 */
-	
-	
+
+
 	/**
 	 * Returns the union (join) of this MonitorSet and <code>other</code>, putting
 	 * result into <code>this</code>. */
 	public void union(MonitorSet other){
-		
+
 	}
-	
+
 	/**
 	 * Returns the union (join) of this MonitorSet and <code>other</code>, putting
 	 * result into <code>dest</code>. <code>dest</code>, <code>other</code> and
@@ -77,7 +77,7 @@ public class MonitorSet extends ArraySparseSet{
 	 other.copy(dest);
 	 Iterator iterator = iterator();
 	 while (iterator.hasNext()){
-	 
+
 	 MonitorDepth md = (MonitorDepth)iterator.next();
 	 Object obj = dest.getMonitorDepth(md.getObjName());
 	 if ( obj == null){
@@ -87,14 +87,14 @@ public class MonitorSet extends ArraySparseSet{
 	 if (obj instanceof MonitorDepth){
 	 if (md.getDepth() != ((MonitorDepth)obj).getDepth())
 	 throw new RuntimeException("Find different monitor depth at merge point!");
-	 
+
 	 }
 	 else
 	 throw new RuntimeException("MonitorSet contains non MonitorDepth element!");
 	 }
-	 
+
 	 }
-	 
+
 	 }
 	 */
 	public void intersection(MonitorSet other, MonitorSet dest){
@@ -105,7 +105,7 @@ public class MonitorSet extends ArraySparseSet{
 		 other.test();
 		 */
 		if (other.contains("&")) {
-			
+
 			this.copy(dest);
 			//System.out.println("copy this to dest: ");
 			//dest.test();
@@ -123,21 +123,21 @@ public class MonitorSet extends ArraySparseSet{
 					MonitorDepth md = (MonitorDepth)o  ;
 					Object obj = dest.getMonitorDepth(md.getObjName());
 					if ( obj != null)
-						
+
 						if (md.getDepth() != ((MonitorDepth)obj).getDepth()) {
 							throw new RuntimeException("stmt inside different monitor depth !");
 						}
 						else  dest.add(obj);
 				}
 			}
-			
-			
-			
+
+
+
 		}
-		
-	} 
-	
-	
+
+	}
+
+
 	public void test(){
 		System.out.println("====MonitorSet===");
 		Iterator it = iterator();
@@ -153,5 +153,5 @@ public class MonitorSet extends ArraySparseSet{
 		}
 		System.out.println("====MonitorSet end====");
 	}
-	
+
 }

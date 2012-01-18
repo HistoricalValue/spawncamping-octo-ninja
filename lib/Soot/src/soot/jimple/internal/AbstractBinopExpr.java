@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -91,7 +91,7 @@ public abstract class AbstractBinopExpr implements Expr
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return op1Box.getValue().equivHashCode() * 101 + op2Box.getValue().equivHashCode() + 17
             ^ getSymbol().hashCode();
@@ -120,7 +120,7 @@ public abstract class AbstractBinopExpr implements Expr
         up.literal(getSymbol());
 
         if( PrecedenceTest.needsBracketsRight( op2Box, this ) ) up.literal("(");
-        op2Box.toString(up);        
+        op2Box.toString(up);
         if( PrecedenceTest.needsBracketsRight( op2Box, this ) ) up.literal(")");
     }
 }

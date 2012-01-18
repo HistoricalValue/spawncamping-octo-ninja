@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,7 +41,7 @@ public class LoadStoreOptimizer extends BodyTransformer
 
     // Constants
     boolean debug = false;
-    
+
     // constants returned by the stackIndependent function.
     final static private int FAILURE = 0;
     final static private int SUCCESS = 1;
@@ -54,28 +54,28 @@ public class LoadStoreOptimizer extends BodyTransformer
     final static private int STORE_LOAD_ELIMINATION = 0;
     final static private int STORE_LOAD_LOAD_ELIMINATION = -1;
 
-        
+
     private Map gOptions;
 
     /** The method that drives the optimizations. */
     /* This is the public interface to LoadStoreOptimizer */
-  
-    protected void internalTransform(Body body, String phaseName, Map options) 
-    {   
+
+    protected void internalTransform(Body body, String phaseName, Map options)
+    {
 
         gOptions = options;
 
         Instance instance = new Instance();
-        instance.mBody = body;        
+        instance.mBody = body;
         instance.mUnits =  body.getUnits();
-        
+
         debug = PhaseOptions.getBoolean(gOptions, "debug");
-        
+
         if(Options.v().verbose())
             G.v().out.println("[" + body.getMethod().getName() + "] Performing LoadStore optimizations...");
 
         if(debug) { G.v().out.println("\n\nOptimizing Method: " + body.getMethod().getName());}
-        
+
         instance.go();
     }
 class Instance {
@@ -90,122 +90,122 @@ class Instance {
 
 
     void go() {
-        if(!mUnits.isEmpty()) {                    
+        if(!mUnits.isEmpty()) {
             buildUnitToBlockMap();
-            computeLocalDefsAndLocalUsesInfo();  
-           
-            
-           
+            computeLocalDefsAndLocalUsesInfo();
+
+
+
             if(debug){G.v().out.println("Calling optimizeLoadStore(1)\n");}
-            optimizeLoadStores(); 
-        
+            optimizeLoadStores();
+
             if(PhaseOptions.getBoolean(gOptions, "inter") ) {
                 if(debug){G.v().out.println("Calling doInterBlockOptimizations");}
-                doInterBlockOptimizations(); 
-                             
-                //computeLocalDefsAndLocalUsesInfo();          
-                //propagateLoadsBackwards();         if(debug)     G.v().out.println("pass 3");         
-                //optimizeLoadStores();      if(debug)   G.v().out.println("pass 4"); 
-                //propagateLoadsForward();   if(debug)   G.v().out.println("pass 5"); 
-                //propagateBackwardsIndependentHunk(); if(debug)  G.v().out.println("pass 6");                        
+                doInterBlockOptimizations();
+
+                //computeLocalDefsAndLocalUsesInfo();
+                //propagateLoadsBackwards();         if(debug)     G.v().out.println("pass 3");
+                //optimizeLoadStores();      if(debug)   G.v().out.println("pass 4");
+                //propagateLoadsForward();   if(debug)   G.v().out.println("pass 5");
+                //propagateBackwardsIndependentHunk(); if(debug)  G.v().out.println("pass 6");
             }
 
-            if(PhaseOptions.getBoolean(gOptions, "sl2") || PhaseOptions.getBoolean(gOptions, "sll2")  ) {        
+            if(PhaseOptions.getBoolean(gOptions, "sl2") || PhaseOptions.getBoolean(gOptions, "sll2")  ) {
                 mPass2 = true;
                 if(debug){G.v().out.println("Calling optimizeLoadStore(2)");}
-                optimizeLoadStores();   
+                optimizeLoadStores();
             }
-        }        
+        }
     }
     /*
-     *  Computes a map binding each unit in a method to the unique basic block    
+     *  Computes a map binding each unit in a method to the unique basic block
      *  that contains it.
-     */    
+     */
     private  void buildUnitToBlockMap()
     {
-        BlockGraph blockGraph = new ZonedBlockGraph(mBody); 
+        BlockGraph blockGraph = new ZonedBlockGraph(mBody);
         if(debug) {
             G.v().out.println("Method " +  mBody.getMethod().getName()+ " Block Graph: ");
             G.v().out.println(blockGraph);
         }
-       
+
         List blocks = blockGraph.getBlocks();
         mUnitToBlockMap = new HashMap<Unit, Block>();
-        
+
         Iterator blockIt = blocks.iterator();
         while(blockIt.hasNext() ) {
             Block block = (Block) blockIt.next();
-            
+
             Iterator unitIt = block.iterator();
             while(unitIt.hasNext()) {
-                Unit unit = (Unit) unitIt.next();                
-                mUnitToBlockMap.put(unit, block);                
+                Unit unit = (Unit) unitIt.next();
+                mUnitToBlockMap.put(unit, block);
             }
         }
     }
 
-    
+
     // computes a list of all the stores in mUnits in order of their occurence therein.
-  
+
     private  List<Unit>  buildStoreList()
     {
         Iterator it = mUnits.iterator();
         List<Unit> storeList = new ArrayList<Unit>();
-        
+
         while(it.hasNext()) {
             Unit unit = (Unit) it.next();
             if(unit  instanceof StoreInst)
                 storeList.add(unit);
-        }     
+        }
         return storeList;
     }
-    
 
-    
-    private void computeLocalDefsAndLocalUsesInfo() 
-    {        
+
+
+    private void computeLocalDefsAndLocalUsesInfo()
+    {
         mExceptionalUnitGraph =  new ExceptionalUnitGraph(mBody);
         mLocalDefs = new SmartLocalDefs(mExceptionalUnitGraph, new SimpleLiveLocals(mExceptionalUnitGraph));
         mLocalUses = new SimpleLocalUses(mExceptionalUnitGraph, mLocalDefs);
     }
-   
 
-    
+
+
 
 
     // main optimizing method
-    private void optimizeLoadStores() 
+    private void optimizeLoadStores()
     {
         List<Unit> storeList;
-        
-        
-        // build a list of all store units in mUnits
-        storeList = buildStoreList();        
-        
 
-        // Eliminate store/load  
+
+        // build a list of all store units in mUnits
+        storeList = buildStoreList();
+
+
+        // Eliminate store/load
         {
-            
+
             boolean hasChanged = true;
-        
+
             boolean hasChangedFlag = false;
             while(hasChanged) {
-        
+
                 hasChanged = false;
 
 
-                // Iterate over the storeList 
+                // Iterate over the storeList
                 Iterator<Unit> unitIt = storeList.iterator();
-                
+
             nextUnit:
                 while(unitIt.hasNext()){
-                    Unit unit = unitIt.next();                
+                    Unit unit = unitIt.next();
                     List uses = mLocalUses.getUsesOf(unit);
-                  
+
 
                     // if uses of a store < 3, attempt some form of store/load elimination
                     if(uses.size() < 3) {
-                        
+
                         // check that all uses have only the current store as their definition
                         {
                             Iterator useIt = uses.iterator();
@@ -214,7 +214,7 @@ class Instance {
                                 Unit loadUnit = pair.getUnit();
                                 if(!(loadUnit instanceof LoadInst))
                                     continue nextUnit;
-                            
+
                                 List<Unit> defs = mLocalDefs.getDefsOfAt((Local) pair.getValueBox().getValue(), loadUnit);
                                 if(defs.size() > 1) {
                                     continue nextUnit;
@@ -223,8 +223,8 @@ class Instance {
                                     continue nextUnit; // xxx how can you get here?
                                 }
                             }
-                        } 
-                        
+                        }
+
                         // Check that all loads are in the same bb as the store
                         {
                             Block storeBlock = mUnitToBlockMap.get(unit);
@@ -233,11 +233,11 @@ class Instance {
                             while(useIt.hasNext()) {
                                 UnitValueBoxPair pair = (UnitValueBoxPair) useIt.next();
                                 Block useBlock = mUnitToBlockMap.get(pair.getUnit());
-                                if(useBlock != storeBlock) 
+                                if(useBlock != storeBlock)
                                     continue nextUnit;
-                            }                            
+                            }
                         }
-                        
+
                         // Check for stack independance (automatic reordering may be performed by stackIndependent() fcnt)
                         {
                             Block block;
@@ -247,11 +247,11 @@ class Instance {
                                 // replace store by a pop and remove store from store list
                                 replaceUnit(unit, Baf.v().newPopInst(((StoreInst)unit).getOpType()));
                                 unitIt.remove();
-                                    
+
                                 hasChanged = true;        hasChangedFlag = false;
                                 }*/
                                 break;
-                                    
+
                             case 1:
                                 if(PhaseOptions.getBoolean(gOptions, "sl")) {
                                     if(!mPass2 || PhaseOptions.getBoolean(gOptions, "sl2")) {
@@ -259,16 +259,16 @@ class Instance {
                                         Unit loadUnit = ((UnitValueBoxPair)uses.get(0)).getUnit();
                                         block =  mUnitToBlockMap.get(unit);
                                         int test = stackIndependent(unit, loadUnit , block, STORE_LOAD_ELIMINATION);
-                                
-                                //xxx 
+
+                                //xxx
                                 //if(block.getIndexInMethod() < 1 ) { // <13
                                         if(test == SUCCESS || test == SPECIAL_SUCCESS){
-                                    
+
                                             block.remove(unit);
                                             block.remove(loadUnit);
                                             unitIt.remove();
                                             hasChanged = true;        hasChangedFlag = false;
-                                    
+
                                             //delme[
                                             if(debug) { G.v().out.println("Store/Load elimination occurred case1.");}
                                             //delme]
@@ -276,12 +276,12 @@ class Instance {
                                             if(!hasChangedFlag) {
                                             hasChangedFlag = true;
                                             hasChanged = true;
-                                            } 
+                                            }
                                             }*/
                                     }
                                 }
                                 break;
-                                
+
                             case 2:
                                 if(PhaseOptions.getBoolean(gOptions, "sll")) {
                                     if(!mPass2 || PhaseOptions.getBoolean(gOptions, "sll2")) {
@@ -291,7 +291,7 @@ class Instance {
                                         block = mUnitToBlockMap.get(unit);
 
 
-                                
+
                                         Unit temp;  // xxx try to optimize this
                                         if(mUnits.follows(firstLoad, secondLoad)) {
                                             temp = secondLoad;
@@ -299,93 +299,93 @@ class Instance {
                                             firstLoad = temp;
                                         }
 
-                                        int result = stackIndependent(unit, firstLoad, block, STORE_LOAD_ELIMINATION);                                 
-                                        if(result == SUCCESS){        
-                                  
+                                        int result = stackIndependent(unit, firstLoad, block, STORE_LOAD_ELIMINATION);
+                                        if(result == SUCCESS){
+
                                             // move the first load just after its defining store.
                                             block.remove(firstLoad);
-                                            block.insertAfter(firstLoad, unit);                                
-                                    
-                                 
+                                            block.insertAfter(firstLoad, unit);
+
+
                                             int res = stackIndependent(unit, secondLoad, block, STORE_LOAD_LOAD_ELIMINATION);
-                                            if(res == MAKE_DUP) {                                        
+                                            if(res == MAKE_DUP) {
                                                 // replace store by dup, drop both loads
                                                 Dup1Inst dup = Baf.v().newDup1Inst(((LoadInst) secondLoad).getOpType());
                                                 dup.addAllTagsOf(unit);
                                                 replaceUnit(unit, dup);
                                                 unitIt.remove(); // remove store from store list
-                                        
-                                                block.remove(firstLoad); 
+
+                                                block.remove(firstLoad);
                                                 block.remove(secondLoad);
 
                                                 hasChanged = true;         hasChangedFlag = false;
-                                        
+
                                             }  /* else if(res == MAKE_DUP1_X1) {
-                                          
+
                                                   // replace store/load/load by a dup1_x1
-                                                  Unit stackUnit = getStackItemAt2(unit, block, -2); 
-                                        
+                                                  Unit stackUnit = getStackItemAt2(unit, block, -2);
+
                                                   if(stackUnit instanceof PushInst)
                                                   break;
-                                        
+
                                                   Type underType = type(stackUnit);
-                                                  if(underType == null) {                                         
+                                                  if(underType == null) {
                                                   throw new RuntimeException("this has to be corrected (loadstoroptimiser.java)" + stackUnit);
                                                   }
-                                        
+
                                                   if(debug) { G.v().out.println("stack unit is: " + stackUnit + " stack type is " + underType);}
                                                   replaceUnit(unit, Baf.v().newDup1_x1Inst(((LoadInst) secondLoad).getOpType(),underType));
-                                                  unitIt.remove();                
-                                        
-                                                  block.remove(firstLoad); 
+                                                  unitIt.remove();
+
+                                                  block.remove(firstLoad);
                                                   block.remove(secondLoad);
-                                        
-                                                  hasChanged = true;          hasChangedFlag = false;                                      
-                                                  break;                                        
-                                        
+
+                                                  hasChanged = true;          hasChangedFlag = false;
+                                                  break;
+
                                                   } */
-                                    
-                                
+
+
                                         } else if(result == SPECIAL_SUCCESS || result == HAS_CHANGED || result == SPECIAL_SUCCESS2){
                                             if(!hasChangedFlag) {
                                                 hasChangedFlag = true;
                                                 hasChanged = true;
-                                            } 
+                                            }
                                         }
                                     }
-                                    
+
                                 }
-                            }                   
+                            }
                         }
                     }
                 }
             }
-        }                    
+        }
     }
-  
-    
-    
-    
-       
-    /** 
-     *  Checks if the units occuring between [from, to] consume 
+
+
+
+
+
+    /**
+     *  Checks if the units occuring between [from, to] consume
      *. stack items not produced by these interval units. (ie if the
-     *  stack height ever goes negative between from and to, assuming the 
+     *  stack height ever goes negative between from and to, assuming the
      *  stack height is set to 0 upon executing the instruction following 'from'.
-     *  
+     *
      */
     private boolean isRequiredByFollowingUnits(Unit from, Unit to)
     {
         Iterator it = mUnits.iterator(from, to);
         int stackHeight = 0;
         boolean res = false;
-        
+
         if(from != to)  {
             // advance past the 'from' unit
             it.next();
             while(it.hasNext()) {
                 Unit  currentInst = (Unit) it.next();
-                if(currentInst == to)                     
+                if(currentInst == to)
                     break;
 
                 stackHeight -= ((Inst)currentInst).getInCount();
@@ -398,11 +398,11 @@ class Instance {
         }
         return res;
     }
-            
 
-    
-    
-    
+
+
+
+
     private int pushStoreToLoad(Unit from , Unit to, Block block)
     {
         Unit storePred =  block.getPredOf(from);
@@ -413,10 +413,10 @@ class Instance {
                 unitsToMove.add(from);
                 int h = ((Inst)storePred).getInCount();
                 Unit currentUnit = storePred;
-                if(h != 0) {           
+                if(h != 0) {
                     currentUnit = block.getPredOf(storePred);
                     while(currentUnit != null) {
-                        
+
                         h-= ((Inst)currentUnit).getOutCount();
                         if(h<0){ // xxx could be more flexible here?
                             if(debug) { G.v().out.println("xxx: negative");}
@@ -431,9 +431,9 @@ class Instance {
                 }
                 if(currentUnit == null) {
                     if(debug) { G.v().out.println("xxx: null");}
-                    return FAILURE;        
+                    return FAILURE;
                 }
-                
+
                 Unit uu = from;
                 for(;;) {
                     uu = block.getSuccOf(uu);
@@ -443,28 +443,28 @@ class Instance {
                     while(it2.hasNext()) {
                         Unit nu = it2.next();
                         if(debug) { G.v().out.println("xxxspecial;success pushing forward stuff.");}
-                        
-                        
+
+
                         if(!canMoveUnitOver(nu, uu)){
                             if(debug) { G.v().out.println("xxx: cant move over faillure" + nu);}
                             return FAILURE;
                         }
                         if(debug) { G.v().out.println("can move" + nu + " over " + uu);}
                     }
-                }        
-                
+                }
+
                 // if we get here it means we can move all the units in the set pass the units in between [to, from]
-                Unit unitToMove = currentUnit; 
-                while(unitToMove != from) {        
+                Unit unitToMove = currentUnit;
+                while(unitToMove != from) {
                     Unit succ = block.getSuccOf(unitToMove);
                     if(debug) { G.v().out.println("moving " + unitToMove);}
                     block.remove(unitToMove);
-                    block.insertBefore(unitToMove, to);                            
+                    block.insertBefore(unitToMove, to);
                     unitToMove = succ;
                 }
                 block.remove(from);
                 block.insertBefore(from, to);
-                               
+
                 if(debug) { G.v().out.println("xxx1success pushing forward stuff.");}
                 return SPECIAL_SUCCESS;
             }
@@ -472,10 +472,10 @@ class Instance {
 
         return FAILURE;
     }
-    
-                
-                
-   
+
+
+
+
     /**
      *
      *
@@ -483,15 +483,15 @@ class Instance {
      * @return SUCCESS when a load in a store load pair can be moved IMMEDIATELY after it's defining store
      * @return MAKE_DUP when a store/load/load trio can be replaced by a dup unit.
      * @return MAKE_DUP_X1 when store/load/load trio can be replaced by a dup1_x1 unit
-     * @return SPECIAL_SUCCESS when a store/load pair can AND must be immediately annihilated. 
+     * @return SPECIAL_SUCCESS when a store/load pair can AND must be immediately annihilated.
      * @return HAS_CHANGED when store load elimination is not possible in any form, but some unit reordering has occured
      */
-    
-    private  int stackIndependent(Unit from, Unit to, Block block, int aContext) 
-    {                
-        if(debug) { 
+
+    private  int stackIndependent(Unit from, Unit to, Block block, int aContext)
+    {
+        if(debug) {
             G.v().out.println("Trying: " + from + "/" + to +  " in block  " + block.getIndexInMethod()+":" );
-            G.v().out.println("context:" + (aContext == STORE_LOAD_ELIMINATION ? 
+            G.v().out.println("context:" + (aContext == STORE_LOAD_ELIMINATION ?
                                              "STORE_LOAD_ELIMINATION" :
                                              "STORE_LOAD_LOAD_ELIMINATION"));
         }
@@ -499,68 +499,68 @@ class Instance {
 
         int minStackHeightAttained = 0; // records the min stack height attained between [from, to]
         int stackHeight = 0;           // records the stack height when similating the effects on the stack
-        Iterator it = mUnits.iterator(mUnits.getSuccOf(from)); 
+        Iterator it = mUnits.iterator(mUnits.getSuccOf(from));
         int res = FAILURE;
-        
+
         Unit currentInst = (Unit) it.next();   // get unit following the store
-        
+
         if(aContext == STORE_LOAD_LOAD_ELIMINATION) {
-            currentInst =  (Unit) it.next(); // jump after first load 
-        } 
-        
+            currentInst =  (Unit) it.next(); // jump after first load
+        }
+
         // find minStackHeightAttained
         while(currentInst != to) {
             stackHeight -= ((Inst)currentInst).getInCount();
             if(stackHeight < minStackHeightAttained)
                 minStackHeightAttained = stackHeight;
-            
-            
-            stackHeight += ((Inst)currentInst).getOutCount();                
-            
+
+
+            stackHeight += ((Inst)currentInst).getOutCount();
+
             currentInst = (Unit) it.next();
         }
-                
+
         // note: now stackHeight contains the delta height of the stack after executing the units contained in
         // [from, to] non-inclusive.
-        
-        
-        if(debug) { 
+
+
+        if(debug) {
             G.v().out.println("nshv = " + stackHeight);
             G.v().out.println("mshv = " + minStackHeightAttained);
         }
-        
-        
-        boolean hasChanged = true;        
-        
-        // Iterate until an elimination clause is taken or no reordering of the code occurs         
+
+
+        boolean hasChanged = true;
+
+        // Iterate until an elimination clause is taken or no reordering of the code occurs
         while(hasChanged) {
             hasChanged = false;
 
             // check for possible sll elimination
             if(aContext == STORE_LOAD_LOAD_ELIMINATION) {
-                                
+
                 if(stackHeight == 0 && minStackHeightAttained == 0){
-                    if(debug) { 
+                    if(debug) {
                         G.v().out.println("xxx: succ: -1, makedup ");
                     }
                     return MAKE_DUP;
                 }
                 else if(stackHeight == -1 && minStackHeightAttained == -1){
-                    if(debug) { G.v().out.println("xxx: succ: -1, makedup , -1");}        
+                    if(debug) { G.v().out.println("xxx: succ: -1, makedup , -1");}
                     return MAKE_DUP;
                  }
                 else if(stackHeight == -2 && minStackHeightAttained == -2){if(debug) { G.v().out.println("xxx: succ -1 , make dupx1 ");}
                 return MAKE_DUP1_X1; }
-                
+
                 else  if (minStackHeightAttained < -2) {
                     if(debug) { G.v().out.println("xxx: failled due: minStackHeightAttained < -2 ");}
                     return FAILURE;
-                }                
+                }
             }
-            
-            
+
+
             // check for possible sl elimination
-            if(aContext == STORE_LOAD_ELIMINATION) {                
+            if(aContext == STORE_LOAD_ELIMINATION) {
                 if(stackHeight == 0 && minStackHeightAttained == 0){
                     if(debug) { G.v().out.println("xxx: success due: 0, SUCCESS ");}
                     return SUCCESS;
@@ -576,55 +576,55 @@ class Instance {
                             block.insertBefore(from, to);
                             if(debug) { G.v().out.println("xxx: success due to 1, SPECIAL_SUCCESS2");}
                             return SPECIAL_SUCCESS2;
-                        }                    
+                        }
 			}*/
                 else if (minStackHeightAttained < 0){
                     return   pushStoreToLoad(from , to, block);
-                }                  
-            }        
-            
+                }
+            }
+
 
             it = mUnits.iterator(mUnits.getSuccOf(from), to);
-            
-            Unit unitToMove = null; 
+
+            Unit unitToMove = null;
             Unit u = (Unit) it.next();
 
             if(aContext == STORE_LOAD_LOAD_ELIMINATION) {
                 u =  (Unit) it.next();
-            } 
+            }
             int currentH = 0;
-            
-            // find a candidate to move before the store/load/(load)  group 
-            while( u != to) {        
-                
+
+            // find a candidate to move before the store/load/(load)  group
+            while( u != to) {
+
                 if(((Inst)u).getNetCount() == 1) {
                     // xxx remove this check
                     if(u instanceof LoadInst || u instanceof PushInst || u instanceof NewInst || u instanceof StaticGetInst || u instanceof Dup1Inst) {
-                        
+
                         // verify that unitToMove is not required by following units (until the 'to' unit)
                         if(!isRequiredByFollowingUnits(u, to)) {
                             unitToMove = u;
                         }
-                        
+
                     }
                     else{
                         if(debug) { G.v().out.println("1003:(LoadStoreOptimizer@stackIndependent): found unknown unit w/ getNetCount == 1" + u);}
                     }
                 }
-                
 
 
-           
-                
+
+
+
                 if(unitToMove != null) {
                     int flag = 0;
                     //if(aContext == 0 || !(stackHeight > -2 && minStackHeightAttained == -2 ) ) {
-                        
+
                     if(tryToMoveUnit(unitToMove, block, from, to, flag)) {
                         if(stackHeight > -2 && minStackHeightAttained == -2){
                             return HAS_CHANGED;
                         }
-                        
+
                         stackHeight--;
                         if(stackHeight < minStackHeightAttained)
                             minStackHeightAttained = stackHeight;
@@ -632,8 +632,8 @@ class Instance {
                         break;
                     }
                 }
-                
-                currentH += ((Inst)u).getNetCount();                
+
+                currentH += ((Inst)u).getNetCount();
                 unitToMove = null;
                 u =  (Unit) it.next();
             }
@@ -648,21 +648,21 @@ class Instance {
                      ((Inst) to).getInCount() == 0  &&
                      ((Inst) mUnits.getPredOf(to)).getOutCount() == 1 &&
                      ((Inst) mUnits.getPredOf(to)).getInCount() == 0) {
-                
+
                 Object toPred =  mUnits.getPredOf(to);
                 block.remove((Unit) toPred);
                 block.insertAfter((Unit) toPred, to);
                 return HAS_CHANGED; // return has changed
-            } 
+            }
             else return FAILURE;
         }
         if (aContext == STORE_LOAD_ELIMINATION)
             return   pushStoreToLoad(from , to, block);
-        
+
         return res;
     }
 
-    
+
     /**
      * @return true if aUnit perform a non-local read or write. false otherwise.
      */
@@ -683,33 +683,33 @@ class Instance {
      */
     private boolean canMoveUnitOver(Unit aUnitToMove, Unit aUnitToGoOver) // xxx missing cases
     {
-        
+
         // can't change method call order or change fieldargInst and method call order
         if((aUnitToGoOver instanceof MethodArgInst && aUnitToMove instanceof MethodArgInst) ||
            (aUnitToGoOver instanceof MethodArgInst && isNonLocalReadOrWrite(aUnitToMove))  ||
            (isNonLocalReadOrWrite(aUnitToGoOver)  && aUnitToMove instanceof MethodArgInst) ||
-           
+
            (aUnitToGoOver instanceof ArrayReadInst  && aUnitToMove instanceof ArrayWriteInst) ||
            (aUnitToGoOver instanceof ArrayWriteInst && aUnitToMove instanceof ArrayReadInst)  ||
            (aUnitToGoOver instanceof ArrayWriteInst  && aUnitToMove instanceof ArrayWriteInst)||
 
-           
+
            (aUnitToGoOver instanceof FieldPutInst && aUnitToMove instanceof FieldGetInst &&
             ((FieldArgInst)aUnitToGoOver).getField() == ((FieldArgInst)aUnitToMove).getField()) ||
-           (aUnitToGoOver instanceof FieldGetInst && aUnitToMove instanceof FieldPutInst && 
+           (aUnitToGoOver instanceof FieldGetInst && aUnitToMove instanceof FieldPutInst &&
             ((FieldArgInst)aUnitToGoOver).getField() == ((FieldArgInst)aUnitToMove).getField()) ||
-           (aUnitToGoOver instanceof FieldPutInst && aUnitToMove instanceof FieldPutInst && 
+           (aUnitToGoOver instanceof FieldPutInst && aUnitToMove instanceof FieldPutInst &&
             ((FieldArgInst)aUnitToGoOver).getField() == ((FieldArgInst)aUnitToMove).getField()) ||
-           
-           
+
+
            (aUnitToGoOver instanceof StaticPutInst && aUnitToMove instanceof StaticGetInst &&
             ((FieldArgInst)aUnitToGoOver).getField() == ((FieldArgInst)aUnitToMove).getField()) ||
-           (aUnitToGoOver instanceof StaticGetInst && aUnitToMove instanceof StaticPutInst && 
+           (aUnitToGoOver instanceof StaticGetInst && aUnitToMove instanceof StaticPutInst &&
             ((FieldArgInst)aUnitToGoOver).getField() == ((FieldArgInst)aUnitToMove).getField())||
-           (aUnitToGoOver instanceof StaticPutInst && aUnitToMove instanceof StaticPutInst && 
+           (aUnitToGoOver instanceof StaticPutInst && aUnitToMove instanceof StaticPutInst &&
             ((FieldArgInst)aUnitToGoOver).getField() == ((FieldArgInst)aUnitToMove).getField()))
             return false;
-           
+
 
         // xxx to be safe don't mess w/ monitors. These rules could be relaxed. ? Maybe.
         if(aUnitToGoOver instanceof EnterMonitorInst || aUnitToGoOver instanceof ExitMonitorInst)
@@ -721,7 +721,7 @@ class Instance {
         if(aUnitToGoOver instanceof IdentityInst || aUnitToMove instanceof IdentityInst)
             return false;
 
-        
+
         if(aUnitToMove instanceof LoadInst ) {
             if(aUnitToGoOver instanceof StoreInst) {
                 if(((StoreInst)aUnitToGoOver).getLocal() == ((LoadInst)aUnitToMove).getLocal()) {
@@ -748,7 +748,7 @@ class Instance {
                 }
             }
         }
-        
+
         if(aUnitToMove instanceof IncInst) {
             if(aUnitToGoOver instanceof StoreInst) {
                 if(((StoreInst)aUnitToGoOver).getLocal() == ((IncInst)aUnitToMove).getLocal()) {
@@ -769,29 +769,29 @@ class Instance {
 
 
 
-    private  boolean tryToMoveUnit(Unit unitToMove, Block block, Unit from, Unit to, int flag) 
+    private  boolean tryToMoveUnit(Unit unitToMove, Block block, Unit from, Unit to, int flag)
     {
-       
+
         int h = 0;
         Unit current = unitToMove;
         boolean reachedStore = false;
         boolean reorderingOccurred =false;
-              
+
         if(debug) {G.v().out.println("[tryToMoveUnit]: trying to move:" + unitToMove);}
-        if(unitToMove == null) 
-            return false;                
-                
+        if(unitToMove == null)
+            return false;
+
         while( current != block.getHead()) {   // do not go past basic block limit
             current = (Unit) mUnits.getPredOf(current);
-            
+
             if(!canMoveUnitOver(current, unitToMove))
                 return false;
 
             if(current == from)
                 reachedStore = true;
-                
-        
-            h -= ((Inst)current).getOutCount();                
+
+
+            h -= ((Inst)current).getOutCount();
             if(h < 0 ){
                 if(debug) { G.v().out.println("1006:(LoadStoreOptimizer@stackIndependent): Stack went negative while trying to reorder code.");}
 
@@ -800,28 +800,28 @@ class Instance {
                 if(flag == 1) {
                     if(current instanceof DupInst) {
                         block.remove(unitToMove);
-                        block.insertAfter(unitToMove, current);        
+                        block.insertAfter(unitToMove, current);
                         //                        block.insertAfter(  new BSwapInst(  )     ,unitToMove);
                     }
-                    
+
                 }
                 return false;
             }
             h += ((Inst)current).getInCount();
-            
-            
+
+
             if(h == 0 && reachedStore == true) {
                 if(!isRequiredByFollowingUnits(unitToMove, to)) {
                     if(debug) { G.v().out.println("10077:(LoadStoreOptimizer@stackIndependent): reordering bytecode move: " + unitToMove + "before: " + current);}
                     block.remove(unitToMove);
                     block.insertBefore(unitToMove, current);
-                    
+
                     reorderingOccurred = true;
                     break;
-                }                    
-            }                                      
+                }
+            }
         }
-            
+
         if(reorderingOccurred) {
             if(debug) { G.v().out.println("reordering occured");}
             return true;
@@ -831,12 +831,12 @@ class Instance {
         }
     }
 
-    
 
 
-    /** 
-     *  Replace 1 or 2 units by a third unit in a block. Both units to 
-     *  replace should be in the same block. The map 'mUnitToBlockMap'   
+
+    /**
+     *  Replace 1 or 2 units by a third unit in a block. Both units to
+     *  replace should be in the same block. The map 'mUnitToBlockMap'
      *  is updated. The replacement unit is inserted in the position,
      *  of the aToReplace2 if not null, otherwise in aToReplace1's slot.
      *
@@ -844,32 +844,32 @@ class Instance {
      *  @param aToReplace2 Second Unit to replace (can be  null)
      *  @param aReplacement Unit that replaces the 2 previous units (shouldn't be null)
      */
-    private void replaceUnit(Unit aToReplace1, Unit aToReplace2,  Unit aReplacement) 
+    private void replaceUnit(Unit aToReplace1, Unit aToReplace2,  Unit aReplacement)
     {
         Block block = mUnitToBlockMap.get(aToReplace1);
-                 
+
         if(aToReplace2 != null) {
             block.insertAfter(aReplacement, aToReplace2);
             block.remove(aToReplace2);
         } else {
-            block.insertAfter(aReplacement, aToReplace1);            
+            block.insertAfter(aReplacement, aToReplace1);
         }
 
         block.remove(aToReplace1);
-                                                        
+
         // add the new unit the block map
-        mUnitToBlockMap.put(aReplacement, block);        
+        mUnitToBlockMap.put(aReplacement, block);
     }
-    
- 
-    private void replaceUnit(Unit aToReplace, Unit aReplacement) 
+
+
+    private void replaceUnit(Unit aToReplace, Unit aReplacement)
     {
         replaceUnit(aToReplace, null, aReplacement);
     }
 
 
-    
-    /* 
+
+    /*
      * @param some block
      * @return true if the block is an exception handler.
      */
@@ -886,45 +886,45 @@ class Instance {
     }
 
     // not a save function :: goes over block boundries
-    private int getDeltaStackHeightFromTo(Unit aFrom, Unit aTo) 
+    private int getDeltaStackHeightFromTo(Unit aFrom, Unit aTo)
     {
         Iterator it = mUnits.iterator(aFrom, aTo);
         int h = 0;
-        
+
         while(it.hasNext()) {
             h += ((Inst)it.next()).getNetCount();
         }
-        
+
         return h;
     }
 
-    
 
-    /** 
-     *   Performs 2 simple inter-block optimizations in order to keep 
+
+    /**
+     *   Performs 2 simple inter-block optimizations in order to keep
      *   some variables  on the stack between blocks. Both are intented to catch
-     *   'if' like constructs where the control flow branches temporarely into two paths 
-     *    that join up at a latter point. 
+     *   'if' like constructs where the control flow branches temporarely into two paths
+     *    that join up at a latter point.
      *
      */
-    private void doInterBlockOptimizations() 
+    private void doInterBlockOptimizations()
     {
         boolean hasChanged = true;
         while(hasChanged) {
             hasChanged = false;
-            
+
             List<Unit> tempList = new ArrayList<Unit>();
             tempList.addAll(mUnits);
-            Iterator<Unit> it = tempList.iterator();        
+            Iterator<Unit> it = tempList.iterator();
             while(it.hasNext()) {
                 Unit u = it.next();
-                
+
                 if(u instanceof LoadInst) {
                     if(debug) { G.v().out.println("inter trying: " + u);}
                     Block loadBlock = mUnitToBlockMap.get(u);
                     List<Unit> defs = mLocalDefs.getDefsOfAt(((LoadInst)u).getLocal(), u);
 
-                    // first optimization 
+                    // first optimization
                     if(defs.size() ==  1) {
                         Block defBlock =mUnitToBlockMap.get(defs.get(0));
                         if(defBlock != loadBlock && !(isExceptionHandlerBlock(loadBlock))) {
@@ -946,11 +946,11 @@ class Instance {
                                                     res = false;
                                                     break;
                                                 }
-                                            }                        
+                                            }
                                             if(debug) { G.v().out.println(defBlock.toString() + loadBlock.toString());}
-                                            
+
                                             if(res) {
-                                                defBlock.remove(storeUnit);                            
+                                                defBlock.remove(storeUnit);
                                                 mUnitToBlockMap.put(storeUnit, loadBlock);
                                                 loadBlock.insertBefore(storeUnit, loadBlock.getHead());
                                                 hasChanged = true;
@@ -962,28 +962,28 @@ class Instance {
                                 }
                             }
                         }
-                    } 
+                    }
                     // second optimization
                     else if(defs.size() == 2) {
-                        
+
                         Unit def0 = defs.get(0);
                         Unit def1 = defs.get(1);
-                            
+
                         Block defBlock0 = mUnitToBlockMap.get(def0);
                         Block defBlock1 = mUnitToBlockMap.get(def1);
                         if(defBlock0 != loadBlock && defBlock1 != loadBlock && defBlock0 != defBlock1
-                           && !(isExceptionHandlerBlock(loadBlock))) {                                
+                           && !(isExceptionHandlerBlock(loadBlock))) {
                             if(mLocalUses.getUsesOf(def0).size() == 1  && mLocalUses.getUsesOf(def1).size() == 1) {
                                 List def0Succs = defBlock0.getSuccs();
                                 List def1Succs  = defBlock1.getSuccs();
                                 if(def0Succs.size()==1 && def1Succs.size()==1) {
-                                    if(def0Succs.get(0) == loadBlock && def1Succs.get(0)== loadBlock) {                                         
+                                    if(def0Succs.get(0) == loadBlock && def1Succs.get(0)== loadBlock) {
                                         if(loadBlock.getPreds().size() == 2) {
-                                            if( (def0 == defBlock0.getTail()|| 
-                                                 getDeltaStackHeightFromTo(defBlock0.getSuccOf(def0),defBlock0.getTail())  == 0) && 
+                                            if( (def0 == defBlock0.getTail()||
+                                                 getDeltaStackHeightFromTo(defBlock0.getSuccOf(def0),defBlock0.getTail())  == 0) &&
                                                 (def1 == defBlock1.getTail() ||
                                                  getDeltaStackHeightFromTo(defBlock1.getSuccOf(def1), defBlock1.getTail()) == 0)) {
-                                                defBlock0.remove(def0);                            
+                                                defBlock0.remove(def0);
                                                 defBlock1.remove(def1);
                                                 loadBlock.insertBefore(def0, loadBlock.getHead());
                                                 mUnitToBlockMap.put(def0, loadBlock);
@@ -991,43 +991,43 @@ class Instance {
                                                 if(debug) { G.v().out.println("inter-block opti2 occurred " + def0);}
                                             } else { if(debug) { G.v().out.println("failed: inter1");}}
                                         } else { if(debug) { G.v().out.println("failed: inter2");}}
-                                    } else { if(debug) { G.v().out.println("failed: inter3");}}                                        
+                                    } else { if(debug) { G.v().out.println("failed: inter3");}}
                                 } else { if(debug) { G.v().out.println("failed: inter4");}}
-                            }        else { if(debug) { G.v().out.println("failed: inter5");}}                        
+                            }        else { if(debug) { G.v().out.println("failed: inter5");}}
                         } else { if(debug) { G.v().out.println("failed: inter6");}}
-                    }                         
-                }        
+                    }
+                }
             }
         }
     }
-    
-    
+
+
 
     /**
-     *  Given 2 blocks, assertains whether all the succesors of the first block are the predecessors 
+     *  Given 2 blocks, assertains whether all the succesors of the first block are the predecessors
      *  of the second block.
-     */    
+     */
     private boolean allSuccesorsOfAreThePredecessorsOf(Block aFirstBlock, Block aSecondBlock)
-    {        
-        int size = aFirstBlock.getSuccs().size();        
+    {
+        int size = aFirstBlock.getSuccs().size();
         Iterator it = aFirstBlock.getSuccs().iterator();
-        
+
         List preds = aSecondBlock.getPreds();
         while(it.hasNext()) {
-            if(!preds.contains(it.next())) 
+            if(!preds.contains(it.next()))
                 return false;
         }
-        
+
         if(size == preds.size())
             return true;
         else
-            return false;        
+            return false;
     }
 
 
 
-    
-     
+
+
     /**
      *  @return true if aUnit is a commutative binary operator
      */
@@ -1035,34 +1035,34 @@ class Instance {
     {
         if(aUnit == null )
             return false;
-        
+
         if(aUnit instanceof AddInst ||
            aUnit instanceof MulInst ||
            aUnit instanceof AndInst ||
            aUnit instanceof OrInst ||
-           aUnit instanceof XorInst) 
+           aUnit instanceof XorInst)
             return true;
         else
             return false;
     }
 
-    void propagateBackwardsIndependentHunk() 
+    void propagateBackwardsIndependentHunk()
     {
-        
+
         List<Unit> tempList = new ArrayList<Unit>();
         tempList.addAll(mUnits);
         Iterator<Unit> it = tempList.iterator();
-        
+
         while(it.hasNext()) {
             Unit u = it.next();
-            
+
             if( u instanceof NewInst) {
                 Block block  = mUnitToBlockMap.get(u);
                 Unit succ = block.getSuccOf(u);
                 if( succ instanceof StoreInst) {
                     Unit currentUnit = u;
                     Unit candidate = null;
-                    
+
                     while(currentUnit != block.getHead()) {
                         currentUnit = block.getPredOf(currentUnit);
                         if(canMoveUnitOver(currentUnit, succ)){
@@ -1074,46 +1074,46 @@ class Instance {
                         block.remove(u);
                         block.remove(succ);
                         block.insertBefore(u, candidate);
-                        block.insertBefore(succ, candidate);                        
-                    }                    
+                        block.insertBefore(succ, candidate);
+                    }
                 }
-            } 
+            }
         }
     }
-    
+
 
 
     // recycled code:
     /*
       // convertsa series of loads into dups when applicable
-      void superDuper1() { 
+      void superDuper1() {
       List tempList = new ArrayList();
       tempList.addAll(mUnits);
       Iterator it = tempList.iterator();
       boolean fetchUnit = true;
-        
+
       while(it.hasNext()) {
       Unit currentInst = null;
-            
+
       if(fetchUnit) {
-      currentInst = (Unit) it.next();               
+      currentInst = (Unit) it.next();
       }
       fetchUnit = true;
-            
+
       if(currentInst instanceof LoadInst) {
       Block block = (Block) mUnitToBlockMap.get(currentInst);
-                
+
       Local local = ((LoadInst)currentInst).getLocal();
-                    
+
       // count the number of identical loads
-                
+
       Unit u;
       for(;;){
       if(it.hasNext()) {
       u = (Unit) it.next();
       if(mUnitToBlockMap.get(u) != block)
       break;
-                        
+
       if(u instanceof LoadInst) {
       if(((LoadInst)u).getLocal() == local) {
       replaceUnit(u, Baf.v().newDup1Inst(((LoadInst) u).getOpType()));
@@ -1122,17 +1122,17 @@ class Instance {
       fetchUnit =false;
       break;
       }
-      } else {                        
+      } else {
       break;
       }
-      } else 
+      } else
       break;
-      }                
+      }
       }
       }
       }
 
-    
+
       //broken use superDuper1
       void superDuper() {
       // compress a serie of loads using dup2's and dup's
@@ -1142,21 +1142,21 @@ class Instance {
       Iterator it = tempList.iterator();
       while(it.hasNext()) {
       Unit currentInst = (Unit) it.next();
-                   
+
       if(currentInst instanceof LoadInst) {
       Block block = (Block) mUnitToBlockMap.get(currentInst);
-                    
+
       int loadCount = 1;
       Local local = ((LoadInst)currentInst).getLocal();
-                    
+
       // count the number of identical loads
-                    
+
       Unit u;
       for(;;){
       u = (Unit) it.next();
       if(mUnitToBlockMap.get(u) != block)
       break;
-                        
+
       if(u instanceof LoadInst) {
       if(((LoadInst)u).getLocal() == local)
       loadCount++;
@@ -1166,26 +1166,26 @@ class Instance {
       break;
       }
       }
-                    
+
 
       if(loadCount > 1) {
       Type loadType = ((LoadInst)currentInst).getOpType();
-        
+
                                 // must leave at least one load on stack before dupping
                                 Unit currentLoad = (Unit) mUnits.getSuccOf(currentInst);
-                                loadCount--; 
-                  
-                                if(loadType instanceof LongType || loadType instanceof DoubleType) {
-                                
-                         
-                                
-                                while(loadCount > 0) {
-                                Unit nextLoad = (Unit) mUnits.getSuccOf(currentLoad); 
-                                replaceUnit(currentLoad,  Baf.v().newDup1Inst(loadType));                                                
-                                    
-                                currentLoad = nextLoad;                                 
                                 loadCount--;
-                                }                                
+
+                                if(loadType instanceof LongType || loadType instanceof DoubleType) {
+
+
+
+                                while(loadCount > 0) {
+                                Unit nextLoad = (Unit) mUnits.getSuccOf(currentLoad);
+                                replaceUnit(currentLoad,  Baf.v().newDup1Inst(loadType));
+
+                                currentLoad = nextLoad;
+                                loadCount--;
+                                }
                                 } else {
                                 boolean canMakeDup2 = false;
                                 if(loadCount >= 3) {
@@ -1193,40 +1193,40 @@ class Instance {
                                 currentLoad = (Unit) mUnits.getSuccOf(currentLoad);
                                 loadCount--;
                                 }
-                            
+
                                 while(loadCount > 0) {
-                                
+
                                 if(loadCount == 1 || !canMakeDup2) {
-                                Unit nextLoad = (Unit) mUnits.getSuccOf(currentLoad); 
-                                replaceUnit(currentLoad,  Baf.v().newDup1Inst(loadType));                                                
-                                    
+                                Unit nextLoad = (Unit) mUnits.getSuccOf(currentLoad);
+                                replaceUnit(currentLoad,  Baf.v().newDup1Inst(loadType));
+
                                 currentLoad = nextLoad;
-                                loadCount--;        
+                                loadCount--;
                                 } else {
                                 if(canMakeDup2) {
                                 Unit nextLoad = (Unit) mUnits.getSuccOf(mUnits.getSuccOf(currentLoad));
-                                replaceUnit(currentLoad, (Unit) mUnits.getSuccOf(currentLoad),  Baf.v().newDup2Inst(loadType, loadType));                    
+                                replaceUnit(currentLoad, (Unit) mUnits.getSuccOf(currentLoad),  Baf.v().newDup2Inst(loadType, loadType));
                                 currentLoad = nextLoad;
-                                loadCount -= 2;        
-                                }
-                                }                                                            
+                                loadCount -= 2;
                                 }
                                 }
-                                }                    
+                                }
+                                }
+                                }
                                 currentInst = u;
-                                }                
                                 }
                                 }
                                 }
-    
+                                }
+
                                 void peephole() {
                                 boolean hasChanged = true;
-       
+
                                 while(hasChanged) {
                                 hasChanged = false;
                                 List tempList = new ArrayList();
                                 tempList.addAll(mUnits);
-           
+
                                 Iterator it = tempList.iterator();
                                 while(it.hasNext() ) {
                                 Unit currentUnit = (Unit) it.next();
@@ -1234,8 +1234,8 @@ class Instance {
                                 Block popBlock = (Block) mUnitToBlockMap.get(currentUnit);
                                 Unit prev = (Unit) popBlock.getPredOf(currentUnit);
                                 Unit succ = (Unit) popBlock.getSuccOf(currentUnit);
-                   
-                                if(prev instanceof LoadInst || prev instanceof PushInst) 
+
+                                if(prev instanceof LoadInst || prev instanceof PushInst)
                                 if(((AbstractInst)prev).getOutMachineCount() == ((AbstractInst)currentUnit).getInMachineCount()) {
                                 popBlock.remove(prev);
                                 popBlock.remove(currentUnit);
@@ -1243,20 +1243,20 @@ class Instance {
                                 else if(succ instanceof ReturnInst) {
                                 popBlock.remove(currentUnit);
                                 popBlock.remove(succ);
-                                }                                   
                                 }
-                                }       
                                 }
-                                }  
+                                }
+                                }
+                                }
 
-                
-                                private boolean propagateStoreForward(Unit aInst, Unit aUnitToReach, Unit aCurrentUnit, int aStackHeight) 
+
+                                private boolean propagateStoreForward(Unit aInst, Unit aUnitToReach, Unit aCurrentUnit, int aStackHeight)
                                 {
                                 boolean res = false;
-                                Unit currentUnit =  aCurrentUnit;           
+                                Unit currentUnit =  aCurrentUnit;
                                 Local storeLocal = ((StoreInst)aInst).getLocal();
                                 Block block  = (Block) mUnitToBlockMap.get(aCurrentUnit);
-        
+
                                 while( currentUnit != block.getTail()) {
                                 if(currentUnit == aUnitToReach) {
                                 if(aStackHeight == 0)
@@ -1264,38 +1264,38 @@ class Instance {
                                 else
                                 return false;
                                 }
-            
+
                                 if(!canMoveUnitOver(aInst, currentUnit)) {
                                 res = false;
                                 break;
                                 }
-            
-                                aStackHeight -= ((Inst)currentUnit).getInCount();                
+
+                                aStackHeight -= ((Inst)currentUnit).getInCount();
                                 if(aStackHeight < 0){
                                 res = false;
                                 break;
-                                }            
+                                }
                                 aStackHeight += ((Inst)currentUnit).getOutCount();
-            
-                                currentUnit = (Unit) block.getSuccOf(currentUnit);
-                                }        
 
-                                // if we hit the block boundry 
+                                currentUnit = (Unit) block.getSuccOf(currentUnit);
+                                }
+
+                                // if we hit the block boundry
                                 if( currentUnit == block.getTail()) {
-                                Iterator it = block.getSuccessors().iterator();        
+                                Iterator it = block.getSuccessors().iterator();
                                 while(it.hasNext()) {
                                 Block b = (Block) it.next();
                                 if(!propagateStoreForward(aInst, aUnitToReach,  b.getHead(), aStackHeight))
-                                return false;                
+                                return false;
                                 }
                                 res = true;
-                                }        
+                                }
                                 return res;
                                 }
 
     */
 
-}   
+}
 
 
 }

@@ -40,17 +40,17 @@ public class SETWhileNode extends SETCycleNode
 	IterableSet c = new IterableSet();
 
 	c.add( get_CharacterizingStmt());
-	
+
 	return c;
     }
-    
+
     public ASTNode emit_AST()
     {
-	return new ASTWhileNode( get_Label(), 
-				 (ConditionExpr) ((IfStmt) get_CharacterizingStmt().get_Stmt()).getCondition(), 
+	return new ASTWhileNode( get_Label(),
+				 (ConditionExpr) ((IfStmt) get_CharacterizingStmt().get_Stmt()).getCondition(),
 				 emit_ASTBody( body2childChain.get( subBodies.get(0))));
     }
-    
+
     public AugmentedStmt get_EntryStmt()
     {
 	return get_CharacterizingStmt();

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -35,9 +35,9 @@ import java.util.*;
 
 import soot.*;
 
-/** 
+/**
     This class encapsulates a JimpleAST instance and provides methods
-    to act on it.      
+    to act on it.
 */
 public class JimpleAST
 {
@@ -65,31 +65,31 @@ public class JimpleAST
         }
     }
 
-    /** Reads an entire class from jimple, creates the Soot objects & 
+    /** Reads an entire class from jimple, creates the Soot objects &
      * returns it. */
     public SootClass createSootClass()
-    {        
-        Walker w = new Walker(SootResolver.v());        
-        mTree.apply(w);  
+    {
+        Walker w = new Walker(SootResolver.v());
+        mTree.apply(w);
         return w.getSootClass();
     }
 
-    /** 
-     *   Applies a SkeletonExtractorWalker to the given SootClass, using the given Resolver to resolve 
-     *   the reference types it contains. The given SootClass instance will be filled to contain 
+    /**
+     *   Applies a SkeletonExtractorWalker to the given SootClass, using the given Resolver to resolve
+     *   the reference types it contains. The given SootClass instance will be filled to contain
      *   a class skeleton: that is no  Body instances will be created for the class' methods.
      *   @param sc a SootClass to fill in.
      *   @param resolver used to resolve the reference types found the given SootClass instance.
      */
     public void getSkeleton(SootClass sc)
     {
-        Walker w = new SkeletonExtractorWalker(SootResolver.v(), sc);        
-        mTree.apply(w);          
+        Walker w = new SkeletonExtractorWalker(SootResolver.v(), sc);
+        mTree.apply(w);
     }
-    
 
-    /**  Returns a body corresponding to the parsed jimple for m. 
-     *   If necessary, applies the BodyExtractorWalker to initialize the bodies map. 
+
+    /**  Returns a body corresponding to the parsed jimple for m.
+     *   If necessary, applies the BodyExtractorWalker to initialize the bodies map.
      *   @param m the method we want to get a body for.
      *   @return the actual body for the given method.
      */
@@ -98,17 +98,17 @@ public class JimpleAST
         if (methodToParsedBodyMap == null)
             stashBodiesForClass(m.getDeclaringClass());
         return methodToParsedBodyMap.get(m);
-    } 
+    }
 
 
     /**
-     *   Extracts the reference constant pool for this JimpleAST. 
+     *   Extracts the reference constant pool for this JimpleAST.
      *   @return the Set of RefTypes for the reference types contained this AST.
      */
-    public Set getCstPool() 
-    {  
+    public Set getCstPool()
+    {
         CstPoolExtractor cpe = new CstPoolExtractor(mTree);
-        return cpe.getCstPool();        
+        return cpe.getCstPool();
     }
 
     /** Returns the SootResolver currently in use. */
@@ -118,10 +118,10 @@ public class JimpleAST
     }
 
     /* Runs a Walker on the InputStream associated to this object.
-     * The SootClass which we want bodies for is passed as the argument. 
+     * The SootClass which we want bodies for is passed as the argument.
      */
-    private void stashBodiesForClass(SootClass sc) 
-    {          
+    private void stashBodiesForClass(SootClass sc)
+    {
         methodToParsedBodyMap = new HashMap<SootMethod, JimpleBody>();
 
         Walker w = new BodyExtractorWalker(sc, SootResolver.v(), methodToParsedBodyMap);
@@ -131,5 +131,5 @@ public class JimpleAST
         Scene.v().setPhantomRefs(true);
         mTree.apply(w);
         Scene.v().setPhantomRefs(oldPhantomValue);
-    }    
+    }
 } // Parse

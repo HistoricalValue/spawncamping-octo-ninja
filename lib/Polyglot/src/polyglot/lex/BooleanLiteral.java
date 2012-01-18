@@ -10,7 +10,7 @@ public class BooleanLiteral extends Literal {
       super(position, sym);
       this.val = Boolean.valueOf(b);
   }
-  
+
   public Boolean getValue() { return val; }
 
   public String toString() { return "boolean literal " + val.toString(); }

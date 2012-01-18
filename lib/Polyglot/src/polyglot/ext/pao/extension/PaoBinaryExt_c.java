@@ -5,14 +5,14 @@ import polyglot.ext.pao.types.PaoTypeSystem;
 import polyglot.types.MethodInstance;
 
 /**
- * The <code>PaoExt</code> implementation for the 
+ * The <code>PaoExt</code> implementation for the
  * <code>Binary</code> AST node.
  */
 public class PaoBinaryExt_c extends PaoExt_c {
     /**
-     * Rewrite the binary operators <code>==</code> and <code>&excl;=</code> to 
+     * Rewrite the binary operators <code>==</code> and <code>&excl;=</code> to
      * invoke <code>Primitive.equals(o, p)</code>.
-     * 
+     *
      * @see PaoExt#rewrite(PaoTypeSystem, NodeFactory)
      * @see polyglot.ext.pao.runtime.Primitive#equals(Object, Object)
      */
@@ -30,7 +30,7 @@ public class PaoBinaryExt_c extends PaoExt_c {
                 ts.equals(l.type(), ts.Object())) {
                 // The left operand is either a subtype of
             	// polyglot.ext.pao.runtime.Primitive, or it is an
-            	// Object, and thus possibly a subtype of 
+            	// Object, and thus possibly a subtype of
             	// polyglot.ext.pao.runtime.Primitive. Either way,
             	// it may be a boxed primitive.
                 if (r.type().isReference()) {
@@ -50,7 +50,7 @@ public class PaoBinaryExt_c extends PaoExt_c {
                 }
             }
         }
-        
+
         // we do not need to rewrite the binary operator.
         return super.rewrite(ts, nf);
     }

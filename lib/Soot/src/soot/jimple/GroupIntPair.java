@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,13 +33,13 @@ public class GroupIntPair
 {
     public Object group;
     public int x;
-    
+
    public  GroupIntPair(Object group, int x)
     {
         this.group = group;
         this.x = x;
     }
-    
+
     public boolean equals(Object other)
     {
         if(other instanceof GroupIntPair)
@@ -48,10 +48,10 @@ public class GroupIntPair
         else
             return false;
     }
-    
+
     public int hashCode()
     {
         return group.hashCode() + 1013 * x;
     }
-    
+
 }

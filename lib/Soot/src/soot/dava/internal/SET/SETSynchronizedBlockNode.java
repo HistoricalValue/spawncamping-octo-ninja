@@ -61,7 +61,7 @@ public class SETSynchronizedBlockNode extends SETNode
 
 	while (sbit.hasNext()) {
 	    IterableSet subBody = sbit.next();
-	    
+
 	    if (subBody.intersects( get_Body()))
 		return subBody.isSupersetOf( get_Body());
 	}

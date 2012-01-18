@@ -45,7 +45,7 @@ public class ASTSwitchNode extends ASTLabeledNode
 	Iterator<Object> it = indexList.iterator();
 	while (it.hasNext()) {
 	    List body = index2BodyList.get( it.next());
-	    
+
 	    if (body != null)
 		subBodies.add( body);
 	}
@@ -70,7 +70,7 @@ public class ASTSwitchNode extends ASTLabeledNode
 	Iterator<Object> it = indexList.iterator();
 	while (it.hasNext()) {
 	    List body = index2BodyList.get( it.next());
-	    
+
 	    if (body != null)
 		subBodies.add( body);
 	}
@@ -82,7 +82,7 @@ public class ASTSwitchNode extends ASTLabeledNode
     public ValueBox getKeyBox(){
 	return keyBox;
     }
-    
+
 
 
     public Value get_Key()
@@ -108,7 +108,7 @@ public class ASTSwitchNode extends ASTLabeledNode
 	if (a instanceof TryContentsFinder) {
 	    TryContentsFinder.v().add_ExceptionSet( this, TryContentsFinder.v().remove_CurExceptionSet());
 	}
-  
+
 	perform_AnalysisOnSubBodies( a);
     }
 
@@ -129,12 +129,12 @@ public class ASTSwitchNode extends ASTLabeledNode
 
 	Iterator<Object> it = indexList.iterator();
 	while (it.hasNext()) {
-	    
+
 	    Object index = it.next();
 
             up.incIndent();
-	    
-	    if (index instanceof String) 
+
+	    if (index instanceof String)
                 up.literal( "default" );
 
 	    else {
@@ -142,7 +142,7 @@ public class ASTSwitchNode extends ASTLabeledNode
                 up.literal( " " );
                 up.literal( index.toString() );
 	    }
-	    
+
             up.literal( ":" );
             up.newline();
 
@@ -151,7 +151,7 @@ public class ASTSwitchNode extends ASTLabeledNode
 	    if (subBody != null) {
                 up.incIndent();
                 body_toString( up, subBody );
-	    
+
 		if (it.hasNext())
 		    up.newline();
                 up.decIndent();
@@ -166,9 +166,9 @@ public class ASTSwitchNode extends ASTLabeledNode
     public String toString()
     {
 	StringBuffer b = new StringBuffer();
-	
+
 	b.append( label_toString( ));
-	
+
 	b.append( "switch (");
 	b.append( get_Key() );
 	b.append( ")");
@@ -179,19 +179,19 @@ public class ASTSwitchNode extends ASTLabeledNode
 
 	Iterator<Object> it = indexList.iterator();
 	while (it.hasNext()) {
-	    
+
 	    Object index = it.next();
 
 	    b.append( TAB);
-	    
-	    if (index instanceof String) 
+
+	    if (index instanceof String)
 		b.append( "default");
 
 	    else {
 		b.append( "case ");
 		b.append( ((Integer) index).toString());
 	    }
-	    
+
 	    b.append( ":");
 	    b.append( NEWLINE);
 
@@ -199,7 +199,7 @@ public class ASTSwitchNode extends ASTLabeledNode
 
 	    if (subBody != null) {
 		b.append( body_toString(subBody));
-	    
+
 		if (it.hasNext())
 		    b.append( NEWLINE);
 	    }

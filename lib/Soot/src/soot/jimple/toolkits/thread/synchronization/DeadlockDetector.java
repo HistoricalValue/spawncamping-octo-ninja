@@ -32,7 +32,7 @@ public class DeadlockDetector {
 	boolean optionAllowSelfEdges;
 	List<CriticalSection> criticalSections;
 	TransitiveTargets tt;
-	
+
 	public DeadlockDetector(boolean optionPrintDebug, boolean optionRepairDeadlock, boolean optionAllowSelfEdges, List<CriticalSection> criticalSections)
 	{
 		this.optionPrintDebug = optionPrintDebug;
@@ -41,7 +41,7 @@ public class DeadlockDetector {
 		this.criticalSections = criticalSections;
 		this.tt = new TransitiveTargets(Scene.v().getCallGraph(), new Filter(new CriticalSectionVisibleEdgesPred(null)));
 	}
-	
+
 	public MutableDirectedGraph<CriticalSectionGroup> detectComponentBasedDeadlock()
 	{
 		MutableDirectedGraph<CriticalSectionGroup> lockOrder;
@@ -96,7 +96,7 @@ public class DeadlockDetector {
 					if( !lockOrder.containsNode(tn2.group) )
 					{
 						lockOrder.addNode(tn2.group);
-					}	
+					}
 
 					if( tn1.transitiveTargets.contains(tn2.method) )
 					{
@@ -172,26 +172,26 @@ public class DeadlockDetector {
 			G.v().out.println("[DeadlockDetector] Deadlock Iteration #" + iteration);
 			foundDeadlock = false;
 			lockOrder = (HashMutableEdgeLabelledDirectedGraph) ((HashMutableEdgeLabelledDirectedGraph) permanentOrder).clone(); // start each iteration with a fresh copy of the permanent orders
-			
+
 			// Assemble the partial ordering of locks
 			Iterator<CriticalSection> deadlockIt1 = criticalSections.iterator();
 			while(deadlockIt1.hasNext() && !foundDeadlock)
 			{
 				CriticalSection tn1 = deadlockIt1.next();
-				
+
 				// skip if unlocked
 				if( tn1.group == null )
 					continue;
-					
+
 				// add a node for each lock in this lockset
 				for( EquivalentValue lockEqVal : tn1.lockset )
 				{
 					Value lock = lockEqVal.getValue();
-				
+
 					if( !lockOrder.containsNode(lockToLockNum.get(lock)) )
 						lockOrder.addNode(lockToLockNum.get(lock));
 				}
-					
+
 				// Get list of tn1's target methods
 				if(tn1.transitiveTargets == null)
 				{
@@ -203,26 +203,26 @@ public class DeadlockDetector {
 		    				tn1.transitiveTargets.add(targetIt.next());
 		    		}
 		    	}
-				
+
 				// compare to each other tn
 				Iterator<CriticalSection> deadlockIt2 = criticalSections.iterator();
 				while(deadlockIt2.hasNext() && !foundDeadlock)
 				{
 					CriticalSection tn2 = deadlockIt2.next();
-					
+
 					// skip if unlocked
 					if( tn2.group == null )
 						continue;
-					
+
 					// add a node for each lock in this lockset
 					for( EquivalentValue lockEqVal : tn2.lockset )
 					{
 						Value lock = lockEqVal.getValue();
-			    		
+
 			    		if( !lockOrder.containsNode(lockToLockNum.get(lock)) )
 			    			lockOrder.addNode(lockToLockNum.get(lock));
 			    	}
-			    				    			
+
 		    		if( tn1.transitiveTargets.contains(tn2.method) && !foundDeadlock )
 		    		{
 		    			// This implies the partial ordering (locks in tn1) before (locks in tn2)
@@ -231,7 +231,7 @@ public class DeadlockDetector {
 			    			G.v().out.println("[DeadlockDetector] locks in " + (tn1.name) + " before locks in " + (tn2.name) + ": " +
 			    				"outer: " + tn1.name + " inner: " + tn2.name);
 			    		}
-		    			
+
 		    			// Check if tn2locks before tn1locks is in our lock order
 						for( EquivalentValue lock2EqVal : tn2.lockset )
 						{
@@ -251,7 +251,7 @@ public class DeadlockDetector {
 									for(Object l : labels)
 									{
 										CriticalSection labelTn = (CriticalSection) l;
-										
+
 										// Check if labelTn and tn1 share a static lock
 										boolean tnsShareAStaticLock = false;
 										for( EquivalentValue tn1LockEqVal : tn1.lockset )
@@ -269,7 +269,7 @@ public class DeadlockDetector {
 												}
 											}
 										}
-										
+
 										if(!tnsShareAStaticLock) // !hasStaticLockInCommon(tn1, labelTn))
 										{
 											keep = true;
@@ -291,13 +291,13 @@ public class DeadlockDetector {
 				    			}
 			    			}
 */
-		    				
+
 							for( EquivalentValue lock1EqVal : tn1.lockset )
 							{
 								Value lock1 = lock1EqVal.getValue();
 								Integer lock1Num = lockToLockNum.get(lock1);
-								
-					    		if( ( lock1Num != lock2Num || 
+
+					    		if( ( lock1Num != lock2Num ||
 					    			  lock1Num > 0 ) &&
 						    		  afterTn2.contains(lock1Num) )
 				    			{
@@ -309,11 +309,11 @@ public class DeadlockDetector {
 					    			else
 					    			{
 					    				G.v().out.println("[DeadlockDetector] DEADLOCK HAS BEEN DETECTED while inspecting " + lock1Num + " ("+lock1+") and " + lock2Num + " ("+lock2+") ");
-		    					
+
 										// Create a deadlock avoidance edge
 										DeadlockAvoidanceEdge dae = new DeadlockAvoidanceEdge(tn1.method.getDeclaringClass());
 										EquivalentValue daeEqVal = new EquivalentValue(dae);
-										
+
 										// Register it as a static lock
 										Integer daeNum = new Integer(-lockPTSets.size()); // negative indicates a static lock
 										permanentOrder.addNode(daeNum);
@@ -350,7 +350,7 @@ public class DeadlockDetector {
 												}
 											}
 										}
-										
+
 										List backwardLabels = lockOrder.getLabelsForEdges(lock2Num, lock1Num);
 										if(backwardLabels != null)
 										{
@@ -373,12 +373,12 @@ public class DeadlockDetector {
 											}
 											G.v().out.println("[DeadlockDetector]   Restarting deadlock detection");
 										}
-										
+
 										foundDeadlock = true;
 										break;
 					    			}
 				    			}
-				    			
+
 				    			if(lock1Num != lock2Num)
 									lockOrder.addEdge(lock1Num, lock2Num, tn1);
 				    		}
@@ -423,7 +423,7 @@ public class DeadlockDetector {
 								tnsShareAStaticLock = true; // not really... but we want to skip this one
 						}
 					}
-					
+
 					if(!tnsShareAStaticLock || tn == otherTn) // if tns don't share any static lock, or if tns are the same one
 					{
 						// add these orderings to tn's visible order
@@ -444,7 +444,7 @@ public class DeadlockDetector {
 
 				G.v().out.println("VISIBLE ORDER FOR " + tn.name);
 				visibleOrder.printGraph();
-			
+
 				// Order locks in tn's lockset according to the visible order (insertion sort)
 				List<EquivalentValue> newLockset = new ArrayList();
 				for(EquivalentValue lockEqVal : tn.lockset)

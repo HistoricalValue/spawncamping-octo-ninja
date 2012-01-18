@@ -31,9 +31,9 @@ import soot.toolkits.graph.BriefUnitGraph;
 import soot.toolkits.scalar.*;
 import soot.util.*;
 /**
- * @author Michael Batchelder 
- * 
- * Created on 10-Jul-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 10-Jul-2006
  */
 public class AddSwitches extends BodyTransformer implements IJbcoTransform {
 
@@ -68,12 +68,12 @@ public class AddSwitches extends BodyTransformer implements IJbcoTransform {
   }
 
 
-  protected void internalTransform(Body b, String phaseName, Map options) 
+  protected void internalTransform(Body b, String phaseName, Map options)
   {
     if (b.getMethod().getSignature().indexOf("<clinit>") >= 0) return;
     int weight = soot.jbco.Main.getWeight(phaseName, b.getMethod().getSignature());
     if (weight == 0) return;
-    
+
     New2InitFlowAnalysis fa = new New2InitFlowAnalysis(new BriefUnitGraph(b));
 
     Vector zeroheight = new Vector();
@@ -88,11 +88,11 @@ public class AddSwitches extends BodyTransformer implements IJbcoTransform {
       first = unit;
       break;
     }
-    
+
     it = units.snapshotIterator();
     while (it.hasNext()) {
       Unit unit = (Unit)it.next();
-      if (unit instanceof IdentityStmt || checkTraps(unit,b)) 
+      if (unit instanceof IdentityStmt || checkTraps(unit,b))
         continue;
       // very conservative estimate about where new-<init> ranges are
       if (((FlowSet)fa.getFlowAfter(unit)).size() == 0
@@ -101,7 +101,7 @@ public class AddSwitches extends BodyTransformer implements IJbcoTransform {
     }
 
     if (zeroheight.size()<3) return;
-    
+
     int idx = 0;
     Unit u = null;
     for (int i = 0; i < zeroheight.size(); i++)
@@ -114,12 +114,12 @@ public class AddSwitches extends BodyTransformer implements IJbcoTransform {
     }
     // couldn't find a unit that fell through
     if (u == null || Rand.getInt(10) > weight) return;
-    
+
     zeroheight.remove(idx);
     while(zeroheight.size() > (weight>3?weight:3)) {
       zeroheight.remove(Rand.getInt(zeroheight.size()));
     }
-    
+
     Chain locals = b.getLocals();
     ArrayList targs = new ArrayList();
     targs.addAll(zeroheight);
@@ -160,8 +160,8 @@ public class AddSwitches extends BodyTransformer implements IJbcoTransform {
     units.insertBeforeNoRedirect(Jimple.v().newAssignStmt(l, IntConstant.v(0)), first);
     units.insertAfter(Jimple.v().newTableSwitchStmt(l,1,zeroheight.size(),targs,u),ifstmt);
 
-    switchesadded += zeroheight.size() + 1; 
-    
+    switchesadded += zeroheight.size() + 1;
+
     Iterator tit = targs.iterator();
     while (tit.hasNext()) {
       Unit nxt = (Unit)tit.next();

@@ -28,7 +28,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public class CallGraph
-{ 
+{
     protected Set<Edge> edges = new HashSet<Edge>();
     protected ChunkedQueue<Edge> stream = new ChunkedQueue<Edge>();
     protected QueueReader<Edge> reader = stream.reader();

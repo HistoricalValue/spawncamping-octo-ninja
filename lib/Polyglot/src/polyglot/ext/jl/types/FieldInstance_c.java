@@ -86,7 +86,7 @@ public class FieldInstance_c extends VarInstance_c implements FieldInstance
         }
         return this;
     }
-    
+
     public boolean equalsImpl(TypeObject o) {
         if (o instanceof FieldInstance) {
 	    FieldInstance i = (FieldInstance) o;

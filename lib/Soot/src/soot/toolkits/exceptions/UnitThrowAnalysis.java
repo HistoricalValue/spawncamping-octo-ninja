@@ -34,7 +34,7 @@ import soot.shimple.PhiExpr;
  * specification.  I.e. this analysis is based entirely on the
  * &ldquo;opcode&rdquo; of the unit, the types of its arguments, and
  * the values of constant arguments.
- * 
+ *
  * <p>The <code>mightThrow</code> methods could be declared static.
  * They are left virtual to facilitate testing. For example,
  * to verify that the expressions in a method call are actually being
@@ -45,16 +45,16 @@ import soot.shimple.PhiExpr;
 public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 
     // Cache the response to mightThrowImplicitly():
-    private final ThrowableSet implicitThrowExceptions 
+    private final ThrowableSet implicitThrowExceptions
 	= ThrowableSet.Manager.v().VM_ERRORS
 	.add(ThrowableSet.Manager.v().NULL_POINTER_EXCEPTION)
 	.add(ThrowableSet.Manager.v().ILLEGAL_MONITOR_STATE_EXCEPTION);
 
     /**
-     * Constructs a <code>UnitThrowAnalysis</code> for inclusion in 
+     * Constructs a <code>UnitThrowAnalysis</code> for inclusion in
      * Soot's global variable manager, {@link G}.
      *
-     * @param g guarantees that the constructor may only be called 
+     * @param g guarantees that the constructor may only be called
      * from {@link Singletons}.
      */
     public UnitThrowAnalysis(Singletons.Global g) {}
@@ -82,13 +82,13 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
     public ThrowableSet mightThrowImplicitly(ThrowInst t) {
 	return implicitThrowExceptions;
     }
-	
-    
+
+
     public ThrowableSet mightThrowImplicitly(ThrowStmt t) {
 	return implicitThrowExceptions;
     }
-	
-    
+
+
     ThrowableSet mightThrow(Value v) {
 	ValueSwitch sw = new ValueSwitch();
 	v.apply(sw);
@@ -123,7 +123,7 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 
 	// Asynchronous errors are always possible:
 	private ThrowableSet result = mgr.VM_ERRORS;
-	
+
 	ThrowableSet getResult() {
 	    return result;
 	}
@@ -131,7 +131,7 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 	public void caseReturnVoidInst(ReturnVoidInst i) {
 	    result = result.add(mgr.ILLEGAL_MONITOR_STATE_EXCEPTION);
 	}
-	    
+
 	public void caseReturnInst(ReturnInst i) {
 	    result = result.add(mgr.ILLEGAL_MONITOR_STATE_EXCEPTION);
 	}
@@ -144,7 +144,7 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 
 	public void caseJSRInst(JSRInst i) {
 	}
-	
+
 	public void casePushInst(PushInst i) {
 	}
 
@@ -333,13 +333,13 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 	public void caseNewInst(NewInst i) {
 	    result = result.add(mgr.INITIALIZATION_ERRORS);
 	}
-	    
+
 	public void caseNegInst(NegInst i) {
 	}
 
 	public void caseSwapInst(SwapInst i) {
 	}
-   
+
 	public void caseDup1Inst(Dup1Inst i) {
 	}
 
@@ -348,7 +348,7 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 
 	public void caseDup1_x1Inst(Dup1_x1Inst i) {
 	}
-    
+
 	public void caseDup1_x2Inst(Dup1_x2Inst i) {
 	}
 
@@ -385,7 +385,7 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 
 	public void caseAssignStmt(AssignStmt s) {
 	    Value lhs = s.getLeftOp();
-	    if (lhs instanceof ArrayRef && 
+	    if (lhs instanceof ArrayRef &&
 		(lhs.getType() instanceof UnknownType ||
 		 lhs.getType() instanceof RefType)) {
 		// This corresponds to an aastore byte code.
@@ -426,7 +426,7 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 	public void caseLookupSwitchStmt(LookupSwitchStmt s) {
 	    result = result.add(mightThrow(s.getKey()));
 	}
-	    
+
 	public void caseNopStmt(NopStmt s) {
 	}
 
@@ -460,12 +460,12 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 
     protected class ValueSwitch implements GrimpValueSwitch, ShimpleValueSwitch {
 
-	private final ThrowableSet.Manager mgr = 
+	private final ThrowableSet.Manager mgr =
 	    ThrowableSet.Manager.v();
 
 	// Asynchronous errors are always possible:
 	private ThrowableSet result = mgr.VM_ERRORS;
-	
+
 	ThrowableSet getResult() {
 	    return result;
 	}
@@ -613,7 +613,7 @@ public class UnitThrowAnalysis extends AbstractThrowAnalysis {
 	    }
 	    result = result.add(mightThrow(expr.getOp()));
 	}
-		
+
 	public void caseInstanceOfExpr(InstanceOfExpr expr) {
 	    result = result.add(mgr.RESOLVE_CLASS_ERRORS);
 	    result = result.add(mightThrow(expr.getOp()));

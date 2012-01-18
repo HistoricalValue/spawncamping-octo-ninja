@@ -28,7 +28,7 @@ import java.util.*;
 
 /**
  * Extension of soot.jimple.toolkits.scalar.Evaluator to handle Phi
- * expressions. 
+ * expressions.
  *
  * @author Navindra Umanee.
  * @see soot.jimple.toolkits.scalar.Evaluator
@@ -68,14 +68,14 @@ public class SEvaluator
      * Returns the constant value of <code>op</code> if it is easy to
      * find the constant value; else returns <code>null</code>.
      **/
-    public static Value getConstantValueOf(Value op) 
+    public static Value getConstantValueOf(Value op)
     {
         if(!(op instanceof PhiExpr))
             return Evaluator.getConstantValueOf(op);
 
         if(!(isValueConstantValued(op)))
             return null;
-        
+
         return ((PhiExpr) op).getValue(0);
     }
 
@@ -113,7 +113,7 @@ public class SEvaluator
 
             while(argsIt.hasNext()){
                 Value arg = argsIt.next();
-            
+
                 if(!(arg instanceof Constant))
                     continue;
 
@@ -140,7 +140,7 @@ public class SEvaluator
                     constant = BottomConstant.v();
                     break;
                 }
-                
+
                 if(value instanceof TopConstant)
                     constant = TopConstant.v();
             }
@@ -151,7 +151,7 @@ public class SEvaluator
             if(constant == null)
                 constant = BottomConstant.v();
         }
-        
+
         return constant;
     }
 
@@ -192,9 +192,9 @@ public class SEvaluator
         // oops -- clear spurious pointers to the unit chain!
         if(expr instanceof UnitBoxOwner)
             ((UnitBoxOwner)expr).clearUnitBoxes();
-        
+
         /* evaluate the expression */
-        
+
         return(getFuzzyConstantValueOf(expr));
     }
 
@@ -204,16 +204,16 @@ public class SEvaluator
     public static abstract class MetaConstant extends Constant
     {
     }
-    
+
     /**
      * Top i.e. assumed to be a constant, but of unknown value.
      **/
     public static class TopConstant extends MetaConstant
     {
         private static final TopConstant constant = new TopConstant();
-        
+
         private TopConstant() {}
-        
+
         public static Constant v()
         {
             return constant;
@@ -229,26 +229,26 @@ public class SEvaluator
             throw new RuntimeException("Not implemented.");
         }
     }
-    
+
     /**
      * Bottom i.e. known not to be a constant.
      **/
     public static class BottomConstant extends MetaConstant
     {
         private static final BottomConstant constant = new BottomConstant();
-        
+
         private BottomConstant() {}
 
         public static Constant v()
         {
             return constant;
         }
-        
+
         public Type getType()
         {
         return UnknownType.v();
         }
-    
+
         public void apply(Switch sw)
         {
             throw new RuntimeException("Not implemented.");

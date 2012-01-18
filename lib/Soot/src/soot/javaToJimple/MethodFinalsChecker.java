@@ -29,24 +29,24 @@ public class MethodFinalsChecker extends polyglot.visit.NodeVisitor{
     private final ArrayList<IdentityKey> finalLocals;
     private final HashMap<IdentityKey, ArrayList<IdentityKey>> typeToLocalsUsed;
     private final ArrayList<Node> ccallList;
-    
+
     public HashMap<IdentityKey, ArrayList<IdentityKey>> typeToLocalsUsed(){
         return typeToLocalsUsed;
     }
-    
+
     public ArrayList<IdentityKey> finalLocals(){
         return finalLocals;
     }
-    
+
     public ArrayList<IdentityKey> inners(){
         return inners;
     }
-    
+
     public ArrayList<Node> ccallList(){
         return ccallList;
     }
-    
-    
+
+
     public MethodFinalsChecker(){
         finalLocals = new ArrayList<IdentityKey>();
         inners = new ArrayList<IdentityKey>();
@@ -75,10 +75,10 @@ public class MethodFinalsChecker extends polyglot.visit.NodeVisitor{
         }
         return null;
     }
-    
+
     public polyglot.visit.NodeVisitor enter(polyglot.ast.Node parent, polyglot.ast.Node n) {
-    
-        
+
+
         if (n instanceof polyglot.ast.LocalDecl){
             polyglot.ast.LocalDecl ld = (polyglot.ast.LocalDecl)n;
             if (ld.flags().isFinal()){

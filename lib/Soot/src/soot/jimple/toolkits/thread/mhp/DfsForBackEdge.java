@@ -19,53 +19,53 @@ import java.util.*;
 // -Richard L. Halpert, 2006-11-30
 
 public class DfsForBackEdge{
-	
-	private final Map<Object, Object> backEdges = new HashMap<Object, Object>();    
+
+	private final Map<Object, Object> backEdges = new HashMap<Object, Object>();
 	private final Set<Object> gray = new HashSet<Object>();
 	private final Set<Object> black = new HashSet<Object>();
 	private final DominatorsFinder domFinder;
-	
+
 	DfsForBackEdge(Chain chain, DirectedGraph peg){
-		
+
 		domFinder = new DominatorsFinder(chain,peg);
 		Iterator it = chain.iterator();
 		dfs(it, peg);
 		testBackEdge();
 	}
 	private void dfs(Iterator it, DirectedGraph g){
-		
-		
+
+
 		// Visit each node
 		{
-			
+
 			while (it.hasNext()){
 				Object s =it.next();
 				if (!gray.contains(s)){
-					
+
 					visitNode(g, s);
 				}
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	private void visitNode(DirectedGraph g, Object s ){
 		//	System.out.println("s is: "+ s);
 		gray.add(s);
 		Iterator it = g.getSuccsOf(s).iterator();
-		
+
 		if (g.getSuccsOf(s).size()>0){
 			while (it.hasNext()){
 				Object succ = it.next();
 				if (!gray.contains(succ)){
-					
+
 					visitNode(g, succ);
 				}
 				else{
 					//if the color of the node is gray, then we found a retreating edge
 					if (gray.contains(succ) && !black.contains(succ)){
-						/* If succ is in s's dominator list, 
+						/* If succ is in s's dominator list,
 						 * then this retreating edge is a back edge.
 						 */
 						FlowSet dominators = domFinder.getDominatorsOf(s);
@@ -75,18 +75,18 @@ public class DfsForBackEdge{
 							backEdges.put(s, succ);
 						}
 					}
-					
+
 				}
 			}
 		}
 		black.add(s);
-		
+
 	}
-	
+
 	protected Map<Object, Object> getBackEdges(){
 		return backEdges;
 	}
-	
+
 	private void testBackEdge(){
 		System.out.println("===test backEdges==");
 		Set maps = backEdges.entrySet();
@@ -101,5 +101,5 @@ public class DfsForBackEdge{
 		}
 		System.out.println("===test backEdges==end==");
 	}
-	
+
 }

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,14 +40,14 @@ import soot.tagkit.*;
  * This implementation is especially slow, as it does not
  * run on basic blocks.  A better implementation (which wouldn't
  * catch every single cse, but would get most) would use
- * basic blocks instead. 
+ * basic blocks instead.
  *
  * It is also slow because the flow universe is explicitly created; it
  * need not be.  A better implementation would implicitly compute the
  * kill sets at every node.  */
 
 public class CommonSubexpressionEliminator extends BodyTransformer
-{ 
+{
     public CommonSubexpressionEliminator( Singletons.Global g ) {}
     public static CommonSubexpressionEliminator v() { return G.v().soot_jimple_toolkits_scalar_CommonSubexpressionEliminator(); }
 
@@ -76,7 +76,7 @@ public class CommonSubexpressionEliminator extends BodyTransformer
         if(Options.v().verbose())
             G.v().out.println("[" + b.getMethod().getName() +
                 "]     Eliminating common subexpressions " +
-		(sideEffect instanceof NaiveSideEffectTester ? 
+		(sideEffect instanceof NaiveSideEffectTester ?
 		 "(naively)" : "") +
 		"...");
 
@@ -127,7 +127,7 @@ public class CommonSubexpressionEliminator extends BodyTransformer
                             Value origLHS = origCalc.getLeftOp();
 
                             origCalc.setLeftOp(l);
-                            
+
                             Unit copier = Jimple.v().newAssignStmt(origLHS, l);
                             units.insertAfter(copier, origCalc);
 

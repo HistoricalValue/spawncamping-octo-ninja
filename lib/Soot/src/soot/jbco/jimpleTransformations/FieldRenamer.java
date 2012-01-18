@@ -26,31 +26,31 @@ import soot.jbco.util.*;
 import soot.jimple.*;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 26-Jan-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 26-Jan-2006
  */
 public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
 
   public void outputSummary() {}
-  
+
   public static String dependancies[] = new String[] { "wjtp.jbco_fr" };
 
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "wjtp.jbco_fr";
-  
+
   public String getName() {
     return name;
   }
-  
+
   private static final char stringChars[][] = { {'S','5','$'},
 		{'l','1','I'},
 		{'_'}
 	  };
-  
+
   public static Vector  namesToNotRename = new Vector();
   public static Hashtable<String, String> oldToNewFieldNames = new Hashtable<String, String>();
   public static Hashtable<SootClass, SootField> opaquePreds1ByClass = new Hashtable<SootClass, SootField>();
@@ -60,25 +60,25 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
   public static int	  handedOutPairs[] = null;
   public static int	  handedOutRunPairs[] = null;
   public static boolean rename_fields = false;
-  
+
   RefType boolRef;
-  
+
   protected void internalTransform(String phaseName, Map options)
   {
     Scene scene = G.v().soot_Scene();
     //Hierarchy hierarchy = scene.getActiveHierarchy();
     boolRef = scene.getRefType("java.lang.Boolean");
-    
+
     if (output) {
       if (rename_fields)
         out.println("Transforming Field Names and Adding Opaque Predicates...");
       else
         out.println("Adding Opaques...");
     }
-    
+
     soot.jbco.util.BodyBuilder.retrieveAllBodies();
     soot.jbco.util.BodyBuilder.retrieveAllNames();
-    
+
     Iterator it = scene.getApplicationClasses().iterator();
     while (it.hasNext())
     {
@@ -87,7 +87,7 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
       if (cName.indexOf(".") >= 0)
         cName = cName.substring(cName.lastIndexOf(".") + 1, cName.length());
       oldToNewFieldNames.put(cName,cName);
-      
+
       if (rename_fields) {
         if (output) out.println("\tClassName: "+cName);
 	    // rename all the fields in the class
@@ -99,11 +99,11 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
             renameField(cName,f);
         }
       }
-      
+
       // skip interfaces - they can only hold final fields
       if (c.isInterface()) continue;
-      
-      // add one opaq predicate for true and one for false to each class 
+
+      // add one opaq predicate for true and one for false to each class
       String bool = "opPred1";
       Type t = Rand.getInt() % 2 == 0 ? (Type)BooleanType.v() : (Type)boolRef;
       while (oldToNewFieldNames.containsKey(bool))
@@ -112,9 +112,9 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
       renameField(cName,f);
       opaquePreds1ByClass.put(c,f);
       c.addField(f);
-      
+
       setBooleanTo(c,f,true);
-      
+
       bool = "opPred2";
       t = t == BooleanType.v() ? (Type)boolRef : (Type)BooleanType.v();
       while (oldToNewFieldNames.containsKey(bool))
@@ -123,19 +123,19 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
       renameField(cName,f);
       opaquePreds2ByClass.put(c,f);
       c.addField(f);
-      
+
       if (t == boolRef)
         setBooleanTo(c,f,false);
     }
-    
+
     buildOpaquePairings();
-    
+
     if (!rename_fields)
       return;
-    
-    if (output) 
+
+    if (output)
       out.println("\r\tUpdating field references in bytecode");
-    
+
     it = scene.getApplicationClasses().iterator();
     while (it.hasNext())
     {
@@ -145,10 +145,10 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
       {
         SootMethod m = (SootMethod)mIt.next();
         if (!m.isConcrete()) continue;
-        
+
         if (!m.hasActiveBody())
           m.retrieveActiveBody();
-        
+
         Iterator uIt = m.getActiveBody().getUnits().iterator();
         while (uIt.hasNext())
         {
@@ -162,13 +162,13 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
               SootFieldRef sfr = fr.getFieldRef();
               if (sfr.declaringClass().isLibraryClass())
                 continue;
-              
+
               String oldName = sfr.name();
               String fullName = sfr.declaringClass().getName() + '.' + oldName;
               String newName = oldToNewFieldNames.get(oldName);
-              if (newName == null || namesToNotRename.contains(fullName)) 
+              if (newName == null || namesToNotRename.contains(fullName))
                 continue;
-              
+
               if (newName.equals(oldName)) {
                 System.out.println("Strange.. Should not find a field with the same old and new name.");
               }
@@ -189,13 +189,13 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
         }
       }
     }
-  } 
-  
+  }
+
   protected void setBooleanTo(SootClass c, SootField f, boolean value) {
-    
-    if (!value && f.getType() instanceof IntegerType && Rand.getInt() % 2 > 0) 
+
+    if (!value && f.getType() instanceof IntegerType && Rand.getInt() % 2 > 0)
       return;
-    
+
     Body b = null;
     boolean newInit = false;
     if (!c.declaresMethodByName("<clinit>")) {
@@ -208,37 +208,37 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
       SootMethod m = c.getMethodByName("<clinit>");
       b = m.getActiveBody();
   	}
-    
+
     PatchingChain units = b.getUnits();
     if (f.getType() instanceof IntegerType) {
 	  units.addFirst(
 	      Jimple.v().newAssignStmt(
-	         Jimple.v().newStaticFieldRef(f.makeRef()), 
+	         Jimple.v().newStaticFieldRef(f.makeRef()),
 	         IntConstant.v(value ? 1 : 0)));
     } else {
       Local bool = Jimple.v().newLocal("boolLcl",boolRef);
       b.getLocals().add(bool);
-      
+
       SootMethod boolInit = boolRef.getSootClass().getMethod("void <init>(boolean)");
-      
+
       units.addFirst(Jimple.v().newAssignStmt(
           					Jimple.v().newStaticFieldRef(f.makeRef()),
           					bool));
-      
+
       units.addFirst(Jimple.v().newInvokeStmt(
           Jimple.v().newSpecialInvokeExpr(bool, boolInit.makeRef(), IntConstant.v(value ? 1 : 0))));
-      
-      units.addFirst(Jimple.v().newAssignStmt(bool, 
+
+      units.addFirst(Jimple.v().newAssignStmt(bool,
 	         Jimple.v().newNewExpr(boolRef)));
     }
     if (newInit)
       units.addLast(Jimple.v().newReturnVoidStmt());
   }
-  
+
   protected void renameField(String cName, SootField f) {
-    if (sootFieldsRenamed.contains(f)) 
+    if (sootFieldsRenamed.contains(f))
       return;
-    
+
     String newName = oldToNewFieldNames.get(f.getName());
     if (newName == null)
     {
@@ -250,17 +250,17 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
     f.setName(newName);
     sootFieldsRenamed.add(f);
   }
-  
+
   /*
    * @return	String	newly generated junk name that DOES NOT exist yet
    */
-  public static String getNewName() 
+  public static String getNewName()
   {
     int size = 3;
     int tries = 0;
     int index = Rand.getInt(stringChars.length);
     int length = stringChars[index].length;
-    
+
     String result = null;
     char cNewName[] = new char[size];
     do {
@@ -271,23 +271,23 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
         length = stringChars[index].length;
         tries = 0;
       }
-      
-      if (size<12) { 
+
+      if (size<12) {
 	      do {
             int rand = Rand.getInt(length);
 	        cNewName[0] = stringChars[index][rand];
 	      } while (!Character.isJavaIdentifierStart(cNewName[0]));
-	      
+
 	      // generate random string
 	      for (int i = 1; i < cNewName.length; i++)
 	      {
 	        int rand = Rand.getInt(length);
-	        cNewName[i] = stringChars[index][rand];      
+	        cNewName[i] = stringChars[index][rand];
 	      }
 	      result = String.copyValueOf(cNewName);
       } else {
         cNewName = new char[size-6];  // size will always be at least 8 here
-        
+
         // generate more random string
         while (true) {
           for (int i = 0; i < cNewName.length; i++)
@@ -299,16 +299,16 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
       }
       tries++;
     } while (oldToNewFieldNames.containsValue(result) || BodyBuilder.nameList.contains(result));
-    
+
     BodyBuilder.nameList.add(result);
-    
+
     return result;
   }
-  
+
   public static void addOldAndNewName(String oldn, String newn) {
     oldToNewFieldNames.put(oldn,newn);
   }
-  
+
   public static boolean isJavaIdentifier(String s) {
     if (s == null || s.length() == 0 || !Character.isJavaIdentifierStart(s.charAt(0))) {
         return false;
@@ -320,32 +320,32 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
     }
     return true;
   }
-  
-  public static SootField[] getRandomOpaques() 
+
+  public static SootField[] getRandomOpaques()
   {
     if (handedOutPairs == null) {
       handedOutPairs = new int[opaquePairs.length];
     }
-    
+
     int lowValue = 99999;
     ArrayList<Integer> available = new ArrayList<Integer>();
     for (int element : handedOutPairs)
 		if (lowValue>element) lowValue = element;
     for (int i = 0; i < handedOutPairs.length; i++)
       if (handedOutPairs[i] == lowValue) available.add(new Integer(i));
-      
+
     Integer index = available.get(Rand.getInt(available.size()));
     handedOutPairs[index.intValue()]++;
-    
+
     return opaquePairs[index.intValue()];
   }
-  
-  public static int getRandomOpaquesForRunnable() 
+
+  public static int getRandomOpaquesForRunnable()
   {
     if (handedOutRunPairs == null) {
       handedOutRunPairs = new int[opaquePairs.length];
     }
-    
+
     int lowValue = 99999;
     ArrayList<Integer> available = new ArrayList<Integer>();
     for (int element : handedOutRunPairs)
@@ -353,22 +353,22 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
     if (lowValue>2) return -1;
     for (int i = 0; i < handedOutRunPairs.length; i++)
       if (handedOutRunPairs[i] == lowValue) available.add(new Integer(i));
-      
+
     Integer index = available.get(Rand.getInt(available.size()));
-	   
+
     return index.intValue();
   }
-  
+
   public static void updateOpaqueRunnableCount(int i) {
     handedOutRunPairs[i]++;
   }
-  
+
   private void buildOpaquePairings() {
     Object fields1[] = opaquePreds1ByClass.values().toArray();
     Object fields2[] = opaquePreds2ByClass.values().toArray();
-    
+
     int leng = fields1.length;
-    
+
     if (leng>1) {
 	    int i = leng * 2;
 	    while (i>1) {
@@ -376,12 +376,12 @@ public class FieldRenamer extends SceneTransformer implements IJbcoTransform {
 	      int rand2 = Rand.getInt(leng);
 	      int rand3 = Rand.getInt(leng);
 	      int rand4 = Rand.getInt(leng);
-	      while (rand1 == rand2) 
+	      while (rand1 == rand2)
 	        rand2 = Rand.getInt(leng);
-	      
-	      while (rand3 == rand4) 
+
+	      while (rand3 == rand4)
 	        rand4 = Rand.getInt(leng);
-	      
+
 	      Object value = fields1[rand1];
 	      fields1[rand1]  = fields1[rand2];
 	      fields1[rand2]  = value;

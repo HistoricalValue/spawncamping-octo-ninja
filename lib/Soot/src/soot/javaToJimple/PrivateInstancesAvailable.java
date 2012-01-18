@@ -25,7 +25,7 @@ import polyglot.util.IdentityKey;
 public class PrivateInstancesAvailable extends polyglot.visit.NodeVisitor {
 
     private final ArrayList<IdentityKey> list;
-      
+
     public ArrayList<IdentityKey> getList() {
         return list;
     }
@@ -35,9 +35,9 @@ public class PrivateInstancesAvailable extends polyglot.visit.NodeVisitor {
     }
 
     public polyglot.ast.Node leave(polyglot.ast.Node old, polyglot.ast.Node n, polyglot.visit.NodeVisitor visitor) {
-    
+
         if (n instanceof polyglot.ast.FieldDecl) {
-            
+
             polyglot.types.FieldInstance fi = ((polyglot.ast.FieldDecl)n).fieldInstance();
 
             if (fi.flags().isPrivate()) {
@@ -45,7 +45,7 @@ public class PrivateInstancesAvailable extends polyglot.visit.NodeVisitor {
             }
         }
         if (n instanceof polyglot.ast.ProcedureDecl) {
-            
+
             polyglot.types.ProcedureInstance pi = ((polyglot.ast.ProcedureDecl)n).procedureInstance();
 
             if (pi.flags().isPrivate()) {

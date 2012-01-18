@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -39,7 +39,7 @@ public class BDup1Inst extends BDupInst implements Dup1Inst
 
     private final Type mOpType;
 
-    
+
 
     public BDup1Inst(Type aOpType)
     {
@@ -58,26 +58,26 @@ public class BDup1Inst extends BDupInst implements Dup1Inst
         res.add(mOpType);
         return res;
     }
-    
+
     public List<Type> getUnderTypes()
     {
         return new ArrayList<Type>();
     }
 
-    
+
     final public String getName() { return "dup1"; }
 
 
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseDup1Inst(this);
-    }   
+    }
 
 
 
     public String toString()
     {
-        return "dup1." +  Baf.bafDescriptorOf(mOpType);        
+        return "dup1." +  Baf.bafDescriptorOf(mOpType);
     }
 
     public void toString( UnitPrinter up ) {
@@ -86,7 +86,7 @@ public class BDup1Inst extends BDupInst implements Dup1Inst
         up.literal(Baf.bafDescriptorOf(mOpType));
     }
 
-  
+
 }
 
 

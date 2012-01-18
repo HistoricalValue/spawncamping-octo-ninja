@@ -9,7 +9,7 @@ import java.util.*;
 public interface CofferConstructorDecl extends ConstructorDecl {
     KeySetNode entryKeys();
     CofferConstructorDecl entryKeys(KeySetNode entryKeys);
-    
+
     KeySetNode returnKeys();
     CofferConstructorDecl returnKeys(KeySetNode returnKeys);
 

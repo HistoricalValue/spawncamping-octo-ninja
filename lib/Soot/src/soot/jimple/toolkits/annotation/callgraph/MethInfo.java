@@ -25,13 +25,13 @@ public class MethInfo {
     private SootMethod method;
     private boolean canExpandCollapse;
     private Kind edgeKind;
-    
+
     public MethInfo(SootMethod meth, boolean b, Kind kind){
         method(meth);
         canExpandCollapse(b);
         edgeKind(kind);
     }
-        
+
     public Kind edgeKind(){
         return edgeKind;
     }
@@ -39,7 +39,7 @@ public class MethInfo {
     public void edgeKind(Kind kind){
         edgeKind = kind;
     }
-    
+
     public boolean canExpandCollapse(){
         return canExpandCollapse;
     }

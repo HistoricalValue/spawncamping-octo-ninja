@@ -15,7 +15,7 @@ public class EscapedUnicodeReader extends FilterReader {
   }
   public int read() throws IOException {
     int r = (pushback==-1)?in.read():pushback; pushback=-1;
-    
+
     if (r!='\\') {
       isEvenSlash=true;
       return r;
@@ -24,7 +24,7 @@ public class EscapedUnicodeReader extends FilterReader {
 	isEvenSlash=true;
 	return r;
       }
-      
+
       // Check for the trailing u.
       pushback=in.read();
       if (pushback!='u') {
@@ -32,12 +32,12 @@ public class EscapedUnicodeReader extends FilterReader {
 	return '\\';
       }
 
-      // OK, we've found backslash-u.  
+      // OK, we've found backslash-u.
       // Reset pushback and snarf up all trailing u's.
       pushback=-1;
       while((r=in.read())=='u')
 	;
-      // Now we should find 4 hex digits. 
+      // Now we should find 4 hex digits.
       // If we don't, we can raise bloody hell.
       int val=0;
       for (int i=0; i<4; i++, r=in.read()) {

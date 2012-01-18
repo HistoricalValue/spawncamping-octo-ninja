@@ -54,8 +54,8 @@ import soot.dava.toolkits.base.AST.traversals.*;
 
 public class LocalVariableCleaner extends DepthFirstAdapter {
 	public final boolean DEBUG = false;
-	
-	
+
+
 	ASTNode AST;
 
 	ASTUsesAndDefs useDefs;
@@ -113,7 +113,7 @@ public class LocalVariableCleaner extends DepthFirstAdapter {
 					DefinitionStmt ds = defIt.next();
 
 					if (canRemoveDef(ds)) {
-						//if removeStmt is successful since something change we need to redo 
+						//if removeStmt is successful since something change we need to redo
 						//everything hoping something else might be removed....
 						//in this case method returns true
 						redo = removeStmt(ds);
@@ -128,7 +128,7 @@ public class LocalVariableCleaner extends DepthFirstAdapter {
 		while (remIt.hasNext()) {
 			Local removeLocal = remIt.next();
 			node.removeDeclaredLocal(removeLocal);
-			
+
 			/*
 			 *  Nomair A. Naeem 7th Feb 2005
 			 * 	these have to be removed from the legacy lists in DavaBody also
@@ -144,17 +144,17 @@ public class LocalVariableCleaner extends DepthFirstAdapter {
 					System.out.println("his locals are: "+body.get_ThisLocals());
 					System.out.println("Param Map is: "+body.get_ParamMap());
 					System.out.println("Locals are:"+body.getLocals());
-				}			
+				}
 				Chain localChain = body.getLocals();
 				if(removeLocal != null && localChain != null)
 					localChain.remove(removeLocal);
 			}
 			else
 				throw new DecompilationException("found AST which is not a methodNode");
-			
-			
-			
-			
+
+
+
+
 			if(DEBUG)
 				System.out.println("Removed"+removeLocal);
 			redo = true;
@@ -214,7 +214,7 @@ public class LocalVariableCleaner extends DepthFirstAdapter {
 		//parents are always ASTNodes, hence safe to cast
 		ASTNode parent = (ASTNode) tempParent;
 
-		//REMOVING STMT 
+		//REMOVING STMT
 		if (!(parent instanceof ASTStatementSequenceNode)) {
 			//parent of a statement should always be a ASTStatementSequenceNode
 			return false;

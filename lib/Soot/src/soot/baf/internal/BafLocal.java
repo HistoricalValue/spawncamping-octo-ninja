@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ public class BafLocal implements Local
 
     int fixedHashCode;
     boolean isHashCodeChosen;
-        
+
     public BafLocal(String name, Type t)
     {
         this.name = name;
@@ -51,7 +51,7 @@ public class BafLocal implements Local
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return name.hashCode() * 101 + type.hashCode() * 17;
     }
@@ -89,7 +89,7 @@ public class BafLocal implements Local
     public void toString( UnitPrinter up ) {
         up.local( this );
     }
-    
+
     public List getUseBoxes()
     {
         return AbstractUnit.emptyList;

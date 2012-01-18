@@ -57,7 +57,7 @@ public final class BitPointsToSet extends PointsToSetInternal {
         return ret;
     }
 
-    /** Adds contents of other into this set, returns true if this set 
+    /** Adds contents of other into this set, returns true if this set
      * changed. */
     public final boolean addAll( PointsToSetInternal other,
             PointsToSetInternal exclude ) {

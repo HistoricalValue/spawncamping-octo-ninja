@@ -27,13 +27,13 @@ import java.util.*;
 public abstract class VarNode extends ValNode implements Comparable {
     public Context context() { return null; }
     /** Returns all field ref nodes having this node as their base. */
-    public Collection getAllFieldRefs() { 
+    public Collection getAllFieldRefs() {
 	if( fields == null ) return Collections.EMPTY_LIST;
-	return fields.values(); 
+	return fields.values();
     }
     /** Returns the field ref node having this node as its base,
      * and field as its field; null if nonexistent. */
-    public FieldRefNode dot( SparkField field ) 
+    public FieldRefNode dot( SparkField field )
     { return fields == null ? null : (FieldRefNode) fields.get( field ); }
     public int compareTo( Object o ) {
 	VarNode other = (VarNode) o;
@@ -53,27 +53,27 @@ public abstract class VarNode extends ValNode implements Comparable {
         return variable;
     }
 
-    /** Designates this node as the potential target of a interprocedural 
-     * assignment edge which may be added during on-the-fly call graph 
+    /** Designates this node as the potential target of a interprocedural
+     * assignment edge which may be added during on-the-fly call graph
      * updating. */
     public void setInterProcTarget() {
         interProcTarget = true;
     }
-    /** Returns true if this node is the potential target of a interprocedural 
-     * assignment edge which may be added during on-the-fly call graph 
+    /** Returns true if this node is the potential target of a interprocedural
+     * assignment edge which may be added during on-the-fly call graph
      * updating. */
     public boolean isInterProcTarget() {
         return interProcTarget;
     }
 
-    /** Designates this node as the potential source of a interprocedural 
-     * assignment edge which may be added during on-the-fly call graph 
+    /** Designates this node as the potential source of a interprocedural
+     * assignment edge which may be added during on-the-fly call graph
      * updating. */
     public void setInterProcSource() {
         interProcSource = true;
     }
-    /** Returns true if this node is the potential source of a interprocedural 
-     * assignment edge which may be added during on-the-fly call graph 
+    /** Returns true if this node is the potential source of a interprocedural
+     * assignment edge which may be added during on-the-fly call graph
      * updating. */
     public boolean isInterProcSource() {
         return interProcSource;

@@ -26,13 +26,13 @@ public class RunnerThread implements Runnable {
   private JBCOViewer viewer = null;
   private String[] cmdarray = null;
   private String wdir = null;
-  
+
   public RunnerThread(String[] argv, JBCOViewer jv, String workingdir) {
     cmdarray = argv;
     viewer = jv;
     wdir = workingdir;
   }
-  
+
   public void run() {
     synchronized (viewer.newFileMenuItem) {
       viewer.newFileMenuItem.setEnabled(false);
@@ -47,17 +47,17 @@ public class RunnerThread implements Runnable {
         if (!f.exists() || !f.isDirectory())
           throw new Exception(f + " does not appear to be a proper working directory.");
       }
-      
+
       Process p = Runtime.getRuntime().exec(cmdarray, null, f);
       BufferedReader br_in = new BufferedReader(new InputStreamReader(p.getInputStream()));
       BufferedReader br_er = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-      
+
       String line_in = "";
       try {
         while ((line_in = br_in.readLine()) != null || (line_in = br_er.readLine()) != null) {
           if (stopRun) {
             p.destroy();
-            synchronized(viewer.TextAreaOutput) {  
+            synchronized(viewer.TextAreaOutput) {
               viewer.TextAreaOutput.append("\n\n*** Execution STOPPED ***");
               viewer.TextAreaOutput.setCaretPosition(viewer.TextAreaOutput.getDocument().getLength() );
             }
@@ -70,7 +70,7 @@ public class RunnerThread implements Runnable {
               autoScroll = ((vbar.getValue() + vbar.getVisibleAmount()) == vbar.getMaximum());
             }
             viewer.TextAreaOutput.append("\n"+line_in);
-            if (autoScroll) 
+            if (autoScroll)
               viewer.TextAreaOutput.setCaretPosition(viewer.TextAreaOutput.getDocument().getLength() );
           }
         }

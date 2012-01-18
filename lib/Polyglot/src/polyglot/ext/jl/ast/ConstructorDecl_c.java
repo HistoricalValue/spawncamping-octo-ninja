@@ -104,7 +104,7 @@ public class ConstructorDecl_c extends Term_c implements ConstructorDecl
     public CodeInstance codeInstance() {
 	return procedureInstance();
     }
-    
+
     /** Set the constructorInstance of the constructor. */
     public ConstructorDecl constructorInstance(ConstructorInstance ci) {
 	ConstructorDecl_c n = (ConstructorDecl_c) copy();
@@ -275,7 +275,7 @@ public class ConstructorDecl_c extends Term_c implements ConstructorDecl
 		if (! throwDeclared) {
                     ec.throwsSet().clear();
                     Position pos = ec.exceptionPosition(t);
-                    throw new SemanticException("The exception \"" + t + 
+                    throw new SemanticException("The exception \"" + t +
                         "\" must either be caught or declared to be thrown.",
                         pos==null?position():pos);
 		}
@@ -300,7 +300,7 @@ public class ConstructorDecl_c extends Term_c implements ConstructorDecl
 	w.write("(");
 
 	w.begin(0);
-	
+
 	for (Iterator i = formals.iterator(); i.hasNext(); ) {
 	    Formal f = (Formal) i.next();
 	    print(f, w, tr);
@@ -331,12 +331,12 @@ public class ConstructorDecl_c extends Term_c implements ConstructorDecl
 
 	w.end();
     }
-    
 
-    public void prettyPrint(CodeWriter w, PrettyPrinter tr) 
+
+    public void prettyPrint(CodeWriter w, PrettyPrinter tr)
     {
   	prettyPrintHeader(w, tr);
-	
+
 	if (body != null) {
 	    printSubStmt(body, w, tr);
 	}
@@ -375,7 +375,7 @@ public class ConstructorDecl_c extends Term_c implements ConstructorDecl
 	return ts.constructorInstance(position(), ct, flags,
 		                      argTypes, excTypes);
     }
-    
+
     /**
      * Return the first (sub)term performed when evaluating this
      * term.
@@ -397,5 +397,5 @@ public class ConstructorDecl_c extends Term_c implements ConstructorDecl
         }
         return succs;
     }
-    
+
 }

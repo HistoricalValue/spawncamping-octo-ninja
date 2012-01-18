@@ -23,7 +23,7 @@ public class DumpAst extends NodeVisitor
 	this.w = w;
     }
 
-    /** 
+    /**
      * Visit each node before traversal of children. Call <code>dump</code> for
      * that node. Then we begin a new <code>CodeWriter</code> block and traverse
      * the children.
@@ -38,7 +38,7 @@ public class DumpAst extends NodeVisitor
 
     /**
      * This method is called only after normal traversal of the children. Thus
-     * we must end the <code>CodeWriter</code> block that was begun in 
+     * we must end the <code>CodeWriter</code> block that was begun in
      * <code>enter</code>.
      */
     public Node leave(Node old, Node n, NodeVisitor v) {

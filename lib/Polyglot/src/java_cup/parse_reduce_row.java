@@ -1,8 +1,8 @@
 
 package java_cup;
 
-/** This class represents one row (corresponding to one machine state) of the 
- *  reduce-goto parse table. 
+/** This class represents one row (corresponding to one machine state) of the
+ *  reduce-goto parse table.
  */
 public class parse_reduce_row {
   /*-----------------------------------------------------------*/
@@ -30,7 +30,7 @@ public class parse_reduce_row {
 
   /** Number of columns (non terminals) in every row. */
   public static int size() {return _size;}
-   
+
   /*-----------------------------------------------------------*/
   /*--- (Access to) Instance Variables ------------------------*/
   /*-----------------------------------------------------------*/

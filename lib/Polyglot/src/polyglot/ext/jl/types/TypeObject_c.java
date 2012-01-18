@@ -7,7 +7,7 @@ import java.io.*;
 /**
  * Abstract implementation of a type object.  Contains a reference to the
  * type system and to the object's position in the code.
- */  
+ */
 public abstract class TypeObject_c implements TypeObject
 {
     protected transient TypeSystem ts;
@@ -16,7 +16,7 @@ public abstract class TypeObject_c implements TypeObject
     /** Used for deserializing types. */
     protected TypeObject_c() {
     }
-    
+
     /** Creates a new type in the given a TypeSystem. */
     public TypeObject_c(TypeSystem ts) {
         this(ts, null);
@@ -68,7 +68,7 @@ public abstract class TypeObject_c implements TypeObject
     public int hashCode() {
         return super.hashCode();
     }
-    
+
     /**
      * Default implementation is pointer equality.
      */
@@ -79,6 +79,6 @@ public abstract class TypeObject_c implements TypeObject
     /**
      * Overload equalsImpl to find inadvertant overridding errors.
      * Make package-scope and void to break callers.
-     */ 
+     */
     void equalsImpl(Object o) { }
 }

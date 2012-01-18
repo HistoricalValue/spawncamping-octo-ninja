@@ -86,19 +86,19 @@ public class AmbQualifierNode_c extends Node_c implements AmbQualifierNode
     public Node typeCheck(TypeChecker tc) throws SemanticException {
 	throw new InternalCompilerError(position(),
 	    "Cannot type check ambiguous node " + this + ".");
-    } 
+    }
 
     public Node exceptionCheck(ExceptionChecker ec) throws SemanticException {
 	throw new InternalCompilerError(position(),
 	    "Cannot exception check ambiguous node " + this + ".");
-    } 
+    }
 
     public void prettyPrint(CodeWriter w, PrettyPrinter tr) {
 	if (qual != null) {
             print(qual, w, tr);
             w.write(".");
         }
-                
+
         w.write(name);
     }
 

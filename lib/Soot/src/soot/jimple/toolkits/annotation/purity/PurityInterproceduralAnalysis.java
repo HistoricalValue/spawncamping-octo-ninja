@@ -35,7 +35,7 @@ import soot.toolkits.graph.*;
 import soot.options.PurityOptions;
 import soot.tagkit.*;
 
-public class PurityInterproceduralAnalysis 
+public class PurityInterproceduralAnalysis
     extends AbstractInterproceduralAnalysis {
 
     // Note: these method lists are adapted to JDK-1.4.2.06 and may
@@ -57,7 +57,7 @@ public class PurityInterproceduralAnalysis
 
 	// we assume that all standard class initialisers are pure!!!
 	{"java.","<clinit>"}, {"javax.","<clinit>"}, {"sun.","<clinit>"},
-	
+
 	// if we define these as pure, the analysis will find them impure as
 	// they call static native functions that could, in theory,
 	// change the whole program state under our feets
@@ -90,15 +90,15 @@ public class PurityInterproceduralAnalysis
 
     // unanalysed methods that modify the whole environment
     static private final String[][] impureMethods =
-    { 
+    {
 	{"java.io.","<init>"},
 	{"java.io.","close"},
 	{"java.io.","read"},
 	{"java.io.","write"},
-	{"java.io.","flush"}, 
-	{"java.io.","flushBuffer"}, 
-	{"java.io.","print"}, 
-	{"java.io.","println"}, 
+	{"java.io.","flush"},
+	{"java.io.","flushBuffer"},
+	{"java.io.","print"},
+	{"java.io.","println"},
 
  	{"java.lang.Runtime","exit"},
 
@@ -190,10 +190,10 @@ public class PurityInterproceduralAnalysis
 	*/
 
     };
-    
+
     // unanalysed methods that alter its arguments, but have no side effect
     static private final String[][] alterMethods =
-    { 
+    {
 	{"java.lang.System","arraycopy"},
 
 	// these are really huge methods used internally by StringBuffer
@@ -207,7 +207,7 @@ public class PurityInterproceduralAnalysis
 
     /** Filter out some method. */
     static private class Filter implements SootMethodFilter {
-	public boolean want(SootMethod method) { 
+	public boolean want(SootMethod method) {
 	    // could be optimized with HashSet....
 	    String c = method.getDeclaringClass().toString();
 	    String m = method.getName();
@@ -223,14 +223,14 @@ public class PurityInterproceduralAnalysis
 	    return true;
 	}
     }
-    
+
     /** The constructor does it all! */
     PurityInterproceduralAnalysis(CallGraph        cg,
 				  Iterator<SootMethod>         heads,
 				  PurityOptions    opts)
     {
 	super(cg,new Filter(),heads, opts.dump_cg());
-	
+
 	if (opts.dump_cg()) {
 	    G.v().out.println("[AM] Dumping empty .dot call-graph");
 	    drawAsOneDot("EmptyCallGraph");
@@ -264,7 +264,7 @@ public class PurityInterproceduralAnalysis
 		Body body = method.retrieveActiveBody();
 		ExceptionalUnitGraph graph = new ExceptionalUnitGraph(body);
 		if (opts.verbose()) G.v().out.println("  |- "+method);
-		PurityIntraproceduralAnalysis r = 
+		PurityIntraproceduralAnalysis r =
 		    new PurityIntraproceduralAnalysis(graph, this);
 		r.drawAsOneDot("Intra_",method.toString());
 		PurityGraphBox b = new PurityGraphBox();
@@ -284,13 +284,13 @@ public class PurityInterproceduralAnalysis
 		boolean isPure;
 		if (m.toString().indexOf("<init>")!=-1)
 		    isPure = b.g.isPureConstructor() ;
-		else 
+		else
 		    isPure = b.g.isPure();
 		/* m.addTag(new GenericAttribute("isPure",
 		   (new String(isPure?"yes":"no")).getBytes()));
 		*/
 		m.addTag(new StringTag("purity: "+(isPure?"pure":"impure")));
-		if (opts.print()) 
+		if (opts.print())
 		    G.v().out.println("  |- method "+m.toString()+" is "+(isPure?"pure":"impure"));
 
 		// param & this ro / safety
@@ -308,7 +308,7 @@ public class PurityInterproceduralAnalysis
 		    m.addTag(new StringTag("this: "+s));
 		    if (opts.print()) G.v().out.println("  |   |- this is "+s);
 		}
-		
+
 		Iterator itt = m.getParameterTypes().iterator();
 		int i = 0;
 		while (itt.hasNext()) {
@@ -354,13 +354,13 @@ public class PurityInterproceduralAnalysis
 	PurityGraphBox dst  = (PurityGraphBox)dest;
 	dst.g = new PurityGraph(src.g);
     }
-    
+
     protected void analyseMethod(SootMethod method,
 				 Object     dst)
     {
 	Body body = method.retrieveActiveBody();
 	ExceptionalUnitGraph graph = new ExceptionalUnitGraph(body);
-	PurityIntraproceduralAnalysis r = 
+	PurityIntraproceduralAnalysis r =
 	    new PurityIntraproceduralAnalysis(graph, this);
 	r.copyResult(dst);
     }
@@ -408,10 +408,10 @@ public class PurityInterproceduralAnalysis
 	    if (v.getType() instanceof RefLikeType) ret = v;
 	}
 	Local obj = null;
-	if (!(e instanceof StaticInvokeExpr)) 
+	if (!(e instanceof StaticInvokeExpr))
 	    obj = (Local)((InstanceInvokeExpr)e).getBase();
 	List args = e.getArgs();
-	
+
 	// call methoCall on the PurityGraph
 	PurityGraphBox s = (PurityGraphBox)src;
 	PurityGraphBox d = (PurityGraphBox)dst;

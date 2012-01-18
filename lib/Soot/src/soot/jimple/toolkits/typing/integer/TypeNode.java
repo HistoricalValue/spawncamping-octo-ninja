@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ class TypeNode
 
   private final int id;
   private final Type type;
-  
+
   public TypeNode(int id, Type type)
   {
     this.id = id;
@@ -48,7 +48,7 @@ class TypeNode
 	G.v().out.println("creating node " + this);
       }
   }
-  
+
   /** Returns the unique id of this type node. **/
   public int id()
   {
@@ -73,7 +73,7 @@ class TypeNode
   {
     if(typeNode == this)
       return true;
-    
+
     return ClassHierarchy.v().hasAncestor_2(id, typeNode.id);
   }
 

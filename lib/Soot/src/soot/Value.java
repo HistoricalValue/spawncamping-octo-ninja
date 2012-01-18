@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,13 +31,13 @@ import java.util.*;
 import java.io.*;
 
 /** Data used as, for instance, arguments to instructions; typical implementations are
- * constants or expressions. 
+ * constants or expressions.
  *
- * Values are typed, clonable and must declare which other 
+ * Values are typed, clonable and must declare which other
  * Values they use (contain). */
 public interface Value extends Switchable, EquivTo, Serializable
 {
-    /** Returns a List of boxes corresponding to Values 
+    /** Returns a List of boxes corresponding to Values
      * which are used by (ie contained within) this Value. */
     public List getUseBoxes();
 
@@ -46,6 +46,6 @@ public interface Value extends Switchable, EquivTo, Serializable
 
     /** Returns a clone of this Value. */
     public Object clone();
-    
+
     public void toString( UnitPrinter up );
 }

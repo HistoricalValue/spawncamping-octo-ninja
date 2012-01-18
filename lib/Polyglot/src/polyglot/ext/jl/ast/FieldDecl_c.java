@@ -235,7 +235,7 @@ public class FieldDecl_c extends Term_c implements FieldDecl {
         TypeSystem ts = tc.typeSystem();
 
         checkFieldInstanceConstant();
-        
+
         try {
             ts.checkFieldFlags(flags);
         }

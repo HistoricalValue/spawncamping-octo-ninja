@@ -137,24 +137,24 @@ public class New_c extends Expr_c implements New
             // bybass the visiting of the body of the anonymous class. We'll
             // get around to visiting it in the buildTypes method.
             // We do this because we need to visit the body of the anonymous
-            // class after we've pushed an anon class onto the type builder, 
-            // but we need to check the arguments, and qualifier, etc. outside 
-            // of the scope of the anon class.            
+            // class after we've pushed an anon class onto the type builder,
+            // but we need to check the arguments, and qualifier, etc. outside
+            // of the scope of the anon class.
             return tb.bypass(body);
         }
-        
+
 
         return tb;
     }
 
     public Node buildTypes(TypeBuilder tb) throws SemanticException {
         New_c n = this;
-        
+
         if (n.body() != null) {
             // let's get a type builder that is prepared to visit the
             // body; tb wants to bypass it, due to the builtTypesEnter method.
             TypeBuilder bodyTB = (TypeBuilder)tb.visitChildren();
-            
+
             // push an anonymous class on the stack.
             bodyTB = bodyTB.pushAnonClass(position());
 
@@ -409,7 +409,7 @@ FIXME: check super types as well.
 
         // The type of the new expression is actually the anon type.
         n = (New_c)n.type(anonType);
-        
+
 	// Now, run the four passes on the body.
 	ClassBody body = n.typeCheckBody(tc, ct);
 
@@ -508,7 +508,7 @@ FIXME: check super types as well.
     public Type childExpectedType(Expr child, AscriptionVisitor av) {
         if (child == qualifier) {
             ReferenceType t = ci.container();
-                     
+
             if (t.isClass() && t.toClass().isMember()) {
                 t = t.toClass().container();
                 return t;
@@ -567,7 +567,7 @@ FIXME: check super types as well.
     protected void printArgs(CodeWriter w, PrettyPrinter tr) {
 	w.write("(");
 	w.begin(0);
-	
+
 	for (Iterator i = arguments.iterator(); i.hasNext();) {
 	    Expr e = (Expr) i.next();
 

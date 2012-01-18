@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -56,9 +56,9 @@ public interface MutableDirectedGraph<N> extends DirectedGraph<N>
     public void removeEdge(N from, N to);
 
 
-    /** @return true if the graph contains an edge the 2 nodes 
+    /** @return true if the graph contains an edge the 2 nodes
      *           false otherwise.
-     */ 
+     */
     public boolean containsEdge(N from, N to);
 
     /** @return a list of the nodes that compose the graph. No ordering is implied.*/
@@ -88,7 +88,7 @@ public interface MutableDirectedGraph<N> extends DirectedGraph<N>
     public boolean containsNode(N node);
 }
 
- 
+
 
 
 

@@ -39,12 +39,12 @@ public interface Analysis{
     public void caseASTDoWhileNode(ASTDoWhileNode node);
     public void caseASTTryNode(ASTTryNode node);
     public void caseASTStatementSequenceNode(ASTStatementSequenceNode node);
-    
+
     public void caseASTUnaryCondition(ASTUnaryCondition uc);
     public void caseASTBinaryCondition(ASTBinaryCondition bc);
     public void caseASTAndCondition(ASTAndCondition ac);
     public void caseASTOrCondition(ASTOrCondition oc);
-    
+
 
     public void caseType(Type t);
     public void caseDefinitionStmt(DefinitionStmt s);

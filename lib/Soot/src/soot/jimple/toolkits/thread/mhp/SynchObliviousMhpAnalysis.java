@@ -17,8 +17,8 @@ import java.util.*;
 
 /** UnsynchronizedMhpAnalysis written by Richard L. Halpert 2006-12-09
  *  Calculates May-Happen-in-Parallel (MHP) information as if in the absence
- *  of synchronization. Any synchronization statements (synchronized, wait, 
- *  notify, etc.) are ignored. If the program has no synchronization, then this 
+ *  of synchronization. Any synchronization statements (synchronized, wait,
+ *  notify, etc.) are ignored. If the program has no synchronization, then this
  *  actually generates correct MHP. This is useful if you are trying to generate
  *  (replacement) synchronization. It is also useful if an approximation is
  *  acceptable, because it runs much faster than a synch-aware MHP analysis.
@@ -34,9 +34,9 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 	List<AbstractRuntimeThread> MHPLists;
 	boolean optionPrintDebug;
 	boolean optionThreaded = false; // DOESN'T WORK if set to true... ForwardFlowAnalysis uses a static field in a thread-unsafe way
-	
+
 	Thread self;
-	
+
 	public SynchObliviousMhpAnalysis()
 	{
 		MHPLists = new ArrayList<AbstractRuntimeThread>();
@@ -69,7 +69,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 		if (pta instanceof DemandCSPointsTo) {
 			DemandCSPointsTo demandCSPointsTo = (DemandCSPointsTo) pta;
 			pta = demandCSPointsTo.getPAG();
-		}		
+		}
 		if (!(pta instanceof PAG))
 		{
 		   throw new RuntimeException("You must use Spark for points-to analysis when computing MHP information!");
@@ -84,7 +84,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 		// Get a call graph trimmed to contain only the relevant methods (non-lib, non-native)
 //		G.v().out.println("    MHP: PegCallGraph");
 		PegCallGraph pecg = new PegCallGraph(callGraph);
-	    
+
 	    // Find allocation nodes that are run more than once
 	    // Also find methods that are run more than once
 //		G.v().out.println("    MHP: AllocNodesFinder");
@@ -99,7 +99,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 		Map<Stmt, List<SootMethod>> startToRunMethods = sjf.getStartToRunMethods();
 		Map<Stmt, SootMethod> startToContainingMethod = sjf.getStartToContainingMethod();
 		Map<Stmt, Stmt> startToJoin = sjf.getStartToJoin();
-		
+
 		// Build MHP Lists
 //		G.v().out.println("    MHP: Building MHP Lists");
 		List<AbstractRuntimeThread> runAtOnceCandidates = new ArrayList<AbstractRuntimeThread>();
@@ -129,7 +129,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 					thread.addRunMethod(method);
 				}
 			}
-			
+
 			// Get a list containing all methods in the call graph(s) rooted at the possible run methods for this thread start statement
 			// AKA a list of all methods that might be called by the thread started here
 			int methodNum = 0;
@@ -139,7 +139,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 				while(succMethodsIt.hasNext())
 				{
 					SootMethod method = (SootMethod) succMethodsIt.next();
-					// if all edges into this method are of Kind THREAD, ignore it 
+					// if all edges into this method are of Kind THREAD, ignore it
 					// (because it's a run method that won't be called as part of THIS thread) THIS IS NOT OPTIMAL
 					boolean ignoremethod = true;
 					Iterator edgeInIt = callGraph.edgesInto(method);
@@ -154,12 +154,12 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 				}
 				methodNum++;
 			}
-			
+
 			// Add this list of methods to MHPLists
 			MHPLists.add(thread);
 			if(optionPrintDebug)
 				System.out.println(thread.toString());
-			
+
 			// Find out if the "thread" in "thread.start()" could be more than one object
 			boolean mayStartMultipleThreadObjects = (threadAllocNodes.size() > 1) || so.types_for_sites();
 			if(!mayStartMultipleThreadObjects) // if there's only one alloc node
@@ -169,10 +169,10 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 					mayStartMultipleThreadObjects = true; // then "thread" in "thread.start()" could be more than one object
 				}
 			}
-			
+
 			if(mayStartMultipleThreadObjects)
 				thread.setStartStmtHasMultipleReachingObjects();
-			
+
 			// Find out if the "thread.start()" statement may be run more than once
 			SootMethod startStmtMethod = startToContainingMethod.get(startStmt);
 			thread.setStartStmtMethod(startStmtMethod);
@@ -186,7 +186,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 				if(multiRunStatements.contains(startStmt))
 					mayBeRunMultipleTimes = true;
 			}
-			
+
 			if(mayBeRunMultipleTimes)
 			{
 				thread.setStartStmtMayBeRunMultipleTimes();
@@ -231,7 +231,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 			// and this start statement may be run more than once,
 			// then add this list of methods to MHPLists *AGAIN*
 			if(optionPrintDebug)
-				System.out.println("Start Stmt " + startStmt.toString() + 
+				System.out.println("Start Stmt " + startStmt.toString() +
 					" mayStartMultipleThreadObjects=" + mayStartMultipleThreadObjects + " mayBeRunMultipleTimes=" + mayBeRunMultipleTimes);
 			if(mayStartMultipleThreadObjects && mayBeRunMultipleTimes)
 			{
@@ -276,7 +276,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 		}
 		if(optionPrintDebug)
 			G.v().out.println(mainThread.toString());
-			
+
 		// Revisit the containing methods of start-join pairs that are non-reentrant but might be called in parallel
 		boolean addedNew = true;
 		while(addedNew)
@@ -299,7 +299,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 				}
 			}
 		}
-		
+
 		// mark the remaining threads here as run-one-at-a-time
 		Iterator<AbstractRuntimeThread> it = runAtOnceCandidates.iterator();
 		while(it.hasNext())
@@ -330,9 +330,9 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 
 		return mayHappenInParallelInternal(m1, m2);
 	}
-		
+
     public boolean mayHappenInParallel(SootMethod m1, SootMethod m2)
-    { 
+    {
    		if(optionThreaded)
 		{
 			if(self == null)
@@ -376,7 +376,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 		}
 		return false;
 	}
-	
+
 	public void printMhpSummary()
 	{
 		if(optionThreaded)
@@ -403,7 +403,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 		{
 			if( !threads.contains(MHPLists.get(i)) )
 			{
-				G.v().out.println("[mhp] " + 
+				G.v().out.println("[mhp] " +
 					MHPLists.get(i).toString().replaceAll(
 						"\n", "\n[mhp] ").replaceAll(
 						">,",">\n[mhp]  "));
@@ -412,7 +412,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 			threads.add(MHPLists.get(i));
 		}
 	}
-	
+
 	public List<SootClass> getThreadClassList()
 	{
 		if(optionThreaded)
@@ -431,10 +431,10 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 				return null;
 			}
 		}
-		
+
 		if(MHPLists == null)
 			return null;
-		
+
 		List<SootClass> threadClasses = new ArrayList<SootClass>();
 		int size = MHPLists.size();
 		for(int i = 0; i < size; i++)
@@ -450,7 +450,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 		}
 		return threadClasses;
 	}
-	
+
 	public List<AbstractRuntimeThread> getThreads()
 	{
 		if(optionThreaded)
@@ -469,7 +469,7 @@ public class SynchObliviousMhpAnalysis implements MhpTester, Runnable
 				return null;
 			}
 		}
-		
+
 		if(MHPLists == null)
 			return null;
 

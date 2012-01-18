@@ -26,7 +26,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public class LocalVarNode extends VarNode {
-    public ContextVarNode context( Object context ) 
+    public ContextVarNode context( Object context )
     { return cvns == null ? null : cvns.get( context ); }
 
     public SootMethod getMethod() {

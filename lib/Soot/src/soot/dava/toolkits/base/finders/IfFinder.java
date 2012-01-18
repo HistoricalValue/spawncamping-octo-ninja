@@ -49,8 +49,8 @@ public class IfFinder implements FactFinder
 		    continue;
 
 		body.consume_Condition( as);
-		
-		AugmentedStmt 
+
+		AugmentedStmt
 		    succIf   = asg.get_AugStmt( ifs.getTarget()),
 		    succElse = (AugmentedStmt) as.bsuccs.get(0);
 
@@ -69,7 +69,7 @@ public class IfFinder implements FactFinder
 		fullBody.add( as);
 		fullBody.addAll( ifBody);
 		fullBody.addAll( elseBody);
-		
+
 		Iterator enlit = body.get_ExceptionFacts().iterator();
 		while (enlit.hasNext()) {
 		    ExceptionNode en = (ExceptionNode) enlit.next();
@@ -77,7 +77,7 @@ public class IfFinder implements FactFinder
 
 		    if (tryBody.contains( as)) {
 			Iterator fbit = fullBody.snapshotIterator();
-			
+
 			while (fbit.hasNext()) {
 			    AugmentedStmt fbas = (AugmentedStmt) fbit.next();
 

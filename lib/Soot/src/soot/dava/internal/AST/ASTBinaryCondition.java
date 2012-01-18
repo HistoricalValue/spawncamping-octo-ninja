@@ -26,7 +26,7 @@ import soot.dava.toolkits.base.AST.analysis.*;
 
 public class ASTBinaryCondition extends ASTUnaryBinaryCondition{
     ConditionExpr condition;
-    
+
     public ASTBinaryCondition(ConditionExpr condition){
 	this.condition=condition;
     }
@@ -51,10 +51,10 @@ public class ASTBinaryCondition extends ASTUnaryBinaryCondition{
     public void flip(){
 	this.condition=ConditionFlipper.flip(condition);
     }
-    
+
     /*
      * Since a conditionExpr can always be flipped we always return true
-     * 
+     *
      */
     public boolean isNotted(){
     	return true;

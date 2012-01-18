@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,10 +40,10 @@ import java.util.*;
  */
 public interface LiveLocals
 {
-    
+
     /**
      *   Returns the list of Locals that are live before the specified
-     *   Unit. 
+     *   Unit.
      *   @param s the Unit that defines this query.
      *   @return a list of Locals that are live before the specified unit in the method.
      */
@@ -52,7 +52,7 @@ public interface LiveLocals
 
     /**
      *   Returns the list of Locals that are live after the specified
-     *   Unit. 
+     *   Unit.
      *   @param s the Unit that defines this query.
      *   @return a list of Locals that are live after the specified unit in the method.
      */

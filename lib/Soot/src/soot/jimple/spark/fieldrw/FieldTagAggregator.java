@@ -25,7 +25,7 @@ import java.util.*;
 import soot.tagkit.*;
 
 public class FieldTagAggregator extends TagAggregator
-{    
+{
     public FieldTagAggregator( Singletons.Global g ) {}
     public static FieldTagAggregator v() { return G.v().soot_jimple_spark_fieldrw_FieldTagAggregator(); }
 

@@ -26,7 +26,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public class TransitiveTargets
-{ 
+{
     private CallGraph cg;
     private Filter filter;
     public TransitiveTargets( CallGraph cg ) {

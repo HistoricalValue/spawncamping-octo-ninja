@@ -25,7 +25,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public class PaddleHook extends SceneTransformer
-{ 
+{
     public PaddleHook( Singletons.Global g ) {}
     public static PaddleHook v() { return G.v().soot_jimple_paddle_PaddleHook(); }
 

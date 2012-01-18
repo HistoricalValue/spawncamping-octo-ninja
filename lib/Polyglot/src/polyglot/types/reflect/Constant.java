@@ -45,22 +45,22 @@ public class Constant
     static final byte STRING             = 8;
 
     /**
-     * Constant tag for int, short, byte, char, and boolean constants. 
+     * Constant tag for int, short, byte, char, and boolean constants.
      */
     static final byte INTEGER            = 3;
 
     /**
-     * Constant tag for float constants. 
+     * Constant tag for float constants.
      */
     static final byte FLOAT              = 4;
 
     /**
-     * Constant tag for long constants. 
+     * Constant tag for long constants.
      */
     static final byte LONG               = 5;
 
     /**
-     * Constant tag for double constants. 
+     * Constant tag for double constants.
      */
     static final byte DOUBLE             = 6;
 

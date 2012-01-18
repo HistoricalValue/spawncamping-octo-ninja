@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -28,12 +28,12 @@ import java.util.*;
 public class SingletonList<E> extends AbstractList<E>
 {
 	private E e;
-	
+
 	public SingletonList(E e)
 	{
 		this.e = e;
 	}
-	
+
 	public E get(int index)
 	{
 		if ( index != 0 )
@@ -41,7 +41,7 @@ public class SingletonList<E> extends AbstractList<E>
 		else
 			return this.e;
 	}
-	
+
 	public int size()
 	{
 		return 1;

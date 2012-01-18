@@ -28,97 +28,97 @@ import java.util.*;
 import java.io.*;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 5-Mar-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 5-Mar-2006
  */
 public class IdentifiersMetric extends ASTMetric {
 
   double nameComplexity = 0;
   double nameCount =0;
-  
-  
-  
+
+
+
   int dictionarySize = 0;
   ArrayList<String> dictionary;
-  
+
   //cache of names so no recomputation
   HashMap<String, Double> names;
   /**
    * @param astNode
-   * 
+   *
    * This metric will take a measure of the "complexity" of each identifier used
    * within the program. An identifier's complexity is computed as follows:
-   * 
+   *
    * First the alpha tokens are parsed by splitting on non-alphas and capitals:
-   * 
+   *
    * 	example identifier: getASTNode		alpha tokens: get, AST, Node
    * 	example identifier: ___Junk$$name	alpha tokens: Junk, name)
-   * 
+   *
    * The alpha tokens are then counted and a 'token complexity' is formed by the ratio
    * of total tokens to the number of tokens found in the dictionary:
-   * 
+   *
    * 	example identifier: getASTNode		Total: 3, Found: 2, Complexity: 1.5
-   * 
+   *
    * Then the 'character complexity' is computed, which is a ratio of total number of
-   * characters to the number of non-complex characters. Non-complex characters are 
+   * characters to the number of non-complex characters. Non-complex characters are
    * those which are NOT part of a multiple string of non-alphas.
-   * 
+   *
    * 	example identifier: ___Junk$$name	complex char strings: '___', '$$'
    * 		number of non-complex (Junk + name): 8, total: 13, Complexity: 1.625
-   * 
+   *
    * Finally, the total identifier complexity is the sum of the token and character
    * complexities multipled by the 'importance' of an identifier:
-   * 
+   *
    * Multipliers are as follows:
-   * 	     
+   *
    * Class multiplier = 3;
    * Method multiplier = 4;
    * Field multiplier = 2;
    * Formal multiplier = 1.5;
    * Local multiplier = 1;
-   * 
+   *
    */
   public IdentifiersMetric(Node astNode) {
     super(astNode);
-    
+
     initializeDictionary();
   }
-  
+
   private void initializeDictionary() {
     String line;
     BufferedReader br;
     dictionary = new ArrayList<String>();
     names = new HashMap<String, Double>();
-    
+
     InputStream is = ClassLoader.getSystemResourceAsStream("mydict.txt");
     if (is != null)
     {
       br = new BufferedReader(new InputStreamReader(is));
-      
+
       try {
         while ((line = br.readLine()) != null)
           addWord(line);
       } catch (IOException ioexc) {}
     }
-    
+
     is = ClassLoader.getSystemResourceAsStream("soot/toolkits/astmetrics/dict.txt");
     if (is != null)
     {
       br = new BufferedReader(new InputStreamReader(is));
-    
+
       try {
         while ((line = br.readLine()) != null)
           addWord(line.trim().toLowerCase());
       } catch (IOException ioexc) {}
     }
-      
+
     if ((dictionarySize = dictionary.size()) == 0)
-      G.v().out.println("Error reading in dictionary file(s)");  
+      G.v().out.println("Error reading in dictionary file(s)");
     else if (Options.v().verbose())
       G.v().out.println("Read "+dictionarySize+" words in from dictionary file(s)");
   }
-  
+
   private void addWord(String word) {
     if (dictionarySize == 0 || word.compareTo(dictionary.get(dictionarySize - 1)) > 0) {
       dictionary.add(word);
@@ -126,13 +126,13 @@ public class IdentifiersMetric extends ASTMetric {
       int i = 0;
 	  while (i < dictionarySize && word.compareTo(dictionary.get(i)) > 0)
 	    i++;
-	  
-	  if (word.compareTo(dictionary.get(i)) == 0) 
+
+	  if (word.compareTo(dictionary.get(i)) == 0)
 	    return;
-	  
+
 	  dictionary.add(i,word);
     }
-    
+
     dictionarySize++;
   }
 
@@ -151,7 +151,7 @@ public class IdentifiersMetric extends ASTMetric {
 	    data.addMetric(new MetricData("NameComplexity",new Double(nameComplexity)));
 	    data.addMetric(new MetricData("NameCount",new Double(nameCount)));
   }
-  
+
   public NodeVisitor enter(Node parent, Node n){
     double multiplier = 1;
     String name = null;
@@ -175,7 +175,7 @@ public class IdentifiersMetric extends ASTMetric {
       name = ((LocalDecl)n).name();
       nameCount++;
     }
-    
+
     if (name!=null)
     {
       nameComplexity += (multiplier * computeNameComplexity(name));
@@ -186,9 +186,9 @@ public class IdentifiersMetric extends ASTMetric {
   private double computeNameComplexity(String name) {
     if (names.containsKey(name))
       return names.get(name).doubleValue();
-    
+
     ArrayList<String> strings = new ArrayList<String>();
-    
+
     // throw out non-alpha characters
     String tmp = "";
     for (int i = 0; i < name.length(); i++)
@@ -203,7 +203,7 @@ public class IdentifiersMetric extends ASTMetric {
     }
     if (tmp.length()>0)
       strings.add(tmp);
-    
+
     ArrayList<String> tokens = new ArrayList<String>();
     for (int i = 0; i < strings.size(); i++)
     {
@@ -241,26 +241,26 @@ public class IdentifiersMetric extends ASTMetric {
         }
       }
     }
-    
+
     double words = 0;
     double complexity = 0;
     for (int i = 0; i < tokens.size(); i++)
       if (dictionary.contains(tokens.get(i)))
         words++;
-      
+
     if (words>0)
       complexity = (tokens.size()) / words;
-    
+
     names.put(name,new Double(complexity + computeCharComplexity(name)));
-    
+
     return complexity;
   }
-  
+
   private double computeCharComplexity(String name) {
     int count = 0, index = 0, last = 0, lng = name.length();
     while (index < lng) {
       char c = name.charAt(index);
-      if ((c < 65 || c > 90) && (c < 97 || c > 122)) { 
+      if ((c < 65 || c > 90) && (c < 97 || c > 122)) {
         last++;
       } else {
         if (last>1)
@@ -269,20 +269,20 @@ public class IdentifiersMetric extends ASTMetric {
       }
       index++;
     }
-    
+
     double complexity = lng - count;
-    
+
     if (complexity > 0)
       return ((lng) / complexity);
     else return lng;
   }
-  
-  
+
+
   /*
-   * @author Michael Batchelder 
-   * 
+   * @author Michael Batchelder
+   *
    * Created on 6-Mar-2006
-   * 
+   *
    * @param	name	string to parse
    * @return		number of leading capital letters
    */
@@ -290,20 +290,20 @@ public class IdentifiersMetric extends ASTMetric {
     int caps = 0;
     while (caps < name.length()) {
       char c = name.charAt(caps);
-      if (c > 64 && c < 91) 
+      if (c > 64 && c < 91)
         caps++;
-      else 
+      else
         break;
     }
-    
+
     return caps;
   }
-  
+
   /*
-   * @author Michael Batchelder 
-   * 
+   * @author Michael Batchelder
+   *
    * Created on 6-Mar-2006
-   * 
+   *
    * @param	name	string to parse
    * @return		index of first capital letter
    */
@@ -311,12 +311,12 @@ public class IdentifiersMetric extends ASTMetric {
     int idx = 0;
     while (idx < name.length()) {
       char c = name.charAt(idx);
-      if (c > 64 && c < 91) 
+      if (c > 64 && c < 91)
         return idx;
-      else 
+      else
         idx++;
     }
-    
+
     return -1;
   }
 }

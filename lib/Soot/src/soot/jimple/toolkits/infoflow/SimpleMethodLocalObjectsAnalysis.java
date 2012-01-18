@@ -18,17 +18,17 @@ public class SimpleMethodLocalObjectsAnalysis extends SimpleMethodInfoFlowAnalys
 	public SimpleMethodLocalObjectsAnalysis(UnitGraph g, ClassLocalObjectsAnalysis cloa, InfoFlowAnalysis dfa)
 	{
 		super(g, dfa, true, true); // special version doesn't run analysis yet
-		
+
 		mlocounter++;
-		
+
 		printMessages = false;
 
 		SootMethod method = g.getBody().getMethod();
-		
+
 		AbstractDataSource sharedDataSource = new AbstractDataSource(new String("SHARED"));
-		
+
 		// Add a source for every parameter that is shared
-		for(int i = 0; i < method.getParameterCount(); i++) // no need to worry about return value... 
+		for(int i = 0; i < method.getParameterCount(); i++) // no need to worry about return value...
 		{
 			EquivalentValue paramEqVal = InfoFlowAnalysis.getNodeForParameterRef(method, i);
 			if(!cloa.parameterIsLocal(method, paramEqVal))
@@ -37,32 +37,32 @@ public class SimpleMethodLocalObjectsAnalysis extends SimpleMethodInfoFlowAnalys
 				addToNewInitialFlow(sharedDataSource, paramEqVal.getValue());
 			}
 		}
-		
+
 		for (SootField sf : cloa.getSharedFields()) {
 			EquivalentValue fieldRefEqVal = InfoFlowAnalysis.getNodeForFieldRef(method, sf);
 			addToEntryInitialFlow(sharedDataSource, fieldRefEqVal.getValue());
 			addToNewInitialFlow(sharedDataSource, fieldRefEqVal.getValue());
 		}
-		
+
 		if(printMessages)
 			G.v().out.println("----- STARTING SHARED/LOCAL ANALYSIS FOR " + g.getBody().getMethod() + " -----");
 		doFlowInsensitiveAnalysis();
 		if(printMessages)
 			G.v().out.println("----- ENDING   SHARED/LOCAL ANALYSIS FOR " + g.getBody().getMethod() + " -----");
 	}
-	
+
 	public SimpleMethodLocalObjectsAnalysis(UnitGraph g, CallLocalityContext context, InfoFlowAnalysis dfa)
 	{
 		super(g, dfa, true, true); // special version doesn't run analysis yet
-		
+
 		mlocounter++;
 
 		printMessages = false;
 
 		SootMethod method = g.getBody().getMethod();
-		
+
 		AbstractDataSource sharedDataSource = new AbstractDataSource(new String("SHARED"));
-		
+
 		List<Object> sharedRefs = context.getSharedRefs();
 		Iterator<Object> sharedRefEqValIt = sharedRefs.iterator(); // returns a list of (correctly structured) EquivalentValue wrapped refs that should be treated as shared
 		while(sharedRefEqValIt.hasNext())
@@ -71,18 +71,18 @@ public class SimpleMethodLocalObjectsAnalysis extends SimpleMethodInfoFlowAnalys
 			addToEntryInitialFlow(sharedDataSource, refEqVal.getValue());
 			addToNewInitialFlow(sharedDataSource, refEqVal.getValue());
 		}
-		
+
 		if(printMessages)
 		{
 			G.v().out.println("----- STARTING SHARED/LOCAL ANALYSIS FOR " + g.getBody().getMethod() + " -----");
 			G.v().out.print("      " + context.toString().replaceAll("\n","\n      "));
 			G.v().out.println("found " + sharedRefs.size() + " shared refs in context.");
-		}	
+		}
 		doFlowInsensitiveAnalysis();
 		if(printMessages)
 			G.v().out.println("----- ENDING   SHARED/LOCAL ANALYSIS FOR " + g.getBody().getMethod() + " -----");
 	}
-	
+
 	// Interesting sources are summarized (and possibly printed)
 	public boolean isInterestingSource(Value source)
 	{
@@ -94,8 +94,8 @@ public class SimpleMethodLocalObjectsAnalysis extends SimpleMethodInfoFlowAnalys
 	{
 		return true; //(sink instanceof Local); // we're interested in all values
 	}
-	
-	// 
+
+	//
 	public boolean isObjectLocal(Value local) // to this analysis of this method (which depends on context)
 	{
 		EquivalentValue source = new CachedEquivalentValue(new AbstractDataSource(new String("SHARED")));

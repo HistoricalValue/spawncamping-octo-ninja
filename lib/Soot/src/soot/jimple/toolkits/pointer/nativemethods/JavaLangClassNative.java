@@ -35,7 +35,7 @@ public class JavaLangClassNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -120,7 +120,7 @@ public class JavaLangClassNative extends NativeMethodClass {
     } else if (subSignature.equals("java.lang.reflect.Constructor getConstructor0(java.lang.Class[],int)")) {
       java_lang_Class_getConstructor0(method, thisVar, returnVar, params);
       return;
-   
+
     } else if (subSignature.equals("java.lang.Class[] getDeclaredClasses0()")){
       java_lang_Class_getDeclaredClasses0(method, thisVar, returnVar, params);
       return;
@@ -139,16 +139,16 @@ public class JavaLangClassNative extends NativeMethodClass {
   /****************************** java.lang.Class **********************/
   /* A quick note for simulating java.lang.Class :
    *
-   * In theory, the same class may have two or more representations 
+   * In theory, the same class may have two or more representations
    * at the runtime. But statically, we can assume that all variables
    * of java.lang.Class type are aliased together. By looking at
-   * static class hierarchy, there is only one ReferenceVariable 
+   * static class hierarchy, there is only one ReferenceVariable
    * variable for a class in the hierarchy.
    */
 
   /**
-   * NOTE: the semantic of forName0 follows forName method.  
-   * 
+   * NOTE: the semantic of forName0 follows forName method.
+   *
    * Returns the Class object associated with the class or interface
    * with the given string name, using the given class loader. Given
    * the fully qualified name for a class or interface (in the same
@@ -163,18 +163,18 @@ public class JavaLangClassNative extends NativeMethodClass {
    * to locate a user-defined class in the unnamed package whose
    * name is name. Therefore, this method cannot be used to obtain
    * any of the Class objects representing primitive types or void.
-   * 
+   *
    * If name denotes an array class, the component type of the array
    * class is loaded but not initialized.
    *
-   * For example, in an instance method the expression: 
-   *       Class.forName("Foo")       
-   * is equivalent to: 
-   *       Class.forName("Foo", true, this.getClass().getClassLoader()) 
+   * For example, in an instance method the expression:
+   *       Class.forName("Foo")
+   * is equivalent to:
+   *       Class.forName("Foo", true, this.getClass().getClassLoader())
    *
-   * private static native java.lang.Class forName0(java.lang.String, 
-   *                                                boolean, 
-   *                                                java.lang.ClassLoader) 
+   * private static native java.lang.Class forName0(java.lang.String,
+   *                                                boolean,
+   *                                                java.lang.ClassLoader)
    *                                throws java.lang.ClassNotFoundException;
    */
   public void java_lang_Class_forName0(SootMethod method,
@@ -187,8 +187,8 @@ public class JavaLangClassNative extends NativeMethodClass {
   /**
    * NOTE: creates an object.
    *
-   * private native java.lang.Object newInstance0() 
-   *           throws java.lang.InstantiationException, 
+   * private native java.lang.Object newInstance0()
+   *           throws java.lang.InstantiationException,
    *                  java.lang.IllegalAccessException
    */
   public void java_lang_Class_newInstance0(SootMethod method,
@@ -213,7 +213,7 @@ public class JavaLangClassNative extends NativeMethodClass {
 
   /**
    * returns the class loader object for this class.
-   * 
+   *
    * it is almost impossible to distinguish the dynamic class loader
    * for classes. a conservative way is to use one static representation
    * for all class loader, which means all class loader variable aliased
@@ -221,7 +221,7 @@ public class JavaLangClassNative extends NativeMethodClass {
    *
    * private native java.lang.ClassLoader getClassLoader0();
    */
-  public 
+  public
     void java_lang_Class_getClassLoader0(SootMethod method,
 					 ReferenceVariable thisVar,
 					 ReferenceVariable returnVar,
@@ -234,7 +234,7 @@ public class JavaLangClassNative extends NativeMethodClass {
    *
    * public native java.lang.Class getSuperclass();
    */
-  public 
+  public
     void java_lang_Class_getSuperclass(SootMethod method,
 				       ReferenceVariable thisVar,
 				       ReferenceVariable returnVar,
@@ -248,7 +248,7 @@ public class JavaLangClassNative extends NativeMethodClass {
    *
    * public native java.lang.Class getInterfaces()[];
    */
-  public 
+  public
     void java_lang_Class_getInterfaces(SootMethod method,
 				       ReferenceVariable thisVar,
 				       ReferenceVariable returnVar,
@@ -260,11 +260,11 @@ public class JavaLangClassNative extends NativeMethodClass {
   /**
    * Returns the Class representing the component type of an array. If
    * this class does not represent an array class this method returns
-   * null.  
+   * null.
    *
    *     public native java.lang.Class getComponentType();
    */
-  public 
+  public
     void java_lang_Class_getComponentType(SootMethod method,
 					  ReferenceVariable thisVar,
 					  ReferenceVariable returnVar,
@@ -274,35 +274,35 @@ public class JavaLangClassNative extends NativeMethodClass {
 
   /**
    * Sets the signers of a class. This should be called after defining a
-   * class.  Parameters: 
-   *           c - the Class object 
+   * class.  Parameters:
+   *           c - the Class object
    *     signers - the signers for the class
    *
-   *     native void setSigners(java.lang.Object[]); 
+   *     native void setSigners(java.lang.Object[]);
    */
-  public 
+  public
     void java_lang_Class_setSigners(SootMethod method,
 				    ReferenceVariable thisVar,
 				    ReferenceVariable returnVar,
 				    ReferenceVariable params[]) {
-    ReferenceVariable tempFld = 
+    ReferenceVariable tempFld =
       helper.tempField("<java.lang.Class signers>");
     helper.assign(tempFld, params[0]);
   }
 
   /**
    * Gets the signers of this class.
-   * We need an artificial field variable to connect setSigners 
+   * We need an artificial field variable to connect setSigners
    * and getSigners.
    *
    *     public native java.lang.Object getSigners()[];
    */
-  public 
+  public
     void java_lang_Class_getSigners(SootMethod method,
 				    ReferenceVariable thisVar,
 				    ReferenceVariable returnVar,
 				    ReferenceVariable params[]) {
-    ReferenceVariable tempFld = 
+    ReferenceVariable tempFld =
       helper.tempField("<java.lang.Class signers>");
     helper.assign(returnVar, tempFld);
   }
@@ -318,9 +318,9 @@ public class JavaLangClassNative extends NativeMethodClass {
    *  Returns:
    *      the declaring class for this class
    *
-   *     public native java.lang.Class getDeclaringClass(); 
+   *     public native java.lang.Class getDeclaringClass();
    */
-  public 
+  public
     void java_lang_Class_getDeclaringClass(SootMethod method,
 					   ReferenceVariable thisVar,
 					   ReferenceVariable returnVar,
@@ -331,30 +331,30 @@ public class JavaLangClassNative extends NativeMethodClass {
   /**
    * Sets or returns the ProtectionDomain of this class,
    * called by getProtectiondomain.
-   * 
+   *
    * We need an artificial field variable to handle this.
    *
    *     native void setProtectionDomain0(java.security.ProtectionDomain);
    */
-  public 
+  public
     void java_lang_Class_setProtectionDomain0(SootMethod method,
 					      ReferenceVariable thisVar,
 					      ReferenceVariable returnVar,
 					      ReferenceVariable params[]) {
-    ReferenceVariable protdmn = 
+    ReferenceVariable protdmn =
       helper.tempField("<java.lang.Class ProtDmn>");
     helper.assign(protdmn, params[0]);
-  } 
+  }
 
   /**
    *     private native java.security.ProtectionDomain getProtectionDomain0();
    */
-  public 
+  public
     void java_lang_Class_getProtectionDomain0(SootMethod method,
 					      ReferenceVariable thisVar,
 					      ReferenceVariable returnVar,
 					      ReferenceVariable params[]) {
-    ReferenceVariable protdmn = 
+    ReferenceVariable protdmn =
       helper.tempField("<java.lang.Class ProtDmn>");
     helper.assign(returnVar, protdmn);
   }
@@ -362,10 +362,10 @@ public class JavaLangClassNative extends NativeMethodClass {
   /**
    * Undocumented. It is supposed to return a class object for primitive
    * type named by @param0.
-   * 
+   *
    *     static native java.lang.Class getPrimitiveClass(java.lang.String);
    */
-  public 
+  public
     void java_lang_Class_getPrimitiveClass(SootMethod method,
 					   ReferenceVariable thisVar,
 					   ReferenceVariable returnVar,
@@ -376,11 +376,11 @@ public class JavaLangClassNative extends NativeMethodClass {
   /**
    * Returns an array containing Field objects reflecting all the
    * accessible public fields of the class or interface represented by
-   * this Class object.  
+   * this Class object.
    *
    *     private native java.lang.reflect.Field getFields0(int)[];
    */
-  public 
+  public
     void java_lang_Class_getFields0(SootMethod method,
 				    ReferenceVariable thisVar,
 				    ReferenceVariable returnVar,
@@ -397,7 +397,7 @@ public class JavaLangClassNative extends NativeMethodClass {
    *
    *     private native java.lang.reflect.Method getMethods0(int)[];
    */
-  public 
+  public
     void java_lang_Class_getMethods0(SootMethod method,
 				     ReferenceVariable thisVar,
 				     ReferenceVariable returnVar,
@@ -410,11 +410,11 @@ public class JavaLangClassNative extends NativeMethodClass {
    * constructor of the class represented by this Class object.  The
    * parameterTypes parameter is an array of Class objects that
    * identify the constructor's formal parameter types, in declared
-   * order.  
-   * 
+   * order.
+   *
    *     private native java.lang.reflect.Constructor getConstructors0(int)[];
    */
-  public 
+  public
     void java_lang_Class_getConstructors0(SootMethod method,
 					  ReferenceVariable thisVar,
 					  ReferenceVariable returnVar,
@@ -428,14 +428,14 @@ public class JavaLangClassNative extends NativeMethodClass {
    *
    * Called by getField(String)
    *
-   * NOTE: getField0(String name), since the name can be dynamically 
+   * NOTE: getField0(String name), since the name can be dynamically
    *       constructed, it may be not able to know exact field name
    *       in static analysis. Uses a C.F to represent the class field.
    *
-   *     private native java.lang.reflect.Field getField0(java.lang.String, 
-   *                                                      int);       
+   *     private native java.lang.reflect.Field getField0(java.lang.String,
+   *                                                      int);
    */
-  public 
+  public
     void java_lang_Class_getField0(SootMethod method,
 				   ReferenceVariable thisVar,
 				   ReferenceVariable returnVar,
@@ -450,11 +450,11 @@ public class JavaLangClassNative extends NativeMethodClass {
    *
    * Called by getMethod()
    *
-   *     private native java.lang.reflect.Method getMethod0(java.lang.String, 
+   *     private native java.lang.reflect.Method getMethod0(java.lang.String,
    *                                                        java.lang.Class[],
    *                                                        int);
    */
-  public 
+  public
     void java_lang_Class_getMethod0(SootMethod method,
 				    ReferenceVariable thisVar,
 				    ReferenceVariable returnVar,
@@ -465,10 +465,10 @@ public class JavaLangClassNative extends NativeMethodClass {
   /**
    * Returns a constructor of a class
    *
-   *     private native java.lang.reflect.Constructor 
+   *     private native java.lang.reflect.Constructor
    *                            getConstructor0(java.lang.Class[], int);
    */
-  public 
+  public
     void java_lang_Class_getConstructor0(SootMethod method,
 					 ReferenceVariable thisVar,
 					 ReferenceVariable returnVar,
@@ -481,9 +481,9 @@ public class JavaLangClassNative extends NativeMethodClass {
    * interfaces declared as members of the class represented by this
    * Class object.
    *
-   *     private native java.lang.Class getDeclaredClasses0()[];  
+   *     private native java.lang.Class getDeclaredClasses0()[];
    */
-  public 
+  public
     void java_lang_Class_getDeclaredClasses0(SootMethod method,
 					     ReferenceVariable thisVar,
 					     ReferenceVariable returnVar,
@@ -496,9 +496,9 @@ public class JavaLangClassNative extends NativeMethodClass {
    * interfaces declared as members of the class represented by this
    * Class object.
    *
-   *     private native java.lang.Class getDeclaredConstructors0(boolean)[];  
+   *     private native java.lang.Class getDeclaredConstructors0(boolean)[];
    */
-  public 
+  public
     void java_lang_Class_getDeclaredConstructors0(SootMethod method,
 					     ReferenceVariable thisVar,
 					     ReferenceVariable returnVar,

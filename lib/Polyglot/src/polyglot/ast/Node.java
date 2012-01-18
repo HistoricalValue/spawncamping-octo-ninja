@@ -93,7 +93,7 @@ public interface Node extends JL, Copy
      * @return A new list with each element from the old list
      *         replaced by the result of visiting that element.
      *         If <code>l</code> is a <code>TypedList</code>, the
-     *         new list will also be typed with the same type as 
+     *         new list will also be typed with the same type as
      *         <code>l</code>.  If <code>l</code> is <code>null</code>,
      *         <code>null</code> is returned.
      */

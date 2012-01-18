@@ -27,15 +27,15 @@ import java.util.Set;
 abstract class AbstractMultiMap<K, V> implements MultiMap<K, V> {
 
 	protected final Map<K, Set<V>> map = new HashMap<K, Set<V>>();
-	
+
 	protected final boolean create;
-	
+
 	protected AbstractMultiMap(boolean create) {
 		this.create = create;
 	}
-	
+
 	protected abstract Set<V> createSet();
-	
+
 	protected Set<V> emptySet() {
 		return Collections.<V>emptySet();
 	}
@@ -54,7 +54,7 @@ abstract class AbstractMultiMap<K, V> implements MultiMap<K, V> {
 		}
 		return ret;
     }
-    
+
     /* (non-Javadoc)
 	 * @see AAA.util.MultiMap#put(K, V)
 	 */
@@ -63,10 +63,10 @@ abstract class AbstractMultiMap<K, V> implements MultiMap<K, V> {
 		if (vals == null) {
 			vals = createSet();
 			map.put(key, vals);
-		}		
-		return vals.add(val);        
+		}
+		return vals.add(val);
     }
-    
+
     /* (non-Javadoc)
 	 * @see AAA.util.MultiMap#remove(K, V)
 	 */
@@ -79,7 +79,7 @@ abstract class AbstractMultiMap<K, V> implements MultiMap<K, V> {
 	    }
         return ret;
     }
-    
+
     public Set<V> removeAll(K key) {
       return map.remove(key);
     }
@@ -89,14 +89,14 @@ abstract class AbstractMultiMap<K, V> implements MultiMap<K, V> {
     public Set<K> keySet() {
     	return map.keySet();
     }
-    
+
     /* (non-Javadoc)
 	 * @see AAA.util.MultiMap#containsKey(java.lang.Object)
 	 */
     public boolean containsKey(K key) {
         return map.containsKey(key);
     }
-    
+
     /* (non-Javadoc)
 	 * @see AAA.util.MultiMap#size()
 	 */
@@ -107,7 +107,7 @@ abstract class AbstractMultiMap<K, V> implements MultiMap<K, V> {
 		}
         return ret;
     }
-    
+
     /* (non-Javadoc)
 	 * @see AAA.util.MultiMap#toString()
 	 */
@@ -123,14 +123,14 @@ abstract class AbstractMultiMap<K, V> implements MultiMap<K, V> {
 		if (edges == null) {
 			edges = createSet();
 			map.put(key, edges);
-		}		
-		return edges.addAll(vals);        
+		}
+		return edges.addAll(vals);
 	}
 
 	public void clear() {
 		map.clear();
 	}
-    
+
     public boolean isEmpty() {
       return map.isEmpty();
     }

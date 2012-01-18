@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -168,7 +168,7 @@ public class ClassFile {
 	return (constant_pool[this_class].toString(constant_pool));
     }
 
-    public boolean loadClassFile(InputStream is) 
+    public boolean loadClassFile(InputStream is)
     {
       InputStream f = null;
       InputStream classFileStream;
@@ -176,36 +176,36 @@ public class ClassFile {
       boolean b;
 
       classFileStream = is;
-     
+
       byte[]  data;
-      
-      
+
+
       Timers.v().readTimer.start();
-      
-      try 
+
+      try
       {
         data = new byte[classFileStream.available()];
         classFileStream.read(data);
         f = new ByteArrayInputStream(data);
-         
+
       } catch(IOException e)
       {
       }
-      
+
       Timers.v().readTimer.end();
-      
+
       d = new DataInputStream(f);
       b = readClass(d);
-      
+
       try {
         classFileStream.close();
-        d.close(); 
+        d.close();
         f.close();
       } catch(IOException e) {
          G.v().out.println("IOException with " + fn + ": " + e.getMessage());
          return false;
       }
-      
+
       if (!b) return false;
       //parse();        // parse all methods & builds CFGs
       //G.v().out.println("-- Read " + cf + " --");
@@ -394,20 +394,20 @@ public class ClassFile {
          //G.v().out.println("Implements " + interfaces_count + " interface(s)");
 
          Timers.v().fieldTimer.start();
-         
+
          fields_count = d.readUnsignedShort();
          //G.v().out.println("Has " + fields_count + " field(s)");
          readFields(d);
          Timers.v().fieldTimer.end();
-        
+
          Timers.v().methodTimer.start();
          methods_count = d.readUnsignedShort();
          //G.v().out.println("Has " + methods_count + " method(s)");
          readMethods(d);
          Timers.v().methodTimer.end();
-        
+
          Timers.v().attributeTimer.start();
-         
+
          attributes_count = d.readUnsignedShort();
          //G.v().out.println("Has " + attributes_count + " attribute(s)");
          if (attributes_count>0) {
@@ -415,7 +415,7 @@ public class ClassFile {
             readAttributes(d,attributes_count,attributes);
          }
          Timers.v().attributeTimer.end();
-         
+
       } catch(IOException e) {
          throw new RuntimeException("IOException with " + fn + ": " + e.getMessage());
       }
@@ -499,7 +499,7 @@ public class ClassFile {
             cp = new CONSTANT_Long_info();
             ((CONSTANT_Long_info)cp).high = d.readInt() & 0xFFFFFFFFL;
             ((CONSTANT_Long_info)cp).low = d.readInt() & 0xFFFFFFFFL;
-            
+
             if (debug) {
                String temp = cp.toString(constant_pool);
                G.v().out.println("Constant pool[" + i + "]: Long = " + temp);
@@ -562,21 +562,21 @@ public class ClassFile {
       String s;
 
       for (i=0;i<attributes_count;i++) {
-         
+
          j = d.readUnsignedShort();  // read attribute name before allocating
          len = d.readInt() & 0xFFFFFFFFL;
          s = ((CONSTANT_Utf8_info)(constant_pool[j])).convert();
-         if (s.compareTo(attribute_info.SourceFile)==0) 
+         if (s.compareTo(attribute_info.SourceFile)==0)
          {
             SourceFile_attribute sa = new SourceFile_attribute();
             sa.sourcefile_index = d.readUnsignedShort();
             a = (attribute_info)sa;
-         } else if(s.compareTo(attribute_info.ConstantValue)==0) 
+         } else if(s.compareTo(attribute_info.ConstantValue)==0)
          {
             ConstantValue_attribute ca = new ConstantValue_attribute();
             ca.constantvalue_index = d.readUnsignedShort();
             a = (attribute_info)ca;
-         } else if(s.compareTo(attribute_info.Code)==0) 
+         } else if(s.compareTo(attribute_info.Code)==0)
          {
             Code_attribute ca = new Code_attribute();
             ca.max_stack = d.readUnsignedShort();
@@ -600,9 +600,9 @@ public class ClassFile {
             ca.attributes = new attribute_info[ca.attributes_count];
             readAttributes(d,ca.attributes_count,ca.attributes);
             a = (attribute_info)ca;
-            
-            
-         } else if(s.compareTo(attribute_info.Exceptions)==0) 
+
+
+         } else if(s.compareTo(attribute_info.Exceptions)==0)
          {
             Exception_attribute ea = new Exception_attribute();
             ea.number_of_exceptions = d.readUnsignedShort();
@@ -613,7 +613,7 @@ public class ClassFile {
                   ea.exception_index_table[k]  = d.readUnsignedShort();
             }
             a = (attribute_info)ea;
-         } else if(s.compareTo(attribute_info.LineNumberTable)==0) 
+         } else if(s.compareTo(attribute_info.LineNumberTable)==0)
          {
 	     LineNumberTable_attribute la = new LineNumberTable_attribute();
 	     la.line_number_table_length = d.readUnsignedShort();
@@ -628,8 +628,8 @@ public class ClassFile {
 		 la.line_number_table[k] = e;
 	     }
 	     a = (attribute_info)la;
-         } 
-         else if(s.compareTo(attribute_info.LocalVariableTable)==0) 
+         }
+         else if(s.compareTo(attribute_info.LocalVariableTable)==0)
          {
             LocalVariableTable_attribute la = new LocalVariableTable_attribute();
             la.local_variable_table_length = d.readUnsignedShort();
@@ -647,8 +647,8 @@ public class ClassFile {
                la.local_variable_table[k] = e;
             }
             a = (attribute_info)la;
-	 } 
-         else if(s.compareTo(attribute_info.LocalVariableTypeTable)==0) 
+	 }
+         else if(s.compareTo(attribute_info.LocalVariableTypeTable)==0)
          {
             LocalVariableTypeTable_attribute la = new LocalVariableTypeTable_attribute();
             la.local_variable_type_table_length = d.readUnsignedShort();
@@ -666,7 +666,7 @@ public class ClassFile {
                la.local_variable_type_table[k] = e;
             }
             a = (attribute_info)la;
-	 } 
+	 }
      else if (s.compareTo(attribute_info.Synthetic)==0){
         Synthetic_attribute ia = new Synthetic_attribute();
         a = (attribute_info)ia;
@@ -713,9 +713,9 @@ public class ClassFile {
                 annot.element_value_pairs = readElementValues(annot.num_element_value_pairs, d, true, 0);
                 ra.annotations[k] = annot;
             }
-        
+
             a = (attribute_info)ra;
-         } 
+         }
         else if (s.compareTo(attribute_info.RuntimeInvisibleAnnotations)==0)
         {
             RuntimeInvisibleAnnotations_attribute ra = new RuntimeInvisibleAnnotations_attribute();
@@ -729,7 +729,7 @@ public class ClassFile {
                 ra.annotations[k] = annot;
             }
             a = (attribute_info)ra;
-         } 
+         }
         else if (s.compareTo(attribute_info.RuntimeVisibleParameterAnnotations)==0)
         {
             RuntimeVisibleParameterAnnotations_attribute ra = new RuntimeVisibleParameterAnnotations_attribute();
@@ -749,7 +749,7 @@ public class ClassFile {
                 ra.parameter_annotations[x] = pAnnot;
             }
             a = (attribute_info)ra;
-         } 
+         }
         else if (s.compareTo(attribute_info.RuntimeInvisibleParameterAnnotations)==0)
         {
             RuntimeInvisibleParameterAnnotations_attribute ra = new RuntimeInvisibleParameterAnnotations_attribute();
@@ -894,17 +894,17 @@ public class ClassFile {
       for (i=0;i<methods_count;i++) {
          mi = new method_info();
          mi.access_flags = d.readUnsignedShort();
-         
+
          mi.name_index = d.readUnsignedShort();
-         
+
          mi.descriptor_index = d.readUnsignedShort();
-         
+
          mi.attributes_count = d.readUnsignedShort();
 
          CONSTANT_Utf8_info ci;
            ci = (CONSTANT_Utf8_info)(constant_pool[mi.name_index]);
           //G.v().out.println("Has " + mi.attributes_count + " attribute(s)");
-         
+
          if (mi.attributes_count>0) {
             mi.attributes = new attribute_info[mi.attributes_count];
             readAttributes(d,mi.attributes_count,mi.attributes);
@@ -1224,10 +1224,10 @@ public class ClassFile {
          j = inst.nextOffset(j);
          // G.v().out.println("after: " + j);
 
-         if ( head==null ) 
+         if ( head==null )
 	     head = inst;
          else
-	 { 	     
+	 {
 	     tail.next = inst;
 	     inst.prev = tail;
 	 }

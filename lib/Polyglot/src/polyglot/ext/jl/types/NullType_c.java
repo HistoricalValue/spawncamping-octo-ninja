@@ -15,7 +15,7 @@ public class NullType_c extends Type_c implements NullType
     public NullType_c(TypeSystem ts) {
 	super(ts);
     }
-    
+
     public String translate(Resolver c) {
 	throw new InternalCompilerError("Cannot translate a null type.");
     }
@@ -23,7 +23,7 @@ public class NullType_c extends Type_c implements NullType
     public String toString() {
 	return "type(null)";
     }
-    
+
     public boolean equalsImpl(TypeObject t) {
         return t instanceof NullType;
     }

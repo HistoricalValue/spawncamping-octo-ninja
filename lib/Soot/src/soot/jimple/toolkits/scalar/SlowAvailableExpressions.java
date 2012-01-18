@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -43,10 +43,10 @@ public class SlowAvailableExpressions implements AvailableExpressions
     Map<Unit, Chain> unitToEquivsAfter;
     Map<Unit, Chain> unitToEquivsBefore;
 
-    /** Wrapper for SlowAvailableExpressionsAnalysis. */ 
+    /** Wrapper for SlowAvailableExpressionsAnalysis. */
     public SlowAvailableExpressions(Body b)
     {
-        SlowAvailableExpressionsAnalysis analysis = 
+        SlowAvailableExpressionsAnalysis analysis =
             new SlowAvailableExpressionsAnalysis(new ExceptionalUnitGraph(b));
 
         // Build unitToExprs map
@@ -61,7 +61,7 @@ public class SlowAvailableExpressions implements AvailableExpressions
             while(unitIt.hasNext())
             {
                 Unit s = (Unit) unitIt.next();
- 
+
                 FlowSet set = (FlowSet) analysis.getFlowBefore(s);
 
                 List<UnitValueBoxPair> pairsBefore = new ArrayList<UnitValueBoxPair>();
@@ -86,7 +86,7 @@ public class SlowAvailableExpressions implements AvailableExpressions
 
                 unitToPairsBefore.put(s, pairsBefore);
                 unitToEquivsBefore.put(s, equivsBefore);
-                
+
                 set = (FlowSet) analysis.getFlowAfter(s);
                 setAsList = set.toList();
                 si = setAsList.iterator();
@@ -104,7 +104,7 @@ public class SlowAvailableExpressions implements AvailableExpressions
 
                 unitToPairsAfter.put(s, pairsAfter);
                 unitToEquivsAfter.put(s, equivsAfter);
-            }  
+            }
         }
     }
 

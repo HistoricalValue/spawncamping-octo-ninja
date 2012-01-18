@@ -8,7 +8,7 @@ import polyglot.types.Package;
 import polyglot.main.Options;
 
 /**
- * A <code>PackageNode</code> is the syntactic representation of a 
+ * A <code>PackageNode</code> is the syntactic representation of a
  * Java package within the abstract syntax tree.
  */
 public class PackageNode_c extends Node_c implements PackageNode

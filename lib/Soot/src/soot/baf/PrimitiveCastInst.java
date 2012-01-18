@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,7 +31,7 @@ public interface PrimitiveCastInst extends Inst
 {
     public Type getFromType();
     public void setFromType(Type t);
-    
+
     public Type getToType();
     public void setToType(Type t);
 }

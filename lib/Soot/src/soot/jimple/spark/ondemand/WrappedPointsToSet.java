@@ -27,7 +27,7 @@ import soot.jimple.spark.sets.EqualsSupportingPointsToSet;
 import soot.jimple.spark.sets.PointsToSetInternal;
 
 public class WrappedPointsToSet implements EqualsSupportingPointsToSet {
-  
+
   final PointsToSetInternal wrapped;
 
   public PointsToSetInternal getWrapped() {
@@ -68,7 +68,7 @@ public class WrappedPointsToSet implements EqualsSupportingPointsToSet {
   public String toString() {
     return wrapped.toString();
   }
-  
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -78,15 +78,15 @@ public class WrappedPointsToSet implements EqualsSupportingPointsToSet {
 		}
 		if(this==obj) {
 			return true;
-		}		
-		
+		}
+
 		//have to get around the tyranny of reference losing equality
 		if(obj instanceof WrappedPointsToSet) {
 			WrappedPointsToSet wrapper = (WrappedPointsToSet) obj;
-			
+
 			return wrapped.equals(wrapper.wrapped);
 		}
-		
+
 		return obj.equals(wrapped);
 	}
 

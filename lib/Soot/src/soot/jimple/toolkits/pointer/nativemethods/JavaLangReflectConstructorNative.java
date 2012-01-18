@@ -35,7 +35,7 @@ public class JavaLangReflectConstructorNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -64,17 +64,17 @@ public class JavaLangReflectConstructorNative extends NativeMethodClass {
    * parameters. Individual parameters are automatically unwrapped to
    * match primitive formal parameters, and both primitive and
    * reference parameters are subject to method invocation conversions
-   * as necessary. Returns the newly created and initialized object.  
+   * as necessary. Returns the newly created and initialized object.
    *
    * NOTE: @return = new Object; but we lose type information.
    *
-   * public native java.lang.Object newInstance(java.lang.Object[]) 
-   *                throws java.lang.InstantiationException, 
-   *                       java.lang.IllegalAccessException, 
-   *                       java.lang.IllegalArgumentException, 
+   * public native java.lang.Object newInstance(java.lang.Object[])
+   *                throws java.lang.InstantiationException,
+   *                       java.lang.IllegalAccessException,
+   *                       java.lang.IllegalArgumentException,
    *                       java.lang.reflect.InvocationTargetException;
    */
-  public 
+  public
     void java_lang_reflect_Constructor_newInstance(SootMethod method,
 						   ReferenceVariable thisVar,
 						   ReferenceVariable returnVar,

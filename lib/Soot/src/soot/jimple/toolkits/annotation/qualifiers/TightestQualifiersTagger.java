@@ -26,11 +26,11 @@ import soot.tagkit.*;
 import soot.jimple.*;
 import soot.jimple.toolkits.callgraph.*;
 
-/** a scene transformer that add tags to indicate the tightest qualifies 
+/** a scene transformer that add tags to indicate the tightest qualifies
  * possible for fields and methods (ie: private, protected or public)
  */
 public class TightestQualifiersTagger extends SceneTransformer {
-    
+
     public TightestQualifiersTagger(Singletons.Global g) {}
     public static TightestQualifiersTagger v() { return G.v().soot_jimple_toolkits_annotation_qualifiers_TightestQualifiersTagger();}
 
@@ -38,13 +38,13 @@ public class TightestQualifiersTagger extends SceneTransformer {
     public final static int RESULT_PACKAGE = 1;
     public final static int RESULT_PROTECTED = 2;
     public final static int RESULT_PRIVATE = 3;
-    
+
     private final HashMap<SootMethod, Integer> methodResultsMap = new HashMap<SootMethod, Integer>();
     private final HashMap<SootField, Integer> fieldResultsMap = new HashMap<SootField, Integer>();
     private MethodToContexts methodToContexts;
 
     protected void internalTransform(String phaseName, Map options){
-    
+
         handleMethods();
         handleFields();
     }
@@ -79,7 +79,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
             else if (result == RESULT_PRIVATE){
                 sRes = "Private";
             }
-            
+
             String actual = null;
             if (Modifier.isPublic(meth.getModifiers())){
                 actual = "Public";
@@ -90,12 +90,12 @@ public class TightestQualifiersTagger extends SceneTransformer {
             else if (Modifier.isPrivate(meth.getModifiers())){
                 actual = "Private";
             }
-            else {    
+            else {
                 actual = "Package";
             }
-            
+
             //System.out.println("Method: "+meth.getName()+" has "+actual+" level access, can have: "+sRes+" level access.");
-        
+
             if (!sRes.equals(actual)) {
                 if (meth.getName().equals("<init>")){
                     meth.addTag(new StringTag("Constructor: "+meth.getDeclaringClass().getName()+" has "+actual+" level access, can have: "+sRes+" level access.", "Tightest Qualifiers"));
@@ -107,21 +107,21 @@ public class TightestQualifiersTagger extends SceneTransformer {
             }
         }
     }
-    
+
 
     private void analyzeMethod(SootMethod sm){
-       
+
         CallGraph cg = Scene.v().getCallGraph();
 
         //Iterator eIt = Scene.v().getEntryPoints().iterator();
         //while (eIt.hasNext()){
         //    System.out.println(eIt.next());
         //}
-        
+
         if( methodToContexts == null ) {
             methodToContexts = new MethodToContexts( Scene.v().getReachableMethods().listener() );
         }
-        
+
         for( Iterator momcIt = methodToContexts.get(sm).iterator(); momcIt.hasNext(); ) {
             final MethodOrMethodContext momc = (MethodOrMethodContext) momcIt.next();
             Iterator callerEdges = cg.edgesInto(momc);
@@ -133,11 +133,11 @@ public class TightestQualifiersTagger extends SceneTransformer {
                 SootClass callingClass = methodCaller.getDeclaringClass();
                 // public methods
                 if (Modifier.isPublic(sm.getModifiers())){
-                    analyzePublicMethod(sm, callingClass); 
+                    analyzePublicMethod(sm, callingClass);
                 }
                 // protected methods
                 else if (Modifier.isProtected(sm.getModifiers())){
-                    analyzeProtectedMethod(sm, callingClass); 
+                    analyzeProtectedMethod(sm, callingClass);
                 }
                 // private methods - do nothing
                 else if (Modifier.isPrivate(sm.getModifiers())){
@@ -146,21 +146,21 @@ public class TightestQualifiersTagger extends SceneTransformer {
                 else {
                     analyzePackageMethod(sm, callingClass);
                 }
-                
+
             }
         }
-        
+
     }
 
     private boolean analyzeProtectedMethod(SootMethod sm, SootClass callingClass){
         SootClass methodClass = sm.getDeclaringClass();
-        
+
         //System.out.println("protected method: "+sm.getName()+" in class: "+methodClass.getName()+" calling class: "+callingClass.getName());
 
         boolean insidePackageAccess = isCallSamePackage(callingClass, methodClass);
         boolean subClassAccess = isCallClassSubClass(callingClass, methodClass);
         boolean sameClassAccess = isCallClassMethodClass(callingClass, methodClass);
-        
+
         if (!insidePackageAccess && subClassAccess) {
             methodResultsMap.put(sm, new Integer(RESULT_PROTECTED));
             return true;
@@ -172,9 +172,9 @@ public class TightestQualifiersTagger extends SceneTransformer {
         else {
             updateToPrivate(sm);
             return false;
-        }    
+        }
     }
-        
+
     private boolean analyzePackageMethod(SootMethod sm, SootClass callingClass){
         SootClass methodClass = sm.getDeclaringClass();
 
@@ -182,7 +182,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
         boolean insidePackageAccess = isCallSamePackage(callingClass, methodClass);
         boolean subClassAccess = isCallClassSubClass(callingClass, methodClass);
         boolean sameClassAccess = isCallClassMethodClass(callingClass, methodClass);
-        
+
         if (insidePackageAccess && !sameClassAccess) {
             updateToPackage(sm);
             return true;
@@ -192,17 +192,17 @@ public class TightestQualifiersTagger extends SceneTransformer {
             return false;
         }
     }
-    
+
     private boolean analyzePublicMethod(SootMethod sm, SootClass callingClass){
-        
+
         SootClass methodClass = sm.getDeclaringClass();
-        
+
         //System.out.println("public method: "+sm.getName()+" in class: "+methodClass.getName()+" calling class: "+callingClass.getName());
-           
+
         boolean insidePackageAccess = isCallSamePackage(callingClass, methodClass);
         boolean subClassAccess = isCallClassSubClass(callingClass, methodClass);
         boolean sameClassAccess = isCallClassMethodClass(callingClass, methodClass);
-                
+
         if (!insidePackageAccess && !subClassAccess){
             methodResultsMap.put(sm, new Integer(RESULT_PUBLIC));
             return true;
@@ -219,7 +219,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
             updateToPrivate(sm);
             return false;
         }
-                
+
     }
 
     private void updateToProtected(SootMethod sm){
@@ -232,7 +232,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
             }
         }
     }
-    
+
     private void updateToPackage(SootMethod sm){
         if (!methodResultsMap.containsKey(sm)){
             methodResultsMap.put(sm, new Integer(RESULT_PACKAGE));
@@ -243,13 +243,13 @@ public class TightestQualifiersTagger extends SceneTransformer {
             }
         }
     }
-    
+
     private void updateToPrivate(SootMethod sm){
         if (!methodResultsMap.containsKey(sm)) {
             methodResultsMap.put(sm, new Integer(RESULT_PRIVATE));
         }
     }
-    
+
     private boolean isCallClassMethodClass(SootClass call, SootClass check){
         if (call.equals(check)) return true;
         return false;
@@ -276,7 +276,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
                 analyzeField(sf);
             }
         }
-        
+
         Iterator<SootField> fieldStatIt = fieldResultsMap.keySet().iterator();
         while (fieldStatIt.hasNext()) {
             SootField f = fieldStatIt.next();
@@ -294,7 +294,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
             else if (result == RESULT_PRIVATE){
                 sRes = "Private";
             }
-            
+
             String actual = null;
             if (Modifier.isPublic(f.getModifiers())){
                 //System.out.println("Field: "+f.getName()+" is public");
@@ -306,21 +306,21 @@ public class TightestQualifiersTagger extends SceneTransformer {
             else if (Modifier.isPrivate(f.getModifiers())){
                 actual = "Private";
             }
-            else {    
+            else {
                 actual = "Package";
             }
-            
+
             //System.out.println("Field: "+f.getName()+" has "+actual+" level access, can have: "+sRes+" level access.");
-        
+
             if (!sRes.equals(actual)){
                 f.addTag(new StringTag("Field: "+f.getName()+" has "+actual+" level access, can have: "+sRes+" level access.", "Tightest Qualifiers"));
                 f.addTag(new ColorTag(255, 10, 0, true, "Tightest Qualifiers"));
             }
         }
     }
-    
+
     private void analyzeField(SootField sf){
-       
+
         // from all bodies get all use boxes and eliminate used fields
         Iterator classesIt = Scene.v().getApplicationClasses().iterator();
         while (classesIt.hasNext()) {
@@ -360,12 +360,12 @@ public class TightestQualifiersTagger extends SceneTransformer {
 
     private boolean analyzePublicField(SootField sf, SootClass callingClass){
         SootClass fieldClass = sf.getDeclaringClass();
-        
-           
+
+
         boolean insidePackageAccess = isCallSamePackage(callingClass, fieldClass);
         boolean subClassAccess = isCallClassSubClass(callingClass, fieldClass);
         boolean sameClassAccess = isCallClassMethodClass(callingClass, fieldClass);
-                
+
         if (!insidePackageAccess && !subClassAccess){
             fieldResultsMap.put(sf, new Integer(RESULT_PUBLIC));
             return true;
@@ -382,7 +382,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
             updateToPrivate(sf);
             return false;
         }
-        
+
     }
 
     private boolean analyzeProtectedField(SootField sf, SootClass callingClass){
@@ -391,7 +391,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
         boolean insidePackageAccess = isCallSamePackage(callingClass, fieldClass);
         boolean subClassAccess = isCallClassSubClass(callingClass, fieldClass);
         boolean sameClassAccess = isCallClassMethodClass(callingClass, fieldClass);
-        
+
         if (!insidePackageAccess && subClassAccess) {
             fieldResultsMap.put(sf, new Integer(RESULT_PROTECTED));
             return true;
@@ -403,7 +403,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
         else {
             updateToPrivate(sf);
             return false;
-        }    
+        }
     }
 
     private boolean analyzePackageField(SootField sf, SootClass callingClass){
@@ -412,7 +412,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
         boolean insidePackageAccess = isCallSamePackage(callingClass, fieldClass);
         boolean subClassAccess = isCallClassSubClass(callingClass, fieldClass);
         boolean sameClassAccess = isCallClassMethodClass(callingClass, fieldClass);
-        
+
         if (insidePackageAccess && !sameClassAccess) {
             updateToPackage(sf);
             return true;
@@ -422,7 +422,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
             return false;
         }
     }
-    
+
     private void updateToProtected(SootField sf){
         if (!fieldResultsMap.containsKey(sf)){
             fieldResultsMap.put(sf, new Integer(RESULT_PROTECTED));
@@ -433,7 +433,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
             }
         }
     }
-    
+
     private void updateToPackage(SootField sf){
         if (!fieldResultsMap.containsKey(sf)){
             fieldResultsMap.put(sf, new Integer(RESULT_PACKAGE));
@@ -444,7 +444,7 @@ public class TightestQualifiersTagger extends SceneTransformer {
             }
         }
     }
-    
+
     private void updateToPrivate(SootField sf){
         if (!fieldResultsMap.containsKey(sf)) {
             fieldResultsMap.put(sf, new Integer(RESULT_PRIVATE));

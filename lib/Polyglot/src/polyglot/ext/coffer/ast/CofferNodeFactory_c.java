@@ -11,7 +11,7 @@ import polyglot.types.Qualifier;
 import polyglot.util.*;
 import java.util.*;
 
-/** An implementation of the <code>CofferNodeFactory</code> interface. 
+/** An implementation of the <code>CofferNodeFactory</code> interface.
  */
 public class CofferNodeFactory_c extends NodeFactory_c implements CofferNodeFactory
 {
@@ -24,7 +24,7 @@ public class CofferNodeFactory_c extends NodeFactory_c implements CofferNodeFact
 
     public New TrackedNew(Position pos, Expr outer, KeyNode key, TypeNode objectType, List args, ClassBody body) {
         return New(pos, outer, TrackedTypeNode(key.position(), key, objectType), args, body);
-        
+
     }
 
     public Free Free(Position pos, Expr expr) {
@@ -141,9 +141,9 @@ public class CofferNodeFactory_c extends NodeFactory_c implements CofferNodeFact
         n = (CofferConstructorDecl)n.ext(extFactory().extConstructorDecl());
         return n;
     }
-    
+
     public Assign Assign(Position pos, Expr left, Assign.Operator op, Expr right) {
         return (Assign) super.Assign(pos, left, op, right).del(new AssignDel_c());
     }
-    
+
 }

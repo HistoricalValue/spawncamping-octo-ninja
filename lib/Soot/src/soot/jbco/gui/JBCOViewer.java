@@ -81,12 +81,12 @@ public class JBCOViewer extends javax.swing.JFrame {
   private JButton ButtonRemove;
   private JFrame thisRef;
   private RunnerThread runner;
-  
+
   static int previousSelected = -1;
   static ListModel models[] = new ListModel[20];
-  static String[][] optionStrings = new String[][] { {"Rename Classes","Rename Methods","Rename Fields","Build API Buffer Methods","Build Library Buffer Classes","Goto Instruction Augmentation","Add Dead Switch Statements","Convert Arith. Expr. To Bit Ops","Convert Branches to JSR Instructions","Disobey Constructor Conventions","Reuse Duplicate Sequences","Replace If(Non)Nulls with Try-Catch","Indirect If Instructions","Pack Locals into Bitfields","Reorder Loads Above Ifs","Combine Try and Catch Blocks","Embed Constants in Fields","Partially Trap Switches"}, 
+  static String[][] optionStrings = new String[][] { {"Rename Classes","Rename Methods","Rename Fields","Build API Buffer Methods","Build Library Buffer Classes","Goto Instruction Augmentation","Add Dead Switch Statements","Convert Arith. Expr. To Bit Ops","Convert Branches to JSR Instructions","Disobey Constructor Conventions","Reuse Duplicate Sequences","Replace If(Non)Nulls with Try-Catch","Indirect If Instructions","Pack Locals into Bitfields","Reorder Loads Above Ifs","Combine Try and Catch Blocks","Embed Constants in Fields","Partially Trap Switches"},
                                                      {"wjtp.jbco_cr",  "wjtp.jbco_mr",  "wjtp.jbco_fr", "wjtp.jbco_bapibm",        "wjtp.jbco_blbc",              "jtp.jbco_gia",                 "jtp.jbco_adss",             "jtp.jbco_cae2bo",                        "bb.jbco_cb2ji",                       "bb.jbco_dcc",                    "bb.jbco_rds",              "bb.jbco_riitcb",                     "bb.jbco_iii",             "bb.jbco_plvb",              "bb.jbco_rlaii",          "bb.jbco_ctbcb",               "bb.jbco_ecvf",             "bb.jbco_ptss"           }};
-  
+
   static int[][] defaultWeights     = new int[][]  { {9,               9,               9,              9,                         9,                             9,                              6,                           9,                                        0,                                     0,                                3,                          9,                                    6,                         3,                           9,                        9,                             0,                          0,                       },
                                                      {0,               0,               0,              0,                         9,                             6,                              0,                           9,                                        9,                                     9,                                0,                          9,                                    0,                         0,                           9,                        9,                             0,                          9,                       },
                                                      {5,               5,               5,              6,                         9,                             9,                              5,                           9,                                        9,                                     5,                                7,                          9,                                    9,                         2,                           9,                        9,                             0,                          9,                       }};
@@ -99,12 +99,12 @@ public class JBCOViewer extends javax.swing.JFrame {
     JBCOViewer inst = new JBCOViewer();
     inst.setVisible(true);
   }
-  
+
   public JBCOViewer() {
     super();
     initGUI();
   }
-  
+
   private void initGUI() {
     thisRef = this;
     try {
@@ -228,7 +228,7 @@ public class JBCOViewer extends javax.swing.JFrame {
                 ":/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/jce.jar\n" +
                 ":/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/jsse.jar\n" +
                 ":/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/rt.jar");
-            
+
             if (arguments!=null) {
               for (int i = 0; i < arguments.length; i++) {
                 if (arguments[i].equals("-cp") || arguments[i].equals("-classpath") && arguments.length>(i+1)) {
@@ -289,7 +289,7 @@ public class JBCOViewer extends javax.swing.JFrame {
               AvoidList.addListSelectionListener(new ListSelectionListener() {
                 public void valueChanged(ListSelectionEvent evt) {
                   int length = AvoidList.getSelectedIndices().length;
-                  if (length < 1) 
+                  if (length < 1)
                     ButtonRemove.setEnabled(false);
                   else
                     ButtonRemove.setEnabled(true);
@@ -309,18 +309,18 @@ public class JBCOViewer extends javax.swing.JFrame {
               ButtonRemove.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
                   int index[] = AvoidList.getSelectedIndices();
-                  if (index.length < 1) { 
+                  if (index.length < 1) {
                     java.awt.Toolkit.getDefaultToolkit().beep();
                     return;
                   }
-                  
+
                   Object o[] = new Object[index.length];
                   DefaultComboBoxModel lm = (DefaultComboBoxModel)AvoidList.getModel();
                   for (int i = 0; i < index.length; i++)
                     o[i] = lm.getElementAt(index[i]);
                   for (int i = 0; i < index.length; i++)
                     lm.removeElement(o[i]);
-                  
+
                   models[previousSelected] = lm;
                 }
               });
@@ -356,7 +356,7 @@ public class JBCOViewer extends javax.swing.JFrame {
                 public void actionPerformed(ActionEvent evt) {
                   int index = ListTransforms.getSelectedIndex();
                   if (index < 0) return;
-                  
+
                   DefaultComboBoxModel lm = (DefaultComboBoxModel)ListTransforms.getModel();
                   lm.removeElementAt(index);
                   lm.insertElementAt(optionStrings[0][index] + " - "+ComboBoxDefWeight.getSelectedItem(), index);
@@ -375,7 +375,7 @@ public class JBCOViewer extends javax.swing.JFrame {
                     java.awt.Toolkit.getDefaultToolkit().beep();
                     return;
                   }
-                  
+
                   boolean regex = text.startsWith("*");
                   if (regex) {
                     try {
@@ -385,7 +385,7 @@ public class JBCOViewer extends javax.swing.JFrame {
                       return;
                     }
                   }
-                  
+
                   DefaultComboBoxModel lm = (DefaultComboBoxModel)AvoidList.getModel();
                   int size = lm.getSize();
                   for (int i = 0; i < size; i++) {
@@ -395,11 +395,11 @@ public class JBCOViewer extends javax.swing.JFrame {
                       return;
                     }
                   }
-                  
+
                   lm.addElement(text + " - " + ComboWeight.getSelectedItem());
-                  
+
                   models[previousSelected] = lm;
-                  
+
                   TextFieldConstraint.setText("");
                   ComboWeight.setSelectedIndex(0);
               }});
@@ -418,7 +418,7 @@ public class JBCOViewer extends javax.swing.JFrame {
             DefaultComboBoxModel ListTransformsModel = new DefaultComboBoxModel();
             for (int i = 0; i < optionStrings[0].length; i++)
               ListTransformsModel.addElement(optionStrings[0][i] + " - 9");
-            
+
             ListTransforms = new JList();
             PanelTransforms.add(ListTransforms);
             ListTransforms.setModel(ListTransformsModel);
@@ -432,28 +432,28 @@ public class JBCOViewer extends javax.swing.JFrame {
                 } else if (selected.length == 0) {
                   return;
                 }
-              
+
                 String val = (String)ListTransforms.getSelectedValue();
                 if (ListTransforms.getSelectedIndex() == previousSelected)
                   return;
                 previousSelected = ListTransforms.getSelectedIndex();
-                
+
                 if (val.indexOf("-") > 0) {
                   String weight = val.substring(val.indexOf("-") + 1, val.length()).trim();
                   val = val.substring(0,val.indexOf("-"));
-                  
+
                   try {
                     int w = Integer.parseInt(weight);
-                    if (w < 0 || w > 10) 
+                    if (w < 0 || w > 10)
                       weight = "0";
                   } catch (NumberFormatException nfe) {
                     weight = "0";
                   }
-                  
+
                   ComboBoxDefWeight.setSelectedItem(weight);
                 }
                 LabelTransformHeading.setText(val);
-                
+
                 DefaultComboBoxModel lm = (DefaultComboBoxModel)models[previousSelected];
                 if (lm == null)
                   lm = new DefaultComboBoxModel(new String[0]);
@@ -477,14 +477,14 @@ public class JBCOViewer extends javax.swing.JFrame {
                 String file = TextFieldOutputFolder.getText();
                 if (file.startsWith("~"))
                   file = System.getProperty("user.home") + file.substring(1);
-                
+
                 try {
                   File f = new File(file);
                   if (!f.getParentFile().exists() || !f.getParentFile().isDirectory())
                     throw new Exception("Directory does not appear to exist");
                   if (f.exists() && f.isDirectory())
                     throw new Exception("File points to a directory");
-                  if (f.exists())  
+                  if (f.exists())
                     f.delete();
                   f.createNewFile();
                   RandomAccessFile rf = new RandomAccessFile(f, "rw");
@@ -533,11 +533,11 @@ public class JBCOViewer extends javax.swing.JFrame {
                 DefaultComboBoxModel ListTransformsModel = new DefaultComboBoxModel();
                 for (int i = 0; i < optionStrings[0].length; i++)
                   ListTransformsModel.addElement(optionStrings[0][i] + " - " + defaultWeights[0][i]);
-                
+
                 ListTransforms.setModel(ListTransformsModel);
               }
             });
-            
+
             sizeMenuItem = new JMenuItem();
             jMenu3.add(sizeMenuItem);
             sizeMenuItem.setText("Use Size-Tuned Combo");
@@ -546,11 +546,11 @@ public class JBCOViewer extends javax.swing.JFrame {
                 DefaultComboBoxModel ListTransformsModel = new DefaultComboBoxModel();
                 for (int i = 0; i < optionStrings[0].length; i++)
                   ListTransformsModel.addElement(optionStrings[0][i] + " - " + defaultWeights[1][i]);
-                
+
                 ListTransforms.setModel(ListTransformsModel);
               }
             });
-            
+
             protMenuItem = new JMenuItem();
             jMenu3.add(protMenuItem);
             protMenuItem.setText("Use Protection-Tuned Combo");
@@ -559,30 +559,30 @@ public class JBCOViewer extends javax.swing.JFrame {
                 DefaultComboBoxModel ListTransformsModel = new DefaultComboBoxModel();
                 for (int i = 0; i < optionStrings[0].length; i++)
                   ListTransformsModel.addElement(optionStrings[0][i] + " - " + defaultWeights[2][i]);
-                
+
                 ListTransforms.setModel(ListTransformsModel);
               }
             });
-            
+
             newFileMenuItem = new JMenuItem();
             jMenu3.add(newFileMenuItem);
             newFileMenuItem.setText("Execute");
             newFileMenuItem.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent evt) {
                 String main = TextFieldMain.getText().trim();
-                if (main.length() == 0) { 
+                if (main.length() == 0) {
                   new PopupDialog(thisRef, true, "No Main Class Specified");
                   return;
                 }
-                
+
                 String cp = ClasspathTextField.getText().trim();
-                if (cp.length() == 0) { 
+                if (cp.length() == 0) {
                   StringTokenizer cptokenizer = new StringTokenizer(DefaultClassPathPane.getText());
                   cp = cptokenizer.nextToken();
                   while (cptokenizer.hasMoreTokens())
                     cp += cptokenizer.nextToken();
                 }
-                
+
                 Integer min = null, max = null;
                 try {
                   min = new Integer(TextFieldMinMem.getText());
@@ -594,13 +594,13 @@ public class JBCOViewer extends javax.swing.JFrame {
                 } catch (NumberFormatException nfe) {
                   max = null;
                 }
-                
+
                 Vector<String> tmp = new Vector<String>();
                 String args = TextFieldJVMArgs.getText();
                 StringTokenizer st = new StringTokenizer(args,",");
                 while (st.hasMoreTokens())
                   tmp.add(st.nextToken());
-                
+
                 boolean customclasspath = false;
                 String vmargs[] = new String[tmp.size() + (min == null ? 0 : 1) + + (max == null ? 0 : 1)];
                 for (int i = 0; i < tmp.size(); i++) {
@@ -615,7 +615,7 @@ public class JBCOViewer extends javax.swing.JFrame {
                 } else if (max != null){
                   vmargs[tmp.size()] = "-Xmx"+max.intValue()+"m";
                 }
-                
+
                 Vector trans = new Vector();
                 ListModel lmy = (ListModel)ListTransforms.getModel();
                 for (int i = 0; i < lmy.getSize(); i++) {
@@ -632,7 +632,7 @@ public class JBCOViewer extends javax.swing.JFrame {
                         }
                       }
                       trans.add("-t:"+weight+":"+optionStrings[1][j]);
-                      
+
                       ListModel lmx = (ListModel)models[j];
                       if (lmx != null) {
                         for (int k = 0; k < lmx.getSize(); k++) {
@@ -645,14 +645,14 @@ public class JBCOViewer extends javax.swing.JFrame {
                       break;
                     }
                 }
-                String[] transforms = new String[trans.size()]; 
+                String[] transforms = new String[trans.size()];
                 trans.copyInto(transforms);
                 trans = null;
-                
+
                 int index = 0;
                 String outdir = TextField.getText();
-                String[] cmdarray = new String[6 + (customclasspath ? 0 : 2) 
-                                               + vmargs.length + transforms.length 
+                String[] cmdarray = new String[6 + (customclasspath ? 0 : 2)
+                                               + vmargs.length + transforms.length
                                                + (RadioSummary.isSelected() ? 1 : 0)
                                                + (RadioVerbose.isSelected() ? 1 : 0)
                                                + (DebugRadio.isSelected() ? 1 : 0)
@@ -672,13 +672,13 @@ public class JBCOViewer extends javax.swing.JFrame {
                 }
                 cmdarray[vmargs.length + index++] = "-app";
                 cmdarray[vmargs.length + index++] = main;
-                if (RadioSummary.isSelected()) 
+                if (RadioSummary.isSelected())
                   cmdarray[vmargs.length + index++] = "-jbco:silent";
-                if (RadioVerbose.isSelected()) 
+                if (RadioVerbose.isSelected())
                   cmdarray[vmargs.length + index++] = "-jbco:verbose";
-                if (DebugRadio.isSelected()) 
+                if (DebugRadio.isSelected())
                   cmdarray[vmargs.length + index++] = "-jbco:debug";
-                System.arraycopy(transforms, 0, cmdarray, vmargs.length + index, transforms.length); 
+                System.arraycopy(transforms, 0, cmdarray, vmargs.length + index, transforms.length);
 
                 String output = "";
                 for (String element : cmdarray)

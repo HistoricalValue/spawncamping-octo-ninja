@@ -11,7 +11,7 @@ import polyglot.types.Qualifier;
 import polyglot.util.*;
 import java.util.*;
 
-/** An implementation of the <code>CofferNodeFactory</code> interface. 
+/** An implementation of the <code>CofferNodeFactory</code> interface.
  */
 public class CofferExtFactory_c extends AbstractExtFactory_c
 {

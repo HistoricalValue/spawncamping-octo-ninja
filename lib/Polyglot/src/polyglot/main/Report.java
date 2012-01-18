@@ -19,22 +19,22 @@ public class Report {
       if we should report. */
   public final static Stack should_report = new Stack();
 
-  /** 
+  /**
    * The topics that the user has selected to report, mapped to the level
    * they want to report them to.
    */
   protected final static Map reportTopics = new HashMap(); // Map[String, Integer]
-  
+
 
   /**
    * Indicates if there is no reporting at all.
-   * The normal case is that we do not report anything, so for efficiency 
+   * The normal case is that we do not report anything, so for efficiency
    * reasons, since <code>should_report</code> is called so often, we'll use
    * this flag to bypass a lot of the checking. When the options are processed,
    * this flag should be changed.
    */
   static boolean noReporting = true;
-  
+
   /** Report topics understood by the base compiler. */
   public final static String cfg = "cfg";
   public final static String context = "context";
@@ -49,9 +49,9 @@ public class Report {
   public final static String types = "types";
   public final static String visit = "visit";
   public final static String verbose = "verbose";
-  
+
   // This topic is the level of detail that should be in messages.
-  public final static String debug = "debug";  
+  public final static String debug = "debug";
 
   static {
     topics.add(cfg);
@@ -80,7 +80,7 @@ public class Report {
   public static boolean should_report(String topic, int level) {
     if (noReporting)
         return false;
-    return should_report(Collections.singletonList(topic), level); 
+    return should_report(Collections.singletonList(topic), level);
   }
 
   /**
@@ -114,7 +114,7 @@ public class Report {
     }
     return false;
   }
-  
+
   public static void addTopic(String topic, int level) {
       Integer i = (Integer)reportTopics.get(topic);
       if (i == null || i.intValue() < level) {

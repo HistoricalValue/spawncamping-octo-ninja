@@ -38,5 +38,5 @@ public class DIdentityStmt extends GIdentityStmt
     public String toString()
     {
         return getLeftOpBox().getValue().toString() + " = " + getRightOpBox().getValue().toString();
-    }    
+    }
 }

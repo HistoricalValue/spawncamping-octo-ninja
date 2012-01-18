@@ -24,7 +24,7 @@ import soot.jimple.Jimple;
 
 /**
  * Utility class used to package a Value and a Unit together.
- * 
+ *
  * @author Navindra Umanee
  **/
 public class ValueUnitPair extends AbstractValueBox implements UnitBox, EquivTo
@@ -36,10 +36,10 @@ public class ValueUnitPair extends AbstractValueBox implements UnitBox, EquivTo
     // a losing proposition.
     // protected UnitBox oub;
     protected Unit unit;
-        
+
     /**
      * Constructs a ValueUnitPair from a Unit object and a Value object.
-     * 
+     *
      * @param value some Value
      * @param unit some Unit.
      **/
@@ -60,10 +60,10 @@ public class ValueUnitPair extends AbstractValueBox implements UnitBox, EquivTo
     public void setUnit(Unit unit)
     {
         /* Code copied from AbstractUnitBox */
-        
+
         if(!canContainUnit(unit))
             throw new RuntimeException("Cannot put " + unit + " in this box");
-        
+
         // Remove this from set of back pointers.
         if(this.unit != null){
             this.unit.removeBoxPointingToThis(this);
@@ -107,7 +107,7 @@ public class ValueUnitPair extends AbstractValueBox implements UnitBox, EquivTo
         return "Value = " + getValue() + ", Unit = " + getUnit();
     }
 
-    public void toString(UnitPrinter up) 
+    public void toString(UnitPrinter up)
     {
         super.toString(up);
 
@@ -120,7 +120,7 @@ public class ValueUnitPair extends AbstractValueBox implements UnitBox, EquivTo
         up.unitRef(unit, isBranchTarget());
         up.endUnitBox(this);
     }
-    
+
     public int hashCode()
     {
         // If you need to change this implementation, please change it
@@ -136,7 +136,7 @@ public class ValueUnitPair extends AbstractValueBox implements UnitBox, EquivTo
         // ways.
         return super.equals(other);
     }
-    
+
     /**
      * Two ValueUnitPairs are equivTo iff they hold the same
      * Unit objects and equivalent Value objects within them.
@@ -166,12 +166,12 @@ public class ValueUnitPair extends AbstractValueBox implements UnitBox, EquivTo
     public int equivHashCode()
     {
         // this is not deterministic because a Unit's hash code is
-        // non-deterministic. 
+        // non-deterministic.
         return
             (getUnit().hashCode() * 17) +
             (getValue().equivHashCode() * 101);
     }
-    
+
     public Object clone()
     {
         // Note to self: Do not try to "fix" this.  Yes, it should be

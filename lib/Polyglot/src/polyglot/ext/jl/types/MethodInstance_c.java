@@ -160,15 +160,15 @@ public class MethodInstance_c extends ProcedureInstance_c
         ReferenceType rt = container();
 
         while (rt != null) {
-            // add any method with the same name and formalTypes from 
+            // add any method with the same name and formalTypes from
             // rt
             l.addAll(rt.methods(name, formalTypes));
 
             ReferenceType sup = null;
             if (rt.superType() != null && rt.superType().isReference()) {
-                sup = (ReferenceType) rt.superType();    
+                sup = (ReferenceType) rt.superType();
             }
-            
+
             rt = sup;
         };
 
@@ -190,7 +190,7 @@ public class MethodInstance_c extends ProcedureInstance_c
     public final boolean canOverrideImpl(MethodInstance mj) throws SemanticException {
         throw new RuntimeException("canOverrideImpl(MethodInstance mj) should not be called.");
     }
-        
+
     /**
      * @param quiet If true, then no Semantic Exceptions will be thrown, and the
      *              return value will be true or false. Otherwise, if the method
@@ -211,14 +211,14 @@ public class MethodInstance_c extends ProcedureInstance_c
                               " != " + mj.returnType());
             if (quiet) return false;
             throw new SemanticException(mi.signature() + " in " + mi.container() +
-                                        " cannot override " + 
-                                        mj.signature() + " in " + mj.container() + 
+                                        " cannot override " +
+                                        mj.signature() + " in " + mj.container() +
                                         "; attempting to use incompatible " +
-                                        "return type\n" +                                        
+                                        "return type\n" +
                                         "found: " + mi.returnType() + "\n" +
-                                        "required: " + mj.returnType(), 
+                                        "required: " + mj.returnType(),
                                         mi.position());
-        } 
+        }
 
         if (! ts.throwsSubset(mi, mj)) {
             if (Report.should_report(Report.types, 3))
@@ -226,12 +226,12 @@ public class MethodInstance_c extends ProcedureInstance_c
                               mj.throwTypes());
             if (quiet) return false;
             throw new SemanticException(mi.signature() + " in " + mi.container() +
-                                        " cannot override " + 
-                                        mj.signature() + " in " + mj.container() + 
+                                        " cannot override " +
+                                        mj.signature() + " in " + mj.container() +
                                         "; the throw set is not a subset of the " +
-                                        "overridden method's throw set", 
+                                        "overridden method's throw set",
                                         mi.position());
-        }   
+        }
 
         if (mi.flags().moreRestrictiveThan(mj.flags())) {
             if (Report.should_report(Report.types, 3))
@@ -239,26 +239,26 @@ public class MethodInstance_c extends ProcedureInstance_c
                               mj.flags());
             if (quiet) return false;
             throw new SemanticException(mi.signature() + " in " + mi.container() +
-                                        " cannot override " + 
-                                        mj.signature() + " in " + mj.container() + 
-                                        "; attempting to assign weaker " + 
-                                        "access privileges", 
+                                        " cannot override " +
+                                        mj.signature() + " in " + mj.container() +
+                                        "; attempting to assign weaker " +
+                                        "access privileges",
                                         mi.position());
         }
 
         if (mi.flags().isStatic() != mj.flags().isStatic()) {
             if (Report.should_report(Report.types, 3))
-                Report.report(3, mi.signature() + " is " + 
-                              (mi.flags().isStatic() ? "" : "not") + 
+                Report.report(3, mi.signature() + " is " +
+                              (mi.flags().isStatic() ? "" : "not") +
                               " static but " + mj.signature() + " is " +
                               (mj.flags().isStatic() ? "" : "not") + " static");
             if (quiet) return false;
             throw new SemanticException(mi.signature() + " in " + mi.container() +
-                                        " cannot override " + 
-                                        mj.signature() + " in " + mj.container() + 
-                                        "; overridden method is " + 
+                                        " cannot override " +
+                                        mj.signature() + " in " + mj.container() +
+                                        "; overridden method is " +
                                         (mj.flags().isStatic() ? "" : "not") +
-                                        "static", 
+                                        "static",
                                         mi.position());
         }
 
@@ -268,15 +268,15 @@ public class MethodInstance_c extends ProcedureInstance_c
                 Report.report(3, mj.flags() + " final");
             if (quiet) return false;
             throw new SemanticException(mi.signature() + " in " + mi.container() +
-                                        " cannot override " + 
-                                        mj.signature() + " in " + mj.container() + 
-                                        "; overridden method is final", 
+                                        " cannot override " +
+                                        mj.signature() + " in " + mj.container() +
+                                        "; overridden method is final",
                                         mi.position());
         }
 
         return true;
     }
-    
+
     public List implemented() {
 	return ts.implemented(this);
     }
@@ -291,15 +291,15 @@ public class MethodInstance_c extends ProcedureInstance_c
 
 	Type superType = rt.superType();
 	if (superType != null) {
-	    l.addAll(implementedImpl(superType.toReference())); 
+	    l.addAll(implementedImpl(superType.toReference()));
 	}
-	
+
 	List ints = rt.interfaces();
 	for (Iterator i = ints.iterator(); i.hasNext(); ) {
             ReferenceType rt2 = (ReferenceType) i.next();
 	    l.addAll(implementedImpl(rt2));
 	}
-	
+
         return l;
     }
 }

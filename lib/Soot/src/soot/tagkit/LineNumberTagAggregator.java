@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -32,7 +32,7 @@ import soot.*;
 
 /** The aggregator for LineNumberTable attribute. */
 public class LineNumberTagAggregator extends FirstTagAggregator
-{    
+{
     public LineNumberTagAggregator( Singletons.Global g ) {}
     public static LineNumberTagAggregator v() { return G.v().soot_tagkit_LineNumberTagAggregator(); }
 
@@ -41,7 +41,7 @@ public class LineNumberTagAggregator extends FirstTagAggregator
     {
 	return (t instanceof LineNumberTag) || (t instanceof SourceLnPosTag);
     }
-    
+
     public String aggregatedName()
     {
         return "LineNumberTable";

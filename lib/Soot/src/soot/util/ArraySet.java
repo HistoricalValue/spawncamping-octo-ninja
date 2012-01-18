@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -218,82 +218,82 @@ public class ArraySet<E> extends AbstractSet<E>
     class Array
     {
         private final int DEFAULT_SIZE = 8;
-    
+
         private int numElements;
         private int maxElements;
         private Object[] elements;
-    
+
         final public void clear()
         {
             numElements = 0;
         }
-    
+
         public Array()
         {
             elements = new Object[DEFAULT_SIZE];
             maxElements = DEFAULT_SIZE;
             numElements = 0;
         }
-    
+
         final private void doubleCapacity()
         {
             int newSize = maxElements * 2;
-    
+
             Object[] newElements = new Object[newSize];
-    
+
             System.arraycopy(elements, 0, newElements, 0, numElements);
             elements = newElements;
             maxElements = newSize;
         }
-    
+
         final public void addElement(Object e)
         {
             // Expand array if necessary
                 if(numElements == maxElements)
                     doubleCapacity();
-    
+
             // Add element
                 elements[numElements++] = e;
         }
-    
+
         final public void insertElementAt(Object e, int index)
         {
             // Expaxpand array if necessary
                 if(numElements == maxElements)
                     doubleCapacity();
-    
+
             // Handle simple case
                 if(index == numElements)
                 {
                     elements[numElements++] = e;
                     return;
                 }
-    
+
             // Shift things over
                 System.arraycopy(elements, index, elements, index + 1, numElements - index);
                 elements[index] = e;
                 numElements++;
         }
-    
+
         final public boolean contains(Object e)
         {
             for(int i = 0; i < numElements; i++)
                 if(elements[i].equals(e))
                     return true;
-    
+
             return false;
         }
-    
+
         final public int size()
         {
             return numElements;
         }
-    
+
         final public Object elementAt(int index)
         {
             return elements[index];
         }
-    
+
         final public void removeElementAt(int index)
         {
             // Handle simple case
@@ -302,7 +302,7 @@ public class ArraySet<E> extends AbstractSet<E>
                     numElements--;
                     return;
                 }
-    
+
             // Else, shift over elements
                 System.arraycopy(elements, index + 1, elements, index, numElements - (index + 1));
                 numElements--;

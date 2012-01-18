@@ -32,12 +32,12 @@ public class Util {
         }
         sc.addTag(new soot.tagkit.InnerClassTag(
             innerName,
-            outerName, 
+            outerName,
             simpleName,
             access));
-    
+
     }
-    
+
     public static String getParamNameForClassLit(polyglot.types.Type type){
         String name = "";
         if (type.isArray()){
@@ -75,7 +75,7 @@ public class Util {
                 String typeSt = getSootType(arrType).toString();
                 fieldName = "L"+typeSt;
             }
-            
+
             for (int i = 0; i < dims; i++){
                 name += "[";
             }
@@ -89,7 +89,7 @@ public class Util {
         }
         return name;
     }
-    
+
     public static String getFieldNameForClassLit(polyglot.types.Type type){
         String fieldName = "";
         if (type.isArray()){
@@ -139,21 +139,21 @@ public class Util {
             typeSt = soot.util.StringTools.replaceAll(typeSt, ".", "$");
             fieldName = fieldName+typeSt;
        }
-       
+
        return fieldName;
     }
-    
+
     public static String getSourceFileOfClass(soot.SootClass sootClass){
         String name = sootClass.getName();
         int index = name.indexOf("$");
-        
+
         // inner classes are found in the very outer class
         if (index != -1){
             name = name.substring(0, index);
         }
         return name;
     }
-    
+
     public static void addLnPosTags(soot.tagkit.Host host, polyglot.util.Position pos) {
         if (pos != null) {
             if (soot.options.Options.v().keep_line_number()){
@@ -173,13 +173,13 @@ public class Util {
             }
         }
     }
-    
+
     public static void addLnPosTags(soot.tagkit.Host host, int sline, int eline, int spos, int epos) {
         if (soot.options.Options.v().keep_line_number()){
             host.addTag(new soot.tagkit.SourceLnPosTag(sline, eline, spos, epos));
         }
     }
-    
+
     /**
      * Position Tag Adder
      */
@@ -190,10 +190,10 @@ public class Util {
     }
 
     public static void addMethodPosTag(soot.tagkit.Host meth, int start, int end){
-    
+
         meth.addTag(new soot.tagkit.SourcePositionTag(start, end));
     }
-    
+
     /**
      * Position Tag Adder
      */
@@ -204,10 +204,10 @@ public class Util {
 
     public static void addMethodLineTag(soot.tagkit.Host host, int sline, int eline){
         if (soot.options.Options.v().keep_line_number()){
-            host.addTag(new soot.tagkit.SourceLineNumberTag(sline, eline));    
+            host.addTag(new soot.tagkit.SourceLineNumberTag(sline, eline));
         }
     }
-    
+
     /**
      * Line Tag Adder
      */
@@ -216,30 +216,30 @@ public class Util {
         if (soot.options.Options.v().keep_line_number()){
             if (node.position() != null) {
                 host.addTag(new soot.tagkit.SourceLineNumberTag(node.position().line(), node.position().line()));
-                
+
             }
         }
     }
-    
+
     /**
      * Line Tag Adder
      */
     public static void addLineTag(soot.tagkit.Host host, int sLine, int eLine) {
 
         host.addTag(new soot.tagkit.SourceLineNumberTag(sLine, eLine));
-                    
+
     }
-    
-    
-    
+
+
+
     public static soot.Local getThis(soot.Type sootType, soot.Body body, HashMap getThisMap, LocalGenerator lg){
 
         if (InitialResolver.v().hierarchy() == null){
             InitialResolver.v().hierarchy(new soot.FastHierarchy());
         }
-        
+
         soot.FastHierarchy fh = InitialResolver.v().hierarchy();
-       
+
         //System.out.println("getting this for type: "+sootType);
         // if this for type already created return it from map
         //if (getThisMap.containsKey(sootType)){
@@ -248,11 +248,11 @@ public class Util {
         soot.Local specialThisLocal = body.getThisLocal();
         // if need this just return it
         if (specialThisLocal.getType().equals(sootType)) {
-           
+
             getThisMap.put(sootType, specialThisLocal);
             return specialThisLocal;
         }
-       
+
         // check to see if this method has a local of the correct type (it will
         // if its an initializer - then ust use it)
         // here we need an exact type I think
@@ -261,21 +261,21 @@ public class Util {
             getThisMap.put(sootType, l);
             return l;
         }
-        
+
         // otherwise get this$0 for one level up
         soot.SootClass classToInvoke = ((soot.RefType)specialThisLocal.getType()).getSootClass();
         soot.SootField outerThisField = classToInvoke.getFieldByName("this$0");
         soot.Local t1 = lg.generateLocal(outerThisField.getType());
-        
+
         soot.jimple.FieldRef fieldRef = soot.jimple.Jimple.v().newInstanceFieldRef(specialThisLocal, outerThisField.makeRef());
         soot.jimple.AssignStmt fieldAssignStmt = soot.jimple.Jimple.v().newAssignStmt(t1, fieldRef);
         body.getUnits().add(fieldAssignStmt);
-         
+
         if (fh.canStoreType(t1.getType(), sootType)){
             getThisMap.put(sootType, t1);
-            return t1;            
+            return t1;
         }
-        
+
         // check to see if this method has a local of the correct type (it will
         // if its an initializer - then ust use it)
         // here we need an exact type I think
@@ -284,7 +284,7 @@ public class Util {
             getThisMap.put(sootType, l);
             return l;
         }*/
-        
+
         // otherwise make a new access method
         soot.Local t2 = t1;
 
@@ -309,7 +309,7 @@ public class Util {
         }
         return correctLocal;
     }
-    
+
     private static boolean bodyHasLocal(soot.Body body, soot.Type type) {
         soot.FastHierarchy fh = InitialResolver.v().hierarchy();
         Iterator stmtsIt = body.getUnits().iterator();
@@ -337,21 +337,21 @@ public class Util {
         return false;*/
     }
 
-    
+
     public static soot.Local getThisGivenOuter(soot.Type sootType, HashMap getThisMap, soot.Body body, LocalGenerator lg, soot.Local t2){
-       
+
         if (InitialResolver.v().hierarchy() == null){
             InitialResolver.v().hierarchy(new soot.FastHierarchy());
         }
-        
+
         soot.FastHierarchy fh = InitialResolver.v().hierarchy();
-        
+
         while (!fh.canStoreType(t2.getType(),sootType)){
             soot.SootClass classToInvoke = ((soot.RefType)t2.getType()).getSootClass();
-            // make an access method and add it to that class for accessing 
+            // make an access method and add it to that class for accessing
             // its private this$0 field
             soot.SootMethod methToInvoke = makeOuterThisAccessMethod(classToInvoke);
-            
+
             // generate a local that corresponds to the invoke of that meth
             soot.Local t3 = lg.generateLocal(methToInvoke.getReturnType());
             ArrayList methParams = new ArrayList();
@@ -361,18 +361,18 @@ public class Util {
             body.getUnits().add(assign);
             t2 = t3;
         }
-            
+
         getThisMap.put(sootType, t2);
 
-        return t2;        
+        return t2;
     }
-    
+
 
     private static soot.SootMethod makeOuterThisAccessMethod(soot.SootClass classToInvoke){
         String name = "access$"+soot.javaToJimple.InitialResolver.v().getNextPrivateAccessCounter()+"00";
         ArrayList paramTypes = new ArrayList();
         paramTypes.add(classToInvoke.getType());
-        
+
         soot.SootMethod meth = new soot.SootMethod(name, paramTypes, classToInvoke.getFieldByName("this$0").getType(), soot.Modifier.STATIC);
 
         classToInvoke.addMethod(meth);
@@ -386,7 +386,7 @@ public class Util {
         meth.addTag(new soot.tagkit.SyntheticTag());
         return meth;
     }
-    
+
     public static soot.Local getPrivateAccessFieldInvoke(soot.SootMethodRef toInvoke, ArrayList params, soot.Body body, LocalGenerator lg){
         soot.jimple.InvokeExpr invoke = soot.jimple.Jimple.v().newStaticInvokeExpr(toInvoke, params);
 
@@ -403,7 +403,7 @@ public class Util {
         if (type.superType() == null) return false;
         return isSubType((polyglot.types.ClassType)type.superType(), superType);
     }
-    
+
     /**
      * Type handling
      */
@@ -413,7 +413,7 @@ public class Util {
             throw new RuntimeException("Trying to get soot type for null polyglot type");
         }
 		soot.Type sootType = null;
-	
+
 		if (type.isInt()){
 			sootType = soot.IntType.v();
 		}
@@ -461,10 +461,10 @@ public class Util {
             String className;
             if (classType.isNested()) {
                 if (classType.isAnonymous() && (soot.javaToJimple.InitialResolver.v().getAnonTypeMap() != null) && soot.javaToJimple.InitialResolver.v().getAnonTypeMap().containsKey(new polyglot.util.IdentityKey(classType))){
-                    className = soot.javaToJimple.InitialResolver.v().getAnonTypeMap().get(new polyglot.util.IdentityKey(classType));   
+                    className = soot.javaToJimple.InitialResolver.v().getAnonTypeMap().get(new polyglot.util.IdentityKey(classType));
                 }
                 else if (classType.isLocal() && (soot.javaToJimple.InitialResolver.v().getLocalTypeMap() != null) && soot.javaToJimple.InitialResolver.v().getLocalTypeMap().containsKey(new polyglot.util.IdentityKey(classType))) {
-                    className = soot.javaToJimple.InitialResolver.v().getLocalTypeMap().get(new polyglot.util.IdentityKey(classType));    
+                    className = soot.javaToJimple.InitialResolver.v().getLocalTypeMap().get(new polyglot.util.IdentityKey(classType));
                 }
                 else {
                     String pkgName = "";
@@ -472,7 +472,7 @@ public class Util {
                         pkgName = classType.package_().fullName();
                     }
                     className = classType.name();
-                    
+
                     if (classType.outer().isAnonymous() || classType.outer().isLocal()){
                         className = getSootType(classType.outer()).toString()+"$"+className;
                     }
@@ -491,25 +491,25 @@ public class Util {
             else {
 			    className = classType.fullName();
             }
-            
+
 			sootType = soot.RefType.v(className);
 		}
 		else{
 			throw new RuntimeException("Unknown Type");
 		}
 		return sootType;
-    }    
-    
-    
+    }
+
+
     /**
      * Modifier Creation
      */
 	public static int getModifier(polyglot.types.Flags flags) {
 
 		int modifier = 0;
-		
+
 		if (flags.isPublic()){
-			modifier = modifier | soot.Modifier.PUBLIC;	
+			modifier = modifier | soot.Modifier.PUBLIC;
 		}
 		if (flags.isPrivate()){
 			modifier = modifier | soot.Modifier.PRIVATE;

@@ -44,7 +44,7 @@ public class PPG
 			  }
                         else if (args[i].equals ("-o"))
                           {
-                              if (args.length > i) 
+                              if (args.length > i)
                                   OUTPUT_FILE = args[++i];
                               else
 				  throw new

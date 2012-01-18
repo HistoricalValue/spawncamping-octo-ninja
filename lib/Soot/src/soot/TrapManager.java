@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -103,17 +103,17 @@ public class TrapManager
         return trapsSet;
     }
 
-    /** Splits all traps so that they do not cross the range rangeStart - rangeEnd. 
+    /** Splits all traps so that they do not cross the range rangeStart - rangeEnd.
      * Note that rangeStart is inclusive, rangeEnd is exclusive. */
-    public static void splitTrapsAgainst(Body b, Unit rangeStart, Unit rangeEnd) 
+    public static void splitTrapsAgainst(Body b, Unit rangeStart, Unit rangeEnd)
     {
         Chain traps = b.getTraps(), units = b.getUnits();
         Iterator trapsIt = traps.snapshotIterator();
-        
+
         while (trapsIt.hasNext())
         {
             Trap t = (Trap)trapsIt.next();
-            
+
             Iterator unitIt = units.iterator(t.getBeginUnit(),
                                              t.getEndUnit());
 
@@ -156,27 +156,27 @@ public class TrapManager
     }
 
     /** Given a body and a unit handling an exception,
-     * returns the list of exception types possibly caught 
+     * returns the list of exception types possibly caught
      * by the handler. */
     public static List getExceptionTypesOf(Unit u, Body body)
     {
          List possibleTypes = new ArrayList();
-        
+
          Iterator trapIt = body.getTraps().iterator();
-        
+
          while(trapIt.hasNext())
          {
             Trap trap = (Trap) trapIt.next();
-            
+
             Unit handler = trap.getHandlerUnit();
-             
+
             if(handler == u)
             {
                 possibleTypes.add(RefType.v(trap.getException().
                     getName()));
             }
         }
-        
+
         return possibleTypes;
     }
 }

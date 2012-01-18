@@ -29,7 +29,7 @@ import soot.jbco.util.*;
 
 /**
  * @author Michael Batchelder
- * 
+ *
  * Created on 7-Feb-2006
  */
 public class LibraryMethodWrappersBuilder extends SceneTransformer  implements IJbcoTransform {
@@ -39,21 +39,21 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "wjtp.jbco_blbc";
-  
+
   public String getName() {
     return name;
   }
-  
+
   private static int newmethods = 0;
   private static int methodcalls = 0;
-  
+
   public void outputSummary() {
     out.println("New Methods Created: "+newmethods);
     out.println("Method Calls Replaced: "+methodcalls);
   }
-  
+
   private static final HashMap<SootClass, HashMap> libClassesToMethods = new HashMap<SootClass, HashMap>();
 
   private static final Scene scene = G.v().soot_Scene();
@@ -68,7 +68,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
     Iterator it = scene.getApplicationClasses().snapshotIterator();
     while (it.hasNext()) {
       SootClass c = (SootClass) it.next();
-        
+
       if (output) out.println("\r\tProcessing " + c.getName()+"\r");
 
       List mList = c.getMethods();
@@ -89,7 +89,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
         int localName = 0;
         Chain locals = body.getLocals();
         PatchingChain units = body.getUnits();
-        
+
         Unit first = null;
         Iterator uIt = units.snapshotIterator();
         while (uIt.hasNext()) {
@@ -99,7 +99,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
           first = unit;
           break;
         }
-        
+
         uIt = units.snapshotIterator();
         while (uIt.hasNext()) {
           Unit unit = (Unit) uIt.next();
@@ -121,7 +121,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
               continue;
 
             if (output) out.print("\t\t\tChanging " + sm.getSignature());
-            
+
             SootMethodRef smr = getNewMethodRef(dc, sm);
             if (smr == null) {
               try {
@@ -136,7 +136,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
               continue;
 
             if (output) out.println(" to " + smr.getSignature() + "\tUnit: " + unit);
-            
+
             List args = ie.getArgs();
             List parms = smr.parameterTypes();
             int argsCount = args.size();
@@ -175,7 +175,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
         }
       }
     }
-    
+
     scene.releaseActiveHierarchy();
     scene.getActiveHierarchy();
     scene.setFastHierarchy(new FastHierarchy());
@@ -202,7 +202,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
   }
 
   private SootMethodRef buildNewMethod(SootClass fromC, SootClass libClass,
-      SootMethod sm, InvokeExpr origIE) 
+      SootMethod sm, InvokeExpr origIE)
   {
     SootClass randClass;
     List methods;
@@ -216,11 +216,11 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
       if (c.isConcrete() && !c.isInterface() && c.isPublic())
         availClasses.add(c);
     }
-    
+
     int classCount = availClasses.size();
     if (classCount==0)
         throw new RuntimeException("There appears to be no public non-interface Application classes!");
-    
+
     do {
       int index = Rand.getInt(classCount);
       if ((randClass = availClasses.get(index)) == fromC && classCount > 1) {
@@ -269,7 +269,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
     } while (similarM != null);
 
     int mods = ((((sm.getModifiers() | Modifier.STATIC | Modifier.PUBLIC)
-        & (Modifier.ABSTRACT ^ 0xFFFF)) & (Modifier.NATIVE ^ 0xFFFF)) 
+        & (Modifier.ABSTRACT ^ 0xFFFF)) & (Modifier.NATIVE ^ 0xFFFF))
         & (Modifier.SYNCHRONIZED ^ 0xFFFF));
     SootMethod newMethod = new SootMethod(newName, smParamTypes, sm
         .getReturnType(), mods);
@@ -284,7 +284,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
     List args = BodyBuilder.buildParameterLocals(units, locals, smParamTypes);
     while (extraParams-- > 0)
       args.remove(args.size() - 1);
-    
+
     if (sm.isStatic()) {
       ie = Jimple.v().newStaticInvokeExpr(sm.makeRef(), args);
     } else {
@@ -309,14 +309,14 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
     if (output)
       out.println("\r"+sm.getName()+" was replaced by \r\t"+newMethod.getName()+" which calls \r\t\t"+ie);
 
-    if (units.size()<2) 
+    if (units.size()<2)
       out.println("\r\rTHERE AREN'T MANY UNITS IN THIS METHOD "+units);
-    
+
     builtByMe.add(newMethod);
-    
+
     return newMethod.makeRef();
   }
-  
+
   private static Type getPrimType(int idx) {
     switch (idx) {
     	case 0: return IntType.v();
@@ -329,7 +329,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
     	default: return IntType.v();
     }
   }
-  
+
   private static Value getConstantType(Type t) {
     if (t instanceof BooleanType)
       return IntConstant.v(Rand.getInt(1));
@@ -345,7 +345,7 @@ public class LibraryMethodWrappersBuilder extends SceneTransformer  implements I
       return FloatConstant.v(Rand.getFloat());
     if (t instanceof DoubleType)
       return DoubleConstant.v(Rand.getDouble());
-    
+
     return Jimple.v().newCastExpr(NullConstant.v(),t);
   }
 }

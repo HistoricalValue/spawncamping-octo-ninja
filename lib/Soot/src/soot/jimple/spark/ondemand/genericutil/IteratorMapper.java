@@ -23,10 +23,10 @@ import java.util.Iterator;
 public class IteratorMapper<T,U> implements Iterator<U> {
 
     private final Mapper<T,U> mapper;
-    
+
     private final Iterator<T> delegate;
-    
-    
+
+
     public IteratorMapper(final Mapper<T,U> mapper, final Iterator<T> delegate) {
         this.mapper = mapper;
         this.delegate = delegate;

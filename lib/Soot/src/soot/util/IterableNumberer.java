@@ -24,5 +24,5 @@ import java.util.*;
  */
 public interface IterableNumberer extends Numberer {
     /** Returns an iterator over all objects added to the numberer. */
-    Iterator iterator(); 
+    Iterator iterator();
 }

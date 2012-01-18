@@ -19,7 +19,7 @@ public class Package_c extends TypeObject_c implements Package
 
     /** Used for deserializing types. */
     protected Package_c() { }
-    
+
     public Package_c(TypeSystem ts) {
         this(ts, null, null);
     }

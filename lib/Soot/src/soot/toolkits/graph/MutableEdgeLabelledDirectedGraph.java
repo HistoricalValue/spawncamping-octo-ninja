@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -73,8 +73,8 @@ public interface MutableEdgeLabelledDirectedGraph extends DirectedGraph
      *  @param label  label for the edge to remove.
      */
     public void removeEdge(Object from, Object to, Object label);
-    
-    
+
+
     /**
      *  Removes all edges between 2 nodes in the graph.
      *  If no edges are present, no change is made.
@@ -82,8 +82,8 @@ public interface MutableEdgeLabelledDirectedGraph extends DirectedGraph
      *  @param to    in node for the edges to remove.
      */
     public void removeAllEdges(Object from, Object to);
-    
-    
+
+
     /**
      *  Removes all edges with the given label in the graph.
      *  If no edges are present, no change is made.
@@ -92,24 +92,24 @@ public interface MutableEdgeLabelledDirectedGraph extends DirectedGraph
     public void removeAllEdges(Object label);
 
 
-    /** @return true if the graph contains an edge between 
+    /** @return true if the graph contains an edge between
      *  the 2 nodes with the given label, otherwise return false.
-     */ 
+     */
     public boolean containsEdge(Object from, Object to, Object label);
-    
-    
-    /** @return true if the graph contains any edges between 
+
+
+    /** @return true if the graph contains any edges between
      *  the 2 nodes, otherwise return false.
      *  @param from  out node for the edges.
      *  @param to    in node for the edges.
-     */ 
+     */
     public boolean containsAnyEdge(Object from, Object to);
-    
-    
+
+
     /** @return true if the graph contains any edges
      *  with the given label, otherwise return false.
      *  @param label  label for the edges.
-     */ 
+     */
     public boolean containsAnyEdge(Object label);
 
 
@@ -143,7 +143,7 @@ public interface MutableEdgeLabelledDirectedGraph extends DirectedGraph
     public boolean containsNode(Object node);
 }
 
- 
+
 
 
 

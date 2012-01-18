@@ -38,8 +38,8 @@ public class DNotExpr extends AbstractUnopExpr
     {
         super(Grimp.v().newExprBox(op));
     }
-      
-    public Object clone() 
+
+    public Object clone()
     {
         return new DNotExpr(Grimp.cloneIfNecessary(getOpBox().getValue()));
     }
@@ -52,15 +52,15 @@ public class DNotExpr extends AbstractUnopExpr
 
     public String toString()
     {
-	return " ! (" + ( getOpBox().getValue()).toString() +")"; 
+	return " ! (" + ( getOpBox().getValue()).toString() +")";
     }
 
-    
+
     public Type getType(){
 	Value op = getOpBox().getValue();
-    
+
 	if(op.getType().equals(IntType.v()) || op.getType().equals(ByteType.v()) ||
-	   op.getType().equals(ShortType.v()) || op.getType().equals(BooleanType.v()) || 
+	   op.getType().equals(ShortType.v()) || op.getType().equals(BooleanType.v()) ||
 	   op.getType().equals(CharType.v()))
             return IntType.v();
         else if(op.getType().equals(LongType.v()))
@@ -99,7 +99,7 @@ public class DNotExpr extends AbstractUnopExpr
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return getOpBox().getValue().equivHashCode();
     }

@@ -25,7 +25,7 @@ import java.util.*;
 
 public class CondTransformer extends BodyTransformer {
     public CondTransformer (Singletons.Global g) {}
-    public static CondTransformer v() { 
+    public static CondTransformer v() {
         return G.v().soot_javaToJimple_toolkits_CondTransformer();
     }
 
@@ -47,15 +47,15 @@ public class CondTransformer extends BodyTransformer {
          * L1:  if z0 == 0 goto L2
          *      conseq
          * L2:  altern
-         * 
+         *
          * and transform to
          *      if cond goto L0
          *      if cond goto L0
          *      conseq
-         * L0:  altern     
-         *      
+         * L0:  altern
+         *
          */
-        
+
         while (change){
             Iterator it = b.getUnits().iterator();
             int pos = 0;
@@ -72,7 +72,7 @@ public class CondTransformer extends BodyTransformer {
                     break;
                 }
             }
-            if (change){ 
+            if (change){
                 transformBody(b, (Stmt)it.next());
                 pos = 0;
                 stmtSeq = new Stmt[SEQ_LENGTH];
@@ -81,7 +81,7 @@ public class CondTransformer extends BodyTransformer {
     }
 
     private void transformBody(Body b, Stmt next){
-        // change target of stmts 0 and 1 to target of stmt 5 
+        // change target of stmts 0 and 1 to target of stmt 5
         // remove stmts 2, 3, 4, 5
         Stmt newTarget = null;
         Stmt oldTarget = null;
@@ -94,12 +94,12 @@ public class CondTransformer extends BodyTransformer {
         }
         ((IfStmt)stmtSeq[0]).setTarget(newTarget);
         ((IfStmt)stmtSeq[1]).setTarget(newTarget);
-        
+
         for (int i = 2; i <= 5; i++){
             b.getUnits().remove(stmtSeq[i]);
         }
         if (!sameGoto){
-            b.getUnits().insertAfter(Jimple.v().newGotoStmt(oldTarget), stmtSeq[1]); 
+            b.getUnits().insertAfter(Jimple.v().newGotoStmt(oldTarget), stmtSeq[1]);
         }
     }
 
@@ -107,7 +107,7 @@ public class CondTransformer extends BodyTransformer {
         switch(pos){
             case 0: {
                         if (s instanceof IfStmt){
-                            stmtSeq[pos] = s;   
+                            stmtSeq[pos] = s;
                             return true;
                         }
                         break;
@@ -115,7 +115,7 @@ public class CondTransformer extends BodyTransformer {
             case 1: {
                         if (s instanceof IfStmt){
                             if (sameTarget(stmtSeq[pos-1], s)){
-                                stmtSeq[pos] = s;   
+                                stmtSeq[pos] = s;
                                 return true;
                             }
                         }
@@ -123,9 +123,9 @@ public class CondTransformer extends BodyTransformer {
                     }
             case 2: {
                         if (s instanceof AssignStmt){
-                            stmtSeq[pos] = s; 
+                            stmtSeq[pos] = s;
                             if ((((AssignStmt)s).getRightOp() instanceof IntConstant) && (((IntConstant)((AssignStmt)s).getRightOp())).value == 0){
-                                sameGoto = false;        
+                                sameGoto = false;
                             }
                             return true;
                         }
@@ -133,7 +133,7 @@ public class CondTransformer extends BodyTransformer {
                     }
             case 3: {
                         if (s instanceof GotoStmt){
-                            stmtSeq[pos] = s;   
+                            stmtSeq[pos] = s;
                             return true;
                         }
                         break;
@@ -141,7 +141,7 @@ public class CondTransformer extends BodyTransformer {
             case 4: {
                         if (s instanceof AssignStmt){
                             if (isTarget(((IfStmt)stmtSeq[0]).getTarget(), s) && sameLocal(stmtSeq[2], s)){
-                                stmtSeq[pos] = s;   
+                                stmtSeq[pos] = s;
                                 return true;
                             }
                         }
@@ -150,7 +150,7 @@ public class CondTransformer extends BodyTransformer {
             case 5: {
                         if (s instanceof IfStmt){
                             if (isTarget((Stmt)((GotoStmt)stmtSeq[3]).getTarget(), s) && sameCondLocal(stmtSeq[4], s) && (((IfStmt)s).getCondition() instanceof EqExpr)){
-                                stmtSeq[pos] = s;   
+                                stmtSeq[pos] = s;
                                 return true;
                             }
                             else if (isTarget((Stmt)((GotoStmt)stmtSeq[3]).getTarget(), s) && sameCondLocal(stmtSeq[4], s)){
@@ -161,7 +161,7 @@ public class CondTransformer extends BodyTransformer {
                         }
                         break;
                     }
-       
+
             default: {
                          break;
                      }

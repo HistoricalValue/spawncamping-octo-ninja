@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,13 +33,13 @@ public interface TableSwitchInst extends Inst
     public Unit getDefaultTarget();
     public void setDefaultTarget(Unit defTarget);
     public UnitBox getDefaultTargetBox();
-    
+
     public int getLowIndex();
     public void setLowIndex(int index);
-    
+
     public int getHighIndex();
     public void setHighIndex(int index);
-    
+
     public List getTargets();
     public Unit getTarget(int index);
     public void setTarget(int index, Unit target);

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -47,11 +47,11 @@ public interface Chain<E> extends Collection<E>, Serializable
     /** Inserts <code>toInsert</code> in the Chain before <code>point</code>.
      * (It would probably be better to make Chain implement List)*/
     public void insertBefore(Chain<E> toInsert, E point);
-    /** Inserts <code>toInsert</code> in the Chain after <code>point</code>. 
+    /** Inserts <code>toInsert</code> in the Chain after <code>point</code>.
      * (It would probably be better to make Chain implement List)*/
     public void insertAfter(Chain<E> toInsert, E point);
 
-    
+
     /** Replaces <code>out</code> in the Chain by <code>in</code>. */
     public void swapWith(E out, E in);
 
@@ -79,14 +79,14 @@ public interface Chain<E> extends Collection<E>, Serializable
 
     /** Returns the last object in this Chain. */
     public E getLast();
-    
+
     /** Returns the object immediately following <code>point</code>. */
     public E getSuccOf(E point);
 
     /** Returns the object immediately preceding <code>point</code>. */
     public E getPredOf(E point);
 
-    /** Returns an iterator over a copy of this chain. 
+    /** Returns an iterator over a copy of this chain.
      * This avoids ConcurrentModificationExceptions from being thrown
      * if the underlying Chain is modified during iteration.
      * Do not use this to remove elements which have not yet been
@@ -103,6 +103,6 @@ public interface Chain<E> extends Collection<E>, Serializable
     public Iterator<E> iterator(E head, E tail);
 
     /** Returns the size of this Chain. */
-    public int size();   
+    public int size();
 }
 

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,15 +40,15 @@ public abstract class AbstractOpTypeInst extends AbstractInst
     {
         if(opType instanceof NullType || opType instanceof ArrayType || opType instanceof RefType)
             opType = RefType.v();
-        
+
         this.opType = opType;
     }
-    
+
     public Type getOpType()
     {
         return opType;
     }
-    
+
     public void setOpType(Type t)
     {
         opType = t;
@@ -59,10 +59,10 @@ public abstract class AbstractOpTypeInst extends AbstractInst
     /* override AbstractInst's toString with our own, including types */
     public String toString()
     {
-        return getName() + "." + 
+        return getName() + "." +
           Baf.bafDescriptorOf(opType) + getParameters();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(getName());
         up.literal(".");
@@ -71,12 +71,12 @@ public abstract class AbstractOpTypeInst extends AbstractInst
     }
 
 
-  
-  
-  
+
+
+
   public int getOutMachineCount()
   {
     return AbstractJasminClass.sizeOfType(getOpType());
-  } 
+  }
 
 }

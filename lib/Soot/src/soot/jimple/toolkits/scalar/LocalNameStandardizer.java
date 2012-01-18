@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -59,15 +59,15 @@ public class LocalNameStandardizer extends BodyTransformer
             {
                 Local l = (Local) localIt.next();
                 String prefix = "";
-                
+
                 if(l.getName().startsWith("$"))
                     prefix = "$";
-                else 
+                else
                 {
                     if (onlyStackName)
                         continue;
                 }
-                    
+
                 if(l.getType().equals(BooleanType.v()))
                     l.setName(prefix + "z" + intCount++);
                 else if(l.getType().equals(ByteType.v()))

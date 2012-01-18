@@ -18,13 +18,13 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
 
 
- 
+
 
 
 
@@ -60,8 +60,8 @@ public class ConstructorFolder extends BodyTransformer
       Iterator<Unit> it = stmtList.iterator();
 
       ExceptionalUnitGraph graph = new ExceptionalUnitGraph(body);
-              
-        
+
+
       LocalDefs localDefs = new SmartLocalDefs(graph, new SimpleLiveLocals(graph));
       LocalUses localUses = new SimpleLocalUses(graph, localDefs);
 
@@ -69,15 +69,15 @@ public class ConstructorFolder extends BodyTransformer
       while (it.hasNext())
         {
           Stmt s = (Stmt)it.next();
-            
+
           if (!(s instanceof AssignStmt))
             continue;
-            
+
           /* this should be generalized to ArrayRefs */
           Value lhs = ((AssignStmt)s).getLeftOp();
           if (!(lhs instanceof Local))
             continue;
-            
+
           Value rhs = ((AssignStmt)s).getRightOp();
           if (!(rhs instanceof NewExpr))
             continue;
@@ -89,11 +89,11 @@ public class ConstructorFolder extends BodyTransformer
 
              Also, do note that any new's (object creation) without
              corresponding constructors must be dead. */
-           
+
           List lu = localUses.getUsesOf(s);
           Iterator luIter = lu.iterator();
           boolean MadeNewInvokeExpr = false;
-           
+
           while (luIter.hasNext())
             {
               Unit use = ((UnitValueBoxPair)(luIter.next())).unit;
@@ -103,20 +103,20 @@ public class ConstructorFolder extends BodyTransformer
               if (!(is.getInvokeExpr() instanceof SpecialInvokeExpr) ||
                   lhs != ((SpecialInvokeExpr)is.getInvokeExpr()).getBase())
                 continue;
-              
-              SpecialInvokeExpr oldInvoke = 
+
+              SpecialInvokeExpr oldInvoke =
                 ((SpecialInvokeExpr)is.getInvokeExpr());
               LinkedList invokeArgs = new LinkedList();
               for (int i = 0; i < oldInvoke.getArgCount(); i++)
                 invokeArgs.add(oldInvoke.getArg(i));
-              
+
               AssignStmt constructStmt = Grimp.v().newAssignStmt
                 ((AssignStmt)s);
               constructStmt.setRightOp
                 (Grimp.v().newNewInvokeExpr
                  (((NewExpr)rhs).getBaseType(), oldInvoke.getMethodRef(), invokeArgs));
               MadeNewInvokeExpr = true;
-              
+
               use.redirectJumpsToThisTo(constructStmt);
               units.insertBefore(constructStmt, use);
               units.remove(use);
@@ -126,5 +126,5 @@ public class ConstructorFolder extends BodyTransformer
               units.remove(s);
             }
         }
-    }  
+    }
 }

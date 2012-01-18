@@ -30,18 +30,18 @@ import soot.toolkits.graph.Block;
  * This class defines a Node in the Program Dependence Graph. There might be a need to store
  * additional information in the PDG nodes. In essence, the PDG nodes represent (within them)
  *  either CFG nodes or Region nodes.
- * 
- * 
+ *
+ *
  *
  * @author Hossein Sadat-Mohtasham
  * June 2009
  */
 
 public class PDGNode {
-	
+
 	public enum Type{REGION, CFGNODE};
 	public enum Attribute{NORMAL, ENTRY, CONDHEADER, LOOPHEADER};
-	
+
 	protected Type m_type;
 	protected Object m_node = null;
 	protected List<PDGNode> m_dependents = new ArrayList<PDGNode>();
@@ -50,16 +50,16 @@ public class PDGNode {
 	//between them (if any).
 	protected PDGNode m_next = null;
 	protected PDGNode m_prev = null;
-	
+
 	protected Attribute m_attrib = Attribute.NORMAL;
-	
-	
+
+
 	public PDGNode(Object obj, Type t)
 	{
 		this.m_node = obj;
 		this.m_type = t;
 	}
-	
+
 	public Type getType()
 	{
 		return this.m_type;
@@ -68,12 +68,12 @@ public class PDGNode {
 	{
 		this.m_type = t;
 	}
-	
+
 	public Object getNode()
 	{
 		return this.m_node;
 	}
-	
+
 	public void setNext(PDGNode n)
 	{
 		this.m_next = n;
@@ -82,7 +82,7 @@ public class PDGNode {
 	{
 		return this.m_next;
 	}
-	
+
 	public void setPrev(PDGNode n)
 	{
 		this.m_prev = n;
@@ -91,7 +91,7 @@ public class PDGNode {
 	{
 		return this.m_prev;
 	}
-	
+
 	//The following is used to keep track of the nodes that are visited in post-order traversal. This should
 	//probably be moved into an aspect.
 	protected boolean m_visited = false;
@@ -107,7 +107,7 @@ public class PDGNode {
 	{
 		this.m_node = obj;
 	}
-	
+
 	public Attribute getAttrib()
 	{
 		return this.m_attrib;
@@ -116,7 +116,7 @@ public class PDGNode {
 	{
 		this.m_attrib = a;
 	}
-	
+
 	public void addDependent(PDGNode node)
 	{
 		if(!this.m_dependents.contains(node))
@@ -126,17 +126,17 @@ public class PDGNode {
 	{
 		this.m_backDependents.add(node);
 	}
-	
+
 	public void removeDependent(PDGNode node)
 	{
 		this.m_dependents.remove(node);
 	}
-	
+
 	public List<PDGNode> getDependets()
 	{
 		return this.m_dependents;
 	}
-	
+
 	public List<PDGNode> getBackDependets()
 	{
 		return this.m_backDependents;
@@ -147,9 +147,9 @@ public class PDGNode {
 		s = "Type: " + ((this.m_type == Type.REGION)? "REGION: " : "CFGNODE: ");
 		s += this.m_node;
 		return s;
-		
+
 	}
-	
+
 	public String toShortString()
 	{
 		String s = new String();
@@ -158,8 +158,8 @@ public class PDGNode {
 			s += ((IRegion)this.m_node).getID();
 		else
 			s += ((Block)this.m_node).toShortString();
-		
+
 		return s;
 	}
-	
+
 }

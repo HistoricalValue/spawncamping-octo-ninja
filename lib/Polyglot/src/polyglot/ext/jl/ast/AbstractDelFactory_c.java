@@ -8,34 +8,34 @@ import polyglot.util.InternalCompilerError;
  * This abstract implementation of <code>DelFactory</code> provides
  * a way of chaining together DelFactories, and default implementations
  * of factory methods for each node.
- * 
+ *
  * <p>
  * For a given type of AST node <code>N</code>, there are three methods:
- * <code>delN()</code>,  <code>delNImpl()</code> and <code>postDelN(JL)</code>. 
+ * <code>delN()</code>,  <code>delNImpl()</code> and <code>postDelN(JL)</code>.
  * The method <code>delN()</code> calls <code>delNImpl()</code> to create
- * an appropriate delegate object, and if other <code>DelFactory</code>s are 
- * chained onto this one, it will also call <code>delN()</code> on the next 
- * <code>DelFactory</code>. The method <code>delN()</code> will then 
+ * an appropriate delegate object, and if other <code>DelFactory</code>s are
+ * chained onto this one, it will also call <code>delN()</code> on the next
+ * <code>DelFactory</code>. The method <code>delN()</code> will then
  * call <code>postDelN</code>, passing in the newly created extension object.
- * 
+ *
  * <p>
  * The default implementation of <code>delNImpl()</code> is to simply call
- * <code>delMImpl()</code>, where <code>M</code> is the immediate 
+ * <code>delMImpl()</code>, where <code>M</code> is the immediate
  * superclass of <code>N</code>. Similarly, the default implementation of
  * <code>postDelN(JL)</code> is to call <code>postDelM(JL)</code>.
- * 
- * @see polyglot.ext.jl.ast.AbstractExtFactory_c has a very similar structure. 
+ *
+ * @see polyglot.ext.jl.ast.AbstractExtFactory_c has a very similar structure.
  */
 public abstract class AbstractDelFactory_c implements DelFactory
 {
     protected AbstractDelFactory_c() {
         this(null);
     }
-    
+
     protected AbstractDelFactory_c(DelFactory nextDelFactory) {
         this.nextDelFactory = nextDelFactory;
     }
-    
+
     /**
      * The next delFactory in the chain. Whenever an extension is instantiated,
      * the next delFactory should be called to see if it also has an extension,
@@ -50,22 +50,22 @@ public abstract class AbstractDelFactory_c implements DelFactory
     /**
      * Compose two delegates together. Order is important: e1 gets added
      * at the end of e2's chain.
-     * @param e1 the <code>JL</code> object to add to the end of e2's 
-     *             chain of delegates. 
-     * @param e2 the second <code>JL</code> object that will have e1 added to 
+     * @param e1 the <code>JL</code> object to add to the end of e2's
+     *             chain of delegates.
+     * @param e2 the second <code>JL</code> object that will have e1 added to
      *             its chain of delegates.
      * @return the result of adding e1 to the end of e2's chain of delegates.
      */
     protected JL composeDels(JL e1, JL e2) {
-        if (e1 == null) return e2;        
-        if (e2 == null) return e1;        
+        if (e1 == null) return e2;
+        if (e2 == null) return e1;
         throw new InternalCompilerError("Composition of delegates unimplemented.");
         // add e1 as e2's last extension, by recursing...
         //return e2.ext(composeDels(e1, e2.ext()));
     }
-    
+
     // ******************************************
-    // Final methods that call the Impl methods to construct 
+    // Final methods that call the Impl methods to construct
     // extensions, and then check with nextDelFactory to see if it
     // also has an extension. Finally, call an appropriate post method,
     // to allow subclasses to perform operations on the construction Exts
@@ -833,7 +833,7 @@ public abstract class AbstractDelFactory_c implements DelFactory
     // ********************************************
     // Impl methods
     // ********************************************
-    
+
     /**
      * Create the delegate for a <code>AmbAssign</code> AST node.
      * @return the delegate for a <code>AmbAssign</code> AST node.

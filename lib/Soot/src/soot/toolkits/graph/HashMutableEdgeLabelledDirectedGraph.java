@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -43,23 +43,23 @@ class DGEdge
 {
 	Object from;
 	Object to;
-	
+
 	public DGEdge(Object from, Object to)
 	{
 		this.from = from;
 		this.to = to;
 	}
-	
+
 	public Object from()
 	{
 		return from;
 	}
-	
+
 	public Object to()
 	{
 		return to;
 	}
-	
+
 	public boolean equals(Object o)
 	{
 		if(o instanceof DGEdge)
@@ -69,7 +69,7 @@ class DGEdge
 		}
 		return false;
 	}
-	
+
 	public int hashCode()
 	{
 		return from.hashCode() + to.hashCode();
@@ -80,7 +80,7 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
 {
     protected HashMap<Object,ArrayList> nodeToPreds = new HashMap();
     protected HashMap<Object,ArrayList> nodeToSuccs = new HashMap();
-    
+
     protected HashMap<DGEdge,ArrayList<Object>> edgeToLabels = new HashMap();
     protected HashMap<Object,ArrayList<DGEdge>> labelToEdges = new HashMap();
 
@@ -158,7 +158,7 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
     {
         if (from == null || to == null)
 						throw new RuntimeException("edge from or to null");
-						
+
 		if (label == null)
 						throw new RuntimeException("edge with null label");
 
@@ -178,21 +178,21 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
 
         if (tails.contains(from))
             tails.remove(from);
-		
+
 		if(!succsList.contains(to))
 	        succsList.add(to);
 	    if(!predsList.contains(from))
 	        predsList.add(from);
-	    
+
 	    DGEdge edge = new DGEdge(from, to);
 		if(!edgeToLabels.containsKey(edge))
 			edgeToLabels.put(edge, new ArrayList());
 	    List<Object> labels = edgeToLabels.get(edge);
-	    
+
 	    if(!labelToEdges.containsKey(label))
 	    	labelToEdges.put(label, new ArrayList());
 	    List<DGEdge> edges = labelToEdges.get(label);
-		
+
 //		if(!labels.contains(label))
 			labels.add(label);
 //		if(!edges.contains(edge))
@@ -204,7 +204,7 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
 		DGEdge edge = new DGEdge(from, to);
 		return edgeToLabels.get(edge);
 	}
-	
+
 	public MutableDirectedGraph getEdgesForLabel(Object label)
 	{
 		List<DGEdge> edges = labelToEdges.get(label);
@@ -226,19 +226,19 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
     {
         if (!containsEdge(from, to, label))
             return;
-            
+
         DGEdge edge = new DGEdge(from, to);
         List labels = edgeToLabels.get(edge);
         if( labels == null )
         	throw new RuntimeException("edge " + edge + " not in graph!");
-        
+
         List edges = labelToEdges.get(label);
         if( edges == null )
         	throw new RuntimeException("label " + label + " not in graph!");
 
 		labels.remove(label);
 		edges.remove(edge);
-		
+
 		// if this edge has no more labels, then it's gone!
 		if(labels.isEmpty())
 		{
@@ -251,7 +251,7 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
 	        List predsList = nodeToPreds.get(to);
 	        if (predsList == null)
 	            throw new RuntimeException(to + " not in graph!");
-			
+
 	        succsList.remove(to);
 	        predsList.remove(from);
 
@@ -261,7 +261,7 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
 	        if (predsList.isEmpty())
 	            heads.add(to);
 	    }
-	    
+
 	    // if this label has no more edges, then who cares?
 	    if(edges.isEmpty())
 	    	labelToEdges.remove(label);
@@ -271,14 +271,14 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
 	{
         if (!containsAnyEdge(from, to))
             return;
-            
+
         DGEdge edge = new DGEdge(from, to);
         List labels = edgeToLabels.get(edge);
         if( labels == null )
         	throw new RuntimeException("edge " + edge + " not in graph!");
-        
+
         for(Object label : labels)
-        {        
+        {
 	        removeEdge(from, to, label);
 	    }
 	}
@@ -287,11 +287,11 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
     {
 		if( !containsAnyEdge(label) )
 			return;
-		
+
 		List<DGEdge> edges = labelToEdges.get(label);
 		if( edges == null )
 			throw new RuntimeException("label " + label + " not in graph!");
-			
+
 		for(DGEdge edge : edges)
 		{
 			removeEdge(edge.from(), edge.to(), label);
@@ -335,10 +335,10 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
     {
 				if (containsNode(node))
 						throw new RuntimeException("Node already in graph");
-				
+
 				nodeToSuccs.put(node, new ArrayList());
         nodeToPreds.put(node, new ArrayList());
-        heads.add(node); 
+        heads.add(node);
 				tails.add(node);
     }
 
@@ -355,7 +355,7 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
         nodeToPreds.remove(node);
 
         if (heads.contains(node))
-            heads.remove(node); 
+            heads.remove(node);
 
         if (tails.contains(node))
             tails.remove(node);
@@ -389,4 +389,4 @@ public class HashMutableEdgeLabelledDirectedGraph implements MutableEdgeLabelled
 
 }
 
- 
+

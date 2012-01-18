@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -43,8 +43,8 @@ public class JReturnVoidStmt extends AbstractStmt implements ReturnVoidStmt
     {
     }
 
-  
-    public Object clone() 
+
+    public Object clone()
     {
         return new JReturnVoidStmt();
     }
@@ -53,24 +53,24 @@ public class JReturnVoidStmt extends AbstractStmt implements ReturnVoidStmt
     {
         return Jimple.RETURN;
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(Jimple.RETURN);
     }
-    
+
     public void apply(Switch sw)
     {
         ((StmtSwitch) sw).caseReturnVoidStmt(this);
     }
-    
+
     public void convertToBaf(JimpleToBafContext context, List<Unit> out)
     {
 	Unit u;
         out.add(u = Baf.v().newReturnVoidInst());
-	
+
 	Unit currentUnit = this;
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}

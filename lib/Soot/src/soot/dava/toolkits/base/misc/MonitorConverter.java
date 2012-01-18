@@ -63,7 +63,7 @@ public class MonitorConverter
 
     public static MonitorConverter v() { return G.v().soot_dava_toolkits_base_misc_MonitorConverter(); }
 
-    private final SootMethod v, enter, exit; 
+    private final SootMethod v, enter, exit;
 
     public void convert( DavaBody body)
     {
@@ -73,7 +73,7 @@ public class MonitorConverter
 	    MonitorStmt ms = (MonitorStmt) mas.get_Stmt();
 
 	    body.addToImportList("soot.dava.toolkits.base.DavaMonitor.DavaMonitor");
-	    
+
 	    ArrayList arg = new ArrayList();
 	    arg.add( ms.getOp());
 

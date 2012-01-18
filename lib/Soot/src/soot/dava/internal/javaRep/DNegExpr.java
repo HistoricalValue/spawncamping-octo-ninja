@@ -29,8 +29,8 @@ public class DNegExpr extends AbstractNegExpr
     {
         super(Grimp.v().newExprBox(op));
     }
-      
-    public Object clone() 
+
+    public Object clone()
     {
         return new DNegExpr(Grimp.cloneIfNecessary(getOp()));
     }
@@ -47,6 +47,6 @@ public class DNegExpr extends AbstractNegExpr
 
     public String toString()
     {
-	return "(- (" + ( getOpBox().getValue()).toString() + "))"; 
+	return "(- (" + ( getOpBox().getValue()).toString() + "))";
     }
 }

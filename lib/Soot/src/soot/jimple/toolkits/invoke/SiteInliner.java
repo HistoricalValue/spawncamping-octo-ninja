@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,7 +34,7 @@ import soot.util.*;
 /** Provides methods to inline a given invoke site. */
 public class SiteInliner
 {
-    public String getDefaultOptions() 
+    public String getDefaultOptions()
     {
         return "insert-null-checks insert-redundant-casts";
     }
@@ -44,7 +44,7 @@ public class SiteInliner
         inlineSites(sites, new HashMap());
     }
 
-    /** Iterates over a list of sites, inlining them in order. 
+    /** Iterates over a list of sites, inlining them in order.
      * Each site is given as a 3-element list (inlinee, toInline, container). */
     public static void inlineSites(List sites, Map options)
     {
@@ -62,7 +62,7 @@ public class SiteInliner
 
     /** Inlines the method <code>inlinee</code> into the <code>container</code>
      * at the point <code>toInline</code>. */
-    public static void inlineSite(SootMethod inlinee, Stmt toInline, 
+    public static void inlineSite(SootMethod inlinee, Stmt toInline,
                                     SootMethod container)
     {
         inlineSite(inlinee, toInline, container, new HashMap());
@@ -72,9 +72,9 @@ public class SiteInliner
         Inlines the given site.  Note that this method does
         not actually check if it's safe (with respect to access modifiers and special invokes)
         for it to be inlined.  That functionality is handled by the InlinerSafetyManager.
-         
+
      */
-    public static List inlineSite(SootMethod inlinee, Stmt toInline, 
+    public static List inlineSite(SootMethod inlinee, Stmt toInline,
                                     SootMethod container, Map options)
     {
 
@@ -137,7 +137,7 @@ public class SiteInliner
                 {
                     /* In this case, we don't use throwPoint;
                      * instead, put the code right there. */
-                    Stmt insertee = Jimple.v().newIfStmt(Jimple.v().newNeExpr(((InstanceInvokeExpr)ie).getBase(), 
+                    Stmt insertee = Jimple.v().newIfStmt(Jimple.v().newNeExpr(((InstanceInvokeExpr)ie).getBase(),
                                                   NullConstant.v()), toInline);
 
                     containerB.getUnits().insertBefore(insertee, toInline);
@@ -149,15 +149,15 @@ public class SiteInliner
                 }
                 else
                 {
-                    Stmt throwPoint = 
+                    Stmt throwPoint =
                         ThrowManager.getNullPointerExceptionThrower(containerB);
                     containerB.getUnits().insertBefore
-                        (Jimple.v().newIfStmt(Jimple.v().newEqExpr(((InstanceInvokeExpr)ie).getBase(), 
+                        (Jimple.v().newIfStmt(Jimple.v().newEqExpr(((InstanceInvokeExpr)ie).getBase(),
                                          NullConstant.v()), throwPoint), toInline);
                 }
             }
         }
-                    
+
         // Add synchronizing stuff.
         {
             if (inlinee.isSynchronized())
@@ -215,7 +215,7 @@ public class SiteInliner
         // Backpatch the newly-inserted units using newly-constructed maps.
         {
             Iterator it = containerUnits.iterator
-                (containerUnits.getSuccOf(toInline), 
+                (containerUnits.getSuccOf(toInline),
                  containerUnits.getPredOf(exitPoint));
 
             while (it.hasNext())
@@ -245,7 +245,7 @@ public class SiteInliner
                         box.setUnit(uPrime);
                     else
                         throw new RuntimeException("inlined stmt has no clone!");
-                }                
+                }
             }
         }
 
@@ -277,7 +277,7 @@ public class SiteInliner
         // Handle identity stmt's and returns.
         {
             Iterator it = containerUnits.iterator
-                (containerUnits.getSuccOf(toInline), 
+                (containerUnits.getSuccOf(toInline),
                  containerUnits.getPredOf(exitPoint));
             ArrayList cuCopy = new ArrayList();
 
@@ -338,13 +338,13 @@ public class SiteInliner
         for(Iterator i = containerUnits.iterator(containerUnits.getSuccOf(toInline), containerUnits.getPredOf(exitPoint)); i.hasNext();) {
         	newStmts.add(i.next());
         }
-        
+
         // Remove the original statement toInline.
         containerUnits.remove(toInline);
 
         // Resolve name collisions.
         LocalNameStandardizer.v().transform(containerB, "ji.lns");
-        
+
         return newStmts;
     }
 }

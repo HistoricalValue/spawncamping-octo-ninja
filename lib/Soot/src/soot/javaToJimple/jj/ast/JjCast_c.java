@@ -30,7 +30,7 @@ public class JjCast_c extends Cast_c {
     public JjCast_c(Position pos, TypeNode castType, Expr expr){
         super(pos, castType, expr);
     }
-    
+
     public Type childExpectedType(Expr child, AscriptionVisitor av){
         TypeSystem ts = av.typeSystem();
 
@@ -48,7 +48,7 @@ public class JjCast_c extends Cast_c {
         }
 
         return child.type();
-        
+
 
     }
 }

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -51,7 +51,7 @@ public class JThrowStmt extends AbstractStmt implements ThrowStmt
         this.opBox = opBox;
     }
 
-    public Object clone() 
+    public Object clone()
     {
         return new JThrowStmt(Jimple.cloneIfNecessary(getOp()));
     }
@@ -75,7 +75,7 @@ public class JThrowStmt extends AbstractStmt implements ThrowStmt
     {
         return "throw " + opBox.getValue().toString();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(Jimple.THROW);
         up.literal(" ");
@@ -95,7 +95,7 @@ public class JThrowStmt extends AbstractStmt implements ThrowStmt
     public void apply(Switch sw)
     {
         ((StmtSwitch) sw).caseThrowStmt(this);
-    }    
+    }
 
 
     public void convertToBaf(JimpleToBafContext context, List<Unit> out)
@@ -107,15 +107,15 @@ public class JThrowStmt extends AbstractStmt implements ThrowStmt
 
 	Unit currentUnit = this;
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}
-	
+
     }
 
 
-    
+
     public boolean fallsThrough(){return false;}
     public boolean branches(){return false;}
 

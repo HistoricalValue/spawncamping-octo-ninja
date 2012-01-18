@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,108 +38,108 @@ public class Zonation
 {
     private int zoneCount;
     private Map<Unit, Zone> unitToZone;
-    
+
     public Zonation(StmtBody body)
     {
         Chain units = body.getUnits();
         Map<Unit, ArrayList> unitToTrapBoundaries = new HashMap<Unit, ArrayList>();
-        
+
         // Initialize each unit to an empty set
         {
             Iterator unitIt = units.iterator();
-            
+
             while(unitIt.hasNext())
             {
                 Unit u = (Unit) unitIt.next();
-                
+
                 unitToTrapBoundaries.put(u, new ArrayList());
             }
         }
-            
+
         // Build trap boundaries
         {
             Iterator trapIt = body.getTraps().iterator();
-            
+
             while(trapIt.hasNext())
             {
                 Trap t = (Trap) trapIt.next();
-                
+
                 List<Trap> boundary = unitToTrapBoundaries.get(t.getBeginUnit());
                 boundary.add(t);
-                
+
                 boundary = unitToTrapBoundaries.get(t.getEndUnit());
                 boundary.add(t);
             }
         }
-        
+
         // Traverse units, assigning each to a zone
         {
             Map<List, Zone> trapListToZone = new HashMap<List, Zone>(10, 0.7f);
             List<Trap> currentTraps = new ArrayList<Trap>();
             Zone currentZone;
-            
+
             zoneCount = 0;
             unitToZone = new HashMap<Unit, Zone>(units.size() * 2 + 1, 0.7f);
-                        
+
             // Initialize first empty zone
                 currentZone = new Zone("0");
                 trapListToZone.put(new ArrayList(), currentZone);
-                
+
             Iterator unitIt = units.iterator();
-            
+
             while(unitIt.hasNext())
             {
                 Unit u = (Unit) unitIt.next();
-                
+
                 // Process trap boundaries
                 {
                     List trapBoundaries = unitToTrapBoundaries.get(u);
 
                     if(trapBoundaries.size() != 0)
-                    {                        
+                    {
                         Iterator trapIt = trapBoundaries.iterator();
-                        
+
                         while(trapIt.hasNext())
                         {
                             Trap trap = (Trap) trapIt.next();
-                            
+
                             if(currentTraps.contains(trap))
                                 currentTraps.remove(trap);
                             else
                                 currentTraps.add(trap);
                         }
-                                          
+
                         if(trapListToZone.containsKey(currentTraps))
                             currentZone = trapListToZone.get(currentTraps);
                         else
-                        {   
+                        {
                             // Create a new zone
-                            
+
                             zoneCount++;
                             currentZone = new Zone(new Integer(zoneCount).toString());
-                            
+
                             trapListToZone.put(currentTraps, currentZone);
                         }
-                                                    
+
                     }
                 }
-                    
+
                 unitToZone.put(u, currentZone);
             }
         }
-        
+
     }
-    
+
     public Zone getZoneOf(Unit u)
     {
         Zone z = unitToZone.get(u);
-        
+
         if(z == null)
             throw new RuntimeException("null zone!");
 
-        return z; 
+        return z;
     }
-    
+
     public int getZoneCount()
     {
         return zoneCount;

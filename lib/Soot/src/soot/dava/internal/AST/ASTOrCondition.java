@@ -27,7 +27,7 @@ public class ASTOrCondition extends ASTAggregatedCondition{
     public ASTOrCondition(ASTCondition left, ASTCondition right){
 	super(left,right);
     }
-    
+
     public void apply(Analysis a){
 	a.caseASTOrCondition(this);
     }
@@ -65,7 +65,7 @@ public class ASTOrCondition extends ASTAggregatedCondition{
 
     public void toString(UnitPrinter up){
 	if(up instanceof DavaUnitPrinter){
-	    
+
 	    if(not){
 		//print !
 		((DavaUnitPrinter)up).addNot();
@@ -74,45 +74,45 @@ public class ASTOrCondition extends ASTAggregatedCondition{
 	    }
 	    if(left instanceof ASTUnaryBinaryCondition){
 		if(right instanceof ASTUnaryBinaryCondition){
-		    
+
 		    left.toString(up);
-		    
+
 		    ((DavaUnitPrinter)up).addAggregatedOr();
-		    
+
 		    right.toString(up);
 		}
 		else{ //right is ASTAggregatedCondition
-		    
-		    left.toString(up); 
-		    
-		    ((DavaUnitPrinter)up).addAggregatedOr(); 
-		    
+
+		    left.toString(up);
+
+		    ((DavaUnitPrinter)up).addAggregatedOr();
+
 		    ((DavaUnitPrinter)up).addLeftParen();
-		    right.toString(up); 
+		    right.toString(up);
 		    ((DavaUnitPrinter)up).addRightParen();
 		}
 	    }
 	    else{ //left is ASTAggregatedCondition
 		if(right instanceof ASTUnaryBinaryCondition){
-		    
+
 		    ((DavaUnitPrinter)up).addLeftParen();
-		    left.toString(up); 
+		    left.toString(up);
 		    ((DavaUnitPrinter)up).addRightParen();
-		    
-		    ((DavaUnitPrinter)up).addAggregatedOr(); 
-		    
-		    right.toString(up); 
+
+		    ((DavaUnitPrinter)up).addAggregatedOr();
+
+		    right.toString(up);
 		}
 		else{ //right is ASTAggregatedCondition also
-		    
+
 		    ((DavaUnitPrinter)up).addLeftParen();
-		    left.toString(up); 
+		    left.toString(up);
 		    ((DavaUnitPrinter)up).addRightParen();
-		    
-		    ((DavaUnitPrinter)up).addAggregatedOr(); 
-		    
+
+		    ((DavaUnitPrinter)up).addAggregatedOr();
+
 		    ((DavaUnitPrinter)up).addLeftParen();
-		    right.toString(up); 
+		    right.toString(up);
 		    ((DavaUnitPrinter)up).addRightParen();
 		}
 	    }
@@ -122,5 +122,5 @@ public class ASTOrCondition extends ASTAggregatedCondition{
 	else
 	    throw new RuntimeException();
     }
-    
+
 }

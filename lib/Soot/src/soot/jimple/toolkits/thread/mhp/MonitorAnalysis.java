@@ -30,13 +30,13 @@ import soot.jimple.toolkits.thread.mhp.stmt.JPegStmt;
 //
 public class MonitorAnalysis extends ForwardFlowAnalysis
 {
-	
+
 	private PegGraph g;
 	private final HashMap<String, FlowSet> monitor = new HashMap<String, FlowSet>();
-	private final Vector<Object> nodes = new Vector<Object>();    
+	private final Vector<Object> nodes = new Vector<Object>();
 	private final Vector<Object> valueBefore = new Vector<Object>();
 	private final Vector<Object> valueAfter = new Vector<Object>();
-	
+
 	public MonitorAnalysis(PegGraph g)
 	{
 		super(g);
@@ -46,48 +46,48 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 		g.setMonitor(monitor);
 //		testMonitor();
 	}
-	
+
 	protected void doAnalysis()
 	{
 		LinkedList<Object> changedUnits = new LinkedList<Object>();
 		HashSet<Object> changedUnitsSet = new HashSet<Object>();
-		
+
 		int numNodes = graph.size();
 		int numComputations = 0;
-		
+
 		// Set initial values and nodes to visit.
-		
+
 		createWorkList(changedUnits, changedUnitsSet );
-		
+
 		//testWorkList(changedUnits);
-		
+
 		// Set initial values for entry points
 		{
 			Iterator it = graph.getHeads().iterator();
-			
+
 			while (it.hasNext()) {
 				Object s = it.next();
-				
+
 				//unitToBeforeFlow.put(s, entryInitialFlow());
 				nodes.add(s);
 				valueBefore.add(entryInitialFlow());
 			}
 		}
-		
+
 		// Perform fixed point flow analysis
 		{
 			Object previousAfterFlow = newInitialFlow();
-			
+
 			while(!changedUnits.isEmpty())
 			{
 				Object beforeFlow;
 				Object afterFlow;
-				
+
 				Object s = changedUnits.removeFirst();
 				Tag tag = (Tag)((JPegStmt)s).getTags().get(0);
 				//System.out.println("===unit is: "+tag+" "+s);
 				changedUnitsSet.remove(s);
-				
+
 				//copy(unitToAfterFlow.get(s), previousAfterFlow);
 				//add for debug april 6
 				int pos = nodes.indexOf(s);
@@ -96,24 +96,24 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 				// Compute and store beforeFlow
 				{
 					List preds = graph.getPredsOf(s);
-					
+
 					//beforeFlow = unitToBeforeFlow.get(s);
-					
+
 					beforeFlow = valueBefore.elementAt(pos);
-					
+
 					if(preds.size() == 1){
 						//copy(unitToAfterFlow.get(preds.get(0)), beforeFlow);
 						copy(valueAfter.elementAt(nodes.indexOf(preds.get(0))), beforeFlow);
 					}
-					
+
 					else if(preds.size() != 0)
 					{
 						Iterator predIt = preds.iterator();
 						Object obj = predIt.next();
-						
+
 						//copy(unitToAfterFlow.get(obj), beforeFlow);
 						copy(valueAfter.elementAt(nodes.indexOf(obj)), beforeFlow);
-						
+
 						while(predIt.hasNext())
 						{
 							JPegStmt stmt = (JPegStmt)predIt.next();
@@ -123,73 +123,73 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 							}
 							Tag tag1 = (Tag)stmt.getTags().get(0);
 							// System.out.println("pred: "+tag1+" "+stmt);
-							
+
 							// Object otherBranchFlow = unitToAfterFlow.get(stmt);
 							if(nodes.indexOf(stmt) >= 0) // RLH
 							{
 								Object otherBranchFlow = valueAfter.elementAt(nodes.indexOf(stmt));
-								
+
 								merge(beforeFlow, otherBranchFlow, beforeFlow);
 							}
-							
+
 						}
 					}
 				}
-				
+
 				// Compute afterFlow and store it.
 				{
 					//afterFlow = unitToAfterFlow.get(s);
 					afterFlow = valueAfter.elementAt(nodes.indexOf(s));
 					flowThrough(beforeFlow, s, afterFlow);
-					
+
 					//unitToAfterFlow.put(s, afterFlow);
 					valueAfter.set(nodes.indexOf(s), afterFlow);
 					//System.out.println("update afterFlow nodes: "+s);
 					//System.out.println("afterFlow: "+afterFlow);
 					//((MonitorSet)unitToAfterFlow.get(s)).test();
-					
+
 					numComputations++;
 				}
-				
+
 				// Update queue appropriately
-				
+
 				if(!afterFlow.equals(previousAfterFlow))
 				{
-					
+
 					Iterator succIt = graph.getSuccsOf(s).iterator();
-					
+
 					while(succIt.hasNext())
 					{
 						Object succ = succIt.next();
-						
+
 						if(!changedUnitsSet.contains(succ))
 						{
 							changedUnits.addLast(succ);
 							changedUnitsSet.add(succ);
 							/*if (succ instanceof JPegStmt){
 							 Tag tag1 = (Tag)((JPegStmt)succ).getTags().get(0);
-							 
+
 							 System.out.println("add to worklist: "+tag1+" "+succ);
 							 }
 							 else
 							 System.out.println("add to worklist: "+succ);
-							 */  
+							 */
 						}
 					}
 				}
-				
-				
+
+
 			}
 		}
-		
-		// G.v().out.println(graph.getBody().getMethod().getSignature() + " numNodes: " + numNodes + 
+
+		// G.v().out.println(graph.getBody().getMethod().getSignature() + " numNodes: " + numNodes +
 		//    " numComputations: " + numComputations + " avg: " + Main.truncatedOf((double) numComputations / numNodes, 2));
-		
+
 		Timers.v().totalFlowNodes += numNodes;
 		Timers.v().totalFlowComputations += numComputations;
 	}
-	
-	
+
+
 //	STEP 4: Is the merge operator union or intersection?
 //	UNION
 	protected void merge(Object in1, Object in2, Object out)
@@ -197,91 +197,91 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 		MonitorSet inSet1 = (MonitorSet) in1;
 		MonitorSet inSet2 = (MonitorSet) in2;
 		MonitorSet outSet = (MonitorSet) out;
-		
+
 		inSet1.intersection(inSet2, outSet);
-		
+
 	}
-	
-	
+
+
 //	STEP 5: Define flow equations.
 //	in(s) = ( out(s) minus defs(s) ) union uses(s)
-//	
+//
 	protected void flowThrough(Object inValue, Object unit,
 			Object outValue)
 	{
 		MonitorSet in  = (MonitorSet) inValue;
 		MonitorSet out = (MonitorSet) outValue;
 		JPegStmt s = (JPegStmt)unit;
-		Tag tag = (Tag)s.getTags().get(0);	 
+		Tag tag = (Tag)s.getTags().get(0);
 		//System.out.println("s: "+tag+" "+s);
 		// Copy in to out
 		//if (in.contains("&")) in.remove("&");
-		
+
 		in.copy( out );
 		//	System.out.println("-----in: ");
 		//in.test();
-		
+
 		if (in.size() >0){
-			
-			if (!s.getName().equals("waiting") && !s.getName().equals("notified-entry"))	    
-				updateMonitor(in, unit);	
+
+			if (!s.getName().equals("waiting") && !s.getName().equals("notified-entry"))
+				updateMonitor(in, unit);
 		}
 		String objName = s.getObject();
 		//if (objName == null) throw new RuntimeException("null object: "+s.getUnit());
 		if (s.getName().equals("entry") || s.getName().equals("exit")){
 			if (out.contains("&")) out.remove("&");
-			
-			
+
+
 			Object obj = out.getMonitorDepth(objName) ;
-			
+
 			if (obj == null){
-				
+
 				if (s.getName().equals("entry")){
 					MonitorDepth md =  new MonitorDepth(objName, 1);
 					out.add(md);
 					//System.out.println("add to out: "+md.getObjName()+" "+md.getDepth());
 				}
-				/*		
+				/*
 				 else{
 				 throw new RuntimeException("The monitor depth can not be decreased at  "+
 				 (Tag)((JPegStmt)s).getTags().get(0)+" "+unit);
 				 }
 				 */
-				
+
 			}
 			else{
 				//System.out.println("obj: "+obj);
 				if (obj instanceof MonitorDepth){
 					MonitorDepth md = (MonitorDepth)obj;
-					
+
 					if (s.getName().equals("entry")) {
-						md.increaseDepth(); 
+						md.increaseDepth();
 						//System.out.println("===increase depth===");
 					}
 					else {
-						
+
 						if (md.getDepth() > 1)   {
 							//System.out.println("===decrease depth==");
 							md.decreaseDepth();
 						}
 						else if (md.getDepth() == 1){
 							//  System.out.println("===remove monitordepth: "+md);
-							
+
 							out.remove(md);
 						}
 						else
-							throw new RuntimeException("The monitor depth can not be decreased at  "+unit);	
-						
-						
+							throw new RuntimeException("The monitor depth can not be decreased at  "+unit);
+
+
 					}
 				}
 				else
 					throw new RuntimeException("MonitorSet contains non MonitorDepth element!");
-				
+
 			}
-			
+
 		}
-		
+
 		//System.out.println("-----out: "+out);
 		//out.test();
 		//testForDebug();
@@ -295,10 +295,10 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 	 //System.out.println("Tag: "+ ((Tag)stmt.getTags().get(0)).toString());
 	  if (((Tag)stmt.getTags().get(0)).toString().equals("8")){
 	  int pos = nodes.indexOf(stmt);
-	  if (((MonitorSet)valueAfter.elementAt(pos)).size() >0 && 
+	  if (((MonitorSet)valueAfter.elementAt(pos)).size() >0 &&
 	  !((MonitorSet)valueAfter.elementAt(pos)).contains("&")){
 	  System.out.println("sp"+stmt.getTags().get(0)+" "+nodes.elementAt(pos));
-	  
+
 	  ((MonitorSet)valueAfter.elementAt(pos)).test();
 	  }
 	  }
@@ -310,28 +310,28 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 	{
 		MonitorSet sourceSet = (MonitorSet) source;
 		MonitorSet destSet   = (MonitorSet) dest;
-		
+
 		sourceSet.copy(destSet);
 	}
-	
+
 //	STEP 6: Determine value for start/end node, and
 //	initial approximation.
-//	
+//
 //	start node:              empty set
 //	initial approximation:   empty set
 	protected Object entryInitialFlow()
 	{
 		return new MonitorSet();
 	}
-	
+
 	protected Object newInitialFlow()
 	{
 		MonitorSet fullSet = new MonitorSet();
 		fullSet.add("&");
 		return fullSet;
-		
+
 		//return fullSet.clone();
-		
+
 	}
 	private void updateMonitor(MonitorSet ms, Object unit){
 		//System.out.println("===inside updateMonitor===");
@@ -356,11 +356,11 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 				}
 			}
 		}
-		
+
 	}
 	private void createWorkList(LinkedList<Object> changedUnits, HashSet<Object> changedUnitsSet ){
 		createWorkList( changedUnits, changedUnitsSet, g.getMainPegChain());
-		
+
 		Set maps = g.getStartToThread().entrySet();
 		for(Iterator iter=maps.iterator(); iter.hasNext();){
 			Map.Entry entry = (Map.Entry)iter.next();
@@ -371,13 +371,13 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 				createWorkList( changedUnits, changedUnitsSet, chain);
 			}
 		}
-		
+
 	}
-	
+
 	public void computeSynchNodes(){
 		int num = 0;
 		Set maps = monitor.entrySet();
-		
+
 		for(Iterator iter=maps.iterator(); iter.hasNext();){
 			Map.Entry entry = (Map.Entry)iter.next();
 			FlowSet fs = (FlowSet)entry.getValue();
@@ -385,11 +385,11 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 		}
 		System.err.println("synch objects: "+num);
 	}
-	/*        
+	/*
 	 private void createWorkList(LinkedList changedUnits, HashSet changedUnitsSet, PegChain chain ){
 	 //breadth first scan
 	  Iterator it = chain.getHeads().iterator();
-	  
+
 	  while (it.hasNext()) {
 	  Object head = it.next();
 	  Set gray = new HashSet();
@@ -397,7 +397,7 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 	  queue.add(head);
 	  changedUnits.addLast(head);
 	  changedUnitsSet.add(head);
-	  
+
 	  //unitToBeforeFlow.put(head, newInitialFlow());
 	   //unitToAfterFlow.put(head, newInitialFlow());
 	    // add for debug April 6
@@ -405,10 +405,10 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 	     valueBefore.add(newInitialFlow());
 	     valueAfter.add(newInitialFlow());
 	     // end add for debug April 6
-	      
+
 	      while (queue.size()>0){
 	      Object root = queue.getFirst();
-	      
+
 	      Iterator succsIt = graph.getSuccsOf(root).iterator();
 	      while (succsIt.hasNext()){
 	      Object succ = succsIt.next();
@@ -417,7 +417,7 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 	      queue.addLast(succ);
 	      changedUnits.addLast(succ);
 	      changedUnitsSet.add(succ);
-	      
+
 	      //	unitToBeforeFlow.put(succ, newInitialFlow());
 	       //unitToAfterFlow.put(succ, newInitialFlow());
 	        // add for debug April 6
@@ -425,31 +425,31 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 	         valueBefore.add(newInitialFlow());
 	         valueAfter.add(newInitialFlow());
 	         // end add for debug April 6
-	          
+
 	          }
 	          }
 	          queue.remove(root);
 	          }
 	          }
-	          
+
 	          }*/
-	
+
 	private void createWorkList(LinkedList<Object> changedUnits, HashSet<Object> changedUnitsSet, PegChain chain ){
 		//Depth first scan
 		Iterator it = chain.getHeads().iterator();
 		Set<Object> gray = new HashSet<Object>();
-		
+
 		while (it.hasNext()) {
 			Object head = it.next();
 			if (!gray.contains(head)){
-				
+
 				visitNode(gray, head, changedUnits, changedUnitsSet);
 			}
 		}
 	}
-	
+
 	private void visitNode(Set<Object> gray, Object obj,LinkedList<Object> changedUnits, HashSet<Object> changedUnitsSet ){
-		
+
 		gray.add(obj);
 		changedUnits.addLast(obj);
 		changedUnitsSet.add(obj);
@@ -461,13 +461,13 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 			while (succsIt.hasNext()){
 				Object succ = succsIt.next();
 				if (!gray.contains(succ)){
-					
+
 					visitNode(gray, succ, changedUnits, changedUnitsSet );
 				}
 			}
 		}
 	}
-	
+
 	public Map<String, FlowSet> getMonitor(){
 		return monitor;
 	}
@@ -477,21 +477,21 @@ public class MonitorAnalysis extends ForwardFlowAnalysis
 		for(Iterator iter=maps.iterator(); iter.hasNext();){
 			Map.Entry entry = (Map.Entry)iter.next();
 			String key = (String)entry.getKey();
-			
+
 			System.out.println("---key=  "+key);
 			FlowSet list = (FlowSet)entry.getValue();
 			if (list.size()>0){
-				
+
 				System.out.println("**set:  "+list.size());
 				Iterator it = list.iterator();
 				while (it.hasNext()){
 					JPegStmt stmt = (JPegStmt)it.next();
 					Tag tag1 = (Tag)stmt.getTags().get(0);
 					System.out.println(tag1+" "+stmt);
-					
-					
+
+
 				}
-				
+
 			}
 		}
 		System.out.println("=========monitor--ends--------");

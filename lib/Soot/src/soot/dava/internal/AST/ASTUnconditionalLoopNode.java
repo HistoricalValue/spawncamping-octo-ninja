@@ -75,12 +75,12 @@ public class ASTUnconditionalLoopNode extends ASTLabeledNode
     public String toString()
     {
 	StringBuffer b = new StringBuffer();
-	
+
 	b.append( label_toString( ));
 
 	b.append( "while (true)");
 	b.append( NEWLINE);
-	
+
 	b.append( "{");
 	b.append( NEWLINE);
 

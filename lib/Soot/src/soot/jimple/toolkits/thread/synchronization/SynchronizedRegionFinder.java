@@ -29,14 +29,14 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 	LocalUses slu;
 	CriticalSectionAwareSideEffectAnalysis tasea;
 //	SideEffectAnalysis sea;
-	
+
 	List<Object> prepUnits;
 
     CriticalSection methodTn;
-	
+
 	public boolean optionPrintDebug = false;
 	public boolean optionOpenNesting = true;
-	
+
     SynchronizedRegionFinder(UnitGraph graph, Body b, boolean optionPrintDebug, boolean optionOpenNesting, ThreadLocalObjectsAnalysis tlo)
 	{
 		super(graph);
@@ -52,20 +52,20 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 			egraph = (ExceptionalUnitGraph) graph;
 		else
 			egraph = new ExceptionalUnitGraph(b);
-				
+
 		slu = new SimpleLocalUses(egraph, new SmartLocalDefs(egraph, new SimpleLiveLocals(egraph)));
-		
+
 		if( G.v().Union_factory == null ) {
 		    G.v().Union_factory = new UnionFactory() {
 			public Union newUnion() { return FullObjectSet.v(); }
 		    };
 		}
-		
-    	tasea = new CriticalSectionAwareSideEffectAnalysis(Scene.v().getPointsToAnalysis(), 
+
+    	tasea = new CriticalSectionAwareSideEffectAnalysis(Scene.v().getPointsToAnalysis(),
     				Scene.v().getCallGraph(), null, tlo);
-    	    				
+
     	prepUnits = new ArrayList<Object>();
-    	
+
 		methodTn = null;
 		if(method.isSynchronized())
 		{
@@ -83,7 +83,7 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 			}
 		}
 	}
-    	
+
     /**
      * All INs are initialized to the empty set.
      **/
@@ -118,10 +118,10 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 		Stmt stmt = (Stmt) unit;
 
        	copy(in, out);
-       	
+
         // Determine if this statement is a preparatory statement for an
-        // upcoming transactional region. Such a statement would be a definition 
-        // which contains no invoke statement, and which corresponds only to 
+        // upcoming transactional region. Such a statement would be a definition
+        // which contains no invoke statement, and which corresponds only to
         // EnterMonitorStmt and ExitMonitorStmt uses.  In this case, the read
         // set of this statement should not be considered part of the read set
         // of any containing transaction
@@ -151,10 +151,10 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
         		return;
         	}
         }
-                
+
         // Determine if this statement is the start of a transaction
         boolean addSelf = (unit instanceof EnterMonitorStmt);
-        
+
 		// Determine the level of transaction nesting of this statement
 		int nestLevel = 0;
         Iterator outIt0 = out.iterator();
@@ -174,23 +174,23 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
         {
             SynchronizedRegionFlowPair srfp = (SynchronizedRegionFlowPair) outIt.next();
             CriticalSection tn = srfp.tn;
-            
+
             // Check if we are revisting the start of this existing transaction
             if(tn.entermonitor == stmt)
             {
             	srfp.inside = true;
             	addSelf = false; // this transaction already exists...
             }
-            
+
             // if this is the immediately enclosing transaction
         	if(srfp.inside == true && (tn.nestLevel == nestLevel || optionOpenNesting == false))
         	{
         		printed = true; // for debugging purposes, indicated that we'll print a debug output for this statement
-        		
+
             	// Add this unit to the current transactional region
             	if(!tn.units.contains(unit))
 	            	tn.units.add(unit);
-        		
+
         		// Check what kind of statement this is
         		// If it contains an invoke, save it for later processing as part of this transaction
         		// If it is a monitorexit, mark that it's the end of the transaction
@@ -213,12 +213,12 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 	            		if(optionPrintDebug)
 	            			G.v().out.print("{x,x} ");
 	            	}
-	            	
+
 	            	if(!tn.invokes.contains(unit))
 	            	{
 	            		// Mark this unit for later read/write set calculation (must be deferred until all tns have been found)
 		            	tn.invokes.add(unit);
-		            	
+
 		            	// Debug Output
 	            		if(optionPrintDebug)
 	            		{
@@ -228,7 +228,7 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 			           		G.v().out.print("{");
 				           	if(stmtRead != null)
 				           	{
-					           	G.v().out.print( ( (stmtRead.getGlobals()  != null ? stmtRead.getGlobals().size()  : 0)   + 
+					           	G.v().out.print( ( (stmtRead.getGlobals()  != null ? stmtRead.getGlobals().size()  : 0)   +
 					           					   (stmtRead.getFields()   != null ? stmtRead.getFields().size()   : 0) ) );
 					        }
 					        else
@@ -236,7 +236,7 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 					        G.v().out.print(",");
 					        if(stmtWrite != null)
 					        {
-					           	G.v().out.print( ( (stmtWrite.getGlobals() != null ? stmtWrite.getGlobals().size() : 0)   + 
+					           	G.v().out.print( ( (stmtWrite.getGlobals() != null ? stmtWrite.getGlobals().size() : 0)   +
 				           						   (stmtWrite.getFields()  != null ? stmtWrite.getFields().size()  : 0) ) );
 				        	}
 				        	else
@@ -249,7 +249,7 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
             	{
             		// Mark this as end of this tn
             		srfp.inside = false;
-            		
+
             		// Check if this is an early end or fallthrough end
             		Stmt nextUnit = stmt;
             		do
@@ -286,14 +286,14 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 
     		   		tn.read.union(stmtRead);
         			tn.write.union(stmtWrite);
-        					           	
+
 		           	// Debug Output
             		if(optionPrintDebug)
 			        {
 			           	G.v().out.print("[");
 			           	if(stmtRead != null)
 			           	{
-				           	G.v().out.print( ( (stmtRead.getGlobals()  != null ? stmtRead.getGlobals().size()  : 0)   + 
+				           	G.v().out.print( ( (stmtRead.getGlobals()  != null ? stmtRead.getGlobals().size()  : 0)   +
 				           					   (stmtRead.getFields()   != null ? stmtRead.getFields().size()   : 0) ) );
 				        }
 				        else
@@ -301,7 +301,7 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 				        G.v().out.print(",");
 				        if(stmtWrite != null)
 				        {
-				           	G.v().out.print( ( (stmtWrite.getGlobals() != null ? stmtWrite.getGlobals().size() : 0)   + 
+				           	G.v().out.print( ( (stmtWrite.getGlobals() != null ? stmtWrite.getGlobals().size() : 0)   +
 			           						   (stmtWrite.getFields()  != null ? stmtWrite.getFields().size()  : 0) ) );
 			        	}
 			        	else
@@ -311,7 +311,7 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
         		}
 			}
         }
-        
+
 		// DEBUG output
 	    if(optionPrintDebug)
 		{
@@ -320,9 +320,9 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 	        	G.v().out.print("[0,0] ");
 			}
 			G.v().out.println(unit.toString());
-			
+
 			// If this unit is an invoke statement calling a library function and the R/W sets are huge, print out the targets
-			if(stmt.containsInvokeExpr() && 
+			if(stmt.containsInvokeExpr() &&
 				stmt.getInvokeExpr().getMethod().getDeclaringClass().toString().startsWith("java.") &&
 				stmtRead != null && stmtWrite != null)
 				{
@@ -334,7 +334,7 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 					}
 				}
 		}
-		
+
 		// If this statement was a monitorenter, and no transaction object yet exists for it,
 		// create one.
         if(addSelf)
@@ -344,17 +344,17 @@ public class SynchronizedRegionFinder extends ForwardFlowAnalysis<Unit, FlowSet>
 			newTn.beginning = (Stmt) units.getSuccOf(stmt);
 			if(stmt instanceof EnterMonitorStmt)
 				newTn.origLock = ((EnterMonitorStmt) stmt).getOp();
-				
+
         	if(optionPrintDebug)
         		G.v().out.println("Transaction found in method: " + newTn.method.toString());
 			out.add(new SynchronizedRegionFlowPair(newTn, true));
-			
+
 			// This is a really stupid way to find out which prep applies to this txn.
 			Iterator<Object> prepUnitsIt = prepUnits.iterator();
 			while(prepUnitsIt.hasNext())
 			{
 				Unit prepUnit = (Unit) prepUnitsIt.next();
-				
+
 				Iterator uses = slu.getUsesOf(prepUnit).iterator();
 	        	while(uses.hasNext())
 	        	{

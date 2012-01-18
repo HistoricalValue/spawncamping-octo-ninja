@@ -32,9 +32,9 @@
  *
  * String objects are special, since there are other string constants.
  * An unknown object has the least type, same as array.
- * 
+ *
  * This class defines all abstract object as constants.
- * Temporary variables can be obtained from NativeHelper. 
+ * Temporary variables can be obtained from NativeHelper.
  *
  * @author Feng Qian
  */
@@ -49,7 +49,7 @@ public class Environment {
 
   private final ConstantObject clsloaders =
     new GeneralConstObject(TypeConstants.v().CLASSLOADERCLASS, "classloader");
-  
+
   private final ConstantObject processes  =
     new GeneralConstObject(TypeConstants.v().PROCESSCLASS, "process");
 
@@ -95,7 +95,7 @@ public class Environment {
    */
   private final ConstantObject methodobject =
     new GeneralConstObject(TypeConstants.v().METHODCLASS, "method");
-  
+
   /* provides an abstract java.lang.reflect.Constructor object
    */
   private final ConstantObject constructorobject =
@@ -131,7 +131,7 @@ public class Environment {
   public ConstantObject getLeastArrayObject(){
     return leastarray;
   }
-  
+
   public ConstantObject getLeastObject(){
     return leastobject;
   }

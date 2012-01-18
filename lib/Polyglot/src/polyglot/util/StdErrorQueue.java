@@ -58,7 +58,7 @@ public class StdErrorQueue extends AbstractErrorQueue
         */
 
 	// I (Nate) tried without success to get CodeWriter to do this.
-	// It would be nice if we could specify where breaks are allowed 
+	// It would be nice if we could specify where breaks are allowed
 	// when generating the error.  We don't want to break Jif labels,
 	// for instance.
 
@@ -117,11 +117,11 @@ public class StdErrorQueue extends AbstractErrorQueue
 	    showError(position);
 	}
     }
-    
+
     protected void tooManyErrors(ErrorInfo lastError) {
         Position position = lastError.getPosition();
         String prefix = position != null ? (position.file() + ": ") : "";
-        err.println(prefix + "Too many errors.  Aborting compilation.");        
+        err.println(prefix + "Too many errors.  Aborting compilation.");
     }
 
     protected Reader reader(Position pos) throws IOException {
@@ -149,7 +149,7 @@ public class StdErrorQueue extends AbstractErrorQueue
         if (s != null) {
           err.println(s);
           showErrorIndicator(pos, reader.getLineNumber(), s);
-          
+
           if (pos.endLine() != pos.line() &&
               pos.endLine() != Position.UNKNOWN &&
               pos.endLine() != Position.END_UNUSED) {
@@ -163,7 +163,7 @@ public class StdErrorQueue extends AbstractErrorQueue
                   }
                   err.println("...");
               }
-              
+
               while (reader.getLineNumber() < pos.endLine()) {
                 s = reader.readLine();
               }
@@ -175,7 +175,7 @@ public class StdErrorQueue extends AbstractErrorQueue
               }
             }
         }
-        
+
         reader.close();
 
         err.println();
@@ -183,22 +183,22 @@ public class StdErrorQueue extends AbstractErrorQueue
       catch (IOException e) {
       }
     }
-    
+
     protected void showErrorIndicator(Position pos, int lineNum, String s) {
         if (pos.column() == Position.UNKNOWN) {
             return;
         }
-        
+
         int i = 0;
         while (i < s.length() && Character.isWhitespace(s.charAt(i))) {
             err.print(s.charAt(i++));
         }
-        
+
         int startIndAt = i; // column position to start showing the indicator marks
         int stopIndAt = s.length() - 1; // column position to stop showing the indicator marks
         if (pos.line() == lineNum) {
             startIndAt = pos.column();
-        }        
+        }
         if (pos.endLine() == lineNum) {
             stopIndAt = pos.endColumn() - 1;
         }
@@ -209,28 +209,28 @@ public class StdErrorQueue extends AbstractErrorQueue
             pos.endColumn() == Position.END_UNUSED) {
             stopIndAt = startIndAt;
         }
-                
+
         for (;i <= stopIndAt; i++) {
-            char c = '-';            
+            char c = '-';
             if (i < startIndAt) {
               c = ' ';
             }
             if (i < s.length() && s.charAt(i) == '\t') {
               c = '\t';
-            }            
+            }
             if (i == startIndAt && pos.line() == lineNum) {
                 c = '^';
             }
             if (i == stopIndAt && pos.endLine() == lineNum) {
                 c = '^';
             }
-            
+
             err.print(c);
         }
 
         err.println();
     }
-    
+
     public void flush() {
 	if (! flushed) {
             if (errorCount() > 0) {

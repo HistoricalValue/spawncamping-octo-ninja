@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,7 +38,7 @@ public interface LookupSwitchInst extends Inst
     public int getLookupValue(int index);
     public List getLookupValues();
     public void setLookupValues(List values);
-    
+
     public int getTargetCount();
     public Unit getTarget(int index);
     public UnitBox getTargetBox(int index);

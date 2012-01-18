@@ -35,7 +35,7 @@ public class JavaLangThrowableNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -46,7 +46,7 @@ public class JavaLangThrowableNative extends NativeMethodClass {
     String subSignature = method.getSubSignature();
 
     if (subSignature.equals("java.lang.Throwable fillInStackTrace()")) {
-      java_lang_Throwable_fillInStackTrace(method, thisVar, 
+      java_lang_Throwable_fillInStackTrace(method, thisVar,
 					   returnVar, params);
       return;
 
@@ -58,12 +58,12 @@ public class JavaLangThrowableNative extends NativeMethodClass {
   }
   /************************** java.lang.Throwable *******************/
   /**
-   * NOTE: this method just fills in the stack state in this throwable 
+   * NOTE: this method just fills in the stack state in this throwable
    *       object content.
    *
    * public native java.lang.Throwable fillInStackTrace();
    */
-  public 
+  public
     void java_lang_Throwable_fillInStackTrace(SootMethod method,
 					      ReferenceVariable thisVar,
 					      ReferenceVariable returnVar,
@@ -73,7 +73,7 @@ public class JavaLangThrowableNative extends NativeMethodClass {
 
   /**
    * NO side effects.
-   * 
+   *
    * private native void printStackTrace0(java.lang.Object);
    */
 

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,13 +37,13 @@ public class EnclosingMethodTag implements  Tag
     private String enclosingClass;
     private String enclosingMethod;
     private String enclosingMethodSig;
-    
+
     public EnclosingMethodTag(String c, String m, String s){
         this.enclosingClass = c;
         this.enclosingMethod = m;
         this.enclosingMethodSig = s;
     }
-    
+
     public String toString() {
         return "Enclosing Class: "+enclosingClass+" Enclosing Method: "+enclosingMethod+" Sig: "+enclosingMethodSig;
     }
@@ -56,19 +56,19 @@ public class EnclosingMethodTag implements  Tag
     public String getInfo(){
         return "EnclosingMethod";
     }
-    
+
     public String getEnclosingClass(){
         return enclosingClass;
     }
-    
+
     public String getEnclosingMethod(){
         return enclosingMethod;
     }
-    
+
     public String getEnclosingMethodSig(){
         return enclosingMethodSig;
     }
-    
+
     /** Returns the tag raw data. */
     public byte[] getValue() {
         throw new RuntimeException( "EnclosingMethodTag has no value for bytecode" );

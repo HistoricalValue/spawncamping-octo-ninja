@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -95,7 +95,7 @@ public class ToppedSet extends AbstractFlowSet
             other.copy(dest);
         else
         {
-            underlyingSet.union(other.underlyingSet, 
+            underlyingSet.union(other.underlyingSet,
                                 dest.underlyingSet);
             dest.setTop(false);
         }
@@ -120,7 +120,7 @@ public class ToppedSet extends AbstractFlowSet
         }
         else
         {
-            underlyingSet.intersection(other.underlyingSet, 
+            underlyingSet.intersection(other.underlyingSet,
                                        dest.underlyingSet);
             dest.setTop(false);
         }

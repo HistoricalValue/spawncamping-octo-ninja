@@ -28,7 +28,7 @@ public class UnicodeWriter extends FilterWriter
       write(s);
     }
   }
-  
+
   public void write(char[] cbuf, int off, int len) throws IOException
   {
     for( int i = 0; i < len; i++)

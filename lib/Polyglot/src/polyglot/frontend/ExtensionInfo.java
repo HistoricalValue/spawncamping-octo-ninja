@@ -21,14 +21,14 @@ public interface ExtensionInfo {
     /** Report the version of the extension. */
     polyglot.main.Version version();
 
-    /** 
+    /**
      * Return an Options object, which will be given the command line to parse.
-     */    
+     */
     Options getOptions();
 
     /**
      * Return a Stats object to accumulate and report statistics.
-     */ 
+     */
     Stats getStats();
 
     /**
@@ -61,23 +61,23 @@ public interface ExtensionInfo {
     SourceLoader sourceLoader();
 
     /**
-     * Adds a dependency from the current job to the given Source. 
+     * Adds a dependency from the current job to the given Source.
      */
     void addDependencyToCurrentJob(Source s);
-    
-    /** 
+
+    /**
      * Produce a job for the given source. A new job will be created if
      * needed. If the <code>Source source</code> has already been processed,
-     * and its job discarded to release resources, then <code>null</code> 
+     * and its job discarded to release resources, then <code>null</code>
      * will be returned.
      */
     SourceJob addJob(Source source);
 
-    /** 
+    /**
      * Produce a job for a given source using the given AST.
      * A new job will be created if
      * needed. If the <code>Source source</code> has already been processed,
-     * and its job discarded to release resources, then <code>null</code> 
+     * and its job discarded to release resources, then <code>null</code>
      * will be returned.
      */
     SourceJob addJob(Source source, Node ast);
@@ -95,7 +95,7 @@ public interface ExtensionInfo {
      * @return the new job.  The caller can check the result with
      * <code>j.status()</code> and get the ast with <code>j.ast()</code>.
      */
-    Job spawnJob(Context c, Node ast, Job outerJob, Pass.ID begin, Pass.ID end);    
+    Job spawnJob(Context c, Node ast, Job outerJob, Pass.ID begin, Pass.ID end);
 
     /** Run all jobs to completion. */
     boolean runToCompletion();
@@ -146,6 +146,6 @@ public interface ExtensionInfo {
     /** Remove a pass.  The removed pass cannot be a barrier. */
     void removePass(List passes, Pass.ID oldPass);
 
-    /** Create class file */ 
+    /** Create class file */
     ClassFile createClassFile(File classFileSource, byte[] code);
 }

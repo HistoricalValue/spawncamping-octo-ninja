@@ -29,9 +29,9 @@ import polyglot.ast.FieldDecl;
 public class AnonInitBodyBuilder extends JimpleBodyBuilder {
 
     public soot.jimple.JimpleBody createBody(soot.SootMethod sootMethod){
-        
+
         body = soot.jimple.Jimple.v().newBody(sootMethod);
-       
+
         lg = new LocalGenerator(body);
 
         AnonClassInitMethodSource acims = (AnonClassInitMethodSource) body.getMethod().getSource();
@@ -44,10 +44,10 @@ public class AnonInitBodyBuilder extends JimpleBodyBuilder {
         soot.Type outerClassType = acims.outerClassType();
         polyglot.types.ClassType polyglotType = acims.polyglotType();
         polyglot.types.ClassType anonType = acims.anonType();
-        
+
         boolean hasOuterRef = ((AnonClassInitMethodSource)body.getMethod().getSource()).hasOuterRef();
         boolean hasQualifier = ((AnonClassInitMethodSource)body.getMethod().getSource()).hasQualifier();
-        
+
         // this formal needed
         soot.RefType type = sootMethod.getDeclaringClass().getType();
         specialThisLocal = soot.jimple.Jimple.v().newLocal("this", type);
@@ -57,23 +57,23 @@ public class AnonInitBodyBuilder extends JimpleBodyBuilder {
 
         soot.jimple.Stmt thisStmt = soot.jimple.Jimple.v().newIdentityStmt(specialThisLocal, thisRef);
         body.getUnits().add(thisStmt);
-       
+
         ArrayList invokeList = new ArrayList();
         ArrayList invokeTypeList = new ArrayList();
-        
+
         int numParams = sootMethod.getParameterCount();
         int numFinals = 0;
-        
+
         if (fields != null){
             numFinals = fields.size();
         }
-        
+
         int startFinals = numParams - numFinals;
         ArrayList paramsForFinals = new ArrayList();
 
         soot.Local outerLocal = null;
         soot.Local qualifierLocal = null;
-       
+
         // param
         Iterator fIt = sootMethod.getParameterTypes().iterator();
         int counter = 0;
@@ -82,10 +82,10 @@ public class AnonInitBodyBuilder extends JimpleBodyBuilder {
             soot.Local local = soot.jimple.Jimple.v().newLocal("r"+counter, fType);
             body.getLocals().add(local);
             soot.jimple.ParameterRef paramRef = soot.jimple.Jimple.v().newParameterRef(fType, counter);
-            
+
             soot.jimple.Stmt stmt = soot.jimple.Jimple.v().newIdentityStmt(local, paramRef);
 
-            
+
             int realArgs = 0;
             if ((hasOuterRef) && (counter == 0)){
                 // in a non static method the first param is the outer ref
@@ -106,7 +106,7 @@ public class AnonInitBodyBuilder extends JimpleBodyBuilder {
                 invokeList.add(qualifierLocal);
                 stmt.addTag(new soot.tagkit.QualifyingTag());
             }
-            
+
             if ((counter >= realArgs) && (counter < startFinals)){
                 invokeTypeList.add(fType);
                 invokeList.add(local);
@@ -137,9 +137,9 @@ public class AnonInitBodyBuilder extends JimpleBodyBuilder {
 
         soot.jimple.Stmt invokeStmt = soot.jimple.Jimple.v().newInvokeStmt(invoke);
         body.getUnits().add(invokeStmt);
-       
+
         //System.out.println("polyglotType: "+polyglotType+" needs ref: "+needsOuterClassRef(polyglotType));
-        
+
         // field assign
         if (!inStaticMethod && needsOuterClassRef(anonType)){
             soot.SootFieldRef field = Scene.v().makeFieldRef( sootMethod.getDeclaringClass(), "this$0", outerClassType, false);
@@ -151,35 +151,35 @@ public class AnonInitBodyBuilder extends JimpleBodyBuilder {
             Iterator finalsIt = paramsForFinals.iterator();
             Iterator<SootField> fieldsIt = fields.iterator();
             while (finalsIt.hasNext() && fieldsIt.hasNext()){
-            
+
                 soot.Local pLocal = (soot.Local)finalsIt.next();
                 soot.SootField pField = fieldsIt.next();
-            
+
                 soot.jimple.FieldRef pRef = soot.jimple.Jimple.v().newInstanceFieldRef(specialThisLocal, pField.makeRef());
-            
+
                 soot.jimple.AssignStmt pAssign = soot.jimple.Jimple.v().newAssignStmt(pRef, pLocal);
                 body.getUnits().add(pAssign);
- 
+
             }
         }
 
         // need to be able to handle any kind of field inits -> make this class
         // extend JimpleBodyBuilder to have access to everything
-        
+
         if (fieldInits != null) {
             handleFieldInits(fieldInits);
         }
-   
+
         ArrayList<Block> staticBlocks = ((AnonClassInitMethodSource)body.getMethod().getSource()).getInitializerBlocks();
         if (staticBlocks != null){
             handleStaticBlocks(staticBlocks);
         }
-        
+
         // return
         soot.jimple.ReturnVoidStmt retStmt = soot.jimple.Jimple.v().newReturnVoidStmt();
         body.getUnits().add(retStmt);
-        
-    
+
+
         return body;
     }
 }

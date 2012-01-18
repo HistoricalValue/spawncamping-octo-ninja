@@ -28,28 +28,28 @@ public class TagCollector {
 
     private final ArrayList<Attribute> attributes;
     private final ArrayList<Key> keys;
-    
+
     public TagCollector(){
         attributes = new ArrayList<Attribute>();
         keys = new ArrayList<Key>();
     }
 
     public void collectTags(SootClass sc){
-	
-        
+
+
         // tag fields
         Iterator fit = sc.getFields().iterator();
 		while (fit.hasNext()){
             SootField sf = (SootField)fit.next();
             collectFieldTags(sf);
         }
-        
+
         // tag methods
         Iterator it = sc.getMethods().iterator();
 		while (it.hasNext()) {
 			SootMethod sm = (SootMethod)it.next();
 			collectMethodTags(sm);
-		
+
             if (!sm.hasActiveBody()) continue;
 			Body b = sm.getActiveBody();
             collectBodyTags(b);
@@ -76,8 +76,8 @@ public class TagCollector {
             k.print(writerOut);
         }
     }
-    
-            
+
+
     public void collectFieldTags(SootField sf){
         Iterator fTags = sf.getTags().iterator();
         Attribute fa = new Attribute();
@@ -103,9 +103,9 @@ public class TagCollector {
 			}
             attributes.add(ma);
 		}
-			
+
     }
-    
+
     public void collectBodyTags(Body b){
 		Iterator itUnits = b.getUnits().iterator();
 		while (itUnits.hasNext()) {
@@ -127,7 +127,7 @@ public class TagCollector {
 				ValueBox vb = (ValueBox)valBoxIt.next();
                 //PosColorAttribute attr = new PosColorAttribute();
 				if (!vb.getTags().isEmpty()){
-			    	Iterator tagsIt = vb.getTags().iterator(); 
+			    	Iterator tagsIt = vb.getTags().iterator();
                     Attribute va = new Attribute();
 			    	while (tagsIt.hasNext()) {
 						Tag t = (Tag)tagsIt.next();
@@ -145,9 +145,9 @@ public class TagCollector {
             }
         }
     }
-    
+
     public void printTags(PrintWriter writerOut){
-        
+
         Iterator<Attribute> it = attributes.iterator();
         while (it.hasNext()){
             Attribute a = it.next();

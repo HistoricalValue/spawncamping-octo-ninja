@@ -11,17 +11,17 @@ public class NoMemberException extends SemanticException {
     public static final int METHOD = 1;
     public static final int CONSTRUCTOR = 2;
     public static final int FIELD = 3;
-    
+
     public NoMemberException(int kind, String s) {
         super(s);
         this.kind = kind;
     }
-    
+
     public NoMemberException(int kind, String s, Position position) {
         super(s, position);
         this.kind = kind;
     }
-    
+
     public int getKind() {
         return kind;
     }
@@ -34,7 +34,7 @@ public class NoMemberException extends SemanticException {
             case FIELD:
                 return "field";
             default:
-                return "unknown!!!";    
+                return "unknown!!!";
         }
     }
 }

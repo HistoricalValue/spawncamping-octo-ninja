@@ -92,11 +92,11 @@ public class Binary_c extends Expr_c implements Binary
 	Expr right = (Expr) visitChild(this.right, v);
 	return reconstruct(left, right);
     }
-    
+
     public boolean isConstant() {
 	return left.isConstant() && right.isConstant();
     }
-    
+
     public Object constantValue() {
         Object lv = left.constantValue();
         Object rv = right.constantValue();
@@ -109,7 +109,7 @@ public class Binary_c extends Expr_c implements Binary
             // toString() does what we want for String, Number, and Boolean
 	    if (lv == null) lv = "null";
 	    if (rv == null) rv = "null";
-            return lv.toString() + rv.toString();       
+            return lv.toString() + rv.toString();
 	}
 
         if (op == EQ && (lv instanceof String && rv instanceof String)) {
@@ -286,13 +286,13 @@ public class Binary_c extends Expr_c implements Binary
 	if (op == ADD) {
 	    if (ts.equals(l, ts.String()) || ts.equals(r, ts.String())) {
                 if (!ts.canCoerceToString(r, tc.context())) {
-                    throw new SemanticException("Cannot coerce an expression " + 
-                                "of type " + r + " to a String.", 
+                    throw new SemanticException("Cannot coerce an expression " +
+                                "of type " + r + " to a String.",
                                 right.position());
                 }
                 if (!ts.canCoerceToString(l, tc.context())) {
-                    throw new SemanticException("Cannot coerce an expression " + 
-                                "of type " + l + " to a String.", 
+                    throw new SemanticException("Cannot coerce an expression " +
+                                "of type " + l + " to a String.",
                                 left.position());
                 }
                 return precedence(Precedence.STRING_ADD).type(ts.String());
@@ -404,7 +404,7 @@ public class Binary_c extends Expr_c implements Binary
             }
 
             if (op == ADD && ts.equals(type, ts.String())) {
-                // Implicit coercion to String. 
+                // Implicit coercion to String.
                 return ts.String();
             }
 
@@ -533,21 +533,21 @@ public class Binary_c extends Expr_c implements Binary
         if (op == COND_AND) {
           // AND operator
           // short circuit means that left is false
-          v.visitCFG(left, FlowGraph.EDGE_KEY_TRUE, right.entry(), 
+          v.visitCFG(left, FlowGraph.EDGE_KEY_TRUE, right.entry(),
                            FlowGraph.EDGE_KEY_FALSE, this);
         }
         else {
           // OR operator
           // short circuit means that left is true
-          v.visitCFG(left, FlowGraph.EDGE_KEY_FALSE, right.entry(), 
-                           FlowGraph.EDGE_KEY_TRUE, this);            
+          v.visitCFG(left, FlowGraph.EDGE_KEY_FALSE, right.entry(),
+                           FlowGraph.EDGE_KEY_TRUE, this);
         }
         v.visitCFG(right, FlowGraph.EDGE_KEY_TRUE, this,
                           FlowGraph.EDGE_KEY_FALSE, this);
       }
     }
     else {
-      if (left.type().isBoolean() && right.type().isBoolean()) {        
+      if (left.type().isBoolean() && right.type().isBoolean()) {
           v.visitCFG(left, FlowGraph.EDGE_KEY_TRUE, right.entry(),
                            FlowGraph.EDGE_KEY_FALSE, right.entry());
           v.visitCFG(right, FlowGraph.EDGE_KEY_TRUE, this,

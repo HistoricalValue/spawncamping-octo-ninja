@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -52,7 +52,7 @@ import java.util.*;
  *
  *    @see BodyTransformer
  *    @see LocalPacker
- *    @see Body 
+ *    @see Body
  */
 public class LocalSplitter extends BodyTransformer
 {
@@ -77,20 +77,20 @@ public class LocalSplitter extends BodyTransformer
             ExceptionalUnitGraph graph = new ExceptionalUnitGraph(body);
 
             LocalDefs localDefs;
-            
+
             localDefs = new SmartLocalDefs(graph, new SimpleLiveLocals(graph));
 
             LocalUses localUses = new SimpleLocalUses(graph, localDefs);
-            
+
             if(Options.v().time())
                 Timers.v().splitPhase1Timer.end();
-    
+
             if(Options.v().time())
                 Timers.v().splitPhase2Timer.start();
 
             Set<ValueBox> markedBoxes = new HashSet<ValueBox>();
             Map<ValueBox, Unit> boxToUnit = new HashMap<ValueBox, Unit>(units.size() * 2 + 1, 0.7f);
-            
+
             Iterator codeIt = units.iterator();
 
             while(codeIt.hasNext())
@@ -113,10 +113,10 @@ public class LocalSplitter extends BodyTransformer
 
                     List web = new ArrayList();
                     webs.add(web);
-                                        
+
                     defsToVisit.add(s);
                     markedBoxes.add(loBox);
-                    
+
                     while(!boxesToVisit.isEmpty() || !defsToVisit.isEmpty())
                     {
                         if(!defsToVisit.isEmpty())
@@ -129,11 +129,11 @@ public class LocalSplitter extends BodyTransformer
                             {
                                 List uses = localUses.getUsesOf(d);
                                 Iterator useIt = uses.iterator();
-    
+
                                 while(useIt.hasNext())
                                 {
                                     UnitValueBoxPair use = (UnitValueBoxPair) useIt.next();
-    
+
                                     if(!markedBoxes.contains(use.valueBox))
                                     {
                                         markedBoxes.add(use.valueBox);
@@ -149,11 +149,11 @@ public class LocalSplitter extends BodyTransformer
                             web.add(box);
 
                             // Add all the definitions of this use to the queue.
-                            {               
+                            {
                                 List<Unit> defs = localDefs.getDefsOfAt((Local) box.getValue(),
                                     boxToUnit.get(box));
                                 Iterator<Unit> defIt = defs.iterator();
-    
+
                                 while(defIt.hasNext())
                                 {
                                     Unit u = defIt.next();
@@ -169,7 +169,7 @@ public class LocalSplitter extends BodyTransformer
                                             markedBoxes.add(b);
                                             defsToVisit.addLast(u);
                                         }
-                                    }    
+                                    }
                                 }
                             }
                         }
@@ -201,10 +201,10 @@ public class LocalSplitter extends BodyTransformer
 
                     int useCount = localToUseCount.get(desiredLocal).intValue() + 1;
                     localToUseCount.put(desiredLocal, new Integer(useCount));
-        
+
                     Local local = (Local) desiredLocal.clone();
                     local.setName(desiredLocal.getName() + "#" + useCount);
-                    
+
                     body.getLocals().add(local);
 
                     // Change all boxes to point to this new local
@@ -221,9 +221,9 @@ public class LocalSplitter extends BodyTransformer
                 }
             }
         }
-        
+
         if(Options.v().time())
             Timers.v().splitPhase2Timer.end();
 
-    }   
+    }
 }

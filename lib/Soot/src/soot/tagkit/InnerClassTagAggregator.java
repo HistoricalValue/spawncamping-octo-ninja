@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,11 +33,11 @@ import java.util.*;
 
 /** The aggregator for LineNumberTable attribute. */
 public class InnerClassTagAggregator extends SceneTransformer {
-    
+
     public InnerClassTagAggregator( Singletons.Global g ) {}
     public static InnerClassTagAggregator v() { return G.v().soot_tagkit_InnerClassTagAggregator(); }
 
-    
+
     public String aggregatedName()
     {
         return "InnerClasses";
@@ -56,7 +56,7 @@ public class InnerClassTagAggregator extends SceneTransformer {
                 }
             }
             if (!list.isEmpty()){
-                nextSc.addTag(new InnerClassAttribute(list)); 
+                nextSc.addTag(new InnerClassAttribute(list));
             }
         }
     }

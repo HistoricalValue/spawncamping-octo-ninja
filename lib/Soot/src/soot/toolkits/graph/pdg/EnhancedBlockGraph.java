@@ -22,9 +22,9 @@ import soot.Body;
 import soot.toolkits.graph.BlockGraph;
 
 
-public class EnhancedBlockGraph extends BlockGraph 
+public class EnhancedBlockGraph extends BlockGraph
 {
-   
+
     public  EnhancedBlockGraph(Body body) {
         this(new EnhancedUnitGraph(body));
     }

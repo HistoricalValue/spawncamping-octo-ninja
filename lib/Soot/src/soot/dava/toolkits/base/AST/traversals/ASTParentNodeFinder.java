@@ -46,7 +46,7 @@ import soot.dava.toolkits.base.AST.analysis.*;
  * The class produces a HashMap between the node/statement given as
  * key and the parent of this construct (value)
  *
- * November 23rd, 2005. (Nomair) It is used for instance in the CopyPropagation algorithm 
+ * November 23rd, 2005. (Nomair) It is used for instance in the CopyPropagation algorithm
  * to be able to remove a particular copy
  * stmt for instance from its parent.
  */

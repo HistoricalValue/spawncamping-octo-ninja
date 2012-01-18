@@ -20,40 +20,40 @@ import java.util.*;
 // -Richard L. Halpert, 2006-11-30
 
 public class MethodExtentBuilder {
-	
-	
-	//private List inlineSites = new ArrayList(); 
-	private final Set<Object> methodsNeedingInlining = new HashSet<Object>();	  
-	
+
+
+	//private List inlineSites = new ArrayList();
+	private final Set<Object> methodsNeedingInlining = new HashSet<Object>();
+
 	public MethodExtentBuilder(Body unitBody, PegCallGraph pcg, CallGraph cg){
 		//testCallGraph(cg);
 		build(pcg, cg);
 //		checkMethodNeedExtent();
-		CheckRecursiveCalls crc = new  CheckRecursiveCalls(pcg, methodsNeedingInlining);	 
+		CheckRecursiveCalls crc = new  CheckRecursiveCalls(pcg, methodsNeedingInlining);
 		//testMap();
 		// checkSccList(sccList, cg);
 		propagate(pcg);
 //		checkMethodNeedExtent();
 	}
-	
+
 	public Set<Object> getMethodsNeedingInlining(){
 		return methodsNeedingInlining;
 	}
-	
+
 	private void build(PegCallGraph pcg, CallGraph cg){
-		
+
 		Iterator it = pcg.iterator();
 		while (it.hasNext()){
 			SootMethod method = (SootMethod)it.next();
 			computeForMethodInlining(method, cg);
 		}
-		
-		
+
+
 	}
-	
+
 	private void computeForMethodInlining(SootMethod targetMethod, CallGraph cg){
 //		System.out.println("method:  "+targetMethod);
-		
+
 		if (targetMethod.isSynchronized()){
 			methodsNeedingInlining.add(targetMethod);
 			return;
@@ -62,10 +62,10 @@ public class MethodExtentBuilder {
 		Iterator bodyIt = mBody.getUnits().iterator();
 		while (bodyIt.hasNext()){
 			Stmt stmt = (Stmt)bodyIt.next();
-			
+
 			if (stmt instanceof MonitorStmt) {
 //				methodsNeedingInlining.put(targetMethod, new Boolean(true));
-				methodsNeedingInlining.add(targetMethod);		
+				methodsNeedingInlining.add(targetMethod);
 				//System.out.println("put: "+targetMethod);
 				return;
 				//return true;
@@ -74,13 +74,13 @@ public class MethodExtentBuilder {
 				if (stmt.containsInvokeExpr()){
 					//System.out.println("stmt is: "+stmt);
 					Value invokeExpr =(stmt).getInvokeExpr();
-					
+
 					SootMethod method = ((InvokeExpr)invokeExpr).getMethod();
-					
+
 					String name = method.getName();
-					
+
 					if( name.equals("wait") ||  name.equals("notify") || name.equals("notifyAll") ||
-							((name.equals("start") || name.equals("join") || 
+							((name.equals("start") || name.equals("join") ||
 									name.equals("suspend") || name.equals("resume") ||
 									name.equals("destroy") || name.equals("stop")) &&
 									method.getDeclaringClass().getName().equals("java.lang.Thread") )){
@@ -88,39 +88,39 @@ public class MethodExtentBuilder {
 						return;
 					}
 					else{
-						
+
 						if (method.isConcrete() && !method.getDeclaringClass().isLibraryClass()){
 							Iterator it = cg.edgesOutOf(stmt);
 							TargetMethodsFinder tmd = new TargetMethodsFinder();
 							Iterator<SootMethod>  targetIt = (tmd.find(stmt, cg, true, false)).iterator();
 							while (targetIt.hasNext()){
-								SootMethod target = targetIt.next();     
+								SootMethod target = targetIt.next();
 								if (target.isSynchronized()){
-									//System.out.println("method is synchronized: "+method);    
+									//System.out.println("method is synchronized: "+method);
 									methodsNeedingInlining.add(targetMethod);
 									return;
 								}
 							}
 						}
-					} 
-				}		       
+					}
+				}
 			}
-			
-			
+
+
 		}
 		return;
-		
-		
+
+
 	}
-	
+
 	protected void propagate(PegCallGraph cg){
-		/*if a method is not in methodsNeedingInlining, 
+		/*if a method is not in methodsNeedingInlining,
 		 * use DFS to find out if it's parents need inlining.
 		 * If so, add it to methodsNeedingInlining
 		 */
 		Set<Object> gray = new HashSet<Object>();
 		Iterator it = cg.iterator();
-		
+
 		while (it.hasNext()){
 			Object o = it.next();
 			if (methodsNeedingInlining.contains(o)) continue;
@@ -132,15 +132,15 @@ public class MethodExtentBuilder {
 				}
 			}
 		}
-		
+
 		//System.out.println("======after pro========");
-		
+
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	private boolean visitNode(Object o, Set<Object> gray, PegCallGraph cg){
 		//System.out.println("visit(in visit): "+o);
 		gray.add(o);
@@ -153,20 +153,20 @@ public class MethodExtentBuilder {
 				//System.out.println("return true for: "+child);
 				return true;
 			}
-			else{   
+			else{
 				if (!gray.contains(child)){
 					if (visitNode(child, gray, cg)) {
-						
+
 						methodsNeedingInlining.add(child);
 						//System.out.println("put: "+child+"in pro");
 						//System.out.println("return true for: "+child);
 						return true;
 					}
 				}
-				
+
 			}
 		}
 		return false;
 	}
-	
+
 }

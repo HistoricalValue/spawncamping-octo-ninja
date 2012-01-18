@@ -23,9 +23,9 @@ import java.io.PrintStream;
 import soot.G;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 19-Jun-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 19-Jun-2006
  */
 public interface IJbcoTransform {
 

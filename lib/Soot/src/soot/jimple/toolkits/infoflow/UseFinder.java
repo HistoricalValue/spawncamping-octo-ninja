@@ -20,62 +20,62 @@ public class UseFinder
 
 	Map<SootClass, List> classToExtFieldAccesses; // each field access is a Pair <containing method, stmt>
 	Map<SootClass, ArrayList> classToIntFieldAccesses;
-	
+
 	Map<SootClass, List> classToExtCalls; // each call is a Pair <containing method, stmt>
 	Map<SootClass, ArrayList> classToIntCalls;
-	
+
 	public UseFinder()
 	{
 		classToExtFieldAccesses = new HashMap<SootClass, List>();
 		classToIntFieldAccesses = new HashMap<SootClass, ArrayList>();
 		classToExtCalls = new HashMap<SootClass, List>();
 		classToIntCalls = new HashMap<SootClass, ArrayList>();
-		
+
 		rm = Scene.v().getReachableMethods();
-		
+
 		doAnalysis();
 	}
-	
+
 	public UseFinder(ReachableMethods rm)
 	{
 		classToExtFieldAccesses = new HashMap<SootClass, List>();
 		classToIntFieldAccesses = new HashMap<SootClass, ArrayList>();
 		classToExtCalls = new HashMap<SootClass, List>();
 		classToIntCalls = new HashMap<SootClass, ArrayList>();
-		
+
 		this.rm = rm;
-		
+
 		doAnalysis();
 	}
-	
+
 	public List getExtFieldAccesses(SootClass sc)
 	{
 		if(classToExtFieldAccesses.containsKey(sc))
 			return classToExtFieldAccesses.get(sc);
 		throw new RuntimeException("UseFinder does not search non-application classes: " + sc);
 	}
-	
+
 	public List getIntFieldAccesses(SootClass sc)
 	{
 		if(classToIntFieldAccesses.containsKey(sc))
 			return classToIntFieldAccesses.get(sc);
 		throw new RuntimeException("UseFinder does not search non-application classes: " + sc);
 	}
-	
+
 	public List getExtCalls(SootClass sc)
 	{
 		if(classToExtCalls.containsKey(sc))
 			return classToExtCalls.get(sc);
 		throw new RuntimeException("UseFinder does not search non-application classes: " + sc);
 	}
-	
+
 	public List getIntCalls(SootClass sc)
 	{
 		if(classToIntCalls.containsKey(sc))
 			return classToIntCalls.get(sc);
 		throw new RuntimeException("UseFinder does not search non-application classes: " + sc);
 	}
-	
+
 	// This is an incredibly stupid way to do this... we should just use the call graph for faster/better info!
 	public List<SootMethod> getExtMethods(SootClass sc)
 	{
@@ -94,7 +94,7 @@ public class UseFinder
 		}
 		throw new RuntimeException("UseFinder does not search non-application classes: " + sc);
 	}
-	
+
 	public List<SootField> getExtFields(SootClass sc)
 	{
 		if(classToExtFieldAccesses.containsKey(sc))
@@ -112,11 +112,11 @@ public class UseFinder
 		}
 		throw new RuntimeException("UseFinder does not search non-application classes: " + sc);
 	}
-	
+
 	private void doAnalysis()
 	{
 		Chain appClasses = Scene.v().getApplicationClasses();
-		
+
 		// Set up lists of internal and external accesses
 		Iterator appClassesIt = appClasses.iterator();
 		while(appClassesIt.hasNext())
@@ -132,7 +132,7 @@ public class UseFinder
 		appClassesIt = appClasses.iterator();
 		while(appClassesIt.hasNext())
 		{
-			SootClass appClass = (SootClass) appClassesIt.next();		
+			SootClass appClass = (SootClass) appClassesIt.next();
     	    Iterator methodsIt = appClass.getMethods().iterator();
     	    while (methodsIt.hasNext())
     	    {

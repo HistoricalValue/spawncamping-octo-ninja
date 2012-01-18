@@ -4,10 +4,10 @@ import polyglot.types.*;
 import polyglot.util.*;
 
 /**
- * A place holder type when serializing the Polylgot type information. 
- * When serializing the type information for some class <code>C</code>, 
+ * A place holder type when serializing the Polylgot type information.
+ * When serializing the type information for some class <code>C</code>,
  * Placeholders are used to prevent serializing the class type information
- * for classes that <code>C</code> depends on.  
+ * for classes that <code>C</code> depends on.
  */
 public class PlaceHolder_c implements PlaceHolder
 {
@@ -18,7 +18,7 @@ public class PlaceHolder_c implements PlaceHolder
 
     /** Used for deserializing types. */
     protected PlaceHolder_c() { }
-    
+
     /** Creates a place holder type for the type. */
     public PlaceHolder_c(Type t) {
 	if (t.isClass()) {
@@ -29,7 +29,7 @@ public class PlaceHolder_c implements PlaceHolder
 	}
     }
 
-    /** Restore the placeholder into a proper type. */ 
+    /** Restore the placeholder into a proper type. */
     public TypeObject resolve(TypeSystem ts) {
         try {
             return ts.systemResolver().find(name);

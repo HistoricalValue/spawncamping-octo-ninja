@@ -50,26 +50,26 @@ public class HashReversibleGraph extends HashMutableDirectedGraph
         }
 
         /* use the same heads and tails as the original graph */
-        
+
         heads.clear();
         heads.addAll(dg.getHeads());
         tails.clear();
         tails.addAll(dg.getTails());
     }
-            
+
     public HashReversibleGraph()
     {
         super();
         reversed = false;
     }
-    
+
     public boolean isReversed()
     {
         return reversed;
     }
 
     public ReversibleGraph reverse()
-    {   
+    {
         reversed = !reversed;
         return this;
     }
@@ -103,13 +103,13 @@ public class HashReversibleGraph extends HashMutableDirectedGraph
     public List getTails()
     {
         return reversed ? super.getHeads() : super.getTails();
-    }   
+    }
 
     public List getPredsOf(Object s)
     {
         return reversed ? super.getSuccsOf(s) : super.getPredsOf(s);
     }
-    
+
     public List getSuccsOf(Object s)
     {
         return reversed ? super.getPredsOf(s) : super.getSuccsOf(s);

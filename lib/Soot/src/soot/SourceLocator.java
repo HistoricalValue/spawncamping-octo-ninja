@@ -32,9 +32,9 @@ public class SourceLocator
     public static SourceLocator v() { return G.v().soot_SourceLocator(); }
 
     protected Set<ClassLoader> additionalClassLoaders = new HashSet<ClassLoader>();
-    
+
     /** Given a class name, uses the soot-class-path to return a ClassSource for the given class. */
-    public ClassSource getClassSource(String className) 
+    public ClassSource getClassSource(String className)
     {
         if( classPath == null ) {
             classPath = explodeClassPath(Scene.v().getSootClassPath());
@@ -55,7 +55,7 @@ public class SourceLocator
         for(final ClassLoader cl: additionalClassLoaders) {
             try {
             	ClassSource ret = new ClassProvider() {
-					
+
 					public ClassSource find(String className) {
 				        String fileName = className.replace('.', '/') + ".class";
 						return new CoffiClassSource(className, cl.getResourceAsStream(fileName));
@@ -70,7 +70,7 @@ public class SourceLocator
         if(ex!=null) throw ex;
         return null;
     }
-    
+
     public void additionalClassLoader(ClassLoader c) {
     	additionalClassLoaders.add(c);
     }
@@ -124,14 +124,14 @@ public class SourceLocator
     }
 
     private boolean isJar(String path) {
-	File f = new File(path);	
-	if(f.isFile() && f.canRead()) { 		
+	File f = new File(path);
+	if(f.isFile() && f.canRead()) {
 	    if(path.endsWith("zip") || path.endsWith("jar")) {
 		return true;
 	    } else {
 		G.v().out.println("Warning: the following soot-classpath entry is not a supported archive file (must be .zip or .jar): " + path);
 	    }
-	}  
+	}
 	return false;
     }
 
@@ -146,7 +146,7 @@ public class SourceLocator
 
 	    try {
 		ZipFile archive = new ZipFile(aPath);
-		for (Enumeration entries = archive.entries(); 
+		for (Enumeration entries = archive.entries();
 		     entries.hasMoreElements(); ) {
 		    ZipEntry entry = (ZipEntry) entries.nextElement();
 		    String entryName = entry.getName();
@@ -161,7 +161,7 @@ public class SourceLocator
 		    }
 		}
 	    } catch(IOException e) {
-		G.v().out.println("Error reading " + aPath + ": " 
+		G.v().out.println("Error reading " + aPath + ": "
 				  + e.toString());
 		throw new CompilationDeathException(CompilationDeathException.COMPILATION_ABORTED);
 	    }
@@ -345,7 +345,7 @@ public class SourceLocator
     protected List<String> explodeClassPath( String classPath ) {
         List<String> ret = new ArrayList<String>();
 
-        StringTokenizer tokenizer = 
+        StringTokenizer tokenizer =
             new StringTokenizer(classPath, File.pathSeparator);
         while( tokenizer.hasMoreTokens() ) {
             String originalDir = tokenizer.nextToken();
@@ -382,20 +382,20 @@ public class SourceLocator
     }
 
     private static InputStream doJDKBugWorkaround(InputStream is, long size) throws IOException {
-	
+
 	int sz = (int) size;
-	byte[] buf = new byte[sz];					
-				
-				    
+	byte[] buf = new byte[sz];
+
+
 	final int N = 1024;
 	int ln = 0;
 	int count = 0;
-	while (sz > 0 &&  
+	while (sz > 0 &&
 	       (ln = is.read(buf, count, Math.min(N, sz))) != -1) {
 	    count += ln;
 	    sz -= ln;
 	}
-	return  new ByteArrayInputStream(buf);		
+	return  new ByteArrayInputStream(buf);
     }
 
 

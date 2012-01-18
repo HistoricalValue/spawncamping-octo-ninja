@@ -70,7 +70,7 @@ public class Subst_c implements Subst
                 Map.Entry e = (Map.Entry) i.next();
                 Object formal = e.getKey();
                 Object actual = e.getValue();
-                
+
                 newSubst.put(formal, substSubstValue(actual));
                 }
 
@@ -91,19 +91,19 @@ public class Subst_c implements Subst
     }
 
     /**
-     * When adding a new substitution A-&gt;B to the map, we need to check if 
+     * When adding a new substitution A-&gt;B to the map, we need to check if
      * there are already any existing substitutions, say C-&gt;A, and if so,
      * replace them appropriately, in this case with C-&gt;B.
-     * 
+     *
      * This method allows subclasses to perform substitution on a value in
-     * the substitution map (B in the 
+     * the substitution map (B in the
      * example above). Subclasses may need to override this
      * if the keys and values are not the same object.
      */
     protected Object substSubstValue(Object value) {
         return value;
     }
-    
+
     /** Perform substitutions on a class type. Substitutions are performed
      * lazily. */
     public ClassType substClassType(ClassType t) {
@@ -265,17 +265,17 @@ public class Subst_c implements Subst
             str += "<" + key + ": " + subst.get(key) + ">";
             if (iter.hasNext())
                 str += ", ";
-        }	
+        }
         return str + "]";
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) 
+    private void writeObject(java.io.ObjectOutputStream out)
 	throws IOException
     {
         out.defaultWriteObject();
     }
 
-    private void readObject(java.io.ObjectInputStream in) 
+    private void readObject(java.io.ObjectInputStream in)
 	throws IOException, ClassNotFoundException
     {
         if (in instanceof TypeInputStream) {

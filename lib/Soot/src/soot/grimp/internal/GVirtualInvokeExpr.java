@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -54,9 +54,9 @@ public class GVirtualInvokeExpr extends AbstractVirtualInvokeExpr
     private String toString(Value op, String opString, String rightString)
     {
         String leftOp = opString;
-	
-        if (getBase() instanceof Precedence && 
-            ((Precedence)getBase()).getPrecedence() < getPrecedence()) 
+
+        if (getBase() instanceof Precedence &&
+            ((Precedence)getBase()).getPrecedence() < getPrecedence())
             leftOp = "(" + leftOp + ")";
         return leftOp + rightString;
     }
@@ -77,7 +77,7 @@ public class GVirtualInvokeExpr extends AbstractVirtualInvokeExpr
 
         buffer.append(")");
 
-        return toString(getBase(), getBase().toString(), 
+        return toString(getBase(), getBase().toString(),
                         buffer.toString());
     }
 
@@ -101,16 +101,16 @@ public class GVirtualInvokeExpr extends AbstractVirtualInvokeExpr
         up.literal(")");
     }
 
-    
-    public Object clone() 
+
+    public Object clone()
     {
         ArrayList clonedArgs = new ArrayList(getArgCount());
 
         for(int i = 0; i < getArgCount(); i++) {
             clonedArgs.add(i, Grimp.cloneIfNecessary(getArg(i)));
         }
-        
-        return new  GVirtualInvokeExpr(Grimp.cloneIfNecessary(getBase()), methodRef, 
+
+        return new  GVirtualInvokeExpr(Grimp.cloneIfNecessary(getBase()), methodRef,
             clonedArgs);
     }
 

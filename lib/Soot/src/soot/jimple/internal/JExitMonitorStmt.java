@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,7 +38,7 @@ import soot.*;
 import soot.jimple.*;
 import soot.baf.*;
 
-public class JExitMonitorStmt extends AbstractStmt 
+public class JExitMonitorStmt extends AbstractStmt
     implements ExitMonitorStmt
 {
     ValueBox opBox;
@@ -53,7 +53,7 @@ public class JExitMonitorStmt extends AbstractStmt
         this.opBox = opBox;
     }
 
-    public Object clone() 
+    public Object clone()
     {
         return new JExitMonitorStmt(Jimple.cloneIfNecessary(getOp()));
     }
@@ -62,7 +62,7 @@ public class JExitMonitorStmt extends AbstractStmt
     {
         return Jimple.EXITMONITOR + " "  + opBox.getValue().toString();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(Jimple.EXITMONITOR);
         up.literal(" ");
@@ -90,7 +90,7 @@ public class JExitMonitorStmt extends AbstractStmt
 
         list.addAll(opBox.getValue().getUseBoxes());
         list.add(opBox);
-    
+
         return list;
     }
 
@@ -98,7 +98,7 @@ public class JExitMonitorStmt extends AbstractStmt
     {
         ((StmtSwitch) sw).caseExitMonitorStmt(this);
 
-    }    
+    }
 
   public void convertToBaf(JimpleToBafContext context, List<Unit> out)
   {
@@ -109,7 +109,7 @@ public class JExitMonitorStmt extends AbstractStmt
 
     Unit currentUnit = this;
 
-    Iterator it = currentUnit.getTags().iterator();	
+    Iterator it = currentUnit.getTags().iterator();
     while(it.hasNext()) {
 	u.addTag((Tag) it.next());
     }
@@ -117,10 +117,10 @@ public class JExitMonitorStmt extends AbstractStmt
   }
 
 
-    
+
     public boolean fallsThrough(){return true;}
-    public boolean branches(){return false;}        
-    
+    public boolean branches(){return false;}
+
 
 
 }

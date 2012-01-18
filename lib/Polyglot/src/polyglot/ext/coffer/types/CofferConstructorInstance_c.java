@@ -5,7 +5,7 @@ import polyglot.types.*;
 import polyglot.util.*;
 import java.util.*;
 
-/** An implementation of the <code>CofferConstructorInstance</code> interface. 
+/** An implementation of the <code>CofferConstructorInstance</code> interface.
  */
 public class CofferConstructorInstance_c extends ConstructorInstance_c
 				     implements CofferConstructorInstance

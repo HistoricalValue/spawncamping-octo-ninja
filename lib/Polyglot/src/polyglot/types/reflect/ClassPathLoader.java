@@ -59,7 +59,7 @@ public class ClassPathLoader
 
 	for (Iterator i = classpath.iterator(); i.hasNext(); ) {
 	    File dir = (File) i.next();
-            ClassFile cf = loader.loadClass(dir, name); 
+            ClassFile cf = loader.loadClass(dir, name);
             if (cf != null) {
                 return cf;
             }

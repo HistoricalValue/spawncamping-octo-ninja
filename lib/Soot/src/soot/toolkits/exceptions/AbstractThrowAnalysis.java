@@ -66,7 +66,7 @@ public abstract class AbstractThrowAnalysis implements ThrowAnalysis {
 	} else {
 	    ThrowableSet result = ThrowableSet.Manager.v().EMPTY;
 	    if (thrownExpression instanceof NewInvokeExpr) {
-		// In this case, we know the exact type of the 
+		// In this case, we know the exact type of the
 		// argument exception.
 		result = result.add((RefType) thrownType);
 	    } else {
@@ -78,8 +78,8 @@ public abstract class AbstractThrowAnalysis implements ThrowAnalysis {
 
 
     abstract public ThrowableSet mightThrowImplicitly(ThrowInst t);
-	
-    
+
+
     abstract public ThrowableSet mightThrowImplicitly(ThrowStmt t);
 }
 

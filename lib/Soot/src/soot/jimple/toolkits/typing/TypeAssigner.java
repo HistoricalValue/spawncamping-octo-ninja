@@ -1,8 +1,8 @@
 /* Soot - a J*va Optimization Framework
  * Copyright (C) 1997-2000 Etienne Gagnon.
- * Copyright (C) 2008 Ben Bellamy 
- * Copyright (C) 2008 Eric Bodden 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ * Copyright (C) 2008 Eric Bodden
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,7 +38,7 @@ import java.util.*;
  * This transformer assigns types to local variables.
  * @author Etienne Gagnon
  * @author Ben Bellamy
- * @author Eric Bodden 
+ * @author Eric Bodden
  */
 public class TypeAssigner extends BodyTransformer {
 	private boolean ignoreWrongStaticNess;
@@ -49,7 +49,7 @@ public class TypeAssigner extends BodyTransformer {
 	public static TypeAssigner v() {
 		return G.v().soot_jimple_toolkits_typing_TypeAssigner();
 	}
-	
+
 	public boolean ignoreWrongStaticNess() {
 		return ignoreWrongStaticNess;
 	}
@@ -67,28 +67,28 @@ public class TypeAssigner extends BodyTransformer {
 					+ start);
 
 		JBTROptions opt = new JBTROptions(options);
-		
+
 		ignoreWrongStaticNess = opt.ignore_wrong_staticness();
-		
+
 		/*
 		 * Setting this guard to true enables comparison of the original and new
 		 * type assigners. This will be slow since type assignment will always
 		 * happen twice. The actual types used for Jimple are determined by the
 		 * use-old-type-assigner option.
-		 * 
+		 *
 		 * Each comparison is written as a separate semicolon-delimited line to
 		 * the standard output, and the first field is always 'cmp' for use in
 		 * grep. The format is:
-		 * 
+		 *
 		 * cmp;Method Name;Stmt Count;Old Inference Time (ms); New Inference
 		 * Time (ms);Typing Comparison
-		 * 
+		 *
 		 * The Typing Comparison field compares the old and new typings: -2 -
 		 * Old typing contains fewer variables (BAD!) -1 - Old typing is tighter
 		 * (BAD!) 0 - Typings are equal 1 - New typing is tighter 2 - New typing
 		 * contains fewer variables 3 - Typings are incomparable (inspect
 		 * manually)
-		 * 
+		 *
 		 * In a final release this guard, and anything in the first branch,
 		 * would probably be removed.
 		 */

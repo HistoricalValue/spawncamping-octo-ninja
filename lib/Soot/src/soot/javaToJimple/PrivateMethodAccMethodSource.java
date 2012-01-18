@@ -30,7 +30,7 @@ public class PrivateMethodAccMethodSource implements soot.MethodSource {
     public void setMethodInst(polyglot.types.MethodInstance mi) {
         methodInst = mi;
     }
-    
+
     private boolean isCallParamType(soot.Type sootType) {
         Iterator it = methodInst.formalTypes().iterator();
         while (it.hasNext()) {
@@ -39,12 +39,12 @@ public class PrivateMethodAccMethodSource implements soot.MethodSource {
         }
         return false;
     }
-    
+
     public soot.Body getBody(soot.SootMethod sootMethod, String phaseName){
-           
+
         soot.Body body = soot.jimple.Jimple.v().newBody(sootMethod);
         LocalGenerator lg = new LocalGenerator(body);
-        
+
         soot.Local base = null;
         ArrayList methParams = new ArrayList();
         ArrayList methParamsTypes = new ArrayList();
@@ -67,10 +67,10 @@ public class PrivateMethodAccMethodSource implements soot.MethodSource {
             }
             paramCounter++;
         }
-        
+
         // create return type local
         soot.Type type = Util.getSootType(methodInst.returnType());
-        
+
         soot.Local returnLocal = null;
         if (!(type instanceof soot.VoidType)){
             returnLocal = lg.generateLocal(type);
@@ -106,10 +106,10 @@ public class PrivateMethodAccMethodSource implements soot.MethodSource {
             retStmt = soot.jimple.Jimple.v().newReturnVoidStmt();
         }
         body.getUnits().add(retStmt);
-        
+
         return body;
-     
+
     }
-    
+
 
 }

@@ -7,8 +7,8 @@ import polyglot.util.*;
 import java.util.*;
 import polyglot.main.Options;
 
-/** 
- * A <code>StringLit</code> represents an immutable instance of a 
+/**
+ * A <code>StringLit</code> represents an immutable instance of a
  * <code>String</code> which corresponds to a literal string in Java code.
  */
 public class StringLit_c extends Lit_c implements StringLit
@@ -41,16 +41,16 @@ public class StringLit_c extends Lit_c implements StringLit
         if (StringUtil.unicodeEscape(value).length() > 11) {
             return "\"" + StringUtil.unicodeEscape(value).substring(0,8) + "...\"";
         }
-                
+
 	return "\"" + StringUtil.unicodeEscape(value) + "\"";
     }
 
     protected int MAX_LENGTH = 60;
- 
+
     /** Write the expression to an output file. */
     public void prettyPrint(CodeWriter w, PrettyPrinter tr) {
         List l = breakupString();
-        
+
         // If we break up the string, parenthesize it to avoid precedence bugs.
         if (l.size() > 1) {
             w.write("(");
@@ -83,8 +83,8 @@ public class StringLit_c extends Lit_c implements StringLit
     /**
      * Break a long string literal into a concatenation of small string
      * literals.  This avoids messing up the pretty printer and editors.
-     * 
-     * ak333: made public to allow CppStringLitDel to get to it. 
+     *
+     * ak333: made public to allow CppStringLitDel to get to it.
      */
     public List breakupString() {
         List result = new LinkedList();
@@ -120,7 +120,7 @@ public class StringLit_c extends Lit_c implements StringLit
 
         return result;
     }
-    
+
     public Object constantValue() {
 	return value;
     }

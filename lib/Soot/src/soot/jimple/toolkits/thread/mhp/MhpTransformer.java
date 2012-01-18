@@ -11,7 +11,7 @@ import java.util.*;
 /**
  *
  */
- 
+
 // *** USE AT YOUR OWN RISK ***
 // May Happen in Parallel (MHP) analysis by Lin Li.
 // This code should be treated as beta-quality code.
@@ -25,13 +25,13 @@ import java.util.*;
 
 public class MhpTransformer extends SceneTransformer{
     public MhpTransformer(Singletons.Global g){}
-    public static MhpTransformer v() 
-	{ 
+    public static MhpTransformer v()
+	{
 		return G.v().soot_jimple_toolkits_thread_mhp_MhpTransformer();
-	}	
-	
+	}
+
     MhpTester mhpTester;
-    
+
 	protected void internalTransform(String phaseName, Map options)
 	{
 		getMhpTester().printMhpSummary();
@@ -50,15 +50,15 @@ public class MhpTransformer extends SceneTransformer{
 		SootMethod sootMethod= Scene.v().getMainClass().getMethodByName("main");
 		Body body = sootMethod.retrieveActiveBody();
 		long beginBuildPegTime = System.currentTimeMillis();
-		PegCallGraph pcg = new PegCallGraph(callGraph);	
-		MethodExtentBuilder meb = new MethodExtentBuilder(body, pcg, callGraph);     
+		PegCallGraph pcg = new PegCallGraph(callGraph);
+		MethodExtentBuilder meb = new MethodExtentBuilder(body, pcg, callGraph);
 		Set<Object> methodsNeedingInlining = meb.getMethodsNeedingInlining();
 		Map synchObj = new HashMap();
 		Map allocNodeToObj = new HashMap();
 		AllocNodesFinder anf = new AllocNodesFinder(pcg, callGraph, pag);
 		ArrayList inlineSites = new ArrayList();
-		PegGraph pegGraph = buildPeg( callGraph, hierarchy, pag, methodsNeedingInlining, 
-			anf.getAllocNodes(), inlineSites, synchObj, anf.getMultiRunAllocNodes(), allocNodeToObj, body, sootMethod);	
+		PegGraph pegGraph = buildPeg( callGraph, hierarchy, pag, methodsNeedingInlining,
+			anf.getAllocNodes(), inlineSites, synchObj, anf.getMultiRunAllocNodes(), allocNodeToObj, body, sootMethod);
 		MethodInliner.inline(inlineSites);
 		long buildPegDuration = (System.currentTimeMillis() - beginBuildPegTime );
 		System.err.println("Peg Duration: "+ buildPegDuration);
@@ -66,12 +66,12 @@ public class MhpTransformer extends SceneTransformer{
 				+buildPegDuration % 100 +" seconds");
 		long beginMhpTime = System.currentTimeMillis();
 		long mhpAnalysisDuration = (System.currentTimeMillis() - beginMhpTime);
-		long beginSccTime = System.currentTimeMillis();	
+		long beginSccTime = System.currentTimeMillis();
 		long sccDuration =  (System.currentTimeMillis() - beginSccTime);
 		long beginSeqTime = System.currentTimeMillis();
 		long seqDuration = (System.currentTimeMillis() - beginSeqTime);
 		long afterBeginMhpTime = System.currentTimeMillis();
-		mhpAnalysisDuration = (System.currentTimeMillis() - afterBeginMhpTime);		
+		mhpAnalysisDuration = (System.currentTimeMillis() - afterBeginMhpTime);
 		long duration = (System.currentTimeMillis() - beginBuildPegTime);
 		System.err.println("Total time: " + duration );
 		System.err.println(" SCC duration "+ sccDuration);
@@ -79,10 +79,10 @@ public class MhpTransformer extends SceneTransformer{
 		System.err.println("after compacting mhp duration: "+mhpAnalysisDuration);
 		*/
 	}
-	
-	protected static PegGraph buildPeg( CallGraph callGraph, Hierarchy hierarchy, PAG pag, Set<Object> methodsNeedingInlining, Set<AllocNode> allocNodes, List inlineSites, Map synchObj, Set<AllocNode> multiRunAllocNodes, Map allocNodeToObj, Body body, 
+
+	protected static PegGraph buildPeg( CallGraph callGraph, Hierarchy hierarchy, PAG pag, Set<Object> methodsNeedingInlining, Set<AllocNode> allocNodes, List inlineSites, Map synchObj, Set<AllocNode> multiRunAllocNodes, Map allocNodeToObj, Body body,
 			SootMethod sm){
-		
+
 		PegGraph pG = new PegGraph( callGraph, hierarchy, pag, methodsNeedingInlining, allocNodes, inlineSites, synchObj, multiRunAllocNodes, allocNodeToObj, body,  sm, true,  false);
 		return pG;
 	}

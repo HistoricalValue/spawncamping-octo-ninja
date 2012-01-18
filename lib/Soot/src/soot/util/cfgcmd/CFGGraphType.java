@@ -45,7 +45,7 @@ import soot.util.dot.DotGraph;
  */
 public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
 
-  private static final boolean DEBUG = true;  
+  private static final boolean DEBUG = true;
 
   /**
    * Method that will build a graph of this type.
@@ -97,31 +97,31 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
   /**
    * Returns a string containing the names of all the
    * available {@link CFGGraphType}s, separated by
-   * '|' characters. 
+   * '|' characters.
    *
-   * @param initialIndent The number of blank spaces to insert at the 
-   *                      beginning of the returned string. Ignored if 
+   * @param initialIndent The number of blank spaces to insert at the
+   *                      beginning of the returned string. Ignored if
    *                      negative.
    *
    * @param rightMargin   If positive, newlines will be inserted to try
    *                      to keep the length of each line in the
    *                      returned string less than or equal to
    *                      <code>rightMargin</code>.
-   *         
+   *
    * @param hangingIndent  If positive, this number of spaces will be
-   *                       inserted immediately after each newline 
+   *                       inserted immediately after each newline
    *                       inserted to respect the <code>rightMargin</code>.
    */
-  public static String help(int initialIndent, int rightMargin, 
+  public static String help(int initialIndent, int rightMargin,
 			    int hangingIndent) {
     return graphTypeOptions.help(initialIndent, rightMargin, hangingIndent);
   }
 
 
-  public static final CFGGraphType BRIEF_UNIT_GRAPH = 
+  public static final CFGGraphType BRIEF_UNIT_GRAPH =
     new CFGGraphType("BriefUnitGraph") {
-      public DirectedGraph buildGraph(Body b) { 
-	return new BriefUnitGraph(b); 
+      public DirectedGraph buildGraph(Body b) {
+	return new BriefUnitGraph(b);
       }
 
     public DotGraph drawGraph(CFGToDotGraph drawer, DirectedGraph g, Body b) {
@@ -129,7 +129,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType EXCEPTIONAL_UNIT_GRAPH = 
+  public static final CFGGraphType EXCEPTIONAL_UNIT_GRAPH =
     new CFGGraphType("ExceptionalUnitGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new ExceptionalUnitGraph(b);
@@ -139,7 +139,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType COMPLETE_UNIT_GRAPH = 
+  public static final CFGGraphType COMPLETE_UNIT_GRAPH =
     new CFGGraphType("CompleteUnitGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new CompleteUnitGraph(b);
@@ -149,7 +149,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType TRAP_UNIT_GRAPH = 
+  public static final CFGGraphType TRAP_UNIT_GRAPH =
     new CFGGraphType("TrapUnitGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new TrapUnitGraph(b);
@@ -159,7 +159,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType CLASSIC_COMPLETE_UNIT_GRAPH = 
+  public static final CFGGraphType CLASSIC_COMPLETE_UNIT_GRAPH =
     new CFGGraphType("ClassicCompleteUnitGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new ClassicCompleteUnitGraph(b);
@@ -169,7 +169,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType BRIEF_BLOCK_GRAPH = 
+  public static final CFGGraphType BRIEF_BLOCK_GRAPH =
     new CFGGraphType("BriefBlockGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new BriefBlockGraph(b);
@@ -179,7 +179,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType EXCEPTIONAL_BLOCK_GRAPH = 
+  public static final CFGGraphType EXCEPTIONAL_BLOCK_GRAPH =
     new CFGGraphType("ExceptionalBlockGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new ExceptionalBlockGraph(b);
@@ -189,7 +189,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType COMPLETE_BLOCK_GRAPH = 
+  public static final CFGGraphType COMPLETE_BLOCK_GRAPH =
     new CFGGraphType("CompleteBlockGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new CompleteBlockGraph(b);
@@ -199,7 +199,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType CLASSIC_COMPLETE_BLOCK_GRAPH = 
+  public static final CFGGraphType CLASSIC_COMPLETE_BLOCK_GRAPH =
     new CFGGraphType("ClassicCompleteBlockGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new ClassicCompleteBlockGraph(b);
@@ -209,7 +209,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType ARRAY_REF_BLOCK_GRAPH = 
+  public static final CFGGraphType ARRAY_REF_BLOCK_GRAPH =
     new CFGGraphType("ArrayRefBlockGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new ArrayRefBlockGraph(b);
@@ -219,7 +219,7 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType ZONED_BLOCK_GRAPH = 
+  public static final CFGGraphType ZONED_BLOCK_GRAPH =
     new CFGGraphType("ZonedBlockGraph") {
     public DirectedGraph buildGraph(Body b) {
       return new ZonedBlockGraph(b);
@@ -234,18 +234,18 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     try {
       Class graphClass = AltClassLoader.v().loadClass(className);
       Class[] paramTypes = new Class[] { Body.class };
-      Constructor constructor = graphClass.getConstructor(paramTypes);    
-      DirectedGraph result = (DirectedGraph) 
+      Constructor constructor = graphClass.getConstructor(paramTypes);
+      DirectedGraph result = (DirectedGraph)
 	constructor.newInstance(new Object[] { b });
       return result;
-    } 
+    }
     // Turn class loading exceptions into RuntimeExceptions, so callers
     // don't need to declare them:  perhaps a shoddy tactic.
     catch (ClassNotFoundException e) {
       if (DEBUG) {
 	e.printStackTrace(G.v().out);
       }
-      throw new IllegalArgumentException("Unable to find " + className + 
+      throw new IllegalArgumentException("Unable to find " + className +
 				 " in alternate classpath: " +
 					 e.getMessage());
     }
@@ -253,8 +253,8 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
       if (DEBUG) {
 	e.printStackTrace(G.v().out);
       }
-      throw new IllegalArgumentException("There is no " + className + 
-					 "(Body) constructor: " + 
+      throw new IllegalArgumentException("There is no " + className +
+					 "(Body) constructor: " +
 					 e.getMessage());
     }
     catch (InstantiationException e) {
@@ -281,12 +281,12 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
 					 "(Body) in alternate classpath: " +
 					 e.getMessage());
     }
-  } 
+  }
 
 
-  public static final CFGGraphType ALT_BRIEF_UNIT_GRAPH = 
+  public static final CFGGraphType ALT_BRIEF_UNIT_GRAPH =
     new CFGGraphType("AltBriefUnitGraph") {
-      public DirectedGraph buildGraph(Body b) { 
+      public DirectedGraph buildGraph(Body b) {
 	return loadAltGraph("soot.toolkits.graph.BriefUnitGraph", b);
       }
 
@@ -295,9 +295,9 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType ALT_COMPLETE_UNIT_GRAPH = 
+  public static final CFGGraphType ALT_COMPLETE_UNIT_GRAPH =
     new CFGGraphType("AltCompleteUnitGraph") {
-      public DirectedGraph buildGraph(Body b) { 
+      public DirectedGraph buildGraph(Body b) {
 	return loadAltGraph("soot.toolkits.graph.CompleteUnitGraph", b);
       }
 
@@ -306,9 +306,9 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType ALT_TRAP_UNIT_GRAPH = 
+  public static final CFGGraphType ALT_TRAP_UNIT_GRAPH =
     new CFGGraphType("AltTrapUnitGraph") {
-      public DirectedGraph buildGraph(Body b) { 
+      public DirectedGraph buildGraph(Body b) {
 	return loadAltGraph("soot.toolkits.graph.TrapUnitGraph", b);
       }
 
@@ -317,9 +317,9 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType ALT_ARRAY_REF_BLOCK_GRAPH = 
+  public static final CFGGraphType ALT_ARRAY_REF_BLOCK_GRAPH =
     new CFGGraphType("AltArrayRefBlockGraph") {
-      public DirectedGraph buildGraph(Body b) { 
+      public DirectedGraph buildGraph(Body b) {
 	return loadAltGraph("soot.toolkits.graph.ArrayRefBlockGraph", b);
       }
 
@@ -328,9 +328,9 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType ALT_BRIEF_BLOCK_GRAPH = 
+  public static final CFGGraphType ALT_BRIEF_BLOCK_GRAPH =
     new CFGGraphType("AltBriefBlockGraph") {
-      public DirectedGraph buildGraph(Body b) { 
+      public DirectedGraph buildGraph(Body b) {
 	return loadAltGraph("soot.toolkits.graph.BriefBlockGraph", b);
       }
 
@@ -339,9 +339,9 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType ALT_COMPLETE_BLOCK_GRAPH = 
+  public static final CFGGraphType ALT_COMPLETE_BLOCK_GRAPH =
     new CFGGraphType("AltCompleteBlockGraph") {
-      public DirectedGraph buildGraph(Body b) { 
+      public DirectedGraph buildGraph(Body b) {
 	return loadAltGraph("soot.toolkits.graph.CompleteBlockGraph", b);
       }
 
@@ -350,9 +350,9 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  public static final CFGGraphType ALT_ZONED_BLOCK_GRAPH = 
+  public static final CFGGraphType ALT_ZONED_BLOCK_GRAPH =
     new CFGGraphType("AltZonedBlockGraph") {
-      public DirectedGraph buildGraph(Body b) { 
+      public DirectedGraph buildGraph(Body b) {
 	return loadAltGraph("soot.toolkits.graph.ZonedBlockGraph", b);
       }
 
@@ -361,8 +361,8 @@ public abstract class CFGGraphType extends CFGOptionMatcher.CFGOption {
     }
   };
 
-  private final static CFGOptionMatcher graphTypeOptions = 
-    new CFGOptionMatcher(new CFGGraphType[] {    
+  private final static CFGOptionMatcher graphTypeOptions =
+    new CFGOptionMatcher(new CFGGraphType[] {
       BRIEF_UNIT_GRAPH,
       EXCEPTIONAL_UNIT_GRAPH,
       COMPLETE_UNIT_GRAPH,

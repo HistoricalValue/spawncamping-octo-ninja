@@ -21,7 +21,7 @@ public class PrettyPrinter
 
     public PrettyPrinter() {
     }
-    
+
     /** Flag indicating whether to print a ';' after certain statements.
      * This is used when pretty-printing for loops. */
     public boolean appendSemicolon() {

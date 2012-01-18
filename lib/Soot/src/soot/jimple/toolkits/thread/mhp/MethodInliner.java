@@ -17,7 +17,7 @@ import java.util.*;
 
 public class MethodInliner
 {
-	
+
 	// private ArrayList inlineSite;
 	MethodInliner(){
 		//	inlineSite = new ArrayList();
@@ -33,35 +33,35 @@ public class MethodInliner
 			// testHeads(p2);
 			// System.out.println("before inlining: stmt:"+stmt);
 			//  System.out.println(p1);
-			
-			
+
+
 			inline(stmt, chain, p1, p2);
 			// System.out.println("after inlining: stmt:"+stmt);
-			
-			
+
+
 			//System.out.println(p1);
 		}
-		
+
 	}
 	private static void inline(JPegStmt invokeStmt,Chain chain, PegGraph container, PegGraph inlinee){
-		//System.out.println("==inside inline===");	
+		//System.out.println("==inside inline===");
 //		PegToDotFile printer = new PegToDotFile(inlinee, false, "before_addPeg_inlinee"+invokeStmt.getName());
 		if (!container.addPeg(inlinee, chain)) {
 			System.out.println("heads >1 stm: "+invokeStmt);
 			System.exit(1);
 		}
-		
+
 //		printer = new PegToDotFile(container, false, "after_addPeg_"+invokeStmt);
 		container.buildSuccsForInlining(invokeStmt, chain, inlinee);
 		//printer = new PegToDotFile(container, false, "after_bu_succ_"+invokeStmt.getName());
-		
+
 		//	System.out.println(container);
 		container.buildMaps(inlinee);
 		container.buildPreds();
 		//	container.testStartToThread();
-		
+
 	}
-	
-	
-	
+
+
+
 }

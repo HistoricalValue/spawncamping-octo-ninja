@@ -6,12 +6,12 @@ import ppg.util.*;
 public class ExtendCmd implements Command
 {
 	private Production prod;
-	
+
 	public ExtendCmd(Production p)
 	{
 		prod = p;
 	}
-	
+
 	public Production getProduction() { return prod; }
 
 	public void unparse(CodeWriter cw) {
@@ -21,5 +21,5 @@ public class ExtendCmd implements Command
 		prod.unparse(cw);
 		//cw.end();
 	}
-	
+
 }

@@ -62,7 +62,7 @@ public class CFGOptionMatcher {
     /**
      * Searches the options in this <code>CFGOptionMatcher</code>
      * looking for one whose name begins with the passed string
-     * (ignoring the case of letters in the string). 
+     * (ignoring the case of letters in the string).
      *
      * @param quarry The string to be matched against the stored
      * option names.
@@ -74,7 +74,7 @@ public class CFGOptionMatcher {
      * matches none of the option names, or if it matches more than
      * one.
      */
-    public CFGOption match(String quarry) 
+    public CFGOption match(String quarry)
 	throws soot.CompilationDeathException {
 	String uncasedQuarry = quarry.toLowerCase();
 	int match = -1;
@@ -94,7 +94,7 @@ public class CFGOptionMatcher {
 	    }
 	}
 	if (match == -1) {
-	    G.v().out.println("\"" + quarry + "\"" + 
+	    G.v().out.println("\"" + quarry + "\"" +
 			      " does not match any value.");
 	    throw new CompilationDeathException(
 		CompilationDeathException.COMPILATION_ABORTED,
@@ -108,20 +108,20 @@ public class CFGOptionMatcher {
     /**
      * Returns a string containing the names of all the
      * options in this <code>CFGOptionMatcher</code>, separated by
-     * '|' characters. The string is intended for use in 
+     * '|' characters. The string is intended for use in
      * help messages.
      *
-     * @param initialIndent The number of blank spaces to insert at the 
-     *	                    beginning of the returned string. Ignored if 
+     * @param initialIndent The number of blank spaces to insert at the
+     *	                    beginning of the returned string. Ignored if
      *                      negative.
      *
      * @param rightMargin   If positive, newlines will be inserted to try
      *                      to keep the length of each line in the
      *                      returned string less than or equal to
      *                      <code>rightMargin</code>.
-     *         
+     *
      * @param hangingIndent  If positive, this number of spaces will be
-     *                       inserted immediately after each newline 
+     *                       inserted immediately after each newline
      *                       inserted to respect the <code>rightMargin</code>.
      */
     public String help(int initialIndent, int rightMargin, int hangingIndent) {
@@ -149,7 +149,7 @@ public class CFGOptionMatcher {
 		lineLength++;
 	    }
 	    String name = options[i].name();
-	    int nameLength = name.length();	    
+	    int nameLength = name.length();
 	    if ((lineLength + nameLength) > rightMargin) {
 		result.append(newLine);
 		lineLength = hangingIndent;

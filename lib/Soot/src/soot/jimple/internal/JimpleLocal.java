@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -56,7 +56,7 @@ public class JimpleLocal implements Local, ConvertToBaf
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return name.hashCode() * 101 + type.hashCode() * 17;
     }
@@ -85,7 +85,7 @@ public class JimpleLocal implements Local, ConvertToBaf
         if(!isHashCodeChosen)
         {
             // Set the hash code for this object
-            
+
             if(name != null & type != null)
                 fixedHashCode = name.hashCode() + 19 * type.hashCode();
             else if(name != null)
@@ -94,13 +94,13 @@ public class JimpleLocal implements Local, ConvertToBaf
                 fixedHashCode = type.hashCode();
             else
                 fixedHashCode = 1;
-                
+
             isHashCodeChosen = true;
         }
-        
+
         return fixedHashCode;
     }
-    
+
     /** Returns the type of this local. */
     public Type getType()
     {
@@ -117,7 +117,7 @@ public class JimpleLocal implements Local, ConvertToBaf
     {
         return getName();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.local(this);
     }

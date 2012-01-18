@@ -32,7 +32,7 @@ public class NullPointerColorer extends BodyTransformer {
     public static NullPointerColorer v() { return G.v().soot_jimple_toolkits_annotation_nullcheck_NullPointerColorer(); }
 
 	protected void internalTransform (Body b, String phaseName, Map options) {
-		
+
 		BranchedRefVarsAnalysis analysis = new BranchedRefVarsAnalysis (
 				new ExceptionalUnitGraph(b));
 
@@ -40,10 +40,10 @@ public class NullPointerColorer extends BodyTransformer {
 
 		while (it.hasNext()) {
 			Stmt s = (Stmt)it.next();
-			
+
 			Iterator usesIt = s.getUseBoxes().iterator();
 			FlowSet beforeSet = (FlowSet)analysis.getFlowBefore(s);
-				
+
 			while (usesIt.hasNext()) {
 				ValueBox vBox = (ValueBox)usesIt.next();
 				addColorTags(vBox, beforeSet, s, analysis);
@@ -64,7 +64,7 @@ public class NullPointerColorer extends BodyTransformer {
             Object next = keysIt.next();
             if (next instanceof KeyTag){
                 if (((KeyTag)next).analysisType().equals("NullCheckTag")){
-                    keysAdded = true;  
+                    keysAdded = true;
                 }
             }
         }
@@ -74,13 +74,13 @@ public class NullPointerColorer extends BodyTransformer {
             b.getMethod().getDeclaringClass().addTag(new KeyTag(ColorTag.BLUE, "Nullness: Nullness Unknown", "NullCheckTag"));
         }
 	}
-	
+
 	private void addColorTags(ValueBox vBox, FlowSet set, Stmt s, BranchedRefVarsAnalysis analysis){
-		
+
 		Value val = vBox.getValue();
 		if (val.getType() instanceof RefLikeType) {
 			//G.v().out.println(val+": "+val.getClass().toString());
-		
+
 			int vInfo = analysis.anyRefInfo(val, set);
 
 			switch (vInfo) {
@@ -91,7 +91,7 @@ public class NullPointerColorer extends BodyTransformer {
 					break;
 						 }
 				case 2 : {
-					// analysis.kNonNull 
+					// analysis.kNonNull
 					s.addTag(new StringTag(val+": NonNull", "NullCheckTag"));
 					vBox.addTag(new ColorTag(ColorTag.GREEN, "NullCheckTag"));
 					break;
@@ -111,7 +111,7 @@ public class NullPointerColorer extends BodyTransformer {
 			}
 		}
 		else {
-			
+
 		}
 	}
 }

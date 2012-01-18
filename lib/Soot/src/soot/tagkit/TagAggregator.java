@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -45,7 +45,7 @@ public abstract class TagAggregator extends BodyTransformer {
     protected void internalTransform(Body b, String phaseName, Map options)
     {
         BafBody body = (BafBody) b;
-       
+
 	/* clear the aggregator first. */
         tags.clear();
 	units.clear();
@@ -56,11 +56,11 @@ public abstract class TagAggregator extends BodyTransformer {
             for( Iterator tagIt = unit.getTags().iterator(); tagIt.hasNext(); ) {
                 final Tag tag = (Tag) tagIt.next();
                 if( wantTag( tag ) ) considerTag( tag, unit );
-	    }         
-        }        
+	    }
+        }
 
 	if(units.size() > 0) {
-            b.addTag( new CodeAttribute(aggregatedName(), 
+            b.addTag( new CodeAttribute(aggregatedName(),
                  new LinkedList<Unit>(units), new LinkedList<Tag>(tags)) );
         }
         fini();

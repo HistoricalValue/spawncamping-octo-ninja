@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,14 +40,14 @@ public class ObjExprBox extends ExprBox
     public boolean canContainValue(Value value)
     {
         return value instanceof ConcreteRef ||
-            value instanceof InvokeExpr || 
+            value instanceof InvokeExpr ||
         value instanceof NewArrayExpr ||
         value instanceof NewMultiArrayExpr ||
             value instanceof Local ||
         value instanceof NullConstant ||
         value instanceof StringConstant ||
         value instanceof ClassConstant ||
-            (value instanceof CastExpr && 
+            (value instanceof CastExpr &&
                 canContainValue(((CastExpr)value).getOp()));
     }
 }

@@ -41,7 +41,7 @@ public class CoffiClassSource extends ClassSource
         try {
             classFile.close();
         } catch (IOException e) { throw new RuntimeException("!?"); }
-        
+
         IInitialResolver.Dependencies deps = new IInitialResolver.Dependencies();
         deps.typesToSignature.addAll(references);
         return deps;

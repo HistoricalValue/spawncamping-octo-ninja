@@ -24,7 +24,7 @@ public abstract class ASTAggregatedCondition extends ASTCondition{
     ASTCondition    left;
     ASTCondition    right;
     boolean not;//used to see if the condition has a not infront of it
-    
+
     public ASTAggregatedCondition(ASTCondition left, ASTCondition right){
     	not=false;//by default condition does not have a not
     	this.left = left;

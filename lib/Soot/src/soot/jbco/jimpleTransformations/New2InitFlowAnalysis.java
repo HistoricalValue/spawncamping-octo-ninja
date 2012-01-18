@@ -26,26 +26,26 @@ import soot.*;
 import soot.jimple.*;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 10-Jul-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 10-Jul-2006
  */
 public class New2InitFlowAnalysis extends BackwardFlowAnalysis {
 
   FlowSet emptySet = new ArraySparseSet();
-  
+
   public New2InitFlowAnalysis(DirectedGraph graph) {
     super(graph);
-    
+
     doAnalysis();
   }
 
   protected void flowThrough(Object in, Object d, Object out) {
     FlowSet inf = (FlowSet)in;
     FlowSet outf = (FlowSet)out;
-    
+
     inf.copy(outf);
-    
+
     if (d instanceof DefinitionStmt) {
       DefinitionStmt ds = (DefinitionStmt)d;
       if (ds.getRightOp() instanceof NewExpr) {
@@ -53,8 +53,8 @@ public class New2InitFlowAnalysis extends BackwardFlowAnalysis {
         if (v instanceof Local && inf.contains(v))
           outf.remove(v);
       }
-    } 
-    
+    }
+
     else {
       Iterator it = ((Unit)d).getUseBoxes().iterator();
       while (it.hasNext()) {
@@ -84,7 +84,7 @@ public class New2InitFlowAnalysis extends BackwardFlowAnalysis {
   protected void merge(Object in1, Object in2, Object out) {
     FlowSet inSet1 = (FlowSet) in1,
     inSet2 = (FlowSet) in2;
-    
+
     FlowSet outSet = (FlowSet) out;
 
     inSet1.union(inSet2, outSet);

@@ -36,7 +36,7 @@ public class DependenceGraph implements Attribute
 	    return from == o.from && to == o.to;
 	}
     }
-    
+
     public boolean areAdjacent( short from, short to ) {
 	if( from > to ) return areAdjacent( to, from );
 	if( from < 0 || to < 0 ) return false;

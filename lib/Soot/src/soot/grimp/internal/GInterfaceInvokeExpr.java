@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -54,8 +54,8 @@ public class GInterfaceInvokeExpr extends AbstractInterfaceInvokeExpr
     {
         String leftOp = opString;
 
-        if (getBase() instanceof Precedence && 
-            ((Precedence)getBase()).getPrecedence() < getPrecedence()) 
+        if (getBase() instanceof Precedence &&
+            ((Precedence)getBase()).getPrecedence() < getPrecedence())
             leftOp = "(" + leftOp + ")";
         return leftOp + rightString;
     }
@@ -76,7 +76,7 @@ public class GInterfaceInvokeExpr extends AbstractInterfaceInvokeExpr
 
         buffer.append(")");
 
-        return toString(getBase(), getBase().toString(), 
+        return toString(getBase(), getBase().toString(),
                         buffer.toString());
     }
 
@@ -100,16 +100,16 @@ public class GInterfaceInvokeExpr extends AbstractInterfaceInvokeExpr
         up.literal(")");
     }
 
-    
-    public Object clone() 
+
+    public Object clone()
     {
         List argList = new ArrayList(getArgCount());
 
         for(int i = 0; i < getArgCount(); i++) {
             argList.add(i, Grimp.cloneIfNecessary(getArg(i)));
         }
-            
-        return new  GInterfaceInvokeExpr(Grimp.cloneIfNecessary(getBase()), 
+
+        return new  GInterfaceInvokeExpr(Grimp.cloneIfNecessary(getBase()),
             methodRef, argList);
     }
 

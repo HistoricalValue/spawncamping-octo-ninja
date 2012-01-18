@@ -40,7 +40,7 @@ public interface MultiMap<K, V> {
     public boolean putAll(K key, Collection<? extends V> vals);
 
     public Set<V> removeAll(K key);
-    
+
     public void clear();
 
     public boolean isEmpty();

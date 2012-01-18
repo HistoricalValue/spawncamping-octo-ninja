@@ -60,10 +60,10 @@ public abstract class BranchedFlowAnalysis<N extends Unit,A> extends AbstractFlo
         unitToAfterBranchFlow = new HashMap<Unit, ArrayList<A>>(graph.size() * 2 + 1, 0.7f);
     }
 
-    /** Given the merge of the <code>in</code> sets, 
+    /** Given the merge of the <code>in</code> sets,
      * compute the <code>fallOut</code> and <code>branchOuts</code>
      * set for <code>s</code>. */
-    protected abstract void flowThrough(A in, Unit s, 
+    protected abstract void flowThrough(A in, Unit s,
                                         List<A> fallOut, List<A> branchOuts);
 
     public A getFallFlowAfter(Unit s)

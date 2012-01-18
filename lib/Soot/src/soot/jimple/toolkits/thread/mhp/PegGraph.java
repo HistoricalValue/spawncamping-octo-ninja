@@ -39,11 +39,11 @@ import java.io.*;
 import soot.tagkit.*;
 
 /**
- *  Oct. 7, 2003  modify buildPegChain() for building chain without inliner. 
+ *  Oct. 7, 2003  modify buildPegChain() for building chain without inliner.
  *  June 19, 2003 add begin node to peg
- *  June 18, 2003 modify the iterator() to be iterator for all nodes of PEG 
+ *  June 18, 2003 modify the iterator() to be iterator for all nodes of PEG
  *                and mainIterator() to be the iterator for main chain.
- *  June 12, 2003 add monitor Map, 
+ *  June 12, 2003 add monitor Map,
  *                    notifyAll Map,
  *                    waitingNodes Map.
  */
@@ -70,7 +70,7 @@ public class PegGraph implements DirectedGraph
 	private List tails;
 	//    private long numberOfEdge = 0;
 	protected HashMap<Object,List> unitToSuccs;
-	protected HashMap<Object,List> unitToPreds;   
+	protected HashMap<Object,List> unitToPreds;
 	private HashMap unitToPegMap;
 	public HashMap<JPegStmt,List> startToThread;
 	public HashMap startToAllocNodes;
@@ -80,7 +80,7 @@ public class PegGraph implements DirectedGraph
 	private Set methodsNeedingInlining;
 	private boolean needInlining;
 	private Set<List> synch;
-	private Set<JPegStmt> specialJoin;   
+	private Set<JPegStmt> specialJoin;
 	private Body body;
 	private Chain unitChain;
 	private Chain mainPegChain;
@@ -103,39 +103,39 @@ public class PegGraph implements DirectedGraph
 	List<List> inlineSites;
 	Map<SootMethod, String> synchObj;
 	Set multiRunAllocNodes;
-	
+
 	/**
 	 *   Constructs  a graph for the units found in the provided
 	 *   Body instance. Each node in the graph corresponds to
 	 *   a unit. The edges are derived from the control flow.
-	 *   
+	 *
 	 *   @param Body               The underlying body of main thread
 	 *   @param addExceptionEdges  If true then the control flow edges associated with
 	 *                             exceptions are added.
 	 *   @param Hierarchy          Using class hierarchy analysis to find the run method of started thread
 	 *   @param PointsToAnalysis   Using point to analysis (SPARK package) to improve the precision of results
 	 */
-	
-	public PegGraph(CallGraph callGraph, Hierarchy hierarchy, PAG pag, Set<Object> methodsNeedingInlining, Set<AllocNode> allocNodes, List inlineSites, Map synchObj, Set<AllocNode> multiRunAllocNodes, Map allocNodeToObj, Body unitBody, 
+
+	public PegGraph(CallGraph callGraph, Hierarchy hierarchy, PAG pag, Set<Object> methodsNeedingInlining, Set<AllocNode> allocNodes, List inlineSites, Map synchObj, Set<AllocNode> multiRunAllocNodes, Map allocNodeToObj, Body unitBody,
 			SootMethod sm,
 			boolean addExceptionEdges,
 			boolean dontAddEdgeFromStmtBeforeAreaOfProtectionToCatchBlock) {
-		
+
 		/* public PegGraph( Body unitBody, Hierarchy hierarchy,  boolean addExceptionEdges,
 		 boolean dontAddEdgeFromStmtBeforeAreaOfProtectionToCatchBlock) {
 		 */
-		
-		this( callGraph, hierarchy, pag, methodsNeedingInlining, allocNodes, inlineSites, synchObj, multiRunAllocNodes, allocNodeToObj, unitBody, "main",  sm, addExceptionEdges, 
+
+		this( callGraph, hierarchy, pag, methodsNeedingInlining, allocNodes, inlineSites, synchObj, multiRunAllocNodes, allocNodeToObj, unitBody, "main",  sm, addExceptionEdges,
 				dontAddEdgeFromStmtBeforeAreaOfProtectionToCatchBlock);
 	}
-	
-	
-	
+
+
+
 	/**
 	 *   Constructs  a graph for the units found in the provided
 	 *   Body instance. Each node in the graph corresponds to
 	 *   a unit. The edges are derived from the control flow.
-	 *   
+	 *
 	 *   @param body               The underlying body we want to make a
 	 *                             graph for.
 	 *   @param addExceptionEdges  If true then the control flow edges associated with
@@ -164,7 +164,7 @@ public class PegGraph implements DirectedGraph
 			System.err.println("Errors occur during create FileWriter !");
 //			throw io;
 		}
-		
+
 		body = unitBody;
 		synch = new HashSet<List>();
 		exceHandlers = new HashSet<Unit>();
@@ -187,7 +187,7 @@ public class PegGraph implements DirectedGraph
 		this.allocNodeToObj = new HashMap<AllocNode, String>(size*2+1,0.7f);
 		allocNodeToThread = new HashMap<AllocNode, PegChain>(size*2+1,0.7f);
 		notifyAll = new HashMap<String, Set<JPegStmt>>(size*2+1,0.7f);
-		
+
 		methodsNeedingInlining = new HashSet();
 		allNodes = new ArraySparseSet();
 		canNotBeCompacted = new HashSet();
@@ -195,23 +195,23 @@ public class PegGraph implements DirectedGraph
 		specialJoin = new HashSet<JPegStmt>();
 		//       if(Main.isVerbose)
 		//   System.out.println("     Constructing PegGraph...");
-		
+
 		//if(Main.isProfilingOptimization)
 		//   Main.graphTimer.start();
 		//make a peg for debug
-		/*	
+		/*
 		 mainPegChain = new HashChain();
 		 specialTreatment1();
 		 */
 		//end make a peg
-		
-		
+
+
 		UnitGraph mainUnitGraph = new CompleteUnitGraph(body);
 		//	mainPegChain = new HashChain();
 		mainPegChain = new PegChain( callGraph, hierarchy, pag, threadAllocSites, methodsNeedingInlining, allocNodes, inlineSites, synchObj, multiRunAllocNodes, allocNodeToObj, body, sm, threadName,  true, this);
-				
+
 		//testPegChain();
-		
+
 //		System.out.println("finish building chain");
 		//testStartToThread();
 		//buildSuccessor(mainUnitGraph, mainPegChain,addExceptionEdges);
@@ -229,22 +229,22 @@ public class PegGraph implements DirectedGraph
 		addTag();
 		//	System.out.println(this.toString());
 		buildHeadsAndTails();
-		
+
 		//testIterator();
 		//testWaitingNodes();
-		
+
 		//	System.out.println("finish building heads and tails");
-		
+
 		//testSet(canNotBeCompacted, "canNotBeCompacted");
 		//	computeEdgeAndThreadNo();
 		//	testExtendingPoints();
 		//	testUnitToSucc();
-		
+
 		//testPegChain();
 		/*	if (print) {
 		 PegToDotFile printer1 = new PegToDotFile(this, false, sm.getName());
 		 }
-		 */  
+		 */
 		try{
 			fileWriter.flush();
 			fileWriter.close();
@@ -254,8 +254,8 @@ public class PegGraph implements DirectedGraph
 			//        throw io;
 		}
 		//System.out.println("==threadAllocaSits==\n"+threadAllocSites.toString());
-		
-	} 
+
+	}
 	protected Map getStartToBeginNodes(){
 		return startToBeginNodes;
 	}
@@ -265,17 +265,17 @@ public class PegGraph implements DirectedGraph
 	protected Map getUnitToPegMap(){
 		return unitToPegMap;
 	}
-	
-	
+
+
 	// This method adds the monitorenter/exit statements into whichever pegChain contains the corresponding node statement
 	protected void addMonitorStmt(){
-		//System.out.println("====entering addMonitorStmt");	
+		//System.out.println("====entering addMonitorStmt");
 		if (synch.size()>0){
 			// System.out.println("synch: "+synch);
 			Iterator<List> it = synch.iterator();
 			while (it.hasNext()){
 				List list = it.next();
-				
+
 				JPegStmt node = (JPegStmt)list.get(0);
 				JPegStmt enter = (JPegStmt)list.get(1);
 				JPegStmt exit = (JPegStmt)list.get(2);
@@ -285,10 +285,10 @@ public class PegGraph implements DirectedGraph
 				//add for test
 				//System.out.println("allNodes contains node: "+allNodes.contains(node));
 				//end add for test
-				
+
 				{
 					if (!mainPegChain.contains(node)){
-						
+
 						boolean find = false;
 						//System.out.println("main chain does not contain node");
 						Set maps = startToThread.entrySet();
@@ -313,18 +313,18 @@ public class PegGraph implements DirectedGraph
 							System.err.println("fail to find stmt: "+node+" in chains!");
 							System.exit(1);
 						}
-						
+
 						//this.toString();
 					}
 					else{
 						mainPegChain.add(enter);
 						mainPegChain.add(exit);
 					}
-				}		
-				
+				}
+
 				allNodes.add(enter);
 				allNodes.add(exit);
-				
+
 				insertBefore(node, enter);
 				insertAfter(node, exit);
 			}
@@ -351,81 +351,81 @@ public class PegGraph implements DirectedGraph
 		//end add for test
 	}
 	private void insertBefore(JPegStmt node, JPegStmt enter){
-		
+
 		//build preds of before
-		
+
 		List predOfBefore = new ArrayList();
 		predOfBefore.addAll(getPredsOf(node));
 		unitToPreds.put(enter,predOfBefore );
-		
+
 		//	System.out.println("put into unitToPreds enter: "+enter);
 		//	System.out.println("put into unitToPreds value: "+predOfBefore);
 		Iterator predsIt = getPredsOf(node).iterator();
-		
+
 		//build succs of former preds of node
 		while (predsIt.hasNext()){
 			Object pred = predsIt.next();
-			
+
 			List succ = getSuccsOf(pred);
 			succ.remove(node);
 			succ.add(enter);
 			//	    System.out.println("in unitToPred pred: "+pred);
 			//	    System.out.println("in unitToPred value is: "+succ);
 		}
-		
-		
+
+
 		List succOfBefore = new ArrayList();
 		succOfBefore.add(node);
 		unitToSuccs.put(enter, succOfBefore);
 		//	System.out.println("put into unitToSuccs enter: "+enter);
 		//System.out.println("put into unitToSuccs value: "+succOfBefore);
-		
+
 		List predOfNode = new ArrayList();
 		predOfNode.add(enter);
 		unitToPreds.put(node, predOfNode);
 		//System.out.println("put into unitToPreds enter: "+node);
 		//System.out.println("put into unitToPreds value: "+predOfNode);
 		//buildPreds();
-		
+
 	}
 	private void insertAfter(JPegStmt node, JPegStmt after){
 		//System.out.println("node: "+node);
 		//System.out.println("after: "+after);
 //		System.out.println("succs of node: "+getSuccsOf(node));
-		
+
 		// this must be done first because the succs of node will be chanaged lately
 		List succOfAfter = new ArrayList();
 		succOfAfter.addAll(getSuccsOf(node));
 		unitToSuccs.put(after,succOfAfter );
-		
-		
-		Iterator succsIt = getSuccsOf(node).iterator();	
+
+
+		Iterator succsIt = getSuccsOf(node).iterator();
 		while (succsIt.hasNext()){
 			Object succ = succsIt.next();
 			List pred = getPredsOf(succ);
 			pred.remove(node);
 			pred.add(after);
 		}
-		
+
 		List succOfNode = new ArrayList();
 		succOfNode.add(after);
 		unitToSuccs.put(node, succOfNode);
-		
+
 		List predOfAfter = new ArrayList();
 		predOfAfter.add(node);
 		unitToPreds.put(after, predOfAfter);
-		
-		
-		
+
+
+
 		//	buildPredecessor(Chain pegChain);
 	}
-	
-	private void buildSuccessor(Chain pegChain)	
+
+	private void buildSuccessor(Chain pegChain)
 	{
-		
+
 		// Add regular successors
 		{
-			
+
 			HashMap unitToPeg =(HashMap)unitToPegMap.get(pegChain);
 			Iterator pegIt = pegChain.iterator();
 			JPegStmt currentNode, nextNode;
@@ -435,55 +435,55 @@ public class PegGraph implements DirectedGraph
 				//System.out.println("currentNode: "+currentNode);
 				//if the unit is "begin" node
 				nextNode = pegIt.hasNext() ? (JPegStmt) pegIt.next(): null;
-				
+
 				if (currentNode.getName().equals("begin")){
 					List<JPegStmt> successors = new ArrayList<JPegStmt>();
 					successors.add(nextNode);
 					unitToSuccs.put(currentNode, successors);
-					
-					
+
+
 					currentNode = nextNode;
 				}
 				//end June 19 add for begin node
-				
+
 				while(currentNode != null) {
 					//		    System.out.println("currentNode: "+currentNode);
 					/* If unitToSuccs contains currentNode, it is the point to inline methods,
 					 * we need not compute its successors again
 					 */
-					
+
 					if (unitToSuccs.containsKey(currentNode) && !currentNode.getName().equals("wait")){
 						currentNode = pegIt.hasNext() ? (JPegStmt) pegIt.next(): null;
 						continue;
 					}
 					List<JPegStmt> successors = new ArrayList<JPegStmt>();
 					Unit unit = currentNode.getUnit();
-					
-					
+
+
 					UnitGraph unitGraph = currentNode.getUnitGraph();
 					List unitSucc = unitGraph.getSuccsOf(unit);
 					Iterator succIt = unitSucc.iterator();
 					while (succIt.hasNext()){
 						Unit un = (Unit)succIt.next();
-						
+
 						//Don't build the edge from "monitor exit" to exception handler
-						
+
 						if (unit instanceof ExitMonitorStmt && exceHandlers.contains(un) ){
 							//System.out.println("====find it! unit: "+unit+"\n un: "+un);
 							continue;
 						}
-						
+
 						else if ( unitToPeg.containsKey(un) ){
 							JPegStmt pp= (JPegStmt)(unitToPeg.get(un));
 							if (pp !=null && !successors.contains(pp) )
 								successors.add(pp);
 						}
-						
+
 					}//end while
-					
+
 					if (currentNode.getName().equals("wait")){
 						while ( !(currentNode.getName().equals("notified-entry"))){
-							currentNode = pegIt.hasNext() ? (JPegStmt) pegIt.next(): null;  
+							currentNode = pegIt.hasNext() ? (JPegStmt) pegIt.next(): null;
 						}
 						unitToSuccs.put(currentNode, successors);
 						//System.out.println("put key: "+currentNode+" into unitToSucc");
@@ -492,14 +492,14 @@ public class PegGraph implements DirectedGraph
 						unitToSuccs.put(currentNode, successors);
 					}
 					if (currentNode.getName().equals("start")){
-						
+
 //						System.out.println("-----build succ for start----");
-						
+
 						if (startToThread.containsKey(currentNode)){
 							List runMethodChainList = startToThread.get(currentNode);
 							Iterator possibleMethodIt = runMethodChainList.iterator();
 							while (possibleMethodIt.hasNext()){
-								
+
 								Chain subChain = (Chain)possibleMethodIt.next();
 								if ( subChain != null){
 									//System.out.println("build succ for subChain");
@@ -510,23 +510,23 @@ public class PegGraph implements DirectedGraph
 									System.out.println("*********subgraph is null!!!");
 							}
 						}
-						
+
 					}
-					
-					
-					
+
+
+
 					currentNode = pegIt.hasNext() ? (JPegStmt) pegIt.next(): null;
 				}//while
-				
+
 				//June 19 add for begin node
-			}	    
+			}
 			//end June 19 add for begin node
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	/*
 	 private void deleteExitToException(){
 	 Iterator it = iterator();
@@ -546,30 +546,30 @@ public class PegGraph implements DirectedGraph
 	 */
 	private void buildPredecessor(Chain pegChain){
 		//System.out.println("==building predcessor===");
-		
+
 		// initialize the pred sets to empty
 		{
 			JPegStmt s=null;
 			Iterator unitIt = pegChain.iterator();
 			while(unitIt.hasNext()){
-				
+
 				s = (JPegStmt)unitIt.next();
-				
+
 				unitToPreds.put(s, new ArrayList());
-				
+
 			}
-			
+
 		}
 		//	System.out.println("==finish init of unitToPred===");
 		{
 			Iterator unitIt = pegChain.iterator();
-			
+
 			while(unitIt.hasNext()){
-				
+
 				Object s =  unitIt.next();
 				//		System.out.println("s is: "+s);
-				
-				
+
+
 				// Modify preds set for each successor for this statement
 				if (unitToSuccs.containsKey(s)){
 					List succList = unitToSuccs.get(s);
@@ -577,7 +577,7 @@ public class PegGraph implements DirectedGraph
 					//		    System.out.println("unitToSuccs contains "+s);
 					//		    System.out.println("succList is: "+succList);
 					while(succIt.hasNext()){
-						
+
 						//Object successor =  succIt.next();
 						JPegStmt successor = (JPegStmt)succIt.next();
 						//			System.out.println("successor is: "+successor);
@@ -604,9 +604,9 @@ public class PegGraph implements DirectedGraph
 								}
 								Iterator possibleMethodIt = runMethodChainList.iterator();
 								while (possibleMethodIt.hasNext()){
-									
+
 									Chain subChain = (Chain)possibleMethodIt.next();
-									
+
 									buildPredecessor(subChain);
 								}
 							}
@@ -616,10 +616,10 @@ public class PegGraph implements DirectedGraph
 //							System.exit(1);
 						}
 						//			unitToPreds.put(successor, predList);
-						
-						
+
+
 					}
-					
+
 				}
 				else{
 					System.err.println("unitToSuccs does not contains key"+s);
@@ -627,24 +627,24 @@ public class PegGraph implements DirectedGraph
 				}
 			}
 		}
-		
+
 	}
-	
+
 	// Make pred lists unmodifiable.
-	
+
 	private void buildHeadsAndTails(){
-		
+
 		List tailList = new ArrayList();
 		List headList = new ArrayList();
-		
+
 		// Build the sets
 		{
 			Iterator unitIt = mainPegChain.iterator();
-			
+
 			while(unitIt.hasNext())
 			{
 				JPegStmt s = (JPegStmt) unitIt.next();
-				
+
 				List succs = unitToSuccs.get(s);
 				if(succs.size() == 0)
 					tailList.add(s);
@@ -662,29 +662,29 @@ public class PegGraph implements DirectedGraph
 		heads = (List)headList;
 		//	tails = Collections.unmodifiableList(tailList);
 		//heads = Collections.unmodifiableList(headList);
-		
+
 		Iterator tmpIt =heads.iterator();
-		
+
 		while (tmpIt.hasNext()){
 			Object temp = tmpIt.next();
 			//System.out.println(temp);
 		}
-		
-		buildPredecessor(mainPegChain); 
+
+		buildPredecessor(mainPegChain);
 	}
-	
-	
+
+
 	public boolean addPeg(PegGraph pg,Chain chain){
 		if (!pg.removeBeginNode()) return false;
 //		System.out.println("adding one peg into another");
-		
+
 //		System.out.println("after removeBeginNode===");
 		//	pg.testPegChain();
 		//System.out.println(pg);
-		
+
 		//put every node of peg into this
 		Iterator mainIt = pg.mainIterator();
-		
+
 		while (mainIt.hasNext()){
 			JPegStmt s = (JPegStmt)mainIt.next();
 //			System.out.println("add to mainPegChain: "+s);
@@ -695,7 +695,7 @@ public class PegGraph implements DirectedGraph
 //			}
 //			else
 //				chain.addLast(s);
-			
+
 		}
 		Iterator it = pg.iterator();
 		while (it.hasNext()){
@@ -707,7 +707,7 @@ public class PegGraph implements DirectedGraph
 			}
 			else
 				allNodes.add(s);
-			
+
 		}
 		//	testPegChain();
 		//	testIterator();
@@ -718,7 +718,7 @@ public class PegGraph implements DirectedGraph
 //		buildMaps(pg); // RLH
 		return true;
 	}
-	
+
 	private boolean removeBeginNode(){
 		List heads = getHeads();
 		if (heads.size() != 1){
@@ -727,7 +727,7 @@ public class PegGraph implements DirectedGraph
 			return false;
 			//	    System.exit(1);
 		}
-		
+
 		else{
 			JPegStmt head =(JPegStmt)heads.get(0);
 			//System.out.println("test head: "+head);
@@ -740,9 +740,9 @@ public class PegGraph implements DirectedGraph
 			//set the preds list of the succs of head to a new list and put succs of head into heads
 			Iterator succOfHeadIt = getSuccsOf(head).iterator();
 			while (succOfHeadIt.hasNext()){
-				
+
 				JPegStmt succOfHead = (JPegStmt)succOfHeadIt.next();
-				
+
 				unitToPreds.put(succOfHead, new ArrayList());
 				//put succs of head into heads
 				heads.add(succOfHead);
@@ -759,13 +759,13 @@ public class PegGraph implements DirectedGraph
 			else{
 				allNodes.remove(head);
 			}
-			
+
 			//remove begin node from unitToSuccs
 			if (unitToSuccs.containsKey(head)){
 				unitToSuccs.remove(head);
 			}
 		}
-		
+
 		return true;
 	}
 	protected void buildSuccsForInlining(JPegStmt stmt, Chain chain, PegGraph inlinee){
@@ -775,8 +775,8 @@ public class PegGraph implements DirectedGraph
 		/*connect heads of inlinee with the preds of invokeStmt and
 		 * delete stmt from the succs list from the preds
 		 */
-		
-		
+
+
 		Iterator predIt = getPredsOf(stmt).iterator();
 		//System.out.println("preds list: "+getPredsOf(stmt));
 		//System.out.println("preds size: "+getPredsOf(stmt).size());
@@ -792,23 +792,23 @@ public class PegGraph implements DirectedGraph
 				//System.out.println("remove : "+stmt + " from succList: \n"+succList+ "\n of pred" );
 				//remove invokeStmt
 				succList.remove(pos);
-				
-				
+
+
 				while (headsIt.hasNext()){
 					succList.add(headsIt.next());
 				}
-				unitToSuccs.put(pred, succList); 
-				
+				unitToSuccs.put(pred, succList);
+
 			}
-			
+
 			{
-				
+
 				while (headsIt.hasNext()){
 					Object head = headsIt.next();
 					List predsOfHeads = new ArrayList();
 					predsOfHeads.addAll(getPredsOf(head));
 					unitToPreds.put(head, predsOfHeads);
-					
+
 				}
 			}
 			/*
@@ -819,14 +819,14 @@ public class PegGraph implements DirectedGraph
 			 if (unitToSuccs.containsKey(s)){
 			 Iterator succIt = ((List) unitToSuccs.get(s)).iterator();
 			 while(succIt.hasNext()){
-			 
+
 			 //Object successor =  succIt.next();
 			  JPegStmt successor = (JPegStmt)succIt.next();
 			  List predList = (List) unitToPreds.get(successor);
 			  if (predList != null) {
 			  try {
 			  predList.add(s);
-			  
+
 			  } catch(NullPointerException e) {
 			  System.out.println(s + "successor: " + successor);
 			  throw e;
@@ -835,23 +835,23 @@ public class PegGraph implements DirectedGraph
 			  }
 			  }
 			  }
-			  
-			  
-			  
-			  
+
+
+
+
 			  }*/
-			
-			
+
+
 		}
-		
-		
+
+
 		/*connect tails of inlinee with the succ of invokeStmt and
-		 * delete stmt from the 
+		 * delete stmt from the
 		 */
-		
-		
+
+
 		Iterator tailsIt = inlinee.getTails().iterator();
-		{	
+		{
 			//System.out.println("tails: "+inlinee.getTails());
 			while (tailsIt.hasNext()){
 				Iterator succIt = getSuccsOf(stmt).iterator();
@@ -863,7 +863,7 @@ public class PegGraph implements DirectedGraph
 					//System.out.println("succList: "+succList);
 				}
 				else{
-					
+
 					succList = new ArrayList();
 				}
 				while (succIt.hasNext()){
@@ -878,28 +878,28 @@ public class PegGraph implements DirectedGraph
 					}
 					else{
 						if (predListOfSucc.size() != 0){
-							
+
 							int pos = predListOfSucc.indexOf(stmt);
 							if (pos > 0 || pos == 0 ){
-								
+
 								//	System.out.println("remove stmt: "+stmt+" from the preds list"+predListOfSucc+" of the succ");
 								predListOfSucc.remove(pos);
 							}
-							
+
 							//		System.out.println("remove(from PRED): ");
 						}
 					}
-					unitToPreds.put(succ,predListOfSucc); 
-					
+					unitToPreds.put(succ,predListOfSucc);
+
 				}
 				unitToSuccs.put(tail, succList);
 				//System.out.println("put: "+tail);
 				//System.out.println("succList: "+succList+ "into unitToSucc");
-				
-				
+
+
 			}
 		}
-		
+
 		//add Nov 1
 		{
 			tailsIt = inlinee.getTails().iterator();
@@ -908,7 +908,7 @@ public class PegGraph implements DirectedGraph
 				if (unitToSuccs.containsKey(s)){
 					Iterator succIt = unitToSuccs.get(s).iterator();
 					while(succIt.hasNext()){
-						
+
 						//Object successor =  succIt.next();
 						JPegStmt successor = (JPegStmt)succIt.next();
 						List<JPegStmt> predList = unitToPreds.get(successor);
@@ -927,17 +927,17 @@ public class PegGraph implements DirectedGraph
 					}
 				}
 			}
-			
-			
-			
+
+
+
 		}
 		//end add Nov 1
-		
+
 		//System.out.println("stmt: "+stmt);
 		//remove stmt from allNodes and mainPegChain
 		//System.out.println("mainPegChain contains stmt: "+mainPegChain.contains(stmt));
 //		testPegChain();
-		
+
 		if (!allNodes.contains(stmt)){
 			System.err.println("fail to find begin node in  allNodes!");
 			System.exit(1);
@@ -946,11 +946,11 @@ public class PegGraph implements DirectedGraph
 			allNodes.remove(stmt);
 			// System.out.println("remove from allNode: "+stmt);
 		}
-		
+
 		if (!chain.contains(stmt)){
 			System.err.println("Error! Chain does not contains stmt (extending point)!");
 			System.exit(1);
-			
+
 		}
 		else{
 			if (!chain.remove(stmt)){
@@ -1002,11 +1002,11 @@ public class PegGraph implements DirectedGraph
 		if (unitToPreds.containsKey(stmt)) {
 			unitToPreds.remove(stmt);
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	protected void buildMaps(PegGraph pg){
 		exceHandlers.addAll(pg.getExceHandlers());
 		startToThread.putAll(pg.getStartToThread());
@@ -1014,7 +1014,7 @@ public class PegGraph implements DirectedGraph
 		startToBeginNodes.putAll(pg.getStartToBeginNodes());
 		waitingNodes.putAll(pg.getWaitingNodes());
 		notifyAll.putAll(pg.getNotifyAll());
-		canNotBeCompacted.addAll(pg.getCanNotBeCompacted());	
+		canNotBeCompacted.addAll(pg.getCanNotBeCompacted());
 		synch.addAll(pg.getSynch());
 		threadNameToStart.putAll(pg.getThreadNameToStart());
 		specialJoin.addAll(pg.getSpecialJoin());
@@ -1022,11 +1022,11 @@ public class PegGraph implements DirectedGraph
 		threadAllocSites.addAll(pg.getThreadAllocSites());
 		allocNodeToThread.putAll(pg.getAllocNodeToThread());
 	}
-	
+
 	protected void buildPreds(){
 		buildPredecessor(mainPegChain);
 		Set maps = getStartToThread().entrySet();
-		for(Iterator iter=maps.iterator(); iter.hasNext();){ 
+		for(Iterator iter=maps.iterator(); iter.hasNext();){
 			Map.Entry entry = (Map.Entry)iter.next();
 			List runMethodChainList = (List)entry.getValue();
 			Iterator it = runMethodChainList.iterator();
@@ -1034,7 +1034,7 @@ public class PegGraph implements DirectedGraph
 				Chain chain=(Chain)it.next();
 				//	System.out.println("chain is null: "+(chain == null));
 				buildPredecessor(chain);
-				
+
 			}
 		}
 	}
@@ -1042,7 +1042,7 @@ public class PegGraph implements DirectedGraph
 		Set maps = monitor.entrySet();
 		for(Iterator iter=maps.iterator(); iter.hasNext();){
 			Map.Entry entry = (Map.Entry)iter.next();
-			
+
 			FlowSet fs  = (FlowSet)entry.getValue();
 			Iterator it = fs.iterator();
 			while (it.hasNext()){
@@ -1061,45 +1061,45 @@ public class PegGraph implements DirectedGraph
 	protected  HashMap getUnitToSuccs(){
 		return (HashMap)unitToSuccs;
 	}
-	
+
 	protected HashMap getUnitToPreds(){
 		return (HashMap)unitToPreds;
 	}
-	
+
 	public Body getBody()
 	{
 		return body;
 	}
-	
-	
+
+
 	/* DirectedGraph implementation */
 	public List getHeads()
 	{
 		return heads;
 	}
-	
+
 	public List getTails()
 	{
 		return tails;
 	}
-	
+
 	public List getPredsOf(Object s)
 	{
 		if(!unitToPreds.containsKey(s))
 			throw new RuntimeException("Invalid stmt" + s);
-		
+
 		return unitToPreds.get(s);
 	}
-	
+
 	public List getSuccsOf(Object s)
 	{
-		
+
 		if(!unitToSuccs.containsKey(s))
 		{
 			return new ArrayList();
 //			throw new RuntimeException("Invalid stmt:" + s);
 		}
-		
+
 		return unitToSuccs.get(s);
 	}
 	public Set getCanNotBeCompacted(){
@@ -1109,19 +1109,19 @@ public class PegGraph implements DirectedGraph
 	{
 		return allNodes.size();
 //		return pegSize;
-		
-	}  
-	
+
+	}
+
 	public Iterator mainIterator()
-	{ 
+	{
 		return mainPegChain.iterator();
-	} 
+	}
 	public Iterator iterator()
 	{
-		
+
 		return allNodes.iterator();
 	}
-	public String toString() 
+	public String toString()
 	{
 		Iterator it = iterator();
 		StringBuffer buf = new StringBuffer();
@@ -1134,7 +1134,7 @@ public class PegGraph implements DirectedGraph
 			l = new ArrayList(); l.addAll(getSuccsOf(u));
 			buf.append("succs: "+l+"\n");
 		}
-		
+
 		return buf.toString();
 	}
 	protected Set<Unit> getExceHandlers(){
@@ -1143,7 +1143,7 @@ public class PegGraph implements DirectedGraph
 	protected void setMonitor(Map<String, FlowSet> m){
 		monitor = m;
 	}
-	
+
 	public Map<String, FlowSet> getMonitor(){
 		return (Map<String, FlowSet>)monitor;
 	}
@@ -1205,19 +1205,19 @@ public class PegGraph implements DirectedGraph
 			System.out.println("---key=  "+entry.getKey());
 			FlowSet fs = (FlowSet)entry.getValue();
 			if (fs.size()>0){
-				
+
 				System.out.println("**waiting nodes set:");
 				Iterator it = fs.iterator();
 				while (it.hasNext()){
 					JPegStmt  unit =(JPegStmt)it.next();
-					
+
 					System.out.println(unit.toString());
 				}
 			}
 		}
-		System.out.println("------------waitingnodes---ends--------");	
+		System.out.println("------------waitingnodes---ends--------");
 	}
-	
+
 	protected void testStartToThread(){
 		System.out.println("=====test startToThread ");
 		Set maps = startToThread.entrySet();
@@ -1228,13 +1228,13 @@ public class PegGraph implements DirectedGraph
 			System.out.println("---key=  "+tag+" "+key);
 			/*	    List list = (List)entry.getValue();
 			 if (list.size()>0){
-			 
+
 			 System.out.println("**thread set:");
 			 Iterator it = list.iterator();
 			 while (it.hasNext()){
 			 Chain chain =(Chain)it.next();
 			 Iterator chainIt = chain.iterator();
-			 
+
 			 System.out.println("the size of chain is: "+chain.size());
 			 while (chainIt.hasNext()){
 			 JPegStmt stmt = (JPegStmt)chainIt.next();
@@ -1244,7 +1244,7 @@ public class PegGraph implements DirectedGraph
 			 }
 			 */
 		}
-		System.out.println("=========startToThread--ends--------");	
+		System.out.println("=========startToThread--ends--------");
 	}
 	protected void testUnitToPeg(HashMap unitToPeg){
 		System.out.println("=====test unitToPeg ");
@@ -1255,9 +1255,9 @@ public class PegGraph implements DirectedGraph
 			JPegStmt s= (JPegStmt)entry.getValue();
 			System.out.println("--value= "+s);
 		}
-		System.out.println("=========unitToPeg--ends--------");	
+		System.out.println("=========unitToPeg--ends--------");
 	}
-	
+
 	protected void testUnitToSucc(){
 		System.out.println("=====test unitToSucc ");
 		Set maps = unitToSuccs.entrySet();
@@ -1268,20 +1268,20 @@ public class PegGraph implements DirectedGraph
 			System.out.println("---key=  "+tag+" "+key);
 			List list = (List)entry.getValue();
 			if (list.size()>0){
-				
+
 				System.out.println("**succ set: size: "+list.size());
 				Iterator it = list.iterator();
 				while (it.hasNext()){
 					JPegStmt stmt = (JPegStmt)it.next();
 					Tag tag1 = (Tag)stmt.getTags().get(0);
 					System.out.println(tag1+" "+stmt);
-					
-					
+
+
 				}
-				
+
 			}
 		}
-		System.out.println("=========unitToSucc--ends--------");	
+		System.out.println("=========unitToSucc--ends--------");
 	}
 	protected void testUnitToPred(){
 		System.out.println("=====test unitToPred ");
@@ -1293,26 +1293,26 @@ public class PegGraph implements DirectedGraph
 			System.out.println("---key=  "+tag+" "+key);
 			List list = (List)entry.getValue();
 			//	    if (list.size()>0){
-			
+
 			System.out.println("**pred set: size: "+list.size());
 			Iterator it = list.iterator();
 			while (it.hasNext()){
 				JPegStmt stmt = (JPegStmt)it.next();
 				Tag tag1 = (Tag)stmt.getTags().get(0);
 				System.out.println(tag1+" "+stmt);
-				
-				
+
+
 			}
-			
+
 			//  }
 		}
-		System.out.println("=========unitToPred--ends--------");	
+		System.out.println("=========unitToPred--ends--------");
 	}
 	protected void addTag(){
 		//add tag for each stmt
 		Iterator it = iterator();
 //		int count = 0;
-		
+
 		while (it.hasNext()){
 			JPegStmt stmt = (JPegStmt)it.next();
 			int count = Counter.getTagNo();
@@ -1338,13 +1338,13 @@ public class PegGraph implements DirectedGraph
 		for(Iterator iter=maps.iterator(); iter.hasNext();){
 			Map.Entry entry = (Map.Entry)iter.next();
 			Object key = entry.getKey();
-			
+
 			System.out.println("---key=  "+key);
 			JPegStmt stmt  = (JPegStmt)entry.getValue();
 			Tag tag1 = (Tag)stmt.getTags().get(0);
 			System.out.println("value: "+tag1+" "+stmt);
-			
-			
+
+
 		}
 		System.out.println("=========ThreadNameToStart--ends--------");
 	}
@@ -1354,14 +1354,14 @@ public class PegGraph implements DirectedGraph
 		for(Iterator iter=maps.iterator(); iter.hasNext();){
 			Map.Entry entry = (Map.Entry)iter.next();
 			Object key = entry.getKey();
-			
+
 			System.out.println("---key=  "+key);
-			
+
 			System.out.println("value: "+entry.getValue());
-			
-			
+
+
 		}
-		System.out.println("=========JoinStmtToThread--ends--------");	
+		System.out.println("=========JoinStmtToThread--ends--------");
 	}
 	protected void testPegChain(Chain chain)
 	{
@@ -1373,10 +1373,10 @@ public class PegGraph implements DirectedGraph
 			 if (!(o instanceof JPegStmt))  System.out.println("not instanceof JPegStmt: "+o);
 			 JPegStmt s = (JPegStmt)o;
 			 */
-			JPegStmt stmt =(JPegStmt)it.next(); 
+			JPegStmt stmt =(JPegStmt)it.next();
 			System.out.println(stmt.toString());
 			/*if (stmt.getName().equals("start")){
-			 
+
 			 System.out.println("find start method in : " + stmt.toString() );
 			 List list =(List)startToThread.get(stmt);
 			 Iterator chainIt = list.iterator();
@@ -1391,26 +1391,26 @@ public class PegGraph implements DirectedGraph
 			 }
 			 */
 		}
-		
+
 	}
 	protected void computeEdgeAndThreadNo(){
 		Iterator it = iterator();
 		int numberOfEdge = 0;
 		while (it.hasNext()){
 			List succList =(List)getSuccsOf(it.next());
-			
+
 			numberOfEdge = numberOfEdge + succList.size();
-			
+
 		}
 		numberOfEdge = numberOfEdge + startToThread.size();
-		
+
 		System.err.println("**number of edges: "+numberOfEdge);
-		
+
 		System.err.println("**number of threads: "+ (startToThread.size()+ 1 ));
-		
-		
-		
-		
+
+
+
+
 		/*	Set keySet = startToThread.keySet();
 		 Iterator keyIt = keySet.iterator();
 		 while (keyIt.hasNext()){
@@ -1422,10 +1422,10 @@ public class PegGraph implements DirectedGraph
 		 }
 		 }
 		 */
-		
+
 	}
-	
-	
+
+
 	protected void testList(List list){
 //		System.out.println("test list");
 		Iterator listIt = list.iterator();
@@ -1433,7 +1433,7 @@ public class PegGraph implements DirectedGraph
 			System.out.println(listIt.next());
 		}
 	}
-	
+
 	protected void testSet(Set set, String name){
 		System.out.println("$test set "+name);
 		Iterator setIt = set.iterator();
@@ -1444,18 +1444,18 @@ public class PegGraph implements DirectedGraph
 			System.out.println(s);
 		}
 	}
-	
+
 	public void testMonitor(){
 		System.out.println("=====test monitor size: "+monitor.size());
 		Set maps = monitor.entrySet();
 		for(Iterator iter=maps.iterator(); iter.hasNext();){
 			Map.Entry entry = (Map.Entry)iter.next();
 			String key = (String)entry.getKey();
-			
+
 			System.out.println("---key=  "+key);
 			FlowSet list = (FlowSet)entry.getValue();
 			if (list.size()>0){
-				
+
 				System.out.println("**set:  "+list.size());
 				Iterator it = list.iterator();
 				while (it.hasNext()){
@@ -1480,13 +1480,13 @@ public class PegGraph implements DirectedGraph
 						}
 						System.out.println("---list--end-");
 					}
-					
+
 				}
-				
+
 			}
 		}
 		System.out.println("=========monitor--ends--------");
-	} 
-	
-	
+	}
+
+
 }

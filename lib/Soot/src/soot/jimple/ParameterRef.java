@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -64,19 +64,19 @@ public class ParameterRef implements IdentityRef
     {
         return n * 101 + paramType.hashCode() * 17;
     }
-    
+
     /** Create a new ParameterRef object with the same paramType and number. */
-    public Object clone() 
+    public Object clone()
     {
         return new ParameterRef(paramType, n);
     }
-    
+
     /** Converts the given ParameterRef into a String i.e. <code>@parameter0: .int</code>. */
     public String toString()
     {
-        return "@parameter" + n + ": " + paramType;                                                   
+        return "@parameter" + n + ": " + paramType;
     }
-    
+
     public void toString( UnitPrinter up )
     {
         up.identityRef(this);

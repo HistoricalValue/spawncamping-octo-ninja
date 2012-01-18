@@ -15,7 +15,7 @@ public class Main {
 	if ((extension == null && args.length != 1) ||
 	    (extension != null && args.length != 3)) {
 	    System.err.println("Usage: " +
-			       "polyglot.util.typedump.Main "+ 
+			       "polyglot.util.typedump.Main "+
 			       "[-ext <extension>] <classname>");
 	    System.exit(1);
 	}
@@ -56,7 +56,7 @@ public class Main {
 	    TypeDumper t = TypeDumper.load(className, ts);
 
 	    CodeWriter cw = new CodeWriter(System.out, 72);
-	    
+
 	    t.dump(cw);
 	    cw.newline(0);
 

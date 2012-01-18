@@ -20,7 +20,7 @@
 package soot.dava;
 
 
-public class RetriggerAnalysisException extends Exception 
+public class RetriggerAnalysisException extends Exception
 {
     public RetriggerAnalysisException()
     {

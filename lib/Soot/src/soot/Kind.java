@@ -24,7 +24,7 @@ import soot.util.*;
  * @author Ondrej Lhotak
  */
 public final class Kind implements Numberable
-{ 
+{
     public static final Kind INVALID = new Kind( "INVALID" );
     /** Due to explicit invokestatic instruction. */
     public static final Kind STATIC = new Kind( "STATIC" );
@@ -75,7 +75,7 @@ public final class Kind implements Numberable
     public boolean isExplicit() {
         return isInstance() || isStatic();
     }
-	
+
     /** Returns true if the call is due to an explicit instance invoke
      * statement. */
     public boolean isInstance() {

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2002.  
+ * Modified by the Sable Research Group and others 1997-2002.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -42,7 +42,7 @@ public class BytecodeOffsetTag implements Tag {
   public BytecodeOffsetTag(int offset) {
     this.offset = offset;
   }
-	
+
   /** Returns the name of this tag.
    */
   public String getName() {

@@ -32,7 +32,7 @@ public class ASTWalker
 {
     public ASTWalker( Singletons.Global g ) {}
     public static ASTWalker v() { return G.v().soot_dava_toolkits_base_AST_ASTWalker(); }
-    
+
     public void walk_stmt( ASTAnalysis a, Stmt s)
     {
 	if (a.getAnalysisDepth() < ASTAnalysis.ANALYSE_STMTS)
@@ -77,14 +77,14 @@ public class ASTWalker
 
 	    if (e instanceof BinopExpr) {
 		BinopExpr be = (BinopExpr) e;
-		
+
 		walk_value( a, be.getOp1());
 		walk_value( a, be.getOp2());
 		a.analyseBinopExpr( be);
 	    }
 	    else if (e instanceof UnopExpr) {
 		UnopExpr ue = (UnopExpr) e;
-		
+
 		walk_value( a, ue.getOp());
 		a.analyseUnopExpr( ue);
 	    }
@@ -96,32 +96,32 @@ public class ASTWalker
 		}
 	    else if (e instanceof NewArrayExpr) {
 		NewArrayExpr nae = (NewArrayExpr) e;
-		
+
 		walk_value( a, nae.getSize());
 		a.analyseNewArrayExpr( nae);
 	    }
 	    else if (e instanceof NewMultiArrayExpr) {
 		NewMultiArrayExpr nmae = (NewMultiArrayExpr) e;
-		
+
 		for (int i=0; i<nmae.getSizeCount(); i++)
 		    walk_value( a, nmae.getSize( i));
 		a.analyseNewMultiArrayExpr( nmae);
 	    }
 	    else if (e instanceof InstanceOfExpr) {
 		InstanceOfExpr ioe = (InstanceOfExpr) e;
-		
+
 		walk_value( a, ioe.getOp());
 		a.analyseInstanceOfExpr( ioe);
 	    }
 	    else if (e instanceof InvokeExpr) {
 		InvokeExpr ie = (InvokeExpr) e;
-		
-		for (int i=0; i<ie.getArgCount(); i++) 
+
+		for (int i=0; i<ie.getArgCount(); i++)
 		    walk_value( a, ie.getArg( i));
-		
+
 		if (ie instanceof InstanceInvokeExpr) {
 		    InstanceInvokeExpr iie = (InstanceInvokeExpr) ie;
-		    
+
 		    walk_value( a, iie.getBase());
 		    a.analyseInstanceInvokeExpr( iie);
 		}
@@ -136,21 +136,21 @@ public class ASTWalker
 
 	    if (r instanceof ArrayRef) {
 		ArrayRef ar = (ArrayRef) r;
-		
+
 		walk_value( a, ar.getBase());
 		walk_value( a, ar.getIndex());
 		a.analyseArrayRef( ar);
 	    }
 	    else if (r instanceof InstanceFieldRef) {
 		InstanceFieldRef ifr = (InstanceFieldRef) r;
-		
+
 		walk_value( a, ifr.getBase());
 		a.analyseInstanceFieldRef( ifr);
 	    }
 	    else
 		a.analyseRef( r);
 	}
-	else 
+	else
 	    a.analyseValue( v);
     }
 }

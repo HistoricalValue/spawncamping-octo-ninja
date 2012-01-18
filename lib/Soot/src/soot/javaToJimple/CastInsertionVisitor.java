@@ -39,7 +39,7 @@ public class CastInsertionVisitor extends polyglot.visit.AscriptionVisitor {
         if (toType.isVoid()) {
             return e;
         }
-        
+
         polyglot.util.Position p = e.position();
 
         if (toType.equals(fromType)){
@@ -73,13 +73,13 @@ public class CastInsertionVisitor extends polyglot.visit.AscriptionVisitor {
             }
             return newExpr;
         }
-        
+
         return e;
-        
+
     }
-    
+
     public polyglot.ast.Node leaveCall(polyglot.ast.Node old, polyglot.ast.Node n, polyglot.visit.NodeVisitor v) throws polyglot.types.SemanticException {
-    
+
         n = super.leaveCall(old, n, v);
 
         return n;

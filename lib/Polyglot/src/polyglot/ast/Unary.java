@@ -6,7 +6,7 @@ import polyglot.util.Enum;
  * A <code>Unary</code> represents a Java unary expression, an
  * immutable pair of an expression and an an operator.
  */
-public interface Unary extends Expr 
+public interface Unary extends Expr
 {
     /** Unary expression operator. */
     public static class Operator extends Enum {

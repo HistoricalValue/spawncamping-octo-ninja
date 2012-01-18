@@ -21,7 +21,7 @@ public class ConstructorCallChecker extends ContextVisitor
     }
 
     protected Map constructorInvocations = new HashMap();
-    
+
     protected NodeVisitor enterCall(Node n) throws SemanticException {
         if (n instanceof ConstructorCall) {
             ConstructorCall cc = (ConstructorCall)n;
@@ -35,7 +35,7 @@ public class ConstructorCallChecker extends ContextVisitor
                 }
                 ConstructorInstance srcCI = (ConstructorInstance)ctxt.currentCode();
                 ConstructorInstance destCI = cc.constructorInstance();
-                
+
                 constructorInvocations.put(srcCI, destCI);
                 while (destCI != null) {
                     destCI = (ConstructorInstance)constructorInvocations.get(destCI);
@@ -47,7 +47,7 @@ public class ConstructorCallChecker extends ContextVisitor
                 }
             }
         }
-        return this;        
+        return this;
     }
 }
 

@@ -35,7 +35,7 @@ public class JavaLangReflectProxyNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -63,11 +63,11 @@ public class JavaLangReflectProxyNative extends NativeMethodClass {
    * NOTE: assuming a close world, and this method should not
    *       be called.
    *
-   * private static native java.lang.Class defineClass0(java.lang.ClassLoader, 
-   *                                                    java.lang.String, 
+   * private static native java.lang.Class defineClass0(java.lang.ClassLoader,
+   *                                                    java.lang.String,
    *                                                    byte[], int, int);
    */
-  public 
+  public
     void java_lang_reflect_Proxy_defineClass0(SootMethod method,
 					      ReferenceVariable thisVar,
 					      ReferenceVariable returnVar,

@@ -21,8 +21,8 @@ package soot.toolkits.scalar;
 import soot.util.IdentityHashSet;
 
 /**
- * An optimized kind of {@link IdentityHashSet} that only holds two objects. (Allows for faster comparison.) 
- * 
+ * An optimized kind of {@link IdentityHashSet} that only holds two objects. (Allows for faster comparison.)
+ *
  * @author Eric Bodden
  */
 public class BinaryIdentitySet<T> {
@@ -51,7 +51,7 @@ public class BinaryIdentitySet<T> {
         result += System.identityHashCode(o2);
         return result;
     }
-    
+
     /**
      * {@inheritDoc}
      */

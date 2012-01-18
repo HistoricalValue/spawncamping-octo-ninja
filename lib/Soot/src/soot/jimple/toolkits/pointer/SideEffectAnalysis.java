@@ -35,7 +35,7 @@ public class SideEffectAnalysis {
     public void findNTRWSets( SootMethod method ) {
 	if( methodToNTReadSet.containsKey( method )
 	    && methodToNTWriteSet.containsKey( method ) ) return;
-	
+
 	MethodRWSet read = null;
 	MethodRWSet write = null;
 	for( Iterator sIt = method.retrieveActiveBody().getUnits().iterator(); sIt.hasNext(); ) {
@@ -75,7 +75,7 @@ public class SideEffectAnalysis {
     public SideEffectAnalysis( PointsToAnalysis pa, CallGraph cg, Filter filter ) {
     // This constructor allows customization of call graph edges to
     // consider via the use of a transitive targets filter.
-    // For example, using the NonClinitEdgesPred, you can create a 
+    // For example, using the NonClinitEdgesPred, you can create a
     // SideEffectAnalysis that will ignore static initializers
     // - R. Halpert 2006-12-02
 	this.pa = pa;

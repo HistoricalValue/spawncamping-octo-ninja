@@ -99,9 +99,9 @@ class LocalTypeSet extends java.util.BitSet {
                     sb.append("(("+l+","+t+") -> elim cast check) ");
                 }
             }
-            
+
         }
-        return sb.toString(); 
+        return sb.toString();
     }
 }
 

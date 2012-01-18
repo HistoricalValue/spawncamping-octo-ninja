@@ -49,7 +49,7 @@ public interface FieldDecl extends ClassMember
      * Get the type object for the initializer expression, or null.
      * We evaluate the initializer expression as if it were in an
      * initializer block (e.g., <code>{ }</code> or </code>static { }<code>).
-     */ 
+     */
     InitializerInstance initializerInstance();
 
     /** Set the type object for the initializer expression. */

@@ -49,9 +49,9 @@ public class StrictFPPropagator extends polyglot.visit.NodeVisitor {
         }
         return this;
     }
-    
+
     public polyglot.ast.Node leave(polyglot.ast.Node old, polyglot.ast.Node n, polyglot.visit.NodeVisitor nodeVisitor){
-    
+
         if (n instanceof polyglot.ast.MethodDecl) {
             polyglot.ast.MethodDecl decl = (polyglot.ast.MethodDecl)n;
             if (strict && !decl.flags().isAbstract() && !decl.flags().isStrictFP()){

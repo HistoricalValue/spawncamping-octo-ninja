@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ import soot.baf.*;
 import soot.util.*;
 import java.util.*;
 
-public class JIdentityStmt extends AbstractDefinitionStmt 
+public class JIdentityStmt extends AbstractDefinitionStmt
     implements IdentityStmt
 {
     public JIdentityStmt(Value local, Value identityValue)
@@ -62,7 +62,7 @@ public class JIdentityStmt extends AbstractDefinitionStmt
     {
         return leftBox.getValue().toString() + " := " + rightBox.getValue().toString();
     }
-    
+
     public void toString( UnitPrinter up ) {
         leftBox.toString(up);
         up.literal(" := ");
@@ -82,20 +82,20 @@ public class JIdentityStmt extends AbstractDefinitionStmt
     public void apply(Switch sw)
     {
         ((StmtSwitch) sw).caseIdentityStmt(this);
-    }    
-    
+    }
+
     public void convertToBaf(JimpleToBafContext context, List<Unit> out)
     {
         Value currentRhs = getRightOp();
         Value newRhs;
-        
+
         if(currentRhs instanceof ThisRef)
             newRhs = Baf.v().newThisRef((RefType)((ThisRef) currentRhs).getType());
         else if(currentRhs instanceof ParameterRef)
             newRhs = Baf.v().newParameterRef(((ParameterRef)currentRhs).getType(), ((ParameterRef) currentRhs).getIndex());
         else if(currentRhs instanceof CaughtExceptionRef)
-            { 
-		Unit u = Baf.v().newStoreInst(RefType.v(), 
+            {
+		Unit u = Baf.v().newStoreInst(RefType.v(),
                        context.getBafLocalOfJimpleLocal((Local) getLeftOp()));
                 out.add(u);
 
@@ -103,7 +103,7 @@ public class JIdentityStmt extends AbstractDefinitionStmt
 		while(it.hasNext()) {
 		    u.addTag((Tag) it.next());
 		}
-		return; 
+		return;
 	    }
         else
             throw new RuntimeException("Don't know how to convert unknown rhs");

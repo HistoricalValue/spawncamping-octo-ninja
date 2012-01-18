@@ -210,7 +210,7 @@ public class MethodDecl_c extends Term_c implements MethodDecl
         ct.addMethod(mi);
         return am.bypassChildren(this);
     }
-     
+
     public Context enterScope(Context c) {
         if (Report.should_report(TOPICS, 5))
 	    Report.report(5, "enter scope of method " + name);
@@ -264,8 +264,8 @@ public class MethodDecl_c extends Term_c implements MethodDecl
         if (flags().isStatic() &&
               methodInstance().container().toClass().isInnerClass()) {
             // it's a static method in an inner class.
-            throw new SemanticException("Inner classes cannot declare " + 
-                    "static methods.", this.position());             
+            throw new SemanticException("Inner classes cannot declare " +
+                    "static methods.", this.position());
         }
 
         overrideMethodCheck(tc);
@@ -312,7 +312,7 @@ public class MethodDecl_c extends Term_c implements MethodDecl
 		if (! throwDeclared) {
                     ec.throwsSet().clear();
                     Position pos = ec.exceptionPosition(t);
-                    throw new SemanticException("The exception \"" + t + 
+                    throw new SemanticException("The exception \"" + t +
                         "\" must either be caught or declared to be thrown.",
 		        pos==null?position():pos);
 		}
@@ -369,7 +369,7 @@ public class MethodDecl_c extends Term_c implements MethodDecl
     }
 
     public void prettyPrint(CodeWriter w, PrettyPrinter tr) {
-      
+
       prettyPrintHeader(flags(), w, tr);
       if (body != null) {
 	      printSubStmt(body, w, tr);
@@ -382,12 +382,12 @@ public class MethodDecl_c extends Term_c implements MethodDecl
     public void translate(CodeWriter w, Translator tr) {
         Context c = tr.context();
 		Flags flags = flags();
-	
+
 		if (c.currentClass().flags().isInterface()) {
 		    flags = flags.clearPublic();
 		    flags = flags.clearAbstract();
 		}
-		
+
 	      prettyPrintHeader(flags(), w, tr);
 	      if (body != null) {
 		      printSubStmt(body, w, tr);
@@ -462,7 +462,7 @@ public class MethodDecl_c extends Term_c implements MethodDecl
         return succs;
     }
 
-    private static final Collection TOPICS = 
+    private static final Collection TOPICS =
             CollectionUtil.list(Report.types, Report.context);
 
 }

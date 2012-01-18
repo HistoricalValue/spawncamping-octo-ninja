@@ -23,7 +23,7 @@ public class AllSharedHybridNodes {
 
 		private final static int INCREASE_FACTOR = 2;  //change to affect the
 			//speed/memory tradeoff
-		
+
 		public void add(int size, PointsToBitVector toAdd) {
 			if (map.length < size + 1)
 			// if the `map' array isn't big enough
@@ -38,7 +38,7 @@ public class AllSharedHybridNodes {
 				map[size] = new LinkedList();
 			map[size].add(toAdd);
 		}
-		
+
 		public void remove(int size, PointsToBitVector toRemove)
 		{
 /*			if (map[size] == null)

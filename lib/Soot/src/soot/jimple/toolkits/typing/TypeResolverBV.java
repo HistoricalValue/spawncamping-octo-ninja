@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -96,13 +96,13 @@ public class TypeResolverBV
 
 	typeVariableList.set(id, result);
 	typeVariableMap.put(local, result);
-	
+
 	if(DEBUG)
 	  {
 	    G.v().out.println("[LOCAL VARIABLE \"" + local + "\" -> " + id + "]");
 	  }
       }
-    
+
     return result;
   }
 
@@ -142,11 +142,11 @@ public class TypeResolverBV
   {
     int id = typeVariableList.size();
     typeVariableList.add(null);
-    
+
     TypeVariableBV result = new TypeVariableBV(id, this);
-    
+
     typeVariableList.set(id, result);
-    
+
     return result;
   }
 
@@ -159,8 +159,8 @@ public class TypeResolverBV
     NULL = hierarchy.NULL;
     typeVariable(OBJECT);
     typeVariable(NULL);
-    
-    // hack for J2ME library, reported by Stephen Cheng 
+
+    // hack for J2ME library, reported by Stephen Cheng
     if (!Options.v().j2me()) {
       typeVariable(hierarchy.CLONEABLE);
       typeVariable(hierarchy.SERIALIZABLE);
@@ -186,7 +186,7 @@ public class TypeResolverBV
           e1.printStackTrace();
           G.v().out.println("Step 1 Exception-->" + e1.getMessage());
         }
-    
+
       try
         {
           TypeResolverBV resolver = new TypeResolverBV(stmtBody, scene);
@@ -199,7 +199,7 @@ public class TypeResolverBV
           e2.printStackTrace();
           G.v().out.println("Step 2 Exception-->" + e2.getMessage());
             }
-          
+
           try
             {
               TypeResolverBV resolver = new TypeResolverBV(stmtBody, scene);
@@ -214,10 +214,10 @@ public class TypeResolverBV
               throw new RuntimeException(st.toString());
             }
         }
-    } 
+    }
     soot.jimple.toolkits.typing.integer.TypeResolver.resolve(stmtBody);
   }
-  
+
   private void debug_vars(String message)
   {
     if(DEBUG)
@@ -376,7 +376,7 @@ public class TypeResolverBV
       }
 
     if(max > 1) {
-      // hack for J2ME library, reported by Stephen Cheng 
+      // hack for J2ME library, reported by Stephen Cheng
       if (!Options.v().j2me()) {
 	typeVariable(ArrayType.v(RefType.v("java.lang.Cloneable"), max - 1));
 	typeVariable(ArrayType.v(RefType.v("java.io.Serializable"), max - 1));
@@ -392,7 +392,7 @@ public class TypeResolverBV
 
     for (TypeVariableBV var : typeVariableList) {
         int depth = var.depth();
-	
+
 	lists[depth].add(var);
       }
 
@@ -437,13 +437,13 @@ public class TypeResolverBV
 			  {
 			    G.v().out.print(".");
 			  }
-	
+
 			TypeVariableBV parent = typeVariableForId(j.next());
 
 			var = var.union(parent);
 		      }
 		  }
-		
+
 		children = var.children();
 		if(children.length() != 0)
 		  {
@@ -454,7 +454,7 @@ public class TypeResolverBV
 			  {
 			    G.v().out.print(".");
 			  }
-	
+
 			TypeVariableBV child = typeVariableForId(j.next());
 
 			var = var.union(child);
@@ -472,10 +472,10 @@ public class TypeResolverBV
     BitVector list = new BitVector();
     list.or(solved);
     list.or(unsolved);
-    
+
     new StronglyConnectedComponentsBV(list, this);
   }
-  
+
   private void remove_transitive_constraints() throws TypeException
   {
     refresh_solved();
@@ -486,7 +486,7 @@ public class TypeResolverBV
     for( BitSetIterator varIt = list.iterator(); varIt.hasNext(); ) {
 
         final TypeVariableBV var = typeVariableForId(varIt.next());
-	
+
 	var.removeIndirectRelations();
       }
   }
@@ -498,14 +498,14 @@ public class TypeResolverBV
     while(true)
       {
 	categorize();
-	
+
 	if(single_child_not_null.length() != 0)
 	  {
 	    finished = false;
 	    modified = true;
-	    
+
             BitSetIterator i = single_child_not_null.iterator();
-            while( i.hasNext() ) 
+            while( i.hasNext() )
               {
                 TypeVariableBV var = typeVariableForId(i.next());
 
@@ -514,7 +514,7 @@ public class TypeResolverBV
 		    // PA: Potential difference to old algorithm - using the smallest element
                     // in the list rather than children().get(0);
                     TypeVariableBV child = typeVariableForId(var.children().iterator().next());
-		
+
                     var = var.union(child);
 		  }
               }
@@ -526,37 +526,37 @@ public class TypeResolverBV
 	      {
 		finished = false;
 		modified = true;
-		
+
                 BitSetIterator i = single_soft_parent.iterator();
-                while( i.hasNext() ) 
+                while( i.hasNext() )
                   {
                     TypeVariableBV var = typeVariableForId(i.next());
-		    
+
 		    if(single_soft_parent.get(var.id()))
 		      {
 		        // PA: See above.
 		        TypeVariableBV parent = typeVariableForId(var.parents().iterator().next());
-			
+
 		        var = var.union(parent);
 		      }
                   }
 	      }
-	    
+
 	    if(single_hard_parent.length() != 0)
 	      {
 		finished = false;
 		modified = true;
-		
+
                 BitSetIterator i = single_hard_parent.iterator();
-                while( i.hasNext() ) 
+                while( i.hasNext() )
                   {
                     TypeVariableBV var = typeVariableForId(i.next());
-		    
+
 		    if(single_hard_parent.get(var.id()))
 		      {
 		        // PA: See above
 			TypeVariableBV parent = typeVariableForId(var.parents().iterator().next());
-			
+
 			debug_vars("union single parent\n " + var + "\n " + parent);
 			var = var.union(parent);
 		      }
@@ -567,30 +567,30 @@ public class TypeResolverBV
 	      {
 		finished = false;
 		modified = true;
-		
+
                 BitSetIterator i = single_null_child.iterator();
-                while( i.hasNext() ) 
+                while( i.hasNext() )
                   {
                     TypeVariableBV var = typeVariableForId(i.next());
-		    
+
 		    if(single_null_child.get(var.id()))
 		      {
 		        // PA: See above
 			TypeVariableBV child = typeVariableForId(var.children().iterator().next());
-			
+
 			var = var.union(child);
 		      }
 		  }
 	      }
-	    
+
 	    if(finished)
 	      {
 		break;
 	      }
-	    
+
 	    continue;
 	  }
-	
+
 	if(modified)
 	  {
 	    modified = false;
@@ -598,17 +598,17 @@ public class TypeResolverBV
 	  }
 
 	finished = true;
-	
+
       multiple_children:
-	for( BitSetIterator varIt = multiple_children.iterator(); varIt.hasNext(); ) 
+	for( BitSetIterator varIt = multiple_children.iterator(); varIt.hasNext(); )
           {
 	    final TypeVariableBV var = typeVariableForId(varIt.next());
 	    TypeNode lca = null;
 	    BitVector children_to_remove = new BitVector();
-	    
-	    for( BitSetIterator childIt = var.children().iterator(); childIt.hasNext(); ) 
+
+	    for( BitSetIterator childIt = var.children().iterator(); childIt.hasNext(); )
               {
-	    
+
 	        final TypeVariableBV child = typeVariableForId(childIt.next());
 		TypeNode type = child.type();
 
@@ -619,7 +619,7 @@ public class TypeResolverBV
 		else if(type != null && type.isClass())
 		  {
 		    children_to_remove.set(child.id());
-		    
+
 		    if(lca == null)
 		      {
 			lca = type;
@@ -634,16 +634,16 @@ public class TypeResolverBV
 			      {
 				G.v().out.println
 				  ("==++==" +
-				   stmtBody.getMethod().getDeclaringClass().getName() + "." + 
+				   stmtBody.getMethod().getDeclaringClass().getName() + "." +
 				   stmtBody.getMethod().getName());
 			      }
-			    
+
 			    continue multiple_children;
 			  }
 		      }
 		  }
 	      }
-	    
+
 	    if(lca != null)
 	      {
 		for( BitSetIterator childIt = children_to_remove.iterator(); childIt.hasNext(); ) {
@@ -654,38 +654,38 @@ public class TypeResolverBV
 		var.addChild(typeVariable(lca));
 	      }
 	  }
-	
+
 	for( BitSetIterator varIt = multiple_parents.iterator(); varIt.hasNext(); ) {
-	
+
 	    final TypeVariableBV var = typeVariableForId(varIt.next());
 	    LinkedList<TypeVariableBV> hp = new LinkedList<TypeVariableBV>(); // hard parents
-	    
+
 	    for( BitSetIterator parentIt = var.parents().iterator(); parentIt.hasNext(); ) {
-	    
+
 	        final TypeVariableBV parent = typeVariableForId(parentIt.next());
 		TypeNode type = parent.type();
-		
+
 		if(type != null)
 		  {
                     Iterator<TypeVariableBV> k = hp.iterator();
                     while( k.hasNext() ) {
                         TypeVariableBV otherparent = k.next();
 			TypeNode othertype = otherparent.type();
-			
+
 			if(type.hasDescendant(othertype))
 			  {
 			    var.removeParent(parent);
 			    type = null;
 			    break;
 			  }
-			
+
 			if(type.hasAncestor(othertype))
 			  {
 			    var.removeParent(otherparent);
 			    k.remove();
 			  }
 		      }
-		    
+
 		    if(type != null)
 		      {
 			hp.add(parent);
@@ -701,7 +701,7 @@ public class TypeResolverBV
     for( Iterator localIt = stmtBody.getLocals().iterator(); localIt.hasNext(); ) {
         final Local local = (Local) localIt.next();
 	TypeVariableBV var = typeVariable(local);
-	
+
 	if(var == null)
 	  {
 	    local.setType(RefType.v("java.lang.Object"));
@@ -720,7 +720,7 @@ public class TypeResolverBV
 	else
 	  {
 	    TypeVariableBV element = var.element();
-	    
+
 	    for(int j = 1; j < var.depth(); j++)
 	      {
 		element = element.element();
@@ -747,7 +747,7 @@ public class TypeResolverBV
 		  }
 	      }
 	  }
-	
+
 	if(DEBUG)
 	  {
 	    if((var != null) &&
@@ -768,7 +768,7 @@ public class TypeResolverBV
     for( Iterator localIt = stmtBody.getLocals().iterator(); localIt.hasNext(); ) {
         final Local local = (Local) localIt.next();
 	TypeVariableBV var = typeVariable(local);
-	
+
 	if(var == null ||
 	   var.approx() == null ||
 	   var.approx().type() == null)
@@ -873,14 +873,14 @@ public class TypeResolverBV
 	  }
       }
   }
-  
+
   private void compute_solved()
   {
     unsolved = new BitVector();
     solved = new BitVector();
-    
+
     for (TypeVariableBV var : typeVariableList) {
-    
+
         if(var.depth() == 0)
 	  {
 	    if(var.type() == null)
@@ -899,11 +899,11 @@ public class TypeResolverBV
   {
     unsolved = new BitVector();
     // solved stays the same
-    
+
     for( BitSetIterator varIt = unsolved.iterator(); varIt.hasNext(); ) {
-    
+
         final TypeVariableBV var = typeVariableForId(varIt.next());
-	
+
 	if(var.depth() == 0)
 	  {
 	    if(var.type() == null)
@@ -923,23 +923,23 @@ public class TypeResolverBV
   private void categorize() throws TypeException
   {
     refresh_solved();
-   
+
     single_soft_parent = new BitVector();
     single_hard_parent = new BitVector();
     multiple_parents = new BitVector();
     single_child_not_null = new BitVector();
     single_null_child = new BitVector();
     multiple_children = new BitVector();
-    
+
     for(BitSetIterator i = unsolved.iterator(); i .hasNext(); )
       {
 	TypeVariableBV var = typeVariableForId(i.next());
-	
+
 	// parent category
 	{
 	  BitVector parents = var.parents();
 	  int size = parents.length();
-	  
+
 	  if(size == 0)
 	    {
 	      var.addParent(typeVariable(OBJECT));
@@ -948,7 +948,7 @@ public class TypeResolverBV
 	  else if(size == 1)
 	    {
 	      TypeVariableBV parent = typeVariableForId(parents.iterator().next());
-	      
+
 	      if(parent.type() == null)
 		{
 		  single_soft_parent.set(var.id());
@@ -963,12 +963,12 @@ public class TypeResolverBV
 	      multiple_parents.set(var.id());
 	    }
 	}
-	
+
 	// child category
 	{
 	  BitVector children = var.children();
 	  int size = children.size();
-	  
+
 	  if(size == 0)
 	    {
 	      var.addChild(typeVariable(NULL));
@@ -977,7 +977,7 @@ public class TypeResolverBV
 	  else if(size == 1)
 	    {
 	      TypeVariableBV child = typeVariableForId(children.iterator().next());
-	      
+
 	      if(child.type() == NULL)
 		{
 		  single_null_child.set(var.id());
@@ -1003,42 +1003,42 @@ public class TypeResolverBV
     Stmt[] stmts = new Stmt[units.size()];
 
     units.toArray(stmts);
-    
+
     for (Stmt stmt : stmts) {
 	if(stmt instanceof InvokeStmt)
 	  {
 	    InvokeStmt invoke = (InvokeStmt) stmt;
-	    
+
 	    if(invoke.getInvokeExpr() instanceof SpecialInvokeExpr)
 	      {
 		SpecialInvokeExpr special = (SpecialInvokeExpr) invoke.getInvokeExpr();
-		
+
 		if(special.getMethodRef().name().equals("<init>"))
 		  {
 		    List<Unit> deflist = defs.getDefsOfAt((Local) special.getBase(), invoke);
-		    
+
 		    while(deflist.size() == 1)
 		      {
 			Stmt stmt2 = (Stmt) deflist.get(0);
-			
+
 			if(stmt2 instanceof AssignStmt)
 			  {
 			    AssignStmt assign = (AssignStmt) stmt2;
-			    
+
 			    if(assign.getRightOp() instanceof Local)
 			      {
 				deflist = defs.getDefsOfAt((Local) assign.getRightOp(), assign);
 				continue;
 			      }
 			    else if(assign.getRightOp() instanceof NewExpr)
-			      {			
+			      {
 				// We split the local.
 				//G.v().out.println("split: [" + assign + "] and [" + stmt + "]");
 				Local newlocal = Jimple.v().newLocal("tmp", null);
 				stmtBody.getLocals().add(newlocal);
-				
+
 				special.setBase(newlocal);
-				
+
 				units.insertAfter(Jimple.v().newAssignStmt(assign.getLeftOp(), newlocal), assign);
 				assign.setLeftOp(newlocal);
 			      }
@@ -1050,15 +1050,15 @@ public class TypeResolverBV
 	  }
       }
   }
-  
+
   public TypeVariableBV typeVariableForId(int idx) {
       return typeVariableList.get(idx);
   }
-  
+
   public BitVector invalidIds() {
       return invalidIds;
   }
-  
+
   public void invalidateId(int id) {
       invalidIds.set(id);
   }

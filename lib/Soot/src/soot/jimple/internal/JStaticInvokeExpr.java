@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -35,7 +35,7 @@ import soot.*;
 import soot.jimple.*;
 import java.util.*;
 
-public class JStaticInvokeExpr extends AbstractStaticInvokeExpr 
+public class JStaticInvokeExpr extends AbstractStaticInvokeExpr
 {
     public JStaticInvokeExpr(SootMethodRef methodRef, List args)
     {
@@ -43,22 +43,22 @@ public class JStaticInvokeExpr extends AbstractStaticInvokeExpr
 
         for(int i = 0; i < args.size(); i++)
             this.argBoxes[i] = Jimple.v().newImmediateBox((Value) args.get(i));
-    }  
+    }
 
     JStaticInvokeExpr(SootMethodRef methodRef, ValueBox[] args)
     {
         super(methodRef, args);
-    }  
+    }
 
-   
-    public Object clone() 
+
+    public Object clone()
     {
         ArrayList clonedArgs = new ArrayList(getArgCount());
 
         for(int i = 0; i < getArgCount(); i++) {
             clonedArgs.add(i, getArg(i));
         }
-        
+
         return new  JStaticInvokeExpr(methodRef, clonedArgs);
     }
 }

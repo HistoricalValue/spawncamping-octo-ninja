@@ -9,28 +9,28 @@ import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.util.Chain;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 16-Jun-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 16-Jun-2006
  */
 public class RemoveRedundantPushStores extends BodyTransformer implements IJbcoTransform {
-  
+
   public static String dependancies[] = new String[] {"bb.jbco_rrps"};
 
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "bb.jbco_rrps";
-  
+
   public String getName() {
     return name;
   }
-  
+
   public void outputSummary() {}
 
-  protected void internalTransform(Body b, String phaseName, Map options) 
-  {  
+  protected void internalTransform(Body b, String phaseName, Map options)
+  {
     // removes all redundant load-stores
     boolean changed = true;
     PatchingChain units = b.getUnits();
@@ -42,7 +42,7 @@ public class RemoveRedundantPushStores extends BodyTransformer implements IJbcoT
       while (it.hasNext()) {
         Unit u = (Unit)it.next();
         if (prev != null && prev instanceof PushInst && u instanceof StoreInst) {
-          if (prevprev != null && prevprev instanceof StoreInst 
+          if (prevprev != null && prevprev instanceof StoreInst
               && prevprevprev != null && prevprevprev instanceof PushInst) {
             Local lprev = ((StoreInst)prevprev).getLocal();
             Local l = ((StoreInst)u).getLocal();

@@ -18,26 +18,26 @@ import java.util.*;
 // -Richard L. Halpert, 2006-11-30
 
 public class CompactStronglyConnectedComponents{
-	
+
 	long compactNodes = 0;
 	long add = 0;
 
 	public CompactStronglyConnectedComponents(PegGraph pg){
-		Chain mainPegChain = pg.getMainPegChain();	
-		compactGraph(mainPegChain, pg);	
+		Chain mainPegChain = pg.getMainPegChain();
+		compactGraph(mainPegChain, pg);
 		compactStartChain(pg);
 		//PegToDotFile printer = new PegToDotFile(pg, false, "compact");
 		System.err.println("compact SCC nodes: "+compactNodes);
 		System.err.println(" number of compacting scc nodes: "+add);
 	}
-	
+
 	private void compactGraph(Chain chain, PegGraph peg){
-		
+
 		Set canNotBeCompacted = peg.getCanNotBeCompacted();
-//		testCan(speg.getMainPegChain(), canNotBeCompacted);	
+//		testCan(speg.getMainPegChain(), canNotBeCompacted);
 //		SCC scc = new SCC(chain, peg);
 		SCC scc = new SCC(chain.iterator(), peg);
-		List<List<Object>> sccList = scc.getSccList();	
+		List<List<Object>> sccList = scc.getSccList();
 		//testSCC(sccList);
 		Iterator<List<Object>> sccListIt = sccList.iterator();
 		while (sccListIt.hasNext()){
@@ -46,16 +46,16 @@ public class CompactStronglyConnectedComponents{
 				//printSCC(s);
 				if (!checkIfContainsElemsCanNotBeCompacted(s, canNotBeCompacted)){
 					add++;
-					compact(s, chain, peg);		        
-					
+					compact(s, chain, peg);
+
 				}
 			}
-			
+
 		}
 		//testListSucc(peg);
-		
-	} 
-	
+
+	}
+
 	private void compactStartChain(PegGraph graph){
 		Set maps = graph.getStartToThread().entrySet();
 		for(Iterator iter=maps.iterator(); iter.hasNext();){
@@ -67,9 +67,9 @@ public class CompactStronglyConnectedComponents{
 				compactGraph(chain, graph);
 			}
 		}
-		
+
 	}
-	private boolean checkIfContainsElemsCanNotBeCompacted(List list, 
+	private boolean checkIfContainsElemsCanNotBeCompacted(List list,
 			Set canNotBeCompacted ){
 		Iterator sccIt = list.iterator();
 		//	System.out.println("sccList: ");
@@ -80,20 +80,20 @@ public class CompactStronglyConnectedComponents{
 				//	System.out.println("find a syn method!!");
 				return true;
 			}
-			
-		}	
+
+		}
 		return false;
 	}
-	
+
 	private void compact(List list, Chain chain, PegGraph peg){
-		
+
 		Iterator it = list.iterator();
 		FlowSet allNodes = peg.getAllNodes();
 		HashMap unitToSuccs = peg.getUnitToSuccs();
 		HashMap unitToPreds = peg.getUnitToPreds();
 		List<Object> newPreds = new ArrayList<Object>();
 		List<Object> newSuccs = new ArrayList<Object>();
-		
+
 		while (it.hasNext()){
 			JPegStmt s = (JPegStmt)it.next();
 			//Replace the SCC with a list node.
@@ -104,9 +104,9 @@ public class CompactStronglyConnectedComponents{
 					List succsOfPred = peg.getSuccsOf(pred);
 					succsOfPred.remove(s);
 					if (!list.contains(pred)) {
-						newPreds.add(pred); 
-						succsOfPred.add(list); 
-						
+						newPreds.add(pred);
+						succsOfPred.add(list);
+
 					}
 				}
 			}
@@ -117,13 +117,13 @@ public class CompactStronglyConnectedComponents{
 					List predsOfSucc =  peg.getPredsOf(succ);
 					predsOfSucc.remove(s);
 					if (!list.contains(succ)){
-						newSuccs.add(succ); 
+						newSuccs.add(succ);
 						predsOfSucc.add(list);
 					}
 				}
 			}
-			
-			
+
+
 		}
 		unitToSuccs.put(list, newSuccs);
 		//System.out.println("put list"+list+"\n"+ "newSuccs: "+newSuccs);
@@ -134,47 +134,47 @@ public class CompactStronglyConnectedComponents{
 		{
 			it = list.iterator();
 			while (it.hasNext()){
-				JPegStmt s = (JPegStmt)it.next();     
+				JPegStmt s = (JPegStmt)it.next();
 				chain.remove(s);
 				allNodes.remove(s);
 				unitToSuccs.remove(s);
 				unitToPreds.remove(s);
 			}
-			
+
 		}
 		//System.out.println("inside compactSCC");
 //		testListSucc(peg);
-		
+
 		// add for get experimental results
 		compactNodes += list.size();
 	}
 	private void updateMonitor(PegGraph pg, List list){
 		//System.out.println("=======update monitor===");
-		//add list to corresponding monitor objects sets 
+		//add list to corresponding monitor objects sets
 		Set maps = pg.getMonitor().entrySet();
-		
+
 		//System.out.println("---test list----");
 		//testList(list);
-		
+
 		for(Iterator iter=maps.iterator(); iter.hasNext();){
 			Map.Entry entry = (Map.Entry)iter.next();
 			FlowSet fs = (FlowSet)entry.getValue();
-			
+
 			Iterator it = list.iterator();
 			while(it.hasNext()){
 				Object obj = it.next();
 				if (fs.contains(obj)){
-					
+
 					fs.add(list);
 					break;
-					
+
 					// System.out.println("add list to monitor: "+entry.getKey());
-					
+
 				}
-				
+
 			}
-			
+
 		}
-		//System.out.println("=======update monitor==end====");		     
+		//System.out.println("=======update monitor==end====");
 	}
 }

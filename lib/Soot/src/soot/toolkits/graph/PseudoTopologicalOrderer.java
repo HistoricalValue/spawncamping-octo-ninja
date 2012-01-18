@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -68,7 +68,7 @@ public class PseudoTopologicalOrderer<N> implements Orderer<N> {
 
 	/**
 	 * Orders in pseudo-topological order.
-	 * 
+	 *
 	 * @param g
 	 *            a DirectedGraph instance we want to order the nodes for.
 	 * @return an ordered list of the graph's nodes.
@@ -137,7 +137,7 @@ public class PseudoTopologicalOrderer<N> implements Orderer<N> {
 	}
 
 	//deprecated methods and constructors follow
-	
+
 	/**
 	 * @deprecated use {@link #PseudoTopologicalOrderer()} instead
 	 */
@@ -157,7 +157,7 @@ public class PseudoTopologicalOrderer<N> implements Orderer<N> {
 
 	/**
 	 * Set the ordering for the orderer.
-	 * 
+	 *
 	 * @param isReverse
 	 *            specify if we want reverse pseudo-topological ordering, or
 	 *            not.
@@ -169,7 +169,7 @@ public class PseudoTopologicalOrderer<N> implements Orderer<N> {
 
 	/**
 	 * Check the ordering for the orderer.
-	 * 
+	 *
 	 * @return true if we have reverse pseudo-topological ordering, false
 	 *         otherwise.
 	 * @deprecated use {@link #newList(DirectedGraph, boolean))} instead
@@ -178,5 +178,5 @@ public class PseudoTopologicalOrderer<N> implements Orderer<N> {
 		return mIsReversed;
 	}
 
-	
+
 }

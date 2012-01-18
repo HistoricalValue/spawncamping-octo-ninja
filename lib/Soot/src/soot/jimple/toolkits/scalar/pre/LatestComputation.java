@@ -30,7 +30,7 @@ import soot.toolkits.scalar.*;
 import soot.toolkits.graph.*;
 import java.util.*;
 
-/** 
+/**
  * Performs a Latest-Computation on the given graph.
  * a computation is latest, when we can't delay it anymore. This uses the
  * Delayability-analysis.
@@ -83,7 +83,7 @@ public class LatestComputation {
       /* create a new Earliest-list for each unit */
       Unit currentUnit = (Unit)unitIt.next();
 
-      /* basically the latest-set is: 
+      /* basically the latest-set is:
        * (delayed) INTERSECT (comp UNION (UNION_successors ~Delayed)) =
        * (delayed) MINUS ((INTERSECTION_successors Delayed) MINUS comp).
        */

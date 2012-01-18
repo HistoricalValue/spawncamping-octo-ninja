@@ -20,7 +20,7 @@ import soot.toolkits.graph.*;
 public class JoinStmt extends JPegStmt
 
 {
-	
+
 	public JoinStmt(String obj, String ca, Unit un, UnitGraph ug, SootMethod sm)
 	{
 		this.object = obj;
@@ -30,9 +30,9 @@ public class JoinStmt extends JPegStmt
 		this.unitGraph = ug;
 		this.sootMethod = sm;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }

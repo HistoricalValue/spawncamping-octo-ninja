@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -27,7 +27,7 @@
 package soot;
 
 /** Implements Switchable on base Java types. */
-public class TypeSwitch implements ITypeSwitch 
+public class TypeSwitch implements ITypeSwitch
 {
     Object result;
 

@@ -33,33 +33,33 @@ import soot.jimple.NullConstant;
 import soot.toolkits.scalar.GuaranteedDefs;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 16-Jun-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 16-Jun-2006
  */
 public class FixUndefinedLocals extends BodyTransformer implements IJbcoTransform {
 
   private int undefined = 0;
-  
+
   public static String dependancies[] = new String[] {"bb.jbco_j2bl", "bb.jbco_ful", "bb.lp" };
 
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "bb.jbco_ful";
-  
+
   public String getName() {
     return name;
   }
-  
+
   public void outputSummary() {
     out.println("Undefined Locals fixed with pre-initializers: "+undefined);
   }
 
   protected void internalTransform(Body b, String phaseName, Map options) {
     //  deal with locals not defined at all used points
-    
+
     int icount = 0;
     boolean passedIDs = false;
     HashMap bafToJLocals = soot.jbco.Main.methods2Baf2JLocals.get(b.getMethod());
@@ -79,14 +79,14 @@ public class FixUndefinedLocals extends BodyTransformer implements IJbcoTransfor
         after = u;
         continue;
       }
-      
+
       passedIDs = true;
-      
+
       if (after == null) {
         after = Baf.v().newNopInst();
         units.addFirst(after);
       }
-      
+
       List defs = gd.getGuaranteedDefs(u);
       Iterator useIt = u.getUseBoxes().iterator();
       while (useIt.hasNext()) {
@@ -100,7 +100,7 @@ public class FixUndefinedLocals extends BodyTransformer implements IJbcoTransfor
         if (jl != null) {
           t = jl.getType();
         } else {
-          // We should hopefully never get here. There should be a jimple 
+          // We should hopefully never get here. There should be a jimple
           // local unless it's one of our ControlDups
           t = l.getType();
           if (u instanceof OpTypeArgInst) {
@@ -111,14 +111,14 @@ public class FixUndefinedLocals extends BodyTransformer implements IJbcoTransfor
             t = ota.getOpType();
           } else if (u instanceof IncInst)
             t = IntType.v();
-          
+
           if (t instanceof DoubleWordType || t instanceof WordType) {
             throw new RuntimeException("Shouldn't get here (t is a double or word type: in FixUndefinedLocals)");
           }
         }
         Unit store = Baf.v().newStoreInst(t, l);
         units.insertAfter(store,after);
-        
+
         // TODO: is this necessary if I fix the other casting issues?
         if (t instanceof ArrayType) {
           Unit tmp = Baf.v().newInstanceCastInst(t);
@@ -126,7 +126,7 @@ public class FixUndefinedLocals extends BodyTransformer implements IJbcoTransfor
           store = tmp;
         }
         /////
-        
+
         Unit pinit = getPushInitializer(l, t);
         units.insertBefore(pinit,store);
         /*if (t instanceof RefType) {
@@ -134,11 +134,11 @@ public class FixUndefinedLocals extends BodyTransformer implements IJbcoTransfor
           if (sc != null)
             units.insertAfter(Baf.v().newInstanceCastInst(t), pinit);
         }*/
-        
+
         initialized.add(l);
       }
     }
-    
+
     if (after instanceof NopInst)
       units.remove(after);
     undefined += initialized.size() - icount;
@@ -158,12 +158,12 @@ public class FixUndefinedLocals extends BodyTransformer implements IJbcoTransfor
       return Baf.v().newPushInst(
           DoubleConstant.v(soot.jbco.util.Rand.getDouble()));
     }
-    
+
     return null;
   }
-  
+
   /*
-   * 
+   *
   private Unit findInitializerSpotFor(Value v, Unit u, UnitGraph ug,
       GuaranteedDefs gd) {
     List preds = ug.getPredsOf(u);

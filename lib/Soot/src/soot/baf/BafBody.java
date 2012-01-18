@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -64,37 +64,37 @@ public class BafBody extends Body
               + " from JimpleBody's.");
 
         jimpleBody.validate();
-               
+
         JimpleToBafContext context = new JimpleToBafContext(jimpleBody.getLocalCount());
-           
+
         // Convert all locals
         {
             Iterator localIt = jimpleBody.getLocals().iterator();
-            
+
             while(localIt.hasNext())
             {
                 Local l = (Local) localIt.next();
                 Type t = l.getType();
                 Local newLocal;
-                
+
                 newLocal = Baf.v().newLocal(l.getName(), UnknownType.v());
-                
+
                 if(t.equals(DoubleType.v()) || t.equals(LongType.v()))
                     newLocal.setType(DoubleWordType.v());
                 else
                     newLocal.setType(WordType.v());
-        
-                context.setBafLocalOfJimpleLocal(l, newLocal);            
+
+                context.setBafLocalOfJimpleLocal(l, newLocal);
                 getLocals().add(newLocal);
             }
         }
-    
+
         Map<Stmt, Unit> stmtToFirstInstruction = new HashMap<Stmt, Unit>();
-            
+
         // Convert all jimple instructions
         {
             Iterator stmtIt = jimpleBody.getUnits().iterator();
-            
+
             while(stmtIt.hasNext())
             {
                 Stmt s = (Stmt) stmtIt.next();
@@ -102,20 +102,20 @@ public class BafBody extends Body
 
                 context.setCurrentUnit(s);
                 ((ConvertToBaf) s).convertToBaf(context, conversionList);
-               
+
                 stmtToFirstInstruction.put(s, conversionList.get(0));
                 getUnits().addAll(conversionList);
             }
         }
-        
+
         // Change all place holders
         {
             Iterator boxIt = getAllUnitBoxes().iterator();
-            
+
             while(boxIt.hasNext())
             {
                 UnitBox box = (UnitBox) boxIt.next();
-                
+
                 if(box.getUnit() instanceof PlaceholderInst)
                 {
                     Unit source = ((PlaceholderInst) box.getUnit()).getSource();
@@ -137,7 +137,7 @@ public class BafBody extends Body
                      stmtToFirstInstruction.get(trap.getHandlerUnit())));
             }
         }
-        
+
         PackManager.v().getPack( "bb" ).apply( this );
     }
 }

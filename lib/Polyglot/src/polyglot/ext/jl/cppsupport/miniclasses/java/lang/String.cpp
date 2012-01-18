@@ -22,7 +22,7 @@ String::String()
 	capacity = 0;
 }
 
-String::String(const char *cs) 
+String::String(const char *cs)
 {
 	len = strlen(cs);
 	capacity = len + 1;

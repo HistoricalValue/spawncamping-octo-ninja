@@ -23,7 +23,7 @@ package soot.jimple.spark.ondemand.genericutil;
  * circular buffer.  NOTE: elements stored in the
  * buffer should be non-null; this is not checked
  * for performance reasons.
- * 
+ *
  * @author Manu Sridharan
  */
 public final class FIFOQueue {
@@ -93,7 +93,7 @@ public final class FIFOQueue {
     public Object pop() {
         return remove();
     }
-    
+
     /**
      * remove the top element from the buffer
      */
@@ -113,10 +113,10 @@ public final class FIFOQueue {
     public String toString() {
         return _bottom + " " + _top;
     }
-    
+
     public void clear() {
     	_bottom = 0;
     	_top = 0;
     }
 }
-   
+

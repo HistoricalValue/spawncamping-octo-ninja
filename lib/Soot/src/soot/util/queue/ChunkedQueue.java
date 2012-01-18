@@ -29,7 +29,7 @@ package soot.util.queue;
  */
 @SuppressWarnings("unchecked")
 public final class ChunkedQueue<E>
-{ 
+{
     static Object NULL_CONST = new Object();
     private static final int LENGTH = 60;
     private Object[] q;

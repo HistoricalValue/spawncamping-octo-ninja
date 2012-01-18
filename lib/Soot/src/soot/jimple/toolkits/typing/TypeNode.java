@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,7 +41,7 @@ class TypeNode
   private final int id;
   private final Type type;
   private final ClassHierarchy hierarchy;
-  
+
   private TypeNode parentClass;
   private TypeNode element;
   private TypeNode array;
@@ -49,15 +49,15 @@ class TypeNode
   private List parents = Collections.EMPTY_LIST;
   private final BitVector ancestors = new BitVector(0);
   private final BitVector descendants = new BitVector(0);
-	
+
   public TypeNode(int id, Type type, ClassHierarchy hierarchy)
   {
     if(type == null || hierarchy == null)
       {
 	throw new InternalTypingException();
       }
-      
-    if(!((type instanceof PrimType) || (type instanceof RefType) || 
+
+    if(!((type instanceof PrimType) || (type instanceof RefType) ||
 	 (type instanceof ArrayType) || (type instanceof NullType)))
       {
 	G.v().out.println("Unhandled type: " + type);
@@ -73,18 +73,18 @@ class TypeNode
 	G.v().out.println("creating node " + this);
       }
   }
-  
+
   public TypeNode(int id, RefType type, ClassHierarchy hierarchy)
   {
     this(id, (Type) type, hierarchy);
-	
-    {    
+
+    {
       SootClass sClass = type.getSootClass();
       if( sClass == null ) throw new RuntimeException( "Oops, forgot to load "+type );
       if(sClass.isPhantomClass()) throw new RuntimeException("Jimplification requires "+sClass+", but it is a phantom ref.");
       List plist = new LinkedList();
-      
-      if(sClass.hasSuperclass() && 
+
+      if(sClass.hasSuperclass() &&
 	 !sClass.getName().equals("java.lang.Object"))
 	{
 	  TypeNode parent = hierarchy.typeNode(RefType.v(sClass.getSuperclass().getName()));
@@ -100,7 +100,7 @@ class TypeNode
 
       parents = Collections.unmodifiableList(plist);
     }
-	    
+
     descendants.set(hierarchy.NULL.id);
     hierarchy.NULL.ancestors.set(id);
 
@@ -112,7 +112,7 @@ class TypeNode
 	parent.fixDescendants(id);
       }
   }
-	
+
   public TypeNode(int id, ArrayType type, ClassHierarchy hierarchy)
   {
     this(id, (Type) type, hierarchy);
@@ -137,10 +137,10 @@ class TypeNode
 	  {
 	    throw new InternalTypingException();
 	  }
-	
+
 	element.array = this;
       }
-    
+
     {
       List plist = new LinkedList();
       if(type.baseType instanceof RefType)
@@ -207,9 +207,9 @@ class TypeNode
 
 	  parentClass = hierarchy.typeNode(ArrayType.v(hierarchy.OBJECT.type(), type.numDimensions - 1));
 	}
-      	    
+
       parents = Collections.unmodifiableList(plist);
-    }		    
+    }
 
     descendants.set(hierarchy.NULL.id);
     hierarchy.NULL.ancestors.set(id);
@@ -318,7 +318,7 @@ class TypeNode
     do
       {
 	type = type.parentClass;
-	
+
 	if(type == null)
 	  {
 	    try
@@ -396,7 +396,7 @@ class TypeNode
       {
 	throw new InternalTypingException();
       }
-    
+
     return element;
   }
 

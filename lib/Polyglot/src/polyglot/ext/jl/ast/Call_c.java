@@ -84,7 +84,7 @@ public class Call_c extends Expr_c implements Call
       if (targetImplicit == this.targetImplicit) {
           return this;
       }
-      
+
       Call_c n = (Call_c) copy();
       n.targetImplicit = targetImplicit;
       return n;
@@ -143,7 +143,7 @@ public class Call_c extends Expr_c implements Call
     /**
      * Typecheck the Call when the target is null. This method finds
      * an appropriate target, and then type checks accordingly.
-     * 
+     *
      * @param argTypes list of <code>Type</code>s of the arguments
      */
     protected Node typeCheckNullTarget(TypeChecker tc, List argTypes) throws SemanticException {
@@ -156,7 +156,7 @@ public class Call_c extends Expr_c implements Call
         // set the target appropriately, and then type check
         // the result
         MethodInstance mi =  c.findMethod(this.name, argTypes);
-        
+
         Receiver r;
         if (mi.flags().isStatic()) {
             r = nf.CanonicalTypeNode(position(), mi.container()).type(mi.container());
@@ -199,12 +199,12 @@ public class Call_c extends Expr_c implements Call
         }
 
         ReferenceType targetType = this.findTargetType();
-        MethodInstance mi = ts.findMethod(targetType, 
-                                          this.name, 
-                                          argTypes, 
+        MethodInstance mi = ts.findMethod(targetType,
+                                          this.name,
+                                          argTypes,
                                           c.currentClass());
-        
-        
+
+
         /* This call is in a static context if and only if
          * the target (possibly implicit) is a type node.
          */
@@ -218,22 +218,22 @@ public class Call_c extends Expr_c implements Call
         }
 
         // If the target is super, but the method is abstract, then complain.
-        if (this.target instanceof Special && 
+        if (this.target instanceof Special &&
             ((Special)this.target).kind() == Special.SUPER &&
             mi.flags().isAbstract()) {
                 throw new SemanticException("Cannot call an abstract method " +
-                               "of the super class", this.position());            
+                               "of the super class", this.position());
         }
         // If we found a method, the call must type check, so no need to check
         // the arguments here.
-        
+
         Call_c call = (Call_c)this.methodInstance(mi).type(mi.returnType());
         call.checkConsistency(c);
         return call;
     }
-    
+
     //ak333: made public so it could be accessed by CppCallDel
-    public ReferenceType findTargetType() throws SemanticException { 
+    public ReferenceType findTargetType() throws SemanticException {
         Type t = target.type();
         if (t.isReference()) {
             return t.toReference();
@@ -249,7 +249,7 @@ public class Call_c extends Expr_c implements Call
                 throw new SemanticException("Cannot invoke static method \"" + name
                                     + "\" on non-reference type " + t + ".",
                                     target.position());
-            }            
+            }
             throw new SemanticException("Receiver of method invocation must be a "
                                     + "reference type.",
                                         target.position());
@@ -315,14 +315,14 @@ public class Call_c extends Expr_c implements Call
 	    w.write(".");
 	  }
 	}
-	
+
 	w.write(name + "(");
 	w.begin(0);
-	
+
 	for(Iterator i = arguments.iterator(); i.hasNext();) {
 	  Expr e = (Expr) i.next();
 	  print(e, w, tr);
-	
+
 	  if (i.hasNext()) {
 	    w.write(",");
 	    w.allowBreak(0, " ");
@@ -396,26 +396,26 @@ public class Call_c extends Expr_c implements Call
 
     return l;
   }
-  
+
   // check that the implicit target setting is correct.
   protected void checkConsistency(Context c) throws SemanticException {
       if (targetImplicit) {
           // the target is implicit. Check that the
           // method found in the target type is the
           // same as the method found in the context.
-          
+
           // as exception will be thrown if no appropriate method
-          // exists. 
+          // exists.
           MethodInstance ctxtMI = c.findMethod(name, mi.formalTypes());
-          
-          // cannot perform this check due to the context's findMethod returning a 
+
+          // cannot perform this check due to the context's findMethod returning a
           // different method instance than the typeSystem in some situations
 //          if (!c.typeSystem().equals(ctxtMI, mi)) {
 //              throw new InternalCompilerError("Method call " + this + " has an " +
 //                   "implicit target, but the name " + name + " resolves to " +
 //                   ctxtMI + " in " + ctxtMI.container() + " instead of " + mi+ " in " + mi.container(), position());
 //          }
-      }      
+      }
   }
-  
+
 }

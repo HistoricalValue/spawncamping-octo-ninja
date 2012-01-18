@@ -39,7 +39,7 @@ public interface EscapeAnalysis {
     public boolean mayEscapeThread( AnyNewExpr n );
 
     /** Returns true if objects allocated at n in context c may be
-     * accessed in a thread other than the thread in which they 
+     * accessed in a thread other than the thread in which they
      * were allocated. */
     public boolean mayEscapeThread( Context c, AnyNewExpr n );
 }

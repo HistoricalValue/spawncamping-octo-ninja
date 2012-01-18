@@ -38,7 +38,7 @@ public abstract class PointsToSetInternal implements PointsToSet, EqualsSupporti
                 | addAll( other.getOldSet(), exclude );
         } else if( other instanceof EmptyPointsToSet ) {
             return false;
-        } else if( exclude instanceof EmptyPointsToSet ) { 
+        } else if( exclude instanceof EmptyPointsToSet ) {
             return addAll( other, null );
         }
         if( !G.v().PointsToSetInternal_warnedAlready ) {
@@ -73,7 +73,7 @@ public abstract class PointsToSetInternal implements PointsToSet, EqualsSupporti
     /** Sets all nodes to newly-added nodes. */
     public void unFlushNew() {}
     /** Merges other into this set. */
-    public void mergeWith( PointsToSetInternal other ) 
+    public void mergeWith( PointsToSetInternal other )
     { addAll( other, null ); }
     /** Returns true iff the set contains n. */
     public abstract boolean contains( Node n );
@@ -126,7 +126,7 @@ public abstract class PointsToSetInternal implements PointsToSet, EqualsSupporti
         return ret.toString();
     }
 
-    public Set<String> possibleStringConstants() { 
+    public Set<String> possibleStringConstants() {
         final HashSet<String> ret = new HashSet<String>();
         return this.forall( new P2SetVisitor() {
         public final void visit( Node n ) {
@@ -137,7 +137,7 @@ public abstract class PointsToSetInternal implements PointsToSet, EqualsSupporti
             }
         }} ) ? null : ret;
     }
-    public Set<ClassConstant> possibleClassConstants() { 
+    public Set<ClassConstant> possibleClassConstants() {
         final HashSet<ClassConstant> ret = new HashSet<ClassConstant>();
         return this.forall( new P2SetVisitor() {
         public final void visit( Node n ) {
@@ -153,7 +153,7 @@ public abstract class PointsToSetInternal implements PointsToSet, EqualsSupporti
     /* End of package methods. */
 
     protected Type type;
-    
+
     //Added by Adam Richard
     protected BitVector getBitMask(PointsToSetInternal other, PAG pag)
     {
@@ -172,7 +172,7 @@ public abstract class PointsToSetInternal implements PointsToSet, EqualsSupporti
     	}
     	return mask;
     }
-    
+
 	/**
      * {@inheritDoc}
      */
@@ -180,16 +180,16 @@ public abstract class PointsToSetInternal implements PointsToSet, EqualsSupporti
 		P2SetVisitorInt visitor = new P2SetVisitorInt(1) {
 
 			final int PRIME = 31;
-			
+
 			public void visit(Node n) {
-				intValue = PRIME * intValue + n.hashCode(); 
+				intValue = PRIME * intValue + n.hashCode();
 			}
-			
+
 		};
 		this.forall(visitor);
 		return visitor.intValue;
 	}
-	
+
 	/**
      * {@inheritDoc}
      */
@@ -201,22 +201,22 @@ public abstract class PointsToSetInternal implements PointsToSet, EqualsSupporti
     		return false;
     	}
     	PointsToSetInternal otherPts = (PointsToSetInternal) other;
-    	
-    	//both sets are equal if they are supersets of each other 
-    	return superSetOf(otherPts, this) && superSetOf(this, otherPts);    	
+
+    	//both sets are equal if they are supersets of each other
+    	return superSetOf(otherPts, this) && superSetOf(this, otherPts);
     }
-    
+
 	/**
 	 * Returns <code>true</code> if <code>onePts</code> is a (non-strict) superset of <code>otherPts</code>.
 	 */
 	private boolean superSetOf(PointsToSetInternal onePts, final PointsToSetInternal otherPts) {
 		return onePts.forall(
     		new P2SetVisitorDefaultTrue() {
-    			
+
     			public final void visit( Node n ) {
                     returnValue = returnValue && otherPts.contains(n);
                 }
-    			
+
             }
     	);
 	}
@@ -227,25 +227,25 @@ public abstract class PointsToSetInternal implements PointsToSet, EqualsSupporti
 	 * @author Eric Bodden
 	 */
 	public static abstract class P2SetVisitorDefaultTrue extends P2SetVisitor {
-		
+
 		public P2SetVisitorDefaultTrue() {
 			returnValue = true;
 		}
-		
+
 	}
-	
+
 	/**
 	 * A P2SetVisitor with an int value.
 	 *
 	 * @author Eric Bodden
 	 */
 	public static abstract class P2SetVisitorInt extends P2SetVisitor {
-		
+
 		protected int intValue;
-		
+
 		public P2SetVisitorInt(int i) {
 			intValue = 1;
 		}
-		
+
 	}
 }

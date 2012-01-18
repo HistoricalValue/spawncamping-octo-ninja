@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,7 +40,7 @@ import soot.shimple.*;
 import soot.toolkits.astmetrics.ClassData;
 
 /** A class to group together all the global variables in Soot. */
-public class G extends Singletons 
+public class G extends Singletons
 {
     private static G instance = new G();
     public static G v() { return instance; }
@@ -80,9 +80,9 @@ public class G extends Singletons
 
     public ShimpleFactory shimpleFactory = new DefaultShimpleFactory();
 
-    
+
     public boolean ASTTransformations_modified;
-    
+
     /*
      * 16th Feb 2006 Nomair
      * The AST transformations are unfortunately non-monotonic.
@@ -91,9 +91,9 @@ public class G extends Singletons
      * a separate flag...clumsy but works
      */
     public boolean ASTIfElseFlipped;
-    
-    
-    
+
+
+
     /*
      * Nomair A. Naeem January 15th 2006
      * Added For Dava.toolkits.AST.transformations.SuperFirstStmtHandler
@@ -103,9 +103,9 @@ public class G extends Singletons
      * were added by the decompiler (refer to filer SuperFirstStmtHandler)
      * SootMethodsAdded ArrayList contains these method. These
      * methods are then added to the SootClass
-     * 
-     * Some of these newly added methods make use of an object of 
-     * a static inner class DavaSuperHandler which is to be output 
+     *
+     * Some of these newly added methods make use of an object of
+     * a static inner class DavaSuperHandler which is to be output
      * in the decompilers
      * output. The class is marked to need a DavaSuperHandlerClass
      * by adding it into the SootClassNeedsDavaSuperHandlerClass list.
@@ -116,7 +116,7 @@ public class G extends Singletons
     public boolean SootMethodAddedByDava;
     public ArrayList<SootClass> SootClassNeedsDavaSuperHandlerClass = new ArrayList<SootClass>();
     public ArrayList SootMethodsAdded = new ArrayList();
-    
+
     //ASTMetrics Data
     public ArrayList<ClassData> ASTMetricsData = new ArrayList<ClassData>();
 }

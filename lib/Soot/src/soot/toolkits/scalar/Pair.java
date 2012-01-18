@@ -20,7 +20,7 @@
 package soot.toolkits.scalar;
 
 /** Just a pair of arbitrary objects.
- * 
+ *
  * @author Ondrej Lhotak
  * @author Manu Sridharan (genericized it)
  */

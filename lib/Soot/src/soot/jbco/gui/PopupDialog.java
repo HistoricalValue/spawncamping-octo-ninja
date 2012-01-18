@@ -26,7 +26,7 @@ import java.awt.event.ActionEvent;
 public class PopupDialog extends JDialog implements ActionListener {
       private JPanel myPanel = null;
       private JButton okButton = null;
-      
+
       public PopupDialog (JFrame frame, boolean modal, String myMessage) {
         super(frame, modal);
         myPanel = new JPanel();
@@ -35,7 +35,7 @@ public class PopupDialog extends JDialog implements ActionListener {
         myPanel.add(jta);
         okButton = new JButton("Ok");
         okButton.addActionListener(this);
-        myPanel.add(okButton); 
+        myPanel.add(okButton);
         pack();
         setLocationRelativeTo(frame);
         setVisible(true);

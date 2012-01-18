@@ -24,7 +24,7 @@
 /*
  * CHANGE LOG: * November 22nd: Removed check of DAbruptStmt from analysis since
  *               this is now handled by the structredAnalysis framework
- *             
+ *
  *             * November 22nd: Inlined the LocalPair class
  *               Tested Extensively: found bug in implementation of process_doWhile in structuredAnalysis :)
  */
@@ -50,9 +50,9 @@ import soot.dava.internal.AST.*;
   Step 5:
          x = expr
 	 kill = { all pairs containing x in left or right position}
-	 
+
 	 if expr is a local , y
-	 gen = (x,y) 
+	 gen = (x,y)
   Step 6:
          out(start) = {}
          newInitialFlow: No copies are available. an empty flow set
@@ -70,21 +70,21 @@ public class ReachingCopies extends StructuredAnalysis{
     public class LocalPair{
 	private final Local leftLocal;
 	private final Local rightLocal;
-	
+
 	public LocalPair(Local left, Local right){
 	    leftLocal=left;
 	    rightLocal=right;
 	}
-	
-	
+
+
 	public Local getLeftLocal(){
 	    return leftLocal;
 	}
-	
+
 	public Local getRightLocal(){
 	    return rightLocal;
 	}
-	
+
 	public boolean equals(Object other){
 	    if(other instanceof LocalPair){
 		if(this.leftLocal.toString().equals(((LocalPair)other).getLeftLocal().toString())){
@@ -95,7 +95,7 @@ public class ReachingCopies extends StructuredAnalysis{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * Method checks whether local occurs in the left or right side of the localpair
 	 * different semantics than the usual contains method which checks something in a list
@@ -106,13 +106,13 @@ public class ReachingCopies extends StructuredAnalysis{
 	    }
 	    return false;
 	}
-	
+
 	public String toString(){
 	    StringBuffer b = new StringBuffer();
 	    b.append("<"+leftLocal.toString()+","+rightLocal.toString()+">");
 	    return b.toString();
 	}
-	
+
     }
 
     /******************************END OF LOCAL PAIR CLASS ***********************/
@@ -139,7 +139,7 @@ public class ReachingCopies extends StructuredAnalysis{
     public Object newInitialFlow(){
 	return new DavaFlowSet();
     }
-    
+
     public Object cloneFlowSet(Object flowSet){
 	if(flowSet instanceof DavaFlowSet){
 	    return ((DavaFlowSet)flowSet).clone();
@@ -246,7 +246,7 @@ public class ReachingCopies extends StructuredAnalysis{
 	LocalPair localp = new LocalPair(left,right);
 	in.add(localp);
     }
-    
+
     public void kill(DavaFlowSet in, Local redefined){
 	// kill any previous localpairs which have the redefined Local in the left OR right position
 	List list = in.toList();
@@ -280,7 +280,7 @@ public class ReachingCopies extends StructuredAnalysis{
 	DavaFlowSet beforeSetReaching = (DavaFlowSet)beforeSet;
 	//Get all reachingCopies
 
-	/* the list that toList of this object contains elements of 
+	/* the list that toList of this object contains elements of
 	 * type LocalPair (a,b) which means this is a copy
 	 * stmt of the form a=b
 	 */

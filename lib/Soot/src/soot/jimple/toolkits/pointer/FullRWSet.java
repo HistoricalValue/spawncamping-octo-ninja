@@ -22,12 +22,12 @@ import java.util.*;
 import soot.*;
 
 public class FullRWSet extends RWSet {
-    
+
     public int size()
     {
 	throw new RuntimeException( "Unsupported" );
     }
-    
+
     public boolean getCallsNative() {
 	return true;
     }

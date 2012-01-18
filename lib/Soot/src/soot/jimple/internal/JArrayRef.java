@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -53,8 +53,8 @@ public class JArrayRef implements ArrayRef, ConvertToBaf
         this.baseBox = baseBox;
         this.indexBox = indexBox;
     }
-    
-    public Object clone() 
+
+    public Object clone()
     {
         return new JArrayRef(Jimple.cloneIfNecessary(getBase()), Jimple.cloneIfNecessary(getIndex()));
     }
@@ -70,7 +70,7 @@ public class JArrayRef implements ArrayRef, ConvertToBaf
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return getBase().equivHashCode() * 101 + getIndex().equivHashCode() + 17;
     }
@@ -79,7 +79,7 @@ public class JArrayRef implements ArrayRef, ConvertToBaf
     {
         return baseBox.getValue().toString() + "[" + indexBox.getValue().toString() + "]";
     }
-    
+
     public void toString(UnitPrinter up) {
         baseBox.toString(up);
         up.literal("[");
@@ -166,7 +166,7 @@ public class JArrayRef implements ArrayRef, ConvertToBaf
     {
         ((ConvertToBaf)getBase()).convertToBaf(context, out);
         ((ConvertToBaf)getIndex()).convertToBaf(context, out);
-	
+
 	Unit currentUnit = context.getCurrentUnit();
 
 	Unit x;

@@ -25,7 +25,7 @@ public class CompoundResolver implements TopLevelResolver {
     public String toString() {
         return "(compound " + head + " " + tail + ")";
     }
-    
+
     /**
      * Check if a package exists.
      */

@@ -22,7 +22,7 @@ import soot.PointsToSet;
 
 /**
  * A points-to set supporting deep equals and hashCode operations.
- *  
+ *
  * @author Eric Bodden
  * @see PointsToSetEqualsWrapper
  */

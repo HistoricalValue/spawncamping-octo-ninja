@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.zip.*;
 
 /**
- * The <code>TypeEncoder</code> gives the ability to encode a polyglot 
+ * The <code>TypeEncoder</code> gives the ability to encode a polyglot
  * <code>Type</code> as a Java string.
  * <p>
  * It uses a form of serialization to encode the <code>Type</code> into
@@ -15,10 +15,10 @@ import java.util.zip.*;
  * <p>
  * The difference between the encoder and a normal serialization process is
  * that in order to encode this type, we need to sever any links to other types
- * in the current environment. So any <code>ClassType</code> other than the 
- * the type being encoded is replaced in the stream with a 
+ * in the current environment. So any <code>ClassType</code> other than the
+ * the type being encoded is replaced in the stream with a
  * <code>PlaceHolder</code> that contains the name of the class. To aid
- * in the decoding process, placeholders for member classes user their 
+ * in the decoding process, placeholders for member classes user their
  * "mangled" name; non-member classes use their fully qualified name.
  */
 public class TypeEncoder
@@ -41,7 +41,7 @@ public class TypeEncoder
     if (Report.should_report(Report.serialize, 1)) {
       Report.report(1, "Encoding type " + t);
     }
-    
+
     baos = new ByteArrayOutputStream();
 
     if (zip) {
@@ -54,11 +54,11 @@ public class TypeEncoder
     oos.writeObject( t);
     oos.flush();
     oos.close();
-    
+
     byte[] b = baos.toByteArray();
 
     if (Report.should_report(Report.serialize, 2)) {
-      Report.report(2, "Size of serialization (with" 
+      Report.report(2, "Size of serialization (with"
             + (zip?"":"out") + " zipping) is " + b.length + " bytes");
     }
 
@@ -66,15 +66,15 @@ public class TypeEncoder
     if (base64) {
         s = new String(Base64.encode(b));
     }
-    else {    
+    else {
         StringBuffer sb = new StringBuffer(b.length);
         for (int i = 0; i < b.length; i++)
     	sb.append((char) b[i]);
         s = sb.toString();
     }
-    
+
     if (Report.should_report(Report.serialize, 2)) {
-      Report.report(2, "Size of serialization after conversion to string is " 
+      Report.report(2, "Size of serialization after conversion to string is "
             + s.length() + " characters");
     }
 
@@ -99,19 +99,19 @@ public class TypeEncoder
     byte[] b;
 
     if (base64) {
-        b = Base64.decode(s.toCharArray());    
+        b = Base64.decode(s.toCharArray());
     }
     else {
-        char[] source;        
+        char[] source;
         source = s.toCharArray();
         b = new byte[ source.length];
         for (int i = 0; i < source.length; i++)
     	b[i] = (byte) source[i];
     }
-    
+
     try {
         if (zip) {
-            ois = new TypeInputStream( new GZIPInputStream( 
+            ois = new TypeInputStream( new GZIPInputStream(
     				     new ByteArrayInputStream( b)), ts);
         }
         else {

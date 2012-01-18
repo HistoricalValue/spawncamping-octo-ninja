@@ -44,20 +44,20 @@ public class PurityMethodNode implements PurityNode
     private static int n = 0;
 
     PurityMethodNode(SootMethod id)
-    { 
+    {
 	this.id = id;
 	if (!nMap.containsKey(id)) { nMap.put(id,new Integer(n)); n++; }
     }
 
-    public String toString() 
-    { 
+    public String toString()
+    {
 	return "M_"+nMap.get(id);
 	//return ""+id;
     }
 
-    public int hashCode() 
+    public int hashCode()
     { return id.hashCode(); }
-    
+
     public boolean equals(Object o)
     {
 	if (o instanceof PurityMethodNode) {
@@ -67,12 +67,12 @@ public class PurityMethodNode implements PurityNode
 	else return false;
     }
 
-    public boolean isInside() 
+    public boolean isInside()
     { return true; }
 
     public boolean isLoad()
     { return false; }
 
-    public boolean isParam() 
+    public boolean isParam()
     { return false; }
 }

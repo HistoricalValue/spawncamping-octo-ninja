@@ -41,7 +41,7 @@ import soot.util.HashMultiMap;
 
 /**
  * Information for a context-sensitive analysis, eg. for call sites
- * 
+ *
  * @author manu
  */
 public class ContextSensitiveInfo {
@@ -88,7 +88,7 @@ public class ContextSensitiveInfo {
     private final ArraySetMultiMap<LocalVarNode, Integer> receiverToVirtCallSites = new ArraySetMultiMap<LocalVarNode, Integer>();
 
     /**
-     * 
+     *
      */
     public ContextSensitiveInfo(PAG pag) {
         // set up method to node map
@@ -318,7 +318,7 @@ public class ContextSensitiveInfo {
     }
 
     /**
-     * 
+     *
      * @param node
      * @return edges capturing assign flow <em>into</em> node
      */

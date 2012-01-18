@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,11 +41,11 @@ public class Baf
     public Baf( Singletons.Global g ) {}
     public static Baf v() { return G.v().soot_baf_Baf(); }
 
-    public static Type getDescriptorTypeOf(Type opType) 
-    {        
+    public static Type getDescriptorTypeOf(Type opType)
+    {
         if(opType instanceof NullType || opType instanceof ArrayType || opType instanceof RefType)
             opType = RefType.v();
-        
+
         return opType;
     }
 
@@ -90,7 +90,7 @@ public class Baf
     {
         return new BReturnVoidInst();
     }
-    
+
     public NopInst newNopInst()
     {
         return new BNopInst();
@@ -100,7 +100,7 @@ public class Baf
     {
         return new BGotoInst(unit);
     }
-    
+
     public JSRInst newJSRInst(Unit unit)
     {
       	return new BJSRInst(unit);
@@ -110,17 +110,17 @@ public class Baf
     {
         return new PlaceholderInst(source);
     }
-        
+
     public UnitBox newInstBox(Unit unit)
     {
         return new InstBox((Inst) unit);
     }
-    
+
     public PushInst newPushInst(Constant c)
     {
         return new BPushInst(c);
     }
-    
+
     public IdentityInst newIdentityInst(Value local, Value identityRef)
     {
         return new BIdentityInst(local, identityRef);
@@ -130,13 +130,13 @@ public class Baf
     {
         return new BafLocalBox(value);
     }
-    
+
     public ValueBox newIdentityRefBox(Value value)
     {
         return new IdentityRefBox(value);
     }
 
-    
+
     /**
         Constructs a ThisRef(RefType) grammar chunk.
      */
@@ -145,7 +145,7 @@ public class Baf
     {
         return new ThisRef(t);
     }
-    
+
     /**
         Constructs a ParameterRef(SootMethod, int) grammar chunk.
      */
@@ -154,12 +154,12 @@ public class Baf
     {
         return new ParameterRef(paramType, number);
     }
-    
+
     public StoreInst newStoreInst(Type opType, Local l)
     {
         return new BStoreInst(opType, l);
     }
-    
+
     public LoadInst newLoadInst(Type opType, Local l)
     {
         return new BLoadInst(opType, l);
@@ -169,7 +169,7 @@ public class Baf
     {
         return new BArrayWriteInst(opType);
     }
-    
+
     public ArrayReadInst newArrayReadInst(Type opType)
     {
         return new BArrayReadInst(opType);
@@ -179,7 +179,7 @@ public class Baf
     {
         return new BStaticGetInst(fieldRef);
     }
-    
+
     public StaticPutInst newStaticPutInst(SootFieldRef fieldRef)
     {
         return new BStaticPutInst(fieldRef);
@@ -189,18 +189,18 @@ public class Baf
     {
         return new BFieldGetInst(fieldRef);
     }
-    
+
     public FieldPutInst newFieldPutInst(SootFieldRef fieldRef)
     {
         return new BFieldPutInst(fieldRef);
     }
-    
+
     public AddInst newAddInst(Type opType)
     {
         return new BAddInst(opType);
     }
 
-    public PopInst newPopInst(Type aType) 
+    public PopInst newPopInst(Type aType)
     {
         return new BPopInst(aType);
     }
@@ -418,13 +418,13 @@ public class Baf
     {
         return new BSwapInst(fromType, toType);
     }
-  
+
     /*
     public DupInst newDupInst(Type type)
     {
         return new BDupInst(new ArrayList(), Arrays.asList(new Type[] {type}));
         }*/
-    
+
 
     public Dup1Inst newDup1Inst(Type type)
     {
@@ -440,7 +440,7 @@ public class Baf
     {
         return new BDup1_x1Inst(aOpType, aUnderType);
     }
-    
+
     public Dup1_x2Inst newDup1_x2Inst(Type aOpType,
                                       Type aUnder1Type, Type aUnder2Type)
     {
@@ -463,14 +463,14 @@ public class Baf
   {
        return new BIncInst(aLocal, aConstant);
   }
-  
-    public LookupSwitchInst newLookupSwitchInst(Unit defaultTarget, 
+
+    public LookupSwitchInst newLookupSwitchInst(Unit defaultTarget,
                              List lookupValues, List targets)
     {
         return new BLookupSwitchInst(defaultTarget, lookupValues, targets);
     }
 
-    public TableSwitchInst newTableSwitchInst(Unit defaultTarget, 
+    public TableSwitchInst newTableSwitchInst(Unit defaultTarget,
                              int lowIndex, int highIndex, List targets)
     {
         return new BTableSwitchInst(defaultTarget, lowIndex,
@@ -525,7 +525,7 @@ public class Baf
                 setResult("s");
             }
 
-            
+
             public void defaultCase(Type t)
             {
                 throw new RuntimeException("Invalid type: " + t);

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,7 +38,7 @@ package soot;
  *   work with with Java modifiers (ie public, final,...)
  *   Represents Java modifiers as int constants that can be packed and
  *   combined by bitwise operations and methods to query these.
- *   
+ *
  */
 public class Modifier
 {
@@ -53,10 +53,10 @@ public class Modifier
     public static final int SYNCHRONIZED = 0x0020;
     public static final int TRANSIENT =    0x0080; /* VARARGS for methods */
     public static final int VOLATILE =     0x0040; /* BRIDGE for methods */
-    public static final int STRICTFP =     0x0800; 
-    public static final int ANNOTATION =   0x2000; 
-    public static final int ENUM =         0x4000; 
-    
+    public static final int STRICTFP =     0x0800;
+    public static final int ANNOTATION =   0x2000;
+    public static final int ENUM =         0x4000;
+
     private Modifier()
     {
     }
@@ -120,17 +120,17 @@ public class Modifier
     {
         return (m & STRICTFP) != 0;
     }
-    
+
     public static boolean isAnnotation(int m)
     {
         return (m & ANNOTATION) != 0;
     }
-    
+
     public static boolean isEnum(int m)
     {
         return (m & ENUM) != 0;
     }
-    
+
     /**
      *  Converts the given modifiers to their string representation, in canonical form.
      *   @param m  a modifier set
@@ -170,16 +170,16 @@ public class Modifier
 
         if(isStrictFP(m))
             buffer.append("strictfp ");
-        
+
         if(isAnnotation(m))
             buffer.append("annotation ");
-        
+
         if(isEnum(m))
             buffer.append("enum ");
-        
+
         if(isInterface(m))
         	buffer.append("interface ");
-        
+
         return (buffer.toString()).trim();
     }
 

@@ -28,26 +28,26 @@ public class ConstantFolder extends NodeVisitor
 	if (! (n instanceof Expr)) {
 	    return n;
 	}
-	
+
 	Expr e = (Expr) n;
-	
+
 	if (! e.isConstant()) {
 	    return e;
 	}
-	
+
 	// Don't fold String +.  Strings are often broken up for better
 	// formatting.
 	if (e instanceof Binary) {
 	    Binary b = (Binary) e;
-	    
+
 	    if (b.operator() == Binary.ADD &&
 		b.left().constantValue() instanceof String &&
 		b.right().constantValue() instanceof String) {
-		
+
 		return b;
 	    }
 	}
-	
+
 	Object v = e.constantValue();
 	Position pos = e.position();
 
@@ -82,7 +82,7 @@ public class ConstantFolder extends NodeVisitor
 	    return nf.CharLit(pos,
 			      ((Character) v).charValue()).type(ts.Char());
 	}
-	
+
 	return e;
     }
 }

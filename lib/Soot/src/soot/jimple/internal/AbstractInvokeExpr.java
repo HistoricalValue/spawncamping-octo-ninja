@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -43,7 +43,7 @@ abstract public class AbstractInvokeExpr implements InvokeExpr
 	public void setMethodRef(SootMethodRef methodRef) {
 		this.methodRef = methodRef;
 	}
-	
+
     public SootMethodRef getMethodRef()
     {
         return methodRef;
@@ -55,7 +55,7 @@ abstract public class AbstractInvokeExpr implements InvokeExpr
     }
 
     public abstract Object clone();
-    
+
     public Value getArg(int index)
     {
         return argBoxes[index].getValue();

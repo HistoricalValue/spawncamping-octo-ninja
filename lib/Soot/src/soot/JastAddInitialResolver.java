@@ -35,7 +35,7 @@ import soot.JastAddJ.TypeDecl;
 
 /**
  * An {@link IInitialResolver} for the JastAdd frontend.
- * 
+ *
  * @author Torbjorn Ekman
  * @author Eric Bodden
  */
@@ -46,9 +46,9 @@ public class JastAddInitialResolver implements IInitialResolver {
     public static JastAddInitialResolver v() {
         return soot.G.v().soot_JastAddInitialResolver();
     }
-	
+
 	protected Map<String,CompilationUnit> classNameToCU = new HashMap<String, CompilationUnit>();
-	
+
 	public void formAst(String fullPath, List<String> locations, String className) {
 	      Program program = SootResolver.v().getProgram();
     	  CompilationUnit u = program.getCachedOrLoadCompilationUnit(fullPath);
@@ -73,10 +73,10 @@ public class JastAddInitialResolver implements IInitialResolver {
 				  classNameToCU.put(className, u);
 		      else
 		    	  for(SootClass sc : types)
-		    		  classNameToCU.put(sc.getName(), u);	     
+		    		  classNameToCU.put(sc.getName(), u);
     	  }
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void collectTypeDecl(TypeDecl typeDecl, HashSet<SootClass> types) {
 		types.add(typeDecl.getSootClassDecl());
@@ -84,7 +84,7 @@ public class JastAddInitialResolver implements IInitialResolver {
 			collectTypeDecl(nestedType, types);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private TypeDecl findNestedTypeDecl(TypeDecl typeDecl, SootClass sc) {
 		if(typeDecl.sootClass() == sc)
@@ -94,7 +94,7 @@ public class JastAddInitialResolver implements IInitialResolver {
 			if(t != null)
 				return t;
 		}
-		return null;			
+		return null;
 	}
 
 	public Dependencies resolveFromJavaFile(SootClass sootclass) {
@@ -103,10 +103,10 @@ public class JastAddInitialResolver implements IInitialResolver {
 		for(TypeDecl typeDecl : u.getTypeDecls()) {
 			collectTypeDecl(typeDecl, types);
 		}
-		Dependencies deps = new Dependencies(); 
+		Dependencies deps = new Dependencies();
 		u.collectTypesToHierarchy(deps.typesToHierarchy);
 	  	u.collectTypesToSignatures(deps.typesToSignature);
-		
+
 		for(SootClass sc : types) {
 		for (SootMethod m : sc.getMethods()) {
 			m.setSource(new MethodSource() {
@@ -135,7 +135,7 @@ public class JastAddInitialResolver implements IInitialResolver {
 									}
 								}
 							}
-							
+
 						}
 					}
 					throw new RuntimeException("Could not find body for " + m.getSignature() + " in " + m.getDeclaringClass().getName());

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -35,12 +35,12 @@ import java.util.*;
 
 
 /**
- *   Reference implementation for a FlowSet. Items are stored in an Array.  
+ *   Reference implementation for a FlowSet. Items are stored in an Array.
  */
 public class ArraySparseSet extends AbstractFlowSet
 {
-	protected static final int DEFAULT_SIZE = 8; 
-    
+	protected static final int DEFAULT_SIZE = 8;
+
     protected int numElements;
     protected int maxElements;
     protected Object[] elements;
@@ -51,14 +51,14 @@ public class ArraySparseSet extends AbstractFlowSet
         elements = new Object[DEFAULT_SIZE];
         numElements = 0;
     }
-    
+
     private ArraySparseSet(ArraySparseSet other)
     {
         numElements = other.numElements;
         maxElements = other.maxElements;
         elements = other.elements.clone();
     }
-    
+
     /** Returns true if flowSet is the same type of flow set as this. */
     private boolean sameType(Object flowSet)
     {
@@ -79,7 +79,7 @@ public class ArraySparseSet extends AbstractFlowSet
     {
         numElements = 0;
     }
-    
+
     public int size()
     {
         return numElements;
@@ -114,15 +114,15 @@ public class ArraySparseSet extends AbstractFlowSet
     }
 
     private void doubleCapacity()
-    {        
+    {
         int newSize = maxElements * 2;
-                    
+
         Object[] newElements = new Object[newSize];
-                
+
         System.arraycopy(elements, 0, newElements, 0, numElements);
         elements = newElements;
         maxElements = newSize;
-    }    
+    }
 
     public void remove(Object obj)
     {
@@ -156,7 +156,7 @@ public class ArraySparseSet extends AbstractFlowSet
                 for(int i = 0; i < this.numElements; i++)
                     dest.add(this.elements[i]);
             }
-        
+
         // Else, force that dest starts with contents of this
         else {
             if(this != dest)
@@ -176,20 +176,20 @@ public class ArraySparseSet extends AbstractFlowSet
         ArraySparseSet other = (ArraySparseSet) otherFlow;
         ArraySparseSet dest = (ArraySparseSet) destFlow;
         ArraySparseSet workingSet;
-        
+
         if(dest == other || dest == this)
             workingSet = new ArraySparseSet();
-        else { 
+        else {
             workingSet = dest;
             workingSet.clear();
         }
-        
+
         for(int i = 0; i < this.numElements; i++)
         {
             if(other.contains(this.elements[i]))
                 workingSet.add(this.elements[i]);
         }
-        
+
         if(workingSet != dest)
             workingSet.copy(dest);
       } else
@@ -203,26 +203,26 @@ public class ArraySparseSet extends AbstractFlowSet
         ArraySparseSet other = (ArraySparseSet) otherFlow;
         ArraySparseSet dest = (ArraySparseSet) destFlow;
         ArraySparseSet workingSet;
-        
+
         if(dest == other || dest == this)
             workingSet = new ArraySparseSet();
-        else { 
+        else {
             workingSet = dest;
             workingSet.clear();
         }
-        
+
         for(int i = 0; i < this.numElements; i++)
         {
             if(!other.contains(this.elements[i]))
                 workingSet.add(this.elements[i]);
         }
-        
+
         if(workingSet != dest)
             workingSet.copy(dest);
       } else
         super.difference(otherFlow, destFlow);
     }
-    
+
     /**
      * @deprecated This method uses linear-time lookup.
      * For better performance, consider using a {@link HashSet} instead, if you require this operation.
@@ -232,7 +232,7 @@ public class ArraySparseSet extends AbstractFlowSet
         for(int i = 0; i < numElements; i++)
             if(elements[i].equals(obj))
                 return true;
-                
+
         return false;
     }
 
@@ -240,13 +240,13 @@ public class ArraySparseSet extends AbstractFlowSet
     {
       if (sameType(otherFlow)) {
         ArraySparseSet other = (ArraySparseSet) otherFlow;
-         
+
         if(other.numElements != this.numElements)
             return false;
-     
+
         int size = this.numElements;
-             
-        // Make sure that thisFlow is contained in otherFlow  
+
+        // Make sure that thisFlow is contained in otherFlow
             for(int i = 0; i < size; i++)
                 if(!other.contains(this.elements[i]))
                     return false;
@@ -254,12 +254,12 @@ public class ArraySparseSet extends AbstractFlowSet
             /* both arrays have the same size, no element appears twice in one
              * array, all elements of ThisFlow are in otherFlow -> they are
              * equal!  we don't need to test again!
-        // Make sure that otherFlow is contained in ThisFlow        
+        // Make sure that otherFlow is contained in ThisFlow
             for(int i = 0; i < size; i++)
                 if(!this.contains(other.elements[i]))
                     return false;
              */
-        
+
         return true;
       } else
         return super.equals(otherFlow);
@@ -272,9 +272,9 @@ public class ArraySparseSet extends AbstractFlowSet
 
         while(dest.maxElements < this.maxElements)
             dest.doubleCapacity();
-    
+
         dest.numElements = this.numElements;
-        
+
         System.arraycopy(this.elements, 0,
             dest.elements, 0, this.numElements);
       } else

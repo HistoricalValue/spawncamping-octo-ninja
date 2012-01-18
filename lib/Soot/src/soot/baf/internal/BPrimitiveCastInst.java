@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,11 +33,11 @@ import soot.*;
 import soot.baf.*;
 import soot.util.*;
 
-public class BPrimitiveCastInst extends AbstractInst 
+public class BPrimitiveCastInst extends AbstractInst
                             implements PrimitiveCastInst
 {
     Type fromType;
-    
+
     protected Type toType;
 
     public int getInCount()
@@ -49,7 +49,7 @@ public class BPrimitiveCastInst extends AbstractInst
     {
         return AbstractJasminClass.sizeOfType(fromType);
     }
-    
+
     public int getOutCount()
     {
         return 1;
@@ -60,18 +60,18 @@ public class BPrimitiveCastInst extends AbstractInst
         return AbstractJasminClass.sizeOfType(toType);
     }
 
-    
-    public BPrimitiveCastInst(Type fromType, Type toType) 
-    { 
-        
+
+    public BPrimitiveCastInst(Type fromType, Type toType)
+    {
+
         if( fromType instanceof NullType )
             throw new RuntimeException("invalid fromType " + fromType);
         this.fromType = fromType;
         this.toType = toType;
     }
 
-    
-    public Object clone() 
+
+    public Object clone()
     {
         return new BPrimitiveCastInst(getFromType(), toType);
     }
@@ -81,11 +81,11 @@ public class BPrimitiveCastInst extends AbstractInst
     // after changing the types, use getName to check validity
     public Type getFromType() { return fromType; }
     public void setFromType(Type t) { fromType = t;}
-    
+
     public Type getToType() { return toType; }
     public void setToType(Type t) { toType = t;}
 
-    final public String getName() 
+    final public String getName()
     {
         TypeSwitch sw;
 
@@ -141,7 +141,7 @@ public class BPrimitiveCastInst extends AbstractInst
                 {
                     emitIntToTypeCast();
                 }
-            
+
             public void caseShortType(ShortType ty)
                 {
                     emitIntToTypeCast();
@@ -181,7 +181,7 @@ public class BPrimitiveCastInst extends AbstractInst
                     else
                         throw new RuntimeException
                               ("invalid toType from long: " + toType);
-                            
+
                 }
         });
         return (String)sw.getResult();
@@ -190,13 +190,13 @@ public class BPrimitiveCastInst extends AbstractInst
     /* override toString with our own, *not* including types */
     public String toString()
     {
-        return getName() + 
+        return getName() +
             getParameters();
     }
 
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).casePrimitiveCastInst(this);
-    }   
+    }
 }
 

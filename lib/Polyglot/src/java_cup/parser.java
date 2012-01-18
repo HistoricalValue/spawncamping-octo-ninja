@@ -22,7 +22,7 @@ public class parser
   public parser(java_cup.runtime.Scanner s) {super(s);}
 
   /** Production table. */
-  protected static final short _production_table[][] = 
+  protected static final short _production_table[][] =
     unpackFromStrings(new String[] {
     "\000\161\000\002\002\004\000\002\057\002\000\002\003" +
     "\012\000\002\003\007\000\002\060\002\000\002\004\006" +
@@ -64,7 +64,7 @@ public class parser
   public short[][] production_table() {return _production_table;}
 
   /** Parse-action table. */
-  protected static final short[][] _action_table = 
+  protected static final short[][] _action_table =
     unpackFromStrings(new String[] {
     "\000\262\000\026\003\005\004\000\005\000\007\000\010" +
     "\000\011\000\012\000\013\000\014\000\035\000\001\002" +
@@ -260,7 +260,7 @@ public class parser
   public short[][] action_table() {return _action_table;}
 
   /** <code>reduce_goto</code> table. */
-  protected static final short[][] _reduce_table = 
+  protected static final short[][] _reduce_table =
     unpackFromStrings(new String[] {
     "\000\262\000\006\003\003\057\005\001\001\000\002\001" +
     "\001\000\010\012\051\014\257\024\053\001\001\000\006" +
@@ -377,14 +377,14 @@ public class parser
   /** User initialization code. */
   public void user_init() throws java.lang.Exception
     {
- lexer.init(); 
+ lexer.init();
     }
 
   /** Scan to get the next Symbol. */
   public java_cup.runtime.Symbol scan()
     throws java.lang.Exception
     {
- return lexer.next_token(); 
+ return lexer.next_token();
     }
 
 
@@ -439,8 +439,8 @@ class CUP$parser$actions {
   protected void add_rhs_part(production_part part) throws java.lang.Exception
     {
       if (rhs_pos >= MAX_RHS)
-	throw new Exception("Internal Error: Productions limited to " + 
-			     MAX_RHS + " symbols and actions"); 
+	throw new Exception("Internal Error: Productions limited to " +
+			     MAX_RHS + " symbols and actions");
 
       rhs_parts[rhs_pos] = part;
       rhs_pos++;
@@ -483,7 +483,7 @@ class CUP$parser$actions {
     _cur_side = p;
     _cur_prec++;
   }
-  /** add relevant data to terminals */ 
+  /** add relevant data to terminals */
   protected void add_precedence(String term) {
     if (term == null) {
       System.err.println("Unable to add precedence to nonexistent terminal");
@@ -493,7 +493,7 @@ class CUP$parser$actions {
 	System.err.println("Could find terminal " + term + " while declaring precedence");
       } else {
 	java_cup.symbol sym = sp.the_symbol();
-	if (sym instanceof terminal) 
+	if (sym instanceof terminal)
 	  ((terminal)sym).set_precedence(_cur_side, _cur_prec);
 	else System.err.println("Precedence declaration: Can't find terminal " + term);
       }
@@ -522,7 +522,7 @@ class CUP$parser$actions {
       switch (CUP$parser$act_num)
         {
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 112: // empty ::= 
+          case 112: // empty ::=
             {
               Object RESULT = null;
 
@@ -531,7 +531,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 111: // opt_semi ::= SEMI 
+          case 111: // opt_semi ::= SEMI
             {
               Object RESULT = null;
 
@@ -540,7 +540,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 110: // opt_semi ::= 
+          case 110: // opt_semi ::=
             {
               Object RESULT = null;
 
@@ -549,7 +549,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 109: // non_terminal ::= NONTERMINAL 
+          case 109: // non_terminal ::= NONTERMINAL
             {
               Object RESULT = null;
 
@@ -558,7 +558,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 108: // non_terminal ::= NON TERMINAL 
+          case 108: // non_terminal ::= NON TERMINAL
             {
               Object RESULT = null;
 
@@ -567,228 +567,228 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 107: // robust_id ::= error 
+          case 107: // robust_id ::= error
             {
               String RESULT = null;
-		
+
 		lexer.emit_error("Illegal use of reserved word");
 		RESULT="ILLEGAL";
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 106: // robust_id ::= NONASSOC 
+          case 106: // robust_id ::= NONASSOC
             {
               String RESULT = null;
-		 RESULT = "nonassoc"; 
+		 RESULT = "nonassoc";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 105: // robust_id ::= RIGHT 
+          case 105: // robust_id ::= RIGHT
             {
               String RESULT = null;
-		 RESULT = "right"; 
+		 RESULT = "right";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 104: // robust_id ::= LEFT 
+          case 104: // robust_id ::= LEFT
             {
               String RESULT = null;
-		 RESULT = "left"; 
+		 RESULT = "left";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 103: // robust_id ::= PRECEDENCE 
+          case 103: // robust_id ::= PRECEDENCE
             {
               String RESULT = null;
-		 RESULT = "precedence"; 
+		 RESULT = "precedence";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 102: // robust_id ::= START 
+          case 102: // robust_id ::= START
             {
               String RESULT = null;
-		 RESULT = "start"; 
+		 RESULT = "start";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 101: // robust_id ::= WITH 
+          case 101: // robust_id ::= WITH
             {
               String RESULT = null;
-		 RESULT = "with"; 
+		 RESULT = "with";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 100: // robust_id ::= SCAN 
+          case 100: // robust_id ::= SCAN
             {
               String RESULT = null;
-		 RESULT = "scan"; 
+		 RESULT = "scan";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 99: // robust_id ::= INIT 
+          case 99: // robust_id ::= INIT
             {
               String RESULT = null;
-		 RESULT = "init"; 
+		 RESULT = "init";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 98: // robust_id ::= NONTERMINAL 
+          case 98: // robust_id ::= NONTERMINAL
             {
               String RESULT = null;
-		 RESULT = "nonterminal"; 
+		 RESULT = "nonterminal";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 97: // robust_id ::= NON 
+          case 97: // robust_id ::= NON
             {
               String RESULT = null;
-		 RESULT = "non"; 
+		 RESULT = "non";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 96: // robust_id ::= TERMINAL 
+          case 96: // robust_id ::= TERMINAL
             {
               String RESULT = null;
-		 RESULT = "terminal"; 
+		 RESULT = "terminal";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 95: // robust_id ::= PARSER 
+          case 95: // robust_id ::= PARSER
             {
               String RESULT = null;
-		 RESULT = "parser"; 
+		 RESULT = "parser";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 94: // robust_id ::= ACTION 
+          case 94: // robust_id ::= ACTION
             {
               String RESULT = null;
-		 RESULT = "action"; 
+		 RESULT = "action";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 93: // robust_id ::= CODE 
+          case 93: // robust_id ::= CODE
             {
               String RESULT = null;
-		 RESULT = "code"; 
+		 RESULT = "code";
               CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 92: // robust_id ::= ID 
-            {
-              String RESULT = null;
-		int the_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
-		int the_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
-		String the_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = the_id; 
-              CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
-            }
-          return CUP$parser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 91: // label_id ::= robust_id 
+          case 92: // robust_id ::= ID
             {
               String RESULT = null;
 		int the_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int the_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String the_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = the_id; 
+		 RESULT = the_id;
+              CUP$parser$result = new java_cup.runtime.Symbol(42/*robust_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 91: // label_id ::= robust_id
+            {
+              String RESULT = null;
+		int the_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
+		int the_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
+		String the_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
+		 RESULT = the_id;
               CUP$parser$result = new java_cup.runtime.Symbol(38/*label_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 90: // symbol_id ::= error 
+          case 90: // symbol_id ::= error
             {
               String RESULT = null;
-		
+
 		lexer.emit_error("Illegal use of reserved word");
 		RESULT="ILLEGAL";
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(37/*symbol_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 89: // symbol_id ::= ID 
+          case 89: // symbol_id ::= ID
             {
               String RESULT = null;
 		int the_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int the_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String the_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = the_id; 
+		 RESULT = the_id;
               CUP$parser$result = new java_cup.runtime.Symbol(37/*symbol_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 88: // nt_id ::= error 
+          case 88: // nt_id ::= error
             {
               String RESULT = null;
-		
+
 		lexer.emit_error("Illegal use of reserved word");
 		RESULT="ILLEGAL";
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(36/*nt_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 87: // nt_id ::= ID 
+          case 87: // nt_id ::= ID
             {
               String RESULT = null;
 		int the_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int the_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String the_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = the_id; 
+		 RESULT = the_id;
               CUP$parser$result = new java_cup.runtime.Symbol(36/*nt_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 86: // new_non_term_id ::= ID 
+          case 86: // new_non_term_id ::= ID
             {
               Object RESULT = null;
 		int non_term_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int non_term_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String non_term_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 
+
 	  /* see if this non terminal has been declared before */
 	  if (symbols.get(non_term_id) != null)
 	    {
 	      /* issue a message */
-	      lexer.emit_error( "java_cup.runtime.Symbol \"" + non_term_id + 
+	      lexer.emit_error( "java_cup.runtime.Symbol \"" + non_term_id +
 			                      "\" has already been declared");
 	    }
 	  else
@@ -797,33 +797,33 @@ class CUP$parser$actions {
 		append_multipart("Object");
 	      }
 	      /* build the non terminal object */
-              non_terminal this_nt = 
+              non_terminal this_nt =
 		new non_terminal(non_term_id, multipart_name);
 
 	      /* put it in the non_terms table */
 	      non_terms.put(non_term_id, this_nt);
 
-	      /* build a production_part and put it in the symbols table */ 
+	      /* build a production_part and put it in the symbols table */
 	      symbols.put(non_term_id, new symbol_part(this_nt));
 	    }
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(26/*new_non_term_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 85: // new_term_id ::= ID 
+          case 85: // new_term_id ::= ID
             {
               Object RESULT = null;
 		int term_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int term_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String term_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 
+
 	  /* see if this terminal has been declared before */
 	  if (symbols.get(term_id) != null)
 	    {
 	      /* issue a message */
-	      lexer.emit_error("java_cup.runtime.Symbol \"" + term_id + 
+	      lexer.emit_error("java_cup.runtime.Symbol \"" + term_id +
 			   "\" has already been declared");
 	    }
 	  else
@@ -832,26 +832,26 @@ class CUP$parser$actions {
 	      if (multipart_name.equals("")) {
 		append_multipart("Object");
 	      }
-	      /* build a production_part and put it in the table */ 
-	      symbols.put(term_id, 
+	      /* build a production_part and put it in the table */
+	      symbols.put(term_id,
 	        new symbol_part(new terminal(term_id, multipart_name)));
 	    }
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(25/*new_term_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 84: // type_id ::= type_id LBRACK RBRACK 
+          case 84: // type_id ::= type_id LBRACK RBRACK
             {
               Object RESULT = null;
-		 multipart_name = multipart_name.concat("[]"); 
+		 multipart_name = multipart_name.concat("[]");
               CUP$parser$result = new java_cup.runtime.Symbol(19/*type_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 83: // type_id ::= multipart_id 
+          case 83: // type_id ::= multipart_id
             {
               Object RESULT = null;
 
@@ -860,7 +860,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 82: // import_id ::= multipart_id 
+          case 82: // import_id ::= multipart_id
             {
               Object RESULT = null;
 
@@ -869,76 +869,76 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 81: // import_id ::= multipart_id DOT STAR 
+          case 81: // import_id ::= multipart_id DOT STAR
             {
               Object RESULT = null;
-		 append_multipart("*"); 
+		 append_multipart("*");
               CUP$parser$result = new java_cup.runtime.Symbol(15/*import_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 80: // multipart_id ::= robust_id 
+          case 80: // multipart_id ::= robust_id
             {
               Object RESULT = null;
 		int an_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int an_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String an_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 append_multipart(an_id); 
+		 append_multipart(an_id);
               CUP$parser$result = new java_cup.runtime.Symbol(13/*multipart_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 79: // multipart_id ::= multipart_id DOT robust_id 
+          case 79: // multipart_id ::= multipart_id DOT robust_id
             {
               Object RESULT = null;
 		int another_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int another_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String another_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 append_multipart(another_id); 
+		 append_multipart(another_id);
               CUP$parser$result = new java_cup.runtime.Symbol(13/*multipart_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 78: // opt_label ::= empty 
+          case 78: // opt_label ::= empty
             {
               String RESULT = null;
-		 RESULT = null; 
+		 RESULT = null;
               CUP$parser$result = new java_cup.runtime.Symbol(39/*opt_label*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 77: // opt_label ::= COLON label_id 
+          case 77: // opt_label ::= COLON label_id
             {
               String RESULT = null;
 		int labidleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int labidright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String labid = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = labid; 
+		 RESULT = labid;
               CUP$parser$result = new java_cup.runtime.Symbol(39/*opt_label*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 76: // prod_part ::= CODE_STRING 
+          case 76: // prod_part ::= CODE_STRING
             {
               Object RESULT = null;
 		int code_strleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int code_strright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String code_str = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 
+
 	  /* add a new production part */
 	  add_rhs_part(new action_part(code_str));
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(24/*prod_part*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 75: // prod_part ::= symbol_id opt_label 
+          case 75: // prod_part ::= symbol_id opt_label
             {
               Object RESULT = null;
 		int symidleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -947,7 +947,7 @@ class CUP$parser$actions {
 		int labidleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int labidright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String labid = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 
+
 	  /* try to look up the id */
 	  production_part symb = (production_part)symbols.get(symid);
 
@@ -955,7 +955,7 @@ class CUP$parser$actions {
 	  if (symb == null)
 	    {
 	      if (lexer.error_count == 0)
-	        lexer.emit_error("java_cup.runtime.Symbol \"" + symid + 
+	        lexer.emit_error("java_cup.runtime.Symbol \"" + symid +
 			       "\" has not been declared");
 	    }
 	  else
@@ -963,13 +963,13 @@ class CUP$parser$actions {
 	      /* add a labeled production part */
 	      add_rhs_part(add_lab(symb, labid));
 	    }
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(24/*prod_part*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 74: // prod_part_list ::= empty 
+          case 74: // prod_part_list ::= empty
             {
               Object RESULT = null;
 
@@ -978,7 +978,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 73: // prod_part_list ::= prod_part_list prod_part 
+          case 73: // prod_part_list ::= prod_part_list prod_part
             {
               Object RESULT = null;
 
@@ -987,17 +987,17 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 72: // rhs ::= prod_part_list 
+          case 72: // rhs ::= prod_part_list
             {
               Object RESULT = null;
-		 
-	  if (lhs_nt != null) 
+
+	  if (lhs_nt != null)
 	    {
 	      /* build the production */
 	      production p = new production(lhs_nt, rhs_parts, rhs_pos);
 
-	      /* if we have no start non-terminal declared and this is 
-		 the first production, make its lhs nt the start_nt 
+	      /* if we have no start non-terminal declared and this is
+		 the first production, make its lhs nt the start_nt
 		 and build a special start production for it. */
               if (start_nt == null)
 		{
@@ -1008,30 +1008,30 @@ class CUP$parser$actions {
 	          add_rhs_part(add_lab(new symbol_part(start_nt),"start_val"));
 	          add_rhs_part(new symbol_part(terminal.EOF));
 		  add_rhs_part(new action_part("RESULT = start_val;"));
-	          emit.start_production = 
+	          emit.start_production =
 		     new production(non_terminal.START_nt, rhs_parts, rhs_pos);
 
 	          new_rhs();
 		}
 	    }
-	  
+
 	  /* reset the rhs accumulation in any case */
 	  new_rhs();
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(28/*rhs*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 71: // rhs ::= prod_part_list PERCENT_PREC term_id 
+          case 71: // rhs ::= prod_part_list PERCENT_PREC term_id
             {
               Object RESULT = null;
 		int term_nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int term_nameright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String term_name = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
 	  java_cup.symbol sym = null;
-	  if (lhs_nt != null) 
+	  if (lhs_nt != null)
 	    {
 	      /* Find the precedence symbol */
 	      if (term_name == null) {
@@ -1048,13 +1048,13 @@ class CUP$parser$actions {
 				   ((terminal)sym).precedence_side());
 		((symbol_part)symbols.get(term_name)).the_symbol().note_use();
 	      } else {
-		System.err.println("Invalid terminal " + term_name + 
+		System.err.println("Invalid terminal " + term_name +
 				   " for contextual precedence assignment");
 		p = new production(lhs_nt, rhs_parts, rhs_pos);
 	      }
 
-	      /* if we have no start non-terminal declared and this is 
-		 the first production, make its lhs nt the start_nt 
+	      /* if we have no start non-terminal declared and this is
+		 the first production, make its lhs nt the start_nt
 		 and build a special start production for it. */
               if (start_nt == null)
 		{
@@ -1066,12 +1066,12 @@ class CUP$parser$actions {
 	          add_rhs_part(new symbol_part(terminal.EOF));
 		  add_rhs_part(new action_part("RESULT = start_val;"));
 		  if ((sym!=null) && (sym instanceof terminal)) {
-		    emit.start_production = 
-		      new production(non_terminal.START_nt, rhs_parts, 
+		    emit.start_production =
+		      new production(non_terminal.START_nt, rhs_parts,
 				     rhs_pos, ((terminal)sym).precedence_num(),
 				     ((terminal)sym).precedence_side());
 		  } else {
-		    emit.start_production = 
+		    emit.start_production =
 		      new production(non_terminal.START_nt, rhs_parts, rhs_pos);
 		  }
 	          new_rhs();
@@ -1080,13 +1080,13 @@ class CUP$parser$actions {
 
 	  /* reset the rhs accumulation in any case */
 	  new_rhs();
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(28/*rhs*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 70: // rhs_list ::= rhs 
+          case 70: // rhs_list ::= rhs
             {
               Object RESULT = null;
 
@@ -1095,7 +1095,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 69: // rhs_list ::= rhs_list BAR rhs 
+          case 69: // rhs_list ::= rhs_list BAR rhs
             {
               Object RESULT = null;
 
@@ -1104,7 +1104,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 68: // production ::= error NT$13 SEMI 
+          case 68: // production ::= error NT$13 SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$13
@@ -1116,16 +1116,16 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 67: // NT$13 ::= 
+          case 67: // NT$13 ::=
             {
               Object RESULT = null;
- lexer.emit_error("Syntax Error"); 
+ lexer.emit_error("Syntax Error");
               CUP$parser$result = new java_cup.runtime.Symbol(58/*NT$13*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 66: // production ::= nt_id NT$11 COLON_COLON_EQUALS NT$12 rhs_list SEMI 
+          case 66: // production ::= nt_id NT$11 COLON_COLON_EQUALS NT$12 rhs_list SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$11
@@ -1143,19 +1143,19 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 65: // NT$12 ::= 
+          case 65: // NT$12 ::=
             {
               Object RESULT = null;
 		int lhs_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int lhs_idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String lhs_id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
- 
+
               CUP$parser$result = new java_cup.runtime.Symbol(57/*NT$12*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 64: // NT$11 ::= 
+          case 64: // NT$11 ::=
             {
               Object RESULT = null;
 		int lhs_idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
@@ -1169,19 +1169,19 @@ class CUP$parser$actions {
 	  if (lhs_nt == null)
 	    {
 	      if (lexer.error_count == 0)
-	        lexer.emit_error("LHS non terminal \"" + lhs_id + 
+	        lexer.emit_error("LHS non terminal \"" + lhs_id +
 			       "\" has not been declared");
 	    }
 
 	  /* reset the rhs accumulation */
 	  new_rhs();
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(56/*NT$11*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 63: // production_list ::= production 
+          case 63: // production_list ::= production
             {
               Object RESULT = null;
 
@@ -1190,7 +1190,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 62: // production_list ::= production_list production 
+          case 62: // production_list ::= production_list production
             {
               Object RESULT = null;
 
@@ -1199,7 +1199,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 61: // start_spec ::= empty 
+          case 61: // start_spec ::= empty
             {
               Object RESULT = null;
 
@@ -1208,7 +1208,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 60: // start_spec ::= START WITH nt_id NT$10 SEMI 
+          case 60: // start_spec ::= START WITH nt_id NT$10 SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$10
@@ -1223,18 +1223,18 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 59: // NT$10 ::= 
+          case 59: // NT$10 ::=
             {
               Object RESULT = null;
 		int start_nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int start_nameright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String start_name = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
- 
+
 	  /* verify that the name has been declared as a non terminal */
 	  non_terminal nt = (non_terminal)non_terms.get(start_name);
 	  if (nt == null)
 	    {
-	      lexer.emit_error( "Start non terminal \"" + start_name + 
+	      lexer.emit_error( "Start non terminal \"" + start_name +
 	  		         "\" has not been declared");
 	    }
           else
@@ -1247,53 +1247,53 @@ class CUP$parser$actions {
 	      add_rhs_part(add_lab(new symbol_part(start_nt), "start_val"));
 	      add_rhs_part(new symbol_part(terminal.EOF));
 	      add_rhs_part(new action_part("RESULT = start_val;"));
-	      emit.start_production = 
+	      emit.start_production =
 		     new production(non_terminal.START_nt, rhs_parts, rhs_pos);
 	      new_rhs();
 	    }
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(55/*NT$10*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 58: // term_id ::= symbol_id 
+          case 58: // term_id ::= symbol_id
             {
               String RESULT = null;
 		int symleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int symright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String sym = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
 	  /* check that the symbol_id is a terminal */
 	  if (symbols.get(sym) == null)
 	    {
 	      /* issue a message */
-	      lexer.emit_error("Terminal \"" + sym + 
+	      lexer.emit_error("Terminal \"" + sym +
 			   "\" has not been declared");
 	    }
           RESULT = sym;
-         
+
               CUP$parser$result = new java_cup.runtime.Symbol(41/*term_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 57: // terminal_id ::= term_id 
+          case 57: // terminal_id ::= term_id
             {
               String RESULT = null;
 		int symleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int symright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String sym = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-			
+
 	  add_precedence(sym);
 	  RESULT = sym;
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(40/*terminal_id*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 56: // terminal_list ::= terminal_id 
+          case 56: // terminal_list ::= terminal_id
             {
               Object RESULT = null;
 
@@ -1302,7 +1302,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 55: // terminal_list ::= terminal_list COMMA terminal_id 
+          case 55: // terminal_list ::= terminal_list COMMA terminal_id
             {
               Object RESULT = null;
 
@@ -1311,7 +1311,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 54: // preced ::= PRECEDENCE NONASSOC NT$9 terminal_list SEMI 
+          case 54: // preced ::= PRECEDENCE NONASSOC NT$9 terminal_list SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$9
@@ -1323,18 +1323,18 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 53: // NT$9 ::= 
+          case 53: // NT$9 ::=
             {
               Object RESULT = null;
 
 	  update_precedence(assoc.nonassoc);
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(54/*NT$9*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 52: // preced ::= PRECEDENCE RIGHT NT$8 terminal_list SEMI 
+          case 52: // preced ::= PRECEDENCE RIGHT NT$8 terminal_list SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$8
@@ -1346,18 +1346,18 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 51: // NT$8 ::= 
+          case 51: // NT$8 ::=
             {
               Object RESULT = null;
 
 	  update_precedence(assoc.right);
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(53/*NT$8*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 50: // preced ::= PRECEDENCE LEFT NT$7 terminal_list SEMI 
+          case 50: // preced ::= PRECEDENCE LEFT NT$7 terminal_list SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$7
@@ -1369,18 +1369,18 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 49: // NT$7 ::= 
+          case 49: // NT$7 ::=
             {
               Object RESULT = null;
 
 	  update_precedence(assoc.left);
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(52/*NT$7*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 48: // precedence_l ::= preced 
+          case 48: // precedence_l ::= preced
             {
               Object RESULT = null;
 
@@ -1389,7 +1389,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 47: // precedence_l ::= precedence_l preced 
+          case 47: // precedence_l ::= precedence_l preced
             {
               Object RESULT = null;
 
@@ -1398,7 +1398,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 46: // precedence_list ::= empty 
+          case 46: // precedence_list ::= empty
             {
               Object RESULT = null;
 
@@ -1407,7 +1407,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 45: // precedence_list ::= precedence_l 
+          case 45: // precedence_list ::= precedence_l
             {
               Object RESULT = null;
 
@@ -1416,7 +1416,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 44: // non_term_name_list ::= new_non_term_id 
+          case 44: // non_term_name_list ::= new_non_term_id
             {
               Object RESULT = null;
 
@@ -1425,7 +1425,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 43: // non_term_name_list ::= non_term_name_list COMMA new_non_term_id 
+          case 43: // non_term_name_list ::= non_term_name_list COMMA new_non_term_id
             {
               Object RESULT = null;
 
@@ -1434,7 +1434,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 42: // term_name_list ::= new_term_id 
+          case 42: // term_name_list ::= new_term_id
             {
               Object RESULT = null;
 
@@ -1443,7 +1443,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 41: // term_name_list ::= term_name_list COMMA new_term_id 
+          case 41: // term_name_list ::= term_name_list COMMA new_term_id
             {
               Object RESULT = null;
 
@@ -1452,7 +1452,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 40: // declares_non_term ::= non_term_name_list NT$6 SEMI 
+          case 40: // declares_non_term ::= non_term_name_list NT$6 SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$6
@@ -1464,19 +1464,19 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 39: // NT$6 ::= 
+          case 39: // NT$6 ::=
             {
               Object RESULT = null;
- 
+
 	  /* reset the accumulated multipart name */
 	  multipart_name = new String();
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(51/*NT$6*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 38: // declares_term ::= term_name_list NT$5 SEMI 
+          case 38: // declares_term ::= term_name_list NT$5 SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$5
@@ -1488,19 +1488,19 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 37: // NT$5 ::= 
+          case 37: // NT$5 ::=
             {
               Object RESULT = null;
- 
+
 	  /* reset the accumulated multipart name */
 	  multipart_name = new String();
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(50/*NT$5*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 36: // symbol ::= non_terminal error NT$4 SEMI 
+          case 36: // symbol ::= non_terminal error NT$4 SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$4
@@ -1512,19 +1512,19 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 35: // NT$4 ::= 
+          case 35: // NT$4 ::=
             {
               Object RESULT = null;
 
 	  /* reset the accumulated multipart name */
 	  multipart_name = new String();
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(49/*NT$4*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 34: // symbol ::= TERMINAL error NT$3 SEMI 
+          case 34: // symbol ::= TERMINAL error NT$3 SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$3
@@ -1536,19 +1536,19 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 33: // NT$3 ::= 
+          case 33: // NT$3 ::=
             {
               Object RESULT = null;
 
 	  /* reset the accumulated multipart name */
 	  multipart_name = new String();
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(48/*NT$3*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 32: // symbol ::= non_terminal declares_non_term 
+          case 32: // symbol ::= non_terminal declares_non_term
             {
               Object RESULT = null;
 
@@ -1557,7 +1557,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 31: // symbol ::= non_terminal type_id declares_non_term 
+          case 31: // symbol ::= non_terminal type_id declares_non_term
             {
               Object RESULT = null;
 
@@ -1566,7 +1566,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 30: // symbol ::= TERMINAL declares_term 
+          case 30: // symbol ::= TERMINAL declares_term
             {
               Object RESULT = null;
 
@@ -1575,7 +1575,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 29: // symbol ::= TERMINAL type_id declares_term 
+          case 29: // symbol ::= TERMINAL type_id declares_term
             {
               Object RESULT = null;
 
@@ -1584,7 +1584,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 28: // symbol_list ::= symbol 
+          case 28: // symbol_list ::= symbol
             {
               Object RESULT = null;
 
@@ -1593,7 +1593,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 27: // symbol_list ::= symbol_list symbol 
+          case 27: // symbol_list ::= symbol_list symbol
             {
               Object RESULT = null;
 
@@ -1602,41 +1602,41 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 26: // scan_code ::= SCAN WITH CODE_STRING opt_semi 
+          case 26: // scan_code ::= SCAN WITH CODE_STRING opt_semi
             {
               Object RESULT = null;
 		int user_codeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int user_coderight = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String user_code = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 
+
 	  if (emit.scan_code!=null)
 	    lexer.emit_error("Redundant scan code (skipping)");
 	  else /* save the user code */
 	    emit.scan_code = user_code;
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(17/*scan_code*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 25: // init_code ::= INIT WITH CODE_STRING opt_semi 
+          case 25: // init_code ::= INIT WITH CODE_STRING opt_semi
             {
               Object RESULT = null;
 		int user_codeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int user_coderight = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String user_code = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 
+
 	  if (emit.init_code!=null)
 	    lexer.emit_error("Redundant init code (skipping)");
 	  else /* save the user code */
 	    emit.init_code = user_code;
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(16/*init_code*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 24: // qualified_identifier ::= qualified_identifier DOT ID 
+          case 24: // qualified_identifier ::= qualified_identifier DOT ID
             {
               String RESULT = null;
 		int qidleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1645,29 +1645,29 @@ class CUP$parser$actions {
 		int xleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int xright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String x = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
 	    RESULT = qid + "." + x;
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(43/*qualified_identifier*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 23: // qualified_identifier ::= ID 
+          case 23: // qualified_identifier ::= ID
             {
               String RESULT = null;
 		int xleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int xright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String x = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
 	    RESULT = x;
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(43/*qualified_identifier*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 22: // extendsimpls ::= extendsimpls IMPLEMENTS qualified_identifier 
+          case 22: // extendsimpls ::= extendsimpls IMPLEMENTS qualified_identifier
             {
               String RESULT = null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1676,13 +1676,13 @@ class CUP$parser$actions {
 		int qidleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int qidright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String qid = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = e + " implements " + qid; 
+		 RESULT = e + " implements " + qid;
               CUP$parser$result = new java_cup.runtime.Symbol(44/*extendsimpls*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 21: // extendsimpls ::= extendsimpls EXTENDS qualified_identifier 
+          case 21: // extendsimpls ::= extendsimpls EXTENDS qualified_identifier
             {
               String RESULT = null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1691,22 +1691,22 @@ class CUP$parser$actions {
 		int qidleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int qidright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String qid = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = e + " extends " + qid; 
+		 RESULT = e + " extends " + qid;
               CUP$parser$result = new java_cup.runtime.Symbol(44/*extendsimpls*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 20: // extendsimpls ::= 
+          case 20: // extendsimpls ::=
             {
               String RESULT = null;
-		 RESULT = ""; 
+		 RESULT = "";
               CUP$parser$result = new java_cup.runtime.Symbol(44/*extendsimpls*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 19: // parser_code_part ::= PARSER ID extendsimpls CODE_STRING opt_semi 
+          case 19: // parser_code_part ::= PARSER ID extendsimpls CODE_STRING opt_semi
             {
               Object RESULT = null;
 		int classnameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
@@ -1718,7 +1718,7 @@ class CUP$parser$actions {
 		int user_codeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int user_coderight = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String user_code = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
 	  if (emit.parser_code!=null) {
 	    lexer.emit_error("Redundant parser code (skipping)");
 	  } else {
@@ -1726,47 +1726,47 @@ class CUP$parser$actions {
 	    emit.parser_class_name = classname;
 	    emit.extendsimpls = e;
 	  }
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(9/*parser_code_part*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 18: // parser_code_part ::= PARSER CODE CODE_STRING opt_semi 
+          case 18: // parser_code_part ::= PARSER CODE CODE_STRING opt_semi
             {
               Object RESULT = null;
 		int user_codeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int user_coderight = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String user_code = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
 	  if (emit.parser_code!=null)
 	    lexer.emit_error("Redundant parser code (skipping)");
 	  else /* save the user included code string */
 	    emit.parser_code = user_code;
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(9/*parser_code_part*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 17: // action_code_part ::= ACTION CODE CODE_STRING opt_semi 
+          case 17: // action_code_part ::= ACTION CODE CODE_STRING opt_semi
             {
               Object RESULT = null;
 		int user_codeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int user_coderight = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String user_code = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
 	  if (emit.action_code!=null)
 	    lexer.emit_error("Redundant action code (skipping)");
 	  else /* save the user included code string */
 	    emit.action_code = user_code;
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(4/*action_code_part*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 16: // code_parts ::= code_parts code_part 
+          case 16: // code_parts ::= code_parts code_part
             {
               Object RESULT = null;
 
@@ -1775,7 +1775,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 15: // code_parts ::= 
+          case 15: // code_parts ::=
             {
               Object RESULT = null;
 
@@ -1784,7 +1784,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 14: // code_part ::= scan_code 
+          case 14: // code_part ::= scan_code
             {
               Object RESULT = null;
 
@@ -1793,7 +1793,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 13: // code_part ::= init_code 
+          case 13: // code_part ::= init_code
             {
               Object RESULT = null;
 
@@ -1802,7 +1802,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // code_part ::= parser_code_part 
+          case 12: // code_part ::= parser_code_part
             {
               Object RESULT = null;
 
@@ -1811,7 +1811,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // code_part ::= action_code_part 
+          case 11: // code_part ::= action_code_part
             {
               Object RESULT = null;
 
@@ -1820,7 +1820,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // import_spec ::= IMPORT import_id NT$2 SEMI 
+          case 10: // import_spec ::= IMPORT import_id NT$2 SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$2
@@ -1832,22 +1832,22 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // NT$2 ::= 
+          case 9: // NT$2 ::=
             {
               Object RESULT = null;
- 
+
 	  /* save this import on the imports list */
 	  emit.import_list.push(multipart_name);
 
 	  /* reset the accumulated multipart name */
 	  multipart_name = new String();
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(47/*NT$2*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // import_list ::= empty 
+          case 8: // import_list ::= empty
             {
               Object RESULT = null;
 
@@ -1856,7 +1856,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // import_list ::= import_list import_spec 
+          case 7: // import_list ::= import_list import_spec
             {
               Object RESULT = null;
 
@@ -1865,7 +1865,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // package_spec ::= empty 
+          case 6: // package_spec ::= empty
             {
               Object RESULT = null;
 
@@ -1874,7 +1874,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 5: // package_spec ::= PACKAGE multipart_id NT$1 SEMI 
+          case 5: // package_spec ::= PACKAGE multipart_id NT$1 SEMI
             {
               Object RESULT = null;
               // propagate RESULT from NT$1
@@ -1886,7 +1886,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // NT$1 ::= 
+          case 4: // NT$1 ::=
             {
               Object RESULT = null;
 
@@ -1895,13 +1895,13 @@ class CUP$parser$actions {
 
 	  /* reset the accumulated multipart name */
 	  multipart_name = new String();
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(46/*NT$1*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 3: // spec ::= error symbol_list precedence_list start_spec production_list 
+          case 3: // spec ::= error symbol_list precedence_list start_spec production_list
             {
               Object RESULT = null;
 
@@ -1910,7 +1910,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 2: // spec ::= NT$0 package_spec import_list code_parts symbol_list precedence_list start_spec production_list 
+          case 2: // spec ::= NT$0 package_spec import_list code_parts symbol_list precedence_list start_spec production_list
             {
               Object RESULT = null;
               // propagate RESULT from NT$0
@@ -1922,7 +1922,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 1: // NT$0 ::= 
+          case 1: // NT$0 ::=
             {
               Object RESULT = null;
 
@@ -1931,13 +1931,13 @@ class CUP$parser$actions {
 
           /* declare start non terminal */
           non_terms.put("$START", non_terminal.START_nt);
-	
+
               CUP$parser$result = new java_cup.runtime.Symbol(45/*NT$0*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 0: // $START ::= spec EOF 
+          case 0: // $START ::= spec EOF
             {
               Object RESULT = null;
 		int start_valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;

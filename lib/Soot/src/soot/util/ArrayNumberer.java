@@ -68,7 +68,7 @@ public class ArrayNumberer implements IterableNumberer {
         public final boolean hasNext() {
             return cur < numberToObj.length && numberToObj[cur] != null;
         }
-        public final Object next() { 
+        public final Object next() {
             if( !hasNext() ) throw new NoSuchElementException();
             return numberToObj[cur++];
         }

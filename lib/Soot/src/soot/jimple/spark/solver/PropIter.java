@@ -115,7 +115,7 @@ public final class PropIter extends Propagator {
             final SparkField f = fr.getField();
             ret = fr.getBase().getP2Set().forall( new P2SetVisitor() {
             public final void visit( Node n ) {
-                    AllocDotField nDotF = pag.makeAllocDotField( 
+                    AllocDotField nDotF = pag.makeAllocDotField(
                         (AllocNode) n, f );
                     if( nDotF.makeP2Set().addAll( srcSet, null ) ) {
                         returnValue = true;

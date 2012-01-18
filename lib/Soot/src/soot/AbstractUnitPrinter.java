@@ -56,9 +56,9 @@ public abstract class AbstractUnitPrinter implements UnitPrinter {
     }
     public void setIndent(String indent) { this.indent = indent; }
     public String getIndent() { return indent; }
-    
+
     public abstract void literal( String s );
-    public abstract void type( Type t ); 
+    public abstract void type( Type t );
     public abstract void methodRef( SootMethodRef m );
     public abstract void fieldRef( SootFieldRef f );
     public abstract void identityRef( IdentityRef r );
@@ -69,7 +69,7 @@ public abstract class AbstractUnitPrinter implements UnitPrinter {
         startOfLine = true;
         if( pt != null ) pt.newline();
     }
-    public void local( Local l ) { 
+    public void local( Local l ) {
         handleIndent();
         if( quotableLocals == null )
             initializeQuotableLocals();

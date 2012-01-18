@@ -30,17 +30,17 @@ public class ConstructorConfuser extends BodyTransformer implements
     IJbcoTransform {
 
   static int count = 0;
-  
+
   static int instances[] = new int[4];
-  
+
   public static String dependancies[] = new String[] { "bb.jbco_dcc", "bb.jbco_ful", "bb.lp" };
 
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "bb.jbco_dcc";
-  
+
   public String getName() {
     return name;
   }
@@ -54,7 +54,7 @@ public class ConstructorConfuser extends BodyTransformer implements
     if (!b.getMethod().getSubSignature().equals("void <init>()")) return;
     int weight = soot.jbco.Main.getWeight(phaseName, b.getMethod().getSignature());
     if (weight == 0) return;
-    
+
     SootClass origClass = b.getMethod().getDeclaringClass();
     SootClass c = origClass;
     if (c.hasSuperclass()) {
@@ -62,7 +62,7 @@ public class ConstructorConfuser extends BodyTransformer implements
     } else {
       c = null;
     }
-    
+
     PatchingChain units = b.getUnits();
     Iterator it = units.snapshotIterator();
     Unit prev = null;
@@ -80,9 +80,9 @@ public class ConstructorConfuser extends BodyTransformer implements
       }
       prev = u;
     }
-    
+
     if (sii == null) return;
-    
+
     int lowi = -1, lowest = 99999999, rand = Rand.getInt(4);
     for (int i = 0; i < instances.length; i++)
       if (lowest>instances[i]) {
@@ -91,14 +91,14 @@ public class ConstructorConfuser extends BodyTransformer implements
       }
     if (instances[rand]>instances[lowi])
       rand = lowi;
-    
+
     boolean done = false;
     switch (rand) {
     case 0:
       if (prev != null && prev instanceof LoadInst &&
         sii.getMethodRef().parameterTypes().size() == 0 &&
         !BodyBuilder.isExceptionCaughtAt(units, sii, b.getTraps().iterator())) {
-        
+
         Local bl = ((LoadInst)prev).getLocal();
         HashMap locals = soot.jbco.Main.methods2Baf2JLocals.get(b.getMethod());
         if (locals != null && locals.containsKey(bl)) {
@@ -109,7 +109,7 @@ public class ConstructorConfuser extends BodyTransformer implements
             units.insertBeforeNoRedirect(ifinst, sii);
             units.insertAfter(Baf.v().newThrowInst(), ifinst);
             units.insertAfter(Baf.v().newPushInst(NullConstant.v()), ifinst);
-          
+
             Unit pop = Baf.v().newPopInst(RefType.v());
             units.add(pop);
             units.add(prev.clone());
@@ -144,7 +144,7 @@ public class ConstructorConfuser extends BodyTransformer implements
             done = true;
             break;
           }
-        
+
           if (c.hasSuperclass())
             c = c.getSuperclass();
           else c = null;
@@ -159,12 +159,12 @@ public class ConstructorConfuser extends BodyTransformer implements
       done = true;
       break;
     }
-    
+
     if (done) {
       instances[rand]++;
       count++;
     }
-    
+
     if (debug)
       StackTypeHeightCalculator.calculateStackHeights(b);
   }

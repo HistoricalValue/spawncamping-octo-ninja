@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,12 +34,12 @@ import soot.baf.*;
 
 public abstract class AbstractInst extends AbstractUnit implements Inst
 {
-    
+
     public String toString()
     {
         return getName() + getParameters();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(getName());
         getParameters(up);
@@ -50,18 +50,18 @@ public abstract class AbstractInst extends AbstractUnit implements Inst
     {
         throw new RuntimeException("undefined "+ toString() + "!" );
     }
-    
+
     public int getOutCount()
     {
         throw new RuntimeException("undefined " + toString() + "!");
     }
-    
+
     public int getNetCount()
     {
         return getOutCount() - getInCount();
     }
 
-  
+
 
     public boolean fallsThrough()
     {
@@ -71,15 +71,15 @@ public abstract class AbstractInst extends AbstractUnit implements Inst
     {
         return false;
     }
-    
 
 
-   
-    public int getInMachineCount() 
+
+
+    public int getInMachineCount()
     {
         throw new RuntimeException("undefined"+ toString() + "!" );
     }
-    
+
     public int getOutMachineCount()
     {
         throw new RuntimeException("undefined" + toString() + "!");
@@ -90,13 +90,13 @@ public abstract class AbstractInst extends AbstractUnit implements Inst
         return getOutMachineCount() - getInMachineCount();
     }
 
-    
+
     public  Object clone()
     {
         throw new RuntimeException("undefined clone for: " + this.toString());
     }
-   
-    
+
+
     public abstract String getName();
     String getParameters() { return ""; }
     protected void getParameters(UnitPrinter up) {}

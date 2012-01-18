@@ -24,7 +24,7 @@ import soot.*;
 import java.util.*;
 import soot.grimp.internal.*;
 
-public class DInstanceFieldRef extends GInstanceFieldRef 
+public class DInstanceFieldRef extends GInstanceFieldRef
 {
     private HashSet<Object> thisLocals;
 
@@ -45,7 +45,7 @@ public class DInstanceFieldRef extends GInstanceFieldRef
 
     public String toString()
     {
-	if (thisLocals.contains( getBase())) 
+	if (thisLocals.contains( getBase()))
 	    return fieldRef.name();
 
 	return super.toString();

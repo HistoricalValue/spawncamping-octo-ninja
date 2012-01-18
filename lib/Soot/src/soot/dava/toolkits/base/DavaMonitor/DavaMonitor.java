@@ -27,7 +27,7 @@ public class DavaMonitor
 
     private final HashMap<Object, Lock> ref, lockTable;
 
-    private DavaMonitor() 
+    private DavaMonitor()
     {
 	ref = new HashMap<Object, Lock>( 1, 0.7f);
 	lockTable = new HashMap<Object, Lock>( 1, 0.7f);
@@ -54,15 +54,15 @@ public class DavaMonitor
 	    lock.owner = currentThread;
 	    return;
 	}
-	
+
 	if (lock.owner == currentThread) {
 	    lock.level++;
 	    return;
 	}
-	
+
 	lockTable.put( currentThread, lock);
 	lock.enQ( currentThread);
-	
+
 	while ((lock.level > 0) || (lock.nextThread() != currentThread)) {
 	    try {
 		wait();
@@ -71,13 +71,13 @@ public class DavaMonitor
 		e.printStackTrace();
 		System.exit(0);
 	    }
-	    
+
 	    currentThread = Thread.currentThread();
 	    lock = lockTable.get( currentThread);
 	}
-	
+
 	lock.deQ( currentThread);
-	
+
 	lock.level = 1;
 	lock.owner = currentThread;
     }
@@ -91,9 +91,9 @@ public class DavaMonitor
 
 	if ((lock == null) || (lock.level == 0) || (lock.owner != Thread.currentThread()))
 	    throw new IllegalMonitorStateException();
-	
+
 	lock.level--;
-	
+
 	if (lock.level == 0)
 	    notifyAll();
     }

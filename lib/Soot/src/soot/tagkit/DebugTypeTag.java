@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -26,7 +26,7 @@
 package soot.tagkit;
 
 
-/** Represents the signature attribute used by fields, methods and classes 
+/** Represents the signature attribute used by fields, methods and classes
  * for dealing with generics in Java 1.5.
  */
 
@@ -36,7 +36,7 @@ public class DebugTypeTag extends SignatureTag
     public DebugTypeTag(String signature){
         super(signature);
     }
-    
+
     public String toString() {
         return "DebugType: "+getSignature();
     }
@@ -49,8 +49,8 @@ public class DebugTypeTag extends SignatureTag
     public String getInfo(){
         return "DebugType";
     }
-    
-    
+
+
     /** Returns the tag raw data. */
     public byte[] getValue() {
         throw new RuntimeException( "DebugTypeTag has no value for bytecode" );

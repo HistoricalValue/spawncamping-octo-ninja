@@ -65,7 +65,7 @@ public final class PropCycle extends Propagator {
                     final FieldRefNode target = (FieldRefNode) element0;
                     changed = target.getBase().makeP2Set().forall( new P2SetVisitor() {
                     public final void visit( Node n ) {
-                            AllocDotField nDotF = pag.makeAllocDotField( 
+                            AllocDotField nDotF = pag.makeAllocDotField(
                                 (AllocNode) n, target.getField() );
                             nDotF.makeP2Set().addAll( src.getP2Set(), null );
                         }
@@ -125,7 +125,7 @@ public final class PropCycle extends Propagator {
                 ret = src.getBase().getP2Set().forall( new P2SetVisitor() {
                 public final void visit( Node n ) {
                     AllocNode an = (AllocNode) n;
-                    AllocDotField adf = 
+                    AllocDotField adf =
                         pag.makeAllocDotField( an, src.getField() );
                     returnValue = v.makeP2Set().addAll( adf.getP2Set(), null ) | returnValue;
                 }} ) | ret;

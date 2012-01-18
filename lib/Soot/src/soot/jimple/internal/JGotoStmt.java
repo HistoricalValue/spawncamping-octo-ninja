@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -57,7 +57,7 @@ public class JGotoStmt extends AbstractStmt implements GotoStmt
         targetBoxes = Collections.unmodifiableList(targetBoxes);
     }
 
-    public Object clone() 
+    public Object clone()
     {
         return new JGotoStmt(getTarget());
     }
@@ -70,13 +70,13 @@ public class JGotoStmt extends AbstractStmt implements GotoStmt
             target = t.toString();
         return Jimple.GOTO + " [?= " + target + "]";
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(Jimple.GOTO);
         up.literal(" ");
         targetBox.toString(up);
     }
-    
+
     public Unit getTarget()
     {
         return targetBox.getUnit();
@@ -100,8 +100,8 @@ public class JGotoStmt extends AbstractStmt implements GotoStmt
     public void apply(Switch sw)
     {
         ((StmtSwitch) sw).caseGotoStmt(this);
-    }    
-    
+    }
+
     public void convertToBaf(JimpleToBafContext context, List<Unit> out)
     {
 	Unit u;
@@ -112,10 +112,10 @@ public class JGotoStmt extends AbstractStmt implements GotoStmt
 	    u.addTag((Tag) it.next());
 	}
     }
-    
-    public boolean fallsThrough(){return false;}        
+
+    public boolean fallsThrough(){return false;}
     public boolean branches() { return true;}
-    
+
 }
 
 

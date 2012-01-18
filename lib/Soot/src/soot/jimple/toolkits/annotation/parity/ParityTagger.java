@@ -26,10 +26,10 @@ import soot.tagkit.*;
 import soot.jimple.*;
 import soot.options.*;
 
-/** A body transformer that records parity analysis 
+/** A body transformer that records parity analysis
  * information in tags. */
 public class ParityTagger extends BodyTransformer
-{ 
+{
 	public ParityTagger( Singletons.Global g ) {}
     public static ParityTagger v() { return G.v().soot_jimple_toolkits_annotation_parity_ParityTagger(); }
 
@@ -41,18 +41,18 @@ public class ParityTagger extends BodyTransformer
         boolean isInteractive = Options.v().interactive_mode();
         Options.v().set_interactive_mode(false);
         ParityAnalysis a;
-        
+
         if (isInteractive){
             LiveLocals sll = new SimpleLiveLocals(new BriefUnitGraph(b));
             Options.v().set_interactive_mode(isInteractive);
-        
+
             a = new ParityAnalysis(
 		        new BriefUnitGraph( b ) , sll);
         }
         else {
             a = new ParityAnalysis(new BriefUnitGraph(b));
         }
-        
+
         Iterator sIt = b.getUnits().iterator();
         while( sIt.hasNext() ) {
 
@@ -62,7 +62,7 @@ public class ParityTagger extends BodyTransformer
 
             Iterator it = parityVars.keySet().iterator();
             while( it.hasNext() ) {
-			
+
                 final Value variable = (Value) it.next();
                 if ((variable instanceof IntConstant) || (variable instanceof LongConstant)){
                     // don't add string tags (just color tags)
@@ -78,11 +78,11 @@ public class ParityTagger extends BodyTransformer
 			HashMap parityVarsUses = (HashMap) a.getFlowBefore( s );
 			HashMap parityVarsDefs = (HashMap) a.getFlowAfter( s );
 
-			
+
 			//uses
-			
+
 			Iterator valBoxIt = s.getUseBoxes().iterator();
-			
+
 			while (valBoxIt.hasNext()){
 				ValueBox vb = (ValueBox)valBoxIt.next();
 				if (parityVarsUses.containsKey(vb.getValue())){
@@ -95,7 +95,7 @@ public class ParityTagger extends BodyTransformer
 			// defs
 
 			valBoxIt = s.getDefBoxes().iterator();
-			
+
 			while (valBoxIt.hasNext()){
 				ValueBox vb = (ValueBox)valBoxIt.next();
 				if (parityVarsDefs.containsKey(vb.getValue())){

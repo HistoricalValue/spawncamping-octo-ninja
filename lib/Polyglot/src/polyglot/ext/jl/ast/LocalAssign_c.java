@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * A <code>LocalAssign_c</code> represents a Java assignment expression
  * to a local variable.  For instance, <code>x = e</code>.
- * 
+ *
  * The class of the <code>Expr</code> returned by
  * <code>LocalAssign_c.left()</code>is guaranteed to be an <code>Local</code>.
  */
@@ -38,17 +38,17 @@ public class LocalAssign_c extends Assign_c implements LocalAssign
 
     return right().entry();
   }
-  
+
   protected void acceptCFGAssign(CFGBuilder v) {
       Local l = (Local)left();
 
-      // x OP= e: visit e -> (l OP= e)      
+      // x OP= e: visit e -> (l OP= e)
       v.visitCFG(right(), this);
   }
-  
+
   protected void acceptCFGOpAssign(CFGBuilder v) {
       Local l = (Local)left();
-      
+
       // l OP= e: visit l -> e -> (l OP= e)
       v.visitThrow(l);
       v.edge(l, right().entry());

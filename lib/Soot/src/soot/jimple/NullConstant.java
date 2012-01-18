@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -42,7 +42,7 @@ public class NullConstant extends Constant
         return c == G.v().soot_jimple_NullConstant();
     }
 
-    public int hashCode() 
+    public int hashCode()
     {
         return 982;
     }

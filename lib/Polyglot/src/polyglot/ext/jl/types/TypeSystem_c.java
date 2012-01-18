@@ -198,18 +198,18 @@ public class TypeSystem_c implements TypeSystem
     public ConstructorInstance defaultConstructor(Position pos,
                                                   ClassType container) {
         assert_(container);
-        
-        // access for the default constructor is determined by the 
+
+        // access for the default constructor is determined by the
         // access of the containing class. See the JLS, 2nd Ed., 8.8.7.
         Flags access = Flags.NONE;
         if (container.flags().isPrivate()) {
             access = access.Private();
         }
         if (container.flags().isProtected()) {
-            access = access.Protected();            
+            access = access.Protected();
         }
         if (container.flags().isPublic()) {
-            access = access.Public();            
+            access = access.Public();
         }
         return constructorInstance(pos, container,
                                    access, Collections.EMPTY_LIST,
@@ -424,7 +424,7 @@ public class TypeSystem_c implements TypeSystem
         }
 
         // targetClass must be a top-level class
-        
+
         // same class
 	if (equals(targetClass, contextClass))
             return true;
@@ -514,7 +514,7 @@ public class TypeSystem_c implements TypeSystem
 	}
 
 	if (goal == superType) {
-	    throw new SemanticException("Circular inheritance involving " + goal, 
+	    throw new SemanticException("Circular inheritance involving " + goal,
                                         curr.position());
 	}
 
@@ -524,12 +524,12 @@ public class TypeSystem_c implements TypeSystem
 	    Type si = (Type) i.next();
 
 	    if (si == goal) {
-                throw new SemanticException("Circular inheritance involving " + goal, 
+                throw new SemanticException("Circular inheritance involving " + goal,
                                             curr.position());
 	    }
 
 	    checkCycles(si.toReference(), goal);
-        }    
+        }
         if (curr.isClass()) {
             checkCycles(curr.toClass().outer(), goal);
         }
@@ -599,7 +599,7 @@ public class TypeSystem_c implements TypeSystem
         if (c != null) ct = c.currentClass();
         return findField(container, name, ct);
     }
-    
+
     /**
      * Returns the FieldInstance for the field <code>name</code> defined
      * in type <code>container</code> or a supertype, and visible from
@@ -609,30 +609,30 @@ public class TypeSystem_c implements TypeSystem
     public FieldInstance findField(ReferenceType container, String name,
 	                           ClassType currClass) throws SemanticException {
 	Collection fields = findFields(container, name);
-	
+
 	if (fields.size() == 0) {
 	    throw new NoMemberException(NoMemberException.FIELD,
 					"Field \"" + name +
 					"\" not found in type \"" +
 					container + "\".");
 	}
-	
+
 	Iterator i = fields.iterator();
 	FieldInstance fi = (FieldInstance) i.next();
-	
+
 	if (i.hasNext()) {
 	    FieldInstance fi2 = (FieldInstance) i.next();
-	    
+
 	    throw new SemanticException("Field \"" + name +
 					"\" is ambiguous; it is defined in both " +
 					fi.container() + " and " +
-					fi2.container() + "."); 
+					fi2.container() + ".");
 	}
-	
+
 	if (currClass != null && ! isAccessible(fi, currClass)) {
             throw new SemanticException("Cannot access " + fi + ".");
         }
-	
+
         return fi;
     }
 
@@ -643,11 +643,11 @@ public class TypeSystem_c implements TypeSystem
      */
     public FieldInstance findField(ReferenceType container, String name)
 	throws SemanticException {
-	
+
 	return findField(container, name, (ClassType) null);
     }
-	    
-    
+
+
     /**
      * Returns a set of fields named <code>name</code> defined
      * in type <code>container</code> or a supertype.  The list
@@ -662,7 +662,7 @@ public class TypeSystem_c implements TypeSystem
         }
 
 	FieldInstance fi = container.fieldNamed(name);
-	
+
 	if (fi != null) {
 	    return Collections.singleton(fi);
 	}
@@ -677,14 +677,14 @@ public class TypeSystem_c implements TypeSystem
 	if (container.isClass()) {
 	    // Need to check interfaces for static fields.
 	    ClassType ct = container.toClass();
-	
+
 	    for (Iterator i = ct.interfaces().iterator(); i.hasNext(); ) {
 		Type it = (Type) i.next();
 		Set superFields = findFields(it.toReference(), name);
 		fields.addAll(superFields);
 	    }
 	}
-	
+
 	return fields;
     }
 
@@ -695,21 +695,21 @@ public class TypeSystem_c implements TypeSystem
                                      Context c) throws SemanticException {
         return findMemberClass(container, name, c.currentClass());
     }
-    
+
     public ClassType findMemberClass(ClassType container, String name,
                                      ClassType currClass) throws SemanticException
     {
 	assert_(container);
-	
+
 	Set s = findMemberClasses(container, name);
-	
+
 	if (s.size() == 0) {
 	    throw new NoClassException(name, container);
 	}
-	
+
 	Iterator i = s.iterator();
 	ClassType t = (ClassType) i.next();
-	
+
 	if (i.hasNext()) {
 	    ClassType t2 = (ClassType) i.next();
 	    throw new SemanticException("Member type \"" + name +
@@ -717,19 +717,19 @@ public class TypeSystem_c implements TypeSystem
 					t.container() + " and " +
 					t2.container() + ".");
 	}
-	
+
 	if (currClass != null && ! isAccessible(t, currClass)) {
 	    throw new SemanticException("Cannot access member type \"" + t + "\".");
 	}
-	
+
 	return t;
     }
-    
+
     public Set findMemberClasses(ClassType container, String name) throws SemanticException {
 	assert_(container);
-	
+
 	ClassType mt = container.memberClassNamed(name);
-	
+
 	if (mt != null) {
 	    if (! mt.isMember()) {
 		throw new InternalCompilerError("Class " + mt +
@@ -737,7 +737,7 @@ public class TypeSystem_c implements TypeSystem
 						" but is in " + container +
 						"\'s list of members.");
 	    }
-	    
+
 	    if (mt.outer() != container) {
 		throw new InternalCompilerError("Class " + mt +
 						" has outer class " +
@@ -745,33 +745,33 @@ public class TypeSystem_c implements TypeSystem
 						" but is a member of " +
 						container);
 	    }
-	    
+
 	    return Collections.singleton(mt);
 	}
-	
+
 	Set memberClasses = new HashSet();
-	
+
 	if (container.superType() != null) {
 	    Set s = findMemberClasses(container.superType().toClass(), name);
 	    memberClasses.addAll(s);
 	}
-	
+
 	for (Iterator i = container.interfaces().iterator(); i.hasNext(); ) {
 	    Type it = (Type) i.next();
-	    
+
 	    Set s =  findMemberClasses(it.toClass(), name);
 	    memberClasses.addAll(s);
 	}
-	
+
 	return memberClasses;
     }
-    
+
     public ClassType findMemberClass(ClassType container, String name)
         throws SemanticException {
 
 	return findMemberClass(container, name, (ClassType) null);
     }
-    
+
     protected static String listToString(List l) {
 	StringBuffer sb = new StringBuffer();
 
@@ -821,7 +821,7 @@ public class TypeSystem_c implements TypeSystem
 
 	if (container.isClass()) {
 	    ClassType ct = container.toClass();
-	
+
 	    for (Iterator i = ct.interfaces().iterator(); i.hasNext(); ) {
 		Type it = (Type) i.next();
                 if (hasMethodNamed(it.toReference(), name)) {
@@ -829,7 +829,7 @@ public class TypeSystem_c implements TypeSystem
                 }
 	    }
 	}
-	
+
         return false;
     }
 
@@ -865,7 +865,7 @@ public class TypeSystem_c implements TypeSystem
 					" is ambiguous, multiple methods match: "
 					+ acceptable);
 	}
-		
+
 	return mi;
     }
 
@@ -920,7 +920,7 @@ public class TypeSystem_c implements TypeSystem
 
         return null;
     }
-        
+
     protected Collection findMostSpecificProcedures(List acceptable,
                                                     ReferenceType container,                                                    List argTypes,
                                                     ClassType currClass)
@@ -1028,7 +1028,7 @@ public class TypeSystem_c implements TypeSystem
         // the method is not accessible. This list is needed to make sure that
         // the acceptable methods are not overridden by an unacceptable method.
         List unacceptable = new ArrayList();
-        
+
 	Set visitedTypes = new HashSet();
 
 	LinkedList typeQueue = new LinkedList();
@@ -1051,7 +1051,7 @@ public class TypeSystem_c implements TypeSystem
 	        throw new SemanticException("Cannot call method in " +
 		    " non-reference type " + type + ".");
 	    }
-	    
+
 	    for (Iterator i = type.toReference().methods().iterator(); i.hasNext(); ) {
 		MethodInstance mi = (MethodInstance) i.next();
 
@@ -1322,7 +1322,7 @@ public class TypeSystem_c implements TypeSystem
                                           e);
       }
     }
-    
+
     public Named forName(String name) throws SemanticException {
         try {
             return systemResolver.find(name);
@@ -1331,7 +1331,7 @@ public class TypeSystem_c implements TypeSystem
             if (! StringUtil.isNameShort(name)) {
                 String containerName = StringUtil.getPackageComponent(name);
                 String shortName = StringUtil.getShortNameComponent(name);
-                
+
                 try {
                     Named container = forName(containerName);
 		    if (container instanceof ClassType) {
@@ -1341,7 +1341,7 @@ public class TypeSystem_c implements TypeSystem
                 catch (SemanticException e2) {
                 }
             }
-	    
+
             // throw the original exception
             throw e;
         }
@@ -1875,18 +1875,18 @@ public class TypeSystem_c implements TypeSystem
     /**
      * Assert that <code>ct</code> implements all abstract methods required;
      * that is, if it is a concrete class, then it must implement all
-     * interfaces and abstract methods that it or it's superclasses declare, and if 
-     * it is an abstract class then any methods that it overrides are overridden 
+     * interfaces and abstract methods that it or it's superclasses declare, and if
+     * it is an abstract class then any methods that it overrides are overridden
      * correctly.
      */
     public void checkClassConformance(ClassType ct) throws SemanticException {
         if (ct.flags().isInterface()) {
-            // don't need to check interfaces            
+            // don't need to check interfaces
             return;
         }
 
-        // build up a list of superclasses and interfaces that ct 
-        // extends/implements that may contain abstract methods that 
+        // build up a list of superclasses and interfaces that ct
+        // extends/implements that may contain abstract methods that
         // ct must define.
         List superInterfaces = abstractSuperInterfaces(ct);
 
@@ -1908,18 +1908,18 @@ public class TypeSystem_c implements TypeSystem
                     List possible = curr.methods(mi.name(), mi.formalTypes());
                     for (Iterator k = possible.iterator(); k.hasNext(); ) {
                         MethodInstance mj = (MethodInstance)k.next();
-                        if (!mj.flags().isAbstract() && 
-                            ((isAccessible(mi, ct) && isAccessible(mj, ct)) || 
+                        if (!mj.flags().isAbstract() &&
+                            ((isAccessible(mi, ct) && isAccessible(mj, ct)) ||
                                     isAccessible(mi, mj.container().toClass()))) {
                             // The method mj may be a suitable implementation of mi.
-                            // mj is not abstract, and either mj's container 
+                            // mj is not abstract, and either mj's container
                             // can access mi (thus mj can really override mi), or
                             // mi and mj are both accessible from ct (e.g.,
                             // mi is declared in an interface that ct implements,
                             // and mj is defined in a superclass of ct).
-                            
-                            // If neither the method instance mj nor the method 
-                            // instance mi is declared in the class type ct, then 
+
+                            // If neither the method instance mj nor the method
+                            // instance mi is declared in the class type ct, then
                             // we need to check that it has appropriate protections.
                             if (!equals(ct, mj.container()) && !equals(ct, mi.container())) {
                                 try {
@@ -1946,13 +1946,13 @@ public class TypeSystem_c implements TypeSystem
                     }
 
                     if (curr == mi.container()) {
-                        // we've reached the definition of the abstract 
-                        // method. We don't want to look higher in the 
-                        // hierarchy; this is not an optimization, but is 
-                        // required for correctness. 
+                        // we've reached the definition of the abstract
+                        // method. We don't want to look higher in the
+                        // hierarchy; this is not an optimization, but is
+                        // required for correctness.
                         break;
                     }
-                    
+
                     curr = curr.superType() ==  null ?
                            null : curr.superType().toReference();
                 }

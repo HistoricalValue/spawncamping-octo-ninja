@@ -53,7 +53,7 @@ public class MemoryEfficientRasUnion extends Union {
 
 	public boolean addAll(PointsToSet s) {
 		boolean result;
-		
+
 		if (subsets == null)
 			subsets = new HashSet<PointsToSet>();
 		if (s instanceof MemoryEfficientRasUnion) {
@@ -65,7 +65,7 @@ public class MemoryEfficientRasUnion extends Union {
 		} else {
 			result = subsets.add(s);
 		}
-		
+
 		return result;
 	}
 

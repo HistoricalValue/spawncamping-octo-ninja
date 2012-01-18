@@ -48,9 +48,9 @@ public class ExceptionFinder implements FactFinder
 	    IterableSet fullBody = new IterableSet();
 
 	    Iterator cit = en.get_CatchList().iterator();
-	    while (cit.hasNext()) 
+	    while (cit.hasNext())
 		fullBody.addAll( (IterableSet) cit.next());
-	    
+
 	    fullBody.addAll( en.get_TryBody());
 
 	    if (SET.nest( new SETTryNode( fullBody, en, asg, body)) == false)
@@ -73,7 +73,7 @@ public class ExceptionFinder implements FactFinder
 
 		// get the body of the try block as a raw read of the area of protection
 		IterableSet tryBody = new IterableSet();
-		
+
 		Iterator btit = body.getUnits().iterator( trap.getBeginUnit());
 		for (Unit u = (Unit) btit.next(); u != endUnit; u = (Unit) btit.next())
 		    tryBody.add( asg.get_AugStmt( (Stmt) u));
@@ -90,24 +90,24 @@ public class ExceptionFinder implements FactFinder
 	    while (enlit.hasNext()) {
 		ExceptionNode en = (ExceptionNode) enlit.next();
 		IterableSet try_body = en.get_TryBody();
-		
+
 		Iterator tryIt = try_body.snapshotIterator();
 		while (tryIt.hasNext()) {
 		    AugmentedStmt tras = (AugmentedStmt) tryIt.next();
-		    
+
 		    Iterator ptIt = tras.cpreds.iterator();
 		    while (ptIt.hasNext()) {
 			AugmentedStmt pas = (AugmentedStmt) ptIt.next();
 			Stmt ps = pas.get_Stmt();
-			
+
 			if ((try_body.contains( pas) == false) && (ps instanceof GotoStmt)) {
 			    boolean add_it = true;
-			    
+
 			    Iterator cpit = pas.cpreds.iterator();
-			    while (cpit.hasNext()) 
-				if ((add_it = try_body.contains( cpit.next())) == false) 
+			    while (cpit.hasNext())
+				if ((add_it = try_body.contains( cpit.next())) == false)
 				    break;
-			    
+
 			    if (add_it)
 				en.add_TryStmt( pas);
 			}
@@ -139,15 +139,15 @@ public class ExceptionFinder implements FactFinder
 	    {
 		ExceptionNode[] ena = new ExceptionNode[ enlist.size()];
 		Iterator enlit = enlist.iterator();
-		for (int i=0; enlit.hasNext(); i++) 
+		for (int i=0; enlit.hasNext(); i++)
 		    ena[ i] = (ExceptionNode) enlit.next();
-		
+
 		for (int i=0; i<ena.length-1; i++) {
 		    ExceptionNode eni = ena[i];
 		    for (int j=i+1; j<ena.length; j++) {
 			ExceptionNode enj = ena[j];
-			
-			IterableSet 
+
+			IterableSet
 			    eniTryBody = eni.get_TryBody(),
 			    enjTryBody = enj.get_TryBody();
 
@@ -162,7 +162,7 @@ public class ExceptionFinder implements FactFinder
 
 			    if (newTryBody.equals( enjTryBody))
 				eni.splitOff_ExceptionNode( newTryBody, asg, enlist);
-			    else 
+			    else
 				enj.splitOff_ExceptionNode( newTryBody, asg, enlist);
 
 			    continue splitLoop;
@@ -190,7 +190,7 @@ public class ExceptionFinder implements FactFinder
 			}
 
 			Iterator pit = as.cpreds.iterator();
-			while (pit.hasNext()) 
+			while (pit.hasNext())
 			    if (tryBody.contains( pit.next()) == false) {
 				heads.add( as);
 				break;
@@ -204,34 +204,34 @@ public class ExceptionFinder implements FactFinder
 		    AugmentedStmt head = heads.removeFirst();
 		    IterableSet subTryBlock = new IterableSet();
 		    LinkedList<AugmentedStmt> worklist = new LinkedList<AugmentedStmt>();
-		    
+
 		    worklist.add( head);
-		    
+
 		    while (worklist.isEmpty() == false) {
 			AugmentedStmt as = worklist.removeFirst();
-			
+
 			subTryBlock.add( as);
 			Iterator sit = as.csuccs.iterator();
 			while (sit.hasNext()) {
 			    AugmentedStmt sas = (AugmentedStmt) sit.next();
-			    
+
 			    if ((tryBody.contains( sas) == false) || (touchSet.contains( sas)))
 				continue;
-			    
+
 			    touchSet.add( sas);
-			    
+
 			    if (sas.get_Dominators().contains( head))
 				worklist.add( sas);
-			    else  
+			    else
 				heads.addLast( sas);
 			}
 		    }
-		    
+
 		    if (heads.isEmpty() == false) {
 			en.splitOff_ExceptionNode( subTryBlock, asg, enlist);
 			continue splitLoop;
 		    }
-		}   
+		}
 	    }
 
 	    break;
@@ -241,10 +241,10 @@ public class ExceptionFinder implements FactFinder
 	{
 	    LinkedList<ExceptionNode> reps = new LinkedList<ExceptionNode>();
 	    HashMap<Serializable, LinkedList<IterableSet>>
-	    	hCode2bucket = new HashMap<Serializable, LinkedList<IterableSet>>();	    
-		HashMap<Serializable, ExceptionNode> 
+	    	hCode2bucket = new HashMap<Serializable, LinkedList<IterableSet>>();
+		HashMap<Serializable, ExceptionNode>
 			tryBody2exceptionNode = new HashMap<Serializable, ExceptionNode>();
-	    
+
 	    Iterator enlit = enlist.iterator();
 	    while (enlit.hasNext()) {
 		ExceptionNode en = (ExceptionNode) enlit.next();
@@ -253,7 +253,7 @@ public class ExceptionFinder implements FactFinder
 		IterableSet curTryBody = en.get_TryBody();
 
 		Iterator trit = curTryBody.iterator();
-		while (trit.hasNext()) 
+		while (trit.hasNext())
 		    hashCode ^= trit.next().hashCode();
 		Integer I = new Integer( hashCode);
 
@@ -268,19 +268,19 @@ public class ExceptionFinder implements FactFinder
 		Iterator<IterableSet> bit = bucket.iterator();
 		while (bit.hasNext()) {
 		    IterableSet bucketTryBody = bit.next();
-			
+
 		    if (bucketTryBody.equals( curTryBody)) {
 			repExceptionNode = tryBody2exceptionNode.get( bucketTryBody);
 			break;
 		    }
 		}
-		    
+
 		if (repExceptionNode == null) {
 		    tryBody2exceptionNode.put( curTryBody, en);
 		    bucket.add( curTryBody);
 		    reps.add( en);
 		}
-		else 
+		else
 		    repExceptionNode.add_CatchBody( en);
 	    }
 
@@ -299,20 +299,20 @@ public class ExceptionFinder implements FactFinder
 
     }
 
-    public IterableSet get_CatchBody( AugmentedStmt handlerAugmentedStmt) 
+    public IterableSet get_CatchBody( AugmentedStmt handlerAugmentedStmt)
     {
 	IterableSet catchBody = new IterableSet();
 	LinkedList catchQueue = new LinkedList();
-	
-	catchBody.add( handlerAugmentedStmt);	    
+
+	catchBody.add( handlerAugmentedStmt);
 	catchQueue.addAll( handlerAugmentedStmt.csuccs);
-	
+
 	while (catchQueue.isEmpty() == false) {
 	    AugmentedStmt as = (AugmentedStmt) catchQueue.removeFirst();
-	    
+
 	    if (catchBody.contains( as))
 		continue;
-	    
+
 	    if (as.get_Dominators().contains( handlerAugmentedStmt)) {
 		catchBody.add( as);
 		catchQueue.addAll( as.csuccs);

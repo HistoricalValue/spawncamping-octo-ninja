@@ -37,16 +37,16 @@ import polyglot.visit.NodeVisitor;
 public class ConstructNumbersMetric extends ASTMetric {
 
 	private int numIf, numIfElse;
-	
+
 	private int numLabeledBlocks;
-	
+
 	private int doLoop, forLoop, whileLoop, whileTrue;
-	
+
 	public ConstructNumbersMetric(Node node){
 		super(node);
 	}
-	
-	
+
+
 	public void reset() {
 		numIf = numIfElse = 0;
 		numLabeledBlocks=0;
@@ -59,10 +59,10 @@ public class ConstructNumbersMetric extends ASTMetric {
 		data.addMetric(new MetricData("If",new Integer(numIf)));
 		data.addMetric(new MetricData("IfElse",new Integer(numIfElse)));
 		data.addMetric(new MetricData("Total-Conditionals",new Integer(numIf+numIfElse)));
-		
+
 		//labels
 		data.addMetric(new MetricData("LabelBlock",new Integer(numLabeledBlocks)));
-		
+
 		//loops
 		data.addMetric(new MetricData("Do",new Integer(doLoop)));
 		data.addMetric(new MetricData("For",new Integer(forLoop)));
@@ -70,8 +70,8 @@ public class ConstructNumbersMetric extends ASTMetric {
 		data.addMetric(new MetricData("UnConditional",new Integer(whileTrue)));
 		data.addMetric(new MetricData("Total Loops",new Integer(whileTrue+whileLoop+forLoop+doLoop)));
 	}
-	
-	
+
+
 	public NodeVisitor enter(Node parent, Node n){
 
 		/*
@@ -92,7 +92,7 @@ public class ConstructNumbersMetric extends ASTMetric {
 				numIfElse++;
 			}
 		}
-		
+
 		/*
 		 * Num Labeled Blocks
 		 */
@@ -104,17 +104,17 @@ public class ConstructNumbersMetric extends ASTMetric {
 					numLabeledBlocks++;
 				}
 		}
-		
+
 		/*
 		 * Do
-		 */	
+		 */
 		if(n instanceof Do){
 			//System.out.println((Do)n);
 			doLoop++;
 		}
 		/*
 		 * For
-		 */	
+		 */
 		if(n instanceof For){
 			//System.out.println((For)n);
 			forLoop++;
@@ -122,7 +122,7 @@ public class ConstructNumbersMetric extends ASTMetric {
 
 		/*
 		 * While and While True loop
-		 */	
+		 */
 		if(n instanceof While){
 			//System.out.println((While)n);
 			if(((While)n).condIsConstantTrue())
@@ -132,7 +132,7 @@ public class ConstructNumbersMetric extends ASTMetric {
 		}
 
 
-		
+
 		return enter(n);
 	}
 

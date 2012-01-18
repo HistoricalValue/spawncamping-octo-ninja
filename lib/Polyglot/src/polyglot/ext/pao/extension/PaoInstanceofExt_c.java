@@ -7,16 +7,16 @@ import polyglot.ext.pao.types.PaoTypeSystem;
 import polyglot.types.Type;
 
 /**
- * The <code>PaoExt</code> implementation for the 
+ * The <code>PaoExt</code> implementation for the
  * <code>InstanceOf</code> AST node.
  */
 public class PaoInstanceofExt_c extends PaoExt_c {
 	/**
 	 * Rewrites <code>instanceof</code> checks where the comparison type is
 	 * a primitive type to use the boxed type instead. For example,
-	 * "e instanceof int" gets rewritten to 
+	 * "e instanceof int" gets rewritten to
 	 * "e instanceof polyglot.ext.pao.runtime.Integer".
-	 * 
+	 *
 	 * @see PaoExt#rewrite(PaoTypeSystem, NodeFactory)
 	 */
     public Node rewrite(PaoTypeSystem ts, NodeFactory nf) {

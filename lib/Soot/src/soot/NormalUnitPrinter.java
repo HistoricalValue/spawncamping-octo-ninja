@@ -28,7 +28,7 @@ public class NormalUnitPrinter extends LabeledUnitPrinter {
         super(body);
     }
 
-    public void type( Type t ) { 
+    public void type( Type t ) {
         handleIndent();
         String s = t.toString();
         if( t instanceof RefType ) s = Scene.v().quotedNameOf(s);
@@ -38,7 +38,7 @@ public class NormalUnitPrinter extends LabeledUnitPrinter {
         handleIndent();
         output.append( m.getSignature() );
     }
-    public void fieldRef( SootFieldRef f ) { 
+    public void fieldRef( SootFieldRef f ) {
         handleIndent();
         output.append(f.getSignature());
     }

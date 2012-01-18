@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -65,14 +65,14 @@ public class ConditionalBranchFolder  extends BodyTransformer
                         // if condition always true, convert if to goto
                         Stmt newStmt =
                             Jimple.v().newGotoStmt(((IfStmt)stmt).getTarget());
-                        
+
                         units.insertAfter(newStmt, stmt);
-                        
+
                         numTrue++;
                     }
                     else
                         numFalse++;
-                        
+
                     // remove if
                     units.remove(stmt);
                 }
@@ -87,4 +87,4 @@ public class ConditionalBranchFolder  extends BodyTransformer
     } // foldBranches
 
 } // BranchFolder
-    
+

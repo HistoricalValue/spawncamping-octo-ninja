@@ -35,11 +35,11 @@ public class JjReturn_c extends Return_c {
         if (child == expr) {
             Context c = av.context();
             CodeInstance ci = c.currentCode();
-                            
+
             if (ci instanceof MethodInstance) {
                 MethodInstance mi = (MethodInstance) ci;
                 return mi.returnType();                                                     }
-               
+
         }
         return child.type();
 

@@ -10,22 +10,22 @@ import polyglot.visit.NodeVisitor;
 
 /*
  * TODO compute avarge complexity weighted by depth similar to expression complexity
- * 
- * 
+ *
+ *
  * A unary boolean condition should have the complexity (BooleanLit) 1
- * A noted condition (!)  +0.5 
+ * A noted condition (!)  +0.5
  * A binary relational operation ( < > <= >= == !=) +0.5
  * A boolean logical operator ( AND and OR) +1.0
  */
 public class ConditionComplexityMetric extends ASTMetric {
 	int loopComplexity;
 	int ifComplexity;
-	
+
 	public ConditionComplexityMetric(polyglot.ast.Node node){
 		super(node);
 	}
-	
-	
+
+
 	public void reset() {
 		loopComplexity=ifComplexity=0;
 	}
@@ -33,7 +33,7 @@ public class ConditionComplexityMetric extends ASTMetric {
 	public void addMetrics(ClassData data) {
 		data.addMetric(new MetricData("Loop-Cond-Complexity",new Integer(loopComplexity)));
 		data.addMetric(new MetricData("If-Cond-Complexity",new Integer(ifComplexity)));
-		data.addMetric(new MetricData("Total-Cond-Complexity",new Integer(loopComplexity+ifComplexity)));		
+		data.addMetric(new MetricData("Total-Cond-Complexity",new Integer(loopComplexity+ifComplexity)));
 	}
 
 	public NodeVisitor enter(Node parent, Node n){
@@ -45,16 +45,16 @@ public class ConditionComplexityMetric extends ASTMetric {
 			Expr expr = ((If)n).cond();
 			ifComplexity += condComplexity(expr);
 		}
-		
+
 		return enter(n);
 	}
-	
+
 	private double condComplexity(Expr expr){
 
 		//boolean literal
 		//binary   check for AND and  OR ... else its relational!!
 		//unary  (Check for NOT)
-		
+
 		if(expr instanceof Binary){
 			Binary b = (Binary)expr;
 			if( b.operator() == Binary.COND_AND   || b.operator() == Binary.COND_OR){

@@ -23,8 +23,8 @@ import soot.*;
 /** A context manager which adds no context-sensitivity to the call graph.
  * @author Ondrej Lhotak
  */
-public class ContextInsensitiveContextManager implements ContextManager 
-{ 
+public class ContextInsensitiveContextManager implements ContextManager
+{
     private CallGraph cg;
 
     public ContextInsensitiveContextManager( CallGraph cg ) {

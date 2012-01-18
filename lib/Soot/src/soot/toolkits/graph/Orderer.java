@@ -22,7 +22,7 @@ package soot.toolkits.graph;
 import java.util.List;
 
 /**
- * An orderer builds an order on a directed, not necessarily acyclic, graph. 
+ * An orderer builds an order on a directed, not necessarily acyclic, graph.
  *
  * @author Eric Bodden
  */

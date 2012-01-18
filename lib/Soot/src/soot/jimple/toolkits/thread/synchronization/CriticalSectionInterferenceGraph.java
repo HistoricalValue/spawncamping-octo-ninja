@@ -19,14 +19,14 @@ public class CriticalSectionInterferenceGraph {
 
 	int nextGroup;
 	List<CriticalSectionGroup> groups;
-	
+
 	List<CriticalSection> criticalSections;
 	MhpTester mhp;
 	PointsToAnalysis pta;
 	boolean optionOneGlobalLock = false;
 	boolean optionLeaveOriginalLocks = false;
 	boolean optionIncludeEmptyPossibleEdges = false;
-	
+
 	public CriticalSectionInterferenceGraph(List<CriticalSection> criticalSections, MhpTester mhp, boolean optionOneGlobalLock, boolean optionLeaveOriginalLocks, boolean optionIncludeEmptyPossibleEdges)
 	{
 		this.criticalSections = criticalSections;
@@ -35,26 +35,26 @@ public class CriticalSectionInterferenceGraph {
 		this.optionOneGlobalLock = optionOneGlobalLock;
 		this.optionLeaveOriginalLocks = optionLeaveOriginalLocks;
 		this.optionIncludeEmptyPossibleEdges = optionIncludeEmptyPossibleEdges;
-		
+
 		calculateGroups();
 	}
-	
+
 	public int groupCount()
 	{
 		return nextGroup;
 	}
-	
+
 	public List<CriticalSectionGroup> groups()
 	{
 		return groups;
 	}
-	
+
 	public void calculateGroups()
 	{
 		nextGroup = 1;
 		groups = new ArrayList<CriticalSectionGroup>();
 		groups.add(new CriticalSectionGroup(0)); // dummy group
-		
+
 		if(optionOneGlobalLock) // use one group for all transactions
 		{
 			CriticalSectionGroup onlyGroup = new CriticalSectionGroup(nextGroup);
@@ -73,11 +73,11 @@ public class CriticalSectionInterferenceGraph {
 	    	while(tnIt1.hasNext())
 	    	{
 	    		CriticalSection tn1 = tnIt1.next();
-	    		
+
 	    		// if this transaction has somehow already been marked for deletion
 	    		if(tn1.setNumber == -1)
 	    			continue;
-	    		
+
 	    		// if this transaction is empty
 	    		if(tn1.read.size() == 0 && tn1.write.size() == 0 && !optionLeaveOriginalLocks)
 	    		{
@@ -92,22 +92,22 @@ public class CriticalSectionInterferenceGraph {
 		    		while(tnIt2.hasNext())
 		    		{
 		    			CriticalSection tn2 = tnIt2.next();
-		    				    			
+
 		    			// check if this transactional region is going to be deleted
 		    			if(tn2.setNumber == -1)
 		    				continue;
-	
+
 		    			// check if they're already marked as having an interference
-		    			// NOTE: this results in a sound grouping, but a badly 
-		    			//       incomplete dependency graph. If the dependency 
+		    			// NOTE: this results in a sound grouping, but a badly
+		    			//       incomplete dependency graph. If the dependency
 		    			//       graph is to be analyzed, we cannot do this
 	//	    			if(tn1.setNumber > 0 && tn1.setNumber == tn2.setNumber)
 	//	    				continue;
-		    			
+
 		    			// check if these two transactions can't ever be in parallel
 		    			if(!mayHappenInParallel(tn1, tn2))
 		    				continue;
-	
+
 		    			// check for RW or WW data dependencies.
 		    			// or, for optionLeaveOriginalLocks, check type compatibility
 		    			SootClass classOne = null;
@@ -123,7 +123,7 @@ public class CriticalSectionInterferenceGraph {
 	    						emptyEdge = !tn1.origLock.equals(tn2.origLock);
 	    					else
 		    					emptyEdge = !pta.reachingObjects((Local) tn1.origLock).hasNonEmptyIntersection(pta.reachingObjects((Local) tn2.origLock));
-	
+
 							// Check if types are compatible
 			    			RefLikeType typeOne = (RefLikeType) tn1.origLock.getType();
 			    			RefLikeType typeTwo = (RefLikeType) tn2.origLock.getType();
@@ -136,13 +136,13 @@ public class CriticalSectionInterferenceGraph {
 				    			{
 				    				if(classTwo.isInterface())
 				    				{
-				    					typeCompatible = 
+				    					typeCompatible =
 				    						h.getSubinterfacesOfIncluding(classOne).contains(classTwo) ||
 				    						h.getSubinterfacesOfIncluding(classTwo).contains(classOne);
 				    				}
 				    				else
 				    				{
-				    					typeCompatible = 
+				    					typeCompatible =
 				    						h.getImplementersOf(classOne).contains(classTwo);
 				    				}
 				    			}
@@ -155,17 +155,17 @@ public class CriticalSectionInterferenceGraph {
 				    				}
 				    				else
 				    				{
-						    			typeCompatible = 
+						    			typeCompatible =
 						    				(classOne != null && Scene.v().getActiveHierarchy().getSubclassesOfIncluding(classOne).contains(classTwo) ||
 					    				 	 classTwo != null && Scene.v().getActiveHierarchy().getSubclassesOfIncluding(classTwo).contains(classOne));
 					    			}
 					    		}
 					    	}
 			    		}
-		    			if((!optionLeaveOriginalLocks && 
+		    			if((!optionLeaveOriginalLocks &&
 		    				   (tn1.write.hasNonEmptyIntersection(tn2.write) ||
 		    					tn1.write.hasNonEmptyIntersection(tn2.read) ||
-		    					tn1.read.hasNonEmptyIntersection(tn2.write))	) || 
+		    					tn1.read.hasNonEmptyIntersection(tn2.write))	) ||
 		    			   ( optionLeaveOriginalLocks && typeCompatible && (optionIncludeEmptyPossibleEdges || !emptyEdge) ))
 		    			{
 		    				// Determine the size of the intersection for GraphViz output
@@ -182,12 +182,12 @@ public class CriticalSectionInterferenceGraph {
 			    				rw.union(tn1.write.intersection(tn2.read));
 			    				rw.union(tn1.read.intersection(tn2.write));
 			    				size = rw.size();
-			    			}			    			
-		    				
-		    				// Record this 
+			    			}
+
+		    				// Record this
 		    				tn1.edges.add(new CriticalSectionDataDependency(tn2, size, rw));
 	                        // Don't add opposite... all n^2 pairs will be visited separately
-		    				
+
 		    				if(size > 0)
 		    				{
 			    				// if tn1 already is in a group
@@ -232,12 +232,12 @@ public class CriticalSectionInterferenceGraph {
 		    		if(tn1.setNumber == 0)
 		    		{
 	    				tn1.setNumber = -1; // delete transactional region
-		    		}	    			
+		    		}
 	    		}
 	    	}
 		}
 	}
-	
+
     public boolean mayHappenInParallel(CriticalSection tn1, CriticalSection tn2)
     {
     	if(mhp == null)

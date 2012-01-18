@@ -24,7 +24,7 @@ package soot.jimple.toolkits.callgraph;
  * @author Ondrej Lhotak
  */
 public interface EdgePredicate
-{ 
+{
     /** Returns true iff the edge e is wanted. */
     public boolean want( Edge e );
 }

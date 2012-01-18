@@ -76,7 +76,7 @@ public class PurityIntraproceduralAnalysis extends ForwardFlowAnalysis
 	Stmt         stmt = (Stmt)unit;
 
 	o.g = new PurityGraph(i.g);
-	
+
 	// ********************
 	// BIG PATTERN MATCHING
 	// ********************
@@ -107,7 +107,7 @@ public class PurityIntraproceduralAnalysis extends ForwardFlowAnalysis
 		Local left = (Local)leftOp;
 
 		// remove optional cast
-		if (rightOp instanceof CastExpr) 
+		if (rightOp instanceof CastExpr)
 		    rightOp = ((CastExpr)rightOp).getOp();
 
 		// ignore primitive types
@@ -128,9 +128,9 @@ public class PurityIntraproceduralAnalysis extends ForwardFlowAnalysis
 
 		// v = v.f
 		else if (rightOp instanceof InstanceFieldRef) {
-		    Local  right  = 
+		    Local  right  =
 			(Local) ((InstanceFieldRef)rightOp).getBase();
-		    String field = 
+		    String field =
 			((InstanceFieldRef)rightOp).getField().getName();
 		    o.g.assignFieldToLocal(stmt, right, field, left);
 		}
@@ -177,7 +177,7 @@ public class PurityIntraproceduralAnalysis extends ForwardFlowAnalysis
 		// v[i] = cst
 		else if (rightOp instanceof Constant)
 		    o.g.mutateField(left, "[]");
-		
+
 		else throw new Error("AssignStmt match failure (rightOp)"+stmt);
 	    }
 
@@ -197,16 +197,16 @@ public class PurityIntraproceduralAnalysis extends ForwardFlowAnalysis
 		}
 
 		// v.f = cst
-		else if (rightOp instanceof Constant) 
+		else if (rightOp instanceof Constant)
 		    o.g.mutateField(left, field);
-		
+
 		else throw new Error("AssignStmt match failure (rightOp) "+stmt);
 	    }
 
 	    // C.f = ...
 	    else if (leftOp instanceof StaticFieldRef) {
 		String field = ((StaticFieldRef)leftOp).getField().getName();
-		
+
 		// C.f = v
 		if (rightOp instanceof Local) {
 		    Local right = (Local)rightOp;
@@ -235,7 +235,7 @@ public class PurityIntraproceduralAnalysis extends ForwardFlowAnalysis
 	else if (stmt instanceof IdentityStmt) {
 	    Local left    = (Local)((IdentityStmt)stmt).getLeftOp();
 	    Value rightOp = ((IdentityStmt)stmt).getRightOp();
-	    
+
 	    if (rightOp instanceof ThisRef) {
 		o.g.assignThisToLocal(left);
 	    }
@@ -306,7 +306,7 @@ public class PurityIntraproceduralAnalysis extends ForwardFlowAnalysis
 	//////////
 	// ignored
 	//////////
-	
+
 	else if (stmt instanceof IfStmt ||
 		 stmt instanceof GotoStmt ||
 		 stmt instanceof LookupSwitchStmt ||
@@ -316,7 +316,7 @@ public class PurityIntraproceduralAnalysis extends ForwardFlowAnalysis
 		 stmt instanceof NopStmt) {
 	    // do nothing...
 	}
-		 
+
 
 	else throw new Error("Stmt match faliure "+stmt);
 
@@ -378,7 +378,7 @@ public class PurityIntraproceduralAnalysis extends ForwardFlowAnalysis
      * the method return.
      * It is a valid summary that can be used in methodCall if you do
      * interprocedural analysis.
-     * 
+     *
      */
     public void copyResult(Object dst)
     {

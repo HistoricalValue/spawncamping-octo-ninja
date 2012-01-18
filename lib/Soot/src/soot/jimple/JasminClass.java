@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -39,24 +39,24 @@ public class JasminClass extends AbstractJasminClass
 {
     void emit(String s, int stackChange)
     {
-        modifyStackHeight(stackChange);        
+        modifyStackHeight(stackChange);
         okayEmit(s);
     }
-    
+
     void modifyStackHeight(int stackChange)
     {
         if(currentStackHeight > maxStackHeight)
             maxStackHeight = currentStackHeight;
 
         currentStackHeight += stackChange;
-        
+
         if(currentStackHeight < 0)
             throw new RuntimeException("Stack height is negative!");
-            
+
         if(currentStackHeight > maxStackHeight)
             maxStackHeight = currentStackHeight;
     }
-    
+
     public JasminClass(SootClass sootClass)
     {
         super(sootClass);
@@ -65,44 +65,44 @@ public class JasminClass extends AbstractJasminClass
     protected void assignColorsToLocals(Body body)
     {
         super.assignColorsToLocals(body);
-        
+
         // Call the graph colorer.
             FastColorer.assignColorsToLocals(body, localToGroup,
                 localToColor, groupToColorCount);
 
         if(Options.v().time())
             Timers.v().packTimer.end();
-                    
+
     }
-    
-    
+
+
     protected void emitMethodBody(SootMethod method)//, Map options)
     {
         if(Options.v().time())
             Timers.v().buildJasminTimer.end();
-                    
-     
+
+
         Body activeBody = method.getActiveBody();
-        
+
         if(!(activeBody instanceof StmtBody))
             throw new RuntimeException("method: " + method.getName() + " has an invalid active body!");
-        
+
         StmtBody body = (StmtBody) activeBody;
-        
+
         body.validate();
-            
+
         if(body == null)
-            
+
         if(Options.v().time())
             Timers.v().buildJasminTimer.start();
-        
+
         Chain units = body.getUnits();
 
         ExceptionalUnitGraph stmtGraph = null;
         LocalDefs ld = null;
         LocalUses lu = null;
 
-        
+
         // let's create a u-d web for the ++ peephole optimization.
 
         if(Options.v().verbose())
@@ -120,7 +120,7 @@ public class JasminClass extends AbstractJasminClass
         }
 
         int stackLimitIndex = -1;
-        
+
         subroutineToReturnAddressSlot = new HashMap<Unit, Integer>(10, 0.7f);
 
         // Determine the unitToLabel map
@@ -164,11 +164,11 @@ public class JasminClass extends AbstractJasminClass
             int thisSlot = 0;
             Set<Local> assignedLocals = new HashSet<Local>();
             Map<GroupIntPair, Integer> groupColorPairToSlot = new HashMap<GroupIntPair, Integer>(body.getLocalCount() * 2 + 1, 0.7f);
-            
+
             localToSlot = new HashMap<Local, Integer>(body.getLocalCount() * 2 + 1, 0.7f);
 
             assignColorsToLocals(body);
-            
+
             // Determine slots for 'this' and parameters
             {
                 List paramTypes = method.getParameterTypes();
@@ -200,7 +200,7 @@ public class JasminClass extends AbstractJasminClass
                         IdentityRef identity = (IdentityRef) ((IdentityStmt) s).getRightOp();
 
                         int slot = 0;
-                                                
+
                         if(identity instanceof ThisRef)
                         {
                             if(method.isStatic())
@@ -214,20 +214,20 @@ public class JasminClass extends AbstractJasminClass
                             // Exception ref.  Skip over this
                             continue;
                         }
-                        
+
                         // Make this (group, color) point to the given slot,
                         // so that all locals of the same color can be pointed here too
                         {
-                            
-                            GroupIntPair pair = new GroupIntPair(localToGroup.get(l), 
+
+                            GroupIntPair pair = new GroupIntPair(localToGroup.get(l),
                                 localToColor.get(l).intValue());
-                                
+
                             groupColorPairToSlot.put(pair, new Integer(slot));
                         }
-                            
+
                         localToSlot.put(l, new Integer(slot));
                         assignedLocals.add(l);
-                        
+
                     }
                 }
             }
@@ -242,25 +242,25 @@ public class JasminClass extends AbstractJasminClass
 
                     if(!assignedLocals.contains(local))
                     {
-                        GroupIntPair pair = new GroupIntPair(localToGroup.get(local), 
+                        GroupIntPair pair = new GroupIntPair(localToGroup.get(local),
                                 localToColor.get(local).intValue());
-                            
+
                         int slot;
 
                         if(groupColorPairToSlot.containsKey(pair))
                         {
                             // This local should share the same slot as the previous local with
                             // the same (group, color);
-                            
+
                             slot = groupColorPairToSlot.get(pair).intValue();
                         }
-                        else { 
-                            slot = localCount;           
+                        else {
+                            slot = localCount;
                             localCount += sizeOfType(local.getType());
-                    
+
                             groupColorPairToSlot.put(pair, new Integer(slot));
                          }
-                            
+
                         localToSlot.put(local, new Integer(slot));
                         assignedLocals.add(local);
                     }
@@ -271,7 +271,7 @@ public class JasminClass extends AbstractJasminClass
                   {
                     emit("    .limit stack ?");
                     stackLimitIndex = code.size() - 1;
-                    
+
                     emit("    .limit locals " + localCount);
                   }
             }
@@ -282,7 +282,7 @@ public class JasminClass extends AbstractJasminClass
             Iterator codeIt = units.iterator();
 
             isEmittingMethodCode = true;
-            maxStackHeight = 0; 
+            maxStackHeight = 0;
             isNextGotoAJsr = false;
 
             while(codeIt.hasNext())
@@ -299,7 +299,7 @@ public class JasminClass extends AbstractJasminClass
                     modifyStackHeight(1); // simulate the pushing of address onto the stack by the jsr
 
                     int slot = localToSlot.get(assignStmt.getLeftOp()).intValue();
-                    
+
                     if(slot >= 0 && slot <= 3)
                         emit("astore_" + slot, -1);
                     else
@@ -345,13 +345,13 @@ public class JasminClass extends AbstractJasminClass
                     if (!(lvalue instanceof Local))
                       break;
 
-                    // we're looking for this pattern: 
+                    // we're looking for this pattern:
                     // a: <lvalue> = <rvalue>; <rvalue> = <rvalue> +/- 1; use(<lvalue>);
                     // b: <lvalue> = <rvalue>; <rvalue> = <lvalue> +/- 1; use(<lvalue>);
                     // case a is emitted when rvalue is a local;
                     // case b when rvalue is, eg. a field ref.
 
-                    // we use structural equality 
+                    // we use structural equality
                     // for rvalue & nextStmt.getLeftOp().
 
                     if (!(lvalue instanceof Local)
@@ -362,13 +362,13 @@ public class JasminClass extends AbstractJasminClass
                     // make sure that nextNextStmt uses the local exactly once
                     {
                         Iterator boxIt = nextNextStmt.getUseBoxes().iterator();
-                        
+
                         boolean foundExactlyOnce = false;
-                        
+
                         while(boxIt.hasNext())
                         {
                             ValueBox box = (ValueBox) boxIt.next();
-                            
+
                             if(box.getValue() == lvalue)
                             {
                                 if(!foundExactlyOnce)
@@ -379,41 +379,41 @@ public class JasminClass extends AbstractJasminClass
                                     break;
                                 }
                             }
-                        }    
-                        
+                        }
+
                         if(!foundExactlyOnce)
                             break;
                     }
-                    
+
                     // Specifically exclude the case where rvalue is on the lhs
                     // of nextNextStmt (what a mess!)
                     // this takes care of the extremely pathological case where
                     // the thing being incremented is also on the lhs of nns (!)
                     {
                         Iterator boxIt = nextNextStmt.getDefBoxes().iterator();
-                        
+
                         boolean found = false;
-                        
+
                         while(boxIt.hasNext())
                         {
                             ValueBox box = (ValueBox) boxIt.next();
-                            
+
                             if(box.getValue().equivTo(rvalue))
                             {
                                 found = true;
                             }
-                        }    
-                        
+                        }
+
                         if(found)
                             break;
-                    }                    
+                    }
 
                     AddExpr addexp = (AddExpr)nextStmt.getRightOp();
                     if (!addexp.getOp1().equivTo(lvalue) && !addexp.getOp1().equivTo(rvalue))
                       break;
 
                     Value added /* tax? */ = addexp.getOp2();
-                        
+
                     if (!(added instanceof IntConstant)
                         || ((IntConstant)(added)).value != 1)
                       break;
@@ -454,7 +454,7 @@ public class JasminClass extends AbstractJasminClass
                     /* be incremented & its holding local on a */
                     /* plusPlusStack and deal with it in */
                     /* emitLocal. */
-                       
+
                     currentStackHeight = 0;
 
                     /* emit statements as before */
@@ -475,7 +475,7 @@ public class JasminClass extends AbstractJasminClass
                     codeIt.next(); codeIt.next();
                   }
                 while(false);
-                if (contFlag) 
+                if (contFlag)
                     continue;
 
                 // end of peephole opts.
@@ -484,14 +484,14 @@ public class JasminClass extends AbstractJasminClass
                 {
                     currentStackHeight = 0;
                     emitStmt(s);
-                        
+
                     if(currentStackHeight != 0)
                         throw new RuntimeException("Stack has height " + currentStackHeight + " after execution of stmt: " + s);
                 }
             }
 
             isEmittingMethodCode = false;
-            
+
             if (!Modifier.isNative(method.getModifiers())
                 && !Modifier.isAbstract(method.getModifiers()))
               code.set(stackLimitIndex, "    .limit stack " + maxStackHeight);
@@ -525,27 +525,27 @@ public class JasminClass extends AbstractJasminClass
                 {
                     boolean isValidCase = false;
                     int x = 0;
-                    
-                    if(op1 == l && op2 instanceof IntConstant) 
+
+                    if(op1 == l && op2 instanceof IntConstant)
                     {
                         x = ((IntConstant) op2).value;
                         isValidCase = true;
                     }
-                    else if(expr instanceof AddExpr && 
+                    else if(expr instanceof AddExpr &&
                         op2 == l && op1 instanceof IntConstant)
                     {
                         // Note expr can't be a SubExpr because that would be x = 3 - x
-                        
+
                         x = ((IntConstant) op1).value;
                         isValidCase = true;
                     }
-                    
+
                     if(isValidCase && x >= Short.MIN_VALUE && x <= Short.MAX_VALUE)
                     {
-                        emit("iinc " + localToSlot.get(l).intValue() + " " +  
+                        emit("iinc " + localToSlot.get(l).intValue() + " " +
                             ((expr instanceof AddExpr) ? x : -x), 0);
                         return;
-                    }        
+                    }
                 }
             }
 
@@ -556,7 +556,7 @@ public class JasminClass extends AbstractJasminClass
                     emitValue(v.getBase());
                     emitValue(v.getIndex());
                     emitValue(rvalue);
-                    
+
                     v.getType().apply(new TypeSwitch()
                     {
                         public void caseArrayType(ArrayType t)
@@ -615,27 +615,27 @@ public class JasminClass extends AbstractJasminClass
                         }
                     });
                 }
-                
+
                 public void caseInstanceFieldRef(InstanceFieldRef v)
                     {
                         emitValue(v.getBase());
                         emitValue(rvalue);
-                        
+
                         emit("putfield " + slashify(v.getFieldRef().declaringClass().getName()) + "/" +
-                             v.getFieldRef().name() + " " + jasminDescriptorOf(v.getFieldRef().type()), 
+                             v.getFieldRef().name() + " " + jasminDescriptorOf(v.getFieldRef().type()),
                              -1 + -sizeOfType(v.getFieldRef().type()));
                     }
-                
+
                 public void caseLocal(final Local v)
                 {
                     final int slot = localToSlot.get(v).intValue();
-                        
+
                     v.getType().apply(new TypeSwitch()
                     {
 		        private void handleIntegerType(IntegerType t)
 			{
                                 emitValue(rvalue);
-                                
+
                                 if(slot >= 0 && slot <= 3)
                                     emit("istore_" + slot, -1);
                                 else
@@ -661,7 +661,7 @@ public class JasminClass extends AbstractJasminClass
 			{
 			    handleIntegerType(t);
 			}
-			
+
 			public void caseIntType(IntType t)
 			  {
 			    handleIntegerType(t);
@@ -686,11 +686,11 @@ public class JasminClass extends AbstractJasminClass
                             else
                                 emit("dstore " + slot, -2);
                         }
-                        
+
                         public void caseFloatType(FloatType t)
                         {
                             emitValue(rvalue);
-                            
+
                             if(slot >= 0 && slot <= 3)
                                 emit("fstore_" + slot, -1);
                             else
@@ -700,17 +700,17 @@ public class JasminClass extends AbstractJasminClass
                         public void caseLongType(LongType t)
                             {
                                 emitValue(rvalue);
-                                
+
                                 if(slot >= 0 && slot <= 3)
                                     emit("lstore_" + slot, -2);
                                 else
                                     emit("lstore " + slot, -2);
                             }
-                        
+
                         public void caseRefType(RefType t)
                             {
                                 emitValue(rvalue);
-                                
+
                                 if(slot >= 0 && slot <= 3)
                                     emit("astore_" + slot, -1);
                                 else
@@ -721,38 +721,38 @@ public class JasminClass extends AbstractJasminClass
                             {
                                 isNextGotoAJsr = true;
                                 returnAddressSlot = slot;
-                                
+
                                 /*
                                   if ( slot >= 0 && slot <= 3)
                                   emit("astore_" + slot,  );
                                   else
                                   emit("astore " + slot,  );
-                                  
+
                                 */
-                                
+
                             }
-                        
+
                         public void caseNullType(NullType t)
                             {
                                 emitValue(rvalue);
-                                
+
                                 if(slot >= 0 && slot <= 3)
                                     emit("astore_" + slot, -1);
                                 else
                                     emit("astore " + slot, -1);
                             }
-                        
+
                         public void defaultCase(Type t)
                             {
                                 throw new RuntimeException("Invalid local type: " + t);
                             }
                     });
                 }
-                
+
                 public void caseStaticFieldRef(StaticFieldRef v)
                     {
                         SootFieldRef field = v.getFieldRef();
-                        
+
                         emitValue(rvalue);
                         emit("putstatic " + slashify(field.declaringClass().getName()) + "/" +
                              field.name() + " " + jasminDescriptorOf(field.type()),
@@ -776,101 +776,101 @@ public class JasminClass extends AbstractJasminClass
                     emitValue(op1);
                 else
                     emitValue(op2);
-                    
+
                 if(cond instanceof EqExpr)
                     emit("ifnull " + label, -1);
-                else if(cond instanceof NeExpr)  
+                else if(cond instanceof NeExpr)
                     emit("ifnonnull "+ label, -1);
                 else
                     throw new RuntimeException("invalid condition");
-                    
+
                 return;
             }
 
-        // Handle simple subcase where op2 is 0  
+        // Handle simple subcase where op2 is 0
             if(op2 instanceof IntConstant && ((IntConstant) op2).value == 0)
             {
                 emitValue(op1);
-                
+
                 cond.apply(new AbstractJimpleValueSwitch()
                 {
                     public void caseEqExpr(EqExpr expr)
                     {
                         emit("ifeq " + label, -1);
                     }
-        
+
                     public void caseNeExpr(NeExpr expr)
                     {
                         emit("ifne " + label, -1);
                     }
-        
+
                     public void caseLtExpr(LtExpr expr)
                     {
-                        emit("iflt " + label, -1); 
+                        emit("iflt " + label, -1);
                     }
-                    
+
                     public void caseLeExpr(LeExpr expr)
                     {
                         emit("ifle " + label, -1);
                     }
-        
+
                     public void caseGtExpr(GtExpr expr)
                     {
                         emit("ifgt " + label, -1);
                     }
-        
+
                     public void caseGeExpr(GeExpr expr)
                     {
                         emit("ifge " + label, -1);
                     }
-        
-                });               
-                 
+
+                });
+
                 return;
             }
-        
+
         // Handle simple subcase where op1 is 0  (flip directions)
             if(op1 instanceof IntConstant && ((IntConstant) op1).value == 0)
             {
                 emitValue(op2);
-                
+
                 cond.apply(new AbstractJimpleValueSwitch()
                 {
                     public void caseEqExpr(EqExpr expr)
                     {
                         emit("ifeq " + label, -1);
                     }
-        
+
                     public void caseNeExpr(NeExpr expr)
                     {
                         emit("ifne " + label, -1);
                     }
-        
+
                     public void caseLtExpr(LtExpr expr)
                     {
-                        emit("ifgt " + label, -1); 
+                        emit("ifgt " + label, -1);
                     }
-                    
+
                     public void caseLeExpr(LeExpr expr)
                     {
                         emit("ifge " + label, -1);
                     }
-        
+
                     public void caseGtExpr(GtExpr expr)
                     {
                         emit("iflt " + label, -1);
                     }
-        
+
                     public void caseGeExpr(GeExpr expr)
                     {
                         emit("ifle " + label, -1);
                     }
-        
-                });               
-                 
+
+                });
+
                 return;
             }
-        
+
         emitValue(op1);
         emitValue(op2);
 
@@ -1250,9 +1250,9 @@ public class JasminClass extends AbstractJasminClass
                 {
                     int slot = localToSlot.get(s.getLeftOp()).intValue();
 
-                    modifyStackHeight(1); // simulate the pushing of the exception onto the 
+                    modifyStackHeight(1); // simulate the pushing of the exception onto the
                                           // stack by the jvm
-                                          
+
                     if(slot >= 0 && slot <= 3)
                         emit("astore_" + slot, -1);
                     else
@@ -1459,7 +1459,7 @@ public class JasminClass extends AbstractJasminClass
                 else
                     emit("aload " + slot, 1);
             }
-            
+
             public void defaultCase(Type t)
             {
                 throw new RuntimeException("invalid local type to load" + t);
@@ -1480,7 +1480,7 @@ public class JasminClass extends AbstractJasminClass
                 else
                     emit("fload " + slot, 1);
             }
-          
+
 	    // add boolean, byte, short, and char type
 	    public void caseBooleanType(BooleanType t)
 	      {
@@ -1514,19 +1514,19 @@ public class JasminClass extends AbstractJasminClass
                 {
                     switch(plusPlusState)
                     {
-                    case 0:    
+                    case 0:
                     {
                         // ok, we're called upon to emit the
                         // ++ target, whatever it was.
-                        
+
                         // now we need to emit a statement incrementing
-                        // the correct value.  
+                        // the correct value.
                         // actually, just remember the local to be incremented.
 
                         // here ppi is of the form ppv = pph + 1
 
                         plusPlusState = 1;
-                        
+
                         emitStmt(plusPlusIncrementer);
                         int diff = plusPlusHeight - currentStackHeight + 1;
                         if (diff > 0)
@@ -1626,7 +1626,7 @@ public class JasminClass extends AbstractJasminClass
                     {
                         emit("iadd", -1);
                     }
-                    
+
                     public void caseIntType(IntType t) { handleIntCase(); }
                     public void caseBooleanType(BooleanType t) { handleIntCase(); }
                     public void caseShortType(ShortType t) { handleIntCase(); }
@@ -1946,16 +1946,16 @@ public class JasminClass extends AbstractJasminClass
                     emit("dconst_1", 2);
                 else {
                     String s = v.toString();
-                    
+
                     if(s.equals("#Infinity"))
                         s="+DoubleInfinity";
-                    
+
                     if(s.equals("#-Infinity"))
                         s="-DoubleInfinity";
-                    
+
                     if(s.equals("#NaN"))
                         s="+DoubleNaN";
-                        
+
                     emit("ldc2_w " + s, 2);
                 }
             }
@@ -1970,15 +1970,15 @@ public class JasminClass extends AbstractJasminClass
                     emit("fconst_2", 1);
                 else {
                     String s = v.toString();
-                    
+
                     if(s.equals("#InfinityF"))
                         s="+FloatInfinity";
                     if(s.equals("#-InfinityF"))
                         s="-FloatInfinity";
-                        
+
                     if(s.equals("#NaNF"))
                         s="+FloatNaN";
-                    
+
                     emit("ldc " + s, 1);
                 }
             }
@@ -1989,18 +1989,18 @@ public class JasminClass extends AbstractJasminClass
                 emitValue(v.getBase());
 
                 emit("getfield " + slashify(v.getFieldRef().declaringClass().getName()) + "/" +
-                    v.getFieldRef().name() + " " + jasminDescriptorOf(v.getFieldRef().type()), 
+                    v.getFieldRef().name() + " " + jasminDescriptorOf(v.getFieldRef().type()),
                     -1 + sizeOfType(v.getFieldRef().type()));
             }
 
             public void caseInstanceOfExpr(InstanceOfExpr v)
             {
                 final Type checkType;
-                
+
                 emitValue(v.getOp());
 
                 checkType = v.getCheckType();
-                
+
                 if(checkType instanceof RefType)
                     emit("instanceof " + slashify(checkType.toString()), 0);
                 else if(checkType instanceof ArrayType)
@@ -2450,12 +2450,12 @@ public class JasminClass extends AbstractJasminClass
             {
                 emit("new " + slashify(v.getBaseType().toString()), 1);
                 emit("dup", 1);
-                
+
                 SootMethodRef m = v.getMethodRef();
 
                 // emitValue(v.getBase());
                 // already on the stack
-                
+
                 for(int i = 0; i < m.parameterTypes().size(); i++)
                     emitValue(v.getArg(i));
 
@@ -2734,9 +2734,9 @@ public class JasminClass extends AbstractJasminClass
 
                 v.getType().apply(new TypeSwitch()
                 {
-                    private void handleIntCase() 
-                    { 
-                        emit ("ixor", -1); 
+                    private void handleIntCase()
+                    {
+                        emit ("ixor", -1);
                     }
 
                     public void caseIntType(IntType t) { handleIntCase(); }
@@ -2762,12 +2762,12 @@ public class JasminClass extends AbstractJasminClass
     public void emitBooleanBranch(String s)
     {
         int count;
-        
+
         if(s.indexOf("icmp") != -1 || s.indexOf("acmp") != -1)
             count = -2;
         else
             count = -1;
-            
+
         emit(s + " label" + labelCount, count);
         emit("iconst_0", 1);
         emit("goto label" + labelCount+1, 0);

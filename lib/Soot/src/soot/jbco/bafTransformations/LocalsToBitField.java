@@ -32,31 +32,31 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
 
   int replaced = 0;
   int locals = 0;
-  
-  public static String dependancies[] = new String[]{"jtp.jbco_jl","bb.jbco_plvb", "bb.jbco_ful", "bb.lp"}; 
-  
+
+  public static String dependancies[] = new String[]{"jtp.jbco_jl","bb.jbco_plvb", "bb.jbco_ful", "bb.lp"};
+
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "bb.jbco_plvb";
-  
+
   public String getName() {
     return name;
   }
 
-  
+
   public void outputSummary() {
     out.println("Local fields inserted into bitfield: "+replaced);
     out.println("Original number of locals: "+locals);
   }
-  
+
   @SuppressWarnings("fallthrough")
   protected void internalTransform(Body b, String phaseName, Map options) {
-    
+
     int weight = soot.jbco.Main.getWeight(phaseName, b.getMethod().getSignature());
     if (weight == 0) return;
-    
+
     //  build mapping of baf locals to jimple locals
     Chain bLocals = b.getLocals();
     PatchingChain u = b.getUnits();
@@ -77,7 +77,7 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
         }
       }
     }
-    
+
     //  build mapping of baf locals to jimple locals
     HashMap<Local, Local> bafToJLocals = new HashMap<Local, Local>();
     Iterator jlocIt = soot.jbco.Main.methods2JLocals.get(b.getMethod()).iterator();
@@ -92,7 +92,7 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
         }
       }
     }
-    
+
     ArrayList<Local> booleans = new ArrayList<Local>();
     ArrayList<Local> bytes = new ArrayList<Local>();
     ArrayList<Local> chars = new ArrayList<Local>();
@@ -103,12 +103,12 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
       Local bl = (Local)blocs.next();
       if (params.contains(bl) )
           continue;
-      
+
       locals++;
       Local jlocal = bafToJLocals.get(bl);
       if (jlocal !=null) {
         Type t = jlocal.getType();
-        if (t instanceof PrimType 
+        if (t instanceof PrimType
             && !(t instanceof DoubleType || t instanceof LongType)
             && Rand.getInt(10) <= weight)
         {
@@ -128,7 +128,7 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
         }
       }
     }
-    
+
     int count = 0;
     HashMap bafToNewLocs = new HashMap();
     int total = booleans.size() + bytes.size()*8 + chars.size()*16 + ints.size()*32;
@@ -136,7 +136,7 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
     while (total >= 32 && booleans.size() + bytes.size() + chars.size() + ints.size() > 2) {
       Local nloc = Baf.v().newLocal("newDumby"+count++, LongType.v()); //soot.jbco.util.Rand.getInt(2) > 0 ? DoubleType.v() : LongType.v());
       HashMap<Local, Integer> nlocMap = new HashMap<Local, Integer>();
-      
+
       boolean done = false;
       int index = 0;
       while (index < 64 && !done) {
@@ -172,7 +172,7 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
               index = getNewIndex(index,ints,chars,bytes,booleans);
               break;
             }
-          case 0: 
+          case 0:
             if (booleans.size()>0) {
               Local l = booleans.remove(Rand.getInt(booleans.size()));
               nlocMap.put(l,new Integer(index++));
@@ -194,9 +194,9 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
       }
       total = booleans.size() + bytes.size()*8 + chars.size()*16 + ints.size()*32;
     }
-    
+
     if (bafToNewLocs.size()==0) return;
-    
+
     Iterator it = u.snapshotIterator();
     while (it.hasNext()) {
       Unit unit = (Unit)it.next();
@@ -206,13 +206,13 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
         Local nloc = (Local)bafToNewLocs.get(bafLoc);
         if (nloc != null) {
           Local jloc = bafToJLocals.get(bafLoc);
-          
+
           int index = (newLocs.get(nloc).get(bafLoc)).intValue();
           int size = sizes.get(bafLoc).intValue();
-          long longmask = 0xFFFFFFFFFFFFFFFFL ^ ( 
-              (size == 1 ? 0x1L : size == 8 ? 0xFFL : 
+          long longmask = 0xFFFFFFFFFFFFFFFFL ^ (
+              (size == 1 ? 0x1L : size == 8 ? 0xFFL :
                 size==16 ? 0xFFFFL : 0xFFFFFFFFL) << index);
-          
+
           u.insertBefore(Baf.v().newPrimitiveCastInst(jloc.getType(),LongType.v()),unit);
           if (index>0) {
             u.insertBefore(Baf.v().newPushInst(IntConstant.v(index)),unit);
@@ -234,9 +234,9 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
         if (nloc != null) {
           int index = (newLocs.get(nloc).get(bafLoc)).intValue();
           int size = sizes.get(bafLoc).intValue();
-          long longmask = (size == 1 ? 0x1L : size == 8 ? 0xFFL : 
+          long longmask = (size == 1 ? 0x1L : size == 8 ? 0xFFL :
                 size==16 ? 0xFFFFL : 0xFFFFFFFFL) << index;
-          
+
           u.insertBefore(Baf.v().newLoadInst(LongType.v(),nloc),unit);
           u.insertBefore(Baf.v().newPushInst(LongConstant.v(longmask)),unit);
           u.insertBefore(Baf.v().newAndInst(LongType.v()),unit);
@@ -244,12 +244,12 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
             u.insertBefore(Baf.v().newPushInst(IntConstant.v(index)),unit);
             u.insertBefore(Baf.v().newShrInst(LongType.v()),unit);
           }
-          
+
           Type origType = bafToJLocals.get(bafLoc).getType();
           Type t = getType(origType);
           u.insertBefore(Baf.v().newPrimitiveCastInst(LongType.v(),t),unit);
           if (!(origType instanceof IntType) && !(origType instanceof BooleanType))
-            u.insertBefore(Baf.v().newPrimitiveCastInst(t,origType),unit);  
+            u.insertBefore(Baf.v().newPrimitiveCastInst(t,origType),unit);
           u.remove(unit);
         }
       } else if (unit instanceof IncInst) {
@@ -258,12 +258,12 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
         Local nloc = (Local)bafToNewLocs.get(bafLoc);
         if (nloc != null) {
           Type jlocType = getType(bafToJLocals.get(bafLoc).getType());
-          
+
           int index = (newLocs.get(nloc).get(bafLoc)).intValue();
           int size = sizes.get(bafLoc).intValue();
-          long longmask = (size == 1 ? 0x1L : size == 8 ? 0xFFL : 
+          long longmask = (size == 1 ? 0x1L : size == 8 ? 0xFFL :
                 size==16 ? 0xFFFFL : 0xFFFFFFFFL) << index;
-          
+
           u.insertBefore(Baf.v().newPushInst(ii.getConstant()),unit);
           u.insertBefore(Baf.v().newLoadInst(LongType.v(),nloc),unit);
           u.insertBefore(Baf.v().newPushInst(LongConstant.v(longmask)),unit);
@@ -279,7 +279,7 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
             u.insertBefore(Baf.v().newPushInst(IntConstant.v(index)),unit);
             u.insertBefore(Baf.v().newShlInst(LongType.v()),unit);
           }
-         
+
           longmask = 0xFFFFFFFFFFFFFFFFL ^ longmask;
           u.insertBefore(Baf.v().newLoadInst(LongType.v(),nloc),unit);
           u.insertBefore(Baf.v().newPushInst(LongConstant.v(longmask)),unit);
@@ -290,7 +290,7 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
         }
       }
     }
-    
+
     it = bLocals.snapshotIterator();
     while (it.hasNext()) {
       Local l = (Local)it.next();
@@ -300,14 +300,14 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
       }
     }
   }
-  
+
   private Type getType(Type t) {
     if (t instanceof BooleanType || t instanceof CharType || t instanceof ShortType || t instanceof ByteType)
       return IntType.v();
     else
       return t;
   }
-  
+
   private int getNewIndex(int index, List<Local> ints, List<Local> chars, List<Local> bytes, List<Local> booleans) {
     int max = 0;
     if (booleans.size() > 0 && index < 63)
@@ -318,13 +318,13 @@ public class LocalsToBitField extends BodyTransformer  implements IJbcoTransform
       max = 49;
     else if (ints.size() > 0 && index < 32)
       max = 33;
-    
+
     if (max != 0) {
       int rand = Rand.getInt(4);
       max = max - index;
-      if (max > rand) 
+      if (max > rand)
         max = rand;
-      else if (max != 1) 
+      else if (max != 1)
         max = Rand.getInt(max);
       index+=max;
     }

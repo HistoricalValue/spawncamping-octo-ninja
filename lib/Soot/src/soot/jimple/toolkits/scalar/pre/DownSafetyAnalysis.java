@@ -32,7 +32,7 @@ import soot.toolkits.graph.*;
 import soot.jimple.*;
 import java.util.*;
 
-/** 
+/**
  * Performs an DownSafe-analysis on the given graph.
  * An expression is downsafe, if the computation will occur on every path from
  * the current point down to the END.

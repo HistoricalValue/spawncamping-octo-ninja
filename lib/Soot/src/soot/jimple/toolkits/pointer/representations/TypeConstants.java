@@ -24,25 +24,25 @@ import soot.options.*;
 
 public class TypeConstants {
     public static TypeConstants v() { return G.v().soot_jimple_toolkits_pointer_representations_TypeConstants(); }
-  
-  public Type OBJECTCLASS; 
+
+  public Type OBJECTCLASS;
   public Type STRINGCLASS;
   public Type CLASSLOADERCLASS;
   public Type PROCESSCLASS;
   public Type THREADCLASS;
   public Type CLASSCLASS;
   public Type LEASTCLASS;
-  public Type FIELDCLASS; 
+  public Type FIELDCLASS;
   public Type METHODCLASS;
   public Type CONSTRUCTORCLASS;
   public Type FILESYSTEMCLASS;
   public Type PRIVILEGEDACTIONEXCEPTION;
 
     public TypeConstants( Singletons.Global g ) {
-        int jdkver = 
+        int jdkver =
             new CGOptions(PhaseOptions.v().getPhaseOptions("cg")).jdkver();
 
-        OBJECTCLASS = 
+        OBJECTCLASS =
         RefType.v("java.lang.Object");
 
         STRINGCLASS =
@@ -63,7 +63,7 @@ public class TypeConstants {
         LEASTCLASS =
         AnySubType.v( RefType.v( "java.lang.Object" ) );
 
-        FIELDCLASS = 
+        FIELDCLASS =
         RefType.v("java.lang.reflect.Field");
 
         METHODCLASS =

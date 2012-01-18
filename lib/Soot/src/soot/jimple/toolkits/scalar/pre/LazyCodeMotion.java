@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ import soot.util.*;
 import soot.jimple.toolkits.pointer.PASideEffectTester;
 import soot.options.LCMOptions;
 
-/** 
+/**
  * Performs a partial redundancy elimination (= code motion). This is done, by
  * introducing helper-vars, that store an already computed value, or if a
  * compuation only arrives partially (not from all predecessors) inserts a new
@@ -107,7 +107,7 @@ public class LazyCodeMotion extends BodyTransformer {
     }
     sideEffect.newMethod( b.getMethod() );
     UpSafetyAnalysis upSafe;
-    DownSafetyAnalysis downSafe; 
+    DownSafetyAnalysis downSafe;
     EarliestnessComputation earliest;
     DelayabilityAnalysis delay;
     NotIsolatedAnalysis notIsolated;
@@ -191,7 +191,7 @@ public class LazyCodeMotion extends BodyTransformer {
           /* insert a new Assignment-stmt before the currentUnit */
           Value insertValue = Jimple.cloneIfNecessary(equiVal.getValue());
           Unit firstComp = Jimple.v().newAssignStmt(helper, insertValue);
-          unitChain.insertBefore(firstComp, currentUnit);          
+          unitChain.insertBefore(firstComp, currentUnit);
 	  //	  G.v().out.print("x");
         }
       }
@@ -216,12 +216,12 @@ public class LazyCodeMotion extends BodyTransformer {
 	      G.v().out.println(currentUnit.toString());
 
 	      G.v().out.println(latestSet);
-	      
+
 	      G.v().out.println(notIsolatedSet);
 
 	      throw e;
 	    }
-           
+
 	    // G.v().out.print(".");
           }
         }

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,7 +34,7 @@ import soot.*;
 import soot.jimple.*;
 import java.util.*;
 
-public abstract class AbstractDefinitionStmt extends AbstractStmt 
+public abstract class AbstractDefinitionStmt extends AbstractStmt
     implements DefinitionStmt
 {
 	public ValueBox leftBox;
@@ -77,7 +77,7 @@ public abstract class AbstractDefinitionStmt extends AbstractStmt
         return list;
     }
 
-    public boolean fallsThrough() { return true;}        
+    public boolean fallsThrough() { return true;}
     public boolean branches() { return false;}
 }
 

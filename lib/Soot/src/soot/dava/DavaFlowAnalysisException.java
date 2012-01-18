@@ -23,7 +23,7 @@ package soot.dava;
 //import soot.util.*;
 //import soot.dava.toolkits.base.finders.*;
 
-public class DavaFlowAnalysisException extends DecompilationException 
+public class DavaFlowAnalysisException extends DecompilationException
 {
     public DavaFlowAnalysisException(){
 	super();

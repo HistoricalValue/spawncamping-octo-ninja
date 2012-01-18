@@ -33,7 +33,7 @@ public class AttributesUnitPrinter {
 	private int currentLn;
     private int lastNewline;
     private UnitPrinter printer;
-    
+
 	public AttributesUnitPrinter( int currentLnNum ) {
 		this.currentLn = currentLnNum;
 	}
@@ -75,7 +75,7 @@ public class AttributesUnitPrinter {
 		if (h.getTags().isEmpty()) return false;
 		return true;
 	}
-	
+
 	private boolean hasColorTag(Host h) {
 		Iterator it = h.getTags().iterator();
 		while (it.hasNext()){
@@ -83,14 +83,14 @@ public class AttributesUnitPrinter {
 		}
 		return false;
 	}
-	
+
     public void setEndLn(int ln){
         currentLn = ln;
     }
     public int getEndLn() {
         return currentLn;
     }
-    public void newline() { 
+    public void newline() {
         currentLn++;
         lastNewline = output().length();
     }

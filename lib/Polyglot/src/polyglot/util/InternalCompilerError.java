@@ -18,15 +18,15 @@ public class InternalCompilerError extends RuntimeException
     }
 
     public InternalCompilerError(Position position, String msg) {
-	this(msg, position); 
+	this(msg, position);
     }
 
     public InternalCompilerError(String msg, Position position) {
-        super(msg); 
+        super(msg);
         pos = position;
     }
     public InternalCompilerError(String msg, Position position, Throwable cause) {
-        super(msg, cause); 
+        super(msg, cause);
         pos = position;
     }
 

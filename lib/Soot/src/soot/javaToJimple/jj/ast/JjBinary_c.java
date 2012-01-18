@@ -74,7 +74,7 @@ public class JjBinary_c extends Binary_c {
         }
 
         if (op == ADD && ts.equals(type, ts.String())) {
-            // Implicit coercion to String. 
+            // Implicit coercion to String.
             return ts.String();
         }
 
@@ -119,7 +119,7 @@ public class JjBinary_c extends Binary_c {
         if (op == ADD || op == SUB || op == MUL || op == DIV || op == MOD) {
             //System.out.println("other: "+other+" type: "+other.type());
             //System.out.println("child: "+child+" child: "+child.type());
-            
+
             if (other.type().isNumeric()) {
                 if (other.type().isDouble() || child.type().isDouble()) {
                     return ts.Double();
@@ -135,7 +135,7 @@ public class JjBinary_c extends Binary_c {
                 }
             }
         }
-        
+
         if (op == SHL || op == SHR || op == USHR) {
             if (child == right || !child.type().isLong()) {
                 return ts.Int();
@@ -161,7 +161,7 @@ public class JjBinary_c extends Binary_c {
             String r = ((StringLit) right).value();
             if (op == ADD) return nf.StringLit(position(), l + r);
         }
-        else if (left instanceof 
+        else if (left instanceof
     }*/
 }
 

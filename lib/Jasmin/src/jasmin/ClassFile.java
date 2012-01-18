@@ -68,7 +68,7 @@ public class ClassFile {
     ParameterVisibilityAnnotationAttr methParamAnnotAttrVis;
     ParameterVisibilityAnnotationAttr methParamAnnotAttrInvis;
     ElemValPair methAnnotDef;
-    
+
     int line_label_count, line_num;
     boolean auto_number;
 
@@ -82,16 +82,16 @@ public class ClassFile {
     Var currentField;
 
     VisibilityAnnotationAttr vis_annot_attr;
-    
+
     public void addSootCodeAttr(String name, String value)
     {
 	class_env.addCPItem(new AsciiCP(name));
 	code.addSootCodeAttr(name, value);
     }
-    
+
     public void addGenericAttrToMethod(String name, byte[] value)
     {
-	if(currentMethod == null) 
+	if(currentMethod == null)
 	    System.err.println("Error: no field in scope to add attribute onto.");
 	else {
 	    class_env.addCPItem(new AsciiCP(name));
@@ -101,7 +101,7 @@ public class ClassFile {
 
     public void addGenericAttrToField(String name, byte[] value)
     {
-	if(currentField == null) 
+	if(currentField == null)
 	    System.err.println("Error: no field in scope to add attribute onto.");
 	else {
 	    class_env.addCPItem(new AsciiCP(name));
@@ -179,7 +179,7 @@ public class ClassFile {
     }
 
     //
-    // called by the .no_super directive 
+    // called by the .no_super directive
     // (for java.lang.Object only)
     void setNoSuperClass() {
         class_env.setNoSuperClass();
@@ -197,25 +197,25 @@ public class ClassFile {
             class_env.setClassDepr(new DeprecatedAttr());
         }
     }
-    
+
     void addClassSigAttr(Object res){
         if (res != null){
             class_env.setClassSigAttr(new SignatureAttr((String)res));
         }
     }
-    
+
     void addClassAnnotAttrVisible(Object res){
         if (res != null){
             class_env.setClassAnnotAttrVis((VisibilityAnnotationAttr)res);
         }
     }
-    
+
     void addClassAnnotAttrInvisible(Object res){
         if (res != null){
             class_env.setClassAnnotAttrInvis((VisibilityAnnotationAttr)res);
         }
     }
-    
+
     void addField(short access, String name, String sig, Object value, Object dep_attr, Object sig_attr, Object vis_annot_attr, Object vis_annot_attr2){
         addField(access, name, sig, value, null, dep_attr, sig_attr, vis_annot_attr, vis_annot_attr2);
     }
@@ -255,7 +255,7 @@ public class ClassFile {
             else
             	currentField.addVisibilityAnnotationAttrInvis(attribute);
         }
-            
+
 	    /*currentField =
 		new Var(access, new AsciiCP(name),
 			new AsciiCP(sig), null);*/
@@ -283,12 +283,12 @@ public class ClassFile {
 
             // add the field
             if (synth == null){
-	    currentField = 
+	    currentField =
             new Var(access, new AsciiCP(name),
                                new AsciiCP(sig), new ConstAttr(cp));
 	        }
             else {
-	    currentField = 
+	    currentField =
             new Var(access, new AsciiCP(name),
                                new AsciiCP(sig), new ConstAttr(cp), new SyntheticAttr());
             }
@@ -346,10 +346,10 @@ public class ClassFile {
             if (line_table != null) {
                 code.setLineTable(line_table);
             }
-	   
+
 	    code.setLabelTable(labels);
         }
-    
+
         if (!methSynth){
 	currentMethod  =  new Method(method_access, new AsciiCP(method_name),
 					    new AsciiCP(method_signature), code, except_attr);
@@ -362,29 +362,29 @@ public class ClassFile {
         if (methDepr){
             currentMethod.addDeprecatedAttr(new DeprecatedAttr());
         }
-        if (methSigAttr != null){ 
+        if (methSigAttr != null){
             currentMethod.addSignatureAttr(new SignatureAttr(methSigAttr));
         }
-        if (methAnnotAttrVis != null){ 
+        if (methAnnotAttrVis != null){
             currentMethod.addVisAnnotationAttr(methAnnotAttrVis);
         }
-        if (methAnnotAttrInvis != null){ 
+        if (methAnnotAttrInvis != null){
             currentMethod.addInvisAnnotationAttr(methAnnotAttrInvis);
         }
-        if (methParamAnnotAttrVis != null){ 
+        if (methParamAnnotAttrVis != null){
             currentMethod.addVisParamAnnotationAttr(methParamAnnotAttrVis);
         }
-        if (methParamAnnotAttrInvis != null){ 
+        if (methParamAnnotAttrInvis != null){
             currentMethod.addInvisParamAnnotationAttr(methParamAnnotAttrInvis);
         }
-        if (methAnnotDef != null){ 
+        if (methAnnotDef != null){
             methAnnotDef.setNoName();
             currentMethod.addAnnotationDef(new AnnotationDefaultAttr(methAnnotDef));
         }
 	class_env.addMethod( currentMethod);
-	
-	
-	
+
+
+
         // clear method state variables
         code        = null;
         labels      = null;
@@ -404,7 +404,7 @@ public class ClassFile {
 
     }
 
-    
+
 
     //
     // plant routines - these use addInsn to add instructions to the
@@ -450,7 +450,7 @@ public class ClassFile {
         InsnInfo insn = InsnInfo.get(name);
         CodeAttr code = _getCode();
         autoNumber();
-	
+
 	Insn inst = null;
         if (insn.args.equals("i")) {
             inst = new Insn(insn.opcode, val);
@@ -461,7 +461,7 @@ public class ClassFile {
         } else {
             throw new jasError("Bad arguments for instruction " + name);
         }
-	
+
 	code.addInsn(inst);
 
     }
@@ -473,7 +473,7 @@ public class ClassFile {
         InsnInfo insn = InsnInfo.get(name);
         CodeAttr code = _getCode();
         autoNumber();
-	
+
 	Insn inst = null;
         if (insn.args.equals("i") && (val instanceof Integer)) {
             inst = new Insn(insn.opcode, val.intValue());
@@ -513,7 +513,7 @@ public class ClassFile {
         } else {
             throw new jasError("Bad arguments for instruction " + name);
         }
-	
+
 	code.addInsn(inst);
 
     }
@@ -860,13 +860,13 @@ public class ClassFile {
         }
         //inner_class_attr.addInnerClassSpec(new InnerClassSpecAttr(new ClassCP(inner_class_name), new ClassCP(outer_class_name), new AsciiCP(inner_name), access));
         inner_class_attr.addInnerClassSpec(new InnerClassSpecAttr(inner_class_name, outer_class_name, inner_name, access));
-        
+
     }
-   
+
     void endInnerClassAttr(){
         class_env.finishInnerClassAttr(inner_class_attr);
     }
-    
+
     void addClassSynthAttr(){
         class_env.setClassSynth(true);
     }
@@ -874,19 +874,19 @@ public class ClassFile {
     void addMethSynthAttr(){
         methSynth = true;
     }
-   
+
     void addMethDeprAttr(){
          methDepr = true;
     }
-   
+
     void addMethSigAttr(String s){
         methSigAttr = s;
     }
-   
+
     void addEnclMethAttr(String cls, String meth, String sig){
         class_env.addEnclMethAttr(new EnclMethAttr(cls, meth, sig));
     }
-   
+
     void addMethAnnotAttrVisible(Object attr){
 		methAnnotAttrVis = (VisibilityAnnotationAttr)attr;
     }
@@ -898,7 +898,7 @@ public class ClassFile {
     void addMethParamAnnotAttrVisible(Object attr){
         methParamAnnotAttrVis = (ParameterVisibilityAnnotationAttr)attr;
     }
-   
+
     void addMethParamAnnotAttrInvisible(Object attr){
         methParamAnnotAttrInvis = (ParameterVisibilityAnnotationAttr)attr;
     }
@@ -906,16 +906,16 @@ public class ClassFile {
     void addMethAnnotDefault(Object attr){
         methAnnotDef = (ElemValPair)attr;
     }
-   
-    
+
+
     VisibilityAnnotationAttr makeVisibilityAnnotation(Object tval, Object list){
         return new VisibilityAnnotationAttr((String)tval, (ArrayList)list);
     }
-    
+
     ParameterVisibilityAnnotationAttr makeParameterVisibilityAnnotation(Object kind, Object list){
         return new ParameterVisibilityAnnotationAttr((String)kind+"Parameter", (ArrayList)list);
     }
-    
+
 
     void endVisibilityAnnotation(){
     }
@@ -926,9 +926,9 @@ public class ClassFile {
             currentField.addVisibilityAnnotationAttr(vis_annot_attr, class_env);
         }
     }*/
-   
+
     AnnotationAttr currAnn = null;
-  
+
     ArrayList makeNewAnnotAttrList(Object annot){
         ArrayList list = new ArrayList();
         list.add(annot);
@@ -939,7 +939,7 @@ public class ClassFile {
         ((ArrayList)list).add(elem);
         return (ArrayList)list;
     }
-    
+
     ArrayList makeNewAnnotationList(Object elem){
         ArrayList list = new ArrayList();
         list.add(elem);
@@ -950,7 +950,7 @@ public class ClassFile {
         ((ArrayList)list).add(elem);
         return (ArrayList)list;
     }
-    
+
     AnnotationAttr makeAnnotation(String type, Object elems){
         return new AnnotationAttr(type, (ArrayList)elems);
     }
@@ -972,7 +972,7 @@ public class ClassFile {
         ((ArrayList)list).add(elem);
         return (ArrayList)list;
     }
-    
+
     ElemValPair makeConstantElem(String name, char kind, Object val){
         //System.out.println("making constant elem val pair: "+val);
         ElemValPair result = null;
@@ -1006,11 +1006,11 @@ public class ClassFile {
                            result = new StringElemValPair(name, kind, (String)val);
                            break;
                        }
-                
+
         }
         return result;
     }
-   
+
     ElemValPair makeEnumElem(String name, char kind, String tval, String cval){
         return new EnumElemValPair(name, kind, tval, cval);
     }
@@ -1022,21 +1022,21 @@ public class ClassFile {
     ElemValPair makeAnnotElem(String name, char kind, Object attr){
         return new AnnotElemValPair(name, kind, (AnnotationAttr)attr);
     }
-    
+
     ElemValPair makeArrayElem(String name, char kind, Object list){
         ArrayElemValPair elem = new ArrayElemValPair(name, kind, (ArrayList)list);
         elem.setNoName();
         return elem;
     }
-    
+
     void endAnnotElem(){
     }
 
     void endArrayElem(){
-        
+
     }
     // PUBLIC API TO JASMIN:
-	
+
     /** Makes a new ClassFile object, used to represent a Java class file.
       * You can then use readJasmin to read in a class file stored in
       * Jasmin assembly format.
@@ -1118,7 +1118,7 @@ public class ClassFile {
 };
 
 /* --- Revision History ---------------------------------------------------
---- Jonathan Meyer, April 11 1997 
+--- Jonathan Meyer, April 11 1997
     Fixed bug where source_name was not being set in class_env.
 --- Jonathan Meyer, Mar 1 1997
     Renamed "Jasmin" class "ClassFile".

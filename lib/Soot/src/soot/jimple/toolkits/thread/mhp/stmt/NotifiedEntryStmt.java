@@ -18,7 +18,7 @@ import soot.*;
 
 public class NotifiedEntryStmt extends JPegStmt
 {
-	
+
 	public NotifiedEntryStmt(String obj, String ca, SootMethod sm)
 	{
 		this.object = obj;
@@ -26,9 +26,9 @@ public class NotifiedEntryStmt extends JPegStmt
 		this.caller = ca;
 		this.sootMethod = sm;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }

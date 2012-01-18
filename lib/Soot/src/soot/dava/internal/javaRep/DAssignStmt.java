@@ -12,12 +12,12 @@ public class DAssignStmt extends AbstractDefinitionStmt implements AssignStmt {
 		this.leftBox = left;
 		this.rightBox = right;
 	}
-	
+
 	public Object clone() {
         return new DAssignStmt(leftBox, rightBox);
 	}
 
-	public void setLeftOp(Value variable) {		
+	public void setLeftOp(Value variable) {
 		this.leftBox.setValue(variable);
 	}
 
@@ -30,8 +30,8 @@ public class DAssignStmt extends AbstractDefinitionStmt implements AssignStmt {
 		up.literal(" = ");
 		rightBox.toString(up);
 	}
-	
-	
+
+
 	public String toString()
     {
         return leftBox.getValue().toString() + " = " + rightBox.getValue().toString();

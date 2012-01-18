@@ -51,19 +51,19 @@ import soot.jimple.ThisRef;
 import soot.util.Chain;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 7-Feb-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 7-Feb-2006
  */
 public class BodyBuilder {
 
   public static boolean bodiesHaveBeenBuilt = false;
   public static boolean namesHaveBeenRetrieved = false;
   public static ArrayList<String> nameList = new ArrayList<String>();
-  public static void retrieveAllBodies() 
+  public static void retrieveAllBodies()
   {
     if (bodiesHaveBeenBuilt) return;
-      
+
     //  iterate through application classes, rename fields with junk
     Iterator it = soot.Scene.v().getApplicationClasses().iterator();
     while (it.hasNext())
@@ -75,26 +75,26 @@ public class BodyBuilder {
       {
         SootMethod m = (SootMethod)mIt.next();
         if (!m.isConcrete()) continue;
-        
+
         if (!m.hasActiveBody())
           m.retrieveActiveBody();
       }
     }
-    
+
     bodiesHaveBeenBuilt = true;
   }
-  
-  public static void retrieveAllNames() 
+
+  public static void retrieveAllNames()
   {
     if (namesHaveBeenRetrieved) return;
-      
+
     //  iterate through application classes, rename fields with junk
     Iterator it = soot.Scene.v().getApplicationClasses().iterator();
     while (it.hasNext())
     {
       SootClass c = (SootClass)it.next();
       nameList.add(c.getName());
-      
+
       Iterator _it = c.getMethods().iterator();
       while (_it.hasNext())
       {
@@ -108,10 +108,10 @@ public class BodyBuilder {
         nameList.add(f.getName());
       }
     }
-    
+
     namesHaveBeenRetrieved = true;
   }
-  
+
   public static Local buildThisLocal(PatchingChain units, ThisRef tr, Chain locals)
   {
     Local ths = Jimple.v().newLocal("ths", tr.getType());
@@ -120,7 +120,7 @@ public class BodyBuilder {
         Jimple.v().newThisRef((RefType) tr.getType())));
     return ths;
   }
-  
+
   public static ArrayList buildParameterLocals(PatchingChain units, Chain locals, List paramTypes)
   {
     ArrayList args = new ArrayList();
@@ -136,11 +136,11 @@ public class BodyBuilder {
     }
     return args;
   }
-  
+
   public static void updateTraps(Unit oldu, Unit newu, Chain traps) {
     int size = traps.size();
     if (size == 0) return;
-    
+
     Trap t = (Trap)traps.getFirst();
     do {
       if (t.getBeginUnit() == oldu)
@@ -151,7 +151,7 @@ public class BodyBuilder {
         t.setHandlerUnit(newu);
     } while ((--size > 0) && (t = (Trap)traps.getSuccOf(t)) != null);
   }
-  
+
   public static boolean isExceptionCaughtAt(Chain units, Unit u, Iterator trapsIt)
   {
     while (trapsIt.hasNext())
@@ -162,21 +162,21 @@ public class BodyBuilder {
         if (u.equals(it.next()))
           return true;
     }
-    
+
     return false;
   }
-  
+
   public static int getIntegerNine() {
     int r1 = Rand.getInt(8388606) * 256;
-    
+
     int r2 = Rand.getInt(28) * 9;
-    
+
     if (r2 > 126)
-      r2 += 4; 
-    
+      r2 += 4;
+
     return r1 + r2;
   }
-  
+
   public static boolean isBafIf(Unit u) {
     if (u instanceof IfCmpEqInst || u instanceof IfCmpGeInst
         || u instanceof IfCmpGtInst || u instanceof IfCmpLeInst

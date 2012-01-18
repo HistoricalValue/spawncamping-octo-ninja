@@ -52,7 +52,7 @@ public class NestedMap extends AbstractMap implements Map {
    **/
   public void release(Object key) {
     myMap.remove(key);
-  }  
+  }
 
   /**
    * Returns the map containing the elements for this level of nesting.
@@ -80,10 +80,10 @@ public class NestedMap extends AbstractMap implements Map {
   public Object get(Object key) {
     if (myMap.containsKey(key))
       return myMap.get(key);
-    else 
+    else
       return superMap.get(key);
   }
-  
+
   public Object put(Object key, Object value) {
     if (myMap.containsKey(key)) {
       return myMap.put(key,value);
@@ -93,7 +93,7 @@ public class NestedMap extends AbstractMap implements Map {
       nShadowed++;
       return oldV;
     }
-  }  
+  }
 
   public Object remove(Object key) {
     throw new UnsupportedOperationException("Remove from NestedMap");
@@ -122,7 +122,7 @@ public class NestedMap extends AbstractMap implements Map {
     }
   }
 
-  private final class EntrySet extends AbstractSet {    
+  private final class EntrySet extends AbstractSet {
     public Iterator iterator() {
       return new ConcatenatedIterator(
 	  myMap.entrySet().iterator(),
@@ -150,7 +150,7 @@ public class NestedMap extends AbstractMap implements Map {
                "Remove from NestedMap.entrySet");
     }
   }
- 
+
   private HashMap myMap;
   private int nShadowed;
   private Set setView; // the set view of this.

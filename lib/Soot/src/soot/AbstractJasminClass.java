@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * 
- * 
+ *
+ *
  * Copyright (C) 1999 Patrick Lam, Patrick Pominville and Raja Vallee-Rai
  * Copyright (C) 2004 Jennifer Lhotak, Ondrej Lhotak
  *
@@ -21,7 +21,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -57,12 +57,12 @@ public abstract class AbstractJasminClass
 
     protected Map<Local, Object> localToGroup;
     protected Map<Object, Integer> groupToColorCount;
-    protected Map<Local, Integer> localToColor; 
+    protected Map<Local, Integer> localToColor;
 
 
     protected Map<Block, Integer> blockToStackHeight = new HashMap<Block, Integer>(); // maps a block to the stack height upon entering it
     protected Map<Block, Integer> blockToLogicalStackHeight = new HashMap<Block, Integer>(); // maps a block to the logical stack height upon entering it
-    
+
 
     public static String slashify(String s)
     {
@@ -199,7 +199,7 @@ public abstract class AbstractJasminClass
     {
         okayEmit(s);
     }
-    
+
     protected void okayEmit(String s)
     {
         if(isEmittingMethodCode && !s.endsWith(":"))
@@ -207,7 +207,7 @@ public abstract class AbstractJasminClass
         else
             code.add(s);
     }
-    
+
     private String getVisibilityAnnotationAttr(VisibilityAnnotationTag tag){
         StringBuffer sb = new StringBuffer();
         if (tag.getVisibility() == AnnotationConstants.RUNTIME_VISIBLE){
@@ -232,10 +232,10 @@ public abstract class AbstractJasminClass
             }
         }
         sb.append(".end .annotation_attr\n");
-        return sb.toString();    
+        return sb.toString();
     }
-   
-    
+
+
     private String getVisibilityParameterAnnotationAttr(VisibilityParameterAnnotationTag tag){
         StringBuffer sb = new StringBuffer();
         sb.append(".param ");
@@ -253,9 +253,9 @@ public abstract class AbstractJasminClass
             }
         }
         sb.append(".end .param\n");
-        return sb.toString();    
+        return sb.toString();
     }
-   
+
     private String getElemAttr(AnnotationElem elem){
         StringBuffer result = new StringBuffer(".elem ");
         switch (elem.getKind()){
@@ -299,7 +299,7 @@ public abstract class AbstractJasminClass
                         result.append("\""+elem.getName()+"\" ");
                         result.append(((AnnotationLongElem)elem).getValue());
                         result.append("\n");
-                        break; 
+                        break;
                       }
             case 'F': {
                         result.append(".float_kind ");
@@ -325,16 +325,16 @@ public abstract class AbstractJasminClass
             case 'e': {
                         result.append(".enum_kind ");
                         result.append("\""+elem.getName()+"\" ");
-                        result.append(soot.util.StringTools.getQuotedStringOf(((AnnotationEnumElem)elem).getTypeName())); 
+                        result.append(soot.util.StringTools.getQuotedStringOf(((AnnotationEnumElem)elem).getTypeName()));
                         result.append(" ");
-                        result.append(soot.util.StringTools.getQuotedStringOf(((AnnotationEnumElem)elem).getConstantName())); 
+                        result.append(soot.util.StringTools.getQuotedStringOf(((AnnotationEnumElem)elem).getConstantName()));
                         result.append("\n");
                         break;
                       }
             case 'c': {
                         result.append(".cls_kind ");
                         result.append("\""+elem.getName()+"\" ");
-                        result.append(soot.util.StringTools.getQuotedStringOf(((AnnotationClassElem)elem).getDesc())); 
+                        result.append(soot.util.StringTools.getQuotedStringOf(((AnnotationClassElem)elem).getDesc()));
                         result.append("\n");
                         break;
                       }
@@ -369,12 +369,12 @@ public abstract class AbstractJasminClass
         }
         return result.toString();
     }
-    
+
     public AbstractJasminClass(SootClass sootClass)
     {
         if(Options.v().time())
             Timers.v().buildJasminTimer.start();
-        
+
         if(Options.v().verbose())
             G.v().out.println("[" + sootClass.getName() + "] Constructing baf.JasminClass...");
 
@@ -384,7 +384,7 @@ public abstract class AbstractJasminClass
         {
             int modifiers = sootClass.getModifiers();
 
-            
+
             if ((sootClass.getTag("SourceFileTag") != null) && (!Options.v().no_output_source_file_attribute())){
                 String srcName = ((SourceFileTag)sootClass.getTag("SourceFileTag")).getSourceFile();
                 emit(".source "+soot.util.StringTools.getEscapedStringOf(srcName));
@@ -426,9 +426,9 @@ public abstract class AbstractJasminClass
 
 
 
-    
+
 	// emit class attributes.
-	Iterator it =  sootClass.getTags().iterator(); 
+	Iterator it =  sootClass.getTags().iterator();
 	while(it.hasNext()) {
 	    Tag tag = (Tag) it.next();
 	    if(tag instanceof Attribute)
@@ -453,9 +453,9 @@ public abstract class AbstractJasminClass
                 //System.out.println("inner class tag: "+ict);
                 emit(".inner_class_spec_attr "+
                     "\""+ict.getInnerClass()+"\" "+
-                
+
                     "\""+ict.getOuterClass()+"\" "+
-                
+
                     "\""+ict.getShortName()+"\" "+
                     Modifier.toString(ict.getAccessFlags())+" "+
 
@@ -482,7 +482,7 @@ public abstract class AbstractJasminClass
         sigAttr += "\""+sigTag.getSignature()+"\"\n";
         emit(sigAttr);
     }
-    
+
     Iterator vit = sootClass.getTags().iterator();
     while (vit.hasNext()){
         Tag t = (Tag)vit.next();
@@ -500,7 +500,7 @@ public abstract class AbstractJasminClass
                 SootField field = (SootField) fieldIt.next();
 
                 String fieldString = ".field " + Modifier.toString(field.getModifiers()) + " " +  "\"" + field.getName() + "\"" + " " + jasminDescriptorOf(field.getType());
-    
+
                 if (field.hasTag("StringConstantValueTag")){
                     fieldString += " = ";
                     fieldString += soot.util.StringTools.getQuotedStringOf(((StringConstantValueTag)field.getTag("StringConstantValueTag")).getStringValue());
@@ -546,7 +546,7 @@ public abstract class AbstractJasminClass
 
                 emit(fieldString);
 
-		Iterator attributeIt =  field.getTags().iterator(); 
+		Iterator attributeIt =  field.getTags().iterator();
 		while(attributeIt.hasNext()) {
 		    Tag tag = (Tag) attributeIt.next();
 		    if(tag instanceof Attribute)
@@ -569,7 +569,7 @@ public abstract class AbstractJasminClass
                 emit("");
             }
         }
-        
+
         if(Options.v().time())
             Timers.v().buildJasminTimer.end();
     }
@@ -579,14 +579,14 @@ public abstract class AbstractJasminClass
         if(Options.v().verbose())
             G.v().out.println("[" + body.getMethod().getName() +
                 "] Assigning colors to locals...");
-        
+
         if(Options.v().time())
             Timers.v().packTimer.start();
 
         localToGroup = new HashMap<Local, Object>(body.getLocalCount() * 2 + 1, 0.7f);
         groupToColorCount = new HashMap<Object, Integer>(body.getLocalCount() * 2 + 1, 0.7f);
         localToColor = new HashMap<Local, Integer>(body.getLocalCount() * 2 + 1, 0.7f);
-        
+
         // Assign each local to a group, and set that group's color count to 0.
         {
             Iterator localIt = body.getLocals().iterator();
@@ -595,14 +595,14 @@ public abstract class AbstractJasminClass
             {
                 Local l = (Local) localIt.next();
                 Object g;
-                
+
                 if(sizeOfType(l.getType()) == 1)
                     g = IntType.v();
                 else
                     g = LongType.v();
-                
+
                 localToGroup.put(l, g);
-                
+
                 if(!groupToColorCount.containsKey(g))
                 {
                     groupToColorCount.put(g, new Integer(0));
@@ -622,19 +622,19 @@ public abstract class AbstractJasminClass
                     ((IdentityStmt) s).getLeftOp() instanceof Local)
                 {
                     Local l = (Local) ((IdentityStmt) s).getLeftOp();
-                    
+
                     Object group = localToGroup.get(l);
                     int count = groupToColorCount.get(group).intValue();
-                    
+
                     localToColor.put(l, new Integer(count));
-                    
+
                     count++;
-                    
+
                     groupToColorCount.put(group, new Integer(count));
                 }
             }
         }
-        
+
     }
 
     protected void emitMethod(SootMethod method)
@@ -688,7 +688,7 @@ public abstract class AbstractJasminClass
             else
                 emitMethodBody(method);
        }
-       
+
        // Emit epilogue
             emit(".end method");
 
@@ -697,9 +697,9 @@ public abstract class AbstractJasminClass
 		Tag tag = (Tag) it.next();
 		if(tag instanceof Attribute)
 		    emit(".method_attribute "  + tag.getName() + " \"" + new String(Base64.encode(tag.getValue())) +"\"");
-	    }	    
+	    }
     }
-    
+
     protected abstract void emitMethodBody(SootMethod method);
 
     public void print(PrintWriter out)

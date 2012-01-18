@@ -30,7 +30,7 @@ import soot.dava.internal.AST.*;
 
 
 public class VoidReturnRemover{
- 	
+
 	public static void cleanClass(SootClass s){
 		List methods = s.getMethods();
 		Iterator it = methods.iterator();
@@ -38,20 +38,20 @@ public class VoidReturnRemover{
 			removeReturn((SootMethod)it.next());
 		}
 	}
-	
-	
+
+
     private static void removeReturn(SootMethod method){
     	// check if this is a void method
     	if(! (method.getReturnType() instanceof VoidType ))
     		return;
-	
+
     	//get the methodnode
     	if(!method.hasActiveBody())
     		return;
-    	
+
         Chain units = ((DavaBody) method.getActiveBody()).getUnits();
 
-        if (units.size() != 1) 
+        if (units.size() != 1)
         	return;
 
         ASTNode AST = (ASTNode) units.getFirst();
@@ -60,11 +60,11 @@ public class VoidReturnRemover{
 
 		ASTMethodNode node = (ASTMethodNode)AST;
 
-		//check there is only 1 subBody		
+		//check there is only 1 subBody
 	    List<Object> subBodies = node.get_SubBodies();
 	    if(subBodies.size()!=1)
 	    	return;
-	    
+
 	    List subBody = (List)subBodies.get(0);
 	    //see if the last of this is a stmtseq node
 	    if(subBody.size()==0){
@@ -74,10 +74,10 @@ public class VoidReturnRemover{
 
 	    //check last node is a ASTStatementSequenceNode
 	    ASTNode last = (ASTNode)subBody.get(subBody.size()-1);
-	    if(! (last instanceof ASTStatementSequenceNode)) 
+	    if(! (last instanceof ASTStatementSequenceNode))
 	    	return;
-	    	
-	    	
+
+
 	    //get last statement
 	    List<Object> stmts = ((ASTStatementSequenceNode)last).getStatements();
 	    if(stmts.size()==0){
@@ -89,7 +89,7 @@ public class VoidReturnRemover{
 	    Stmt lastStmt = lastas.get_Stmt();
 	    if(! (lastStmt instanceof ReturnVoidStmt))
 	    		return;
-	    			
+
 	    //we can remove the lastStmt
 	    stmts.remove(stmts.size()-1);
 	    /*
@@ -98,7 +98,7 @@ public class VoidReturnRemover{
 	     */
 	    if(stmts.size()==0)
 	    	subBody.remove(subBody.size()-1);
-	    
-	    
+
+
     }//end method
 }

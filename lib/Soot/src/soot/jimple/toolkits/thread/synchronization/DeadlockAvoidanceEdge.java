@@ -4,18 +4,18 @@ package soot.jimple.toolkits.thread.synchronization;
 import soot.*;
 
 public class DeadlockAvoidanceEdge extends NewStaticLock
-{	
+{
 	public DeadlockAvoidanceEdge(SootClass sc)
 	{
 		super(sc);
 	}
-	
+
     /** Clones the object. */
-    public Object clone() 
+    public Object clone()
     {
         return new DeadlockAvoidanceEdge(sc);
     }
-    
+
     public boolean equals(Object c)
     {
     	if(c instanceof DeadlockAvoidanceEdge)
@@ -24,7 +24,7 @@ public class DeadlockAvoidanceEdge extends NewStaticLock
     	}
     	return false;
     }
-        
+
     public String toString()
     {
     	return "dae<" + sc.toString() + ">";

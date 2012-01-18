@@ -12,7 +12,7 @@ public class CofferParsedClassType_c extends ParsedClassType_c
     PClass instantiatedFrom;
     Key key;
 
-    public CofferParsedClassType_c(TypeSystem ts, LazyClassInitializer init, 
+    public CofferParsedClassType_c(TypeSystem ts, LazyClassInitializer init,
                                    Source fromSource) {
         super(ts, init, fromSource);
     }

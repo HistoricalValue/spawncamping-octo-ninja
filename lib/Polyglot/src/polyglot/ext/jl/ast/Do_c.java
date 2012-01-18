@@ -7,10 +7,10 @@ import polyglot.util.*;
 import java.util.*;
 
 /**
- * A immutable representation of a Java language <code>do</code> statement. 
- * It contains a statement to be executed and an expression to be tested 
+ * A immutable representation of a Java language <code>do</code> statement.
+ * It contains a statement to be executed and an expression to be tested
  * indicating whether to reexecute the statement.
- */ 
+ */
 public class Do_c extends Loop_c implements Do
 {
     protected Stmt body;
@@ -115,7 +115,7 @@ public class Do_c extends Loop_c implements Do
             v.visitCFG(cond, body.entry());
         }
         else {
-            v.visitCFG(cond, FlowGraph.EDGE_KEY_TRUE, body.entry(), 
+            v.visitCFG(cond, FlowGraph.EDGE_KEY_TRUE, body.entry(),
                              FlowGraph.EDGE_KEY_FALSE, this);
         }
 

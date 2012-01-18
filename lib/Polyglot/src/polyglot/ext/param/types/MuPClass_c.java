@@ -13,7 +13,7 @@ import java.util.*;
 public class MuPClass_c extends PClass_c implements MuPClass {
     protected List/*[Param]*/ formals;
     protected ClassType clazz;
-	
+
     protected MuPClass_c() { }
 
     public MuPClass_c(TypeSystem ts) {
@@ -35,7 +35,7 @@ public class MuPClass_c extends PClass_c implements MuPClass {
     public ClassType clazz() {
         return clazz;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Implement MuPClass
 
@@ -46,7 +46,7 @@ public class MuPClass_c extends PClass_c implements MuPClass {
     public void addFormal(Param param) {
 	formals().add(param);
     }
-    
+
     public void clazz(ClassType clazz) {
 	this.clazz = clazz;
     }

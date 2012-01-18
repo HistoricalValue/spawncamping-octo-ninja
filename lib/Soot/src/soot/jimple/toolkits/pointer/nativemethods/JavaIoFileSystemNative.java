@@ -36,7 +36,7 @@ public class JavaIoFileSystemNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -62,7 +62,7 @@ public class JavaIoFileSystemNative extends NativeMethodClass {
    *
    *    public static native java.io.FileSystem getFileSystem();
    */
-  public 
+  public
     void java_io_FileSystem_getFileSystem(SootMethod method,
 					  ReferenceVariable thisVar,
 					  ReferenceVariable returnVar,

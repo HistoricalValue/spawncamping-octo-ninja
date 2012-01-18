@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,7 +34,7 @@ import soot.toolkits.graph.*;
 import java.util.*;
 
 
-public class ClassFieldAnalysis 
+public class ClassFieldAnalysis
 {
     public ClassFieldAnalysis( Singletons.Global g ) {}
     public static ClassFieldAnalysis v() { return G.v().soot_jimple_toolkits_annotation_arraycheck_ClassFieldAnalysis(); }
@@ -43,27 +43,27 @@ public class ClassFieldAnalysis
     private final boolean private_in = true;
 
     /* A map hold class object to other information
-     * 
+     *
      * SootClass --> FieldInfoTable
      */
- 
-    private final Map<SootClass, Hashtable<SootField, IntValueContainer>> classToFieldInfoMap = new HashMap<SootClass, Hashtable<SootField, IntValueContainer>>();	
-  
+
+    private final Map<SootClass, Hashtable<SootField, IntValueContainer>> classToFieldInfoMap = new HashMap<SootClass, Hashtable<SootField, IntValueContainer>>();
+
     protected void internalTransform(SootClass c)
     {
  	if (classToFieldInfoMap.containsKey(c))
 		return;
-     
+
 	/* Summerize class information here. */
 	Date start = new Date();
- 	if (Options.v().verbose()) 
+ 	if (Options.v().verbose())
 	    G.v().out.println("[] ClassFieldAnalysis started on : "
 			       +start+" for "
 			       +c.getPackageName()+c.getName());
-	
+
 	Hashtable<SootField, IntValueContainer> fieldInfoTable = new Hashtable<SootField, IntValueContainer>();
 	classToFieldInfoMap.put(c, fieldInfoTable);
-	
+
 	/* Who is the candidate for analysis?
 	   Int, Array, field. Also it should be PRIVATE now.
 	*/
@@ -80,20 +80,20 @@ public class ClassFieldAnalysis
 	    Type type = field.getType();
 	    if (type instanceof ArrayType)
 	    {
-		if ( (final_in 
-		      && ((modifiers & Modifier.FINAL) != 0)) 
-		     || (private_in 
-			 && ((modifiers & Modifier.PRIVATE) != 0))) 
+		if ( (final_in
+		      && ((modifiers & Modifier.FINAL) != 0))
+		     || (private_in
+			 && ((modifiers & Modifier.PRIVATE) != 0)))
 		{
 		    candidSet.add(field);
 		    arrayTypeFieldNum ++;
 		}
 	    }
-	}	
+	}
 
 	if (arrayTypeFieldNum == 0)
 	{
-	    if (Options.v().verbose()) 
+	    if (Options.v().verbose())
 		G.v().out.println("[] ClassFieldAnalysis finished with nothing");
 	    return;
 	}
@@ -102,7 +102,7 @@ public class ClassFieldAnalysis
 
 	/* For PRIVATE field, <clinit> is scanned to make sure that it is always
            assigned a value before other uses. And no other assignment in other methods.*/
-	   
+
 
 	/* The fastest way to determine the value of one field may get.
 	   Scan all method to get all definitions, and summerize the final value.
@@ -114,11 +114,11 @@ public class ClassFieldAnalysis
 	{
 	    ScanMethod ((SootMethod)methodIt.next(),
 			candidSet,
-			fieldInfoTable);	    
+			fieldInfoTable);
 	}
 
 	Date finish = new Date();
-	if (Options.v().verbose()) 
+	if (Options.v().verbose())
 	{
 	    long runtime=finish.getTime()-start.getTime();
 	    long mins=runtime/60000;
@@ -139,7 +139,7 @@ public class ClassFieldAnalysis
 	    internalTransform(c);
 	    fieldInfoTable = classToFieldInfoMap.get(c);
 	}
-	
+
 	return fieldInfoTable.get(field);
     }
 
@@ -148,7 +148,7 @@ public class ClassFieldAnalysis
        fieldinfo, keep the field -> value.
     */
 
-    public void ScanMethod (SootMethod method, 
+    public void ScanMethod (SootMethod method,
 				   Set<SootField> candidates,
 				   Hashtable<SootField, IntValueContainer> fieldinfo)
     {
@@ -187,10 +187,10 @@ public class ClassFieldAnalysis
 
 	/* only take care of the first dimension of array size */
 	/* check the assignment of fields. */
-	
+
 	/* Linearly scan the method body, if it has field references in candidate set. */
 	/* Only a.f = ... needs consideration.
-	   this.f, or other.f are treated as same because we summerize the field as a class's field. 
+	   this.f, or other.f are treated as same because we summerize the field as a class's field.
 	*/
 
 	HashMap<Stmt, SootField> stmtfield = new HashMap<Stmt, SootField>();
@@ -230,7 +230,7 @@ public class ClassFieldAnalysis
 	{
             UnitGraph g = new ExceptionalUnitGraph(body);
 	    LocalDefs localDefs = new SmartLocalDefs(g, new SimpleLiveLocals(g));
-	    
+
 	    Set entries = stmtfield.entrySet();
 
 	    Iterator entryIt = entries.iterator();
@@ -271,14 +271,14 @@ public class ClassFieldAnalysis
 				    size = ((NewArrayExpr)tmp_rhs).getSize();
 				else
 				    size = ((NewMultiArrayExpr)tmp_rhs).getSize(0);
-				
+
 				if (size instanceof IntConstant)
 				    length.setValue(((IntConstant)size).value);
 				else
 				if (size instanceof Local)
 				{
 				    local = (Local)size;
-				    
+
 				    //  defs = localDefs.getDefsOfAt((Local)size, (Unit)usestmt);
 
 				    continue;
@@ -322,7 +322,7 @@ public class ClassFieldAnalysis
 
 		    /* remove from the candidate set. */
 		    candidates.remove(which);
-		}		
+		}
 		else
 		if (length.isInteger())
 		{
@@ -341,8 +341,8 @@ public class ClassFieldAnalysis
 		    }
 		}
 	    }
-	}	
-	
+	}
+
 	if (Options.v().verbose())
 	{
 	    G.v().out.println("[] ScanMethod finished.");

@@ -35,7 +35,7 @@ public class JavaNetInetAddressImplNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -46,12 +46,12 @@ public class JavaNetInetAddressImplNative extends NativeMethodClass {
     String subSignature = method.getSubSignature();
 
     if (subSignature.equals("java.lang.String getLocalHostName()")){
-      java_net_InetAddressImpl_getLocalHostName(method, thisVar, 
+      java_net_InetAddressImpl_getLocalHostName(method, thisVar,
 						returnVar, params);
       return;
 
     } else if (subSignature.equals("java.lang.String getHostByAddress(int)")){
-      java_net_InetAddressImpl_getHostByAddr(method, thisVar, 
+      java_net_InetAddressImpl_getHostByAddr(method, thisVar,
 					     returnVar, params);
       return;
 
@@ -72,10 +72,10 @@ public class JavaNetInetAddressImplNative extends NativeMethodClass {
    *
    * We should avoid analyzing these unsafe native methods.
    *
-   *     native java.lang.String getLocalHostName() 
+   *     native java.lang.String getLocalHostName()
    *                      throws java.net.UnknownHostException;
    */
-  public 
+  public
     void java_net_InetAddressImpl_getLocalHostName(
 					  SootMethod method,
                                           ReferenceVariable thisVar,
@@ -83,14 +83,14 @@ public class JavaNetInetAddressImplNative extends NativeMethodClass {
 					  ReferenceVariable params[]){
     helper.assignObjectTo(returnVar, Environment.v().getStringObject());
   }
-  
+
   /**
    * Create a string object
    *
-   *     native java.lang.String getHostByAddr(int) 
+   *     native java.lang.String getHostByAddr(int)
    *                     throws java.net.UnknownHostException;
    */
-  public 
+  public
     void java_net_InetAddressImpl_getHostByAddr(SootMethod method,
 						ReferenceVariable thisVar,
 						ReferenceVariable returnVar,
@@ -101,7 +101,7 @@ public class JavaNetInetAddressImplNative extends NativeMethodClass {
   /**
    * NO side effects.
    *    native void makeAnyLocalAddress(java.net.InetAddress);
-   *    native byte lookupAllHostAddr(java.lang.String)[][] 
+   *    native byte lookupAllHostAddr(java.lang.String)[][]
    *                     throws java.net.UnknownHostException;
    *    native int getInetFamily();
    *

@@ -41,7 +41,7 @@ import soot.jimple.ThrowStmt;
 
 public interface ThrowAnalysis {
     /**
-     * Returns a set representing the {@link Throwable} types that 
+     * Returns a set representing the {@link Throwable} types that
      * the specified unit might throw.
      *
      * @param u {@link Unit} whose exceptions are to be returned.
@@ -87,7 +87,7 @@ public interface ThrowAnalysis {
      * @param t {@link ThrowStmt} whose implicit exceptions are
      *          to be returned.
      *
-     * @return a representation of the types of exceptions that 
+     * @return a representation of the types of exceptions that
      * <code>t</code> might throw implicitly.
      */
     ThrowableSet mightThrowImplicitly(ThrowInst t);
@@ -102,7 +102,7 @@ public interface ThrowAnalysis {
      * @param t {@link ThrowStmt} whose implicit exceptions are
      *          to be returned.
      *
-     * @return a representation of the types of exceptions that 
+     * @return a representation of the types of exceptions that
      * <code>t</code> might throw implicitly.
      */
     ThrowableSet mightThrowImplicitly(ThrowStmt t);

@@ -18,14 +18,14 @@
  */
 
 /*
- *TODO: Nomair (November 23rd 2005) should look at all methods in AbstractUnit 
+ *TODO: Nomair (November 23rd 2005) should look at all methods in AbstractUnit
  *                                  and figure out what to do with them!!
  *      With the changed semantics maybe another stmt which deals with int i=2; separatly should be
  *      created
  */
 
 /*
- *  CHANGE LOG:  November 23rd 2005: Changing the semantics of DVariableDeclarationStmt. 
+ *  CHANGE LOG:  November 23rd 2005: Changing the semantics of DVariableDeclarationStmt.
  *                   The fact that we can have definition stmts inside the list of locals
  *                   declared is going to lead to way too many problems. So DVairableDeclarationStmt
  *                   is going to be restricted to declaration which do not have definitions
@@ -49,10 +49,10 @@ public class DVariableDeclarationStmt extends AbstractUnit implements Stmt {
 	Type declarationType = null;
 
 	List declarations = null;
-	
+
 	//added solely for the purpose of retrieving packages used when printing
 	DavaBody davaBody = null;
-	
+
 	public DVariableDeclarationStmt(Type decType, DavaBody davaBody) {
 		if (declarationType != null)
 			throw new RuntimeException(
@@ -152,9 +152,9 @@ public class DVariableDeclarationStmt extends AbstractUnit implements Stmt {
 				IterableSet importSet = davaBody.getImportList();
 				if(!importSet.contains(type))
 					davaBody.addToImportList(type);
-				
+
 				type = RemoveFullyQualifiedName.getReducedName(davaBody.getImportList(),type,declarationType);
-	
+
 				dup.printString(type);
 			}
 			dup.printString(" ");

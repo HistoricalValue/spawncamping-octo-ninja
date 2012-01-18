@@ -35,13 +35,13 @@ import java.util.*;
  *  <code>CompleteUnitGraph</code> in releases up to Soot 2.1.0 (the
  *  one known discrepancy is that the 2.1.0
  *  <code>CompleteUnitGraph</code> would include two edges joining one
- *  node to another 
+ *  node to another
  *  {@link Unit}s if the first node both branched to and fell through to
  *  the second). It is included solely for testing purposes, and
  *  should not be used in actual analyses.</p>
  *
  *  <p> There are two distinctions between the graphs produced by the
- *  <tt>ClassicCompleteUnitGraph</tt> and 
+ *  <tt>ClassicCompleteUnitGraph</tt> and
  *  <tt>ExceptionalUnitGraph</tt>:
  *  <ol>
  *
@@ -86,7 +86,7 @@ public class ClassicCompleteUnitGraph extends TrapUnitGraph
 
     /**
      * Method to compute the edges corresponding to exceptional
-     * control flow. 
+     * control flow.
      *
      * @param unitToSuccs A {@link Map} from {@link Unit}s to {@link
      *                    List}s of {@link Unit}s. This is * an ``out
@@ -96,7 +96,7 @@ public class ClassicCompleteUnitGraph extends TrapUnitGraph
      *                    Trap}s to a <tt>List</tt> of the handler
      *                    units of those <tt>Trap</tt>s.
      *
-     * @param unitToPreds A {@link Map} from {@link Unit}s to 
+     * @param unitToPreds A {@link Map} from {@link Unit}s to
      *                    {@link List}s of {@link Unit}s. This is an
      *                    ``out parameter'';
      *                    <tt>buildExceptionalEdges</tt> will add a
@@ -109,20 +109,20 @@ public class ClassicCompleteUnitGraph extends TrapUnitGraph
 	super.buildExceptionalEdges(unitToSuccs, unitToPreds);
 	// Then add edges from the predecessors of the first
 	// trapped Unit for each Trap.
-	for (Iterator trapIt = body.getTraps().iterator(); 
+	for (Iterator trapIt = body.getTraps().iterator();
 	     trapIt.hasNext(); ) {
 	    Trap trap = (Trap) trapIt.next();
 	    Unit firstTrapped = trap.getBeginUnit();
 	    Unit catcher = trap.getHandlerUnit();
 	    // Make a copy of firstTrapped's predecessors to iterate over,
-	    // just in case we're about to add new predecessors to this 
+	    // just in case we're about to add new predecessors to this
 	    // very list, though that can only happen if the handler traps
 	    // itself.  And to really allow for that
 	    // possibility, we should iterate here until we reach a fixed
 	    // point; but the old UnitGraph that we are attempting to
 	    // duplicate did not do that, so we won't either.
 	    List origPredsOfTrapped = new ArrayList(getPredsOf(firstTrapped));
-	    for (Iterator unitIt = origPredsOfTrapped.iterator(); 
+	    for (Iterator unitIt = origPredsOfTrapped.iterator();
 		 unitIt.hasNext(); ) {
 		Unit pred = (Unit) unitIt.next();
 		addEdge(unitToSuccs, unitToPreds, pred, catcher);

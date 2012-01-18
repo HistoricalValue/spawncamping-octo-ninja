@@ -29,7 +29,7 @@ public class DVirtualInvokeExpr extends GVirtualInvokeExpr
 {
     private HashSet<Object> thisLocals;
 
-    public DVirtualInvokeExpr( Value base, SootMethodRef methodRef, java.util.List args, HashSet<Object> thisLocals) 
+    public DVirtualInvokeExpr( Value base, SootMethodRef methodRef, java.util.List args, HashSet<Object> thisLocals)
     {
 	super( base, methodRef, args);
 
@@ -43,7 +43,7 @@ public class DVirtualInvokeExpr extends GVirtualInvokeExpr
             up.literal( "((" );
             up.type( methodRef.declaringClass().getType() );
             up.literal( ") " );
-	    
+
             if( PrecedenceTest.needsBrackets( baseBox, this ) ) up.literal("(");
             baseBox.toString( up );
             if( PrecedenceTest.needsBrackets( baseBox, this ) ) up.literal(")");
@@ -57,7 +57,7 @@ public class DVirtualInvokeExpr extends GVirtualInvokeExpr
 	    for (int i=0; i<argBoxes.length; i++) {
 		if(i != 0)
                     up.literal( ", " );
-		
+
                 argBoxes[i].toString(up);
 	    }
 
@@ -76,7 +76,7 @@ public class DVirtualInvokeExpr extends GVirtualInvokeExpr
 	    b.append( "((");
 	    b.append( methodRef.declaringClass().getJavaStyleName());
 	    b.append( ") ");
-	    
+
 	    String baseStr = ( getBase()).toString();
 	    if ((getBase() instanceof Precedence) && ( ((Precedence) getBase()).getPrecedence() < getPrecedence()))
 		baseStr = "(" + baseStr + ")";
@@ -90,7 +90,7 @@ public class DVirtualInvokeExpr extends GVirtualInvokeExpr
 	    for (int i=0; i<argBoxes.length; i++) {
 		if(i != 0)
 		    b.append(", ");
-		
+
 		b.append( ( argBoxes[i].getValue()).toString());
 	    }
 
@@ -102,13 +102,13 @@ public class DVirtualInvokeExpr extends GVirtualInvokeExpr
 	return super.toString();
     }
 
-    public Object clone() 
+    public Object clone()
     {
         ArrayList clonedArgs = new ArrayList( getArgCount());
 
-        for(int i = 0; i < getArgCount(); i++) 
+        for(int i = 0; i < getArgCount(); i++)
             clonedArgs.add(i, Grimp.cloneIfNecessary(getArg(i)));
-        
+
         return new  DVirtualInvokeExpr(Grimp.cloneIfNecessary(getBase()), methodRef, clonedArgs, thisLocals);
     }
 }

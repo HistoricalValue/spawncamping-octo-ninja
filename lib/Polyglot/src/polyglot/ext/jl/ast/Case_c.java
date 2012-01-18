@@ -112,7 +112,7 @@ public class Case_c extends Stmt_c implements Case
 	    }
 
 	    if (! li.isConstant()) {
-                /* FIXME: isConstant() is incorrect 
+                /* FIXME: isConstant() is incorrect
 	        throw new SemanticException("Case label must be an integral constant.",
 					    position());
                 */

@@ -22,7 +22,7 @@ public:
 
 	virtual const char *getBytes() const { return data; };
 private:
-	char *data;	
+	char *data;
 	int len;
 	int capacity;
 };

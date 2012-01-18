@@ -116,7 +116,7 @@ public class SingletonKeeper {
         LOG.log(Level.INFO, "on-demand creating singleton {0}", klass);
 
         raisingPile.add(sentry);
-        
+
         if (sentry.IsBeingInitialised())
             throw new RuntimeException("Cyclic dependency: " +
                     raisingPile);

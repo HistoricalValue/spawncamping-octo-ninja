@@ -13,7 +13,7 @@ public class UnknownType_c extends Type_c implements UnknownType
 {
     /** Used for deserializing types. */
     protected UnknownType_c() { }
-    
+
     /** Creates a new type in the given a TypeSystem. */
     public UnknownType_c(TypeSystem ts) {
         super(ts);

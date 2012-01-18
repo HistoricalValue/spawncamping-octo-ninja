@@ -7,7 +7,7 @@ import polyglot.types.Type;
 import polyglot.types.TypeSystem;
 
 /**
- * A PAO class type. This class overrides the method 
+ * A PAO class type. This class overrides the method
  * {@link #isCastValidImpl(Type) isCastValidImpl(Type)} to allow casting from
  * <code>Object</code> to primitives.
  */
@@ -23,9 +23,9 @@ public class PaoParsedClassType_c extends ParsedClassType_c {
 
     /**
      * Returns <code>true</code> if normal casting rules permit this cast, or
-     * if this <code>ClassType</code> is <code>Object</code> and the 
+     * if this <code>ClassType</code> is <code>Object</code> and the
      * <code>toType</code> is a primitive.
-     * 
+     *
      * @see polyglot.ext.jl.types.ClassType_c#isCastValidImpl(Type)
      */
     public boolean isCastValidImpl(Type toType) {

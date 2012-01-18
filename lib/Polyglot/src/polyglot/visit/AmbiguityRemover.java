@@ -57,41 +57,41 @@ public class AmbiguityRemover extends ContextVisitor
 	    Report.report(2, "<< " + kind + "::leave " + n + " -> " + m);
         return m;
     }
-    
+
     /**
      * Add dependencies for the job to the super classes and interface classes
      * of <code>ct</code>.
      */
     public void addSuperDependencies(ClassType ct) {
         // track which classtypes we've seen, since it may be the
-        // case that the class types are (incorrectly) circular. 
-        Set seen = new HashSet();    
-            
+        // case that the class types are (incorrectly) circular.
+        Set seen = new HashSet();
+
         Stack s = new Stack();
         s.push(ct);
         while (! s.isEmpty()) {
             Type t = (Type) s.pop();
             if (t.isClass()) {
                 ClassType classt = t.toClass();
-                
+
                 if (seen.contains(classt)) {
                     continue;
                 }
                 else {
                     seen.add(classt);
                 }
-                
+
                 // add a dependency if its a parsed class type.
                 if (classt instanceof ParsedClassType) {
                     this.job().extensionInfo().addDependencyToCurrentJob(
                                       ((ParsedClassType)classt).fromSource());
                 }
-                
+
                 // add all the interfaces to the stack.
                 for (Iterator i = classt.interfaces().iterator(); i.hasNext(); ) {
                     s.push(i.next());
                 }
-    
+
                 // add the superType to the stack.
                 if (classt.superType() != null) {
                     s.push(classt.superType());

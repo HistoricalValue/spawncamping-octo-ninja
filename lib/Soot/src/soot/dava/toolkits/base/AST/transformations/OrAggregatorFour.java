@@ -33,8 +33,8 @@ import soot.dava.toolkits.base.AST.analysis.*;
   Nomair A. Naeem 18-FEB-2005
 
   The class is responsible to do the following transformation on the AST
-  
-  label_1:                                                 
+
+  label_1:
      while(cond){                                    label_1:
          BodyA;                                        while(cond){
          label_2:{                                         BodyA;
@@ -46,10 +46,10 @@ import soot.dava.toolkits.base.AST.analysis.*;
             .                                        remove label_1 if BodyA and BodyB
             if(cond2){                               dont have any reference to label_1 (highly likely)
                 continue label_1;     ------>        should be done as a separate analysis
-	    }                             
-         }//end of label_2                     
-         BodyB                                
-  }//end while                           
+	    }
+         }//end of label_2
+         BodyB
+  }//end while
 
 
   This pattern is applicable to the four cycle nodes representing
@@ -77,7 +77,7 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 	String label = node.get_Label().toString();
 	if(label==null)
 	    return;
-	
+
 	List<Object> subBodies=node.get_SubBodies();
 	List<Object> newBody=matchPattern(label,subBodies);
 	if(newBody!=null){
@@ -85,7 +85,7 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 	    //System.out.println("OR AGGREGATOR FOUR");
 	    G.v().ASTTransformations_modified = true;
 	}
-	
+
 	/*
 	  see if we can remove the label from this construct
 	*/
@@ -98,7 +98,7 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 	String label = node.get_Label().toString();
 	if(label==null)
 	    return;
-	
+
 	List<Object> subBodies=node.get_SubBodies();
 	List<Object> newBody=matchPattern(label,subBodies);
 	if(newBody!=null){
@@ -106,7 +106,7 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 	    //System.out.println("OR AGGREGATOR FOUR");
 	    G.v().ASTTransformations_modified = true;
 	}
-	
+
 	/*
 	  see if we can remove the label from this construct
 	*/
@@ -171,7 +171,7 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 		    nodeNumber++;
 		    continue;
 		}
-		
+
 		//get labeledBlocksBodies
 		List<Object> labeledBlocksSubBodies = labeledNode.get_SubBodies();
 		if(labeledBlocksSubBodies.size()!=1){
@@ -182,7 +182,7 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 
 		//get the subBody
 		List labeledBlocksSubBody = (List)labeledBlocksSubBodies.get(0);
-		
+
 		boolean allIfs = checkAllAreIfsWithProperBreaks(labeledBlocksSubBody.iterator(),whileLabel,innerLabel);
 		if(!allIfs){
 		    //pattern doesnt match
@@ -206,10 +206,10 @@ public class OrAggregatorFour extends DepthFirstAdapter{
     private List<Object> createWhileBody(List subBody,List labeledBlocksSubBody,int nodeNumber){
 	//create BodyA, Nodes from 0 to nodeNumber
 	List<Object> bodyA = new ArrayList<Object>();
-	
+
 	//this is an iterator of ASTNodes
 	Iterator it = subBody.iterator();
-	
+
 	//copy to bodyA all nodes until you get to nodeNumber
 	int index=0;
 	while(index!=nodeNumber ){
@@ -219,10 +219,10 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 	    bodyA.add(it.next());
 	    index++;
 	}
-       
-	
+
+
 	//create ASTIfNode
-	// Create a list of conditions to be Ored together 
+	// Create a list of conditions to be Ored together
 	// remembering that the last ones condition is to be flipped
 	List<ASTCondition> conditions = getConditions(labeledBlocksSubBody.iterator());
 
@@ -237,14 +237,14 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 		newCond=new ASTOrCondition(newCond,next);
 	}
 
-	
+
 	//create BodyB
 	it.next();//this skips the LabeledBlockNode
 	List<Object> bodyB = new ArrayList<Object>();
 	while(it.hasNext()){
 	    bodyB.add(it.next());
 	}
-	
+
 	ASTIfNode newNode = new ASTIfNode(new SETNodeLabel(),newCond,bodyB);
 
 
@@ -258,13 +258,13 @@ public class OrAggregatorFour extends DepthFirstAdapter{
       of methods called before in the outASTLabeledBlockNode
       it knows the following:
        All nodes are ASTIFNodes
-    */  
+    */
     private List<ASTCondition> getConditions(Iterator it){
 	List<ASTCondition> toReturn = new ArrayList<ASTCondition>();
 	while(it.hasNext()){
 	    //safe cast since we know these are all ASTIfNodes
 	    ASTIfNode node = (ASTIfNode)it.next();
-	    
+
 	    ASTCondition cond = node.get_Condition();
 	    //check if this is the last in which case we need to flip
 	    if(it.hasNext()){
@@ -289,7 +289,7 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 	//the pattern says that ALL bodies in this list should be IF statements
 	while(it.hasNext()){
 	    ASTNode secondLabelsBody = (ASTNode)it.next();
-	    
+
 	    //check that this is a ifNode with a single statement
 
 	    Stmt stmt = isIfNodeWithOneStatement(secondLabelsBody);
@@ -297,7 +297,7 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 		//pattern is broken
 		return false;
 	    }
-	
+
 	    //check if the single stmt follows the pattern
 	    boolean abrupt = abruptLabel(stmt,outerLabel,innerLabel,it.hasNext());
 
@@ -370,13 +370,13 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 	    //if body should always have oneSubBody
 	    return null;
 	}
-	
+
 	//if has one SubBody
 	List ifBody = (List)ifSubBodies.get(0);
-	
+
 	//Looking for a statement sequence node with a single stmt
 	if(ifBody.size()!=1){
-	    //there should only be one body 
+	    //there should only be one body
 	    return null;
 	}
 
@@ -387,7 +387,7 @@ public class OrAggregatorFour extends DepthFirstAdapter{
 	    return null;
 	}
 
-	//the only ASTnode is a ASTStatementSequence 
+	//the only ASTnode is a ASTStatementSequence
 	List<Object> statements = ((ASTStatementSequenceNode)ifBodysBody).getStatements();
 	if(statements.size()!=1){
 	    //there is more than one statement

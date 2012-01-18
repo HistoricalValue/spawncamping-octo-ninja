@@ -56,7 +56,7 @@ import soot.dava.toolkits.base.AST.structuredAnalysis.*;
   a, a conditional in if, ifelse, while , do while, for condition
   b, in the for init or update
   c, in a switch choice
-  d, in a syncrhnoized block 
+  d, in a syncrhnoized block
   d, in a statement
 
 */
@@ -64,7 +64,7 @@ public class ASTUsesAndDefs extends DepthFirstAdapter{
 	public static boolean DEBUG=false;
     HashMap<Object, List<DefinitionStmt>> uD; //mapping a use to all possible definitions
     HashMap<Object, List> dU; //mapping a def to all possible uses
-    ReachingDefs reaching;  //using structural analysis information 
+    ReachingDefs reaching;  //using structural analysis information
 
     public ASTUsesAndDefs(ASTNode AST){
 	uD = new HashMap<Object, List<DefinitionStmt>>();
@@ -130,7 +130,7 @@ public class ASTUsesAndDefs extends DepthFirstAdapter{
 	}
     }
 
-	
+
 
 
 
@@ -149,7 +149,7 @@ public class ASTUsesAndDefs extends DepthFirstAdapter{
 	List<DefinitionStmt> reachingDefs = reaching.getReachingDefs(local,useNodeOrStatement);
 	if(DEBUG)
 		System.out.println("Reaching def for:"+local+" are:"+reachingDefs);
-	
+
 	//add the reaching defs into the use def chain
 	Object tempObj = uD.get(useNodeOrStatement);
 	if(tempObj != null){
@@ -159,13 +159,13 @@ public class ASTUsesAndDefs extends DepthFirstAdapter{
 	}
 	else
 	    uD.put(useNodeOrStatement,reachingDefs);
-	
+
 	//add the use into the def use chain
 	Iterator<DefinitionStmt> defIt = reachingDefs.iterator();
 	while(defIt.hasNext()){
 	    //for each reaching def
 	    Object defStmt = defIt.next();
-	    
+
 	    //get the dU Chain
 	    Object useObj = dU.get(defStmt);
 	    List<Object> uses=null;
@@ -173,7 +173,7 @@ public class ASTUsesAndDefs extends DepthFirstAdapter{
 		uses = new ArrayList<Object>();
 	    else
 		uses = (List<Object>)useObj;
-	    
+
 	    //add the new local use to this list (we add the node since thats where the local is used
 	    uses.add(useNodeOrStatement);
 	    //System.out.println("Adding definition:"+defStmt+"with uses:"+uses);
@@ -392,7 +392,7 @@ public class ASTUsesAndDefs extends DepthFirstAdapter{
 	ASTCondition cond = node.get_Condition();
 	checkConditionalUses(cond,node);
 
-	
+
 	//checking uses in update
 	List<Object> update = node.getUpdate();
 	it = update.iterator();
@@ -408,12 +408,12 @@ public class ASTUsesAndDefs extends DepthFirstAdapter{
     public void inASTStatementSequenceNode(ASTStatementSequenceNode node){
 	List<Object> statements = node.getStatements();
 	Iterator<Object> it = statements.iterator();
-	
+
 	while(it.hasNext()){
 	    AugmentedStmt as = (AugmentedStmt)it.next();
 	    Stmt s = as.get_Stmt();
 	    //in the case of stmtts in a stmtt sequence each stmt is considered an entity
-	    //compared to the case where these stmts occur within other constructs 
+	    //compared to the case where these stmts occur within other constructs
 	    //where the node is the entity
 	    checkStatementUses(s,s);
 	}
@@ -421,7 +421,7 @@ public class ASTUsesAndDefs extends DepthFirstAdapter{
 
 
     /*
-     * Input is a construct (ASTNode or statement) that has some locals used and output are all defs reached 
+     * Input is a construct (ASTNode or statement) that has some locals used and output are all defs reached
      * for all the uses in that construct...
      *
      * dont know whether it actually makes sense for the nodes but it definetly makes sense for the statements

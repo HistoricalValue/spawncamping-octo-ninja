@@ -47,7 +47,7 @@ public class ThrowConstraintNode_c extends Node_c implements ThrowConstraintNode
     }
 
     public ThrowConstraint constraint() {
-        return constraint; 
+        return constraint;
     }
 
     public ThrowConstraintNode constraint(ThrowConstraint constraint) {

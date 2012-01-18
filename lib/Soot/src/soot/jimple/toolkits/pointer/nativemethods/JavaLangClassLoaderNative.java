@@ -35,7 +35,7 @@ public class JavaLangClassLoaderNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -50,20 +50,20 @@ public class JavaLangClassLoaderNative extends NativeMethodClass {
       return;
 
     } else if (subSignature.equals("java.lang.Class findBootstrapClass(java.lang.String)")){
-      java_lang_ClassLoader_findBootstrapClass(method, thisVar, 
+      java_lang_ClassLoader_findBootstrapClass(method, thisVar,
 					       returnVar, params);
       return;
 
     } else if (subSignature.equals("java.lang.Class findLoadedClass(java.lang.String)")){
-      java_lang_ClassLoader_findLoadedClass(method, thisVar, 
+      java_lang_ClassLoader_findLoadedClass(method, thisVar,
 					    returnVar, params);
       return;
 
     } else if (subSignature.equals("java.lang.ClassLoader getCallerClassLoader()")){
-      java_lang_ClassLoader_getCallerClassLoader(method, thisVar, 
+      java_lang_ClassLoader_getCallerClassLoader(method, thisVar,
 						 returnVar, params);
       return;
-      
+
     } else {
       defaultMethod(method, thisVar, returnVar, params);
       return;
@@ -71,7 +71,7 @@ public class JavaLangClassLoaderNative extends NativeMethodClass {
     }
   }
 
-  /************************** java.lang.ClassLoader ******************/  
+  /************************** java.lang.ClassLoader ******************/
   /**
    * Converts an array of bytes into an instance of class
    * Class. Before the Class can be used it must be resolved.
@@ -81,14 +81,14 @@ public class JavaLangClassLoaderNative extends NativeMethodClass {
    *       return an abstract reference points to all possible class object
    *       in current analysis environment.
    *
-   * private native 
-   *   java.lang.Class defineClass0(java.lang.String, 
-   *                                byte[], 
-   *                                int, 
-   *                                int, 
+   * private native
+   *   java.lang.Class defineClass0(java.lang.String,
+   *                                byte[],
+   *                                int,
+   *                                int,
    *                                java.security.ProtectionDomain);
    */
-  public 
+  public
     void java_lang_ClassLoader_defineClass0(SootMethod method,
 					    ReferenceVariable thisVar,
 					    ReferenceVariable returnVar,
@@ -98,14 +98,14 @@ public class JavaLangClassLoaderNative extends NativeMethodClass {
 
   /**
    * NOTE: undocumented, finding the bootstrap class
-   * 
+   *
    * Assuming all classes
    *
-   * private native 
-   *   java.lang.Class findBootstrapClass(java.lang.String) 
+   * private native
+   *   java.lang.Class findBootstrapClass(java.lang.String)
    *                   throws java.lang.ClassNotFoundException;
    */
-  public 
+  public
     void java_lang_ClassLoader_findBootstrapClass(
 					 SootMethod method,
                                          ReferenceVariable thisVar,
@@ -117,12 +117,12 @@ public class JavaLangClassLoaderNative extends NativeMethodClass {
   /**
    * Finds the class with the given name if it had been previously
    * loaded through this class loader.
-   * 
+   *
    * NOTE: assuming all classes.
    *
    * protected final native java.lang.Class findLoadedClass(java.lang.String);
    */
-  public 
+  public
     void java_lang_ClassLoader_findLoadedClass(SootMethod method,
 					       ReferenceVariable thisVar,
 					       ReferenceVariable returnVar,
@@ -135,7 +135,7 @@ public class JavaLangClassLoaderNative extends NativeMethodClass {
    *
    * static native java.lang.ClassLoader getCallerClassLoader();
    */
-  public 
+  public
     void java_lang_ClassLoader_getCallerClassLoader(
 				    SootMethod method,
 				    ReferenceVariable thisVar,

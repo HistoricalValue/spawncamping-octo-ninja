@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -43,9 +43,9 @@ public class JNopStmt extends AbstractStmt implements NopStmt
     public JNopStmt()
     {
     }
-    
 
-    public Object clone() 
+
+    public Object clone()
     {
         return new JNopStmt();
     }
@@ -55,16 +55,16 @@ public class JNopStmt extends AbstractStmt implements NopStmt
     {
         return Jimple.NOP;
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(Jimple.NOP);
     }
-    
+
     public void apply(Switch sw)
     {
         ((StmtSwitch) sw).caseNopStmt(this);
-    }    
-    
+    }
+
     public void convertToBaf(JimpleToBafContext context, List<Unit> out)
     {
 	Unit u;
@@ -72,14 +72,14 @@ public class JNopStmt extends AbstractStmt implements NopStmt
 
 	Unit currentUnit = this;
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}
     }
 
 
-    public boolean fallsThrough(){return true;}        
+    public boolean fallsThrough(){return true;}
     public boolean branches(){return false;}
 
 }

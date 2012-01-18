@@ -42,16 +42,16 @@ import soot.util.NumberedString;
 /**
  * Interface for handler for when an allocation site is encountered in a pointer
  * analysis query.
- * 
+ *
  * @author manu
- * 
- * 
+ *
+ *
  */
 public interface AllocationSiteHandler {
 
   /**
    * handle a particular allocation site
-   * 
+   *
    * @param allocNode
    *          the abstract location node
    * @param callStack
@@ -68,7 +68,7 @@ public interface AllocationSiteHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see AAA.algs.AllocationSiteHandler#handleAllocationSite(soot.jimple.spark.pag.AllocNode,
      *      java.lang.Integer)
      */
@@ -106,7 +106,7 @@ public interface AllocationSiteHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see AAA.algs.AllocationSiteHandler#handleAllocationSite(soot.jimple.spark.pag.AllocNode,
      *      java.lang.Integer)
      */
@@ -170,7 +170,7 @@ public interface AllocationSiteHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see AAA.algs.AllocationSiteHandler#handleAllocationSite(soot.jimple.spark.pag.AllocNode,
      *      AAA.algs.MethodContext)
      */

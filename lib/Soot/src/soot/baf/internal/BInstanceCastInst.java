@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,21 +33,21 @@ import soot.*;
 import soot.baf.*;
 import soot.util.*;
 
-public class BInstanceCastInst extends AbstractInst 
+public class BInstanceCastInst extends AbstractInst
                             implements InstanceCastInst
 {
 
     protected Type castType;
 
-    public BInstanceCastInst(Type opType) 
-    { 
-        
+    public BInstanceCastInst(Type opType)
+    {
+
         if (!(opType instanceof RefType) && !(opType instanceof ArrayType))
             throw new RuntimeException("invalid InstanceCastInst: "+ opType);
         castType = opType;
     }
 
-    
+
     public int getInCount()
     {
         return 1;
@@ -57,19 +57,19 @@ public class BInstanceCastInst extends AbstractInst
 
 
 
-    public Object clone() 
+    public Object clone()
     {
 
         return new  BInstanceCastInst(castType);
 
     }
 
-    
+
     public int getInMachineCount()
     {
         return 1;
     }
-    
+
     public int getOutCount()
     {
         return 1;
@@ -79,7 +79,7 @@ public class BInstanceCastInst extends AbstractInst
     {
         return 1;
     }
-    
+
 
     final public String getName() { return "checkcast"; }
 
@@ -89,6 +89,6 @@ public class BInstanceCastInst extends AbstractInst
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseInstanceCastInst(this);
-    }   
+    }
 }
 

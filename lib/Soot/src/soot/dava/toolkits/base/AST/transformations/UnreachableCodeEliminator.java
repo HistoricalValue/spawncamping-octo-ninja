@@ -23,7 +23,7 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
 	public boolean DUBUG=true;
 	ASTNode AST;
 	UnreachableCodeFinder codeFinder;
-	
+
 	public UnreachableCodeEliminator(ASTNode AST) {
 		super();
 		this.AST = AST;
@@ -36,7 +36,7 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
 		setup();
 	}
 
-	private void setup() {	
+	private void setup() {
 		codeFinder = new UnreachableCodeFinder(AST);
 		//parentOf = new ASTParentNodeFinder();
 		//AST.apply(parentOf);
@@ -60,9 +60,9 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
 			stmts.remove(it.next());
 		}
 	}
-	
-	
-	
+
+
+
 	public void normalRetrieving(ASTNode node) {
     	if(node instanceof ASTSwitchNode){
   		   dealWithSwitchNode((ASTSwitchNode)node);
@@ -88,7 +88,7 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
 					temp.apply(this);
 				}
 			}
-			
+
 			it = toReturn.iterator();
 			while(it.hasNext()){
 				//System.out.println("Removed");
@@ -96,20 +96,20 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
 			}
 		}//end of going over subBodies
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
 	//TODO
 	public void caseASTTryNode(ASTTryNode node) {
-		//get try body 
+		//get try body
 		List<Object> tryBody = node.get_TryBody();
 		Iterator<Object> it = tryBody.iterator();
 
@@ -125,16 +125,16 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
 				temp.apply(this);
 			}
 		}
-		
+
 		it = toReturn.iterator();
 		while(it.hasNext()){
 			tryBody.remove(it.next());
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 		Map<Object, Object> exceptionMap = node.get_ExceptionMap();
 		Map<Object, Object> paramMap = node.get_ParamMap();
 		//get catch list and apply on the following
@@ -174,7 +174,7 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
 					temp.apply(this);
 				}
 			}
-			
+
 			itBody = toReturn.iterator();
 			while(itBody.hasNext()){
 				body.remove(itBody.next());
@@ -182,10 +182,10 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
 		}
 	}
 
-	
-	
-	
-	
+
+
+
+
 
     private void dealWithSwitchNode(ASTSwitchNode node){
     	//System.out.println("dealing with SwitchNode");
@@ -198,11 +198,11 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
     	while (it.hasNext()) {//going through all the cases of the switch statement
     	    Object currentIndex = it.next();
     	    List body = index2BodyList.get( currentIndex);
-    	    
+
     	    if (body == null)
     	    	continue;
-    	    
-    	    //this body is a list of ASTNodes 
+
+    	    //this body is a list of ASTNodes
 
     	    List<ASTNode> toReturn = new ArrayList<ASTNode>();
     	    Iterator itBody = body.iterator();
@@ -220,7 +220,7 @@ public class UnreachableCodeEliminator extends DepthFirstAdapter {
 					temp.apply(this);
 				}
 			}
-			
+
     	    Iterator<ASTNode> newit = toReturn.iterator();
 			while(newit.hasNext()){
 				//System.out.println("Removed");

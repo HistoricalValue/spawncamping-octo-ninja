@@ -12,7 +12,7 @@ public class TypeInputStream extends ObjectInputStream
   protected TypeSystem ts;
   protected Map cache;
 
-  public TypeInputStream( InputStream in, TypeSystem ts) 
+  public TypeInputStream( InputStream in, TypeSystem ts)
     throws IOException
   {
     super( in);
@@ -34,7 +34,7 @@ public class TypeInputStream extends ObjectInputStream
       } catch (NullPointerException e) {
         s = "<NullPointerException thrown>";
       }
-    }	  
+    }
     if (o instanceof PlaceHolder) {
       Object k = new IdentityKey(o);
       TypeObject t = (TypeObject) cache.get(k);
@@ -44,18 +44,18 @@ public class TypeInputStream extends ObjectInputStream
       }
       if (Report.should_report(Report.serialize, 2)) {
         Report.report(2, "- Resolving " + s + " : " + o.getClass()
-          + " to " + t + " : " + t.getClass());      	
+          + " to " + t + " : " + t.getClass());
       }
       return t;
     }
     else if (o instanceof Enum) {
-      if (Report.should_report(Report.serialize, 2)) {    
+      if (Report.should_report(Report.serialize, 2)) {
         Report.report(2, "- Interning " + s + " : " + o.getClass());
       }
       return ((Enum) o).intern();
     }
     else {
-      if (Report.should_report(Report.serialize, 2)) {    
+      if (Report.should_report(Report.serialize, 2)) {
         Report.report(2, "- " + s + " : " + o.getClass());
       }
       return o;

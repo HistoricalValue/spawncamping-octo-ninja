@@ -87,23 +87,23 @@ public class MethodNodeFactory extends AbstractShimpleValueSwitch {
                 	if (pag.getOpts().empties_as_allocs()) {
                 	    if (s.declaringClass().getName().equals("java.util.Collections")) {
                                 if (s.name().equals("EMPTY_SET")) {
-                                    src = pag.makeAllocNode( RefType.v("java.util.HashSet"), 
+                                    src = pag.makeAllocNode( RefType.v("java.util.HashSet"),
                                                                   RefType.v("java.util.HashSet"), method );
                                 } else if (s.name().equals("EMPTY_MAP")) {
-                                    src = pag.makeAllocNode( RefType.v("java.util.HashMap"), 
+                                    src = pag.makeAllocNode( RefType.v("java.util.HashMap"),
                                                                   RefType.v("java.util.HashMap"), method );
                                 } else if (s.name().equals("EMPTY_LIST")) {
-                                    src = pag.makeAllocNode( RefType.v("java.util.LinkedList"), 
+                                    src = pag.makeAllocNode( RefType.v("java.util.LinkedList"),
                                                                   RefType.v("java.util.LinkedList"), method );
-                                } 
+                                }
                         } else if (s.declaringClass().getName().equals("java.util.Hashtable")) {
                             if (s.name().equals("emptyIterator")) {
-                                src = pag.makeAllocNode( RefType.v("java.util.Hashtable$EmptyIterator"), 
+                                src = pag.makeAllocNode( RefType.v("java.util.Hashtable$EmptyIterator"),
                                                               RefType.v("java.util.Hashtable$EmptyIterator"), method );
                             } else if (s.name().equals("emptyEnumerator")) {
-                                src = pag.makeAllocNode( RefType.v("java.util.Hashtable$EmptyEnumerator"), 
+                                src = pag.makeAllocNode( RefType.v("java.util.Hashtable$EmptyEnumerator"),
                                         RefType.v("java.util.Hashtable$EmptyEnumerator"), method );
-                            } 
+                            }
                         }
                 	}
                 }
@@ -158,7 +158,7 @@ public class MethodNodeFactory extends AbstractShimpleValueSwitch {
         }
         setResult( phiNode );
     }
-    
+
     final public Node caseRet() {
         VarNode ret = pag.makeLocalVarNode(
                     Parm.v( method, PointsToAnalysis.RETURN_NODE ),
@@ -192,12 +192,12 @@ public class MethodNodeFactory extends AbstractShimpleValueSwitch {
     }
     final public void caseInstanceFieldRef( InstanceFieldRef ifr ) {
 	if( pag.getOpts().field_based() || pag.getOpts().vta() ) {
-	    setResult( pag.makeGlobalVarNode( 
-			ifr.getField(), 
+	    setResult( pag.makeGlobalVarNode(
+			ifr.getField(),
 			ifr.getField().getType() ) );
 	} else {
-	    setResult( pag.makeLocalFieldRefNode( 
-			ifr.getBase(), 
+	    setResult( pag.makeLocalFieldRefNode(
+			ifr.getBase(),
 			ifr.getBase().getType(),
 			ifr.getField(),
                         method ) );
@@ -218,7 +218,7 @@ public class MethodNodeFactory extends AbstractShimpleValueSwitch {
         return false;
     }
     final public void caseNewExpr( NewExpr ne ) {
-        if( pag.getOpts().merge_stringbuffer() 
+        if( pag.getOpts().merge_stringbuffer()
         && isStringBuffer(ne.getType())) {
             setResult( pag.makeAllocNode( ne.getType(), ne.getType(), null ) );
         } else {
@@ -249,14 +249,14 @@ public class MethodNodeFactory extends AbstractShimpleValueSwitch {
 	setResult( caseParm( pr.getIndex() ) );
     }
     final public void caseStaticFieldRef( StaticFieldRef sfr ) {
-	setResult( pag.makeGlobalVarNode( 
-		    sfr.getField(), 
+	setResult( pag.makeGlobalVarNode(
+		    sfr.getField(),
 		    sfr.getField().getType() ) );
     }
     final public void caseStringConstant( StringConstant sc ) {
         AllocNode stringConstant;
         if( pag.getOpts().string_constants()
-        || Scene.v().containsClass(sc.value) 
+        || Scene.v().containsClass(sc.value)
         || ( sc.value.length() > 0 && sc.value.charAt(0) == '[' ) ) {
             stringConstant = pag.makeStringConstantNode( sc.value );
         } else {

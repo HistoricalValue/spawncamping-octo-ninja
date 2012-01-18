@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -35,9 +35,9 @@ import soot.util.*;
 
 public class BPopInst extends AbstractInst implements PopInst
 {
-    
+
     protected Type mType;
-    
+
     public BPopInst(Type aType)
     {
         mType = aType;
@@ -49,15 +49,15 @@ public class BPopInst extends AbstractInst implements PopInst
     {
         return getInMachineCount();
     }
-    
+
     public void setWordCount(int count)
     {
         throw new RuntimeException("not implemented");
-    }   
-    
+    }
 
 
-    public Object clone() 
+
+    public Object clone()
     {
         return new  BPopInst(mType);
     }
@@ -67,7 +67,7 @@ public class BPopInst extends AbstractInst implements PopInst
 
     final String getParameters()
     {
-        return ""; 
+        return "";
     }
 
     public int getInCount()
@@ -79,7 +79,7 @@ public class BPopInst extends AbstractInst implements PopInst
     {
         return 0;
     }
-    
+
     public int getOutCount()
     {
         return 0;
@@ -94,9 +94,9 @@ public class BPopInst extends AbstractInst implements PopInst
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).casePopInst(this);
-    }   
-    
-    public Type getType() 
+    }
+
+    public Type getType()
     {
       return mType;
     }

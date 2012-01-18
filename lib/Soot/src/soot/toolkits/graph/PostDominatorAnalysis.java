@@ -29,8 +29,8 @@ import soot.toolkits.scalar.*;
 // SETS OF Units that are post-dominators => Use ArraySparseSet.
 //
 // STEP 2: Precisely define what we are computing.
-// For each statement compute the set of stmts that post-dominate it 
-// 
+// For each statement compute the set of stmts that post-dominate it
+//
 // STEP 3: Decide whether it is a backwards or forwards analysis.
 // FORWARDS
 //
@@ -42,7 +42,7 @@ public class PostDominatorAnalysis extends BackwardFlowAnalysis {
 
     private UnitGraph g;
     private FlowSet allNodes;
-    
+
     public PostDominatorAnalysis(UnitGraph g)
     {
         super(g);
@@ -51,7 +51,7 @@ public class PostDominatorAnalysis extends BackwardFlowAnalysis {
         initAllNodes();
 
         doAnalysis();
-        
+
     }
 
     private void initAllNodes(){
@@ -59,7 +59,7 @@ public class PostDominatorAnalysis extends BackwardFlowAnalysis {
         Iterator it = g.iterator();
         while (it.hasNext()){
             allNodes.add(it.next());
-        } 
+        }
     }
 
 
@@ -73,23 +73,23 @@ public class PostDominatorAnalysis extends BackwardFlowAnalysis {
 	    FlowSet outSet = (FlowSet) out;
 
         inSet1.intersection(inSet2, outSet);
-	
+
     }
 
     protected void copy(Object source, Object dest) {
 
         FlowSet sourceIn = (FlowSet)source;
         FlowSet destOut = (FlowSet)dest;
-        
+
         sourceIn.copy(destOut);
 
     }
-   
+
 // STEP 5: Define flow equations.
 // dom(s) = s U ( ForAll Y in pred(s): Intersection (dom(y)))
 // ie: dom(s) = s and whoever dominates all the predeccessors of s
-// 
-    
+//
+
     protected void flowThrough(Object inValue, Object unit,
             Object outValue)
     {
@@ -104,10 +104,10 @@ public class PostDominatorAnalysis extends BackwardFlowAnalysis {
 //            System.out.println("in: "+in+" out: "+out);
         }
         else {
-        
+
 //            System.out.println("s: "+s+" is not start node");
             FlowSet domsOfSuccs = allNodes.clone();
-        
+
             // for each pred of s
             Iterator succsIt = g.getSuccsOf(s).iterator();
             while (succsIt.hasNext()){
@@ -120,16 +120,16 @@ public class PostDominatorAnalysis extends BackwardFlowAnalysis {
                 in.intersection(next, in);
 //                System.out.println("in after intersect: "+in);
             }
-        
+
             // intersected with in
-       
+
 //            System.out.println("out init: "+out);
             out.intersection(in, out);
             out.add(s);
 //            System.out.println("out after: "+out);
         }
     }
-    
+
     private boolean isUnitEndNode(Unit s){
         //System.out.println("head: "+g.getHeads().get(0));
         if( g.getTails().contains(s) )
@@ -159,7 +159,7 @@ public class PostDominatorAnalysis extends BackwardFlowAnalysis {
     {
         return allNodes.clone();
     }
-    
+
 	/**
 	 * Returns true if s post-dominates t.
 	 */
@@ -167,6 +167,6 @@ public class PostDominatorAnalysis extends BackwardFlowAnalysis {
 		return ((FlowSet)getFlowBefore(t)).contains(s);
 	}
 
-        
+
 
 }

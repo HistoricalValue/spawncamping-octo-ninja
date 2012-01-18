@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -60,26 +60,26 @@ public class IterableMap implements Map
 	Iterator vcit = value_chain.iterator();
 	while (vcit.hasNext())
 	    back_map.remove( vcit.next());
-	
+
 	key_chain.clear();
 	value_chain.clear();
     }
-    
+
     public Iterator iterator()
     {
 	return key_chain.iterator();
     }
-    
-    public boolean containsKey(Object key) 
+
+    public boolean containsKey(Object key)
     {
 	return key_chain.contains( key);
     }
-    
+
     public boolean containsValue(Object value)
     {
 	return value_chain.contains( value);
     }
-    
+
     public Set entrySet()
     {
 	return content_map.entrySet();
@@ -92,12 +92,12 @@ public class IterableMap implements Map
 
 	if ((o instanceof IterableMap) == false)
 	    return false;
-	
+
 	IterableMap other = (IterableMap) o;
 
 	if (key_chain.equals( other.key_chain) == false)
 	    return false;
-	
+
 	// check that the other has our mapping
 	Iterator kcit = key_chain.iterator();
 	while (kcit.hasNext()) {
@@ -115,7 +115,7 @@ public class IterableMap implements Map
 	return content_map.get( key);
     }
 
-    public int hashCode() 
+    public int hashCode()
     {
 	return content_map.hashCode();
     }
@@ -128,7 +128,7 @@ public class IterableMap implements Map
     private transient Set<Object> keySet = null;
     private transient Set<Object> valueSet = null;
     private transient Collection<Object> values = null;
-    
+
     public Set<Object> keySet()
     {
         if (keySet == null) {
@@ -235,7 +235,7 @@ public class IterableMap implements Map
 
 	    key_chain.add(key);
 	    content_map.put( key, value);
-	    
+
 	    HashChain kc = (HashChain) back_map.get( value);
 	    if (kc == null) {
 		kc = new HashChain();
@@ -243,7 +243,7 @@ public class IterableMap implements Map
 		value_chain.add( value);
 	    }
 	    kc.add( key);
-	    
+
 	    return null;
 	}
     }
@@ -311,17 +311,17 @@ public class IterableMap implements Map
 	    this.m = m;
 	}
 
-        public boolean hasNext() 
+        public boolean hasNext()
         {
 	    return it.hasNext();
         }
-            
+
         public Object next() throws NoSuchElementException
         {
 	    return m.get( it.next());
         }
 
-        public void remove() throws UnsupportedOperationException 
+        public void remove() throws UnsupportedOperationException
         {
 	    throw new UnsupportedOperationException("You cannot remove from an Iterator on the values() for an IterableMap.");
         }

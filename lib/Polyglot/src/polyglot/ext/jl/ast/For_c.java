@@ -167,7 +167,7 @@ public class For_c extends Loop_c implements For
 	    }
 	}
 
-	w.write(";"); 
+	w.write(";");
 	w.allowBreak(0);
 
 	if (cond != null) {
@@ -176,12 +176,12 @@ public class For_c extends Loop_c implements For
 
 	w.write (";");
 	w.allowBreak(0);
-	
+
 	if (iters != null) {
 	    for (Iterator i = iters.iterator(); i.hasNext();) {
 		ForUpdate s = (ForUpdate) i.next();
 		printForUpdate(s, w, tr);
-		
+
 		if (i.hasNext()) {
 		    w.write(",");
 		    w.allowBreak(2, " ");
@@ -225,7 +225,7 @@ public class For_c extends Loop_c implements For
                 v.visitCFG(cond, body.entry());
             }
             else {
-                v.visitCFG(cond, FlowGraph.EDGE_KEY_TRUE, body.entry(), 
+                v.visitCFG(cond, FlowGraph.EDGE_KEY_TRUE, body.entry(),
                                  FlowGraph.EDGE_KEY_FALSE, this);
             }
         }

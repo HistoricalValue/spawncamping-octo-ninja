@@ -11,7 +11,7 @@ public:
 	Throwable(String *message) { msg = message; };
 	Throwable(Throwable *c)
 	{
-	  cause = c; 
+	  cause = c;
 	  if(cause != null)
 	    msg = new String(c->getMessage());
 	  else
@@ -19,7 +19,7 @@ public:
 	};
 
 	Throwable(String *message, Throwable *c) { msg = message; cause = c; };
-	
+
 	String *getMessage() { return msg; };
 	String *toString() { return msg; };
 	Throwable *getCause() { return cause; };

@@ -31,11 +31,11 @@ public abstract class NodeVisitor
      * visitor does not wish to override traversal of the subtree rooted at
      * <code>n</code>, then it should return <code>null</code>.
      * <p>
-     * The default implementation of this method is to call 
+     * The default implementation of this method is to call
      * {@link #override(Node) override(n)}, as most subclasses do not need to know
      * the parent of the node <code>n</code>.
      *
-     * @param parent The parent of <code>n</code>, 
+     * @param parent The parent of <code>n</code>,
      *    <code>null</code> if <code>n</code> has no parent.
      * @param n The root of the subtree to be traversed.
      * @return A node if normal traversal is to stop, <code>null</code> if it
@@ -55,11 +55,11 @@ public abstract class NodeVisitor
      * visitor does not wish to override traversal of the subtree rooted at
      * <code>n</code>, then it should return <code>null</code>.
      * <p>
-     * This method is typically called by the method 
+     * This method is typically called by the method
      * {@link #override(Node, Node) override(parent, n)}. If a subclass overrides the
      * method {@link #override(Node, Node) override(parent, n)} then this method
      * may not be called.
-     * 
+     *
      * @param n The root of the subtree to be traversed.
      * @return A node if normal traversal is to stop, <code>null</code> if it
      * is to continue.
@@ -73,7 +73,7 @@ public abstract class NodeVisitor
      * the visitor the option of changing internal state or returning a new
      * visitor which will be used to visit the children of <code>n</code>.
      * <p>
-     * The default implementation of this method is to call 
+     * The default implementation of this method is to call
      * {@link #enter(Node) enter(n)}, as most subclasses do not need to know
      * the parent of the node <code>n</code>.
      *
@@ -91,7 +91,7 @@ public abstract class NodeVisitor
      * the visitor the option of changing internal state or returning a new
      * visitor which will be used to visit the children of <code>n</code>.
      * <p>
-     * This method is typically called by the method 
+     * This method is typically called by the method
      * {@link #enter(Node, Node) enter(parent, n)}. If a subclass overrides the
      * method {@link #enter(Node, Node) enter(parent, n)} then this method
      * may not be called.
@@ -117,12 +117,12 @@ public abstract class NodeVisitor
      * of <code>n</code> before modifying it. It should then return the
      * modified copy.
      * <p>
-     * The default implementation of this method is to call 
-     * {@link #leave(Node, Node, NodeVisitor) leave(old, n, v)}, 
-     * as most subclasses do not need to know the parent of the 
+     * The default implementation of this method is to call
+     * {@link #leave(Node, Node, NodeVisitor) leave(old, n, v)},
+     * as most subclasses do not need to know the parent of the
      * node <code>n</code>.
      *
-     * @param parent The parent of <code>old</code>, 
+     * @param parent The parent of <code>old</code>,
      *    <code>null</code> if <code>old</code> has no parent.
      * @param old The original state of root of the current subtree.
      * @param n The current state of the root of the current subtree.
@@ -147,12 +147,12 @@ public abstract class NodeVisitor
      * of <code>n</code> before modifying it. It should then return the
      * modified copy.
      * <p>
-     * This method is typically called by the method 
-     * {@link #leave(Node, Node, Node, NodeVisitor) leave(parent, old, n v)}. 
-     * If a subclass overrides the method 
-     * {@link #leave(Node, Node, Node, NodeVisitor) leave(parent, old, n v)} 
+     * This method is typically called by the method
+     * {@link #leave(Node, Node, Node, NodeVisitor) leave(parent, old, n v)}.
+     * If a subclass overrides the method
+     * {@link #leave(Node, Node, Node, NodeVisitor) leave(parent, old, n v)}
      * then this method may not be called.
-     * 
+     *
      * @param old The original state of root of the current subtree.
      * @param n The current state of the root of the current subtree.
      * @param v The <code>NodeVisitor</code> object used to visit the children.
@@ -169,8 +169,8 @@ public abstract class NodeVisitor
      * that cannot be done when the visitor is created.
      * If <code>null</code> is returned, the ast is not traversed.
      *
-     * @return the <code>NodeVisitor</code> to traverse the ast with. If 
-     *     <code>null</code> is returned, the ast is not traversed. 
+     * @return the <code>NodeVisitor</code> to traverse the ast with. If
+     *     <code>null</code> is returned, the ast is not traversed.
      */
     public NodeVisitor begin() {
         return this;
@@ -192,14 +192,14 @@ public abstract class NodeVisitor
      * Visit the edge between the parent node <code>parent</code>, and child
      * node <code>child</code>. This method recursively visits  the subtree rooted
      * at <code>child</code>.
-     * 
+     *
      * @param parent the parent node of <code>child</code>, <code>null</code> if
-     *         <code>child</code> was visited by calling 
+     *         <code>child</code> was visited by calling
      *         {@link polyglot.ast.Node#visit(NodeVisitor) polyglot.ast.Node.visit(NodeVisitor)} instead
-     *         of {@link polyglot.ast.Node#visitChild(polyglot.ast.Node, NodeVisitor) 
+     *         of {@link polyglot.ast.Node#visitChild(polyglot.ast.Node, NodeVisitor)
      *         Node.visitChild(Node, NodeVisitor)}.
      * @param child the child node of <code>parent</code> to be visited.
-     * @return the (possibly new) version of <code>child</code> after the 
+     * @return the (possibly new) version of <code>child</code> after the
      *       subtree rooted at <code>child</code> has been recursively visited.
      */
     public Node visitEdge(Node parent, Node child) {

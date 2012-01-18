@@ -35,7 +35,7 @@ public class JavaLangStringNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -67,8 +67,8 @@ public class JavaLangStringNative extends NativeMethodClass {
    * returned. Otherwise, this String object is added to the pool and
    * a * reference to this String object is returned.
    *
-   * It follows that for any two strings s and t, 
-   *       s.intern() == t.intern() 
+   * It follows that for any two strings s and t,
+   *       s.intern() == t.intern()
    * is true if and only if s.equals(t) is true.
    *
    * All literal strings and string-valued constant expressions are *
@@ -83,7 +83,7 @@ public class JavaLangStringNative extends NativeMethodClass {
    *
    *              It may be @return = this;
    *                         pool = this;
-   *   
+   *
    * why should we care about String in points-to analysis?
    *
    * public native java.lang.String intern();

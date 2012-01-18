@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,18 +36,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-/** Reference implementation of the Chain interface, 
+/** Reference implementation of the Chain interface,
     using a HashMap as the underlying structure. */
 public class HashChain<E> extends AbstractCollection<E>
-    implements Chain<E> 
+    implements Chain<E>
 {
-    private final HashMap<E, Link> map = new HashMap<E, Link>(); 
+    private final HashMap<E, Link> map = new HashMap<E, Link>();
     private E firstItem;
     private E lastItem;
-    private long stateCount = 0;  
+    private long stateCount = 0;
 
     /** Erases the contents of the current HashChain. */
-    public void clear() 
+    public void clear()
     {
         stateCount++;
         firstItem = lastItem = null;
@@ -59,9 +59,9 @@ public class HashChain<E> extends AbstractCollection<E>
         insertBefore(in, out);
         remove(out);
     }
-    
+
     /** Adds the given object to this HashChain. */
-    public boolean add(E item) 
+    public boolean add(E item)
     {
         addLast(item);
         return true;
@@ -72,17 +72,17 @@ public class HashChain<E> extends AbstractCollection<E>
     {
         Iterator it = c.iterator();
         List list = new ArrayList();
-        
+
         while(it.hasNext()) {
             list.add(it.next());
         }
-        
+
         return list;
     }
 
     /** Constructs an empty HashChain. */
     public HashChain()
-    { 
+    {
         firstItem = lastItem = null;
     }
 
@@ -105,7 +105,7 @@ public class HashChain<E> extends AbstractCollection<E>
         }
         return true;
     }
-    
+
     public boolean contains(Object o)
     {
         return map.containsKey(o);
@@ -117,10 +117,10 @@ public class HashChain<E> extends AbstractCollection<E>
         while (it.hasNext())
             if (!(map.containsKey(it.next())))
                 return false;
-        
+
         return true;
     }
-    
+
     public void insertAfter(E toInsert, E point)
     {
         if (toInsert == null)
@@ -131,9 +131,9 @@ public class HashChain<E> extends AbstractCollection<E>
             throw new RuntimeException("Chain already contains object.");
         stateCount++;
         Link temp = map.get(point);
-        
+
         Link newLink = temp.insertAfter(toInsert);
-        map.put(toInsert, newLink);    
+        map.put(toInsert, newLink);
     }
 
     public void insertAfter(List<E> toInsert, E point)
@@ -141,7 +141,7 @@ public class HashChain<E> extends AbstractCollection<E>
         // if the list is null, treat it as an empty list
         if (toInsert == null)
             throw new RuntimeException("Warning! You tried to insert "
-                                       + "a null list into a Chain!");            
+                                       + "a null list into a Chain!");
 
         E previousPoint = point;
         Iterator<E> it = toInsert.iterator();
@@ -152,13 +152,13 @@ public class HashChain<E> extends AbstractCollection<E>
                 previousPoint = o;
             }
     }
-    
+
     public void insertAfter(Chain<E> toInsert, E point)
     {
         // if the list is null, treat it as an empty list
         if (toInsert == null)
             throw new RuntimeException("Warning! You tried to insert "
-                                       + "a null list into a Chain!");            
+                                       + "a null list into a Chain!");
 
         E previousPoint = point;
         Iterator<E> it = toInsert.iterator();
@@ -183,11 +183,11 @@ public class HashChain<E> extends AbstractCollection<E>
         	throw new RuntimeException("Insertion point not found in chain!");
         }
         stateCount++;
-        
+
         Link newLink = temp.insertBefore(toInsert);
         map.put(toInsert, newLink);
     }
-    
+
     public void insertBefore(List<E> toInsert, E point)
     {
         // if the list is null, treat it as an empty list
@@ -221,13 +221,13 @@ public class HashChain<E> extends AbstractCollection<E>
     public static HashChain listToHashChain(List list) {
         HashChain c = new HashChain();
         Iterator it = list.iterator();
-        while (it.hasNext()) 
+        while (it.hasNext())
             c.addLast(it.next());
         return c;
     }
-  
+
     public boolean remove(Object item)
-    { 
+    {
         if (item == null)
             throw new RuntimeException("Bad idea! You tried to remove "
                                        + " a null object from a Chain!");
@@ -241,7 +241,7 @@ public class HashChain<E> extends AbstractCollection<E>
          */
         if(map.get(item) != null){
         	Link link = map.get(item);
-        
+
         	link.unlinkSelf();
         	map.remove(item);
         	return true;
@@ -280,19 +280,19 @@ public class HashChain<E> extends AbstractCollection<E>
         stateCount++;
         Link newLink, temp;
         if(map.containsKey(item))
-            throw new RuntimeException("Chain already contains object: " 
+            throw new RuntimeException("Chain already contains object: "
                                        + item);
-        
+
         if(lastItem != null) {
             temp = map.get(lastItem);
-            newLink = temp.insertAfter(item);   
+            newLink = temp.insertAfter(item);
         } else {
             newLink = new Link(item);
             firstItem = lastItem = item;
-        }            
+        }
         map.put(item, newLink);
     }
-    
+
     public void removeFirst()
     {
         stateCount++;
@@ -310,17 +310,17 @@ public class HashChain<E> extends AbstractCollection<E>
     }
 
     public E getFirst()
-    {         
-        if(firstItem == null) 
+    {
+        if(firstItem == null)
             throw new NoSuchElementException();
-        return firstItem; 
+        return firstItem;
     }
-    
+
     public E getLast()
-    { 
-        if(lastItem == null) 
+    {
+        if(lastItem == null)
             throw new NoSuchElementException();
-        return lastItem; 
+        return lastItem;
     }
 
     public E getSuccOf(E point)
@@ -333,12 +333,12 @@ public class HashChain<E> extends AbstractCollection<E>
         catch (NullPointerException e) {
             throw new NoSuchElementException();
         }
-        if(link == null) 
+        if(link == null)
             return null;
-        
+
         return link.getItem();
-    } 
-    
+    }
+
     public E getPredOf(E point)
         throws NoSuchElementException
     {
@@ -352,35 +352,35 @@ public class HashChain<E> extends AbstractCollection<E>
         catch (NullPointerException e) {
             throw new NoSuchElementException();
         }
-        
-        if(link == null) 
+
+        if(link == null)
             return null;
         else
             return link.getItem();
-    } 
-    
-    public Iterator<E> snapshotIterator() 
+    }
+
+    public Iterator<E> snapshotIterator()
     {
-	List l = new ArrayList( map.size()); 
-	
+	List l = new ArrayList( map.size());
+
 	l.addAll(this);
 
         return l.iterator();
     }
-   
+
     public Iterator<E> snapshotIterator( Object item)
     {
         List l = new ArrayList( map.size());
-	
+
         Iterator it = new LinkIterator( item);
         while (it.hasNext())
             l.add( it.next());
-	
+
         return l.iterator();
     }
 
     public Iterator<E> iterator(){ return new LinkIterator(firstItem); }
-    public Iterator<E> iterator(E item) 
+    public Iterator<E> iterator(E item)
     {
         return new LinkIterator<E>(item);
     }
@@ -402,7 +402,7 @@ public class HashChain<E> extends AbstractCollection<E>
      */
     public Iterator<E> iterator(E head, E tail)
     {
-	if (head != null && this.getPredOf(head) == tail) { 
+	if (head != null && this.getPredOf(head) == tail) {
 	    // special case hack, so empty ranges iterate 0 times
 	    return new LinkIterator(null, null);
 	} else {
@@ -410,10 +410,10 @@ public class HashChain<E> extends AbstractCollection<E>
 	}
     }
 
-    public int size(){ return map.size(); }               
+    public int size(){ return map.size(); }
 
     /** Returns a textual representation of the contents of this Chain. */
-    public String toString() 
+    public String toString()
     {
         StringBuffer strBuf = new StringBuffer();
         Iterator it = iterator();
@@ -427,7 +427,7 @@ public class HashChain<E> extends AbstractCollection<E>
         strBuf.append("]");
         return strBuf.toString();
     }
-    
+
 
     class Link<X extends E> implements Serializable {
         private Link<X> nextLink;
@@ -445,42 +445,42 @@ public class HashChain<E> extends AbstractCollection<E>
         public void setNext(Link<X> link) { this.nextLink = link;}
         public void setPrevious(Link<X> link) { this.previousLink = link;}
 
-        
-        public void unlinkSelf() 
+
+        public void unlinkSelf()
         {
             bind(previousLink, nextLink);
-            
+
         }
 
         public Link<X> insertAfter(X item)
         {
             Link newLink = new Link(item);
-            
+
             bind(newLink, nextLink);
             bind(this, newLink);
             return newLink;
         }
-        
+
         public Link<X> insertBefore(X item)
         {
             Link newLink = new Link(item);
-            
+
             bind(previousLink, newLink);
             bind(newLink, this);
             return newLink;
         }
-        
 
-        private void bind(Link<X> a, Link<X> b) 
+
+        private void bind(Link<X> a, Link<X> b)
         {
             if(a == null) {
                 if(b != null)
                     firstItem = b.getItem();
                 else
                     firstItem = null;
-            } else 
+            } else
                 a.setNext(b);
-          
+
             if(b == null){
                 if(a != null)
                     lastItem = a.getItem();
@@ -494,7 +494,7 @@ public class HashChain<E> extends AbstractCollection<E>
         public X getItem() { return item; }
 
 
-        public String toString() 
+        public String toString()
         {
             if(item != null)
                 return item.toString();
@@ -502,23 +502,23 @@ public class HashChain<E> extends AbstractCollection<E>
                 return  "Link item is null" + super.toString();
 
         }
-    
+
     }
 
-    class LinkIterator<X extends E> implements Iterator 
+    class LinkIterator<X extends E> implements Iterator
     {
         private Link<X> currentLink;
-        boolean state;    // only when this is true can remove() be called 
+        boolean state;    // only when this is true can remove() be called
         // (in accordance w/ iterator semantics)
-            
+
         private X destination;
         private long iteratorStateCount;
 
 
-        public LinkIterator(X item) 
+        public LinkIterator(X item)
         {
 	    Link nextLink = map.get(item);
-	    if (nextLink == null && item != null) 
+	    if (nextLink == null && item != null)
 		throw new NoSuchElementException("HashChain.LinkIterator(obj) with obj that is not in the chain: " + item.toString() );
             currentLink = new Link(null);
             currentLink.setNext(nextLink);
@@ -533,8 +533,8 @@ public class HashChain<E> extends AbstractCollection<E>
             destination = to;
         }
 
-            
-        public boolean hasNext() 
+
+        public boolean hasNext()
         {
             if(stateCount != iteratorStateCount) {
                 throw new ConcurrentModificationException();
@@ -548,19 +548,19 @@ public class HashChain<E> extends AbstractCollection<E>
 		// destination is not in the chain.
 		return (destination != currentLink.getItem());
         }
-            
+
         public X next()
             throws NoSuchElementException
         {
             if(stateCount != iteratorStateCount)
                 throw new ConcurrentModificationException();
-                        
+
             Link<X> temp = currentLink.getNext();
             if(temp == null) {
 		String exceptionMsg;
 		if(destination != null && destination != currentLink.getItem())
 		    exceptionMsg = "HashChain.LinkIterator.next() reached end of chain without reaching specified tail unit";
-	        else 
+	        else
 		    exceptionMsg = "HashChain.LinkIterator.next() called past the end of the Chain";
                 throw new NoSuchElementException(exceptionMsg);
 	    }
@@ -575,7 +575,7 @@ public class HashChain<E> extends AbstractCollection<E>
         {
             if(stateCount != iteratorStateCount)
                 throw new ConcurrentModificationException();
-            
+
             stateCount++; iteratorStateCount++;
             if(!state)
                 throw new IllegalStateException();
@@ -586,15 +586,15 @@ public class HashChain<E> extends AbstractCollection<E>
             }
 
         }
-   
-        public String toString() 
+
+        public String toString()
         {
-            if(currentLink == null) 
-                return  "Current object under iterator is null" 
+            if(currentLink == null)
+                return  "Current object under iterator is null"
                     + super.toString();
             else
                 return currentLink.toString();
         }
-    }    
+    }
 }
 

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -143,7 +143,7 @@ public class FloatConstant extends RealConstant
         else /* this or c could be NaN */
             return IntConstant.v(1);
     }
-    
+
     public IntConstant cmpl(RealConstant c) {
         if (!(c instanceof FloatConstant))
             throw new IllegalArgumentException("FloatConstant expected");
@@ -155,7 +155,7 @@ public class FloatConstant extends RealConstant
         else /* this or c could be NaN */
             return IntConstant.v(-1);
     }
-    
+
     public NumericConstant negate()
     {
         return FloatConstant.v(-(this.value));
@@ -164,8 +164,8 @@ public class FloatConstant extends RealConstant
     public String toString()
     {
         String floatString = new Float(value).toString();
-        
-        if(floatString.equals("NaN") || 
+
+        if(floatString.equals("NaN") ||
             floatString.equals("Infinity") ||
             floatString.equals("-Infinity"))
             return "#" + floatString + "F";

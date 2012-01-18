@@ -5,24 +5,24 @@ import soot.UnitPrinter;
 
 public class DShortcutAssignStmt extends DAssignStmt {
 	Type type;
-	
+
 	public DShortcutAssignStmt(DAssignStmt assignStmt, Type type){
 		super(assignStmt.getLeftOpBox(),assignStmt.getRightOpBox());
 		this.type = type;
 	}
-	
+
 	public void toString(UnitPrinter up) {
 		up.type(type);
 		up.literal(" ");
 		super.toString(up);
 	}
-	
-	
+
+
 	public String toString()
     {
         return type.toString()+" "+leftBox.getValue().toString() + " = " + rightBox.getValue().toString();
     }
 
 
-	
+
 }

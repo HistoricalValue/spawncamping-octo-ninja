@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ public class BExitMonitorInst extends AbstractInst implements ExitMonitorInst
     public BExitMonitorInst()
     {
     }
-    
+
     public int getInCount()
     {
         return 1;
@@ -47,27 +47,27 @@ public class BExitMonitorInst extends AbstractInst implements ExitMonitorInst
     {
         return 1;
     }
-    
+
     public int getOutCount()
     {
         return 0;
     }
- 
+
     public int getOutMachineCount()
     {
         return 0;
     }
-    
+
     final public String getName() { return "exitmonitor"; }
 
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseExitMonitorInst(this);
-    }   
-    
-    public Object clone() 
+    }
+
+    public Object clone()
     {
         return new BExitMonitorInst();
     }
-   
+
 }

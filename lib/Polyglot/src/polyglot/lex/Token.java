@@ -1,7 +1,7 @@
 package polyglot.lex;
 
 import polyglot.util.Position;
- 
+
 /** The base class of all tokens. */
 public abstract class Token {
   Position position;

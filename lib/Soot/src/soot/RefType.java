@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -55,8 +55,8 @@ public class RefType extends RefLikeType implements Comparable
         this.className = className;
     }
 
-    /** 
-     *  Create a RefType for a class. 
+    /**
+     *  Create a RefType for a class.
      *  @param className The name of the class used to parametrize the created RefType.
      *  @return a RefType for the given class name.
      */
@@ -76,9 +76,9 @@ public class RefType extends RefLikeType implements Comparable
         RefType t = (RefType)o;
         return this.toString().compareTo(t.toString());
     }
-        
-    /** 
-     *  Create a RefType for a class. 
+
+    /**
+     *  Create a RefType for a class.
      *  @param c A SootClass for which to create a RefType.
      *  @return a RefType for the given SootClass..
      */
@@ -86,11 +86,11 @@ public class RefType extends RefLikeType implements Comparable
     {
         return v(c.getName());
     }
-    
-     /** 
+
+     /**
       *  Get the SootClass object corresponding to this RefType.
       *  @return the corresponding SootClass
-      */    
+      */
     public SootClass getSootClass()
     {
         if( sootClass == null ) {
@@ -103,22 +103,22 @@ public class RefType extends RefLikeType implements Comparable
     public boolean hasSootClass() {
         return sootClass != null;
     }
-    
+
     public void setClassName( String className )
     {
         this.className = className;
     }
 
-     /** 
+     /**
       *  Set the SootClass object corresponding to this RefType.
       *  @param sootClass The SootClass corresponding to this RefType.
-      */    
+      */
     public void setSootClass( SootClass sootClass )
     {
         this.sootClass = sootClass;
     }
 
-    /** 
+    /**
      *  2 RefTypes are considered equal if they are parametrized by the same class name String.
      *  @param t an object to test for equality.
      *  @ return true if t is a RefType parametrized by the same name as this.
@@ -149,7 +149,7 @@ public class RefType extends RefLikeType implements Comparable
     {
         if(other.equals(UnknownType.v()) || this.equals(other))
             return this;
-        
+
         if(! (other instanceof RefType))
             throw new RuntimeException("illegal type merge: "
                                        + this + " and " + other);
@@ -157,7 +157,7 @@ public class RefType extends RefLikeType implements Comparable
 
         {
             // Return least common superclass
-            
+
             SootClass thisClass = cm.getSootClass((this).className);
             SootClass otherClass = cm.getSootClass(((RefType) other).className);
             SootClass javalangObject = cm.getSootClass("java.lang.Object");
@@ -209,7 +209,7 @@ public class RefType extends RefLikeType implements Comparable
                 return RefType.v(commonClass.getName());
             }
         }
-        
+
     }
 
     public Type getArrayElementType() {

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -44,12 +44,12 @@ public class UnconditionalBranchFolder extends BodyTransformer
     int numFound[], numFixed[];
 
     HashMap<Stmt, Stmt> stmtMap;
-    
-    protected void internalTransform(Body b, String phaseName, Map options) 
+
+    protected void internalTransform(Body b, String phaseName, Map options)
     {
         StmtBody body = (StmtBody)b;
 
-        if (Options.v().verbose()) 
+        if (Options.v().verbose())
             G.v().out.println("[" + body.getMethod().getName() + "] Folding unconditional branches...");
 
 
@@ -111,11 +111,11 @@ public class UnconditionalBranchFolder extends BodyTransformer
                 }
             }
         }
-        if (Options.v().verbose()) 
-            G.v().out.println("[" + body.getMethod().getName() + "]     " + numFixed[0] + " of " + 
+        if (Options.v().verbose())
+            G.v().out.println("[" + body.getMethod().getName() + "]     " + numFixed[0] + " of " +
                                 numFound[0] + " branches folded.");
-             
-                               
+
+
     } // optimizeJumps
 
     private void updateCounters(int type, boolean fixed) {
@@ -130,10 +130,10 @@ public class UnconditionalBranchFolder extends BodyTransformer
             numFixed[type]++;
         }
     }
-        
+
     private Stmt getFinalTarget(Stmt stmt) {
         Stmt finalTarget=null, target;
-        
+
         // if not a goto, this is the final target
         if (!(stmt instanceof GotoStmt))
             return stmt;
@@ -153,13 +153,13 @@ public class UnconditionalBranchFolder extends BodyTransformer
         }
         else
             finalTarget = getFinalTarget(target);
-            
+
         stmtMap.put(stmt, finalTarget);
         return finalTarget;
     } // getFinalTarget
 
 } // JumpOptimizer
-    
+
 
 
 

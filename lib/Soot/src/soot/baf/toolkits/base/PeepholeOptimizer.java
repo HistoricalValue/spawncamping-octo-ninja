@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ import soot.*;
  *   must implement the Peephole interface. Peepholes are loaded dynamically
  *   by the soot runtime; the runtime reads the file peephole.dat, in order to
  *   determine which peepholes to apply.
- *  
+ *
  *   @see Peephole
  *   @see ExamplePeephole
  */
@@ -53,16 +53,16 @@ public class PeepholeOptimizer extends BodyTransformer
 
     /** The method that drives the optimizations. */
     /* This is the public interface to PeepholeOptimizer */
-  
-    protected void internalTransform(Body body, String phaseName, Map options) 
-    {           
+
+    protected void internalTransform(Body body, String phaseName, Map options)
+    {
         boolean changed = true;
         BufferedReader reader = null;
-        
+
         peepholeListingStream = PeepholeOptimizer.class.getResourceAsStream("peephole.dat");
 	if (peepholeListingStream == null)
 	    throw new RuntimeException("could not open file peephole.dat!");
-        reader = new BufferedReader(new InputStreamReader(peepholeListingStream));        
+        reader = new BufferedReader(new InputStreamReader(peepholeListingStream));
 
         String line = null;
         List<String> peepholes = new LinkedList<String>();
@@ -79,20 +79,20 @@ public class PeepholeOptimizer extends BodyTransformer
                                        line + System.getProperty("line.separator") + e);
         }
 
-        
+
         while(changed) {
-            changed = false;           
+            changed = false;
 
             Iterator<String>  it = peepholes.iterator();
             while(it.hasNext()) {
-                
+
                 boolean peepholeWorked = true;
                 String peepholeName = it.next();
-                
+
                 while(peepholeWorked) {
                     peepholeWorked = false;
 
-                
+
                     Class peepholeClass;
                     if((peepholeClass = peepholeMap.get(peepholeName)) == null) {
                         try {
@@ -102,7 +102,7 @@ public class PeepholeOptimizer extends BodyTransformer
                         }
                         peepholeMap.put(peepholeName, peepholeClass);
                     }
-                    
+
                     Peephole p = null;
                     try {
                         p = (Peephole) peepholeClass.newInstance();

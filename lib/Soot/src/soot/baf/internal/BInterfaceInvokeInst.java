@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -30,36 +30,36 @@ import soot.*;
 import soot.baf.*;
 import soot.util.*;
 
-public class BInterfaceInvokeInst extends AbstractInvokeInst 
+public class BInterfaceInvokeInst extends AbstractInvokeInst
                                   implements InterfaceInvokeInst
 {
     int argCount;
-    
+
     public int getInCount()
     {
         return methodRef.parameterTypes().size()+1;
-        
+
     }
 
     public int getInMachineCount()
     {
-        return super.getInMachineCount() +1;        
+        return super.getInMachineCount() +1;
     }
-    
 
-    public BInterfaceInvokeInst(SootMethodRef methodRef, int argCount) 
+
+    public BInterfaceInvokeInst(SootMethodRef methodRef, int argCount)
         {
             if( methodRef.isStatic() ) throw new RuntimeException("wrong static-ness");
             this.methodRef = methodRef; this.argCount = argCount;
         }
 
 
-    public Object clone() 
+    public Object clone()
     {
         return new  BInterfaceInvokeInst(methodRef, getArgCount());
     }
 
-    
+
 
     final public String getName() { return "interfaceinvoke"; }
     final String getParameters()
@@ -76,7 +76,7 @@ public class BInterfaceInvokeInst extends AbstractInvokeInst
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseInterfaceInvokeInst(this);
-    }   
+    }
 }
 
 

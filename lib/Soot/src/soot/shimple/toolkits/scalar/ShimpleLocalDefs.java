@@ -62,12 +62,12 @@ public class ShimpleLocalDefs implements LocalDefs
 
         // build localToDefs map simply by iterating through all the
         // units in the body and saving the unique definition site for
-        // each local -- no need for fancy analysis 
+        // each local -- no need for fancy analysis
         {
             Chain unitsChain = sb.getUnits();
             Iterator unitsIt = unitsChain.iterator();
             localToDefs = new HashMap<Value, SingletonList>(unitsChain.size() * 2 + 1, 0.7f);
-        
+
             while(unitsIt.hasNext()){
                 Unit unit = (Unit) unitsIt.next();
                 Iterator defBoxesIt = unit.getDefBoxes().iterator();
@@ -77,7 +77,7 @@ public class ShimpleLocalDefs implements LocalDefs
                     // only map locals
                     if(!(value instanceof Local))
                         continue;
-                        
+
                     localToDefs.put(value, new SingletonList(unit));
                 }
             }

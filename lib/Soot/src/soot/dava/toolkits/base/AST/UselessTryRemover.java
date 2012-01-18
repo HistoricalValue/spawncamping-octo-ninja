@@ -38,8 +38,8 @@ public class UselessTryRemover extends ASTAnalysis
 	Iterator<Object> sbit = n.get_SubBodies().iterator();
 
 	while (sbit.hasNext()) {
-	    
-	    List<Object> 
+
+	    List<Object>
 		subBody = null,
 		toRemove = new ArrayList<Object>();
 
@@ -52,7 +52,7 @@ public class UselessTryRemover extends ASTAnalysis
 	    Iterator<Object> cit = subBody.iterator();
 	    while (cit.hasNext()) {
 		Object child = cit.next();
-		
+
 		if (child instanceof ASTTryNode) {
 		    ASTTryNode tryNode = (ASTTryNode) child;
 

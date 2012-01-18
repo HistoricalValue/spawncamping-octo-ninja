@@ -102,7 +102,7 @@ public class ContextInsensitiveBuilder {
     protected void handleClass( SootClass c ) {
         boolean incedClasses = false;
 	Iterator methodsIt = c.methodIterator();
-	while( methodsIt.hasNext() ) 
+	while( methodsIt.hasNext() )
 	{
 	    SootMethod m = (SootMethod) methodsIt.next();
 	    if( !m.isConcrete() && !m.isNative() ) continue;

@@ -92,20 +92,20 @@ public interface Context extends Resolver, Copy
     /** Returns whether the symbol is defined within the current method. */
     boolean isLocal(String name);
 
-    /** 
+    /**
      * Returns whether the current context is a static context.
      * A statement of expression occurs in a static context if and only if the
      * inner-most method, constructor, instance initializer, static initializer,
-     * field initializer, or explicit constructor statement enclosing the 
-     * statement or expressions is a static method, static initializer, the 
-     * variable initializer of a static variable, or an explicity constructor 
+     * field initializer, or explicit constructor statement enclosing the
+     * statement or expressions is a static method, static initializer, the
+     * variable initializer of a static variable, or an explicity constructor
      * invocation statment. (Java Language Spec, 2nd Edition, 8.1.2)
      */
     boolean inStaticContext();
 
     /** Return the innermost class in scope. */
     ClassType currentClass();
- 
+
     /** Return the innermost class in scope. */
     ParsedClassType currentClassScope();
 

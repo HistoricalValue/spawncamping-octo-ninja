@@ -12,10 +12,10 @@ import polyglot.visit.PrettyPrinter;
 import polyglot.visit.TypeChecker;
 
 /**
- * A <code>ClassLit</code> represents a class literal expression. 
- * A class literal expressions is an expression consisting of the 
- * name of a class, interface, array, or primitive type followed by a period (.) 
- * and the token class. 
+ * A <code>ClassLit</code> represents a class literal expression.
+ * A class literal expressions is an expression consisting of the
+ * name of a class, interface, array, or primitive type followed by a period (.)
+ * and the token class.
  */
 public class ClassLit_c extends Lit_c implements ClassLit
 {
@@ -38,10 +38,10 @@ public class ClassLit_c extends Lit_c implements ClassLit
     n.typeNode = typeNode;
     return n;
   }
-    
+
   /**
    * Cannot return the correct object (except for maybe
-   * some of the primitive arrays), so we just return null here. 
+   * some of the primitive arrays), so we just return null here.
    */
   public Object objValue() {
     return null;
@@ -71,7 +71,7 @@ public class ClassLit_c extends Lit_c implements ClassLit
   }
 
   /**
-   * According to the JLS 2nd Ed, sec 15.28, a class literal 
+   * According to the JLS 2nd Ed, sec 15.28, a class literal
    * is not a compile time constant.
    */
   public boolean isConstant() {

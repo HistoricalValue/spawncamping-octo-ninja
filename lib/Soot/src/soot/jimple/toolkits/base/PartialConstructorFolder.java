@@ -18,13 +18,13 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
 
 
- 
+
 
 
 
@@ -52,10 +52,10 @@ public class PartialConstructorFolder extends BodyTransformer
     public List getTypes(){
         return types;
     }
-    
+
     /** This method pushes all newExpr down to be the stmt directly before every
      * invoke of the init only if they are in the types list*/
-    
+
     public void internalTransform(Body b, String phaseName, Map options)
     {
         JimpleBody body = (JimpleBody)b;
@@ -72,9 +72,9 @@ public class PartialConstructorFolder extends BodyTransformer
         Iterator<Unit> nextStmtIt = stmtList.iterator();
         // start ahead one
         nextStmtIt.next();
-        
+
         ExceptionalUnitGraph graph = new ExceptionalUnitGraph(body);
-        
+
         LocalDefs localDefs = new SmartLocalDefs(graph, new SimpleLiveLocals(graph));
         LocalUses localUses = new SimpleLocalUses(graph, localDefs);
 
@@ -82,22 +82,22 @@ public class PartialConstructorFolder extends BodyTransformer
         while (it.hasNext())
         {
             Stmt s = (Stmt)it.next();
-            
-            
+
+
             if (!(s instanceof AssignStmt))
                 continue;
-            
+
             /* this should be generalized to ArrayRefs */
             // only deal with stmts that are an local = newExpr
             Value lhs = ((AssignStmt)s).getLeftOp();
             if (!(lhs instanceof Local))
                 continue;
-            
+
             Value rhs = ((AssignStmt)s).getRightOp();
             if (!(rhs instanceof NewExpr))
                 continue;
 
-            
+
             //check if very next statement is invoke -->
             //this indicates there is no control flow between
             //new and invoke and should do nothing
@@ -105,7 +105,7 @@ public class PartialConstructorFolder extends BodyTransformer
                 Stmt next = (Stmt)nextStmtIt.next();
                 if (next instanceof InvokeStmt){
                     InvokeStmt invoke = (InvokeStmt)next;
-                
+
                     if (invoke.getInvokeExpr() instanceof SpecialInvokeExpr) {
                         SpecialInvokeExpr invokeExpr = (SpecialInvokeExpr)invoke.getInvokeExpr();
                         if (invokeExpr.getBase() == lhs){
@@ -114,15 +114,15 @@ public class PartialConstructorFolder extends BodyTransformer
                     }
                 }
             }
-            
+
 
             // check if new is in the types list - only process these
             if (!types.contains(((NewExpr)rhs).getType())) continue;
-            
+
             List lu = localUses.getUsesOf(s);
             Iterator luIter = lu.iterator();
             boolean MadeNewInvokeExpr = false;
-          
+
             while (luIter.hasNext())
             {
                 Unit use = ((UnitValueBoxPair)(luIter.next())).unit;
@@ -132,20 +132,20 @@ public class PartialConstructorFolder extends BodyTransformer
                 if (!(is.getInvokeExpr() instanceof SpecialInvokeExpr) ||
                   lhs != ((SpecialInvokeExpr)is.getInvokeExpr()).getBase())
                     continue;
-              
-             //make a new one here 
+
+             //make a new one here
               AssignStmt constructStmt = Jimple.v().newAssignStmt
                 (((DefinitionStmt)s).getLeftOp(), ((DefinitionStmt)s).getRightOp());
               constructStmt.setRightOp
                 (Jimple.v().newNewExpr
                  (((NewExpr)rhs).getBaseType()));
               MadeNewInvokeExpr = true;
-              
+
               // redirect jumps
               use.redirectJumpsToThisTo(constructStmt);
               // insert new one here
               units.insertBefore(constructStmt, use);
-              
+
               constructStmt.addTag(s.getTag("SourceLnPosTag"));
             }
           if (MadeNewInvokeExpr)
@@ -153,5 +153,5 @@ public class PartialConstructorFolder extends BodyTransformer
               units.remove(s);
             }
         }
-    }  
+    }
 }

@@ -32,9 +32,9 @@ import soot.options.*;
 // SETS OF PAIRS of form (X, T) => Use ArraySparseSet.
 //
 // STEP 2: Precisely define what we are computing.
-// For each statement compute the parity of all variables 
+// For each statement compute the parity of all variables
 // in the program.
-// 
+//
 // STEP 3: Decide whether it is a backwards or forwards analysis.
 // FORWARDS
 //
@@ -48,21 +48,21 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
     private final static String ODD = "odd";
 
     private LiveLocals filter;
-    
+
     public ParityAnalysis(UnitGraph g, LiveLocals filter)
     {
         super(g);
         this.g = g;
 
         this.filter = filter;
-        
+
         filterUnitToBeforeFlow = new HashMap<Stmt, HashMap>();
         buildBeforeFilterMap();
-        
+
         filterUnitToAfterFlow = new HashMap<Stmt, HashMap>();
-        
+
         doAnalysis();
-        
+
     }
 
     public ParityAnalysis(UnitGraph g){
@@ -71,37 +71,37 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
 
         doAnalysis();
     }
-    
+
     private void buildBeforeFilterMap(){
-        
+
         Iterator it = g.getBody().getUnits().iterator();
         while (it.hasNext()){
             Stmt s = (Stmt)it.next();
             //if (!(s instanceof DefinitionStmt)) continue;
             //Value left = ((DefinitionStmt)s).getLeftOp();
             //if (!(left instanceof Local)) continue;
-        
+
             //if (!((left.getType() instanceof IntegerType) || (left.getType() instanceof LongType))) continue;
             List list = filter.getLiveLocalsBefore(s);
-            HashMap map = new HashMap(); 
+            HashMap map = new HashMap();
             Iterator listIt = list.iterator();
             while (listIt.hasNext()){
                 map.put(listIt.next(), BOTTOM);
             }
             filterUnitToBeforeFlow.put(s, map);
-        } 
-        //System.out.println("init filtBeforeMap: "+filterUnitToBeforeFlow);           
+        }
+        //System.out.println("init filtBeforeMap: "+filterUnitToBeforeFlow);
     }
 
 // STEP 4: Is the merge operator union or intersection?
-// 
+//
 // merge  | bottom | even   | odd   | top
 // -------+--------+--------+-------+--------
 // bottom | bottom | even   | odd   | top
 // -------+--------+--------+-------+--------
 // even   | even   | even   | top   | top
 // -------+--------+--------+-------+--------
-// odd    | odd    | top    | odd   | top  
+// odd    | odd    | top    | odd   | top
 // -------+--------+--------+-------+--------
 // top    | top    | top    | top   | top
 //
@@ -144,7 +144,7 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
 			outMap.put(var1, TOP);
 		}
 	}
-	
+
     }
 
 // STEP 5: Define flow equations.
@@ -162,9 +162,9 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
         dest = destOut;
 
     }
-   
+
     // Parity Tests: 	even + even = even
-    // 			even + odd = odd 
+    // 			even + odd = odd
     // 			odd + odd = even
     //
     // 			even * even = even
@@ -181,7 +181,7 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
 	        String resVal2 = getParity(in, ((BinopExpr)val).getOp2());
 	        if (resVal1.equals(TOP) | resVal2.equals(TOP)) {
                 return TOP;
-	        }  
+	        }
             else if (resVal1.equals(BOTTOM) | resVal2.equals(BOTTOM)){
                 return BOTTOM;
             }
@@ -232,10 +232,10 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
         else {
             return TOP;
         }
-     
+
     }
-    
-    
+
+
     protected void flowThrough(Object inValue, Object unit,
             Object outValue)
     {
@@ -243,14 +243,14 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
         HashMap<Value, String> out = (HashMap<Value, String>) outValue;
         Stmt    s   = (Stmt)    unit;
 
-	    // copy in to out 
+	    // copy in to out
 	    out.putAll(in);
-	
+
         // for each stmt where leftOp is defintionStmt find the parity
 	    // of rightOp and update parity to EVEN, ODD or TOP
 
         //boolean useS = false;
-        
+
 	    if (s instanceof DefinitionStmt) {
 	        Value left = ((DefinitionStmt)s).getLeftOp();
 	        if (left instanceof Local) {
@@ -262,7 +262,7 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
 	        }
 	    }
 
-        // get all use and def boxes of s 
+        // get all use and def boxes of s
         // if use or def is int or long constant add their parity
         Iterator it = s.getUseAndDefBoxes().iterator();
         while (it.hasNext()){
@@ -274,7 +274,7 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
                 //System.out.println("out map: "+out);
             }
         }
-        
+
         //if (useS){
         if (Options.v().interactive_mode()){
             buildAfterFilterMap(s);
@@ -282,11 +282,11 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
         }
         //}
     }
-    
+
     private void buildAfterFilterMap(Stmt s){
-        
+
         List list = filter.getLiveLocalsAfter(s);
-        HashMap map = new HashMap(); 
+        HashMap map = new HashMap();
         Iterator listIt = list.iterator();
         while (listIt.hasNext()){
             map.put(listIt.next(), BOTTOM);
@@ -304,7 +304,7 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
     protected Object entryInitialFlow()
     {
 	/*HashMap initMap = new HashMap();
-	
+
 	Chain locals = g.getBody().getLocals();
 	Iterator it = locals.iterator();
 	while (it.hasNext()) {
@@ -316,29 +316,29 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
     }
 
     private void updateBeforeFilterMap(){
-    
+
         Iterator<Stmt> filterIt = filterUnitToBeforeFlow.keySet().iterator();
         while (filterIt.hasNext()){
             Stmt s = filterIt.next();
             HashMap allData = (HashMap)unitToBeforeFlow.get(s);
-            
+
             HashMap filterData = (HashMap) filterUnitToBeforeFlow.get(s);
 
             filterUnitToBeforeFlow.put(s, updateFilter(allData, filterData));
-            
+
         }
     }
-        
+
     private void updateAfterFilterMap(Stmt s){
-    
+
         HashMap allData = (HashMap)unitToAfterFlow.get(s);
-            
+
         HashMap filterData = (HashMap) filterUnitToAfterFlow.get(s);
 
         filterUnitToAfterFlow.put(s, updateFilter(allData, filterData));
-            
+
     }
-        
+
     private HashMap updateFilter(HashMap allData, HashMap filterData){
 
         if (allData == null) return filterData;
@@ -365,7 +365,7 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
     protected Object newInitialFlow()
     {
 	    HashMap<Value, String> initMap = new HashMap<Value, String>();
-	
+
 	    Chain locals = g.getBody().getLocals();
 	    Iterator it = locals.iterator();
 	    while (it.hasNext()) {
@@ -375,7 +375,7 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
 	            initMap.put(next, BOTTOM);
             }
 	    }
-    
+
         Iterator boxIt = g.getBody().getUseAndDefBoxes().iterator();
         while (boxIt.hasNext()){
             Value val = ((ValueBox)boxIt.next()).getValue();
@@ -387,10 +387,10 @@ public class ParityAnalysis extends ForwardFlowAnalysis {
         if (Options.v().interactive_mode()){
             updateBeforeFilterMap();
         }
-        
+
         return initMap;
 
     }
-        
+
 
 }

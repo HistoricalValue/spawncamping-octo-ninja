@@ -38,15 +38,15 @@ import soot.toolkits.graph.*;
  * Inter-procedural iterator skeleton for summary-based analysis
  *
  * A "summary" is an abstract element associated to each method that
- * fully models the effect of calling the method. In a summary-based 
- * analysis, the summary of a method can be computed using solely 
+ * fully models the effect of calling the method. In a summary-based
+ * analysis, the summary of a method can be computed using solely
  * the summary of all methods it calls: the summary does not depend
  * upon the context in which a method is called.
  * The inter-procedural analysis interacts with a intra-procedural analysis
  * that is able to compute the summary of one method, given the summary
  * of all the method it calls. The inter-procedural analysis calls the
  * intra-procedural analysis in a reverse topological order of method
- * dependencies to resolve unknown summaries. It iterates over recursively 
+ * dependencies to resolve unknown summaries. It iterates over recursively
  * dependant methods.
  *
  * Generally, the intra-procedural works by maintaining an abstract
@@ -55,15 +55,15 @@ import soot.toolkits.graph.*;
  * The summary of the method is then the merge of the abstract values
  * at all its return points.
  *
- * You can provide off-the-shelf summaries for methods you do not 
+ * You can provide off-the-shelf summaries for methods you do not
  * which to analyse. Any method using these "filtered-out" methods will
  * use the off-the-shelf summary instead of performing an intra-procedural
- * analysis. This is useful for native methods, incremental analysis, 
+ * analysis. This is useful for native methods, incremental analysis,
  * or when you hand-made summary. Methods that are called solely by
  * filtered-out ones will never be analysed, effectively triming the
  * call-graph dependencies.
  *
- * This class tries to use the same abstract methods and data managnment 
+ * This class tries to use the same abstract methods and data managnment
  * policy as regular FlowAnalysis classes.
  */
 public abstract class AbstractInterproceduralAnalysis {
@@ -79,18 +79,18 @@ public abstract class AbstractInterproceduralAnalysis {
 
     /** Initial summary value for analysed funtions. */
     protected abstract Object newInitialSummary();
-    
+
     /**
      * Whenever the analyse requires the summary of a method you filtered-out,
      * this function is called instead of analyseMethod.
      *
-     * <p> Note: This function is called at most once per filtered-out 
+     * <p> Note: This function is called at most once per filtered-out
      * method. It is the equivalent of entryInitialFlow!
-     * 
+     *
      */
     protected abstract Object summaryOfUnanalysedMethod(SootMethod method);
 
-    /** 
+    /**
      * Compute the summary for a method by analysing its body.
      *
      * Will be called only on methods not filtered-out.
@@ -102,8 +102,8 @@ public abstract class AbstractInterproceduralAnalysis {
 					  Object     dst);
 
     /**
-     * Interprocedural analysis will call applySummary repeatidly as a 
-     * consequence to analyseCall. Once for each possible target method 
+     * Interprocedural analysis will call applySummary repeatidly as a
+     * consequence to analyseCall. Once for each possible target method
      * of the callStmt statement, provided with its summary.
      *
      * @param src summary valid before the call statement
@@ -118,17 +118,17 @@ public abstract class AbstractInterproceduralAnalysis {
 					 Object summary,
 					 Object dst);
 
-    /** 
-     * Merge in1 and in2 into out. 
+    /**
+     * Merge in1 and in2 into out.
      *
      * <p> Note: in1 or in2 can be aliased to out (e.g., analyseCall).
      */
     protected abstract void merge(Object in1, Object in2, Object out);
-    
+
     /** Copy src into dst. */
     protected abstract void copy(Object sr, Object dst);
 
-    /** 
+    /**
      * Called by drawAsOneDot to fill dot subgraph out with the contents
      * of summary o.
      *
@@ -137,10 +137,10 @@ public abstract class AbstractInterproceduralAnalysis {
      */
     protected void fillDotGraph(String prefix, Object o, DotGraph out)
     { throw new Error("abstract function AbstractInterproceduralAnalysis.fillDotGraph called but not implemented."); }
- 
+
 
    /**
-     * Analyse the call callStmt in the context src, and put the resul into 
+     * Analyse the call callStmt in the context src, and put the resul into
      * dst.
      * This will repeatidly calling summaryOfUnanalysedMethod and applySummary,
      * and then merging the results using merge.
@@ -165,7 +165,7 @@ public abstract class AbstractInterproceduralAnalysis {
 	    }
 	    else {
 		// unanalysed method
-		if (!unanalysed.containsKey(m)) 
+		if (!unanalysed.containsKey(m))
 		    unanalysed.put(m, summaryOfUnanalysedMethod(m));
 		elem = unanalysed.get(m);
 	    }
@@ -202,10 +202,10 @@ public abstract class AbstractInterproceduralAnalysis {
 
     /**
      * Dump the interprocedural analysis result as a graph.
-     * One node / subgraph for each analysed method that contains the 
+     * One node / subgraph for each analysed method that contains the
      * method summary, and call-to edges.
      *
-     * <p> Note: this graph does not show filtered-out methods for which a 
+     * <p> Note: this graph does not show filtered-out methods for which a
      * conservative summary was asked via summaryOfUnanalysedMethod.
      *
      * @param name output filename
@@ -279,7 +279,7 @@ public abstract class AbstractInterproceduralAnalysis {
 			       prefix+m.toString()+DotGraph.DOT_EXTENSION);
 	    dot.plot(f.getPath());
 	}
-	
+
 	if (drawUnanalysed) {
 	    it = unanalysed.keySet().iterator();
 	    while (it.hasNext()) {
@@ -315,7 +315,7 @@ public abstract class AbstractInterproceduralAnalysis {
     /**
      * Carry out the analysis.
      *
-     * Call this from your InterproceduralAnalysis constructor, 
+     * Call this from your InterproceduralAnalysis constructor,
      * just after super(cg).
      * Then , you will be able to call drawAsDot, for instance.
      */
@@ -323,7 +323,7 @@ public abstract class AbstractInterproceduralAnalysis {
     {
 	// queue class
 	class IntComparator implements Comparator {
-	    public int compare(Object o1, Object o2) 
+	    public int compare(Object o1, Object o2)
 	    {
 		Integer v1 = order.get(o1);
 		Integer v2 = order.get(o2);
@@ -331,7 +331,7 @@ public abstract class AbstractInterproceduralAnalysis {
 	    }
 	};
 	SortedSet queue = new TreeSet(new IntComparator());
-	
+
 	// init
 	Iterator it = order.keySet().iterator();
 	while (it.hasNext()) {

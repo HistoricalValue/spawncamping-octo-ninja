@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -65,7 +65,7 @@ abstract class Instruction_branch extends Instruction {
    public Instruction_branch(byte c) { super(c); branches = true; }
 
    public String toString(cp_info constant_pool[]) {
-      return super.toString(constant_pool) + argsep 
+      return super.toString(constant_pool) + argsep
 	  + "[label_" + Integer.toString(target.label) + "]";
    }
 

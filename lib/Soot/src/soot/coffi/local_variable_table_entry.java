@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -51,12 +51,12 @@ class local_variable_table_entry {
    public int descriptor_index;
    /** The index in the local variable array of this local variable. */
    public int index;
-   
+
    public String toString()
    {
-        return "start: " + start_pc + "length: " + length + "name_index: " + name_index + 
+        return "start: " + start_pc + "length: " + length + "name_index: " + name_index +
             "descriptor_index: " + descriptor_index + "index: " + index ;
-        
-        
+
+
    }
 }

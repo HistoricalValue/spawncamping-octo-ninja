@@ -14,7 +14,7 @@ public class ErrorInfo
   protected int kind;
   protected String message;
   protected Position position;
-  
+
   public ErrorInfo(int kind, String message, Position position)
   {
     this.kind = kind;
@@ -62,6 +62,6 @@ public class ErrorInfo
     default:
       return "(Unknown)";
     }
-  }  
+  }
 }
 

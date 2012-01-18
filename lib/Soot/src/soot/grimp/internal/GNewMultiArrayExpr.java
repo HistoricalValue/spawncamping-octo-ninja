@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -35,7 +35,7 @@ import soot.grimp.*;
 import soot.jimple.internal.*;
 import java.util.*;
 
-public class GNewMultiArrayExpr extends AbstractNewMultiArrayExpr 
+public class GNewMultiArrayExpr extends AbstractNewMultiArrayExpr
 {
     public GNewMultiArrayExpr(ArrayType type, List sizes)
     {
@@ -44,16 +44,16 @@ public class GNewMultiArrayExpr extends AbstractNewMultiArrayExpr
         for(int i = 0; i < sizes.size(); i++)
             sizeBoxes[i] = Grimp.v().newExprBox((Value) sizes.get(i));
     }
-    
-    public Object clone() 
+
+    public Object clone()
     {
         List clonedSizes =  new ArrayList(getSizeCount());
 
         for(int i = 0; i <  getSizeCount(); i++) {
             clonedSizes.add(i,  Grimp.cloneIfNecessary(getSize(i)));
         }
-                                                         
-        
+
+
         return new GNewMultiArrayExpr(getBaseType(), clonedSizes);
     }
 

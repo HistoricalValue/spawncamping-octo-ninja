@@ -13,7 +13,7 @@ import java.util.*;
 public class TransformingList extends java.util.AbstractList {
     protected final Transformation trans;
     protected final List underlying;
-    
+
 
     public TransformingList(Collection underlying, Transformation trans) {
 	this(new ArrayList(underlying), trans);

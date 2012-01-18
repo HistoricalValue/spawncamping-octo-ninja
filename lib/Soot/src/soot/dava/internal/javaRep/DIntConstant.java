@@ -44,7 +44,7 @@ public class DIntConstant extends IntConstant
 	    if (type instanceof BooleanType) {
 		if (value == 0)
 		    return "false";
-		else 
+		else
 		    return "true";
 	    }
 
@@ -74,15 +74,15 @@ public class DIntConstant extends IntConstant
 
 			if (ch.length() > 4)
 			    ch = ch.substring( ch.length() - 4);
-			
+
 			ch = "\\u" + ch;
 		    }
 		}
-		
+
 		return "'" + ch + "'";
 	    }
 
-	    else if (type instanceof ByteType) 
+	    else if (type instanceof ByteType)
 		return "(byte) " + new Integer(value).toString();
 
 	return new Integer(value).toString();

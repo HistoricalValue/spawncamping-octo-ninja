@@ -35,7 +35,7 @@ public class JavaIoFileInputStreamNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -55,10 +55,10 @@ public class JavaIoFileInputStreamNative extends NativeMethodClass {
   /**
    * Following methods have NO side effects.
    *
-   *    private native void open(java.lang.String) 
+   *    private native void open(java.lang.String)
    *                  throws java.io.FileNotFoundException;
    *    public native int read() throws java.io.IOException;
-   *    private native int readBytes(byte[], int, int) 
+   *    private native int readBytes(byte[], int, int)
    *                        throws java.io.IOException;
    *    public native int available() throws java.io.IOException;
    *    public native void close() throws java.io.IOException;

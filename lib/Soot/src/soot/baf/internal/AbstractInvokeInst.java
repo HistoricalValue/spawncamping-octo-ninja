@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -64,44 +64,44 @@ abstract class AbstractInvokeInst extends AbstractInst
         up.methodRef(methodRef);
     }
 
-    
 
-  
+
+
   public int getInCount()
   {
     return getMethodRef().parameterTypes().size();
   }
-  
+
 
   public int getOutCount()
   {
-    if(getMethodRef().returnType() instanceof VoidType) 
+    if(getMethodRef().returnType() instanceof VoidType)
       return 0;
     else
       return 1;
   }
-  
+
 
 
   public int getInMachineCount()
   {
     int count = 0;
-    
+
     Iterator it = getMethodRef().parameterTypes().iterator();
     while(it.hasNext()) {
-      count += AbstractJasminClass.sizeOfType((Type) it.next());            
+      count += AbstractJasminClass.sizeOfType((Type) it.next());
     }
     return count;
   }
-  
+
 
   public int getOutMachineCount()
   {
-    if(getMethodRef().returnType() instanceof VoidType) 
+    if(getMethodRef().returnType() instanceof VoidType)
       return 0;
     else
       return AbstractJasminClass.sizeOfType(getMethodRef().returnType());
-  } 
+  }
 
   public boolean containsInvokeExpr() { return true; }
 

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -26,9 +26,9 @@
 package soot.tagkit;
 
 
-/** 
+/**
  * Represents the base class of annotation elements
- * each annotation can have several elements 
+ * each annotation can have several elements
  * for Java 1.5.
  */
 
@@ -42,7 +42,7 @@ public class AnnotationElem
         this.kind = k;
         this.name = name;
     }
-    
+
     public String toString(){
         return "Annotation Element: kind: "+kind+" name: "+name;
     }

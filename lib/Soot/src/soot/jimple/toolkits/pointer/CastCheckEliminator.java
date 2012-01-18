@@ -51,7 +51,7 @@ public class CastCheckEliminator extends ForwardBranchedFlowAnalysis {
                     Type t = cast.getCastType();
                     if( t instanceof RefType ) {
                         if( cast.getOp() instanceof Local ) {
-                            Local l = (Local) cast.getOp(); 
+                            Local l = (Local) cast.getOp();
                             LocalTypeSet set = (LocalTypeSet) unitToBeforeFlow.get(s);
                             s.addTag( new CastCheckTag( set.get( set.indexOf(
                                     l, (RefType) t ) ) ) );
@@ -94,10 +94,10 @@ public class CastCheckEliminator extends ForwardBranchedFlowAnalysis {
                 }
             }
         }
-        
+
         emptySet = new LocalTypeSet( refLocals, types );
     }
-    
+
 
     /** Returns a new, aggressive (local,type) set. */
     protected Object newInitialFlow() {
@@ -108,13 +108,13 @@ public class CastCheckEliminator extends ForwardBranchedFlowAnalysis {
 
     /** This is the flow function as described in the assignment write-up. */
     protected void flowThrough( Object inValue, Unit unit, List outFallValues,
-                                List outBranchValues ) 
+                                List outBranchValues )
     {
         final LocalTypeSet in = (LocalTypeSet) inValue;
         final LocalTypeSet out = (LocalTypeSet) in.clone();
         LocalTypeSet outBranch = out; // aliased to out unless unit is IfStmt
         final Stmt stmt = (Stmt) unit;
-        
+
         // First kill all locals defined in this statement
         for( Iterator bIt = stmt.getDefBoxes().iterator(); bIt.hasNext(); ) {
             final ValueBox b = (ValueBox) bIt.next();
@@ -123,7 +123,7 @@ public class CastCheckEliminator extends ForwardBranchedFlowAnalysis {
                 out.killLocal( (Local) v );
             }
         }
-        
+
         // An AssignStmt may be a new, a simple copy, or a cast
         if( stmt instanceof AssignStmt ) {
             AssignStmt astmt = (AssignStmt) stmt;
@@ -136,7 +136,7 @@ public class CastCheckEliminator extends ForwardBranchedFlowAnalysis {
                 } else if( rhs instanceof CastExpr ) {
                     CastExpr cast = (CastExpr) rhs;
                     Type castType = cast.getCastType();
-                    if( castType instanceof RefType 
+                    if( castType instanceof RefType
                     &&  cast.getOp() instanceof Local ) {
                         RefType refType = (RefType) castType;
                         Local opLocal = (Local) cast.getOp();
@@ -148,11 +148,11 @@ public class CastCheckEliminator extends ForwardBranchedFlowAnalysis {
                     out.localCopy( l, (Local) rhs );
                 }
             }
-            
+
             // Handle if statements
         } else if( stmt instanceof IfStmt ) {
             IfStmt ifstmt = (IfStmt) stmt;
-            
+
             // This do ... while(false) is here so I can break out of it rather
             // than having to have seven nested if statements. Silly people who
             // took goto's out of the language... <grumble> <grumble>
@@ -186,7 +186,7 @@ public class CastCheckEliminator extends ForwardBranchedFlowAnalysis {
                 }
             } while( false );
         }
-        
+
         // Now copy the computed (local,type) set to all successors
         for( Iterator it = outFallValues.iterator(); it.hasNext(); ) {
             copy( out, it.next() );
@@ -210,7 +210,7 @@ public class CastCheckEliminator extends ForwardBranchedFlowAnalysis {
         o.and( (LocalTypeSet) in1 );
         o.and( (LocalTypeSet) in2 );
     }
-    
+
     /** Returns a new, aggressive (local,type) set. */
     protected Object entryInitialFlow() {
         LocalTypeSet ret = (LocalTypeSet) emptySet.clone();

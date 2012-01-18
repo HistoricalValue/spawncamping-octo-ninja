@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,7 +33,7 @@ import java.util.*;
 
 /**
  * A Dot graph node with various attributes.
- */  
+ */
 public class DotGraphNode implements Renderable{
   private String name;
   private List<DotGraphAttribute> attributes;
@@ -57,7 +57,7 @@ public class DotGraphNode implements Renderable{
     label = DotGraphUtility.replaceReturns(label);
     this.setAttribute("label", label);
   }
-  
+
   public void setShape(String shape) {
     this.setAttribute("shape", shape);
   }
@@ -70,16 +70,16 @@ public class DotGraphNode implements Renderable{
     if (this.attributes == null) {
       this.attributes = new LinkedList<DotGraphAttribute>();
     }
-    
-    this.setAttribute(new DotGraphAttribute(id, value));    
+
+    this.setAttribute(new DotGraphAttribute(id, value));
   }
 
   public void setAttribute(DotGraphAttribute attr) {
     if (this.attributes == null) {
       this.attributes = new LinkedList<DotGraphAttribute>();
     }
-    
-    this.attributes.add(attr);    
+
+    this.attributes.add(attr);
   }
 
   public void render(OutputStream out, int indent) throws IOException {

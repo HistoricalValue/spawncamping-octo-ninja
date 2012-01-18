@@ -25,15 +25,15 @@ public class ManualAndInnerHeuristic implements FieldCheckHeuristic {
 
     final ManualFieldCheckHeuristic manual = new ManualFieldCheckHeuristic();
     final InnerTypesIncrementalHeuristic inner;
-    
+
     public ManualAndInnerHeuristic(TypeManager tm, int maxPasses) {
-        inner = new InnerTypesIncrementalHeuristic(tm, maxPasses); 
+        inner = new InnerTypesIncrementalHeuristic(tm, maxPasses);
     }
     public boolean runNewPass() {
         return inner.runNewPass();
     }
 
-    public boolean validateMatchesForField(SparkField field) {        
+    public boolean validateMatchesForField(SparkField field) {
         return manual.validateMatchesForField(field) || inner.validateMatchesForField(field);
     }
 

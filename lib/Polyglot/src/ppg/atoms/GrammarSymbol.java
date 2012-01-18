@@ -7,7 +7,7 @@ public abstract class GrammarSymbol extends GrammarPart implements Equatable
 	protected String name, label;
 
 	public String getName() {
-		return name;	
+		return name;
 	}
 
 	public void unparse(CodeWriter cw) {
@@ -17,12 +17,12 @@ public abstract class GrammarSymbol extends GrammarPart implements Equatable
 			cw.write(":" + label);
 		cw.end();
 	}
-	
+
 	public String toString() {
 		String result = name;
 		if (label != null)
 			result += ":" + label;
 		return result;
 	}
-	
+
 }

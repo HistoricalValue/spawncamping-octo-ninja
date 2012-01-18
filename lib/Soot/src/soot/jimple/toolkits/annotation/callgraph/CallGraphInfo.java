@@ -33,10 +33,10 @@ public class CallGraphInfo {
         setOutputs(outputs);
         setInputs(inputs);
     }
-    
+
     public void setCenter(SootMethod sm){
         center = sm;
-    } 
+    }
 
     public SootMethod getCenter(){
         return center;

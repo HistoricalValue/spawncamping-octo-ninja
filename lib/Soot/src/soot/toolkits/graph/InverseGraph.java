@@ -27,7 +27,7 @@ import java.util.List;
  * @author Eric Bodden
  */
 public class InverseGraph<N> implements DirectedGraph<N> {
-	
+
 	protected final DirectedGraph<N> g;
 
 	public InverseGraph(DirectedGraph<N> g) {

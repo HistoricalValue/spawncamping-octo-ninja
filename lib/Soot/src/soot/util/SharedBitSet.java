@@ -80,7 +80,7 @@ public final class SharedBitSet {
         return ret;
     }
     public BitSetIterator iterator() {
-        return value.iterator(); 
+        return value.iterator();
     }
     public String toString() {
         StringBuffer b = new StringBuffer();

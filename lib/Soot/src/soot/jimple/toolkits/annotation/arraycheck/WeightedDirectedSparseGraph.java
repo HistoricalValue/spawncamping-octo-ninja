@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -65,7 +65,7 @@ class WeightedDirectedSparseGraph
 	this.sources.clear();
     }
     /**
-     * Add an edge with weight to the graph 
+     * Add an edge with weight to the graph
      */
     public void addEdge(Object from, Object to, int w)
     {
@@ -96,7 +96,7 @@ class WeightedDirectedSparseGraph
     }
 
     /** addMutualEdge adds bi-direct edges between two nodes.
-     * for example, 
+     * for example,
      *              i = j + 1;
      *  generates two directed edges.
      * one from j to i with weight 1, another from i to j with weight -1
@@ -122,7 +122,7 @@ class WeightedDirectedSparseGraph
 	    sources.remove(from);
 	}
     }
-	
+
     public boolean hasEdge(Object from, Object to)
     {
 	Hashtable targets = sources.get(from);
@@ -148,7 +148,7 @@ class WeightedDirectedSparseGraph
 	return weight.value;
     }
 
-    /* If other graph is unknown, keep current one. 
+    /* If other graph is unknown, keep current one.
     * If current graph is unknown, copy the other.
     And if both are not unknown, union each edge.
     */
@@ -156,7 +156,7 @@ class WeightedDirectedSparseGraph
     {
 	if (other == null)
 	    return;
-	
+
 	WeightedDirectedSparseGraph othergraph =
 	    other;
 
@@ -165,7 +165,7 @@ class WeightedDirectedSparseGraph
 
 	if (this.isUnknown)
 	    addAll(othergraph);
-	
+
 	List<Object> sourceList = new ArrayList<Object>(this.sources.keySet());
 
 	Iterator<Object> firstSrcIt = sourceList.iterator();
@@ -186,11 +186,11 @@ class WeightedDirectedSparseGraph
 	    List targetList = new ArrayList(src1.keySet());
 
 	    Iterator targetIt = targetList.iterator();
-	    
+
 	    while (targetIt.hasNext())
 	    {
 		Object target = targetIt.next();
-		
+
 		IntContainer w1 = (IntContainer)src1.get(target);
 		IntContainer w2 = (IntContainer)src2.get(target);
 		/* other is unbounded */
@@ -247,20 +247,20 @@ class WeightedDirectedSparseGraph
 		Object target = targetIt.next();
 		IntContainer thisweight = (IntContainer)thistargets.get(target);
 		IntContainer otherweight = (IntContainer)othertargets.get(target);
-		
+
 		/* the former edge is unbounded. */
 		if (otherweight == null)
 		{
 		    thistargets.remove(target);
 		    continue;
 		}
-		
+
 		if (thisweight.value > otherweight.value)
 		{
 		    thistargets.remove(target);
 		}
 	    }
-	    
+
 	    if (thistargets.size()==0)
 		this.sources.remove(src);
 	}
@@ -307,11 +307,11 @@ class WeightedDirectedSparseGraph
     {
 	/* for the in edge, the weight + c. for the out edge, the weight - c */
 	Iterator<Object> srcIt = sources.keySet().iterator();
-	
+
 	while (srcIt.hasNext())
 	{
 	    Object from = srcIt.next();
-	    
+
 	    Hashtable targets = sources.get(from);
 
 	    IntContainer weight = (IntContainer)targets.get(which);
@@ -330,9 +330,9 @@ class WeightedDirectedSparseGraph
 	while (toIt.hasNext())
 	{
 	    Object to = toIt.next();
-	    
+
 	    IntContainer weight = (IntContainer)toset.get(to);
-	    
+
 	    weight.value -= c;
 	}
     }
@@ -412,7 +412,7 @@ class WeightedDirectedSparseGraph
 		Object target = targetIt.next();
 
 		IntContainer otherweight = (IntContainer)othertargets.get(target);
-		
+
 		thistargets.put(target, otherweight.dup());
 	    }
 	}
@@ -424,7 +424,7 @@ class WeightedDirectedSparseGraph
 	if (other == null)
 	    return false;
 
-	if (!(other instanceof WeightedDirectedSparseGraph)) 
+	if (!(other instanceof WeightedDirectedSparseGraph))
 	    return false;
 
 	WeightedDirectedSparseGraph othergraph =
@@ -448,7 +448,7 @@ class WeightedDirectedSparseGraph
 	    Object src = sourceIt.next();
 	    Hashtable thistarget = sources.get(src);
 	    Hashtable othertarget = othersources.get(src);
-	    
+
 	    if (othertarget == null)
 		return false;
 
@@ -488,7 +488,7 @@ class WeightedDirectedSparseGraph
 	    graphstring = graphstring + src +" : ";
 
 	    Hashtable targets = sources.get(src);
-	    
+
 	    Iterator targetIt = targets.keySet().iterator();
 	    while (targetIt.hasNext())
 	    {
@@ -508,7 +508,7 @@ class WeightedDirectedSparseGraph
 	    new WeightedDirectedSparseGraph(this.vertexes);
 
 	newone.addAll(this);
-	
+
 	return newone;
     }
 
@@ -519,17 +519,17 @@ class WeightedDirectedSparseGraph
 	List<Object> srcList = new ArrayList<Object>(sources.keySet());
 
 	Iterator<Object> srcIt = srcList.iterator();
-	
+
 	while (srcIt.hasNext())
 	{
 	    Object src = srcIt.next();
-	    
+
 	    if (!SSSPFinder(src))
 	    {
 		nonegcycle = false;
 	    }
 	}
-	
+
 	return nonegcycle;
     }
 
@@ -537,7 +537,7 @@ class WeightedDirectedSparseGraph
     private final HashSet<WeightedDirectedEdge> reachableEdges = new HashSet<WeightedDirectedEdge>();
     private final Hashtable<Object, IntContainer> distance = new Hashtable<Object, IntContainer>();
     private final Hashtable<Object, Object> pei = new Hashtable<Object, Object>();
-    
+
     private boolean SSSPFinder(Object src)
     {
 	Hashtable<Object, IntContainer> outedges = sources.get(src);
@@ -559,17 +559,17 @@ class WeightedDirectedSparseGraph
 
 	    while (edgeIt.hasNext())
 	    {
-		WeightedDirectedEdge edge = 
+		WeightedDirectedEdge edge =
 		    edgeIt.next();
 
 		Relax(edge.from, edge.to, edge.weight);
 	    }
 	}
-		
+
 	distance.remove(src);
 
 	// check negative cycle
-	
+
 	{
 	    Iterator<WeightedDirectedEdge> edgeIt = reachableEdges.iterator();
 	    while (edgeIt.hasNext())
@@ -581,14 +581,14 @@ class WeightedDirectedSparseGraph
 
 		if (dfrom == null)
 		    continue;
-		
+
 		IntContainer dto = distance.get(edge.to);
 		if (dto == null)
 		    continue;
 
 		if (dto.value > (dfrom.value + edge.weight))
-		    return false;	
-	    }    
+		    return false;
+	    }
 	}
 
 	// update the graph
@@ -599,9 +599,9 @@ class WeightedDirectedSparseGraph
 	    Object to = targetIt.next();
 	    IntContainer dist = distance.get(to);
 
-	    outedges.put(to, dist.dup());	    
+	    outedges.put(to, dist.dup());
 	}
-	
+
 	return true;
 
     }

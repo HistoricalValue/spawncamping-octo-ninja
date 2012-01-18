@@ -27,7 +27,7 @@ import soot.grimp.internal.*;
 
 public class DInterfaceInvokeExpr extends GInterfaceInvokeExpr
 {
-    public DInterfaceInvokeExpr( Value base, SootMethodRef methodRef, java.util.List args) 
+    public DInterfaceInvokeExpr( Value base, SootMethodRef methodRef, java.util.List args)
     {
 	super( base, methodRef, args);
     }
@@ -39,7 +39,7 @@ public class DInterfaceInvokeExpr extends GInterfaceInvokeExpr
             up.literal( "((" );
             up.type( getMethodRef().declaringClass().getType() );
             up.literal( ") " );
-	    
+
             if( PrecedenceTest.needsBrackets( baseBox, this ) ) up.literal("(");
             baseBox.toString( up );
             if( PrecedenceTest.needsBrackets( baseBox, this ) ) up.literal(")");
@@ -53,7 +53,7 @@ public class DInterfaceInvokeExpr extends GInterfaceInvokeExpr
 	    for (int i=0; i<argBoxes.length; i++) {
 		if(i != 0)
                     up.literal( ", " );
-		
+
                 argBoxes[i].toString(up);
 	    }
 
@@ -71,7 +71,7 @@ public class DInterfaceInvokeExpr extends GInterfaceInvokeExpr
 	    b.append( "((");
 	    b.append( getMethodRef().declaringClass().getJavaStyleName());
 	    b.append( ") ");
-	    
+
 	    String baseStr = ( getBase()).toString();
 	    if ((getBase() instanceof Precedence) && ( ((Precedence) getBase()).getPrecedence() < getPrecedence()))
 		baseStr = "(" + baseStr + ")";
@@ -85,7 +85,7 @@ public class DInterfaceInvokeExpr extends GInterfaceInvokeExpr
 	    for (int i=0; i<argBoxes.length; i++) {
 		if(i != 0)
 		    b.append(", ");
-		
+
 		b.append( ( argBoxes[i].getValue()).toString());
 	    }
 
@@ -97,13 +97,13 @@ public class DInterfaceInvokeExpr extends GInterfaceInvokeExpr
 	return super.toString();
     }
 
-    public Object clone() 
+    public Object clone()
     {
         ArrayList clonedArgs = new ArrayList( getArgCount());
 
-        for(int i = 0; i < getArgCount(); i++) 
+        for(int i = 0; i < getArgCount(); i++)
             clonedArgs.add(i, Grimp.cloneIfNecessary(getArg(i)));
-        
+
         return new DInterfaceInvokeExpr( getBase(), methodRef, clonedArgs);
     }
 }

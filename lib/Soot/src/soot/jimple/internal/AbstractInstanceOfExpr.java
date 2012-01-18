@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,7 +40,7 @@ public abstract class AbstractInstanceOfExpr implements InstanceOfExpr
     {
         this.opBox = opBox; this.checkType = checkType;
     }
-    
+
     public boolean equivTo(Object o)
     {
         if (o instanceof AbstractInstanceOfExpr)
@@ -53,18 +53,18 @@ public abstract class AbstractInstanceOfExpr implements InstanceOfExpr
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return opBox.getValue().equivHashCode() * 101 + checkType.hashCode() * 17;
     }
 
     public abstract Object clone();
-    
+
     public String toString()
     {
         return opBox.getValue().toString() + " " + Jimple.INSTANCEOF + " " + checkType.toString();
     }
-    
+
     public void toString( UnitPrinter up ) {
         opBox.toString(up);
         up.literal(" ");

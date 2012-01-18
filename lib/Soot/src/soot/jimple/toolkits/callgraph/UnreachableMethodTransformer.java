@@ -39,16 +39,16 @@ public class UnreachableMethodTransformer extends BodyTransformer
 
         Local tmpRef = Jimple.v().newLocal( "tmpRef", RefType.v( "java.io.PrintStream" ) );
         body.getLocals().add(tmpRef);
-        list.add( Jimple.v().newAssignStmt( tmpRef, Jimple.v().newStaticFieldRef( 
+        list.add( Jimple.v().newAssignStmt( tmpRef, Jimple.v().newStaticFieldRef(
             Scene.v().getField( "<java.lang.System: java.io.PrintStream out>" ).makeRef() ) ) );
 
         SootMethod toCall = Scene.v().getMethod( "<java.lang.Thread: void dumpStack()>" );
         list.add( Jimple.v().newInvokeStmt( Jimple.v().newStaticInvokeExpr( toCall.makeRef() ) ) );
 
         toCall = Scene.v().getMethod( "<java.io.PrintStream: void println(java.lang.String)>" );
-        list.add( Jimple.v().newInvokeStmt( Jimple.v().newVirtualInvokeExpr( 
+        list.add( Jimple.v().newInvokeStmt( Jimple.v().newVirtualInvokeExpr(
             tmpRef, toCall.makeRef(), StringConstant.v( "Executing supposedly unreachable method:" ) ) ) );
-        list.add( Jimple.v().newInvokeStmt( Jimple.v().newVirtualInvokeExpr( 
+        list.add( Jimple.v().newInvokeStmt( Jimple.v().newVirtualInvokeExpr(
             tmpRef, toCall.makeRef(), StringConstant.v( "\t" + method.getDeclaringClass().getName() + "." + method.getName() ) ) ) );
 
         toCall = Scene.v().getMethod( "<java.lang.System: void exit(int)>" );
@@ -90,7 +90,7 @@ public class UnreachableMethodTransformer extends BodyTransformer
                 if( o instanceof JInvokeStmt ) {
                     JInvokeStmt stmt = (JInvokeStmt) o;
                     if( (stmt.getInvokeExpr() instanceof SpecialInvokeExpr) ) {
-                        SootMethodRef 
+                        SootMethodRef
                         break;
                     }
                 }

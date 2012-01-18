@@ -106,9 +106,9 @@ public abstract class SETNode
 
     public boolean add_Child( SETNode child, IterableSet children)
     {
-	if ((this == child) || (children.contains( child))) 
+	if ((this == child) || (children.contains( child)))
 	    return false;
-	
+
 	children.add( child);
 	child.parent = this;
 	return true;
@@ -141,14 +141,14 @@ public abstract class SETNode
 	Iterator cit = children.iterator();
 	while (cit.hasNext()) {
 	    ASTNode astNode = ((SETNode) cit.next()).emit_AST();
-	    
+
 	    if (astNode != null)
 		l.addLast( astNode);
 	}
-	
+
 	return l;
     }
-    
+
 
     /*
      *  Basic inter-SETNode utilities.
@@ -178,11 +178,11 @@ public abstract class SETNode
     {
 	return body.isStrictSubsetOf( other.get_Body());
     }
-    
-    
 
-    /* 
-     *  Tree traversing utilities. 
+
+
+    /*
+     *  Tree traversing utilities.
      */
 
     public void find_SmallestSETNode( AugmentedStmt as)
@@ -192,14 +192,14 @@ public abstract class SETNode
 	    Iterator it = body2childChain.get( sbit.next()).iterator();
 	    while (it.hasNext()) {
 		SETNode child = (SETNode) it.next();
-		
+
 		if (child.contains( as)) {
 		    child.find_SmallestSETNode( as);
 		    return;
 		}
 	    }
 	}
-	    
+
 	as.myNode = this;
     }
 
@@ -211,7 +211,7 @@ public abstract class SETNode
 	    while (cit.hasNext())
 		((SETNode) cit.next()).find_LabeledBlocks( lbf);
 	}
-	
+
 	lbf.perform_ChildOrder( this);
 	lbf.find_LabeledBlocks( this);
     }
@@ -230,9 +230,9 @@ public abstract class SETNode
 		SETNode child = (SETNode) cit.next();
 
 		child.find_StatementSequences( sf, davaBody);
-		childUnion.addAll( child.get_Body()); 
+		childUnion.addAll( child.get_Body());
 	    }
-	    
+
 	    sf.find_StatementSequences( this, body, childUnion, davaBody);
 	}
     }
@@ -243,7 +243,7 @@ public abstract class SETNode
 	while (sbit.hasNext()) {
 	    IterableSet body = sbit.next();
 	    IterableSet children = body2childChain.get( body);
-	    
+
 	    Iterator cit = children.iterator();
 	    while (cit.hasNext())
 		((SETNode) cit.next()).find_AbruptEdges( aef);
@@ -254,11 +254,11 @@ public abstract class SETNode
 	sbit = subBodies.iterator();
 	while (sbit.hasNext()) {
 	    IterableSet children = body2childChain.get( sbit.next());
-	    
+
 	    Iterator cit = children.iterator();
 	    if (cit.hasNext()) {
 
-		SETNode 
+		SETNode
 		    cur = (SETNode) cit.next(),
 		    prev = null;
 
@@ -272,7 +272,7 @@ public abstract class SETNode
 	    }
 	}
     }
-    
+
     protected void remove_AugmentedStmt( AugmentedStmt as)
     {
 	body.remove( as);
@@ -296,33 +296,33 @@ public abstract class SETNode
 	    return false;
 
 	IterableSet otherBody = other.get_Body();
-	
+
 	Iterator<IterableSet> sbit = subBodies.iterator();
 	while (sbit.hasNext()) {
 	    IterableSet subBody = sbit.next();
-	    
+
 	    if (subBody.intersects( otherBody)) {
 		IterableSet childChain = body2childChain.get( subBody);
-		
+
 		Iterator ccit = childChain.snapshotIterator();
 		while (ccit.hasNext()) {
 		    SETNode curChild = (SETNode) ccit.next();
-		    
+
 		    IterableSet childBody = curChild.get_Body();
-		    
+
 		    if (childBody.intersects( otherBody)) {
-			
+
 			if (childBody.isSupersetOf( otherBody))
 			    return curChild.nest( other);
-			
-			
+
+
 			else {
 			    remove_Child( curChild, childChain);
-			    
+
 			    Iterator<IterableSet> osbit = other.subBodies.iterator();
 			    while (osbit.hasNext()) {
 				IterableSet otherSubBody = osbit.next();
-				
+
 				if (otherSubBody.isSupersetOf( childBody)) {
 				    other.add_Child( curChild, other.get_Body2ChildChain().get( otherSubBody));
 				    break;
@@ -331,7 +331,7 @@ public abstract class SETNode
 			}
 		    }
 		}
-		
+
 		add_Child( other, childChain);
 	    }
 	}
@@ -344,7 +344,7 @@ public abstract class SETNode
     /*
      *  Debugging stuff.
      */
-    
+
     public void dump()
     {
 	dump( G.v().out);
@@ -357,7 +357,7 @@ public abstract class SETNode
 
     private void dump( PrintStream out, String indentation)
     {
-	String 
+	String
 	    TOP = ".---",
 	    TAB = "|  " ,
 	    MID = "+---",
@@ -377,7 +377,7 @@ public abstract class SETNode
 
 	    out.println( indentation + MID);
 	    Iterator bit = subBody.iterator();
-	    while (bit.hasNext()) 
+	    while (bit.hasNext())
 		out.println( indentation + TAB + ((AugmentedStmt) bit.next()).toString());
 
 	    out.println( indentation + TAB);
@@ -394,7 +394,7 @@ public abstract class SETNode
 	Iterator<IterableSet> sbit = subBodies.iterator();
 	while (sbit.hasNext()) {
 	    IterableSet body = sbit.next();
-	    
+
 	    Iterator bit = body.iterator();
 	    while (bit.hasNext())
 		if ((bit.next() instanceof AugmentedStmt) == false)

@@ -24,7 +24,7 @@
      Simple wrapper for BranchedRefVarsAnalysis, to be used by
      the statement printer.
 
-     1) Compute lists of (ref, value) that have been analyzed: 
+     1) Compute lists of (ref, value) that have been analyzed:
      * before a statement
      * after a statement fall through
      * after a statement branches
@@ -32,18 +32,18 @@
      Note: (ref, kTop) are discareded to improve readability.
      (This behavior can be turned off at compile time.)
 
-     
+
      2) Compute lists of references that need to be checked by
         a null pointer check at a given statement.
 
-        Compute lists of references that DO NOT need to be 
+        Compute lists of references that DO NOT need to be
         checked by a null pointer check at a given statement.
-     
-	Notes: 
+
+	Notes:
 	a) that computation can be turned off at compile time
 	b) lists all references that (do not) need to be checked
 	   not just the ones that have been analyzed.
-     
+
 */
 
 
@@ -70,7 +70,7 @@ public class LocalRefVarsAnalysisWrapper
     Map<Unit, List<List<RefIntPair>>> unitToListsOfVarsAfterBranches;
     Map<Unit, List<Object>> unitToVarsNeedCheck;
     Map<Unit, List<RefIntPair>> unitToVarsDontNeedCheck;
-    
+
     BranchedRefVarsAnalysis analysis;
 
     // utility method to build lists of (ref, value) pairs for a given flow set
@@ -94,28 +94,28 @@ public class LocalRefVarsAnalysisWrapper
     public LocalRefVarsAnalysisWrapper(ExceptionalUnitGraph graph)
     {
         analysis = new BranchedRefVarsAnalysis(graph);
-        
+
 	unitToVarsBefore = new HashMap<Unit, List<RefIntPair>>(graph.size() * 2 + 1, 0.7f);
 	unitToVarsAfterFall = new HashMap<Unit, List<RefIntPair>>(graph.size() * 2 + 1, 0.7f);
 	unitToListsOfVarsAfterBranches = new HashMap<Unit, List<List<RefIntPair>>>(graph.size() * 2 + 1, 0.7f);
 	unitToVarsNeedCheck = new HashMap<Unit, List<Object>>(graph.size() * 2 + 1, 0.7f);
 	unitToVarsDontNeedCheck = new HashMap<Unit, List<RefIntPair>>(graph.size() * 2 + 1, 0.7f);
-	
+
 	Iterator unitIt = graph.iterator();
-	
+
 	while(unitIt.hasNext()) {
-	    
+
 	    FlowSet set;
 	    Unit s = (Unit) unitIt.next();
-	    
+
 	    set = (FlowSet) analysis.getFallFlowAfter(s);
 	    unitToVarsAfterFall.put(s, Collections.unmodifiableList(buildList(set)));
-	    
+
 	    // we get a list of flow sets for branches, iterate over them
 	    {
 		List branchesFlowsets = analysis.getBranchFlowAfter(s);
 		List<List<RefIntPair>> lst = new ArrayList<List<RefIntPair>>(branchesFlowsets.size());
-		
+
 		Iterator it = branchesFlowsets.iterator();
 		while (it.hasNext()) {
 		    set = (FlowSet) it.next();
@@ -127,21 +127,21 @@ public class LocalRefVarsAnalysisWrapper
 	    set = (FlowSet) analysis.getFlowBefore(s);
 	    unitToVarsBefore.put(s, Collections.unmodifiableList(buildList(set)));
 	    // NOTE: that set is used in the compute check bellow too
-	    
+
 	    if (computeChecks) {
 
 		ArrayList<RefIntPair> dontNeedCheckVars = new ArrayList<RefIntPair>();
 		ArrayList<Object> needCheckVars = new ArrayList<Object>();
-		
+
 		HashSet allChecksSet = new HashSet(5, 0.7f);
 		allChecksSet.addAll(analysis.unitToArrayRefChecksSet.get(s));
 		allChecksSet.addAll(analysis.unitToInstanceFieldRefChecksSet.get(s));
 		allChecksSet.addAll(analysis.unitToInstanceInvokeExprChecksSet.get(s));
 		allChecksSet.addAll(analysis.unitToLengthExprChecksSet.get(s));
 		// set of all references that are subject to a null pointer check at this statement
-		
+
 		Iterator it = allChecksSet.iterator();
-		
+
 		while (it.hasNext()) {
 
 		    Value v = (Value) it.next();
@@ -159,16 +159,16 @@ public class LocalRefVarsAnalysisWrapper
 			dontNeedCheckVars.add(analysis.getKRefIntPair(new EquivalentValue(v), vInfo));
 		    }
 		}
-		
+
 		unitToVarsNeedCheck.put(s, Collections.unmodifiableList(needCheckVars));
 		unitToVarsDontNeedCheck.put(s, Collections.unmodifiableList(dontNeedCheckVars));
 	    } // end if computeChecks
-	    
-	} // end while           
+
+	} // end while
 
     } // end constructor & computations
 
-    
+
     /*
 
         Accesor methods.

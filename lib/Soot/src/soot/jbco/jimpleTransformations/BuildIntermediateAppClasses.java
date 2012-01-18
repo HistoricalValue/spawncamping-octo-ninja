@@ -30,9 +30,9 @@ import soot.jbco.util.*;
 
 /**
  * @author Michael Batchelder
- * 
+ *
  * Created on 1-Feb-2006
- * 
+ *
  * This class builds buffer classes between Application classes
  * and their corresponding library superclasses. This allows for
  * the hiding of all library method overrides to be hidden in
@@ -42,30 +42,30 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
 
   static int newclasses = 0;
   static int newmethods = 0;
-  
+
   public void outputSummary() {
     out.println("New buffer classes created: "+newclasses);
     out.println("New buffer class methods created: "+newmethods);
   }
-  
+
   public static String dependancies[] = new String[] { "wjtp.jbco_bapibm"};
 
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "wjtp.jbco_bapibm";
-  
+
   public String getName() {
     return name;
   }
-  
+
   protected void internalTransform(String phaseName, Map options) {
-    if (output) 
+    if (output)
       out.println("Building Intermediate Classes...");
 
     soot.jbco.util.BodyBuilder.retrieveAllBodies();
-    
+
     Scene scene = G.v().soot_Scene();
     // iterate through application classes, build intermediate classes
     Iterator it = scene.getApplicationClasses().snapshotIterator();
@@ -74,22 +74,22 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
       Hashtable<String, SootMethod> methodsToAdd = new Hashtable<String, SootMethod>();
       SootClass c = (SootClass) it.next();
       SootClass cOrigSuperclass = c.getSuperclass();
-      
+
       if (output)
         out.println("Processing "+c.getName()+" with super "+cOrigSuperclass.getName());
-      
+
       Iterator mIt = c.methodIterator();
       while (mIt.hasNext()) {
         SootMethod m = (SootMethod) mIt.next();
         if (!m.isConcrete()) continue;
-        
+
         try {
           m.getActiveBody();
         } catch (Exception exc) {
           if (m.retrieveActiveBody()==null)
             throw new RuntimeException(m.getSignature() + " has no body. This was not expected dude.");
         }
-        
+
         String subSig = m.getSubSignature();
         if (subSig.equals("void main(java.lang.String[])") && m.isPublic()
             && m.isStatic()) {
@@ -102,17 +102,17 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
           }
           continue; // skip constructors, just add for rewriting at the end
         }
-        else 
+        else
         {
           scene.releaseActiveHierarchy();
-          
+
           Hierarchy hierarchy = scene.getActiveHierarchy();
           Iterator<SootClass> cIt = hierarchy
               .getSuperclassesOfIncluding(cOrigSuperclass).iterator();
           while (cIt.hasNext()) {
             SootClass _c = cIt.next();
             if (_c.isLibraryClass() && _c.declaresMethod(subSig)
-                && hierarchy.isVisible(c, _c.getMethod(subSig))) 
+                && hierarchy.isVisible(c, _c.getMethod(subSig)))
             {
               methodsToAdd.put(subSig, m);
               break;
@@ -125,22 +125,22 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
         String newName = ClassRenamer.getNewName("");
         ClassRenamer.oldToNewClassNames.put(newName,newName);
         String fullName = ClassRenamer.getNamePrefix(c.getName()) + newName;
-        
-        if (output) 
+
+        if (output)
           out.println("\tBuilding " + fullName);
-        
+
         // make class but can't be final
         SootClass iC = new SootClass(fullName, c.getModifiers()
             & (Modifier.FINAL ^ 0xFFFF));
         Main.IntermediateAppClasses.add(iC);
         iC.setSuperclass(cOrigSuperclass);
-        
+
         Scene.v().addClass(iC);
         iC.setApplicationClass();
         iC.setInScene(true);
 
         ThisRef thisRef = new ThisRef(iC.getType());
-        
+
         Enumeration<String> keys = methodsToAdd.keys();
         while (keys.hasMoreElements()) {
           String sSig = keys.nextElement();
@@ -150,7 +150,7 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
           SootMethod newM;
           { // build new junk method to call original method
             String newMName = MethodRenamer.getNewName();
-            newM = new SootMethod(newMName, paramTypes, 
+            newM = new SootMethod(newMName, paramTypes,
                 rType, oldM.getModifiers(), oldM.getExceptions());
             iC.addMethod(newM);
 
@@ -161,17 +161,17 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
 
             BodyBuilder.buildParameterLocals(units,locals,paramTypes);
             BodyBuilder.buildThisLocal(units,thisRef,locals);
-            
-            if (rType instanceof VoidType) 
+
+            if (rType instanceof VoidType)
             {
               units.add(Jimple.v().newReturnVoidStmt());
-            } 
-            else if (rType instanceof PrimType) 
+            }
+            else if (rType instanceof PrimType)
             {
               units.add(Jimple.v().newReturnStmt(
                   Jimple.v().newCastExpr(IntConstant.v(0), rType)));
             }
-            else 
+            else
             {
               units.add(Jimple.v().newReturnStmt(NullConstant.v()));
             }
@@ -179,7 +179,7 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
           } // end build new junk method to call original method
 
           { // build copy of old method
-            newM = new SootMethod(oldM.getName(), paramTypes, 
+            newM = new SootMethod(oldM.getName(), paramTypes,
                 rType, oldM.getModifiers(), oldM.getExceptions());
             iC.addMethod(newM);
 
@@ -190,14 +190,14 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
 
             List args = BodyBuilder.buildParameterLocals(units,locals,paramTypes);
             Local ths = BodyBuilder.buildThisLocal(units, thisRef, locals);
-            
-            if (rType instanceof VoidType) 
+
+            if (rType instanceof VoidType)
             {
               units.add(Jimple.v().newInvokeStmt(
                   Jimple.v().newVirtualInvokeExpr(ths, newM.makeRef(), args)));
               units.add(Jimple.v().newReturnVoidStmt());
             }
-            else 
+            else
             {
               Local loc = Jimple.v().newLocal("retValue", rType);
               body.getLocals().add(loc);
@@ -211,7 +211,7 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
           } // end build copy of old method
         }
         c.setSuperclass(iC);
-        
+
         //rewrite class init methods to call the proper superclass inits
         int i = initMethodsToRewrite.size();
         while(i-- > 0)
@@ -230,7 +230,7 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
               {
                 SpecialInvokeExpr sie = (SpecialInvokeExpr)v;
                 SootMethodRef smr = sie.getMethodRef();
-                if (sie.getBase().equivTo(thisLocal) 
+                if (sie.getBase().equivTo(thisLocal)
                     && smr.declaringClass().getName().equals(cOrigSuperclass.getName())
                     && smr.getSubSignature().getString().startsWith("void <init>"))
                 {
@@ -245,19 +245,19 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
                     newSuperInit.setActiveBody(body);
                     PatchingChain initUnits = body.getUnits();
                     Chain locals = body.getLocals();
-                    
+
                     List args = BodyBuilder.buildParameterLocals(initUnits,locals,paramTypes);
                     Local ths = BodyBuilder.buildThisLocal(initUnits,thisRef,locals);
 
                     initUnits.add(Jimple.v().newInvokeStmt(
                           Jimple.v().newSpecialInvokeExpr(ths, smr, args)));
                     initUnits.add(Jimple.v().newReturnVoidStmt());
-                  } 
-                  else 
+                  }
+                  else
                   {
                     newSuperInit = iC.getMethod("<init>",smr.parameterTypes());
                   }
-                  
+
                   sie.setMethodRef(newSuperInit.makeRef());
                 }
               }
@@ -266,9 +266,9 @@ public class BuildIntermediateAppClasses extends SceneTransformer  implements IJ
         } // end of rewrite class init methods to call the proper superclass inits
       }
     }
-    
+
     newclasses = Main.IntermediateAppClasses.size();
-    
+
     scene.releaseActiveHierarchy();
     scene.getActiveHierarchy();
     scene.setFastHierarchy(new FastHierarchy());

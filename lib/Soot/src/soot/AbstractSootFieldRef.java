@@ -29,7 +29,7 @@ import soot.jimple.toolkits.typing.TypeAssigner;
  */
 
 class AbstractSootFieldRef implements SootFieldRef {
-    public AbstractSootFieldRef( 
+    public AbstractSootFieldRef(
             SootClass declaringClass,
             String name,
             Type type,

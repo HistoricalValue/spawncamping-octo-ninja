@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -35,9 +35,9 @@ import java.util.*;
 
 */
 class ExtendedHashMutableDirectedGraph extends HashMutableDirectedGraph
-{  
+{
     public ExtendedHashMutableDirectedGraph() {}
-    
+
     /**
        If nodes are not in the graph, add them into graph first.
      */
@@ -68,8 +68,8 @@ class ExtendedHashMutableDirectedGraph extends HashMutableDirectedGraph
 	super.addEdge(to, from);
     }
 
-    /** 
-       Bypass the in edge to out edge. Not delete the node 
+    /**
+       Bypass the in edge to out edge. Not delete the node
      */
     public void skipNode(Object node)
     {
@@ -79,7 +79,7 @@ class ExtendedHashMutableDirectedGraph extends HashMutableDirectedGraph
 	Object[] preds = getPredsOf(node).toArray();
 	Object[] succs = getSuccsOf(node).toArray();
 
-	
+
 	for (Object element : preds) {
 	    for (Object element0 : succs) {
 		if (element != element0)
@@ -115,7 +115,7 @@ class ExtendedHashMutableDirectedGraph extends HashMutableDirectedGraph
 	    while (succsIt.hasNext())
 	    {
 		Object succ = succsIt.next();
-		
+
 		this.addEdge(node, succ);
 	    }
 	}
@@ -143,7 +143,7 @@ class ExtendedHashMutableDirectedGraph extends HashMutableDirectedGraph
 
 		rtn = rtn + node + "\t --- \t" + succ +"\n";
 	    }
-	}	 
+	}
 
 	return rtn;
     }

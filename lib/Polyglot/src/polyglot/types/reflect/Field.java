@@ -18,7 +18,7 @@ import java.io.*;
  */
 public class Field {
     DataInputStream in;
-    ClassFile clazz; 
+    ClassFile clazz;
     int modifiers;
     int name;
     int type;
@@ -40,7 +40,7 @@ public class Field {
     public int modifiers(){
         return modifiers;
     }
-    
+
     public FieldInstance fieldInstance(TypeSystem ts, ClassType ct) {
       String name = (String) clazz.constants[this.name].value();
       String type = (String) clazz.constants[this.type].value();

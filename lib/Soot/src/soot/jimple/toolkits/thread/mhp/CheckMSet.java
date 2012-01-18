@@ -20,8 +20,8 @@ import java.util.*;
 public class CheckMSet{
 	CheckMSet(Map m1, Map m2){
 		checkKeySet(m1,m2);
-		check(m1, m2);   
-		
+		check(m1, m2);
+
 	}
 	private void checkKeySet(Map m1, Map m2){
 		Iterator keySetIt2 = m2.keySet().iterator();
@@ -64,8 +64,8 @@ public class CheckMSet{
 				}
 			}
 		}
-		
-		
+
+
 		Iterator keySetIt1 = m1.keySet().iterator();
 		while (keySetIt1.hasNext()) {
 			Object key1 = keySetIt1.next();
@@ -74,11 +74,11 @@ public class CheckMSet{
 				System.exit(1);
 			}
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	private void check(Map m1, Map m2){
 		Iterator keySetIt = m2.keySet().iterator();
 		while (keySetIt.hasNext()){
@@ -86,7 +86,7 @@ public class CheckMSet{
 			if (key instanceof JPegStmt){
 				Tag tag1 = (Tag)((JPegStmt)key).getTags().get(0);
 				// System.out.println("check key: "+tag1+" "+key);
-				
+
 			}
 			// System.out.println("check key: "+key);
 			FlowSet mSet2 = (FlowSet)m2.get(key);
@@ -124,7 +124,7 @@ public class CheckMSet{
 			}
 			else{
 				FlowSet mSet1 = (FlowSet)m1.get(key);
-				
+
 				if (!compare(mSet1, mSet2)){
 					System.err.println("3--mSet before and after are NOT the same!");
 					System.exit(1);
@@ -133,13 +133,13 @@ public class CheckMSet{
 		}
 		//	    System.err.println("---mSet before and after are the same!---");
 	}
-	
-	
-	
+
+
+
 	private boolean compare(FlowSet mSet1, FlowSet mSet2){
 		{
-			
-			Iterator it = mSet2.iterator();	
+
+			Iterator it = mSet2.iterator();
 			FlowSet temp = new ArraySparseSet();
 			while (it.hasNext()){
 				Object obj = it.next();
@@ -148,51 +148,51 @@ public class CheckMSet{
 					while (listIt.hasNext()){
 						Object o = listIt.next();
 						if (o instanceof List){
-							Iterator itit = ((List)o).iterator(); 
+							Iterator itit = ((List)o).iterator();
 							while (itit.hasNext()){
 								temp.add(itit.next());
 							}
 						}
-						else	    
+						else
 							temp.add(o);
 					}
 				}
 				else{
-					
+
 					temp.add(obj);
 				}
-				
+
 			}
-			
+
 			Iterator it1= mSet1.iterator();
 			while (it1.hasNext()){
 				Object o = it1.next();
 				if (!temp.contains(o)){
 					System.out.println("mSet2: \n"+mSet2);
 					System.err.println("mSet2 does not contains "+o);
-					
+
 					return false;
 				}
-				
-				
+
+
 			}
-			
+
 		}
-		
+
 		{
 			Iterator it = mSet2.iterator();
-			
+
 			while (it.hasNext()){
 				Object obj = it.next();
 				if (obj instanceof List){
-					Iterator listIt = ((List)obj).iterator();    
+					Iterator listIt = ((List)obj).iterator();
 					while (listIt.hasNext()){
 						Object o = listIt.next();
 						if (o instanceof List){
 							Iterator itit = ((List)o).iterator();
 							while (itit.hasNext()){
 								Object oo = itit.next();
-								
+
 								if (!mSet1.contains(oo)){
 									System.err.println("1--mSet1 does not contains "+oo);
 									return false;
@@ -207,9 +207,9 @@ public class CheckMSet{
 						}
 					}
 				}
-				
+
 				else{
-					
+
 					if (!mSet1.contains(obj)){
 						System.err.println("3--mSet1 does not contains "+obj);
 						return false;
@@ -217,10 +217,10 @@ public class CheckMSet{
 				}
 			}
 		}
-		
+
 		return true;
-		
-		
+
+
 	}
 }
 

@@ -25,7 +25,7 @@ public class SourceLnPosTag implements Tag {
     private final int endLn;
     private final int startPos;
     private final int endPos;
-    
+
     public SourceLnPosTag(int sline, int eline, int spos, int epos){
         startLn = sline;
         endLn = eline;
@@ -73,4 +73,4 @@ public class SourceLnPosTag implements Tag {
         sb.append(endPos);
         return sb.toString();
     }
-}   
+}

@@ -8,7 +8,7 @@ import polyglot.main.Report;
 import java.util.*;
 
 /**
- * A visitor which maintains a context throughout the visitor's pass.  This is 
+ * A visitor which maintains a context throughout the visitor's pass.  This is
  * the base class of the disambiguation and type checking visitors.
  *
  * TODO: update this documentation.
@@ -62,7 +62,7 @@ public class ContextVisitor extends ErrorHandlingVisitor
      *  except with an updated context.
      *
      *  @param c The new context that is to be used.
-     *  @return Returns a copy of this visitor with the new context 
+     *  @return Returns a copy of this visitor with the new context
      *  <code>c</code>.
      */
     public ContextVisitor context(Context c) {
@@ -72,10 +72,10 @@ public class ContextVisitor extends ErrorHandlingVisitor
     }
 
     /**
-     * Returns a new context based on the current context, the Node current 
-     * being visited (<code>parent</code>), and the Node that is being 
+     * Returns a new context based on the current context, the Node current
+     * being visited (<code>parent</code>), and the Node that is being
      * entered (<code>n</code>).  This new context is to be used
-     * for visiting <code>n</code>. 
+     * for visiting <code>n</code>.
      *
      * @return The new context after entering Node <code>n</code>.
      */

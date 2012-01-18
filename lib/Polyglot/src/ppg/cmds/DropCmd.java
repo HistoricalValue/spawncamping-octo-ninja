@@ -7,7 +7,7 @@ public class DropCmd implements Command
 {
 	private Production prod; // productions to be dropped for some nonterminal
 	private Vector sym; // or, the single nonterminal to be dropped
-	
+
 	/*
 	public DropCmd(String symbol)
 	{
@@ -16,13 +16,13 @@ public class DropCmd implements Command
 		prod = null;
 	}
 	*/
-	
+
 	public DropCmd(Vector symbols)
 	{
 		sym = symbols;
 		prod = null;
 	}
-	
+
 	public DropCmd(Production productions)
 	{
 		prod = productions;
@@ -31,10 +31,10 @@ public class DropCmd implements Command
 
 	public boolean isProdDrop() { return prod != null; }
 	public boolean isSymbolDrop() { return sym != null; }
-	
+
 	public Production getProduction() { return prod; }
 	public Vector getSymbols() { return sym; }
-	
+
 	public void unparse(CodeWriter cw) {
 		//cw.begin(0);
 		cw.write("DropCmd");
@@ -47,5 +47,5 @@ public class DropCmd implements Command
 			}
 		//cw.end();
 	}
-	
+
 }

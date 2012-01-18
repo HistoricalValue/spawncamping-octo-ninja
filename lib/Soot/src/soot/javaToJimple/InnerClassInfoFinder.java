@@ -29,7 +29,7 @@ public class InnerClassInfoFinder extends polyglot.visit.NodeVisitor {
     private final ArrayList<Node> memberList;
     //private ArrayList declaredInstList;
     //private ArrayList usedInstList;
-    
+
     public ArrayList<Node> memberList(){
         return memberList;
     }
@@ -60,7 +60,7 @@ public class InnerClassInfoFinder extends polyglot.visit.NodeVisitor {
     }
 
     public polyglot.visit.NodeVisitor enter(polyglot.ast.Node parent, polyglot.ast.Node n) {
-    
+
         if (n instanceof polyglot.ast.LocalClassDecl) {
             localClassDeclList.add(n);
         }
@@ -73,7 +73,7 @@ public class InnerClassInfoFinder extends polyglot.visit.NodeVisitor {
                 usedInstList.add(new polyglot.util.IdentityKey(pi));
             }*/
         }
-        
+
         if (n instanceof polyglot.ast.ProcedureDecl) {
             memberList.add(n);
             /*polyglot.types.ProcedureInstance pi = ((polyglot.ast.ProcedureDecl)n).procedureInstance();
@@ -110,8 +110,8 @@ public class InnerClassInfoFinder extends polyglot.visit.NodeVisitor {
                 usedInstList.add(new polyglot.util.IdentityKey(pi));
             }
         }*/
-        
-        
+
+
         return enter(n);
     }
 }

@@ -11,9 +11,9 @@ public class Token /* extends Symbol */ implements LexerResult {
     private int lineno;
     private Object value;	// String, Boolean, Integer, Vector, null
 	//private Position position;
-	
+
 	static int lastID;
-	
+
     public Token (String filename, int lineno, Object value/*, Position pos*/) {
 		this (-1, filename, lineno, -1, -1, value/*, pos*/);
     }
@@ -21,7 +21,7 @@ public class Token /* extends Symbol */ implements LexerResult {
     public Token (int id, String filename, int lineno, int left, int right,
 		  Object value/*, Position pos*/) {
 		// super(id, left, right, value);
-		
+
 		symbol = new Symbol (id, left, right, this);
 		lastID=id;
 		this.filename = filename;
@@ -31,13 +31,13 @@ public class Token /* extends Symbol */ implements LexerResult {
     }
 
     public int getCode () {
-		return symbol.sym; 
+		return symbol.sym;
 	}
-	
+
     public Symbol getSymbol () {
 		return symbol;
 	}
-	
+
     public Object getValue () {
 		return value;
 	}
@@ -73,11 +73,11 @@ public class Token /* extends Symbol */ implements LexerResult {
 			case Constant.RBRACE:				return "RBRACE";
 			case Constant.LBRACK:				return "LBRACK";
 			case Constant.RBRACK:				return "RBRACK";
-					
+
 			case Constant.ID:					return "ID";
 			case Constant.CODE_STR:				return "CODE_STR";
 			case Constant.STRING_CONST:			return "STRING_CONST";
-				
+
 			case Constant.WITH:					return "WITH";
 			case Constant.PARSER:				return "PARSER";
 			case Constant.INIT:					return "INIT";
@@ -97,7 +97,7 @@ public class Token /* extends Symbol */ implements LexerResult {
 			case Constant.PERCENT_PREC:			return "PRECEDENCE";
 			case Constant.TERMINAL:				return "TERMINAL";
 			case Constant.RIGHT:				return "RIGHT";
-											
+
 			case Constant.EOF:					return "EOF";
 			case Constant.error:				return "ERROR";
 
@@ -115,7 +115,7 @@ public class Token /* extends Symbol */ implements LexerResult {
     }
 
     public void unparse (java.io.OutputStream o) {
-		
+
 		if (value != null) {
 			try {
 				o.write ((filename + ":" + lineno + ": " + this.getID()+ ": \"" +value + "\"").getBytes());
@@ -129,15 +129,15 @@ public class Token /* extends Symbol */ implements LexerResult {
     public String getFilename () {
 		return filename;
 	}
-	
+
     public int lineNumber () {
 		return lineno;
 	}
-	
+
 	public int getLineno() {
 		return lineno;
 	}
-	
+
     public void setLineno (int i) {
 		lineno = i;
 	}

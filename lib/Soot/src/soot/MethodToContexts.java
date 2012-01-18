@@ -24,7 +24,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public final class MethodToContexts
-{ 
+{
     private final Map<SootMethod, List> map = new HashMap<SootMethod, List>();
     public void add( MethodOrMethodContext momc ) {
         SootMethod m = momc.method();

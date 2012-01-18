@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,17 +34,17 @@ import java.util.*;
 public class AbstractUnitAllMapTo extends AbstractMap
 {
     Object dest;
-    
+
     public AbstractUnitAllMapTo(Object dest)
     {
         this.dest = dest;
     }
-    
+
     public Object get(Object key)
     {
         return dest;
     }
-    
+
     public Set entrySet()
     {
         throw new UnsupportedOperationException();

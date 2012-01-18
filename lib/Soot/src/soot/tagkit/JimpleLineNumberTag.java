@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,7 +31,7 @@ public class JimpleLineNumberTag implements Tag
     /* it is a value representing line number. */
     private final int startLineNumber;
 	private final int endLineNumber;
-    
+
     public JimpleLineNumberTag(int ln)
     {
 		startLineNumber = ln;
@@ -49,11 +49,11 @@ public class JimpleLineNumberTag implements Tag
 	public int getStartLineNumber() {
 		return startLineNumber;
 	}
-	
+
 	public int getEndLineNumber() {
 		return endLineNumber;
 	}
-    
+
     public String getName()
     {
 		return "JimpleLineNumberTag";

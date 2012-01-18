@@ -109,13 +109,13 @@ public interface PhiExpr extends ShimpleExpr
      * predecessor.  Returns null if not found.
      **/
     public ValueUnitPair getArgBox(Unit predTailUnit);
-    
+
     /**
      * Get the PhiExpr argument corresponding to the given control
      * flow predecessor, returns null if not available.
      **/
     public Value getValue(Unit predTailUnit);
-    
+
     /**
      * Returns the index of the argument associated with the given
      * control flow predecessor.  Returns -1 if not found.
@@ -127,7 +127,7 @@ public interface PhiExpr extends ShimpleExpr
      * predecessor.  Returns null if not found.
      **/
     public ValueUnitPair getArgBox(Block pred);
-    
+
     /**
      * Get the PhiExpr argument corresponding to the given control flow
      * predecessor, returns null if not available.
@@ -163,7 +163,7 @@ public interface PhiExpr extends ShimpleExpr
      * and set the value.  Returns false on failure.
      **/
     public boolean setValue(Block pred, Value arg);
-    
+
     /**
      * Update the CFG predecessor associated with the PhiExpr
      * argument at the given index.  Returns false on failure.
@@ -210,12 +210,12 @@ public interface PhiExpr extends ShimpleExpr
      * predecessor.  Returns false on failure.
      **/
     public boolean addArg(Value arg, Unit predTailUnit);
-        
+
     /**
      * Set the block number of the Phi node.
      **/
     public void setBlockId(int blockId);
-     
+
     /**
      * Returns the id number of the block from which the Phi node
      * originated from.

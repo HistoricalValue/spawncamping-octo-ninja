@@ -28,7 +28,7 @@ public class DThisRef extends ThisRef
     {
 	super( thisType);
     }
-    
+
     public String toString()
     {
         return "this: "+ getType();

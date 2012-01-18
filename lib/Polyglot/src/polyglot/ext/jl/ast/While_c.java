@@ -10,7 +10,7 @@ import java.util.*;
  * An immutable representation of a Java language <code>while</code>
  * statement.  It contains a statement to be executed and an expression
  * to be tested indicating whether to reexecute the statement.
- */ 
+ */
 public class While_c extends Loop_c implements While
 {
     protected Expr cond;
@@ -68,13 +68,13 @@ public class While_c extends Loop_c implements While
     /** Type check the statement. */
     public Node typeCheck(TypeChecker tc) throws SemanticException {
 	TypeSystem ts = tc.typeSystem();
-	
+
 	if (! ts.equals(cond.type(), ts.Boolean())) {
 	    throw new SemanticException(
 		"Condition of while statement must have boolean type.",
 		cond.position());
 	}
-	
+
 	return this;
     }
 
@@ -109,7 +109,7 @@ public class While_c extends Loop_c implements While
             v.visitCFG(cond, body.entry());
         }
         else {
-            v.visitCFG(cond, FlowGraph.EDGE_KEY_TRUE, body.entry(), 
+            v.visitCFG(cond, FlowGraph.EDGE_KEY_TRUE, body.entry(),
                              FlowGraph.EDGE_KEY_FALSE, this);
         }
 

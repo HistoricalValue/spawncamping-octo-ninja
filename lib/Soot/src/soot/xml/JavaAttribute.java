@@ -31,10 +31,10 @@ public class JavaAttribute {
     private ArrayList<Tag> tags;
     private ArrayList<PosColorAttribute> vbAttrs;
     public PrintWriter writerOut;
-    
+
     public JavaAttribute(){
     }
-    
+
     public int startLn(){
         return startLn;
     }
@@ -52,7 +52,7 @@ public class JavaAttribute {
     public ArrayList<PosColorAttribute> vbAttrs(){
         return vbAttrs;
     }
-    
+
     public void addTag(Tag t){
         if (tags == null){
             tags = new ArrayList<Tag>();
@@ -84,7 +84,7 @@ public class JavaAttribute {
         }
         return false;
     }
-	
+
     private void printAttributeTag(Tag t) {
 		if (t instanceof LineNumberTag) {
             int lnNum = (new Integer(((LineNumberTag)t).toString())).intValue();
@@ -95,7 +95,7 @@ public class JavaAttribute {
 			printJimpleLnAttr(jlnTag.getStartLineNumber(), jlnTag.getEndLineNumber());
 		}
 		/*else if (t instanceof SourceLineNumberTag) {
-            SourceLineNumberTag jlnTag = (SourceLineNumberTag)t; 
+            SourceLineNumberTag jlnTag = (SourceLineNumberTag)t;
 			printJavaLnAttr(jlnTag.getStartLineNumber(), jlnTag.getEndLineNumber());
 		}*/
 		else if (t instanceof LinkTag) {
@@ -123,7 +123,7 @@ public class JavaAttribute {
 			printTextAttr(t.toString());
 		}
     }
-	
+
     private void printJavaLnAttr(int start_ln, int end_ln){
 		writerOut.println("<javaStartLn>"+start_ln+"</javaStartLn>");
 		writerOut.println("<javaEndLn>"+end_ln+"</javaEndLn>");
@@ -138,7 +138,7 @@ public class JavaAttribute {
 	private void printTextAttr(String text){
 		writerOut.println("<text>"+text+"</text>");
 	}
-	
+
 	private void printLinkAttr(String label, int jimpleLink, int javaLink, String className){
 		writerOut.println("<link_attribute>");
 		writerOut.println("<link_label>"+label+"</link_label>");
@@ -147,7 +147,7 @@ public class JavaAttribute {
 		writerOut.println("<className>"+className+"</className>");
 		writerOut.println("</link_attribute>");
 	}
-    
+
 	private void startPrintValBoxAttr(){
 		writerOut.println("<value_box_attribute>");
 	}
@@ -156,12 +156,12 @@ public class JavaAttribute {
 		writerOut.println("<javaStartPos>"+start+"</javaStartPos>");
 		writerOut.println("<javaEndPos>"+end+"</javaEndPos>");
 	}
-    
+
 	private void printJimplePositionAttr(int start, int end){
 		writerOut.println("<jimpleStartPos>"+start+"</jimpleStartPos>");
 		writerOut.println("<jimpleEndPos>"+end+"</jimpleEndPos>");
 	}
-	
+
 	private void printColorAttr(int r, int g, int b, boolean fg){
 		writerOut.println("<red>"+r+"</red>");
 		writerOut.println("<green>"+g+"</green>");
@@ -170,10 +170,10 @@ public class JavaAttribute {
 		    writerOut.println("<fg>1</fg>");
         }
         else {
-		    writerOut.println("<fg>0</fg>");    
+		    writerOut.println("<fg>0</fg>");
         }
 	}
-	
+
     private void endPrintValBoxAttr(){
 		writerOut.println("</value_box_attribute>");
 	}
@@ -210,14 +210,14 @@ public class JavaAttribute {
             printAttributeTag(it.next());
         }
     }
-    
+
     private String  formatForXML(String in) {
         in = StringTools.replaceAll(in, "<", "&lt;");
         in = StringTools.replaceAll(in, ">", "&gt;");
         in = StringTools.replaceAll(in, "&", "&amp;");
         return in;
     }
-	
+
     private int getJavaLnOfHost(Host h){
 		Iterator it = h.getTags().iterator();
 		while (it.hasNext()){
@@ -233,7 +233,7 @@ public class JavaAttribute {
 		}
 		return 0;
 	}
-	
+
 	private int getJimpleLnOfHost(Host h){
 		Iterator it = h.getTags().iterator();
 		while (it.hasNext()){
@@ -243,5 +243,5 @@ public class JavaAttribute {
 			}
 		}
 		return 0;
-    }    
-}   
+    }
+}

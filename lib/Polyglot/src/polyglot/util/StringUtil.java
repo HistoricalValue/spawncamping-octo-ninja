@@ -12,7 +12,7 @@ public class StringUtil
 	int lastDot = fullName.lastIndexOf('.');
 	return lastDot >= 0 ? fullName.substring(0,lastDot) : "";
     }
-   
+
     /**
      * Given the name for a class, returns the portion which appears to
      * constitute the package -- i.e., all characters after the last
@@ -40,7 +40,7 @@ public class StringUtil
 	int firstDot = fullName.indexOf('.');
 	return firstDot >= 0 ? fullName.substring(firstDot+1) : "";
     }
- 
+
     public static String escape(String s) {
         return escape(s, false);
     }
@@ -101,17 +101,17 @@ public class StringUtil
                        + (char) ('0' + (c & 63) / 8)
                        + (char) ('0' + (c & 7)));
     }
-    
+
     public static String nth(int n) {
         StringBuffer s = new StringBuffer(String.valueOf(n));
         if (s.length() > 1) {
             if (s.charAt(s.length()-2) == '1') {
                 // all the teens end in "th", e.g. "11th"
                 s.append("th");
-                return s.toString();                
-            }            
+                return s.toString();
+            }
         }
-        
+
         char last = s.charAt(s.length()-1);
         switch (last) {
             case '1':
@@ -125,7 +125,7 @@ public class StringUtil
                 break;
             default:
                 s.append("th");
-                            
+
         }
         return s.toString();
     }

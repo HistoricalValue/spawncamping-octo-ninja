@@ -58,12 +58,12 @@ public class CanonicalTypeNode_c extends TypeNode_c implements CanonicalTypeNode
       //   java.lang.Object foo;
       //   foo.package.Bar = new foo.package.Bar();
       //   ...
-      // 
+      //
       // But, the user asked for fully qualified names, so that's what they
       // get.
       w.write(type.translate(null));
     }
-    else { 
+    else {
       w.write(type.translate(tr.context()));
     }
   }

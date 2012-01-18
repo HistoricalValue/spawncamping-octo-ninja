@@ -51,7 +51,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 	super(verbose);
     }
 
-    
+
     public void caseASTStatementSequenceNode(ASTStatementSequenceNode node){
     }
 
@@ -78,7 +78,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 	Iterator<Object> sbit = node.get_SubBodies().iterator();
 
 	//onlyASTIfElseNode has 2 subBodies but we need to deal with that
-	int subBodyNumber=0; 
+	int subBodyNumber=0;
 	while (sbit.hasNext()) {
 	    Object subBody = sbit.next();
 	    Iterator it = ((List) subBody).iterator();
@@ -90,7 +90,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 
 		if(temp instanceof ASTWhileNode || temp instanceof ASTUnconditionalLoopNode ||
 		   temp instanceof ASTDoWhileNode){
-		    
+
 		    ASTNode oneNode=getOnlySubNode(temp);
 		    if(oneNode !=null){
 			List<ASTNode> newNode=null;
@@ -100,7 +100,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 			else if (oneNode instanceof ASTIfElseNode){
 			    newNode=StrengthenByIfElse.getNewNode(temp,(ASTIfElseNode)oneNode);
 			}
-			
+
 			if(newNode!=null){
 			    //some pattern was matched
 			    //replace the temp node with the newNode
@@ -109,7 +109,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 			}
 		    }
 		}
-		
+
 		temp.apply(this);
 		nodeNumber++;
 	    }
@@ -120,7 +120,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
     public void caseASTTryNode(ASTTryNode node){
 	inASTTryNode(node);
 
-	//get try body 
+	//get try body
 	List<Object> tryBody = node.get_TryBody();
 	Iterator<Object> it = tryBody.iterator();
 
@@ -130,7 +130,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 	    ASTNode temp = (ASTNode) it.next();
 	    if(temp instanceof ASTWhileNode || temp instanceof ASTUnconditionalLoopNode ||
 	       temp instanceof ASTDoWhileNode){
-		    
+
 		ASTNode oneNode=getOnlySubNode(temp);
 		if(oneNode !=null){
 		    List<ASTNode> newNode=null;
@@ -140,7 +140,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 		    else if (oneNode instanceof ASTIfElseNode){
 			newNode=StrengthenByIfElse.getNewNode(temp,(ASTIfElseNode)oneNode);
 		    }
-		    
+
 		    if(newNode!=null){
 			//some pattern was matched
 			//replace the temp node with the newNode
@@ -174,10 +174,10 @@ public class LoopStrengthener extends DepthFirstAdapter{
         it = catchList.iterator();
 	while (it.hasNext()) {
 	    ASTTryNode.container catchBody = (ASTTryNode.container)it.next();
-	    
+
 	    SootClass sootClass = ((SootClass)exceptionMap.get(catchBody));
 	    Type type = sootClass.getType();
-	    
+
 	    //apply on type of exception
 	    caseType(type);
 
@@ -195,7 +195,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 		ASTNode temp = (ASTNode) itBody.next();
 		if(temp instanceof ASTWhileNode || temp instanceof ASTUnconditionalLoopNode ||
 		   temp instanceof ASTDoWhileNode){
-		    
+
 		    ASTNode oneNode=getOnlySubNode(temp);
 		    if(oneNode !=null){
 			List<ASTNode> newNode=null;
@@ -205,11 +205,11 @@ public class LoopStrengthener extends DepthFirstAdapter{
 			else if (oneNode instanceof ASTIfElseNode){
 			    newNode=StrengthenByIfElse.getNewNode(temp,(ASTIfElseNode)oneNode);
 			}
-			
+
 			if(newNode!=null){
 			    //some pattern was matched
 			    //replace the temp node with the newNode
-			    
+
 			    List<Object> newBody=createNewSubBody(body,nodeNumber,temp,newNode);
 			    if(newBody!=null){
 				//something did not go wrong
@@ -225,7 +225,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 		nodeNumber++;
 	    }
 	}
-	
+
 	outASTTryNode(node);
     }
 
@@ -240,9 +240,9 @@ public class LoopStrengthener extends DepthFirstAdapter{
 	while (it.hasNext()) {//going through all the cases of the switch statement
 	    Object currentIndex = it.next();
 	    List<Object> body = index2BodyList.get( currentIndex);
-	    
+
 	    if (body != null){
-		//this body is a list of ASTNodes 
+		//this body is a list of ASTNodes
 
 		Iterator<Object> itBody = body.iterator();
 		int nodeNumber=0;
@@ -251,7 +251,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 		    ASTNode temp = (ASTNode) itBody.next();
 		    if(temp instanceof ASTWhileNode || temp instanceof ASTUnconditionalLoopNode ||
 		       temp instanceof ASTDoWhileNode){
-		    
+
 			ASTNode oneNode=getOnlySubNode(temp);
 			if(oneNode !=null){
 			    List<ASTNode> newNode=null;
@@ -261,11 +261,11 @@ public class LoopStrengthener extends DepthFirstAdapter{
 			    else if (oneNode instanceof ASTIfElseNode){
 				newNode=StrengthenByIfElse.getNewNode(temp,(ASTIfElseNode)oneNode);
 			    }
-			    
+
 			    if(newNode!=null){
 				//some pattern was matched
 				//replace the temp node with the newNode
-				
+
 				List<Object> newBody=createNewSubBody(body,nodeNumber,temp,newNode);
 				if(newBody!=null){
 				    //something did not go wrong put this body in the Map
@@ -300,7 +300,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
       it returns the only node in the only SubBody
     */
     private ASTNode getOnlySubNode(ASTNode node){
-	if(!(node instanceof ASTWhileNode || node instanceof ASTDoWhileNode || 
+	if(!(node instanceof ASTWhileNode || node instanceof ASTDoWhileNode ||
 	     node instanceof ASTUnconditionalLoopNode)){
 	    //not one of these loops
 	    return null;
@@ -331,7 +331,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 
 
     /*
-      - Go through the node bodies till you find subBodyNumber 
+      - Go through the node bodies till you find subBodyNumber
       - Go through this subBody until you find nodeNumber
       - This is the temp node Replace it with the newNodes
 
@@ -351,7 +351,7 @@ public class LoopStrengthener extends DepthFirstAdapter{
 	    List<Object> onlySubBody = (List<Object>)subBodies.get(0);
 
 	    /*
-	      The onlySubBody contains the loopNode to be replaced 
+	      The onlySubBody contains the loopNode to be replaced
 	      at location given by the nodeNumber variable
 	    */
 	    List<Object> newBody = createNewSubBody(onlySubBody,nodeNumber,loopNode,newNode);
@@ -449,14 +449,14 @@ public class LoopStrengthener extends DepthFirstAdapter{
 
 
 
-	
+
     public static List<Object> createNewSubBody(List<Object> oldSubBody,int nodeNumber,ASTNode oldNode,List<ASTNode> newNode){
 	//create a new SubBody
 	List<Object> newSubBody = new ArrayList<Object>();
-	
+
 	//this is an iterator of ASTNodes
 	Iterator<Object> it = oldSubBody.iterator();
-	
+
 	//copy to newSubBody all nodes until you get to nodeNumber
 	int index=0;
 	while(index!=nodeNumber ){
@@ -487,5 +487,5 @@ public class LoopStrengthener extends DepthFirstAdapter{
 	//newSubBody is ready return it
 	return newSubBody;
     }
-	 
+
 }

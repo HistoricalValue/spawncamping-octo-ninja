@@ -54,14 +54,14 @@ public class AmbExpr_c extends Expr_c implements AmbExpr
     throw new InternalCompilerError(position(),
                                     "Cannot type check ambiguous node "
                                     + this + ".");
-  } 
+  }
 
   /** Check exceptions thrown by the expression. */
   public Node exceptionCheck(ExceptionChecker ec) throws SemanticException {
     throw new InternalCompilerError(position(),
                                     "Cannot exception check ambiguous node "
                                     + this + ".");
-  } 
+  }
 
   /** Write the expression to an output file. */
   public void prettyPrint(CodeWriter w, PrettyPrinter tr) {

@@ -30,7 +30,7 @@ public class FlowInfo {
         unit(unit);
         setBefore(b);
     }
-    
+
     public Object unit(){
         return unit;
     }
@@ -38,7 +38,7 @@ public class FlowInfo {
     public void unit(Object u){
         unit = u;
     }
-    
+
     public Object info(){
         return info;
     }

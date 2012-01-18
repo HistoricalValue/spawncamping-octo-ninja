@@ -26,10 +26,10 @@ import soot.options.*;
 import soot.jimple.toolkits.pointer.*;
 import soot.jimple.toolkits.scalar.*;
 
-/** A body transformer that records avail expression 
+/** A body transformer that records avail expression
  * information in tags.  - both pessimistic and optimistic options*/
 public class AvailExprTagger extends BodyTransformer
-{ 
+{
 	public AvailExprTagger( Singletons.Global g ) {}
     public static AvailExprTagger v() { return G.v().soot_jimple_toolkits_annotation_AvailExprTagger(); }
 
@@ -41,18 +41,18 @@ public class AvailExprTagger extends BodyTransformer
         if( Scene.v().hasCallGraph()
             && !PhaseOptions.getBoolean( opts, "naive-side-effect" ) ) {
             sideEffect = new PASideEffectTester();
-        } 
+        }
         else {
             sideEffect = new NaiveSideEffectTester();
         }
         sideEffect.newMethod( b.getMethod() );
-                                
+
         AETOptions options = new AETOptions(opts);
         if (options.kind() == AETOptions.kind_optimistic){
-            new SlowAvailableExpressionsAnalysis(new ExceptionalUnitGraph(b)); 
+            new SlowAvailableExpressionsAnalysis(new ExceptionalUnitGraph(b));
         }
         else {
-            new PessimisticAvailableExpressionsAnalysis(new ExceptionalUnitGraph(b), b.getMethod(), sideEffect); 
+            new PessimisticAvailableExpressionsAnalysis(new ExceptionalUnitGraph(b), b.getMethod(), sideEffect);
         }
     }
 }

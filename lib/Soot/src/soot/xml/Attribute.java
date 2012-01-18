@@ -25,7 +25,7 @@ import soot.tagkit.*;
 import soot.util.*;
 
 public class Attribute {
-    
+
     //private ColorAttribute color;
     private ArrayList<ColorAttribute> colors;
     private int jimpleStartPos;
@@ -71,7 +71,7 @@ public class Attribute {
     public void jimpleEndPos(int x){
         jimpleEndPos = x;
     }
-    
+
     public int javaStartPos(){
         return javaStartPos;
     }
@@ -87,7 +87,7 @@ public class Attribute {
     public void javaEndPos(int x){
         javaEndPos = x;
     }
-    
+
     public int jimpleStartLn(){
         return jimpleStartLn;
     }
@@ -103,7 +103,7 @@ public class Attribute {
     public void jimpleEndLn(int x){
         jimpleEndLn = x;
     }
-    
+
     public int javaStartLn(){
         return javaStartLn;
     }
@@ -154,7 +154,7 @@ public class Attribute {
             jimpleEndLn(jlnTag.getEndLineNumber());
 		}
 		else if (t instanceof SourceLnPosTag) {
-            SourceLnPosTag jlnTag = (SourceLnPosTag)t; 
+            SourceLnPosTag jlnTag = (SourceLnPosTag)t;
             javaStartLn(jlnTag.startLn());
             javaEndLn(jlnTag.endLn());
             javaStartPos(jlnTag.startPos());
@@ -192,9 +192,9 @@ public class Attribute {
             StringAttribute sa = new StringAttribute(t.toString(), t.getName());
             addText(sa);
 		}
-        
+
     }
-	
+
     private String  formatForXML(String in) {
 		in = StringTools.replaceAll(in, "<", "&lt;");
 		in = StringTools.replaceAll(in, ">", "&gt;");
@@ -202,7 +202,7 @@ public class Attribute {
         in = StringTools.replaceAll(in, "\"", "&quot;");
 		return in;
 	}
-	
+
     private int getJavaLnOfHost(Host h){
 		Iterator it = h.getTags().iterator();
 		while (it.hasNext()){
@@ -216,7 +216,7 @@ public class Attribute {
 		}
 		return 0;
 	}
-	
+
 	private int getJimpleLnOfHost(Host h){
 		Iterator it = h.getTags().iterator();
 		while (it.hasNext()){
@@ -229,7 +229,7 @@ public class Attribute {
 	}
 
     public String toString(){
-        StringBuffer sb = new StringBuffer();    
+        StringBuffer sb = new StringBuffer();
         sb.append("<srcPos sline=\""+javaStartLn()+"\" eline=\""+javaEndLn()+"\" spos=\""+javaStartPos()+"\" epos=\""+javaEndPos()+"\"/>");
         sb.append("<jmpPos sline=\""+jimpleStartLn()+"\" eline=\""+jimpleEndLn()+"\" spos=\""+jimpleStartPos()+"\" epos=\""+jimpleEndPos()+"\"/>");
         return sb.toString();

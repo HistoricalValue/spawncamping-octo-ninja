@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class SemanticException extends Exception {
     protected Position position;
-    
+
     public SemanticException() {
         super();
         trace(this, 5);

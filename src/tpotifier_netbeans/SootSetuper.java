@@ -19,7 +19,7 @@ public class SootSetuper {
     private boolean WithClassOutput                 = !false; public void SetWithClassOutput                (final boolean set) { WithClassOutput                   = set; }
     private boolean WithDavaOutput                  = false;  public void SetWithDavaOutput                 (final boolean set) { WithDavaOutput                    = set; }
     //
-    
+
     private SootSetuperInitialisation initialisation;
     //
     private void init (final TPOJimpleBodyTransformerOptions _tpoJimpleBodyTransformerOptions) {
@@ -60,7 +60,7 @@ public class SootSetuper {
             mainClass                       = _mainClass;
             classToAnalyse                  = _classToAnalyse;
         }
-        
+
         final TPOJimpleBodyTransformerOptions tpoJimpleBodyTransformerOptions;
         final String                          mainClass;
         final String                          classToAnalyse;
@@ -72,7 +72,7 @@ public class SootSetuper {
 //            LOG.log(Level.INFO, "starting thread {0}", this);
             super.start();
         }
-        
+
         protected final MainArguments args;
         protected SootStarter (final MainArguments _args) { args = _args; }
     }

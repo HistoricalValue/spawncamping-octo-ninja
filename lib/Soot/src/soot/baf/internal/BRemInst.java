@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,7 +40,7 @@ public class BRemInst extends AbstractOpTypeInst implements RemInst
         super(opType);
     }
 
-    
+
     public int getInCount()
     {
         return 2;
@@ -50,17 +50,17 @@ public class BRemInst extends AbstractOpTypeInst implements RemInst
 
 
 
-    public Object clone() 
+    public Object clone()
     {
         return new  BRemInst(getOpType());
     }
 
-    
+
     public int getInMachineCount()
     {
         return 2 * AbstractJasminClass.sizeOfType(getOpType());
     }
-    
+
     public int getOutCount()
     {
         return 1;

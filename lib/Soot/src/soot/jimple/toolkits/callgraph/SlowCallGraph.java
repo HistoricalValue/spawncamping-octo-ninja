@@ -29,7 +29,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public class SlowCallGraph extends CallGraph
-{ 
+{
     private final Set<Edge> edges = new HashSet<Edge>();
     private final MultiMap srcMap = new HashMultiMap();
     private final MultiMap unitMap = new HashMultiMap();

@@ -19,15 +19,15 @@ import soot.jimple.Stmt;
 import soot.jimple.internal.ImmediateBox;
 
 public class ShortcutIfGenerator extends DepthFirstAdapter {
-	
+
 	public ShortcutIfGenerator(){
-		
+
 	}
-	
+
 	public ShortcutIfGenerator(boolean verbose){
 		super(verbose);
 	}
-	
+
 	public void inASTStatementSequenceNode(ASTStatementSequenceNode node){
 		List<Object> stmts = node.getStatements();
 		Iterator<Object> stmtIt = stmts.iterator();
@@ -36,22 +36,22 @@ public class ShortcutIfGenerator extends DepthFirstAdapter {
 			Stmt s = as.get_Stmt();
 			if(! (s instanceof DefinitionStmt))
 				continue;
-			
+
 			DefinitionStmt ds = (DefinitionStmt)s;
 			ValueBox rightBox = ds.getRightOpBox();
-				
+
 			Value right = rightBox.getValue();
-				
+
 			/*
 			 * Going to match int i = (int) z where z is a boolean
 			 * or int i= z i.e. without the cast
 			 */
-			
+
 			//right type should contain the expected type on the left
 			//in the case of the cast this is the cast type else just get the left type
 			Type rightType=null;
 			ValueBox OpBox = null;
-				
+
 			if(right instanceof CastExpr){
 				rightType = ((CastExpr)right).getCastType();
 				OpBox = ((CastExpr)right).getOpBox();
@@ -60,11 +60,11 @@ public class ShortcutIfGenerator extends DepthFirstAdapter {
 				rightType = ds.getLeftOp().getType();
 				OpBox = rightBox;
 			}
-				
+
 			if(! (rightType instanceof IntType )){
 				continue;
-			}				
-				
+			}
+
 			Value Op = OpBox.getValue();
 			if(! (Op.getType() instanceof BooleanType)){
 				continue;
@@ -73,12 +73,12 @@ public class ShortcutIfGenerator extends DepthFirstAdapter {
 			//ready for the switch
 			ImmediateBox trueBox = new ImmediateBox(IntConstant.v(1));
 			ImmediateBox falseBox = new ImmediateBox(IntConstant.v(0));
-				
+
 			DShortcutIf shortcut = new DShortcutIf(OpBox,trueBox,falseBox);
 			if(DEBUG)
 				System.out.println("created: "+shortcut);
 			rightBox.setValue(shortcut);
 		}
-		
+
 	}
 }

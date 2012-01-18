@@ -27,7 +27,7 @@ import soot.util.*;
  * @author Ondrej Lhotak
  */
 public class VirtualCallSite
-{ 
+{
     private InstanceInvokeExpr iie;
     private Stmt stmt;
     private SootMethod container;

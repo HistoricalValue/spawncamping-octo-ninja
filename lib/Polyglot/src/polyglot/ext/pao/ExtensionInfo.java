@@ -18,11 +18,11 @@ import polyglot.util.ErrorQueue;
  * Extension information for the PAO extension. This class specifies the
  * appropriate parser, <code>NodeFactory</code> and <code>TypeSystem</code>
  * to use, as well as inserting a new pass: <code>PaoBoxer</code>.
- * 
+ *
  * @see polyglot.ext.pao.visit.PaoBoxer
- * @see polyglot.ext.pao.ast.PaoNodeFactory_c 
- * @see polyglot.ext.pao.types.PaoTypeSystem 
- * @see polyglot.ext.pao.types.PaoTypeSystem_c 
+ * @see polyglot.ext.pao.ast.PaoNodeFactory_c
+ * @see polyglot.ext.pao.types.PaoTypeSystem
+ * @see polyglot.ext.pao.types.PaoTypeSystem_c
  */
 public class ExtensionInfo extends polyglot.ext.jl.ExtensionInfo {
     public String defaultFileExtension() {
@@ -58,6 +58,6 @@ public class ExtensionInfo extends polyglot.ext.jl.ExtensionInfo {
 
     static {
         // Make sure the class Topics is loaded.
-        new Topics(); 
+        new Topics();
     }
 }

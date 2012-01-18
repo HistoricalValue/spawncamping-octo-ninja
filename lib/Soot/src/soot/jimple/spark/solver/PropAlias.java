@@ -88,11 +88,11 @@ public final class PropAlias extends Propagator {
                             aliasEdges.put( dstFr, srcFr );
                             fieldRefWorkList.add( srcFr );
                             fieldRefWorkList.add( dstFr );
-                            if( makeP2Set( dstFr ).addAll( 
+                            if( makeP2Set( dstFr ).addAll(
                                     srcFr.getP2Set().getOldSet(), null ) ) {
                                 outFieldRefWorkList.add( dstFr );
                             }
-                            if( makeP2Set( srcFr ).addAll( 
+                            if( makeP2Set( srcFr ).addAll(
                                     dstFr.getP2Set().getOldSet(), null ) ) {
                                 outFieldRefWorkList.add( srcFr );
                             }

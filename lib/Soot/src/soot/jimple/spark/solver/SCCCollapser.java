@@ -57,7 +57,7 @@ public class SCCCollapser {
         this.ignoreTypes = ignoreTypes;
         this.typeManager = pag.getTypeManager();
     }
-    
+
     /* End of public methods. */
     /* End of package methods. */
 

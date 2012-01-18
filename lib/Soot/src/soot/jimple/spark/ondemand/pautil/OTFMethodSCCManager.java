@@ -27,9 +27,9 @@ import soot.SootMethod;
 import soot.jimple.spark.ondemand.genericutil.DisjointSets;
 
 public final class OTFMethodSCCManager {
-	
+
 	private DisjointSets disj;
-	
+
 	public OTFMethodSCCManager() {
 		int size = Scene.v().getMethodNumberer().size();
 		disj = new DisjointSets(size + 1);
@@ -38,7 +38,7 @@ public final class OTFMethodSCCManager {
 	public boolean inSameSCC(SootMethod m1, SootMethod m2) {
 		return disj.find(m1.getNumber()) == disj.find(m2.getNumber());
 	}
-	
+
 	public void makeSameSCC(Set<SootMethod> methods) {
 		SootMethod prevMethod = null;
 		for (SootMethod method : methods) {

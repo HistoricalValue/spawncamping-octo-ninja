@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -129,7 +129,7 @@ public class XMLPrinter {
         String cleanMethodName = cleanMethod(body.getMethod().getName());
         Iterator unitIt = units.iterator();
         Unit currentStmt = null;
-        
+
         String currentLabel = "default";
         long statementCount = 0;
         long labelCount = 0;
@@ -210,11 +210,11 @@ public class XMLPrinter {
         while (unitIt.hasNext()) {
             currentStmt = (Unit) unitIt.next();
 
-            // new label								
+            // new label
             if (stmtToName.containsKey(currentStmt)) {
                 currentLabel = stmtToName.get(currentStmt).toString();
 
-                // fill in the stmt count for the previous label				
+                // fill in the stmt count for the previous label
                 //index = xmlLabels.indexOf( "%s" );
                 //if( index != -1 )
                 //	xmlLabels = xmlLabels.substring( 0, index ) + ( labelID ) + xmlLabels.substring( index + 2 );
@@ -233,7 +233,7 @@ public class XMLPrinter {
                     maxStmtCount = xmlLabel.stmtPercentage;
 
                 xmlLabelsList.addElement(xmlLabel);
-                //xmlLabel.clear();				                
+                //xmlLabel.clear();
 
                 xmlLabel =
                     new XMLLabel(labelCount, cleanMethodName, currentLabel);
@@ -266,7 +266,7 @@ public class XMLPrinter {
                         boolToString(currentStmt.branches()),
                         boolToString(currentStmt.fallsThrough())});
 
-            // uses for each statement            
+            // uses for each statement
             int j = 0;
             Iterator boxIt = currentStmt.getUseBoxes().iterator();
             while (boxIt.hasNext()) {
@@ -392,7 +392,7 @@ public class XMLPrinter {
             }
             */
 
-            // simple live locals            
+            // simple live locals
             List liveLocalsIn = sll.getLiveLocalsBefore(currentStmt);
             List liveLocalsOut = sll.getLiveLocalsAfter(currentStmt);
             XMLNode livevarsNode =
@@ -421,7 +421,7 @@ public class XMLPrinter {
                         cleanMethodName });
             }
 
-            // parameters            
+            // parameters
             for (int i = 0;
                 i < body.getMethod().getParameterTypes().size();
                 i++) {
@@ -434,7 +434,7 @@ public class XMLPrinter {
             String jimpleStr = up.toString().trim();
             if (currentStmt instanceof soot.jimple.IdentityStmt &&
 		jimpleStr.indexOf("@parameter") != -1) {
-                // this line is a use of a parameter                
+                // this line is a use of a parameter
                 String tempStr =
                     jimpleStr.substring(jimpleStr.indexOf("@parameter") + 10);
                 if (tempStr.indexOf(":") != -1)
@@ -492,12 +492,12 @@ public class XMLPrinter {
             sootparamNode.addAttribute("uses", tempVec.size() + "");
         }
 
-        /*		
+        /*
                 index = xmlLabels.indexOf( "%s" );
         if( index != -1 )
                     xmlLabels = xmlLabels.substring( 0, index ) + ( labelID ) + xmlLabels.substring( index + 2 );
         index = xmlLabels.indexOf( "%d" );
-        if( index != -1 )			
+        if( index != -1 )
                     xmlLabels = xmlLabels.substring( 0, index ) + new Float( ( new Float( labelID ).floatValue() / new Float( units.size() ).floatValue() ) * 100.0 ).intValue() + xmlLabels.substring( index + 2 );
         */
 
@@ -528,7 +528,7 @@ public class XMLPrinter {
             String local = cleanLocal((String) localData.toString());
             String localType = localData.getType().toString();
 
-            // collect the local types			
+            // collect the local types
             if (!localTypes.contains(localType)) {
                 localTypes.addElement(localType);
                 typedLocals.addElement(new Vector<XMLNode>());
@@ -557,7 +557,7 @@ public class XMLPrinter {
                 }
             }
 
-            // add all uses to this local			
+            // add all uses to this local
             for (int k = 0; k < useList.size(); k++) {
                 String query = useList.elementAt(k);
                 if (query.equalsIgnoreCase(local)) {
@@ -608,13 +608,13 @@ public class XMLPrinter {
             list.addElement(localNode);
             typedLocals.setElementAt(list, currentType);
 
-            // add local to locals node			
+            // add local to locals node
             localsNode.addChild((XMLNode) localNode.clone());
             j++;
 
         }
 
-        // add count to the locals node		
+        // add count to the locals node
         localsNode.addAttribute("count", locals.size() + "");
 
         // add types node to locals node, and each type with each local per type
@@ -641,7 +641,7 @@ public class XMLPrinter {
             }
         }
 
-        // add count attribute to labels node, and stmtcount, and stmtpercentage attributes to each label node		
+        // add count attribute to labels node, and stmtcount, and stmtpercentage attributes to each label node
         labelsNode.addAttribute("count", labelCount + "");
         XMLNode current = labelsNode.child;
         for (int i = 0; i < xmlLabelsList.size(); i++) {
@@ -662,7 +662,7 @@ public class XMLPrinter {
             }
         }
 
-        // Print out exceptions		
+        // Print out exceptions
         statementCount = 0;
         XMLNode exceptionsNode = methodNode.addChild("exceptions");
         Iterator trapIt = body.getTraps().iterator();
@@ -670,7 +670,7 @@ public class XMLPrinter {
             while (trapIt.hasNext()) {
                 Trap trap = (Trap) trapIt.next();
 
-                // catch java.io.IOException from label0 to label1 with label2;				
+                // catch java.io.IOException from label0 to label1 with label2;
                 XMLNode catchNode =
                     exceptionsNode.addChild(
                         "exception",

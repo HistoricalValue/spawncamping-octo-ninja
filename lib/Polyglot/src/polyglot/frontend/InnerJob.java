@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * An <code>InnerJob</code> encapsulates work done by the compiler for a
  * nested class. In general <code>InnerJob</code>s are transient, in that they
- * are not added to the worklist. An <code>InnerJob</code> will typically run 
+ * are not added to the worklist. An <code>InnerJob</code> will typically run
  * only a few passes at a time.
  */
 public class InnerJob extends Job
@@ -18,12 +18,12 @@ public class InnerJob extends Job
      * The job that this InnerJob was spawned by.
      */
     protected Job outer;
-    
+
     /**
      * The context in which this Job was spawned.
      */
     protected Context context;
-    
+
     /**
      * Only the passes between <code>begin</code> and <code>end</code> will
      * be performed.
@@ -35,8 +35,8 @@ public class InnerJob extends Job
      */
     protected Pass.ID end;
 
-    /** 
-     * Constructor 
+    /**
+     * Constructor
      */
     public InnerJob(ExtensionInfo lang, JobExt ext, Node ast, Context context,
                     Job outer, Pass.ID begin, Pass.ID end) {
@@ -57,15 +57,15 @@ public class InnerJob extends Job
     public String toString() {
       String name = "inner-job[" + begin + ".." + end + "](code=" +
           context.currentCode() + " class=" + context.currentClass() + ") [" + status() + "]";
-          
+
        return name + " (" +
-            (isRunning() ? "running " : "before ") + 
+            (isRunning() ? "running " : "before ") +
                         nextPass() + ")" + " <<< passes = " + passes + " >>>";
     }
 
     /**
      * The initial list of passes is the list that the language extension
-     * provides us with, limited to those between <code>begin</code> and 
+     * provides us with, limited to those between <code>begin</code> and
      * <code>end</code> inclusive.
      */
     public List getPasses() {

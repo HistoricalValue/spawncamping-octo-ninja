@@ -38,9 +38,9 @@ class TypeDumper {
 	this.compilerVersion = compilerVersion;
 	this.timestamp = new Date(timestamp.longValue());
     }
-    
+
     public static TypeDumper load(String name, TypeSystem ts)
-	throws ClassNotFoundException, NoSuchFieldException, 
+	throws ClassNotFoundException, NoSuchFieldException,
 	       java.io.IOException, SecurityException
     {
 	Class c = Class.forName(name);

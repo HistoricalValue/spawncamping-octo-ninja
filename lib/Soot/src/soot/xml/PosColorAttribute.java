@@ -20,7 +20,7 @@
 package soot.xml;
 
 public class PosColorAttribute{
-        
+
     private ColorAttribute color;
     private int jimpleStartPos;
     private int jimpleEndPos;
@@ -57,7 +57,7 @@ public class PosColorAttribute{
     public void jimpleEndPos(int x){
         jimpleEndPos = x;
     }
-    
+
     public int javaStartPos(){
         return javaStartPos;
     }
@@ -73,7 +73,7 @@ public class PosColorAttribute{
     public void javaEndPos(int x){
         javaEndPos = x;
     }
-    
+
     public int jimpleStartLn(){
         return jimpleStartLn;
     }
@@ -89,7 +89,7 @@ public class PosColorAttribute{
     public void jimpleEndLn(int x){
         jimpleEndLn = x;
     }
-    
+
     public int javaStartLn(){
         return javaStartLn;
     }

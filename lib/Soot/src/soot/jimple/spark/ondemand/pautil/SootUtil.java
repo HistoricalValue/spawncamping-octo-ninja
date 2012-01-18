@@ -66,9 +66,9 @@ import soot.util.queue.ChunkedQueue;
 
 /**
  * Utility methods for dealing with Soot.
- * 
+ *
  * @author manu_s
- * 
+ *
  */
 public class SootUtil {
 
@@ -100,7 +100,7 @@ public class SootUtil {
   }
 
   /**
-   * 
+   *
    * @param node
    * @return <code>true</code> if <code>node</code> represents the return
    *         value of a method; <code>false</code> otherwise
@@ -122,7 +122,7 @@ public class SootUtil {
   }
 
   /**
-   * 
+   *
    * @param node
    * @return <code>true</code> if <code>node</code> represents the this
    *         parameter of a method; <code>false</code> otherwise
@@ -462,7 +462,7 @@ public class SootUtil {
 
   /**
    * This method should be removed soon.
-   * 
+   *
    * @param qualifiedName
    * @return
    */

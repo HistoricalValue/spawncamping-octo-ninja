@@ -24,7 +24,7 @@ public class CofferMethodDecl_c extends MethodDecl_c implements CofferMethodDecl
 	super(pos, flags, returnType, name, formals, Collections.EMPTY_LIST, body);
 	this.entryKeys = entryKeys;
 	this.returnKeys = returnKeys;
-	this.throwConstraints = TypedList.copyAndCheck(throwConstraints, 
+	this.throwConstraints = TypedList.copyAndCheck(throwConstraints,
 		ThrowConstraintNode.class, true);
     }
 

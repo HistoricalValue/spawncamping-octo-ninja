@@ -41,12 +41,12 @@ public class Compiler
      *
      * @param extensionInfo the <code>ExtensionInfo</code> this compiler is for.
      */
-    public Compiler(ExtensionInfo extensionInfo) {    
-        this(extensionInfo, new StdErrorQueue(System.err, 
+    public Compiler(ExtensionInfo extensionInfo) {
+        this(extensionInfo, new StdErrorQueue(System.err,
                                               extensionInfo.getOptions().error_count,
                                               extensionInfo.compilerName()));
     }
-        
+
     /**
      * Initialize the compiler.
      *

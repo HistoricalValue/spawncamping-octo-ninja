@@ -5,8 +5,8 @@ package polyglot.types;
  *
  * Overview:
  *    A ClassResolver is responsible for taking in the name of a class and
- *    returning a ClassType corresponding to that name.  
- * 
+ *    returning a ClassType corresponding to that name.
+ *
  *    Differing concrete implementations of ClassResolver may obey
  *    slightly different contracts in terms of which names they
  *    accept; it is the responsibility of the user to make sure they

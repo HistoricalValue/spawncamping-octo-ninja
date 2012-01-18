@@ -30,7 +30,7 @@ public class AnonClassInitMethodSource extends soot.javaToJimple.PolyglotMethodS
     public boolean hasOuterRef(){
         return hasOuterRef;
     }
-    
+
     private boolean hasQualifier;
     public void hasQualifier(boolean b){
         hasQualifier = b;
@@ -38,8 +38,8 @@ public class AnonClassInitMethodSource extends soot.javaToJimple.PolyglotMethodS
     public boolean hasQualifier(){
         return hasQualifier;
     }
-    
-    
+
+
     private boolean inStaticMethod;
 
     public void inStaticMethod(boolean b){
@@ -48,7 +48,7 @@ public class AnonClassInitMethodSource extends soot.javaToJimple.PolyglotMethodS
     public boolean inStaticMethod(){
         return inStaticMethod;
     }
-    
+
 
     private boolean isSubType = false;
     public void isSubType(boolean b){
@@ -57,7 +57,7 @@ public class AnonClassInitMethodSource extends soot.javaToJimple.PolyglotMethodS
     public boolean isSubType(){
         return isSubType;
     }
-    
+
     private soot.Type superOuterType = null;
     private soot.Type thisOuterType = null;
 
@@ -82,7 +82,7 @@ public class AnonClassInitMethodSource extends soot.javaToJimple.PolyglotMethodS
     public polyglot.types.ClassType polyglotType() {
         return polyglotType;
     }
-    
+
     private polyglot.types.ClassType anonType;
     public void anonType(polyglot.types.ClassType type){
         anonType = type;
@@ -90,22 +90,22 @@ public class AnonClassInitMethodSource extends soot.javaToJimple.PolyglotMethodS
     public polyglot.types.ClassType anonType() {
         return anonType;
     }
-    
+
     public soot.Body getBody(soot.SootMethod sootMethod, String phaseName){
         AnonInitBodyBuilder aibb = new AnonInitBodyBuilder();
         soot.jimple.JimpleBody body = aibb.createBody(sootMethod);
-        
+
         PackManager.v().getPack("jj").apply(body);
-    
+
         return body;
     }
-    
+
     private soot.Type outerClassType;
 
     public soot.Type outerClassType(){
         return outerClassType;
     }
-    
+
     public void outerClassType(soot.Type type){
         outerClassType = type;
     }

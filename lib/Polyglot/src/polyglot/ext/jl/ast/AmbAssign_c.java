@@ -23,30 +23,30 @@ public class AmbAssign_c extends Assign_c implements AmbAssign
 
     return right().entry();
   }
-  
+
   protected void acceptCFGAssign(CFGBuilder v) {
       v.visitCFG(right(), this);
   }
-  
+
   protected void acceptCFGOpAssign(CFGBuilder v) {
       v.edge(left(), right().entry());
       v.visitCFG(right(), this);
   }
-  
+
   public Node disambiguate(AmbiguityRemover ar) throws SemanticException {
       Assign n = (Assign) super.disambiguate(ar);
-      
+
       if (n.left() instanceof Local) {
           return ar.nodeFactory().LocalAssign(n.position(), (Local)left(), operator(), right());
       }
       else if (n.left() instanceof Field) {
           return ar.nodeFactory().FieldAssign(n.position(), (Field)left(), operator(), right());
-      } 
+      }
       else if (n.left() instanceof ArrayAccess) {
           return ar.nodeFactory().ArrayAccessAssign(n.position(), (ArrayAccess)left(), operator(), right());
       }
 
       throw new SemanticException("Could not disambiguate left side of assignment!", n.position());
   }
-  
+
 }

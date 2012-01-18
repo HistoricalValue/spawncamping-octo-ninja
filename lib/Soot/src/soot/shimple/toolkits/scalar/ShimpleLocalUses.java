@@ -89,7 +89,7 @@ public class ShimpleLocalUses implements LocalUses
     /**
      * Returns all the uses of the given Local as a list of
      * UnitValueBoxPairs, each containing a Unit that uses the local
-     * and the corresponding ValueBox containing the Local.  
+     * and the corresponding ValueBox containing the Local.
      *
      * <p> This method is currently not required by the LocalUses
      * interface.
@@ -111,7 +111,7 @@ public class ShimpleLocalUses implements LocalUses
     public List getUsesOf(Unit unit)
     {
         List defBoxes = unit.getDefBoxes();
-        
+
         switch(defBoxes.size()){
         case 0:
             return Collections.EMPTY_LIST;

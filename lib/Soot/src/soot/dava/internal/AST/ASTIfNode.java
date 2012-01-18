@@ -41,7 +41,7 @@ public class ASTIfNode extends ASTControlFlowNode
 
     /*
       Nomair A. Naeem 17-FEB-05
-      Needed because of change of grammar of condition being stored as a ASTCondition rather 
+      Needed because of change of grammar of condition being stored as a ASTCondition rather
       than the ConditionExpr which was the case before
     */
     public ASTIfNode( SETNodeLabel label, ASTCondition condition, List<Object> body)
@@ -90,7 +90,7 @@ public class ASTIfNode extends ASTControlFlowNode
     }
 
 
-    public void toString(UnitPrinter up) 
+    public void toString(UnitPrinter up)
     {
         label_toString(up);
 
@@ -100,7 +100,7 @@ public class ASTIfNode extends ASTControlFlowNode
         condition.toString( up );
 	up.literal( ")");
         up.newline();
-	
+
         up.literal( "{" );
         up.newline();
 
@@ -114,14 +114,14 @@ public class ASTIfNode extends ASTControlFlowNode
     public String toString()
     {
 	StringBuffer b = new StringBuffer();
-	
+
 	b.append( label_toString());
 
 	b.append( "if (");
 	b.append( get_Condition().toString());
 	b.append( ")");
 	b.append( NEWLINE);
-	
+
 	b.append( "{");
 	b.append( NEWLINE);
 

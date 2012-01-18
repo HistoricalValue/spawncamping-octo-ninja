@@ -51,7 +51,7 @@ public final class Stack<T> implements Cloneable {
         elems[size] = obj_;
         size++;
     }
-    
+
     public void pushAll(Collection<T> c) {
     	for (T t : c) {
 			push(t);
@@ -69,15 +69,15 @@ public final class Stack<T> implements Cloneable {
     	if (size == 0) return null;
     	return elems[size - 1];
     }
-    
+
     public int size() {
     	return size;
     }
-    
+
     public boolean isEmpty() {
     	return size == 0;
     }
-    
+
     public void clear() {
     	size = 0;
     }
@@ -95,15 +95,15 @@ public final class Stack<T> implements Cloneable {
 			throw new InternalError();
 		}
     }
-    
+
     public Object get(int i) {
     	return elems[i];
     }
-    
+
     public boolean contains(Object o) {
         return Util.arrayContains(elems, o, size);
     }
-    
+
     /**
      * returns first index
      * @param o

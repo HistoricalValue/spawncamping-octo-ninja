@@ -11,12 +11,12 @@ public class EncapsulatedMethodAnalysis // extends ForwardFlowAnalysis
 {
 	boolean isMethodPure;
 	boolean isMethodConditionallyPure;
-	
+
 	public EncapsulatedMethodAnalysis(UnitGraph g)
-	{		
+	{
 		isMethodPure = true; // innocent until proven guilty :-)
 		isMethodConditionallyPure = true;
-		
+
 		// Check if accesses any static object
 		Iterator stmtIt = g.iterator();
 		while(stmtIt.hasNext())
@@ -25,7 +25,7 @@ public class EncapsulatedMethodAnalysis // extends ForwardFlowAnalysis
 			if(s.containsFieldRef())
 			{
 				FieldRef ref = s.getFieldRef();
-				if( (ref instanceof StaticFieldRef) && 
+				if( (ref instanceof StaticFieldRef) &&
 				    (Type.toMachineType(((StaticFieldRef) ref).getType()) instanceof RefLikeType) )
 				{
 					isMethodPure = false; // kills purity
@@ -34,7 +34,7 @@ public class EncapsulatedMethodAnalysis // extends ForwardFlowAnalysis
 				}
 			}
 		}
-		
+
 		// Check if takes any object parameters
 		Iterator paramTypesIt = g.getBody().getMethod().getParameterTypes().iterator();
 		while(paramTypesIt.hasNext())
@@ -46,21 +46,21 @@ public class EncapsulatedMethodAnalysis // extends ForwardFlowAnalysis
 				return;
 			}
 		}
-		
+
 		// If neither of the above, it may be object-pure
 		//   if this is an <init> function, it's definitely object-pure
 		//   if all called functions in the class may be object-pure, then they all are object-pure
-		
+
 		// This is conservative... many "may-be-pure" functions can be proven pure if we track what fields are object-pure
 		// Also, if we do this, we should be able to track what fields refer to object-local objects, which will allow
 		// lock assignment to work when inner objects are read/written (because they can be ignored for read/write sets).
 	}
-	
+
 	public boolean isPure()
 	{
 		return isMethodPure;
 	}
-	
+
 	public boolean isConditionallyPure()
 	{
 		return isMethodConditionallyPure;
@@ -71,7 +71,7 @@ public class EncapsulatedMethodAnalysis // extends ForwardFlowAnalysis
 		FlowSet inSet1 = (FlowSet) in1;
 		FlowSet inSet2 = (FlowSet) in2;
 		FlowSet outSet = (FlowSet) out;
-		
+
 		inSet1.intersection(inSet2, outSet);
 	}
 
@@ -80,28 +80,28 @@ public class EncapsulatedMethodAnalysis // extends ForwardFlowAnalysis
 		FlowSet in  = (FlowSet) inValue;
 		FlowSet out = (FlowSet) outValue;
 		Stmt stmt = (Stmt) unit;
-		
+
 		in.copy(out);
 	}
-	
+
 	protected void copy(Object source, Object dest)
 	{
-		
+
 		FlowSet sourceSet = (FlowSet) source;
 		FlowSet destSet   = (FlowSet) dest;
-		
-		sourceSet.copy(destSet);		
+
+		sourceSet.copy(destSet);
 	}
-	
+
 	protected Object entryInitialFlow()
 	{
 		return new ArraySparseSet();
 	}
-	
+
 	protected Object newInitialFlow()
 	{
 		return new ArraySparseSet();
-	}	
+	}
 //*/
 }
 

@@ -4,7 +4,7 @@ package java_cup;
 import java.util.Hashtable;
 import java.util.Enumeration;
 
-/** This class represents a set of symbols and provides a series of 
+/** This class represents a set of symbols and provides a series of
  *  set operations to manipulate them.
  *
  * @see     java_cup.symbol
@@ -20,7 +20,7 @@ public class symbol_set {
   /** Constructor for an empty set. */
   public symbol_set() { }
 
-  /** Constructor for cloning from another set. 
+  /** Constructor for cloning from another set.
    * @param other the set we are cloning from.
    */
   public symbol_set(symbol_set other) throws internal_error
@@ -33,7 +33,7 @@ public class symbol_set {
   /*--- (Access to) Instance Variables ------------------------*/
   /*-----------------------------------------------------------*/
 
-  /** A hash table to hold the set. Symbols are keyed using their name string. 
+  /** A hash table to hold the set. Symbols are keyed using their name string.
    */
   protected Hashtable _all = new Hashtable(11);
 
@@ -53,20 +53,20 @@ public class symbol_set {
    */
   protected void not_null(Object obj) throws internal_error
     {
-      if (obj == null) 
+      if (obj == null)
 	throw new internal_error("Null object used in set operation");
     }
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Determine if the set contains a particular symbol. 
+  /** Determine if the set contains a particular symbol.
    * @param sym the symbol we are looking for.
    */
   public boolean contains(symbol sym) {return _all.containsKey(sym.name());}
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Determine if this set is an (improper) subset of another. 
+  /** Determine if this set is an (improper) subset of another.
    * @param other the set we are testing against.
    */
   public boolean is_subset_of(symbol_set other) throws internal_error
@@ -84,7 +84,7 @@ public class symbol_set {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Determine if this set is an (improper) superset of another. 
+  /** Determine if this set is an (improper) superset of another.
    * @param other the set we are are testing against.
    */
   public boolean is_superset_of(symbol_set other) throws internal_error
@@ -95,7 +95,7 @@ public class symbol_set {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Add a single symbol to the set.  
+  /** Add a single symbol to the set.
    * @param sym the symbol we are adding.
    * @return true if this changes the set.
    */
@@ -103,7 +103,7 @@ public class symbol_set {
     {
       Object previous;
 
-      not_null(sym); 
+      not_null(sym);
 
       /* put the object in */
       previous = _all.put(sym.name(),sym);
@@ -114,20 +114,20 @@ public class symbol_set {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Remove a single symbol if it is in the set. 
+  /** Remove a single symbol if it is in the set.
    * @param sym the symbol we are removing.
    */
   public void remove(symbol sym) throws internal_error
     {
-      not_null(sym); 
+      not_null(sym);
       _all.remove(sym.name());
     }
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Add (union) in a complete set.  
+  /** Add (union) in a complete set.
    * @param other the set we are adding in.
-   * @return true if this changes the set. 
+   * @return true if this changes the set.
    */
   public boolean add(symbol_set other) throws internal_error
     {
@@ -144,7 +144,7 @@ public class symbol_set {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Remove (set subtract) a complete set. 
+  /** Remove (set subtract) a complete set.
    * @param other the set we are removing.
    */
   public void remove(symbol_set other) throws internal_error
@@ -159,7 +159,7 @@ public class symbol_set {
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** Equality comparison. */
-  public boolean equals(symbol_set other) 
+  public boolean equals(symbol_set other)
     {
       if (other == null || other.size() != size()) return false;
 

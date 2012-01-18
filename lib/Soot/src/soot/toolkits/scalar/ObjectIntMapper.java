@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ public class ObjectIntMapper<E> {
   private Vector<E> intToObjects;
   private int counter;
   private Map<E, Integer> objectToInts;
-  
+
   public ObjectIntMapper() {
     intToObjects = new Vector<E>();
     objectToInts = new HashMap<E, Integer>();

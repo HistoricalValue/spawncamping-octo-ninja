@@ -35,7 +35,7 @@ public class JavaLangReflectMethodNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -65,26 +65,26 @@ public class JavaLangReflectMethodNative extends NativeMethodClass {
    * value returned by the underlying method is automatically wrapped
    * in an object if it has a primitive type.
    *
-   * Method invocation proceeds with the following steps, in order: 
+   * Method invocation proceeds with the following steps, in order:
    *
    * If the underlying method is static, then the specified obj
-   * argument is ignored. It may be null.  
+   * argument is ignored. It may be null.
    *
    * NOTE: @this is an variable pointing to method objects,
    *       @param0 points to receivers
-   * 
-   *       The possible target of this call is made by 
+   *
+   *       The possible target of this call is made by
    *       [thisVar] X [param0]
-   * 
+   *
    *       Also the parameters are not distinguishable.
    *
-   * public native java.lang.Object invoke(java.lang.Object, 
-   *                                       java.lang.Object[]) 
-   *                    throws java.lang.IllegalAccessException, 
-   *                           java.lang.IllegalArgumentException, 
+   * public native java.lang.Object invoke(java.lang.Object,
+   *                                       java.lang.Object[])
+   *                    throws java.lang.IllegalAccessException,
+   *                           java.lang.IllegalArgumentException,
    *                           java.lang.reflect.InvocationTargetException
    */
-  public 
+  public
     void java_lang_reflect_Method_invoke(SootMethod method,
 					 ReferenceVariable thisVar,
 					 ReferenceVariable returnVar,

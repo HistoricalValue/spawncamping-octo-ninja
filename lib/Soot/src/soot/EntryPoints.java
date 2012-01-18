@@ -26,7 +26,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public class EntryPoints
-{ 
+{
     public EntryPoints( Singletons.Global g ) {}
     public static EntryPoints v() { return G.v().soot_EntryPoints(); }
 
@@ -114,7 +114,7 @@ public class EntryPoints
         }
         return ret;
     }
-    
+
     /** Returns a list of all constructors. */
     public List<SootMethod> allInits() {
         List<SootMethod> ret = new ArrayList<SootMethod>();

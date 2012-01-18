@@ -11,7 +11,7 @@ class OutputStream : public Object
 public:
 	OutputStream() { };
 
-	virtual void close() = 0; 
+	virtual void close() = 0;
 	virtual void flush() = 0;
 	virtual void write(jmatch_array<char> *b) = 0;
 	virtual void write(jmatch_array<char> *b, int off, int len) = 0;

@@ -26,7 +26,7 @@ public class HashSetMultiMap<K, V> extends AbstractMultiMap<K, V> {
 	public HashSetMultiMap() {
 		super(false);
 	}
-	
+
 	public HashSetMultiMap(boolean create) {
 		super(create);
 	}

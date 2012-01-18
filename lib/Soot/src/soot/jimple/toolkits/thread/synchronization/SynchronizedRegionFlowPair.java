@@ -11,13 +11,13 @@ class SynchronizedRegionFlowPair
 		this.tn = tn;
 		this.inside = inside;
 	}
-	
+
 	SynchronizedRegionFlowPair(SynchronizedRegionFlowPair tfp)
 	{
 		this.tn = tfp.tn;
 		this.inside = tfp.inside;
 	}
-	
+
 	public void copy(SynchronizedRegionFlowPair tfp)
 	{
 		tfp.tn = this.tn;
@@ -28,7 +28,7 @@ class SynchronizedRegionFlowPair
 	{
 		return new SynchronizedRegionFlowPair(tn, inside);
 	}
-	
+
     public boolean equals( Object other )
 	{
 //		G.v().out.print(".");
@@ -40,7 +40,7 @@ class SynchronizedRegionFlowPair
 		}
 		return false;
 	}
-	
+
 	public String toString()
 	{
 		return "[" + (inside ? "in," : "out,") + tn.toString() + "]";

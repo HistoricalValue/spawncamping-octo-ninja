@@ -163,7 +163,7 @@ public abstract class Assign_c extends Expr_c implements Assign
     throw new InternalCompilerError("Unrecognized assignment operator " +
                                     op + ".");
   }
-  
+
   public Type childExpectedType(Expr child, AscriptionVisitor av) {
       if (child == right) {
           TypeSystem ts = av.typeSystem();
@@ -215,10 +215,10 @@ public abstract class Assign_c extends Expr_c implements Assign
 
   public List acceptCFG(CFGBuilder v, List succs) {
       if (operator() == ASSIGN) {
-          acceptCFGAssign(v);          
+          acceptCFGAssign(v);
       }
       else {
-          acceptCFGOpAssign(v);                    
+          acceptCFGOpAssign(v);
       }
     return succs;
   }
@@ -232,7 +232,7 @@ public abstract class Assign_c extends Expr_c implements Assign
    * ###@@@DOCO TODO
    */
   protected abstract void acceptCFGOpAssign(CFGBuilder v);
-  
+
   public List throwTypes(TypeSystem ts) {
     List l = new LinkedList();
 

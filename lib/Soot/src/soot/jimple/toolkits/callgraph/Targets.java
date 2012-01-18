@@ -27,7 +27,7 @@ import soot.MethodOrMethodContext;
  * @author Ondrej Lhotak
  */
 public final class Targets implements Iterator<MethodOrMethodContext>
-{ 
+{
     Iterator<Edge> edges;
     public Targets( Iterator<Edge> edges ) {
         this.edges = edges;

@@ -23,7 +23,7 @@ package soot.dava;
 //import soot.util.*;
 //import soot.dava.toolkits.base.finders.*;
 
-public class CorruptASTException extends DecompilationException 
+public class CorruptASTException extends DecompilationException
 {
     public CorruptASTException(String message){
 	super();

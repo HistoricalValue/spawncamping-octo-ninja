@@ -77,7 +77,7 @@ public class ExtensionInfo extends polyglot.ext.jl.ExtensionInfo {
     public void sourceJobMap(HashMap<Source, Job> map){
         sourceJobMap = map;
     }
-    
+
     /**
      * Appends the soot classpath to the default system classpath.
      */
@@ -92,7 +92,7 @@ public class ExtensionInfo extends polyglot.ext.jl.ExtensionInfo {
 				cp += File.pathSeparator + soot.options.Options.v().soot_classpath();
 				return cp;
 			}
-    		
+
     	};
     }
 }

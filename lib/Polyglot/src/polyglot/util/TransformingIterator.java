@@ -12,7 +12,7 @@ import java.util.Collection;
  *
  * Overview:
  *     This is a swiss-army-knife of iterators.  It concatenates, maps, and
- *     filters.  
+ *     filters.
  *
  *     Does not support Remove.
  **/
@@ -34,7 +34,7 @@ public final class TransformingIterator implements Iterator {
     index = 0;
     backing_iterators = (Iterator[]) iters.clone();
     transformation = trans;
-    if (iters.length > 0) 
+    if (iters.length > 0)
       current_iter = iters[0];
     findNextItem();
   }
@@ -50,7 +50,7 @@ public final class TransformingIterator implements Iterator {
   public boolean hasNext() {
     return next_item != null;
   }
-  
+
   public void remove() {
     throw new UnsupportedOperationException("TransformingIterator.remove");
   }
@@ -59,8 +59,8 @@ public final class TransformingIterator implements Iterator {
   private void findNextItem() {
     while (current_iter != null) {
     inner_loop:
-      while (current_iter.hasNext()) {		
-	Object o = current_iter.next();	
+      while (current_iter.hasNext()) {
+	Object o = current_iter.next();
 	Object res = transformation.transform(o);
 	if (res == Transformation.NOTHING)
 	  continue inner_loop;
@@ -76,11 +76,11 @@ public final class TransformingIterator implements Iterator {
     }
     next_item = null;
   }
-  
+
   // AF:  if next_item==null, this iterator has no more elts to yield.
   //      otherwise, this iterator will yield next_item, followed by
   //      those elements e of backing_iterator[index] transformed by TRANS.
-  // RI: current_iter = backing_iterators[index], or null if no 
+  // RI: current_iter = backing_iterators[index], or null if no
   //     backing_iterator hasNext.
   Object next_item;
   Iterator current_iter;

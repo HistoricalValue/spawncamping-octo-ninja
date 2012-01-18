@@ -47,7 +47,7 @@ public class IncrementalTypesHeuristic implements FieldCheckHeuristic {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see AAA.algs.Heuristic#newQuery()
      */
     public boolean runNewPass() {
@@ -68,7 +68,7 @@ public class IncrementalTypesHeuristic implements FieldCheckHeuristic {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see AAA.algs.Heuristic#validateMatchesForField(soot.jimple.spark.pag.SparkField)
      */
     public boolean validateMatchesForField(SparkField field) {

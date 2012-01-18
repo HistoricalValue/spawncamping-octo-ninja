@@ -23,8 +23,8 @@ import soot.*;
 /** A context manager which creates a 1-CFA call graph.
  * @author Ondrej Lhotak
  */
-public class OneCFAContextManager implements ContextManager 
-{ 
+public class OneCFAContextManager implements ContextManager
+{
     private CallGraph cg;
 
     public OneCFAContextManager( CallGraph cg ) {

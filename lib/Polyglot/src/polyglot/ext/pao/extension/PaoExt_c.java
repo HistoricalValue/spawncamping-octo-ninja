@@ -12,7 +12,7 @@ public class PaoExt_c extends Ext_c implements PaoExt {
 	/**
 	 * Default implementation of <code>rewrite</code>, returns the node
 	 * unchanged.
-	 * 
+	 *
 	 * @see PaoExt#rewrite(PaoTypeSystem, NodeFactory)
 	 */
     public Node rewrite(PaoTypeSystem ts, NodeFactory nf) {

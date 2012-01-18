@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 2002-2003.  
+ * Modified by the Sable Research Group and others 2002-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -68,7 +68,7 @@ public class CFGViewer extends BodyTransformer {
   protected void internalTransform(Body b, String phaseName, Map options) {
     initialize(options);
     SootMethod meth = b.getMethod();
-    
+
     if ((methodsToPrint == null) ||
 	(meth.getDeclaringClass().getName() ==
 	 methodsToPrint.get(meth.getName()))) {
@@ -81,13 +81,13 @@ public class CFGViewer extends BodyTransformer {
   public static void main(String[] args) {
     CFGViewer viewer = new CFGViewer();
     Transform printTransform = new Transform(phaseFullname, viewer);
-    printTransform.setDeclaredOptions("enabled " + 
+    printTransform.setDeclaredOptions("enabled " +
 				      altClassPathOptionName + ' ' +
 				      graphTypeOptionName + ' ' +
 				      irOptionName + ' ' +
 				      multipageOptionName + ' ' +
 				      briefLabelOptionName + ' ');
-    printTransform.setDefaultOptions("enabled " + 
+    printTransform.setDefaultOptions("enabled " +
 				     altClassPathOptionName + ": " +
 				     graphTypeOptionName + ':' + defaultGraph +
 				     ' ' + irOptionName + ':' + defaultIR +
@@ -116,12 +116,12 @@ public class CFGViewer extends BodyTransformer {
 "                specifies the classpath from which to load classes\n" +
 "                that implement graph types whose names begin with 'Alt'.\n" +
 "       --graph={" +
-CFGGraphType.help(0, 70, 
+CFGGraphType.help(0, 70,
 "                ".length()) + "} :\n" +
 "                show the specified type of graph.\n" +
 "                Defaults to " + defaultGraph + ".\n" +
 "       --ir={" +
-CFGIntermediateRep.help(0, 70, 
+CFGIntermediateRep.help(0, 70,
 "                ".length()) + "} :\n" +
 "                create the CFG from the specified intermediate\n" +
 "                representation. Defaults to " + defaultIR + ".\n" +
@@ -195,7 +195,7 @@ CFGIntermediateRep.help(0, 70,
       } else {
 	int smpos = args[i].indexOf(':');
 	if (smpos == -1) {
-	  sootArgs.add(args[i]); 
+	  sootArgs.add(args[i]);
 	} else {
 	  String clsname  = args[i].substring(0, smpos);
 	  sootArgs.add(clsname);
@@ -251,10 +251,10 @@ CFGIntermediateRep.help(0, 70,
     if (filename.length() > 0) {
 	filename = filename + java.io.File.separator;
     }
-    filename = filename + 
-      methodname.replace(java.io.File.separatorChar, '.') + 
+    filename = filename +
+      methodname.replace(java.io.File.separatorChar, '.') +
       DotGraph.DOT_EXTENSION;
-    
+
     G.v().out.println("Generate dot file in "+filename);
     canvas.plot(filename);
   }

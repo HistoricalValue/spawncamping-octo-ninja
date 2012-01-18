@@ -52,7 +52,7 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
 	super(verbose);
     }
 
-    
+
     public void caseASTStatementSequenceNode(ASTStatementSequenceNode node){
     }
 
@@ -73,7 +73,7 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
 	Iterator<Object> sbit = node.get_SubBodies().iterator();
 
 	//onlyASTIfElseNode has 2 subBodies but we need to deal with that
-	int subBodyNumber=0; 
+	int subBodyNumber=0;
 	while (sbit.hasNext()) {
 	    List<Object> subBody = (List<Object>)sbit.next();
 	    Iterator<Object> it = subBody.iterator();
@@ -173,7 +173,7 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
 				    return;
 				}
 				else {
-				    throw new RuntimeException("Please report benchmark to programmer");   
+				    throw new RuntimeException("Please report benchmark to programmer");
 				}
 			    }
 			}//newBody was not null
@@ -189,7 +189,7 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
     public void caseASTTryNode(ASTTryNode node){
 	inASTTryNode(node);
 
-	//get try body 
+	//get try body
 	List<Object> tryBody = node.get_TryBody();
 	Iterator<Object> it = tryBody.iterator();
 
@@ -198,7 +198,7 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
 	while (it.hasNext()){
 	    ASTNode temp = (ASTNode) it.next();
 	    if(temp instanceof ASTIfElseNode){
-		    
+
 		IfElseBreaker breaker = new IfElseBreaker();
 		boolean success=false;
 		if(breaker.isIfElseBreakingPossiblePatternOne((ASTIfElseNode)temp)){
@@ -211,14 +211,14 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
 		    return;
 		if(success){
 		    List<Object> newBody = breaker.createNewBody(tryBody,nodeNumber);
-		    
+
 		    if(newBody!= null){
 			//something did not go wrong
 			node.replaceTryBody(newBody);
 			G.v().ASTTransformations_modified = true;
 			//System.out.println("BROKE IFELSE 10");
 			return;
-		    }//newBody was not null				
+		    }//newBody was not null
 		}
 	    }
 	    temp.apply(this);
@@ -239,10 +239,10 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
         it = catchList.iterator();
 	while (it.hasNext()) {
 	    ASTTryNode.container catchBody = (ASTTryNode.container)it.next();
-	    
+
 	    SootClass sootClass = ((SootClass)exceptionMap.get(catchBody));
 	    Type type = sootClass.getType();
-	    
+
 	    //apply on type of exception
 	    caseType(type);
 
@@ -271,21 +271,21 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
 			return;
 		    if(success){
 			List<Object> newBody = breaker.createNewBody(body,nodeNumber);
-			
+
 			if(newBody!= null){
 			    //something did not go wrong
 			    catchBody.replaceBody(newBody);
 			    G.v().ASTTransformations_modified = true;
 			    //System.out.println("BROKE IFELSE 11");
 			    return;
-			}//newBody was not null				
+			}//newBody was not null
 		    }
 		}
 		temp.apply(this);
 		nodeNumber++;
 	    }
 	}
-	
+
 	outASTTryNode(node);
     }
 
@@ -300,9 +300,9 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
 	while (it.hasNext()) {//going through all the cases of the switch statement
 	    Object currentIndex = it.next();
 	    List<Object> body = index2BodyList.get( currentIndex);
-	    
+
 	    if (body != null){
-		//this body is a list of ASTNodes 
+		//this body is a list of ASTNodes
 
 		Iterator<Object> itBody = body.iterator();
 		int nodeNumber=0;
@@ -322,7 +322,7 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
 			    return;
 			if(success){
 			    List<Object> newBody = breaker.createNewBody(body,nodeNumber);
-			    
+
 			    if(newBody!= null){
 				//put this body in the Map
 				index2BodyList.put(currentIndex,newBody);
@@ -331,7 +331,7 @@ public class ASTCleanerTwo extends DepthFirstAdapter{
 				G.v().ASTTransformations_modified = true;
 				//System.out.println("BROKE IFELSE 12");
 				return;
-			    }//newBody was not null				
+			    }//newBody was not null
 			}
 		    }
 		    temp.apply(this);

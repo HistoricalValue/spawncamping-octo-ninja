@@ -18,8 +18,8 @@
  */
 
 /**
- * NativeMethodClass defines side-effect simulation of native methods 
- * in a class. 
+ * NativeMethodClass defines side-effect simulation of native methods
+ * in a class.
  */
 package soot.jimple.toolkits.pointer.nativemethods;
 
@@ -53,5 +53,5 @@ public abstract class NativeMethodClass {
 				      ReferenceVariable returnVar,
 				      ReferenceVariable params[]);
 
-  
+
 }

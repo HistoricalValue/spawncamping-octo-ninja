@@ -100,9 +100,9 @@ public final class NumberedSet {
             }
         }
     }
-    public Iterator iterator() { 
+    public Iterator iterator() {
         if( array == null ) return new BitSetIterator( this );
-        else return new NumberedSetIterator( this ); 
+        else return new NumberedSetIterator( this );
     }
 
     class BitSetIterator implements Iterator {

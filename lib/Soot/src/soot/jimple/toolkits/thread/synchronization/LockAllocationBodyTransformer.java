@@ -14,25 +14,25 @@ public class LockAllocationBodyTransformer extends BodyTransformer
     private LockAllocationBodyTransformer() {}
 
     public static LockAllocationBodyTransformer v() { return instance; }
-    
+
     private static boolean addedGlobalLockDefs = false;
 	private static int throwableNum = 0; // doesn't matter if not reinitialized to 0
-    
+
     protected void internalTransform(Body b, String phase, Map opts)
     {
     	throw new RuntimeException("Not Supported");
     }
-    
+
     protected void internalTransform(Body b, FlowSet fs, List<CriticalSectionGroup> groups, boolean[] insertedGlobalLock)
 	{
-		// 
+		//
 		JimpleBody j = (JimpleBody) b;
 		SootMethod thisMethod = b.getMethod();
     	PatchingChain<Unit> units = b.getUnits();
 		Iterator<Unit> unitIt = units.iterator();
 		Unit firstUnit = j.getFirstNonIdentityStmt();
 		Unit lastUnit = units.getLast();
-		
+
 		// Objects of synchronization, plus book keeping
 		Local[] lockObj = new Local[groups.size()];
 		boolean[] addedLocalLockObj = new boolean[groups.size()];
@@ -43,7 +43,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 			addedLocalLockObj[i] = false;
 			globalLockObj[i] = null;
 		}
-		
+
         // Add all global lock objects to the main class if not yet added.
         // Get references to them if they do already exist.
   		for(int i = 1; i < groups.size(); i++)
@@ -54,7 +54,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 	   			if( !insertedGlobalLock[i] )
 	            {
 	            	// Add globalLockObj field if possible...
-	            	
+
 	       			// Avoid name collision... if it's already there, then just use it!
 	            	try
 	            	{
@@ -64,7 +64,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 	            	catch(RuntimeException re)
 	            	{
 	            		// field does not yet exist (or, as a pre-existing error, there is more than one field by this name)
-		            	globalLockObj[i] = new SootField("globalLockObj" + i, RefType.v("java.lang.Object"), 
+		            	globalLockObj[i] = new SootField("globalLockObj" + i, RefType.v("java.lang.Object"),
 		                                      Modifier.STATIC | Modifier.PUBLIC);
 		            	Scene.v().getMainClass().addField(globalLockObj[i]);
 					}
@@ -77,9 +77,9 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 				}
 			}
 		}
-   		
+
    		// If the current method is the clinit method of the main class, for each global lock object,
-   		// add a local lock object and assign it a new object.  Copy the new 
+   		// add a local lock object and assign it a new object.  Copy the new
    		// local lock object into the global lock object for use by other fns.
         if(!addedGlobalLockDefs)// thisMethod.getSubSignature().equals("void <clinit>()") && thisMethod.getDeclaringClass() == Scene.v().getMainClass())
         {
@@ -103,7 +103,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 				firstStmt = clinitBody.getFirstNonIdentityStmt();
         	}
         	PatchingChain<Unit> clinitUnits = clinitBody.getUnits();
-        	
+
     		for(int i = 1; i < groups.size(); i++)
     		{
     			CriticalSectionGroup tnGroup = groups.get(i);
@@ -113,7 +113,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 					// add local lock obj
 //	    			addedLocalLockObj[i] = true;
 					clinitBody.getLocals().add(lockObj[i]); // TODO: add name conflict avoidance code
-		            
+
 		            // assign new object to lock obj
 		            Stmt newStmt = Jimple.v().newAssignStmt(lockObj[i],
 							Jimple.v().newNewExpr(RefType.v("java.lang.Object")));
@@ -127,13 +127,13 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 		            RefType type = RefType.v(objectClass);
 		            SootMethod initMethod = objectClass.getMethod("void <init>()");
 		            Stmt initStmt = Jimple.v().newInvokeStmt(
-		            				Jimple.v().newSpecialInvokeExpr(lockObj[i], 
+		            				Jimple.v().newSpecialInvokeExpr(lockObj[i],
 		            					initMethod.makeRef(), Collections.EMPTY_LIST));
 		            if(addingNewClinit)
 			            clinitUnits.add(initStmt);
 			        else
 			        	clinitUnits.insertBeforeNoRedirect(initStmt, firstStmt);
-			        
+
 			        // copy new object to global static lock object (for use by other fns)
 			        Stmt assignStmt = Jimple.v().newAssignStmt(
 	       							  Jimple.v().newStaticFieldRef(globalLockObj[i].makeRef()), lockObj[i]);
@@ -147,7 +147,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 	    		clinitUnits.add(Jimple.v().newReturnVoidStmt());
     		addedGlobalLockDefs = true;
         }
-		
+
 		int tempNum = 1;
 		// Iterate through all of the transactions in the current method
 		Iterator fsIt = fs.iterator();
@@ -157,9 +157,9 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 			CriticalSection tn = ((SynchronizedRegionFlowPair) fsIt.next()).tn;
 			if(tn.setNumber == -1)
 				continue; // this tn should be deleted... for now just skip it!
-				
+
 			if(tn.wholeMethod)
-			{			
+			{
 				thisMethod.setModifiers( thisMethod.getModifiers() & ~ (Modifier.SYNCHRONIZED) ); // remove synchronized modifier for this method
 			}
 
@@ -184,7 +184,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 						}
 						if(!b.getLocals().contains(lockObj[tn.setNumber]))
 							b.getLocals().add(lockObj[tn.setNumber]);
-						
+
 						newPrep = Jimple.v().newAssignStmt(lockObj[tn.setNumber], lock);
 						if(tn.wholeMethod)
 							units.insertBeforeNoRedirect(newPrep, firstUnit);
@@ -214,14 +214,14 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 						Local lockLocal = Jimple.v().newLocal("locksetObj" + tempNum, RefType.v("java.lang.Object"));
 						tempNum++;
 						b.getLocals().add(lockLocal);
-					
+
 						// make it refer to the right lock object
 						newPrep = Jimple.v().newAssignStmt(lockLocal, lock);
 						if(tn.entermonitor != null)
 							units.insertBefore(newPrep, tn.entermonitor);
 						else
 							units.insertBeforeNoRedirect(newPrep, tn.beginning);
-							
+
 						// use it as the lock
 						clo = lockLocal;
 					}
@@ -250,7 +250,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 							Stmt endExitmonitor = csr.end.getO2();
 							nsr.after = endExitmonitor;
 						}
-						
+
 						csr = nsr;
 					}
 					else
@@ -271,12 +271,12 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 					csr = tn;
 					moreLocks = false;
 				}
-				
+
 				// Add synchronization code
 				// For transactions from synchronized methods, use synchronizeSingleEntrySingleExitBlock()
 				// to add all necessary code (including ugly exception handling)
 				// For transactions from synchronized blocks, simply replace the
-				// monitorenter/monitorexit statements with new ones		
+				// monitorenter/monitorexit statements with new ones
 				if(true)
 				{
 					// Remove old prep stmt
@@ -284,7 +284,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 					{
 //						units.remove(clr.prepStmt); // seems to trigger bugs in code generation?
 					}
-					
+
 					// Reuse old entermonitor or insert new one, and insert prep
 					Stmt newEntermonitor = Jimple.v().newEnterMonitorStmt(clo);
 					if( csr.entermonitor != null )
@@ -301,17 +301,17 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 					{
 						units.insertBeforeNoRedirect(newEntermonitor, csr.beginning);
 						csr.entermonitor = newEntermonitor;
-						
+
 						// units.insertBefore(newEntermonitor, newPrep); // already inserted
 						// clr.prepStmt = newPrep;
 					}
-					
+
 					// For each early end, reuse or insert exitmonitor stmt
 					List<Pair<Stmt, Stmt>> newEarlyEnds = new ArrayList<Pair<Stmt, Stmt>>();
 					for (Pair<Stmt, Stmt> end : csr.earlyEnds) {
 						Stmt earlyEnd = end.getO1();
 						Stmt exitmonitor = end.getO2();
-						
+
 						Stmt newExitmonitor = Jimple.v().newExitMonitorStmt(clo);
 						if( exitmonitor != null )
 						{
@@ -337,7 +337,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 						}
 					}
 					csr.earlyEnds = newEarlyEnds;
-					
+
 					// If fallthrough end, reuse or insert goto and exit
 					if( csr.after != null )
 					{
@@ -370,20 +370,20 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 							csr.last = newGotoStmt;
 						}
 					}
-					
+
 					// If exceptional end, reuse it, else insert it and traps
 					Stmt newExitmonitor = Jimple.v().newExitMonitorStmt(clo);
 					if( csr.exceptionalEnd != null )
 					{
 						Stmt exitmonitor = csr.exceptionalEnd.getO2();
-						
+
 						if(newPrep != null)
 						{
 							Stmt tmp = (Stmt) newPrep.clone();
 							units.insertBefore(tmp, exitmonitor);
 						}
 						units.insertBefore(newExitmonitor, exitmonitor);
-							
+
 						units.remove(exitmonitor);
 						csr.exceptionalEnd = new Pair<Stmt, Stmt>(csr.exceptionalEnd.getO1(), newExitmonitor);
 					}
@@ -430,17 +430,17 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 				}
 				lockNum++;
 			}
-			
+
 			// deal with waits and notifys
 			{
 				for(Unit uNotify : tn.notifys)
 				{
 					Stmt sNotify = (Stmt) uNotify;
-					Stmt newNotify = 
+					Stmt newNotify =
 						Jimple.v().newInvokeStmt(
 	           				Jimple.v().newVirtualInvokeExpr(
 	       						clo,
-	       						sNotify.getInvokeExpr().getMethodRef().declaringClass().getMethod("void notifyAll()").makeRef(), 
+	       						sNotify.getInvokeExpr().getMethodRef().declaringClass().getMethod("void notifyAll()").makeRef(),
 	       						Collections.EMPTY_LIST));
 					if(newPrep != null)
 					{
@@ -450,7 +450,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 			        }
 			        else
 			        	units.insertBefore(newNotify, sNotify);
-			        	
+
 					redirectTraps(b, sNotify, newNotify);
 					units.remove(sNotify);
 				}
@@ -466,9 +466,9 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 			}
 		}
 	}
-	
+
 	static int baseLocalNum = 0;
-	
+
 	public InstanceFieldRef reconstruct(Body b, PatchingChain<Unit> units, InstanceFieldRef lock, Stmt insertBefore, boolean redirect)
 	{
 		G.v().out.println("Reconstructing " + lock);
@@ -479,11 +479,11 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 			return lock;
 		}
 		FakeJimpleLocal fakeBase = (FakeJimpleLocal) lock.getBase();
-		
+
 		if(!(fakeBase.getInfo() instanceof LockableReferenceAnalysis))
 			throw new RuntimeException("InstanceFieldRef cannot be reconstructed due to missing LocksetAnalysis info: " + lock);
 		LockableReferenceAnalysis la = (LockableReferenceAnalysis) fakeBase.getInfo();
-		
+
 		EquivalentValue baseEqVal = la.baseFor(lock);
 		if(baseEqVal == null)
 			throw new RuntimeException("InstanceFieldRef cannot be reconstructed due to lost base from Lockset");
@@ -494,7 +494,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 			Value newBase = reconstruct(b, units, (InstanceFieldRef) base, insertBefore, redirect);
 			baseLocal = Jimple.v().newLocal("baseLocal" + (baseLocalNum++), newBase.getType());
 			b.getLocals().add(baseLocal);
-					
+
 			// make it equal to the right value
 			Stmt baseAssign = Jimple.v().newAssignStmt(baseLocal, newBase);
 			if(redirect == true)
@@ -506,32 +506,32 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 			baseLocal = (Local) base;
 		else
 			throw new RuntimeException("InstanceFieldRef cannot be reconstructed because it's base is of an unsupported type" + base.getType() + ": " + base);
-		
+
 		InstanceFieldRef newLock = Jimple.v().newInstanceFieldRef(baseLocal, lock.getField().makeRef());
 		G.v().out.println("  as " + newLock);
 		return newLock;
 	}
-	
+
 	static int lockNumber = 0;
 	static Map<EquivalentValue, StaticFieldRef> lockEqValToLock = new HashMap<EquivalentValue, StaticFieldRef>();
 	static public Value getLockFor(EquivalentValue lockEqVal)
 	{
 		Value lock = lockEqVal.getValue();
-		
+
 		if( lock instanceof InstanceFieldRef )
 			return lock;
-			
+
 		if( lock instanceof ArrayRef ) // it would be better to lock the array ref for each value of the index!
 			return ((ArrayRef) lock).getBase();
-		
+
 		if( lock instanceof Local )
 			return lock;
-			
+
 		if( lock instanceof StaticFieldRef || lock instanceof NewStaticLock)
 		{
 			if( lockEqValToLock.containsKey(lockEqVal) )
 				return lockEqValToLock.get(lockEqVal);
-			
+
 			SootClass lockClass = null;
 			if( lock instanceof StaticFieldRef )
 			{
@@ -561,11 +561,11 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 				firstStmt = clinitBody.getFirstNonIdentityStmt();
         	}
         	PatchingChain<Unit> clinitUnits = clinitBody.getUnits();
-        	
+
 			Local lockLocal = Jimple.v().newLocal("objectLockLocal" + lockNumber, RefType.v("java.lang.Object"));
 			// lockNumber is increased below
 			clinitBody.getLocals().add(lockLocal); // TODO: add name conflict avoidance code
-		            
+
             // assign new object to lock obj
             Stmt newStmt = Jimple.v().newAssignStmt(lockLocal, Jimple.v().newNewExpr(RefType.v("java.lang.Object")));
 			if(addingNewClinit)
@@ -578,13 +578,13 @@ public class LockAllocationBodyTransformer extends BodyTransformer
             RefType type = RefType.v(objectClass);
             SootMethod initMethod = objectClass.getMethod("void <init>()");
             Stmt initStmt = Jimple.v().newInvokeStmt(
-            				Jimple.v().newSpecialInvokeExpr(lockLocal, 
+            				Jimple.v().newSpecialInvokeExpr(lockLocal,
             					initMethod.makeRef(), Collections.EMPTY_LIST));
             if(addingNewClinit)
 	            clinitUnits.add(initStmt);
 	        else
 	        	clinitUnits.insertBeforeNoRedirect(initStmt, firstStmt);
-			        
+
 	        // copy new object to global static lock object (for use by other fns)
         	SootField actualLockObject = new SootField("objectLockGlobal" + lockNumber, RefType.v("java.lang.Object"), Modifier.STATIC | Modifier.PUBLIC);
 			lockNumber++;
@@ -599,7 +599,7 @@ public class LockAllocationBodyTransformer extends BodyTransformer
 
     		if(addingNewClinit)
 	    		clinitUnits.add(Jimple.v().newReturnVoidStmt());
-	    		
+
 	    	lockEqValToLock.put(lockEqVal, actualLockSfr);
 	    	return actualLockSfr;
 		}

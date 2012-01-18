@@ -30,12 +30,12 @@ import soot.G;
 public abstract class ASTMetric extends NodeVisitor implements MetricInterface {
 	polyglot.ast.Node astNode;
 	String className=null; //name of Class being currently processed
-	
+
 	public ASTMetric(polyglot.ast.Node astNode){
 		this.astNode = astNode;
 		reset();
 	}
-	
+
 	/*
 	 * Taking care of the change in classes within a polyglot ast
 	 */
@@ -44,24 +44,24 @@ public abstract class ASTMetric extends NodeVisitor implements MetricInterface {
 			className = ((ClassDecl)n).name();
 			System.out.println("Starting processing: "+ className);
 		}
-		return this;	
+		return this;
 	}
 
 	/*
 	 * When we leave a classDecl all the metrics for this classDecl
 	 * must be stored and the metrics reset
-	 * 
+	 *
 	 * This is done by invoking the addMetrics abstract method
 	 */
-	
-	
+
+
 	public final Node leave(Node parent, Node old, Node n, NodeVisitor v){
 		if(n instanceof ClassDecl){
 			if(className==null)
 				throw new RuntimeException("className is null");
-			
+
 			System.out.println("Done with class "+className);
-			
+
 			//get the classData object for this class
 			ClassData data = getClassData();
 			addMetrics(data);
@@ -72,8 +72,8 @@ public abstract class ASTMetric extends NodeVisitor implements MetricInterface {
 
 	public abstract void reset();
 	public abstract void addMetrics(ClassData data);
-	
-	
+
+
 	/*
 	 * Should be used to execute the traversal which will find the
 	 * metric being calculated
@@ -87,24 +87,24 @@ public abstract class ASTMetric extends NodeVisitor implements MetricInterface {
 		  p.printAst(astNode, new CodeWriter(System.out, 80));
 		}
 	}
-	
+
 	public void printAstMetric(Node n, CodeWriter w) {
-	  
+
 	}
-	
+
 
 	/*
 	 * Returns the classData object if one if present in the globals Metrics List
 	 * otherwise creates new adds to globals metric list and returns that
-	 */	
+	 */
 	public final ClassData getClassData(){
 		if(className==null)
 			throw new RuntimeException("className is null");
-		
+
 		Iterator<ClassData> it = G.v().ASTMetricsData.iterator();
 		while(it.hasNext()){
 			ClassData tempData = it.next();
-			
+
 			if(tempData.classNameEquals(className)){
 				return tempData;
 			}

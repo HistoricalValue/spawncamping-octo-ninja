@@ -30,7 +30,7 @@ public class SETIfElseNode extends SETDagNode
 {
     private IterableSet ifBody, elseBody;
 
-    public SETIfElseNode( AugmentedStmt characterizingStmt, IterableSet body, IterableSet ifBody, IterableSet elseBody) 
+    public SETIfElseNode( AugmentedStmt characterizingStmt, IterableSet body, IterableSet ifBody, IterableSet elseBody)
     {
 	super( characterizingStmt, body);
 
@@ -74,7 +74,7 @@ public class SETIfElseNode extends SETDagNode
 
 	if (astBody1.isEmpty())
 	    return new ASTIfNode( get_Label(), ce, astBody0);
-	else 
+	else
 	    return new ASTIfElseNode( get_Label(), ce, astBody0, astBody1);
     }
 }

@@ -27,35 +27,35 @@ import soot.util.*;
 import soot.jbco.IJbcoTransform;
 import soot.jbco.util.*;
 /**
- * @author Michael Batchelder 
- * 
- * Created on 24-May-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 24-May-2006
  */
 public class WrapSwitchesInTrys extends BodyTransformer implements IJbcoTransform {
 
   int totaltraps = 0;
-  
+
   public static String dependancies[] = new String[] {"bb.jbco_ptss", "bb.jbco_ful", "bb.lp" };
 
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "bb.jbco_ptss";
-  
+
   public String getName() {
     return name;
   }
-  
+
   public void outputSummary() {
     out.println("Switches wrapped in Tries: "+totaltraps);
   }
-  
-  protected void internalTransform(Body b, String phaseName, Map options) 
+
+  protected void internalTransform(Body b, String phaseName, Map options)
   {
     int weight = soot.jbco.Main.getWeight(phaseName, b.getMethod().getSignature());
     if (weight == 0) return;
-    
+
     int i = 0;
     Unit handler = null;
     Chain traps = b.getTraps();
@@ -65,7 +65,7 @@ public class WrapSwitchesInTrys extends BodyTransformer implements IJbcoTransfor
       Unit u = (Unit)it.next();
       if (u instanceof TableSwitchInst) {
         TableSwitchInst twi = (TableSwitchInst)u;
-        
+
         if (!BodyBuilder.isExceptionCaughtAt(units,twi,traps.iterator()) && Rand.getInt(10) <= weight) {
 	        if (handler==null) {
 	          Iterator uit = units.snapshotIterator();
@@ -77,13 +77,13 @@ public class WrapSwitchesInTrys extends BodyTransformer implements IJbcoTransfor
 	              break;
 	            }
 	          }
-	          
+
 	          if (handler==null) {
 	            handler = Baf.v().newThrowInst();
 	            units.add(handler);
 	          }
 	        }
-        
+
 	        int size = 4;
 	        Unit succ = (Unit)units.getSuccOf(twi);
 	        while (!BodyBuilder.isExceptionCaughtAt(units,succ,traps.iterator()) && size-->0) {
@@ -91,13 +91,13 @@ public class WrapSwitchesInTrys extends BodyTransformer implements IJbcoTransfor
 	          if (o != null) succ = (Unit)o;
 	          else break;
 	        }
-	        
+
 	        traps.add(Baf.v().newTrap(ThrowSet.getRandomThrowable(), twi, succ, handler));
 	        i++;
         }
       }
     }
-    
+
     totaltraps+=i;
     if (i>0 && debug) {
         StackTypeHeightCalculator.calculateStackHeights(b);

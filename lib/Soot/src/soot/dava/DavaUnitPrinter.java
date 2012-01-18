@@ -36,7 +36,7 @@ import soot.jimple.ThisRef;
  */
 public class DavaUnitPrinter extends AbstractUnitPrinter {
 	DavaBody body;
-	
+
 	/*
 	 * 30th March 2006, Nomair A Naeem
 	 * Adding constructor so that the current methods DabaBody can be stored
@@ -48,7 +48,7 @@ public class DavaUnitPrinter extends AbstractUnitPrinter {
         handleIndent();
         output.append( m.name() );
     }
-    public void fieldRef( SootFieldRef f ) { 
+    public void fieldRef( SootFieldRef f ) {
         handleIndent();
         output.append(f.name());
     }
@@ -80,7 +80,7 @@ public class DavaUnitPrinter extends AbstractUnitPrinter {
     public void type( Type t ) {
         handleIndent();
         if( t instanceof RefType ) {
-        	
+
         	String name = ((RefType) t).getSootClass().getJavaStyleName();
         	/*
         	 * March 30th 2006, Nomair
@@ -88,17 +88,17 @@ public class DavaUnitPrinter extends AbstractUnitPrinter {
         	 */
         	if(!name.equals( ((RefType)t).getSootClass().toString())){
         		//means javaStyle name is probably shorter check that there is no class clash in imports for this
-        		
+
         		//System.out.println(">>>>Type is"+t.toString());
         		//System.out.println(">>>>Name is"+name);
         		name = RemoveFullyQualifiedName.getReducedName(body.getImportList(),((RefType)t).getSootClass().toString(),t);
-        	
+
         	}
             output.append(name);
-        } 
+        }
         else if( t instanceof ArrayType ) {
             ((ArrayType) t).toString( this );
-        } 
+        }
         else {
             output.append( t.toString() );
         }

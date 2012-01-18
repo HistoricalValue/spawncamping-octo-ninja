@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -86,15 +86,15 @@ public class SootField extends AbstractHost implements ClassMember, SparkField, 
         return buffer.toString().intern();
 
     }
-  
+
     public String getSubSignature()
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append(getType() + " " + Scene.v().quotedNameOf(getName()));
         return buffer.toString().intern();
     }
-    
-    public SootClass getDeclaringClass() 
+
+    public SootClass getDeclaringClass()
     {
         if(!isDeclared)
             throw new RuntimeException("not declared: "+getName()+" "+getType());
@@ -106,14 +106,14 @@ public class SootField extends AbstractHost implements ClassMember, SparkField, 
     {
         return isPhantom;
     }
-    
+
     public void setPhantom(boolean value)
     {
         if( value ) {
-            if( !Scene.v().allowsPhantomRefs() ) 
+            if( !Scene.v().allowsPhantomRefs() )
                 throw new RuntimeException( "Phantom refs not allowed" );
             if( declaringClass != null && !declaringClass.isPhantom() )
-                throw new 
+                throw new
                     RuntimeException( "Declaring class would have to be phantom" );
         }
         isPhantom = value;
@@ -185,7 +185,7 @@ public class SootField extends AbstractHost implements ClassMember, SparkField, 
     {
         if (!declaringClass.isApplicationClass())
             throw new RuntimeException("Cannot set modifiers of a field from a non-app class!");
-            
+
         this.modifiers = modifiers;
     }
 

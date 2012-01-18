@@ -8,7 +8,7 @@ import polyglot.util.Enum;
  * item being imported and the kind which is either indicating that a class
  * is being imported, or that an entire package is being imported.
  */
-public interface Import extends Node 
+public interface Import extends Node
 {
     /** Import kinds: class (e.g., import java.util.Set) or package (e.g.,
      *  import java.util.*).

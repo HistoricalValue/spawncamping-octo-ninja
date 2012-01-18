@@ -50,9 +50,9 @@ public class PurityAnalysis extends SceneTransformer
 
     public PurityAnalysis(Singletons.Global g ) { this.g = g; }
 
-    public static PurityAnalysis v() 
+    public static PurityAnalysis v()
     {
-	return G.v().soot_jimple_toolkits_annotation_purity_PurityAnalysis(); 
+	return G.v().soot_jimple_toolkits_annotation_purity_PurityAnalysis();
     }
 
     protected void internalTransform(String phaseName, Map options)
@@ -81,6 +81,6 @@ public class PurityAnalysis extends SceneTransformer
 
 	// launch the analysis
 	PurityInterproceduralAnalysis p =
-	    new PurityInterproceduralAnalysis(cg, heads.iterator(), opts); 
+	    new PurityInterproceduralAnalysis(cg, heads.iterator(), opts);
     }
 }

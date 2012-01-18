@@ -41,11 +41,11 @@ import soot.util.Chain;
  *        public static final ClassName myField;
  *        static{
                CLASSNAME.postClinit();
-            
+
           }
 
  *        postClinit(){ myField = new ClassName(); }
- * 
+ *
  *  Now this causes a problem since final fields can not be defined using a method call
  * So the solution was to inline just this method. to get something like
  *        static{
@@ -85,8 +85,8 @@ public class DavaStaticBlockCleaner {
     	if (!clinit.hasActiveBody())
     		throw new RuntimeException("method "+ clinit.getName()+ " has no active body!");
 
-	
-    	Body clinitBody = clinit.getActiveBody();	
+
+    	Body clinitBody = clinit.getActiveBody();
         Chain units = ((DavaBody) clinitBody).getUnits();
 
         if (units.size() != 1) {
@@ -97,7 +97,7 @@ public class DavaStaticBlockCleaner {
         if(! (AST instanceof ASTMethodNode))
         	throw new RuntimeException("Starting node of DavaBody AST is not an ASTMethodNode");
 
-        //running methodCallFinder on the Clinit method 	
+        //running methodCallFinder on the Clinit method
         AST.apply(new MethodCallFinder(this));
     }
 
@@ -112,24 +112,24 @@ public class DavaStaticBlockCleaner {
      */
     public ASTMethodNode inline(SootMethod maybeInline){
 	//check if this method should be inlined
-	
+
 	if(sootClass !=null){
 	    //1, method should belong to the same class as the clinit method
 	    if(sootClass.declaresMethod(maybeInline.getSubSignature())){
 		//System.out.println("The method invoked is from the same class");
 		//2, method should be static
-		
+
 		if (Modifier.isStatic(maybeInline.getModifiers())){
 		    //decided to inline
 		    //send the ASTMethod node of the TO BE INLINED METHOD
-		    
+
 		    //retireve the active body
 		    if (!maybeInline.hasActiveBody())
 			throw new RuntimeException("method "+ maybeInline.getName()+ " has no active body!");
 
-	
+
 		    Body bod = maybeInline.getActiveBody();
-	
+
 		    Chain units = ((DavaBody) bod).getUnits();
 
 		    if (units.size() != 1) {
@@ -154,5 +154,5 @@ public class DavaStaticBlockCleaner {
 	}
 	return null;//meaning dont inline
     }
-    
+
 }

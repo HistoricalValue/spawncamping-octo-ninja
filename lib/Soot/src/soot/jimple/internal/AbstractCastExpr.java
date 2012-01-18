@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -63,7 +63,7 @@ abstract public class AbstractCastExpr implements CastExpr, ConvertToBaf
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return opBox.getValue().equivHashCode() * 101 + type.hashCode() + 17;
     }
@@ -72,7 +72,7 @@ abstract public class AbstractCastExpr implements CastExpr, ConvertToBaf
     {
         return "("  + type.toString() + ") " + opBox.getValue().toString();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal("(");
         up.type(type);
@@ -144,7 +144,7 @@ abstract public class AbstractCastExpr implements CastExpr, ConvertToBaf
 
 	Unit currentUnit = context.getCurrentUnit();
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}

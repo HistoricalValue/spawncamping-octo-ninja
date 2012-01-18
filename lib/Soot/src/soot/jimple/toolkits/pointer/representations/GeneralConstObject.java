@@ -43,11 +43,11 @@ public class GeneralConstObject extends ConstantObject {
     this.name = n;
     this.id   = G.v().GeneralConstObject_counter++;
   }
-  
+
   public Type getType() {
     return type;
   }
-  
+
   public String toString() {
     return name;
   }

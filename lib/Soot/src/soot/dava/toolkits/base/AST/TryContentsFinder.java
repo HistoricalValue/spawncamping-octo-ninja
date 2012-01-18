@@ -32,12 +32,12 @@ public class TryContentsFinder extends ASTAnalysis
 
     private IterableSet curExceptionSet = new IterableSet();
     private final HashMap<Object, IterableSet> node2ExceptionSet = new HashMap<Object, IterableSet>();
-    
+
     public int getAnalysisDepth()
     {
 	return ANALYSE_VALUES;
     }
-    
+
     public IterableSet remove_CurExceptionSet()
     {
 	IterableSet s = curExceptionSet;
@@ -51,14 +51,14 @@ public class TryContentsFinder extends ASTAnalysis
     {
 	this.curExceptionSet = curExceptionSet;
     }
-    
+
     public void analyseThrowStmt( ThrowStmt s)
     {
 	Value op = (s).getOp();
-	
-	if (op instanceof Local) 
+
+	if (op instanceof Local)
 	    add_ThrownType( ((Local) op).getType());
-	else if (op instanceof FieldRef) 
+	else if (op instanceof FieldRef)
 	    add_ThrownType( ((FieldRef) op).getType());
     }
 
@@ -73,7 +73,7 @@ public class TryContentsFinder extends ASTAnalysis
 	curExceptionSet.addAll( ie.getMethod().getExceptions());
     }
 
-    public void analyseInstanceInvokeExpr( InstanceInvokeExpr iie) 
+    public void analyseInstanceInvokeExpr( InstanceInvokeExpr iie)
     {
 	analyseInvokeExpr( iie);
     }
@@ -83,30 +83,30 @@ public class TryContentsFinder extends ASTAnalysis
 	if (n instanceof ASTTryNode) {
 
 	    ASTTryNode tryNode = (ASTTryNode) n;
-	    
+
 	    ArrayList<Object> toRemove = new ArrayList<Object>();
 	    IterableSet tryExceptionSet = node2ExceptionSet.get( tryNode.get_TryBodyContainer());
 	    if (tryExceptionSet == null) {
 		tryExceptionSet = new IterableSet();
 		node2ExceptionSet.put( tryNode.get_TryBodyContainer(), tryExceptionSet);
 	    }
-	    
+
 	    List<Object> catchBodies = tryNode.get_CatchList();
 	    List<Object> subBodies = tryNode.get_SubBodies();
-	    
+
 	    Iterator<Object> cit = catchBodies.iterator();
 	    while (cit.hasNext()) {
 		Object catchBody = cit.next();
 		SootClass exception = (SootClass) tryNode.get_ExceptionMap().get( catchBody);
-		
+
 		if ((catches_Exception( tryExceptionSet, exception) == false) && (catches_RuntimeException( exception) == false))
 		    toRemove.add( catchBody);
 	    }
-	    
+
 	    Iterator<Object> trit = toRemove.iterator();
 	    while (trit.hasNext()) {
 		Object catchBody = trit.next();
-		
+
 		subBodies.remove( catchBody);
 		catchBodies.remove( catchBody);
 	    }
@@ -154,7 +154,7 @@ public class TryContentsFinder extends ASTAnalysis
 	    fullSet = new IterableSet();
 	    node2ExceptionSet.put( node, fullSet);
 	}
-	
+
 	fullSet.addAll( s);
     }
 
@@ -184,14 +184,14 @@ public class TryContentsFinder extends ASTAnalysis
 	    (c == Scene.v().getSootClass( "java.lang.Exception")))
 	    return true;
 
-	SootClass 
+	SootClass
 	    caughtException = c,
 	    runtimeException = Scene.v().getSootClass( "java.lang.RuntimeException");
-	
+
 	while (true) {
 	    if (caughtException == runtimeException)
 		return true;
-	    
+
 	    if (caughtException.hasSuperclass() == false)
 		return false;
 

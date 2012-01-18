@@ -152,7 +152,7 @@ public class ConstructorCall_c extends Stmt_c implements ConstructorCall
                                             "constructor invocation.",
                                             position());
             }
-            
+
             if (!superType.isClass() || !superType.toClass().isInnerClass() ||
                 superType.toClass().inStaticContext()) {
                 throw new SemanticException("The class \"" + superType + "\"" +
@@ -178,28 +178,28 @@ public class ConstructorCall_c extends Stmt_c implements ConstructorCall
 	    }
 
             // If the super class is an inner class (i.e., has an enclosing
-            // instance of its container class), then either a qualifier 
+            // instance of its container class), then either a qualifier
             // must be provided, or ct must have an enclosing instance of the
             // super class's container class, or a subclass thereof.
             if (qualifier == null && superType.isClass() && superType.toClass().isInnerClass()) {
                 ClassType superContainer = superType.toClass().outer();
-                // ct needs an enclosing instance of superContainer, 
+                // ct needs an enclosing instance of superContainer,
                 // or a subclass of superContainer.
                 ClassType e = ct;
-                
+
                 while (e != null) {
                     if (e.isSubtype(superContainer) && ct.hasEnclosingInstance(e)) {
-                        break; 
+                        break;
                     }
                     e = e.outer();
                 }
-                
+
                 if (e == null) {
                     throw new SemanticException(ct + " must have an enclosing instance" +
                         " that is a subtype of " + superContainer, position());
-                }               
+                }
                 if (e == ct) {
-                    throw new SemanticException(ct + " is a subtype of " + superContainer + 
+                    throw new SemanticException(ct + " is a subtype of " + superContainer +
                         "; an enclosing instance that is a subtype of " + superContainer +
                         " must be specified in the super constructor call.", position());
                 }
@@ -253,24 +253,24 @@ public class ConstructorCall_c extends Stmt_c implements ConstructorCall
       if (qualifier != null) {
         print(qualifier, w, tr);
         w.write(".");
-      } 
-      		
+      }
+
       w.write(kind + "(");
-      		
+
       w.begin(0);
-      		
+
       for (Iterator i = arguments.iterator(); i.hasNext(); ) {
         Expr e = (Expr) i.next();
         print(e, w, tr);
-      		
+
         if (i.hasNext()) {
           w.write(",");
           w.allowBreak(0);
         }
       }
-      		
+
       w.end();
-      		
+
       w.write(");");
     }
 

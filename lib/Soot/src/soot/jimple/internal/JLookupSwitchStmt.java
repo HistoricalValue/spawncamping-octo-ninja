@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ import soot.baf.*;
 import soot.util.*;
 import java.util.*;
 
-public class JLookupSwitchStmt extends AbstractStmt 
+public class JLookupSwitchStmt extends AbstractStmt
     implements LookupSwitchStmt
 {
     UnitBox defaultTargetBox;
@@ -63,13 +63,13 @@ public class JLookupSwitchStmt extends AbstractStmt
 
     private static UnitBox[] unitBoxListToArray(List<Object> targets) {
         UnitBox[] targetBoxes = new UnitBox[targets.size()];
-        
+
         for(int i = 0; i < targetBoxes.length; i++)
             targetBoxes[i] = (UnitBox) targets.get(i);
         return targetBoxes;
     }
 
-    /** Constructs a new JLookupSwitchStmt. lookupValues should be a list of IntConst s. */ 
+    /** Constructs a new JLookupSwitchStmt. lookupValues should be a list of IntConst s. */
     public JLookupSwitchStmt(Value key, List lookupValues, List targets, Unit defaultTarget)
     {
         this(Jimple.v().newImmediateBox(key),
@@ -77,7 +77,7 @@ public class JLookupSwitchStmt extends AbstractStmt
              Jimple.v().newStmtBox(defaultTarget));
     }
 
-    /** Constructs a new JLookupSwitchStmt. lookupValues should be a list of IntConst s. */     
+    /** Constructs a new JLookupSwitchStmt. lookupValues should be a list of IntConst s. */
     public JLookupSwitchStmt(Value key, List<Object> lookupValues, List<Object> targets, UnitBox defaultTarget)
     {
         this(Jimple.v().newImmediateBox(key),
@@ -86,7 +86,7 @@ public class JLookupSwitchStmt extends AbstractStmt
     }
 
 
-    public Object clone() 
+    public Object clone()
     {
         int lookupValueCount = lookupValues.size();
         List clonedLookupValues = new ArrayList(lookupValueCount);
@@ -94,13 +94,13 @@ public class JLookupSwitchStmt extends AbstractStmt
         for( int i = 0; i < lookupValueCount ;i++) {
             clonedLookupValues.add(i, IntConstant.v(getLookupValue(i)));
         }
-        
+
         return new JLookupSwitchStmt(getKey(), clonedLookupValues, getTargets(), getDefaultTarget());
     }
 
 
-    protected JLookupSwitchStmt(ValueBox keyBox, List lookupValues, 
-                                UnitBox[] targetBoxes, 
+    protected JLookupSwitchStmt(ValueBox keyBox, List lookupValues,
+                                UnitBox[] targetBoxes,
                                 UnitBox defaultTargetBox)
     {
         this.keyBox = keyBox;
@@ -126,15 +126,15 @@ public class JLookupSwitchStmt extends AbstractStmt
     {
         StringBuffer buffer = new StringBuffer();
         String endOfLine = " ";
-        
-        buffer.append(Jimple.LOOKUPSWITCH + "(" + 
+
+        buffer.append(Jimple.LOOKUPSWITCH + "(" +
             keyBox.getValue().toString() + ")" + endOfLine);
-            
+
         buffer.append("{" + endOfLine);
-        
+
         for(int i = 0; i < lookupValues.size(); i++)
         {
-            buffer.append("    " +  Jimple.CASE + " " + lookupValues.get(i) + ": " +  Jimple.GOTO + " " + 
+            buffer.append("    " +  Jimple.CASE + " " + lookupValues.get(i) + ": " +  Jimple.GOTO + " " +
                 getTarget(i) + ";" + endOfLine);
         }
 
@@ -144,7 +144,7 @@ public class JLookupSwitchStmt extends AbstractStmt
 
         return buffer.toString();
     }
-    
+
     public void toString(UnitPrinter up)
     {
         up.literal(Jimple.LOOKUPSWITCH);
@@ -166,7 +166,7 @@ public class JLookupSwitchStmt extends AbstractStmt
             up.literal(";");
             up.newline();
         }
-        
+
         up.literal("    ");
         up.literal(Jimple.DEFAULT);
         up.literal(": ");
@@ -285,7 +285,7 @@ public class JLookupSwitchStmt extends AbstractStmt
     {
       ((StmtSwitch) sw).caseLookupSwitchStmt(this);
     }
-    
+
     public void convertToBaf(JimpleToBafContext context, List<Unit> out)
     {
         ArrayList targetPlaceholders = new ArrayList();
@@ -297,7 +297,7 @@ public class JLookupSwitchStmt extends AbstractStmt
             targetPlaceholders.add(Baf.v().newPlaceholderInst
                                    (getTarget(i)));
         }
-	
+
 	Unit u;
         out.add(u = Baf.v().newLookupSwitchInst
                 (Baf.v().newPlaceholderInst(getDefaultTarget()),
@@ -305,18 +305,18 @@ public class JLookupSwitchStmt extends AbstractStmt
 
 	Unit currentUnit = this;
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}
-	
+
 
     }
 
 
 
 
-    
+
 
     public boolean fallsThrough(){return false;}
     public boolean branches(){return true;}

@@ -23,7 +23,7 @@ public class UnorderedPair<U,V> {
 
 	public U o1;
 	public V o2;
-	
+
 	public UnorderedPair(U o1, V o2) {
 		this.o1 = o1;
 		this.o2 = o2;
@@ -31,7 +31,7 @@ public class UnorderedPair<U,V> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object obj) {
@@ -45,7 +45,7 @@ public class UnorderedPair<U,V> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {

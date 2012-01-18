@@ -23,8 +23,8 @@ import soot.*;
 /** A context manager which creates an object-sensitive call graph.
  * @author Ondrej Lhotak
  */
-public class ObjSensContextManager implements ContextManager 
-{ 
+public class ObjSensContextManager implements ContextManager
+{
     private CallGraph cg;
 
     public ObjSensContextManager( CallGraph cg ) {

@@ -29,7 +29,7 @@
 		<include name="Parser.java"/>
 		<include name="Constant.java"/>
 	</fileset>
-		
+
 	<target name="init">
 	    <tstamp/>
 	    <mkdir dir="${dst.dir}"/>
@@ -61,7 +61,7 @@
 		<available property="parser.up-to-date" file="${Parser.java}"/>
 	</target>
 
-	<target name="parser" depends="lexer,parser-deps" 
+	<target name="parser" depends="lexer,parser-deps"
 	                      unless="parser.up-to-date">
 		<java	classname="java_cup.Main"
 			classpath="${java_cup.jar}"
@@ -72,7 +72,7 @@
 	</target>
 
 	<target name="compile" depends="init,parser">
-		<javac 	srcdir="${src.dir}" 
+		<javac 	srcdir="${src.dir}"
 			destdir="${dst.dir}"
 			classpath="${java_cup.jar}"
 			excludes="test/**"/>

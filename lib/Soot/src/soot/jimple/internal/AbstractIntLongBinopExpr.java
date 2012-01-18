@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -39,7 +39,7 @@ abstract public class AbstractIntLongBinopExpr extends AbstractBinopExpr
         Value op1 = op1Box.getValue();
         Value op2 = op1Box.getValue();
 
-        if((op1.getType().equals(IntType.v()) || 
+        if((op1.getType().equals(IntType.v()) ||
             op1.getType().equals(ByteType.v()) ||
             op1.getType().equals(ShortType.v()) ||
             op1.getType().equals(CharType.v()) ||

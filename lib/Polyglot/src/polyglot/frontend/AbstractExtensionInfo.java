@@ -260,7 +260,7 @@ public abstract class AbstractExtensionInfo implements ExtensionInfo {
             enforceInvariants(job, pass);
         }
         catch (CyclicDependencyException e) {
-            // A job that depends on this job is still running 
+            // A job that depends on this job is still running
             // an earlier pass.  We cannot continue this pass,
             // but we can just silently fail since the job we're
             // that depends on this one will eventually try

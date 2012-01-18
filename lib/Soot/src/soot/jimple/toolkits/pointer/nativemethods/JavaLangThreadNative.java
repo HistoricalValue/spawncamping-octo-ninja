@@ -35,7 +35,7 @@ public class JavaLangThreadNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -58,12 +58,12 @@ public class JavaLangThreadNative extends NativeMethodClass {
   /*************************** java.lang.Thread **********************/
   /**
    * Returns the single variable pointing to all thread objects.
-   * 
+   *
    * This makes our analysis conservative on thread objects.
    *
    * public static native java.lang.Thread currentThread();
    */
-  public 
+  public
     void java_lang_Thread_currentThread(SootMethod method,
 					ReferenceVariable thisVar,
 					ReferenceVariable returnVar,
@@ -74,7 +74,7 @@ public class JavaLangThreadNative extends NativeMethodClass {
   /**
    * Following native methods have no side effects.
    *
-   *    private static native void registerNatives(); 
+   *    private static native void registerNatives();
    *    public static native void yield();
    *    public static native void sleep(long)
    *                     throws java.lang.InterruptedException;

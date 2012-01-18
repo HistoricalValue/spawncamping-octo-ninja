@@ -58,8 +58,8 @@ import soot.dava.toolkits.base.AST.traversals.*;
   Step 5:
          d: x = expr
 	 kill = { all existing defs of x}
-	 
-	 gen = (d) 
+
+	 gen = (d)
 
   Step 6:
          newInitialFlow: No definitions reach (safe) (Catch bodies)
@@ -102,7 +102,7 @@ public class ReachingDefs extends StructuredAnalysis{
 	//initial is not the universal set of all definitions
 	return initial;
     }
-    
+
 
 
     /*
@@ -112,7 +112,7 @@ public class ReachingDefs extends StructuredAnalysis{
     public void setMergeType(){
 	MERGETYPE=UNION;
     }
-    
+
 
 
     public Object cloneFlowSet(Object flowSet){
@@ -212,7 +212,7 @@ public class ReachingDefs extends StructuredAnalysis{
 	//System.out.println("Adding Definition Stmt: "+s);
 	in.add(s);
     }
-    
+
     public void kill(DavaFlowSet in, Local redefined){
 	String redefinedLocalName = redefined.getName();
 
@@ -310,7 +310,7 @@ public class ReachingDefs extends StructuredAnalysis{
 	    throw new RuntimeException("Reaching def set is not a Dava FlowSet");
 	}
 	DavaFlowSet beforeSetReaching = (DavaFlowSet)beforeSet;
-	
+
 	//find all reachingdefs matching this local
 	List allReachingDefs = beforeSetReaching.toList();
 	Iterator it = allReachingDefs.iterator();

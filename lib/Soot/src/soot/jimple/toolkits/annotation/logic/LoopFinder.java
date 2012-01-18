@@ -49,14 +49,14 @@ public class LoopFinder extends BodyTransformer {
         }
         return result;
     }
-    
+
     protected void internalTransform (Body b, String phaseName, Map options){
-    
+
         g = new ExceptionalUnitGraph(b);
         MHGDominatorsFinder a = new MHGDominatorsFinder(g);
-        
+
         loops = new HashMap<Stmt, List<Stmt>>();
-        
+
         Iterator<Unit> stmtsIt = b.getUnits().iterator();
         while (stmtsIt.hasNext()){
             Stmt s = (Stmt)stmtsIt.next();
@@ -94,10 +94,10 @@ public class LoopFinder extends BodyTransformer {
         }
 
     }
-    
+
 
     private List<Stmt> getLoopBodyFor(Stmt header, Stmt node){
-    
+
         ArrayList<Stmt> loopBody = new ArrayList<Stmt>();
         Stack<Unit> stack = new Stack<Unit>();
 
@@ -116,10 +116,10 @@ public class LoopFinder extends BodyTransformer {
                 }
             }
         }
-        
+
         assert (node==header && loopBody.size()==1) || loopBody.get(loopBody.size()-2)==node;
         assert loopBody.get(loopBody.size()-1)==header;
-        
+
         return loopBody;
     }
 

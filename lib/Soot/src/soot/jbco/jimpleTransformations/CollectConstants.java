@@ -29,14 +29,14 @@ import soot.util.*;
 
 /**
  * @author Michael Batchelder
- * 
+ *
  * Created on 31-May-2006
  */
 public class CollectConstants extends SceneTransformer implements IJbcoTransform {
 
   int updatedConstants = 0;
   int constants = 0;
-  
+
   public void outputSummary() {
     out.println(constants + " constants found");
     out.println(updatedConstants + " static fields created");
@@ -47,27 +47,27 @@ public class CollectConstants extends SceneTransformer implements IJbcoTransform
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "wjtp.jbco_cc";
-  
+
   public String getName() {
     return name;
   }
-  
+
   public static HashMap<Constant, SootField> constantsToFields = new HashMap<Constant, SootField>();
   public static HashMap<Type,List<Constant>> typesToValues = new HashMap<Type,List<Constant>>();
 
-  public static SootField field = null;  
-  
+  public static SootField field = null;
+
   protected void internalTransform(String phaseName, Map options)
   {
     Scene scene = G.v().soot_Scene();
-    
+
     if (output)
       out.println("Collecting Constant Data");
-    
+
     soot.jbco.util.BodyBuilder.retrieveAllNames();
-   
+
     Chain appClasses = scene.getApplicationClasses();
     Iterator it = appClasses.iterator();
     while (it.hasNext()) {
@@ -89,7 +89,7 @@ public class CollectConstants extends SceneTransformer implements IJbcoTransform
               values = new ArrayList<Constant>();
               typesToValues.put(t, values);
             }
-            
+
             boolean found = false;
             Iterator<Constant> vit = values.iterator();
             while (vit.hasNext()) {
@@ -98,7 +98,7 @@ public class CollectConstants extends SceneTransformer implements IJbcoTransform
                 break;
               }
             }
-            
+
             if (!found) {
               constants++;
               values.add(c);
@@ -107,7 +107,7 @@ public class CollectConstants extends SceneTransformer implements IJbcoTransform
         }
       }
     }
-    
+
     int count = 0;
     String name = "newConstantJbcoName";
     Object classes[] = appClasses.toArray();
@@ -118,13 +118,13 @@ public class CollectConstants extends SceneTransformer implements IJbcoTransform
       Iterator cit = typesToValues.get(t).iterator();
       while (cit.hasNext()) {
         Constant c = (Constant) cit.next();
-        
+
         name += "_";
         SootClass rand = null;
         do {
           rand = (SootClass)classes[Rand.getInt(classes.length)];
         } while (rand.isInterface());
-        
+
         SootField newf = new SootField(FieldRenamer.getNewName(), t, Modifier.STATIC
               ^ Modifier.PUBLIC);
         rand.addField(newf);
@@ -135,10 +135,10 @@ public class CollectConstants extends SceneTransformer implements IJbcoTransform
         FieldRenamer.addOldAndNewName("addedConstant" + count++, newf.getName());
       }
     }
-    
+
     updatedConstants += count;
   }
-  
+
   private void addInitializingValue(SootClass clas, SootField f, Constant con) {
     if (con instanceof NullConstant) {return;}
     else if (con instanceof IntConstant)
@@ -150,8 +150,8 @@ public class CollectConstants extends SceneTransformer implements IJbcoTransform
     else if (con instanceof DoubleConstant)
       {if (((DoubleConstant)con).value == 0) return;}
     else if (con instanceof FloatConstant)
-      {if (((FloatConstant)con).value == 0) return;}    
-    
+      {if (((FloatConstant)con).value == 0) return;}
+
     Body b = null;
     boolean newInit = false;
     if (!clas.declaresMethodByName("<clinit>")) {
@@ -166,7 +166,7 @@ public class CollectConstants extends SceneTransformer implements IJbcoTransform
     }
 
     PatchingChain units = b.getUnits();
-    
+
     units.addFirst(Jimple.v().newAssignStmt(Jimple.v().newStaticFieldRef(f.makeRef()),con));
     if (newInit)
       units.addLast(Jimple.v().newReturnVoidStmt());

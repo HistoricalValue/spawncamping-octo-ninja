@@ -67,7 +67,7 @@ public class AmbTypeNode_c extends TypeNode_c implements AmbTypeNode {
     if (n instanceof TypeNode) {
       return n;
     }
-   
+
     throw new SemanticException("Could not find type \"" +
             (qual == null ? name : qual.toString() + "." + name) +
                                 "\".", position());
@@ -77,20 +77,20 @@ public class AmbTypeNode_c extends TypeNode_c implements AmbTypeNode {
     throw new InternalCompilerError(position(),
                                     "Cannot type check ambiguous node "
                                     + this + ".");
-  } 
+  }
 
   public Node exceptionCheck(ExceptionChecker ec) throws SemanticException {
     throw new InternalCompilerError(position(),
                                     "Cannot exception check ambiguous node "
                                     + this + ".");
-  } 
+  }
 
   public void prettyPrint(CodeWriter w, PrettyPrinter tr) {
     if (qual != null) {
         print(qual, w, tr);
         w.write(".");
     }
-            
+
     w.write(name);
   }
 

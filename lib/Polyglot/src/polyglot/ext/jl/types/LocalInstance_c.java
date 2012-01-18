@@ -67,7 +67,7 @@ public class LocalInstance_c extends VarInstance_c implements LocalInstance
         }
         return this;
     }
- 
+
     public boolean equalsImpl(TypeObject o) {
         if (o instanceof LocalInstance) {
             LocalInstance i = (LocalInstance) o;

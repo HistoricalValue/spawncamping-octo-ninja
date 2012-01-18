@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -31,16 +31,16 @@
 
 package soot.coffi;
 
-/** 
- * There can be several parameter annotations in each 
- * Parameter Visibility attribute 
+/**
+ * There can be several parameter annotations in each
+ * Parameter Visibility attribute
  * @see attribute_info
  * @author Jennifer Lhotak
  */
 public class parameter_annotation extends attribute_info {
    /** number of annotations */
    public int num_annotations;
-   /** 
+   /**
     * Each entry represents a single annotation.
     */
    public annotation annotations[];

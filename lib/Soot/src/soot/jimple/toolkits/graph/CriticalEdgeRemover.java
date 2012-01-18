@@ -182,7 +182,7 @@ public class CriticalEdgeRemover extends BodyTransformer {
            * easily insert the synthetic nodes. This redirection might not be
            * necessary, but is pleasant anyways (see the Javadoc for this
            * method)*/
-          if (directPredecessor != null && 
+          if (directPredecessor != null &&
               directPredecessor.fallsThrough()) {
             directPredecessor = insertGotoAfter(unitChain, directPredecessor,
                 currentUnit);

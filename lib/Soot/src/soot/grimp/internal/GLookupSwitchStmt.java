@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ import soot.jimple.*;
 
 import java.util.*;
 
-public class GLookupSwitchStmt extends JLookupSwitchStmt 
+public class GLookupSwitchStmt extends JLookupSwitchStmt
 {
     // This method is necessary to deal with constructor-must-be-first-ism.
     private static UnitBox[] getTargetBoxesArray(List targets)
@@ -58,7 +58,7 @@ public class GLookupSwitchStmt extends JLookupSwitchStmt
     }
 
 
-    public Object clone() 
+    public Object clone()
     {
         int lookupValueCount = getLookupValues().size();
         List clonedLookupValues = new ArrayList(lookupValueCount);
@@ -66,7 +66,7 @@ public class GLookupSwitchStmt extends JLookupSwitchStmt
         for( int i = 0; i < lookupValueCount ;i++) {
         	clonedLookupValues.add(i, IntConstant.v(getLookupValue(i)));
         }
-        
+
         return new GLookupSwitchStmt(Grimp.cloneIfNecessary(getKey()), clonedLookupValues, getTargets(), getDefaultTarget());
     }
 

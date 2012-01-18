@@ -33,7 +33,7 @@ public class LiveVarsTagger extends BodyTransformer {
     public static LiveVarsTagger v() { return G.v().soot_jimple_toolkits_annotation_liveness_LiveVarsTagger();}
 
     protected void internalTransform(Body b, String phaseName, Map options){
-    
+
         LiveLocals sll = new SimpleLiveLocals(new ExceptionalUnitGraph(b));
 
         Iterator it = b.getUnits().iterator();
@@ -62,4 +62,4 @@ public class LiveVarsTagger extends BodyTransformer {
             }
         }
     }
-}   
+}

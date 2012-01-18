@@ -39,8 +39,8 @@ import soot.toolkits.graph.ExceptionalUnitGraph;
  * the {@link Trap} and ends just after the last {@link Unit} which might
  * throw an exception caught by the {@link Trap}. In the case where none
  * of the {@link Unit}s protected by a {@link Trap} can throw the exception
- * it catches, the {@link Trap}'s protected area is left completely empty, 
- * which will likely cause the {@link UnreachableCodeEliminator} to remove the 
+ * it catches, the {@link Trap}'s protected area is left completely empty,
+ * which will likely cause the {@link UnreachableCodeEliminator} to remove the
  * {@link Trap} completely.
  *
  * The {@link TrapTightener} is used to reduce the risk of
@@ -68,11 +68,11 @@ public final class TrapTightener extends BodyTransformer {
 		Unit firstTrappedUnit = trap.getBeginUnit();
 		Unit firstTrappedThrower = null;
 		Unit firstUntrappedUnit = trap.getEndUnit();
-		Unit lastTrappedUnit = 
+		Unit lastTrappedUnit =
 		    (Unit) unitChain.getPredOf(firstUntrappedUnit);
 		Unit lastTrappedThrower = null;
-		for (Unit u = firstTrappedUnit; 
-		     u != null && u != firstUntrappedUnit; 
+		for (Unit u = firstTrappedUnit;
+		     u != null && u != firstUntrappedUnit;
 		     u = (Unit) unitChain.getSuccOf(u)) {
 			if (mightThrowTo(graph, u, trap)) {
 			    firstTrappedThrower = u;
@@ -103,8 +103,8 @@ public final class TrapTightener extends BodyTransformer {
     }
 
     /**
-     * A utility routine which determines if a particular {@link Unit} 
-     * might throw an exception to a particular {@link Trap}, according to 
+     * A utility routine which determines if a particular {@link Unit}
+     * might throw an exception to a particular {@link Trap}, according to
      * the information supplied by a particular control flow graph.
      *
      * @param g The control flow graph providing information about exceptions.
@@ -116,7 +116,7 @@ public final class TrapTightener extends BodyTransformer {
     protected boolean mightThrowTo(ExceptionalUnitGraph g, Unit u, Trap t) {
 	Collection dests = g.getExceptionDests(u);
 	for (Iterator destIt = dests.iterator(); destIt.hasNext(); ) {
-	    ExceptionalUnitGraph.ExceptionDest dest = 
+	    ExceptionalUnitGraph.ExceptionDest dest =
 		(ExceptionalUnitGraph.ExceptionDest) destIt.next();
 	    if (dest.getTrap() == t) {
 		return true;

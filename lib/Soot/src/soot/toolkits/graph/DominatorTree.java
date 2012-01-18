@@ -51,7 +51,7 @@ public class DominatorTree
      * dominator tree.
      **/
     protected HashMap godeToDode;
-    
+
     public DominatorTree(DominatorsFinder dominators)
     {
         // if(Options.v().verbose())
@@ -60,11 +60,11 @@ public class DominatorTree
 
         this.dominators = dominators;
         this.graph = dominators.getGraph();
-        
+
         head = null;
         tails = new ArrayList();
         godeToDode = new HashMap();
-        
+
         buildTree();
     }
 
@@ -76,7 +76,7 @@ public class DominatorTree
     {
         return dominators.getGraph();
     }
-    
+
     /**
      * Returns the root of the dominator tree.
      **/
@@ -120,7 +120,7 @@ public class DominatorTree
         List preds = graph.getPredsOf(node.getGode());
 
         List<DominatorNode> predNodes = new ArrayList<DominatorNode>();
-        
+
         for(Iterator predsIt = preds.iterator(); predsIt.hasNext();){
             Object pred = predsIt.next();
             predNodes.add(getDode(pred));
@@ -138,7 +138,7 @@ public class DominatorTree
         List succs = graph.getSuccsOf(node.getGode());
 
         List<DominatorNode> succNodes = new ArrayList<DominatorNode>();
-        
+
         for(Iterator succsIt = succs.iterator(); succsIt.hasNext();){
             Object succ = succsIt.next();
             succNodes.add(getDode(succ));
@@ -212,7 +212,7 @@ public class DominatorTree
                 if(parent == null){
                     if(head != null)
                         throw new RuntimeException("Assertion failed.");
-                    
+
                     head = dode;
                 }
                 else{
@@ -221,7 +221,7 @@ public class DominatorTree
                 }
             }
         }
-        
+
         // identify the tail nodes
         {
             for(Iterator dodesIt = this.iterator(); dodesIt.hasNext();){
@@ -240,7 +240,7 @@ public class DominatorTree
     protected DominatorNode fetchDode(Object gode)
     {
         DominatorNode dode;
-        
+
         if(godeToDode.containsKey(gode)){
             dode = (DominatorNode) godeToDode.get(gode);
         }
@@ -258,7 +258,7 @@ public class DominatorTree
 
         if(immediateDominator == null)
             return null;
-        
+
         return fetchDode(immediateDominator);
     }
 }

@@ -30,21 +30,21 @@ public interface NodeOps
      * This should <i>not</i> update the old context
      * imperatively.  Use <code>addDecls</code> when leaving the node
      * for that.
-     * 
+     *
      * @param c the current <code>Context</code>
-     * @return the <code>Context</code> to be used for visiting this node. 
+     * @return the <code>Context</code> to be used for visiting this node.
      */
     public Context enterScope(Context c);
 
     /**
-     * Push a new scope for visiting the child node <code>child</code>. 
+     * Push a new scope for visiting the child node <code>child</code>.
      * The default behavior is to delegate the call to the child node, and let
      * it add appropriate declarations that should be in scope. However,
      * this method gives parent nodes have the ability to modify this behavior.
-     * 
+     *
      * @param child the child node about to be entered.
      * @param c the current <code>Context</code>
-     * @return the <code>Context</code> to be used for visiting node 
+     * @return the <code>Context</code> to be used for visiting node
      *           <code>child</code>
      */
     public Context enterScope(Node child, Context c);
@@ -198,9 +198,9 @@ public interface NodeOps
      */
     Node exceptionCheck(ExceptionChecker ec) throws SemanticException;
 
-    /** 
+    /**
      * List of Types of exceptions that might get thrown.  The result is
-     * not necessarily correct until after type checking. 
+     * not necessarily correct until after type checking.
      */
     List throwTypes(TypeSystem ts);
 

@@ -22,13 +22,13 @@ import java.util.*;
 
 
 public class AllocNodesFinder{
-	
+
 	private final Set<AllocNode> allocNodes;
 	private final Set<AllocNode>  multiRunAllocNodes;
 	private final Set<Object> multiCalledMethods;
 	private final HashMap methodsToMultiObjsSites;
 	PAG pag;
-	
+
 	public  AllocNodesFinder(PegCallGraph pcg, CallGraph cg, PAG pag){
 		//System.out.println("===inside AllocNodesFinder===");
 		this.pag = pag;
@@ -37,7 +37,7 @@ public class AllocNodesFinder{
 		multiCalledMethods = new HashSet<Object>();
 		methodsToMultiObjsSites = new HashMap();
 		MultiCalledMethods mcm = new MultiCalledMethods(pcg, multiCalledMethods);
-		
+
 		find(mcm.getMultiCalledMethods(), pcg, cg);
 	}
 	private void find(Set<Object> multiCalledMethods, PegCallGraph pcg, CallGraph callGraph){
@@ -48,7 +48,7 @@ public class AllocNodesFinder{
 			SootMethod sm = (SootMethod)it.next();
 			//    System.out.println("sm in alloc: "+sm);
 			if (!methodsToMultiObjsSites.containsKey(sm)){
-				
+
 				//UnitGraph graph = new ClassicCompleteUnitGraph(sm.getActiveBody());
 				UnitGraph graph = new CompleteUnitGraph(sm.getActiveBody());
 				Iterator iterator = graph.iterator();
@@ -58,7 +58,7 @@ public class AllocNodesFinder{
 						//System.out.println("unit: "+unit);
 						if (clinitMethods.contains(sm)  && unit instanceof AssignStmt){
 							Value rightOp = ((AssignStmt)unit).getRightOp();
-							
+
 							Type type = ((NewExpr)rightOp).getType();
 							AllocNode allocNode = pag.makeAllocNode(
 									PointsToAnalysis.STRING_NODE,
@@ -67,9 +67,9 @@ public class AllocNodesFinder{
 							//  System.out.println("make alloc node: "+allocNode);
 							allocNodes.add(allocNode);
 							multiRunAllocNodes.add(allocNode);
-							
+
 						}
-						
+
 						else if (unit instanceof DefinitionStmt ){
 							Value rightOp = ((DefinitionStmt)unit).getRightOp();
 							if (rightOp instanceof NewExpr){
@@ -80,20 +80,20 @@ public class AllocNodesFinder{
 								multiRunAllocNodes.add(allocNode);
 							}
 						}
-					} 
+					}
 				}
-				
+
 				else{
-					// MultiRunStatementsFinder finder = new MultiRunStatementsFinder(graph, sm);     
+					// MultiRunStatementsFinder finder = new MultiRunStatementsFinder(graph, sm);
 					MultiRunStatementsFinder finder = new MultiRunStatementsFinder(graph, sm, multiCalledMethods, callGraph);
 					FlowSet fs = finder.getMultiRunStatements();
 					//methodsToMultiObjsSites.put(sm, fs);
 					//     PatchingChain  pc = sm.getActiveBody().getUnits();
-					
+
 					while (iterator.hasNext()){
 						Unit unit = (Unit)iterator.next();
 						//System.out.println("unit: "+unit);
-						
+
 						if (clinitMethods.contains(sm)  && unit instanceof AssignStmt){
 							AllocNode allocNode = pag.makeAllocNode(
 									PointsToAnalysis.STRING_NODE,
@@ -106,7 +106,7 @@ public class AllocNodesFinder{
 							 }*/
 						}
 						else if (unit instanceof DefinitionStmt ){
-							
+
 							Value rightOp = ((DefinitionStmt)unit).getRightOp();
 							if (rightOp instanceof NewExpr){
 								Type type = ((NewExpr)rightOp).getType();
@@ -121,27 +121,27 @@ public class AllocNodesFinder{
 						}
 					}
 				}
-				
+
 			}
 		}
-		
-		
-		
+
+
+
 //		Arguments.setAllocNodes((Set)allocNodes);
 //		Arguments.setMultiRunAllocNodes((Set)multiRunAllocNodes);
 		//System.out.println("end ==multiAllocNodes: "+multiRunAllocNodes);
 	}
-	
+
 	public Set<AllocNode> getAllocNodes()
 	{
 		return allocNodes;
 	}
-	
+
 	public Set<AllocNode> getMultiRunAllocNodes()
 	{
 		return  multiRunAllocNodes;
 	}
-	
+
 	public Set<Object> getMultiCalledMethods()
 	{
 		return multiCalledMethods;

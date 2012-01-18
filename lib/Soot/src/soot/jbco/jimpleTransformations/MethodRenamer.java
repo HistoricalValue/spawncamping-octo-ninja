@@ -27,7 +27,7 @@ import soot.jimple.*;
 
 /**
  * @author Michael Batchelder
- * 
+ *
  * Created on 24-Jan-2006
  */
 public class MethodRenamer extends SceneTransformer  implements IJbcoTransform {
@@ -37,13 +37,13 @@ public class MethodRenamer extends SceneTransformer  implements IJbcoTransform {
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "wjtp.jbco_mr";
-  
+
   public String getName() {
     return name;
   }
-  
+
   public void outputSummary() {}
 
   private static final char stringChars[][] = { { 'S', '5', '$' },
@@ -53,12 +53,12 @@ public class MethodRenamer extends SceneTransformer  implements IJbcoTransform {
   private static Hierarchy hierarchy;
 
   protected void internalTransform(String phaseName, Map options) {
-    if (output) 
+    if (output)
       out.println("Transforming Method Names...");
 
     soot.jbco.util.BodyBuilder.retrieveAllBodies();
     soot.jbco.util.BodyBuilder.retrieveAllNames();
-    
+
     Scene scene = G.v().soot_Scene();
     scene.releaseActiveHierarchy();
     hierarchy = scene.getActiveHierarchy();
@@ -158,7 +158,7 @@ public class MethodRenamer extends SceneTransformer  implements IJbcoTransform {
         }
       }
     }
-    
+
     scene.releaseActiveHierarchy();
     scene.getActiveHierarchy();
     scene.setFastHierarchy(new FastHierarchy());
@@ -196,15 +196,15 @@ public class MethodRenamer extends SceneTransformer  implements IJbcoTransform {
     } while (oldToNewMethodNames.containsValue(result) || BodyBuilder.nameList.contains(result));
 
     BodyBuilder.nameList.add(result);
-    
+
     return result;
   }
-  
+
   private static boolean allowsRename(SootClass c, SootMethod m) {
-    
+
     if (soot.jbco.Main.getWeight(MethodRenamer.name, m.getName()) == 0)
       return false;
-    
+
     String subSig = m.getSubSignature();
     if (subSig.equals("void main(java.lang.String[])")
     	&& m.isPublic() && m.isStatic())
@@ -213,7 +213,7 @@ public class MethodRenamer extends SceneTransformer  implements IJbcoTransform {
     } else if (subSig.indexOf("void <init>(")>=0 || subSig.equals("void <clinit>()"))
     {
       return false; // skip constructors for now
-    } else { 
+    } else {
       Iterator<SootClass> cIt = hierarchy.getSuperclassesOfIncluding(c.getSuperclass()).iterator();
       while (cIt.hasNext()) {
         SootClass _c = cIt.next();
@@ -223,23 +223,23 @@ public class MethodRenamer extends SceneTransformer  implements IJbcoTransform {
           return false;
         }
       }
-      
+
       do {
         if (checkInterfacesForMethod(c, m))
           return false;
       } while (c.hasSuperclass() && (c = c.getSuperclass()) != null);
     }
-         
+
     return true;
   }
-  
+
   private static boolean checkInterfacesForMethod(SootClass c, SootMethod m) {
     Iterator it = c.getInterfaces().iterator();
     while (it.hasNext()) {
       SootClass sc = (SootClass)it.next();
       if (sc.isLibraryClass() && sc.declaresMethod(m.getName(),m.getParameterTypes(),m.getReturnType()))
         return true;
-    }    
+    }
     return false;
   }
 }

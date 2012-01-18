@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -30,11 +30,11 @@ import soot.*;
 import soot.jimple.*;
 import java.util.*;
 
-public abstract class AbstractInstanceInvokeExpr extends AbstractInvokeExpr 
+public abstract class AbstractInstanceInvokeExpr extends AbstractInvokeExpr
                       implements InstanceInvokeExpr
 {
     protected ValueBox baseBox;
-    
+
     public Value getBase()
     {
         return baseBox.getValue();
@@ -60,9 +60,9 @@ public abstract class AbstractInstanceInvokeExpr extends AbstractInvokeExpr
         for (ValueBox element : argBoxes) {
             list.addAll(element.getValue().getUseBoxes());
             list.add(element);
-            
+
         }
-        
+
         return list;
     }
 }

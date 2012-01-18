@@ -13,10 +13,10 @@ import soot.jimple.toolkits.thread.AbstractRuntimeThread;
 public interface MhpTester
 {
     public boolean mayHappenInParallel(SootMethod m1, SootMethod m2); // method level MHP
-	
+
     public boolean mayHappenInParallel(SootMethod m1, Unit u1, SootMethod m2, Unit u2); // stmt level MHP
 
 	public void printMhpSummary();
-	
+
 	public List<AbstractRuntimeThread> getThreads();
 }

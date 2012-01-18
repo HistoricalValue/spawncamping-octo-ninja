@@ -8,7 +8,7 @@ public class Source
     protected String name;
     protected String path;
     protected Date lastModified;
-    
+
     /**
      * Indicates if this source was explicitly specified by the user,
      * or if it a source that has been drawn in to the compilation process
@@ -27,12 +27,12 @@ public class Source
     public Source(String name, String path, Date lastModified) {
         this(name, path, lastModified, false);
     }
-    
+
     public Source(String name, String path, Date lastModified, boolean userSpecified) {
 	this.name = name;
         this.path = path;
 	this.lastModified = lastModified;
-        this.userSpecified = userSpecified;   
+        this.userSpecified = userSpecified;
     }
 
     public boolean equals(Object o) {
@@ -66,11 +66,11 @@ public class Source
     public String toString() {
 	return path;
     }
-    
+
     public void setUserSpecified(boolean userSpecified) {
         this.userSpecified = userSpecified;
     }
-    
+
     public boolean userSpecified() {
         return userSpecified;
     }

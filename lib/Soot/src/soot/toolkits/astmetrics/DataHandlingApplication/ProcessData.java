@@ -45,29 +45,29 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 public class ProcessData {
-	
+
 	//when printing class names what is the max size of each class name
 	private static final int CLASSNAMESIZE=15;
-	
+
 	private static final int CLASS =0;
 	private static final int BENCHMARK =1;
-	
+
 	private static String metricListFileName=null;
-	
-	
+
+
 	private static final ArrayList<String> xmlFileList = new ArrayList<String>();
 
-	
+
 	private static int aggregationMechanism =-1;
-	
-	
+
+
 	private static OutputStream streamOut;
 	private static PrintWriter bench;
 
 	// set to true to getcsv instead of tex
 	private static final boolean CSV=true;
 	private static final boolean decompiler=false; //else it is obfuscated
-	
+
 	/**
 	 * @param args
 	 */
@@ -78,7 +78,7 @@ public class ProcessData {
 			useHelp();
 			System.exit(1);
 		}
-		
+
 		if(args[0].equals("--help")){
 			printHelp();
 			System.exit(1);
@@ -86,14 +86,14 @@ public class ProcessData {
 		else if(args[0].equals("-metricList")){
 			metricListFileName(args);
 			System.out.println("A list of metrics will be stored in: "+metricListFileName);
-			
+
 			readXMLFileNames(2,args);
-			
+
            	try{
         		OutputStream streamOut = new FileOutputStream(metricListFileName);
         		PrintWriter writerOut = new PrintWriter(new OutputStreamWriter(streamOut));
         		writeMetricLists(writerOut);
-        		
+
         		writerOut.flush();
         		streamOut.close();
         	} catch (IOException e) {
@@ -104,7 +104,7 @@ public class ProcessData {
 		else if (args[0].equals("-tables")){
 			metricListFileName(args);
 			System.out.println("Will read column table headings from: "+metricListFileName);
-			
+
 			//read aggregation option
 			aggregationOption(args);
 			if(aggregationMechanism == ProcessData.BENCHMARK){
@@ -115,9 +115,9 @@ public class ProcessData {
 				System.out.println("Aggregating over class...each row is one class...");
 				System.out.println("Each benchmark (xml file) will have its own tex file");
 			}
-			
+
 			readXMLFileNames(3,args);
-	
+
 			//TODO: hello
 			generateMetricsTables();
 		}
@@ -125,13 +125,13 @@ public class ProcessData {
 			System.out.println("Incorrect argument number 1: expecting -metricList or -tables");
 			System.exit(1);
 		}
-		
+
 	}
 
-	
-	
+
+
 	/*
-	 * check if there is a 3rd argument and it should be either -class or -benchmark 
+	 * check if there is a 3rd argument and it should be either -class or -benchmark
 	 */
 	private static void aggregationOption(String[] args){
 		if(args.length < 3){
@@ -149,9 +149,9 @@ public class ProcessData {
 			System.exit(1);
 		}
 	}
-	
+
 	/*
-	 * Check if there is a 3rd argument if not complain 
+	 * Check if there is a 3rd argument if not complain
 	 * @param startIndex is the first args element where we expect to have an xml file or a *
 	 */
 	private static void readXMLFileNames(int startIndex, String args[]){
@@ -159,11 +159,11 @@ public class ProcessData {
 			System.out.println("Expecting an xml file OR * symbol as argument number"+(startIndex+1));
 			System.exit(1);
 		}
-		
+
 		//check if its a *
 		if(args[startIndex].equals("*")){
 			System.out.println("Will read all xml files from directory");
-			
+
 			//READ DIRECTORY STRUCTURE
 			readStar();
 		}
@@ -176,18 +176,18 @@ public class ProcessData {
 				}
 				else{
 					xmlFileList.add(temp);
-				}				
+				}
 			}
 		}
-		
+
 		Iterator<String> it = xmlFileList.iterator();
 		while(it.hasNext()){
 			System.out.println("Will be reading: "+it.next());
 		}
 	}
-	
-	
-	
+
+
+
 	/*
 	 * Check if args1 exists and if so store the metric List FileName
 	 */
@@ -199,7 +199,7 @@ public class ProcessData {
 		metricListFileName = args[1];
 
 	}
-	
+
 	public static void printHelp(){
 		printIntro();
 		System.out.println("There are two main modes of execution");
@@ -209,7 +209,7 @@ public class ProcessData {
 		System.out.println("The argument at location 1 should be name of a file where the list of metrics will be stored");
 		System.out.println("All arguments following argument 1 have to be xml files to be processed");
 		System.out.println("If argument at location 2 is * then the current directory is searched and all xml files will be processed");
-		
+
 		System.out.println("\n\n The -tables mode");
 		System.out.println("The argument at location 1 should be name of a file where the list of metrics are stored");
 		System.out.println("These metrics will become the COLUMNS in the tables created");
@@ -217,23 +217,23 @@ public class ProcessData {
 		System.out.println("\t -class for class level metrics");
 		System.out.println("\t -benchmark for benchmark level metrics");
 		System.out.println("Each xml file is considered to be a benchmark with a bunch of classes in it");
-		
+
 		System.out.println("All arguments following argument 2 have to be xml files to be processed");
 		System.out.println("If argument at location 3 is * then the current directory is searched and all xml files will be processed");
 	}
-	
-	
+
+
 	public static void printIntro(){
 		System.out.println("Welcome to the processData application");
 		System.out.println("The application is an xml document parser.");
-		System.out.println("Its primary aim is to create pretty tex tables");	
+		System.out.println("Its primary aim is to create pretty tex tables");
 	}
-	
+
 	public static void useHelp(){
 		System.out.println("Use the --help flag for more details");
 	}
-	
-	
+
+
 	/*
 	 * Read all the xml files from current directory into the xmlFileList arraylist
 	 */
@@ -241,29 +241,29 @@ public class ProcessData {
 		String curDir = System.getProperty("user.dir");
 		System.out.println("Current system directory is"+curDir);
 		File dir = new File(curDir);
-		    
+
 		String[] children = dir.list();
 		if (children == null) {
 			// Either dir does not exist or is not a directory
 		} else {
-	
+
 			FilenameFilter filter = new FilenameFilter() {
 				public boolean accept(File dir, String name) {
 					return name.endsWith(".xml");
 				}
 			};
 			children = dir.list(filter);
-			
+
 			for (String element : children)
 				xmlFileList.add(element);
 		}
 	}
-	
-	
-	
+
+
+
 	private static void writeMetricLists(PrintWriter out){
 		ArrayList<String> metricList = new ArrayList<String>();
-		
+
 		Iterator<String> it = xmlFileList.iterator();
 		while(it.hasNext()){
 			String fileName = it.next();
@@ -304,20 +304,20 @@ public class ProcessData {
 				t.printStackTrace ();
 			}
 		}
-		
+
 		it = metricList.iterator();
 		while(it.hasNext()){
 			out.println(it.next());
 		}
 		System.out.println(metricListFileName+ " created.");
 	}
-	
-	
-	@SuppressWarnings("fallthrough")	
+
+
+	@SuppressWarnings("fallthrough")
 	private static void generateMetricsTables(){
-		
-		Vector<String> columns = new Vector<String>(); 
-		
+
+		Vector<String> columns = new Vector<String>();
+
 		/*
 		 * create the columns which are the metriclist
 		 */
@@ -325,7 +325,7 @@ public class ProcessData {
 			FileReader file = new FileReader(metricListFileName);
 			BufferedReader fileInput = new BufferedReader(file);
 			String text;
-					
+
 			//System.out.println("Columns");
 			while( (text = fileInput.readLine()) != null){
 				//System.out.print(text+"\t");
@@ -338,20 +338,20 @@ public class ProcessData {
 			System.exit(1);
 		}
 
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
 		Vector<String> allMetrics = new Vector<String>();
-		
+
 		try{
 			FileReader file = new FileReader("myList");
 			BufferedReader fileInput = new BufferedReader(file);
 			String text;
-					
+
 			//System.out.println("Columns");
 			while( (text = fileInput.readLine()) != null){
 				//System.out.print(text+"\t");
@@ -364,17 +364,17 @@ public class ProcessData {
 			System.exit(1);
 		}
 
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		String newClassName="";
 		if(aggregationMechanism == ProcessData.BENCHMARK){
 			//TODO: create a metricListfileName.xml with metric info
-		
-			
+
+
 			newClassName = metricListFileName;
 			if(CSV){
 				newClassName += ".csv";
@@ -384,7 +384,7 @@ public class ProcessData {
 				newClassName += ".tex";
 				System.out.println("Creating tex file"+newClassName+" from metrics info");
 			}
-			
+
 
 
 			bench = openWriteFile(newClassName);
@@ -394,7 +394,7 @@ public class ProcessData {
 			 * hence
 			 * fft-enabled.xml fft-disabled.xml should be in one table where as
 			 * matrix-enabled.xml matrix-disabled.xml should be in another table
-			 */			
+			 */
 			HashMap<String, List> benchMarkToFiles = new HashMap<String, List>();
 			Iterator<String> it = xmlFileList.iterator();
 			while(it.hasNext()){
@@ -414,7 +414,7 @@ public class ProcessData {
 				}
 				tempList.add(fileName);
 				benchMarkToFiles.put(benchmark,tempList);
-				
+
 				/*
 				 * if csv check that xml files have proper "property names"
 				 */
@@ -427,7 +427,7 @@ public class ProcessData {
 					System.out.println("XML FILE COLUMN TYPE"+xmlfileColumnType);
 					if(xmlfileColumnType.equals("Jad") || xmlfileColumnType.equals("original")
 							|| xmlfileColumnType.equals("SourceAgain") || xmlfileColumnType.equals("disabled") || xmlfileColumnType.equals("enabled")){
-						
+
 						//TODO will have to change this when dealin with obfuscator xml file names
 					}
 					else{
@@ -435,25 +435,25 @@ public class ProcessData {
 					}
 				}
 			}
-			
+
 			if(CSV)
 				printCSVHeader(bench);
-			
+
 			Iterator<String> keys = benchMarkToFiles.keySet().iterator();
 			while(keys.hasNext()){
 				//each key gets its own table
 				String key = keys.next();
-				
+
 				if(!CSV)
-					printTexTableHeader(bench,key,columns);				
-				
+					printTexTableHeader(bench,key,columns);
+
 				//go through each value which is an xml file
 				Object tempValue = benchMarkToFiles.get(key);
 				if(tempValue == null)
 					continue;
 				List<String> files = (List<String>)tempValue;
-				
-				
+
+
 				/*
 				 * We want the files to be read in a specific order depending on decompiler or obfuscator
 				 */
@@ -519,7 +519,7 @@ public class ProcessData {
 						}
 						else if(fileSort.indexOf("klassmaster-disabled")>-1){
 							newFileOrder[4] = fileSort;
-						}	
+						}
 						else
 							throw new RuntimeException("property xml not correct");
 					}
@@ -531,10 +531,10 @@ public class ProcessData {
 					files.add(newFileOrder[3]);
 					files.add(newFileOrder[4]);
 					System.out.println("new order"+files.toString());
-					
+
 				}
-				
-				
+
+
 				Iterator<String> fileIt = files.iterator();
 				int count=-1;
 				while(fileIt.hasNext()){
@@ -547,8 +547,8 @@ public class ProcessData {
 						Document doc = docBuilder.parse (new File(fileName));
 						System.out.println("Gethering metric info from from xml file: "+fileName);
 						// normalize text representation
-		
-			
+
+
 						if(!CSV){
 							//print the name of the xml file as the name of the benchmark
 							if(fileName.endsWith(".xml"))
@@ -556,73 +556,73 @@ public class ProcessData {
 							else
 								bench.print(fileName);
 						}
-			
-						
+
+
 						HashMap<String, Number> aggregatedValues = new HashMap<String, Number>();
-				
-						
+
+
 						//TODO Should compute all metrics always
 						//only print out the one we want
 						Iterator<String> tempIt = allMetrics.iterator();
 						while(tempIt.hasNext()){
 							aggregatedValues.put(tempIt.next(),new Integer(0));
 						}
-					
+
 						int numClasses = aggregateXMLFileMetrics(doc,aggregatedValues);
-			
+
 						//at this point the hashmap contains aggregatedValue of all metrics
-						
-						
-						
-						
-						
+
+
+
+
+
 						//get the metrics we might need to divide
 						Object myTemp = aggregatedValues.get("Total-Conditionals");
 						if(myTemp == null){
 							System.out.println("Total-Conditionals not found in aggregatedValues");
-							System.exit(1);	
+							System.exit(1);
 						}
 						double total_if_ifelse = ((Integer)myTemp).doubleValue();
-						
-						
+
+
 						myTemp = aggregatedValues.get("Total Loops");
 						if(myTemp == null){
 							System.out.println("Total Loops not found in aggregatedValues");
-							System.exit(1);	
+							System.exit(1);
 						}
 						double totalLoops = ((Integer)myTemp).doubleValue();
-						
+
 						double totalConditional = total_if_ifelse+totalLoops;
-						
+
 						myTemp = aggregatedValues.get("AST-Node-Count");
 						if(myTemp == null){
 							System.out.println("AST-Node-Count not found in aggregatedValues");
-							System.exit(1);	
+							System.exit(1);
 						}
 						double astCount = ((Integer)myTemp).doubleValue();
 
-						
-						
-						
-						
+
+
+
+
 						myTemp = aggregatedValues.get("NameCount");
 						if(myTemp == null){
 							System.out.println("NameCount not found in aggregatedValues");
-							System.exit(1);	
+							System.exit(1);
 						}
 						double nameCount = ((Double)myTemp).doubleValue();
 
-						
-						
-						
+
+
+
 						myTemp = aggregatedValues.get("Expr-Count");
 						if(myTemp == null){
 							System.out.println("ExprCount not found in aggregatedValues");
-							System.exit(1);	
+							System.exit(1);
 						}
 						double exprCount = ((Double)myTemp).doubleValue();
 
-						
+
 						tempIt = columns.iterator();
 						while(tempIt.hasNext()){
 							String nexttempit = tempIt.next();
@@ -657,7 +657,7 @@ public class ProcessData {
 												System.out.println("Val not 0 but totalConditionals are zero!!!");
 												System.exit(1);
 											}
-												
+
 										}
 										else if(nexttempit.equals("D-W-Complexity")){
 											if(astCount !=0 ){
@@ -671,8 +671,8 @@ public class ProcessData {
 												System.out.println("Val not 0 but astcount is zero!!!");
 												System.exit(1);
 											}
-												
-										}								
+
+										}
 										else if(nexttempit.equals("Expr-Complexity")){
 
 											if(exprCount !=0 ){
@@ -746,7 +746,7 @@ public class ProcessData {
 												System.out.println("Val not 0 but totalConditionals are zero!!!");
 												System.exit(1);
 											}
-												
+
 										}
 										else if(nexttempit.equals("D-W-Complexity")){
 											if(astCount !=0 ){
@@ -760,8 +760,8 @@ public class ProcessData {
 												System.out.println("Val not 0 but astcount is zero!!!");
 												System.exit(1);
 											}
-												
-										}								
+
+										}
 										else if(nexttempit.equals("Expr-Complexity")){
 
 											if(exprCount !=0 ){
@@ -811,7 +811,7 @@ public class ProcessData {
 								if(tempIt.hasNext()){
 									System.out.println("Only allowed one metric for CSV");
 									System.exit(1);
-								}								
+								}
 							}
 							else{
 								if(tempIt.hasNext())
@@ -833,7 +833,7 @@ public class ProcessData {
 						t.printStackTrace ();
 					}
 				}//done with all files for this benchmark
-				
+
 				//print closing for the table for this benchmark
 				if(CSV)
 					bench.println("");
@@ -845,9 +845,9 @@ public class ProcessData {
 
 
 		}
-		else{		
-		
-		
+		else{
+
+
 			Iterator<String> it = xmlFileList.iterator();
 			while(it.hasNext()){
 				String fileName = it.next();
@@ -861,7 +861,7 @@ public class ProcessData {
 					// normalize text representation
 					doc.getDocumentElement ().normalize ();
 
-					
+
 					if (aggregationMechanism == ProcessData.CLASS){
 						getClassMetrics(fileName,doc,columns);
 					}
@@ -881,10 +881,10 @@ public class ProcessData {
 					t.printStackTrace ();
 				}
 			}
-		}		
+		}
 	}
 
-	
+
 	private static PrintWriter openWriteFile(String fileName){
 		PrintWriter writerOut;
        	try{
@@ -895,8 +895,8 @@ public class ProcessData {
     	}
     	return writerOut;
 	}
-	
-	
+
+
 	private static void closeWriteFile(PrintWriter writerOut,String fileName){
 		try{
 			writerOut.flush();
@@ -905,23 +905,23 @@ public class ProcessData {
 			throw new CompilationDeathException("Cannot output file " + fileName);
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	/*
 	 * This method is called for each xml class sent as input.
-	 * 
+	 *
 	 * Should read all of its metrics and add them to the aggregated values
 	 */
 	private static int aggregateXMLFileMetrics(Document doc, HashMap<String, Number> aggregated){
-		
+
 		NodeList classes = doc.getElementsByTagName("Class");
 		int numClasses =classes.getLength();
-		
-		
+
+
 		System.out.println("NumClasses for this document are"+numClasses);
-		
+
 		NodeList metrics = doc.getElementsByTagName("Metric");
 
 		for(int s=0; s<metrics.getLength() ; s++){
@@ -934,18 +934,18 @@ public class ProcessData {
 
 				NodeList textFNList = name.getChildNodes();
 				String tempName = ((Node)textFNList.item(0)).getNodeValue().trim();
-					
+
 				Object tempObj  = aggregated.get(tempName);
 				if( tempObj == null){
 					//not found in hashmap so we dont care about this metric
 					continue;
 				}
-				
+
 				//We get to this point only if the metric is important
-				
+
 				NodeList value = metricElement.getElementsByTagName("Value");
 				Element name1 = (Element)value.item(0);
-				
+
 				NodeList textFNList1 = name1.getChildNodes();
 				String valToPrint = ((Node)textFNList1.item(0)).getNodeValue().trim();
 
@@ -953,7 +953,7 @@ public class ProcessData {
 				try{
 					int temp = Integer.parseInt(valToPrint);
 					if(tempObj instanceof Integer){
-						Integer valSoFar = (Integer)tempObj;				
+						Integer valSoFar = (Integer)tempObj;
 						aggregated.put(tempName, new Integer(valSoFar.intValue()+temp) );
 					}
 					else if(tempObj instanceof Double){
@@ -967,13 +967,13 @@ public class ProcessData {
 					//temp was not an int
 					notInt = true;
 				}
-				
+
 				if(notInt){
 					//probably a double
 					try{
 						double temp = Double.parseDouble(valToPrint);
 						if(tempObj instanceof Integer){
-							Integer valSoFar = (Integer)tempObj;				
+							Integer valSoFar = (Integer)tempObj;
 							aggregated.put(tempName, new Double(valSoFar.intValue()+temp) );
 						}
 						else if(tempObj instanceof Double){
@@ -981,38 +981,38 @@ public class ProcessData {
 							aggregated.put(tempName, new Double(valSoFar.doubleValue() + temp));
 						}
 						else
-							throw new RuntimeException("\n\nobject type not found");								
-					}	
+							throw new RuntimeException("\n\nobject type not found");
+					}
 					catch(Exception e){
 						throw new RuntimeException("\n\n not an integer not a double unhandled!!!!");
 					}
 				}
-			}//end of if metricNode is an element_Node	
+			}//end of if metricNode is an element_Node
 		}//end of for loop with s var
 		return numClasses;
 	}
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	private static void getClassMetrics(String fileName, Document doc,Vector<String> columns){
 		//create a tex file with name (fileName - xml + tex)
 		String newClassName = fileName;
@@ -1020,33 +1020,33 @@ public class ProcessData {
 			newClassName = newClassName.substring(0,newClassName.length()-4);
 
 		newClassName += ".tex";
-		
+
 		System.out.println("Creating tex file"+newClassName+" from metrics info in file"+fileName);
-		
+
 		PrintWriter writerOut = openWriteFile(newClassName);
     	printTexTableHeader(writerOut,"Classes",columns);
-    	
-    	
-    	
-    	
-    	
+
+
+
+
+
     	/*
     	 * In order to print all class info alphabetically
     	 * we will create a map of className to data to be displayed
     	 */
     	ArrayList<String> classNames = new ArrayList<String>();
     	HashMap<String, String> classData = new HashMap<String, String>();
-		
+
     	//each row is a class the name is obtained from the tag Class
 		NodeList classes = doc.getElementsByTagName("Class");
-		
+
 		for(int cl=0;cl<classes.getLength();cl++){
 			//going through each class node
 			Node classNode = classes.item(cl);
 			if(classNode.getNodeType() == Node.ELEMENT_NODE){
-			
+
 				Element classElement = (Element)classNode;
-				
+
 				/*
 				 * Class Name
 				 */
@@ -1055,9 +1055,9 @@ public class ProcessData {
 
 				NodeList classNameTextFNList = classNameElement.getChildNodes();
 				String className = ((Node)classNameTextFNList.item(0)).getNodeValue().trim();
-				
+
 				//writerOut.println("");
-		
+
 				className = className.replace('_','-');
 				if(className.length()>CLASSNAMESIZE){
 					//writerOut.print(className.substring(0,CLASSNAMESIZE)+"   ");
@@ -1068,21 +1068,21 @@ public class ProcessData {
 					//writerOut.print(className+"   ");
 					classNames.add(className);
 				}
-				
-				System.out.print("\nclassName "+className);							
-				
-	
-				
+
+				System.out.print("\nclassName "+className);
+
+
+
 				String data = "   ";
 
-				
+
 				/*
 				 * Metrics
 				 */
 				NodeList metrics = classElement.getElementsByTagName("Metric");
 
 		    	int columnIndex=0; //which one we are printing right now
-		    	
+
 				for(int s=0; s<metrics.getLength() && columnIndex < columns.size(); s++){
 					Node metricNode = metrics.item(s);
 					if(metricNode.getNodeType() == Node.ELEMENT_NODE){
@@ -1093,20 +1093,20 @@ public class ProcessData {
 
 						NodeList textFNList = name.getChildNodes();
 						String tempName = ((Node)textFNList.item(0)).getNodeValue().trim();
-					
+
 						/*
 						 * If the name of this metric is not the next column name in the columns
 						 * simply skip over it and continue
 						 */
 						if(! tempName.equals(columns.elementAt(columnIndex))){
-							//System.out.println("here");	
+							//System.out.println("here");
 							continue;
 						}
 
-						
-					
+
+
 						//We get to this point only if the metric name is the same as the column name
-					
+
 						NodeList value = metricElement.getElementsByTagName("Value");
 						Element name1 = (Element)value.item(0);
 
@@ -1115,9 +1115,9 @@ public class ProcessData {
 						System.out.print(" " + valToPrint);
 						//writerOut.print("&"+valToPrint);
 						data += "&"+valToPrint;
-						
-						
-						
+
+
+
 						columnIndex++;
 						if(columns.size()>columnIndex){
 							//writerOut.print("   ");
@@ -1127,29 +1127,29 @@ public class ProcessData {
 							//writerOut.println("\\\\");
 							data += "\\\\";
 						}
-						
-					}//end of if metricNode is an element_Node	
+
+					}//end of if metricNode is an element_Node
 				}//end of for loop with s var
-				
-				
-				
-				
-				
-				
+
+
+
+
+
+
 				classData.put(className,data);
-					
-				
-				
+
+
+
 			}//end of if classNode is an element_Node
 		}//end of for loop with cl
 
 		//writerOut.println();
 		//writerOut.println();
 		//writerOut.println();
-		
-		
+
+
 		Collections.sort(classNames);
-		
+
 		Iterator<String> tempIt = classNames.iterator();
 		while(tempIt.hasNext()){
 			String className = tempIt.next();
@@ -1158,11 +1158,11 @@ public class ProcessData {
 			writerOut.println(data);
 		}
 		printTexTableFooter(writerOut,fileName);
-	
+
 		closeWriteFile(writerOut,metricListFileName);
 	}
 
-	
+
 	private static void printTexTableFooter(PrintWriter out, String tableCaption){
 		out.println("");
 		out.println("\\hline");
@@ -1171,11 +1171,11 @@ public class ProcessData {
 		out.println("\\end{table}");
 		//out.println("\\end{figure}");
 	}
-	
-	
+
+
 
 	/*
-	 * Prints the name of?? 
+	 * Prints the name of??
 	 */
 	private static void printCSVHeader(PrintWriter out){
 		if(decompiler)
@@ -1184,7 +1184,7 @@ public class ProcessData {
 			out.println(",Original,JBCO-enabled,JBCO-disabled,klassmaster-enabled,klassmaster-disabled");
 	}
 
-	
+
 	private static void printTexTableHeader(PrintWriter out, String rowHeading, Vector<String> columns){
 		//out.println("\\begin{figure}[hbtp]");
 		out.println("\\begin{table}[hbtp]");
@@ -1192,12 +1192,12 @@ public class ProcessData {
 
 		for(int i =0;i<=columns.size();i++)
 			out.print("|l");
-		
+
 		out.println("|}");
 		out.println("\\hline");
-		
+
 		out.print(rowHeading+"   ");
-		
+
 		Iterator<String> it = columns.iterator();
 		while(it.hasNext()){
 			out.print("&"+it.next());
@@ -1205,7 +1205,7 @@ public class ProcessData {
 				out.print("   ");
 		}
 		out.println("\\\\");
-		
+
 		out.println("\\hline");
 	}
 }

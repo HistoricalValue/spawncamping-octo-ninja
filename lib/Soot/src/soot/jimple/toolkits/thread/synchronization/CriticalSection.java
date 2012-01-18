@@ -7,13 +7,13 @@ import soot.*;
 
 class CriticalSection extends SynchronizedRegion
 {
-	public static int nextIDNum = 1; 
-	
+	public static int nextIDNum = 1;
+
 	// Information about the transactional region
 	public int IDNum;
 	public int nestLevel;
 	public String name;
-	
+
 	public Value origLock;
 	public CodeBlockRWSet read, write;
 	public HashSet<Unit> invokes;
@@ -21,7 +21,7 @@ class CriticalSection extends SynchronizedRegion
 	public HashMap<Unit, CodeBlockRWSet> unitToRWSet;
 	public HashMap<Unit, List> unitToUses; // For lockset analysis
 	public boolean wholeMethod;
-	
+
 	// Information for analyzing conflicts with other transactions
 	public SootMethod method;
 	public int setNumber; // used for breaking the list of transactions into sets
@@ -30,12 +30,12 @@ class CriticalSection extends SynchronizedRegion
 	public HashSet<Unit> waits;
 	public HashSet<Unit> notifys;
 	public HashSet<MethodOrMethodContext> transitiveTargets;
-	
+
 	// Locking Information
 	public Value lockObject;
 	public Value lockObjectArrayIndex;
 	public List<EquivalentValue> lockset;
-	
+
 	CriticalSection(boolean wholeMethod, SootMethod method, int nestLevel)
 	{
 		super();
@@ -60,7 +60,7 @@ class CriticalSection extends SynchronizedRegion
 	    this.lockObjectArrayIndex = null;
 	    this.lockset = null;
 	}
-	
+
 	CriticalSection(CriticalSection tn)
 	{
 		super(tn);
@@ -90,7 +90,7 @@ class CriticalSection extends SynchronizedRegion
 	{
 		return new CriticalSection(this);
 	}
-	
+
 	public String toString()
 	{
 		return name;

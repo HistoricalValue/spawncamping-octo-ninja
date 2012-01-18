@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -42,12 +42,12 @@ public class ThrowManager
      *
      * Creates if necessary.
      */
-        
+
     public static Stmt getNullPointerExceptionThrower(JimpleBody b)
     {
         Chain units = b.getUnits();
         Set trappedUnits = TrapManager.getTrappedUnitsOf(b);
-        
+
         for (Stmt s = (Stmt)units.getLast(); s != units.getFirst();
              s = (Stmt)units.getPredOf(s))
         {
@@ -77,7 +77,7 @@ public class ThrowManager
                 if (!(ie instanceof SpecialInvokeExpr))
                     continue;
 
-                if (((SpecialInvokeExpr)ie).getBase() != throwee || 
+                if (((SpecialInvokeExpr)ie).getBase() != throwee ||
                     !ie.getMethodRef().name().equals("<init>"))
                     continue;
 
@@ -106,7 +106,7 @@ public class ThrowManager
         Chain units = b.getUnits();
         Chain locals = b.getLocals();
         int i = 0;
-        
+
         // Bah!
         boolean canAddI = false;
         do
@@ -132,7 +132,7 @@ public class ThrowManager
 
         Stmt invStmt = Jimple.v().newInvokeStmt
             (Jimple.v().newSpecialInvokeExpr(l, Scene.v().getMethod("<java.lang.NullPointerException: void <init>()>").makeRef()));
-        
+
         Stmt throwStmt = Jimple.v().newThrowStmt(l);
 
         units.insertAfter(newStmt, target);

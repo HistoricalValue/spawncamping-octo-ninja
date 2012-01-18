@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,12 +41,12 @@ public abstract class AbstractUnitBox implements UnitBox
     {
         return true;
     }
-    
+
     public void setUnit(Unit unit)
     {
         if(!canContainUnit(unit))
             throw new RuntimeException("attempting to put invalid unit in UnitBox");
-            
+
         // Remove this from set of back pointers.
             if(this.unit != null)
             {

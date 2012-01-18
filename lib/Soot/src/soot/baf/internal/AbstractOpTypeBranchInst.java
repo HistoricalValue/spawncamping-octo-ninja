@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ public abstract class AbstractOpTypeBranchInst extends AbstractBranchInst
 {
     protected Type opType;
 
-  
+
 
 
     AbstractOpTypeBranchInst(Type opType, UnitBox targetBox)
@@ -53,7 +53,7 @@ public abstract class AbstractOpTypeBranchInst extends AbstractBranchInst
     {
             return 2;
     }
-    
+
     public int getOutCount()
     {
             return 0;
@@ -63,7 +63,7 @@ public abstract class AbstractOpTypeBranchInst extends AbstractBranchInst
     {
         return opType;
     }
-    
+
     public void setOpType(Type t)
     {
         opType = t;
@@ -71,14 +71,14 @@ public abstract class AbstractOpTypeBranchInst extends AbstractBranchInst
             opType = RefType.v();
     }
 
-   
+
     public String toString()
     {
       // do stuff with opType later.
         return getName() + "." + Baf.bafDescriptorOf(opType)+
            " " + getTarget();
-          
-    }    
+
+    }
     public void toString( UnitPrinter up ) {
         up.literal( getName() );
         up.literal( "." );

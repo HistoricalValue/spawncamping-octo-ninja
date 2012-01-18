@@ -25,7 +25,7 @@ import polyglot.types.MemberInstance;
 public class PrivateAccessChecker extends polyglot.visit.NodeVisitor {
 
     private final ArrayList<MemberInstance> list;
-      
+
     public ArrayList<MemberInstance> getList() {
         return list;
     }
@@ -35,9 +35,9 @@ public class PrivateAccessChecker extends polyglot.visit.NodeVisitor {
     }
 
     public polyglot.ast.Node leave(polyglot.ast.Node old, polyglot.ast.Node n, polyglot.visit.NodeVisitor visitor) {
-    
+
         if (n instanceof polyglot.ast.Field) {
-            
+
             polyglot.types.FieldInstance fi = ((polyglot.ast.Field)n).fieldInstance();
 
             if (fi.flags().isPrivate()) {
@@ -45,7 +45,7 @@ public class PrivateAccessChecker extends polyglot.visit.NodeVisitor {
             }
         }
         if (n instanceof polyglot.ast.Call) {
-            
+
             polyglot.types.MethodInstance mi = ((polyglot.ast.Call)n).methodInstance();
 
             if (mi.flags().isPrivate()) {

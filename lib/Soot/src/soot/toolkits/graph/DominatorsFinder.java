@@ -32,7 +32,7 @@ public interface DominatorsFinder<N>
      * Returns the graph to which the analysis pertains.
      **/
     public DirectedGraph<N> getGraph();
-    
+
     /**
      * Returns a list of dominators for the given node in the graph.
      **/

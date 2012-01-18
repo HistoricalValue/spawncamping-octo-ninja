@@ -57,26 +57,26 @@ public class SETStatementSequenceNode extends SETNode
     {
 	IterableSet c = new IterableSet();
 	AugmentedStmt last = (AugmentedStmt) get_Body().getLast();
-	
+
 	if ((last.csuccs != null) && (last.csuccs.isEmpty() == false))
 	    c.add( last);
 
-	return c; 
+	return c;
     }
 
     public ASTNode emit_AST()
     {
 	List<Object> l = new LinkedList<Object>();
-	
+
 	boolean isStaticInitializer = davaBody.getMethod().getName().equals( SootMethod.staticInitializerName);
-	
+
 	Iterator it = get_Body().iterator();
 	while (it.hasNext()) {
 	    AugmentedStmt as = (AugmentedStmt) it.next();
 	    Stmt s = as.get_Stmt();
 
 	    if (davaBody != null) {
-		
+
 		if ((s instanceof ReturnVoidStmt) && (isStaticInitializer))
 		    continue;
 
@@ -85,12 +85,12 @@ public class SETStatementSequenceNode extends SETNode
 
 		if (s instanceof MonitorStmt)
 		    continue;
-		
+
 		/*
 		  January 12th 2006
 		  Trying to fix the super problem we need to not ignore constructor unit
 		  i.e. this or super
-		  
+
 		*/
 		if (s == davaBody.get_ConstructorUnit()){
 		    //System.out.println("ALLOWING this.init STMT TO GET ADDED..............SETStatementSequenceNode");
@@ -101,14 +101,14 @@ public class SETStatementSequenceNode extends SETNode
 
 		if (s instanceof IdentityStmt) {
 		    IdentityStmt ids = (IdentityStmt) s;
-		    
-		    Value 
+
+		    Value
 			rightOp = ids.getRightOp(),
 			leftOp =  ids.getLeftOp();
-		    
+
 		    if (davaBody.get_ThisLocals().contains( leftOp))
 			continue;
-		    
+
 		    if (rightOp instanceof ParameterRef)
 			continue;
 

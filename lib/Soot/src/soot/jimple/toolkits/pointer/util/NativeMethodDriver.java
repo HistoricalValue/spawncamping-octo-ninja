@@ -19,7 +19,7 @@
 
 /**
  * A wrapper for native method side-effect simulation.
- * The caller passes in a native method with parameters, 
+ * The caller passes in a native method with parameters,
  * the corresponding native simulator gets called.
  *
  * @author Feng Qian
@@ -64,9 +64,9 @@ public class NativeMethodDriver {
                        new JavaLangReflectProxyNative(helper));
 
 
-        cnameToSim.put("java.io.FileInputStream", 
+        cnameToSim.put("java.io.FileInputStream",
                        new JavaIoFileInputStreamNative(helper));
-        cnameToSim.put("java.io.FileOutputStream", 
+        cnameToSim.put("java.io.FileOutputStream",
                        new JavaIoFileOutputStreamNative(helper));
         cnameToSim.put("java.io.ObjectInputStream",
                        new JavaIoObjectInputStreamNative(helper));
@@ -78,14 +78,14 @@ public class NativeMethodDriver {
         cnameToSim.put("java.io.FileDescriptor", new JavaIoFileDescriptorNative(helper));
 
 
-        cnameToSim.put("java.util.ResourceBundle", 
+        cnameToSim.put("java.util.ResourceBundle",
                        new JavaUtilResourceBundleNative(helper));
         cnameToSim.put("java.util.TimeZone", new JavaUtilTimeZoneNative(helper));
-        
+
 
         cnameToSim.put("java.util.jar.JarFile",
                        new JavaUtilJarJarFileNative(helper));
-        
+
         cnameToSim.put("java.util.zip.CRC32",
                        new JavaUtilZipCRC32Native(helper));
         cnameToSim.put("java.util.zip.Inflater",
@@ -94,15 +94,15 @@ public class NativeMethodDriver {
                        new JavaUtilZipZipFileNative(helper));
         cnameToSim.put("java.util.zip.ZipEntry",
                        new JavaUtilZipZipEntryNative(helper));
-        
+
 
         cnameToSim.put("java.security.AccessController",
                        new JavaSecurityAccessControllerNative(helper));
-        
 
-        cnameToSim.put("java.net.InetAddress", 
+
+        cnameToSim.put("java.net.InetAddress",
                        new JavaNetInetAddressNative(helper));
-        cnameToSim.put("java.net.InetAddressImpl", 
+        cnameToSim.put("java.net.InetAddressImpl",
                        new JavaNetInetAddressImplNative(helper));
 
 
@@ -120,13 +120,13 @@ public class NativeMethodDriver {
   /**
    * The entry point of native method simulation.
    * @param method, must be a native method
-   * @param thisVar, the variable represent @this, 
+   * @param thisVar, the variable represent @this,
    *                 it can be null if the method is static
    * @param returnVar, the variable represent @return
    *                 it is null if the method has no return
    * @param params, array of parameters.
    */
-  public boolean process(SootMethod method, 
+  public boolean process(SootMethod method,
 				ReferenceVariable thisVar,
 				ReferenceVariable returnVar,
 				ReferenceVariable params[]) {
@@ -137,7 +137,7 @@ public class NativeMethodDriver {
 //    G.v().out.println(method.toString());
     if (clsSim == null) {
 	  //G.v().out.println("WARNING: it is unsafe to simulate the method ");
-	  //G.v().out.println("         "+method.toString());	
+	  //G.v().out.println("         "+method.toString());
       //throw new NativeMethodNotSupportedException(method);
       return true;
     } else {
@@ -150,7 +150,7 @@ public class NativeMethodDriver {
       } catch (NativeMethodNotSupportedException e) {
           if(DEBUG) {
               G.v().out.println("WARNING: it is unsafe to simulate the method ");
-              G.v().out.println("         "+method.toString());	
+              G.v().out.println("         "+method.toString());
           }
       }
       return true;

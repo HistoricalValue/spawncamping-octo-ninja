@@ -31,12 +31,12 @@ public class ExceptionCheckerError extends Exception {
         throwing(s);
         position(pos);
     }
-        
+
     private SootMethod method;
     private SootClass excType;
     private Stmt throwing;
     private SourceLnPosTag position;
-    
+
     public SootMethod method(){
         return method;
     }
@@ -68,5 +68,5 @@ public class ExceptionCheckerError extends Exception {
     public void position(SourceLnPosTag pos){
         position = pos;
     }
-    
+
 }

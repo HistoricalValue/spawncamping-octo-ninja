@@ -27,7 +27,7 @@
 
 package soot.jimple.toolkits.annotation.purity;
 
-/** 
+/**
  * An edge in a purity graph.
  * Each edge has a soruce PurityNode, a taget PurityNode, and a field label
  * (we use a String here).
@@ -38,7 +38,7 @@ package soot.jimple.toolkits.annotation.purity;
  */
 public class PurityEdge
 {
-    private String     field; 
+    private String     field;
     private PurityNode source, target;
     private boolean    inside;
 
@@ -55,24 +55,24 @@ public class PurityEdge
     public PurityNode getSource() { return source; }
     public boolean    isInside()  { return inside; }
 
-    public int hashCode() 
+    public int hashCode()
     { return field.hashCode()+target.hashCode()+source.hashCode()+(inside?69:0); }
 
     public boolean equals(Object o)
     {
 	if (!(o instanceof PurityEdge)) return false;
 	PurityEdge e = (PurityEdge)o;
-	return source.equals(e.source) && field.equals(e.field) 
+	return source.equals(e.source) && field.equals(e.field)
 	    && target.equals(e.target) && inside==e.inside;
     }
 
     public String toString()
     {
 	if (inside)
-	    return source.toString()+" = "+field+" => "+target.toString(); 
+	    return source.toString()+" = "+field+" => "+target.toString();
 	else
-	    return source.toString()+" - "+field+" -> "+target.toString(); 
-	
+	    return source.toString()+" - "+field+" -> "+target.toString();
+
     }
 }
 

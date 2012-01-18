@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -29,11 +29,11 @@ public class Integer127Type extends PrimType implements IntegerType
 {
 	private static Integer127Type instance;
 	static { instance = new Integer127Type(); }
-	
+
 	public static Integer127Type v() { return instance; }
-	
+
 	private Integer127Type() { }
-	
+
 	public String toString() { return "[0..127]"; }
 	public boolean equals(Object t) { return this == t; }
 }

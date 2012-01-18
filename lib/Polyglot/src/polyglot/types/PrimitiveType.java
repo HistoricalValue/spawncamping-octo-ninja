@@ -3,8 +3,8 @@ package polyglot.types;
 import polyglot.util.Enum;
 
 /**
- * A <code>PrimitiveType</code> represents a type which may not be directly 
- * coerced to java.lang.Object (under the standard Java type system).    
+ * A <code>PrimitiveType</code> represents a type which may not be directly
+ * coerced to java.lang.Object (under the standard Java type system).
  * <p>
  * This class should never be instantiated directly. Instead, you should
  * use the <code>TypeSystem.get*</code> methods.

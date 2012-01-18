@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -32,21 +32,21 @@ public class BytecodeHierarchy implements IHierarchy
 	{
 		public final AncestryTreeNode next;
 		public final RefType type;
-		
+
 		public AncestryTreeNode(AncestryTreeNode next, RefType type)
 		{
 			this.next = next;
 			this.type = type;
 		}
 	}
-	
+
 	/* Returns a collection of nodes, each with type Object, each at the leaf
 	end of a different path from root to Object. */
 	private static Collection<AncestryTreeNode> buildAncestryTree(RefType root)
 	{
 		LinkedList<AncestryTreeNode> leafs = new LinkedList<AncestryTreeNode>();
 		leafs.add(new AncestryTreeNode(null, root));
-		
+
 		LinkedList<AncestryTreeNode> r = new LinkedList<AncestryTreeNode>();
 		while ( !leafs.isEmpty() )
 		{
@@ -57,22 +57,22 @@ public class BytecodeHierarchy implements IHierarchy
 			else
 			{
 				SootClass sc = node.type.getSootClass();
-				
+
 				for ( Iterator i = sc.getInterfaces().iterator(); i.hasNext(); )
 					leafs.add(new AncestryTreeNode(
 						node, ((SootClass)i.next()).getType()));
-				
+
 				// The superclass of all interfaces is Object
 				// -- try to discard phantom interfaces.
 				if ( ( !sc.isInterface() || sc.getInterfaceCount() == 0 ) && !sc.isPhantom())
 					leafs.add(new AncestryTreeNode(
 						node, sc.getSuperclass().getType()));
-				
+
 			}
 		}
 		return r;
 	}
-	
+
 	private static RefType leastCommonNode(
 		AncestryTreeNode a, AncestryTreeNode b)
 	{
@@ -86,12 +86,12 @@ public class BytecodeHierarchy implements IHierarchy
 		}
 		return r;
 	}
-	
+
 	public Collection<Type> lcas(Type a, Type b)
 	{
 		return lcas_(a, b);
 	}
-	
+
 	public static Collection<Type> lcas_(Type a, Type b)
 	{
 		if ( TypeResolver.typesEqual(a, b) )
@@ -114,13 +114,13 @@ public class BytecodeHierarchy implements IHierarchy
 			Type eta = ((ArrayType)a).getElementType(),
 				etb = ((ArrayType)b).getElementType();
 			Collection<Type> ts;
-			
+
 			// Primitive arrays are not covariant but all other arrays are
 			if ( eta instanceof PrimType || eta instanceof PrimType )
 				ts = new EmptyList<Type>();
 			else
 				ts = lcas_(eta, etb);
-			
+
 			LinkedList<Type> r = new LinkedList<Type>();
 			if ( ts.isEmpty() )
 			{
@@ -139,17 +139,17 @@ public class BytecodeHierarchy implements IHierarchy
 				rt = b;
 			else
 				rt = a;
-			
-			/* If the reference type implements Serializable or Cloneable then 
-			these are the least common supertypes, otherwise the only one is 
+
+			/* If the reference type implements Serializable or Cloneable then
+			these are the least common supertypes, otherwise the only one is
 			Object. */
-			
+
 			LinkedList<Type> r = new LinkedList<Type>();
 			if ( ancestor_(RefType.v("java.io.Serializable"), rt) )
 				r.add(RefType.v("java.io.Serializable"));
 			if ( ancestor_(RefType.v("java.lang.Cloneable"), rt) )
 				r.add(RefType.v("java.lang.Cloneable"));
-			
+
 			if ( r.isEmpty() )
 				r.add(RefType.v("java.lang.Object"));
 			return r;
@@ -159,32 +159,32 @@ public class BytecodeHierarchy implements IHierarchy
 		{
 			Collection<AncestryTreeNode> treea = buildAncestryTree((RefType)a),
 				treeb = buildAncestryTree((RefType)b);
-			
+
 			LinkedList<Type> r = new LinkedList<Type>();
 			for ( AncestryTreeNode nodea : treea )
 				for ( AncestryTreeNode nodeb : treeb )
 				{
 					RefType t = leastCommonNode(nodea, nodeb);
-					
+
 					boolean least = true;
 					for ( ListIterator i = r.listIterator(); i.hasNext(); )
 					{
 						Type t_ = (Type)i.next();
-						
+
 						if ( ancestor_(t, t_) )
 						{
 							least = false;
 							break;
 						}
-						
+
 						if ( ancestor_(t_, t) )
 							i.remove();
 					}
-					
+
 					if ( least )
 						r.add(t);
 				}
-			
+
 			//in case of phantom classes that screw up type resolution here,
 			//default to only possible common reftype, java.lang.Object
 			//kludge on a kludge on a kludge...
@@ -194,12 +194,12 @@ public class BytecodeHierarchy implements IHierarchy
 			return r;
 		}
 	}
-	
+
 	public boolean ancestor(Type ancestor, Type child)
 	{
 		return ancestor_(ancestor, child);
 	}
-	
+
 	public static boolean ancestor_(Type ancestor, Type child)
 	{
 		if ( TypeResolver.typesEqual(ancestor, child) )
@@ -220,28 +220,28 @@ public class BytecodeHierarchy implements IHierarchy
 		else return Scene.v().getOrMakeFastHierarchy().canStoreType(
 			child, ancestor);
 	}
-	
+
 	private static LinkedList<RefType> superclassPath(RefType t)
 	{
 		LinkedList<RefType> r = new LinkedList<RefType>();
 		r.addFirst(t);
-		
+
 		SootClass sc = t.getSootClass();
 		while ( sc.hasSuperclass() )
 		{
 			sc = sc.getSuperclass();
 			r.addFirst((RefType)sc.getType());
 		}
-		
+
 		return r;
 	}
-	
+
 	public static RefType lcsc(RefType a, RefType b)
 	{
 		LinkedList<RefType> pathA = superclassPath(a),
 			pathB = superclassPath(b);
 		RefType r = null;
-		while ( !(pathA.isEmpty() || pathB.isEmpty()) 
+		while ( !(pathA.isEmpty() || pathB.isEmpty())
 			&& TypeResolver.typesEqual(pathA.getFirst(), pathB.getFirst()) )
 		{
 			r = pathA.removeFirst();

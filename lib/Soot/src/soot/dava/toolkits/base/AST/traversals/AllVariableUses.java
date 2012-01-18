@@ -23,8 +23,8 @@
  */
 
 /*
- * CHANGE LOG:  * 30th January 2006, Class created since FinalFieldDefinition wants 
- *                info about uses of a particular field in a method. Writing a general 
+ * CHANGE LOG:  * 30th January 2006, Class created since FinalFieldDefinition wants
+ *                info about uses of a particular field in a method. Writing a general
  *                analysis which finds all uses of Locals and SootFields
  *
  */
@@ -90,7 +90,7 @@ public class AllVariableUses extends DepthFirstAdapter{
     	init();
     }
 
-    
+
 
     public void init(){
     	localsToUses = new HashMap<Local, List>();
@@ -174,12 +174,12 @@ public class AllVariableUses extends DepthFirstAdapter{
     public void inASTStatementSequenceNode(ASTStatementSequenceNode node){
 	List<Object> statements = node.getStatements();
 	Iterator<Object> it = statements.iterator();
-	
+
 	while(it.hasNext()){
 	    AugmentedStmt as = (AugmentedStmt)it.next();
 	    Stmt s = as.get_Stmt();
 	    //in the case of stmtts in a stmtt sequence each stmt is considered an entity
-	    //compared to the case where these stmts occur within other constructs 
+	    //compared to the case where these stmts occur within other constructs
 	    //where the node is the entity
 	    checkStatementUses(s,s);
 	}
@@ -211,7 +211,7 @@ public class AllVariableUses extends DepthFirstAdapter{
 	ASTCondition cond = node.get_Condition();
 	checkConditionalUses(cond,node);
 
-	
+
 	//checking uses in update
 	List<Object> update = node.getUpdate();
 	it = update.iterator();
@@ -266,7 +266,7 @@ public class AllVariableUses extends DepthFirstAdapter{
      */
     public void checkConditionalUses(ASTCondition cond,ASTNode node){
 	List<Value> useList = getUseList(cond);
-		
+
 	//System.out.println("FOR NODE with condition:"+cond+"USE list is:"+useList);
 
 	//FOR EACH USE

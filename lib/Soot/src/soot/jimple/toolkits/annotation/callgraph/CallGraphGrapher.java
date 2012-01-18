@@ -28,14 +28,14 @@ import soot.options.*;
 
 /** A scene transformer that creates a graphical callgraph. */
 public class CallGraphGrapher extends SceneTransformer
-{ 
+{
     public CallGraphGrapher(Singletons.Global g){}
     public static CallGraphGrapher v() { return G.v().soot_jimple_toolkits_annotation_callgraph_CallGraphGrapher();}
 
     private MethodToContexts methodToContexts;
     private CallGraph cg;
     private boolean showLibMeths;
-    
+
     private ArrayList<MethInfo> getTgtMethods(SootMethod method, boolean recurse){
         //G.v().out.println("meth for tgts: "+method);
         if (!method.hasActiveBody()){
@@ -51,7 +51,7 @@ public class CallGraphGrapher extends SceneTransformer
                 Edge e = (Edge)edges.next();
                 SootMethod sm = e.tgt();
                 //G.v().out.println("found target method: "+sm);
-                
+
                 if (sm.getDeclaringClass().isLibraryClass()){
                     if (isShowLibMeths()){
                         if (recurse){
@@ -86,11 +86,11 @@ public class CallGraphGrapher extends SceneTransformer
         if (list.size() > 1) return true;
         else return false;
     }
-    
+
     private ArrayList<MethInfo> getSrcMethods(SootMethod method, boolean recurse){
         //G.v().out.println("meth for srcs: "+method);
         ArrayList<MethInfo> list = new ArrayList<MethInfo>();
-        
+
         for( Iterator momcIt = methodToContexts.get(method).iterator(); momcIt.hasNext(); ) {
             final MethodOrMethodContext momc = (MethodOrMethodContext) momcIt.next();
             Iterator callerEdges = cg.edgesInto(momc);
@@ -115,13 +115,13 @@ public class CallGraphGrapher extends SceneTransformer
                         list.add(new MethInfo(methodCaller, true, callEdge.kind()));
                     }
                 }
-            } 
+            }
         }
         return list;
     }
-    
+
     protected void internalTransform(String phaseName, Map options){
-        
+
         CGGOptions opts = new CGGOptions(options);
         if (opts.show_lib_meths()){
             setShowLibMeths(true);
@@ -136,7 +136,7 @@ public class CallGraphGrapher extends SceneTransformer
         if (methodToContexts == null){
             methodToContexts = new MethodToContexts(Scene.v().getReachableMethods().listener());
         }
-        
+
         SootClass sc = Scene.v().getMainClass();
         SootMethod sm = getFirstMethod(sc);
         //G.v().out.println("got first method");
@@ -159,7 +159,7 @@ public class CallGraphGrapher extends SceneTransformer
             return (SootMethod)sc.getMethods().get(0);
         }
     }
-    
+
     public void handleNextMethod(){
         if (!getNextMethod().hasActiveBody()) return;
         ArrayList<MethInfo> tgts = getTgtMethods(getNextMethod(), true);
@@ -171,7 +171,7 @@ public class CallGraphGrapher extends SceneTransformer
         InteractionHandler.v().handleCallGraphPart(info);
         //handleNextMethod();
     }
-    
+
     private SootMethod nextMethod;
 
     public void setNextMethod(SootMethod m){

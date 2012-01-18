@@ -1,7 +1,7 @@
-/** 
+/**
     Modifications Copyright (C) 1999 Raja Vallee-Rai (rvalleerai@sable.mcgill.ca)
-    All rights reserved.                                              
-   
+    All rights reserved.
+
     Changes:
         - Added \\ to the list of possible escape characters for Strings.
         - March 15, 1999: $ does no longer significant substitution
@@ -34,7 +34,7 @@ class Scanner implements java_cup.runtime.Scanner {
     char chars[];
     char secondChars[];
     char[] unicodeBuffer;
-        
+
     // true if we have not yet emitted a SEP ('\n') token. This is a bit
     // of a hack so to strip out multiple newlines at the start of the file
     // and replace them with a single SEP token. (for some reason I can't
@@ -173,7 +173,7 @@ class Scanner implements java_cup.runtime.Scanner {
 					   tmparray, 0,
 					   chars.length);
 			  chars = tmparray;
-			  chars[pos] = (char)next_char;			 
+			  chars[pos] = (char)next_char;
 			}
                         pos++;
                     }
@@ -182,24 +182,24 @@ class Scanner implements java_cup.runtime.Scanner {
 
                     if(str.equals("+DoubleInfinity"))
                         return new Symbol(sym.Num, new Double(1.0/0.0));
-                    
+
                     if(str.equals("+DoubleNaN"))
                         return new Symbol(sym.Num, new Double(0.0d/0.0));
-                    
+
                     if(str.equals("+FloatNaN"))
                         return new Symbol(sym.Num, new Float(0.0f/0.0));
-                        
+
                     if(str.equals("-DoubleInfinity"))
                         return new Symbol(sym.Num, new Double(-1.0/0.0));
-                    
+
                     if(str.equals("+FloatInfinity"))
                         return new Symbol(sym.Num, new Float(1.0f/0.0f));
-                        
+
                     if(str.equals("-FloatInfinity"))
                         return new Symbol(sym.Num, new Float(-1.0f/0.0f));
-                    
-                     
-                            
+
+
+
                     // This catches directives like ".method"
                     if ((tok = ReservedWords.get(str)) != null) {
                         return tok;
@@ -239,8 +239,8 @@ class Scanner implements java_cup.runtime.Scanner {
                             case 't': next_char = '\t'; break;
                             case 'f': next_char = '\f'; break;
                             case 'b': next_char = '\b'; break;
-                            case 'u': 
-                            {                          
+                            case 'u':
+                            {
                                 advance();
                                 unicodeBuffer[0] = (char) next_char;
                                 advance();
@@ -249,9 +249,9 @@ class Scanner implements java_cup.runtime.Scanner {
                                 unicodeBuffer[2] = (char) next_char;
                                 advance();
                                 unicodeBuffer[3] = (char) next_char;
-                                
+
                                 // System.out.println(unicodeBuffer[0] + ":" + unicodeBuffer[1] + ":" + unicodeBuffer[2] + ":" + unicodeBuffer[3] + ":");
-                                
+
                                 next_char = (char) Integer.parseInt(new String(unicodeBuffer, 0, 4), 16);
                                 // System.out.println("value: " + next_char);
                                 break;
@@ -259,7 +259,7 @@ class Scanner implements java_cup.runtime.Scanner {
                             case '"': next_char = '"'; break;
                             case '\'': next_char = '\''; break;
                             case '\\': next_char = '\\'; break;
-                            
+
                             case '0': case '1': case '2': case '3': case '4':
                             case '5': case '6': case '7':
 				next_char = readOctal(next_char);
@@ -270,7 +270,7 @@ class Scanner implements java_cup.runtime.Scanner {
                         } else if (next_char == '"') {
                             break;
                         }
-			
+
 			try {
 			  chars[pos] = (char)next_char;
 			} catch (ArrayIndexOutOfBoundsException abe) {
@@ -338,19 +338,19 @@ class Scanner implements java_cup.runtime.Scanner {
                     }
 
                     secondPos = 0;
-                    
+
                     // Parse all the unicode escape sequences
                         for(int i = 0; i < pos; i++)
                         {
 			  if(chars[i] == '\\' && (i + 5) < pos &&
 			     chars[i+1] == 'u') {
-			    int intValue = 
+			    int intValue =
 			      Integer.parseInt(new String(chars, i+2, 4), 16);
-                          
+
 			    try {
 			      secondChars[secondPos] = (char) intValue;
 			    } catch (ArrayIndexOutOfBoundsException abe) {
-			      char[] tmparray = 
+			      char[] tmparray =
 				new char[secondChars.length*2];
 			      System.arraycopy(secondChars, 0,
 					       tmparray, 0,
@@ -365,7 +365,7 @@ class Scanner implements java_cup.runtime.Scanner {
 			    try {
 			      secondChars[secondPos] = chars[i];
 			    } catch (ArrayIndexOutOfBoundsException abe) {
-			      char[] tmparray = 
+			      char[] tmparray =
 				new char[secondChars.length*2];
 			      System.arraycopy(secondChars, 0,
 					       tmparray, 0,
@@ -376,7 +376,7 @@ class Scanner implements java_cup.runtime.Scanner {
 			    secondPos++;
 			  }
                         }
-                        
+
                     // convert the byte array into a String
                     String str = new String(secondChars, 0, secondPos);
 

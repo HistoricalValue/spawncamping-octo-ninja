@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * A method declaration.
  */
-public interface MethodDecl extends ProcedureDecl 
+public interface MethodDecl extends ProcedureDecl
 {
     /** The method's flags. */
     Flags flags();

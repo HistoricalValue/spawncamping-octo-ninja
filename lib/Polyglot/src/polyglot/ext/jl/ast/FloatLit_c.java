@@ -5,7 +5,7 @@ import polyglot.types.*;
 import polyglot.visit.*;
 import polyglot.util.*;
 
-/** 
+/**
  * A <code>FloatLit</code> represents a literal in java of type
  * <code>float</code> or <code>double</code>.
  */
@@ -56,7 +56,7 @@ public class FloatLit_c extends Lit_c implements FloatLit
 	    throw new InternalCompilerError("Unrecognized FloatLit kind " +
 		kind);
 	}
-    }  
+    }
 
     public String toString() {
 	return Double.toString(value);

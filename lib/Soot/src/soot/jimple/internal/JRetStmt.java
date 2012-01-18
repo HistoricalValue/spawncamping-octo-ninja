@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -51,7 +51,7 @@ public class JRetStmt extends AbstractStmt implements RetStmt
 
     }
 
-    public Object clone() 
+    public Object clone()
     {
         return new JRetStmt(Jimple.cloneIfNecessary(getStmtAddress()));
     }
@@ -60,7 +60,7 @@ public class JRetStmt extends AbstractStmt implements RetStmt
     {
         return Jimple.RET + " "  + stmtAddressBox.getValue().toString();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(Jimple.RET);
         up.literal(" ");
@@ -95,9 +95,9 @@ public class JRetStmt extends AbstractStmt implements RetStmt
     public void apply(Switch sw)
     {
         ((StmtSwitch) sw).caseRetStmt(this);
-    }    
+    }
 
-    public boolean fallsThrough(){return true;}        
+    public boolean fallsThrough(){return true;}
     public boolean branches(){return false;}
 
 }

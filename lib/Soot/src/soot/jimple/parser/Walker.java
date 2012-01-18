@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,7 +37,7 @@ import java.util.*;
 
 /*Modified By Marc Berndl 17th May */
 
-public class Walker extends DepthFirstAdapter 
+public class Walker extends DepthFirstAdapter
 {
     boolean debug = false;
     LinkedList mProductions = new LinkedList();
@@ -49,33 +49,33 @@ public class Walker extends DepthFirstAdapter
     Map<String, List> mLabelToPatchList; // maps a label to the a list of stmts that refer to the label (ie goto lableX)
 
 
-               
+
     protected SootResolver mResolver;
 
 
-    public Walker(SootResolver resolver) 
-    {        
+    public Walker(SootResolver resolver)
+    {
         mResolver = resolver;
         if(debug) {
             mProductions = new LinkedList(){
                     public Object removeLast(){
                         Object o = super.removeLast();
-                        if(debug) 
-                            G.v().out.println("popped: " + o );   
+                        if(debug)
+                            G.v().out.println("popped: " + o );
                         return o;
                     }
                 };
-        }        
+        }
     }
 
 
-    public Walker(SootClass sc, SootResolver resolver) 
+    public Walker(SootClass sc, SootResolver resolver)
     {
-        mSootClass = sc;                
+        mSootClass = sc;
         mResolver = resolver;
     }
 
-    
+
     public void outStart(Start node)
     {
         SootClass c = (SootClass)  mProductions.removeLast();
@@ -86,20 +86,20 @@ public class Walker extends DepthFirstAdapter
     {
         if(mSootClass == null)
             throw new RuntimeException("did not parse class yet....");
-        
-        return mSootClass;        
+
+        return mSootClass;
     }
 
 
     /*
-      file = 
-      modifier* file_type class_name extends_clause? implements_clause? file_body; 
+      file =
+      modifier* file_type class_name extends_clause? implements_clause? file_body;
     */
     public void inAFile(AFile node)
     {
         if(debug)
             G.v().out.println("reading class " + node.getClassName());
-    } 
+    }
 
 
     public void caseAFile(AFile node)
@@ -119,16 +119,16 @@ public class Walker extends DepthFirstAdapter
         {
             node.getClassName().apply(this);
         }
-        
+
 	String className = (String) mProductions.removeLast();
- 
+
 
         if(mSootClass == null) {
             mSootClass = new SootClass(className);
             mSootClass.setResolvingLevel(SootClass.BODIES);
         } else {
             if(!mSootClass.getName().equals(className))
-                throw new RuntimeException("Invalid SootClass for this JimpleAST. The SootClass provided is of type: >" + mSootClass.getName() + "< whereas this parse tree is for type: >" + className +  "<");            
+                throw new RuntimeException("Invalid SootClass for this JimpleAST. The SootClass provided is of type: >" + mSootClass.getName() + "< whereas this parse tree is for type: >" + className +  "<");
         }
 
         if(node.getExtendsClause() != null)
@@ -154,8 +154,8 @@ public class Walker extends DepthFirstAdapter
         String superClass = null;
 
         String classType = null;
-        
-        if(node.getImplementsClause() != null) {           
+
+        if(node.getImplementsClause() != null) {
 	    implementsList = (List) mProductions.removeLast();
         }
         if(node.getExtendsClause() != null) {
@@ -164,23 +164,23 @@ public class Walker extends DepthFirstAdapter
 
         classType = (String) mProductions.removeLast();
 
-        
+
         int  modifierCount = node.getModifier().size();
 
-            
+
 
         int modifierFlags = processModifiers(node.getModifier());
 
 
         if(classType.equals("interface"))
-            modifierFlags |= Modifier.INTERFACE;        
+            modifierFlags |= Modifier.INTERFACE;
 
         mSootClass.setModifiers(modifierFlags);
-                
+
         if(superClass != null) {
             mSootClass.setSuperclass(mResolver.makeClassRef(superClass));
         }
-        
+
         if(implementsList != null) {
             Iterator implIt = implementsList.iterator();
             while(implIt.hasNext()) {
@@ -188,15 +188,15 @@ public class Walker extends DepthFirstAdapter
                 mSootClass.addInterface(interfaceClass);
             }
         }
-        
+
 	mProductions.addLast(mSootClass);
-    } 
-    
+    }
+
     /*
       member =
       {field}  modifier* type name semicolon |
       {method} modifier* type name l_paren parameter_list? r_paren throws_clause? method_body;
-    */    
+    */
     public void outAFieldMember(AFieldMember node)
     {
         int modifier = 0;
@@ -208,7 +208,7 @@ public class Walker extends DepthFirstAdapter
 
         modifier = processModifiers(node.getModifier());
 
-        SootField f = new SootField(name, type, modifier);        
+        SootField f = new SootField(name, type, modifier);
         mSootClass.addField(f);
     }
 
@@ -232,7 +232,7 @@ public class Walker extends DepthFirstAdapter
         }
         else {
             parameterList = new ArrayList();
-        } 
+        }
 
 	Object o = mProductions.removeLast();
 
@@ -244,20 +244,20 @@ public class Walker extends DepthFirstAdapter
 
         if(throwsClause != null)
           method =  new SootMethod(name, parameterList, type, modifier, throwsClause);
-        else             
+        else
             method =  new SootMethod(name, parameterList, type, modifier);
 
         mSootClass.addMethod(method);
-        
+
         if(method.isConcrete()) {
             methodBody.setMethod(method);
             method.setActiveBody(methodBody);
-            
+
         } else if(node.getMethodBody() instanceof AFullMethodBody)
             throw new RuntimeException("Impossible: !concrete => ! instanceof");
 
     }
-  
+
 
     /*
       type =
@@ -269,38 +269,38 @@ public class Walker extends DepthFirstAdapter
     {
 	mProductions.addLast(VoidType.v());
     }
-    
+
 
     /*
       nonvoid_type =
       {base}   base_type_no_name array_brackets*;
       {quoted} quoted_name array_brackets* |
       {ident}  identifier array_brackets* |
-      {full_ident} full_identifier array_brackets*;   
+      {full_ident} full_identifier array_brackets*;
     */
     public void outABaseNonvoidType(ABaseNonvoidType node)
     {
 	Type t = (Type) mProductions.removeLast();
         int dim = node.getArrayBrackets().size();
-        if(dim > 0) 
+        if(dim > 0)
             t = ArrayType.v(t, dim);
 	mProductions.addLast(t);
     }
 
-    
+
     public void outAQuotedNonvoidType(AQuotedNonvoidType node)
-    {        
+    {
 	String typeName = (String) mProductions.removeLast();
 	Type t = RefType.v(typeName);
-       
+
         int dim = node.getArrayBrackets().size();
-        if(dim > 0) 
+        if(dim > 0)
             t = ArrayType.v(t, dim);
 	mProductions.addLast(t);
     }
 
     public void outAIdentNonvoidType(AIdentNonvoidType node)
-    {        	  
+    {
 	String typeName = (String) mProductions.removeLast();
 	Type t = RefType.v(typeName);
         int dim = node.getArrayBrackets().size();
@@ -311,20 +311,20 @@ public class Walker extends DepthFirstAdapter
 
 
     public void outAFullIdentNonvoidType(AFullIdentNonvoidType node)
-    {                	  
+    {
 	String typeName = (String) mProductions.removeLast();
 	Type t = RefType.v(typeName);
         int dim = node.getArrayBrackets().size();
         if(dim > 0)
-            t = ArrayType.v(t, dim);                
+            t = ArrayType.v(t, dim);
 	mProductions.addLast(t);
     }
-    
 
 
 
 
-    /*      
+
+    /*
             base_type_no_name =
             {boolean} boolean |
             {byte}    byte |
@@ -341,41 +341,41 @@ public class Walker extends DepthFirstAdapter
     {
 	mProductions.addLast(BooleanType.v());
     }
-    
+
     public void outAByteBaseTypeNoName(AByteBaseTypeNoName node)
     {
 	mProductions.addLast(ByteType.v());
     }
-        
+
 
     public void outACharBaseTypeNoName(ACharBaseTypeNoName node)
     {
 	mProductions.addLast(CharType.v());
     }
-    
+
     public void outAShortBaseTypeNoName(AShortBaseTypeNoName node)
     {
 	mProductions.addLast(ShortType.v());
     }
 
 
-    
+
     public void outAIntBaseTypeNoName(AIntBaseTypeNoName node)
     {
 	mProductions.addLast(IntType.v());
     }
-    
+
     public void outALongBaseTypeNoName(ALongBaseTypeNoName node)
     {
 	mProductions.addLast(LongType.v());
     }
-        
+
 
     public void outAFloatBaseTypeNoName(AFloatBaseTypeNoName node)
     {
 	mProductions.addLast(FloatType.v());
     }
-    
+
     public void outADoubleBaseTypeNoName(ADoubleBaseTypeNoName node)
     {
 	mProductions.addLast(DoubleType.v());
@@ -384,7 +384,7 @@ public class Walker extends DepthFirstAdapter
     {
 	mProductions.addLast(NullType.v());
     }
-    
+
 
     /*
       base_type =
@@ -396,55 +396,55 @@ public class Walker extends DepthFirstAdapter
       {long}    long |
       {float}   float |
       {double}  double |
-      {null}    null_type | 
+      {null}    null_type |
       {class_name}    class_name;
     */
-    
-    
+
+
     public void outABooleanBaseType(ABooleanBaseType node)
     {
 	mProductions.addLast(BooleanType.v());
     }
-    
+
     public void outAByteBaseType(AByteBaseType node)
     {
 	mProductions.addLast(ByteType.v());
     }
-        
+
 
     public void outACharBaseType(ACharBaseType node)
     {
 	mProductions.addLast(CharType.v());
     }
-    
+
     public void outAShortBaseType(AShortBaseType node)
     {
 	mProductions.addLast(ShortType.v());
     }
 
 
-    
+
     public void outAIntBaseType(AIntBaseType node)
     {
 	mProductions.addLast(IntType.v());
     }
-    
+
     public void outALongBaseType(ALongBaseType node)
     {
 	mProductions.addLast(LongType.v());
     }
-        
+
 
     public void outAFloatBaseType(AFloatBaseType node)
     {
 	mProductions.addLast(FloatType.v());
     }
-    
+
     public void outADoubleBaseType(ADoubleBaseType node)
     {
 	mProductions.addLast(DoubleType.v());
     }
-    
+
     public void outANullBaseType(ANullBaseType node)
     {
 	mProductions.addLast(NullType.v());
@@ -463,7 +463,7 @@ public class Walker extends DepthFirstAdapter
       {empty} semicolon |
       {full}  l_brace declaration* statement* catch_clause* r_brace;
     */
-  
+
 
     public void inAFullMethodBody(AFullMethodBody node)
     {
@@ -475,13 +475,13 @@ public class Walker extends DepthFirstAdapter
     public void outAFullMethodBody(AFullMethodBody node)
     {
         JimpleBody jBody = Jimple.v().newBody();
-                
+
         if(node.getCatchClause() != null) {
             int size = node.getCatchClause().size();
-            for(int i =0; i < size; i++)             
+            for(int i =0; i < size; i++)
 		jBody.getTraps().addFirst((Trap)mProductions.removeLast());
         }
-                                
+
         if(node.getStatement() != null) {
             int size = node.getStatement().size();
             Unit lastStmt = null;
@@ -492,54 +492,54 @@ public class Walker extends DepthFirstAdapter
                     lastStmt = (Unit)  o;
                 }
                 else if(o instanceof String) {
-                    if(lastStmt ==  null) 
+                    if(lastStmt ==  null)
                         throw new RuntimeException("impossible");
                     mLabelToStmtMap.put(o, lastStmt);
                 }
                 else
-                    throw new RuntimeException("impossible");                
+                    throw new RuntimeException("impossible");
             }
         }
-        
+
         if(node.getDeclaration() != null) {
             int size = node.getDeclaration().size();
             for(int i = 0; i < size; i++) {
 		List<Local> localList = (List<Local>) mProductions.removeLast();
-                
+
                 int listSize = localList.size();
                 for(int j = listSize-1; j>=0; j--)
-                    jBody.getLocals().addFirst(localList.get(j));                               
+                    jBody.getLocals().addFirst(localList.get(j));
             }
         }
-        
-      
-        
+
+
+
         Iterator<String> it =  mLabelToPatchList.keySet().iterator();
         while(it.hasNext()) {
             String label = it.next();
-            Unit target = mLabelToStmtMap.get(label); 
-        
+            Unit target = mLabelToStmtMap.get(label);
+
             Iterator patchIt = mLabelToPatchList.get(label).iterator();
             while(patchIt.hasNext()) {
                 UnitBox box = (UnitBox) patchIt.next();
                 box.setUnit(target);
-            }            
+            }
         }
-    
-        
+
+
         /*
         Iterator it = mLabelToStmtMap.keySet().iterator();
         while(it.hasNext()) {
             String label = (String) it.next();
-            Unit target = (Unit) mLabelToStmtMap.get(label); 
-            
-            List l =         (List) mLabelToPatchList.get(label);        
+            Unit target = (Unit) mLabelToStmtMap.get(label);
+
+            List l =         (List) mLabelToPatchList.get(label);
             if(l != null) {
                 Iterator patchIt = l.iterator();
                 while(patchIt.hasNext()) {
                     UnitBox box = (UnitBox) patchIt.next();
                     box.setUnit(target);
-                }            
+                }
             }
         }
         */
@@ -556,7 +556,7 @@ public class Walker extends DepthFirstAdapter
       {single} parameter |
       {multi}  parameter comma parameter_list;
     */
-    
+
     public void outASingleParameterList(ASingleParameterList node)
     {
         List<Type> l = new ArrayList<Type>();
@@ -580,7 +580,7 @@ public class Walker extends DepthFirstAdapter
     {
         List<Value> l = new ArrayList<Value>();
 
-	l.add((Value) mProductions.removeLast()); 
+	l.add((Value) mProductions.removeLast());
 	mProductions.addLast(l);
     }
 
@@ -591,9 +591,9 @@ public class Walker extends DepthFirstAdapter
 	mProductions.addLast(l);
     }
 
-    /*  
+    /*
         class_name_list =
-        {class_name_single} class_name | 
+        {class_name_single} class_name |
         {class_name_multi}  class_name comma class_name_list;
     */
 
@@ -608,20 +608,20 @@ public class Walker extends DepthFirstAdapter
     {
 	List<String> l = (List<String>) mProductions.removeLast();
 	l.add(0,(String) mProductions.removeLast());
-	mProductions.addLast(l);  
+	mProductions.addLast(l);
     }
-   
+
     /*
       file_type =
       {class}     [theclass]:class |
       {interface} interface;
     */
-    
+
     public void outAClassFileType(AClassFileType node)
     {
 	mProductions.addLast("class");
     }
-    
+
     public void outAInterfaceFileType(AInterfaceFileType node)
     {
 	mProductions.addLast("interface");
@@ -632,7 +632,7 @@ public class Walker extends DepthFirstAdapter
       catch_clause =
       catch [name]:class_name from [from_label]:label_name to [to_label]:label_name with [with_label]:label_name semicolon;
     */
-    
+
 
     // public void caseACatchClause(ACatchClause node){}
 
@@ -640,7 +640,7 @@ public class Walker extends DepthFirstAdapter
     {
         String exceptionName;
         UnitBox withUnit, fromUnit, toUnit;
-        
+
         withUnit = Jimple.v().newStmtBox(null);
 	addBoxToPatch((String) mProductions.removeLast(), withUnit);
 
@@ -651,8 +651,8 @@ public class Walker extends DepthFirstAdapter
 	addBoxToPatch((String) mProductions.removeLast(), fromUnit);
 
 	exceptionName = (String) mProductions.removeLast();
-                                
-        Trap trap = Jimple.v().newTrap(mResolver.makeClassRef(exceptionName), fromUnit, toUnit, withUnit);          
+
+        Trap trap = Jimple.v().newTrap(mResolver.makeClassRef(exceptionName), fromUnit, toUnit, withUnit);
 	mProductions.addLast(trap);
     }
 
@@ -660,7 +660,7 @@ public class Walker extends DepthFirstAdapter
       declaration =
       jimple_type local_name_list semicolon;
     */
-        
+
 
     public void outADeclaration(ADeclaration node)
     {
@@ -668,12 +668,12 @@ public class Walker extends DepthFirstAdapter
 	Type type = (Type) mProductions.removeLast();
         Iterator it = localNameList.iterator();
         List<Local> localList = new ArrayList<Local>();
-        
-        while(it.hasNext()) {            
-            Local l = Jimple.v().newLocal((String) it.next(),type);                        
-            mLocals.put(l.getName(), l);        
+
+        while(it.hasNext()) {
+            Local l = Jimple.v().newLocal((String) it.next(),type);
+            mLocals.put(l.getName(), l);
             localList.add(l);
-        }                        
+        }
 	mProductions.addLast(localList);
     }
 
@@ -697,7 +697,7 @@ public class Walker extends DepthFirstAdapter
       {single} local_name |
       {multi}  local_name comma local_name_list;
     */
-    
+
     public void outASingleLocalNameList(ASingleLocalNameList node)
     {
         List<String> l = new ArrayList<String>();
@@ -718,7 +718,7 @@ public class Walker extends DepthFirstAdapter
       {label}        label_name colon |
       {breakpoint}   breakpoint semicolon |
       {entermonitor} entermonitor immediate semicolon |
-      {exitmonitor}  exitmonitor immediate semicolon |      
+      {exitmonitor}  exitmonitor immediate semicolon |
       {switch}       switch l_paren immediate r_paren l_brace case_stmt+ r_brace semicolon |
       {identity}     local_name colon_equals at_identifier type semicolon |
       {identity_no_type}  local_name colon_equals at_identifier semicolon |
@@ -729,15 +729,15 @@ public class Walker extends DepthFirstAdapter
       {ret}          ret immediate? semicolon |
       {return}       return immediate? semicolon |
       {throw}        throw immediate semicolon |
-      {invoke}       invoke_expr semicolon;      
+      {invoke}       invoke_expr semicolon;
     */
 
     public void outALabelStatement(ALabelStatement node)
-    {        
+    {
     }
-    
+
     public void outABreakpointStatement(ABreakpointStatement node)
-    {        
+    {
         Unit u = Jimple.v().newBreakpointStmt();
 	mProductions.addLast(u);
     }
@@ -768,14 +768,14 @@ public class Walker extends DepthFirstAdapter
     /*
       case_stmt =
       case_label colon goto_stmt;
-    */    
+    */
     public void outACaseStmt(ACaseStmt node)
-    {        
+    {
 	String labelName = (String) mProductions.removeLast();
         UnitBox box = Jimple.v().newStmtBox(null);
 
         addBoxToPatch(labelName, box);
-        
+
         Value labelValue = null;
         if(node.getCaseLabel() instanceof AConstantCaseLabel)
 	    labelValue = (Value) mProductions.removeLast();
@@ -783,92 +783,92 @@ public class Walker extends DepthFirstAdapter
         // if labelValue == null, this is the default label.
         if(labelValue == null)
 	    mProductions.addLast(box);
-        else {            
+        else {
             Object[] valueTargetPair = new Object[2];
             valueTargetPair[0] = labelValue;
             valueTargetPair[1] = box;
 	    mProductions.addLast(valueTargetPair);
-        }        
+        }
     }
 
 
 
     public void outATableswitchStatement(ATableswitchStatement node)
-    {        
+    {
         List<Object> targets = new ArrayList<Object>();
         UnitBox defaultTarget = null;
-        
+
         int lowIndex = 0, highIndex = 0;
-                
+
         if(node.getCaseStmt() != null) {
             int size = node.getCaseStmt().size();
-            
+
             for(int i = 0; i < size; i++) {
 		Object valueTargetPair = mProductions.removeLast();
                 if(valueTargetPair instanceof UnitBox) {
                     if(defaultTarget != null)
                         throw new RuntimeException("error: can't ;have more than 1 default stmt");
-                    
+
                     defaultTarget = (UnitBox) valueTargetPair;
                 } else {
                     Object[] pair = (Object[]) valueTargetPair;
-                    
-                    if((i == 0 && defaultTarget == null) || (i==1 && defaultTarget != null)) 
+
+                    if((i == 0 && defaultTarget == null) || (i==1 && defaultTarget != null))
                         highIndex = ((IntConstant) pair[0]).value;
                     if(i == (size -1))
                         lowIndex = ((IntConstant) pair[0]).value;
 
-                    targets.add(0, pair[1]);                
+                    targets.add(0, pair[1]);
                 }
             }
         } else {
-            throw new RuntimeException("error: switch stmt has no case stmts");            
+            throw new RuntimeException("error: switch stmt has no case stmts");
         }
-        
+
 
          Value key = (Value) mProductions.removeLast();
         Unit switchStmt  = Jimple.v().newTableSwitchStmt(key, lowIndex, highIndex, targets, defaultTarget);
-        
-        
-	mProductions.addLast(switchStmt); 
+
+
+	mProductions.addLast(switchStmt);
     }
-    
+
 
     public void outALookupswitchStatement(ALookupswitchStatement node)
-    {        
+    {
         List<Object> lookupValues = new ArrayList<Object>();
         List<Object> targets = new ArrayList<Object>();
         UnitBox defaultTarget = null;
-        
+
 
         if(node.getCaseStmt() != null) {
             int size = node.getCaseStmt().size();
-            
+
             for(int i = 0; i < size; i++) {
 		Object valueTargetPair = mProductions.removeLast();
                 if(valueTargetPair instanceof UnitBox) {
                     if(defaultTarget != null)
                         throw new RuntimeException("error: can't ;have more than 1 default stmt");
-                    
+
                     defaultTarget = (UnitBox) valueTargetPair;
                 } else {
                     Object[] pair = (Object[]) valueTargetPair;
-                    
+
                     lookupValues.add(0, pair[0]);
-                    targets.add(0, pair[1]);                
+                    targets.add(0, pair[1]);
                 }
             }
         } else {
-            throw new RuntimeException("error: switch stmt has no case stmts");            
+            throw new RuntimeException("error: switch stmt has no case stmts");
         }
-        
 
-	Value key = (Value) mProductions.removeLast();  
+
+	Value key = (Value) mProductions.removeLast();
         Unit switchStmt  = Jimple.v().newLookupSwitchStmt(key, lookupValues, targets, defaultTarget);
-        
-	mProductions.addLast(switchStmt);  
+
+	mProductions.addLast(switchStmt);
     }
-    
+
 
 
 
@@ -877,33 +877,33 @@ public class Walker extends DepthFirstAdapter
 	Type identityRefType = (Type) mProductions.removeLast();
 	String atClause = (String) mProductions.removeLast();
 	Value local = mLocals.get(mProductions.removeLast()); // the local ref from it's identifier
-        
+
         Value ref = null;
         if(atClause.startsWith("@this")) {
-            ref = Jimple.v().newThisRef((RefType) identityRefType);            
+            ref = Jimple.v().newThisRef((RefType) identityRefType);
         } else if(atClause.startsWith("@parameter")) {
             int index = Integer.parseInt(atClause.substring(10, atClause.length() - 1));
-            
+
             ref = Jimple.v().newParameterRef(identityRefType, index);
-        } else 
+        } else
             throw new RuntimeException("shouldn't @caughtexception be handled by outAIdentityNoTypeStatement: got" + atClause);
-        
+
         Unit u = Jimple.v().newIdentityStmt(local, ref);
 	mProductions.addLast(u);
     }
-    
-    
+
+
     public void outAIdentityNoTypeStatement(AIdentityNoTypeStatement node)
     {
 	mProductions.removeLast();  // get rid of @caughtexception string presently on top of the stack
 	Value local = mLocals.get(mProductions.removeLast()); // the local ref from it's identifier
-    
+
 
         Unit u = Jimple.v().newIdentityStmt(local, Jimple.v().newCaughtExceptionRef());
 	mProductions.addLast(u);
     }
 
-    
+
     public void outAAssignStatement(AAssignStatement node)
     {
 	Value rvalue = (Value) mProductions.removeLast();
@@ -915,19 +915,19 @@ public class Walker extends DepthFirstAdapter
     }
 
     public void outAIfStatement(AIfStatement node)
-    { 
-         String targetLabel = (String) mProductions.removeLast();   
+    {
+         String targetLabel = (String) mProductions.removeLast();
 	 Value condition =(Value) mProductions.removeLast();
-        
+
          UnitBox box = Jimple.v().newStmtBox(null);
-         Unit u = Jimple.v().newIfStmt(condition, box); 
-        
+         Unit u = Jimple.v().newIfStmt(condition, box);
+
          addBoxToPatch(targetLabel, box);
-       
+
          mProductions.addLast(u);
     }
 
-    public void outAReturnStatement(AReturnStatement node) 
+    public void outAReturnStatement(AReturnStatement node)
     {
         Value v;
         Stmt s = null;
@@ -938,25 +938,25 @@ public class Walker extends DepthFirstAdapter
             s = Jimple.v().newReturnVoidStmt();
         }
 
-	mProductions.addLast(s);    
+	mProductions.addLast(s);
     }
-    
+
     public void outAGotoStatement(AGotoStatement node)
-    {            
+    {
 	String targetLabel = (String) mProductions.removeLast();
 
         UnitBox box = Jimple.v().newStmtBox(null);
         Unit branch = Jimple.v().newGotoStmt(box);
-            
+
         addBoxToPatch(targetLabel, box);
-        
+
 	mProductions.addLast(branch);
     }
-        
-    
+
+
     public void outANopStatement(ANopStatement node)
     {
-        Unit u = Jimple.v().newNopStmt(); 
+        Unit u = Jimple.v().newNopStmt();
 	mProductions.addLast(u);
     }
 
@@ -964,8 +964,8 @@ public class Walker extends DepthFirstAdapter
     {
         throw new RuntimeException("ret not yet implemented.");
     }
-    
-    
+
+
     public void outAThrowStatement(AThrowStatement node)
     {
 	Value op = (Value) mProductions.removeLast();
@@ -979,7 +979,7 @@ public class Walker extends DepthFirstAdapter
 	Value op = (Value) mProductions.removeLast();
 
         Unit u = Jimple.v().newInvokeStmt(op);
-        
+
 	mProductions.addLast(u);
     }
 
@@ -996,8 +996,8 @@ public class Walker extends DepthFirstAdapter
         int sign = 1;
         if(node.getMinus() != null)
             sign = -1;
-       
-        if(s.endsWith("L")) {            
+
+        if(s.endsWith("L")) {
 	    mProductions.addLast(LongConstant.v(sign * Long.parseLong(s.substring(0, s.length()-1))));
         }
         else if (s.equals("2147483648"))
@@ -1011,18 +1011,18 @@ public class Walker extends DepthFirstAdapter
       {local}    local_name |
       {constant} constant;
     */
-    
+
     public void outALocalImmediate(ALocalImmediate node)
     {
 	String local = (String) mProductions.removeLast();
-        
+
         Local l = mLocals.get(local);
         if(l == null) throw new RuntimeException("did not find local: " + local);
 	mProductions.addLast(l);
     }
-    
-    
-    
+
+
+
     /*
       constant =
       {integer} minus? integer_constant |
@@ -1031,7 +1031,7 @@ public class Walker extends DepthFirstAdapter
       {null}    null;
     */
 
-    
+
     public void outANullConstant(ANullConstant node)
     {
 	mProductions.addLast(NullConstant.v());
@@ -1041,22 +1041,22 @@ public class Walker extends DepthFirstAdapter
     public void outAIntegerConstant(AIntegerConstant node)
     {
 	String s = (String) mProductions.removeLast();
-        
+
         StringBuffer buf = new StringBuffer();
         if(node.getMinus() != null)
             buf.append('-');
         buf.append(s);
-        
+
         s = buf.toString();
-        if(s.endsWith("L")) {                        
+        if(s.endsWith("L")) {
 	    mProductions.addLast(LongConstant.v(Long.parseLong(s.substring(0, s.length()-1))));
-        } 
+        }
         else if (s.equals("2147483648"))
 	    mProductions.addLast(IntConstant.v(Integer.MIN_VALUE));
         else
 	    mProductions.addLast(IntConstant.v(Integer.parseInt(s)));
     }
-    
+
     public void outAStringConstant(AStringConstant node)
     {
 	String s = (String) mProductions.removeLast();
@@ -1064,7 +1064,7 @@ public class Walker extends DepthFirstAdapter
         /*
           try {
           String t = StringTools.getUnEscapedStringOf(s);
-        
+
           mProductions.push(StringConstant.v(t));
           } catch(RuntimeException e) {
           G.v().out.println(s);
@@ -1090,9 +1090,9 @@ public class Walker extends DepthFirstAdapter
         float value = 0;
         double dvalue = 0;
 
-        if(s.endsWith("f") || s.endsWith("F")) 
+        if(s.endsWith("f") || s.endsWith("F"))
           isDouble = false;
-          
+
         if(s.charAt(0) == '#') {
           if(s.charAt(1) == '-') {
             if(isDouble)
@@ -1114,16 +1114,16 @@ public class Walker extends DepthFirstAdapter
           }
         }
         else {
-          StringBuffer buf = new StringBuffer();          
+          StringBuffer buf = new StringBuffer();
           if(node.getMinus() != null)
             buf.append('-');
           buf.append(s);
           s = buf.toString();
-        
+
           if(isDouble)
             dvalue = Double.parseDouble(s);
           else
-            value =Float.parseFloat(s);        
+            value =Float.parseFloat(s);
         }
 
         Object res;
@@ -1140,7 +1140,7 @@ public class Walker extends DepthFirstAdapter
       binop_expr =
       [left]:immediate binop [right]:immediate;
     */
-    
+
 
     public void outABinopExpr(ABinopExpr node)
     {
@@ -1156,7 +1156,7 @@ public class Walker extends DepthFirstAdapter
 
     public void outABinopBoolExpr(ABinopBoolExpr node){
     }
-    
+
 
     public void outAUnopExpression(AUnopExpression node)
     {
@@ -1295,17 +1295,17 @@ public class Walker extends DepthFirstAdapter
     /*
       throws_clause =
       throws class_name_list;
-    */    
+    */
     public void outAThrowsClause(AThrowsClause node)
     {
 	List l = (List) mProductions.removeLast();
 
         Iterator it = l.iterator();
         List<SootClass> exceptionClasses = new ArrayList<SootClass>(l.size());
-      
-        while(it.hasNext()) {                   
+
+        while(it.hasNext()) {
             String className = (String) it.next();
-          
+
             exceptionClasses.add(mResolver.makeClassRef(className));
         }
 
@@ -1320,7 +1320,7 @@ public class Walker extends DepthFirstAdapter
       {reference} reference |
       {local}     local_name;
     */
-    
+
     public void outALocalVariable(ALocalVariable node)
     {
 	String local = (String) mProductions.removeLast();
@@ -1332,11 +1332,11 @@ public class Walker extends DepthFirstAdapter
 
     /*
       public void caseAReferenceVariable(AReferenceVariable node)
-      {        
+      {
       }
     */
-       
-    
+
+
     /*
       array_ref =
       identifier fixed_array_descriptor;
@@ -1346,14 +1346,14 @@ public class Walker extends DepthFirstAdapter
     {
 	Value immediate = (Value) mProductions.removeLast();
 	String identifier = (String) mProductions.removeLast();
-        
+
         Local l = mLocals.get(identifier);
         if(l == null) throw new RuntimeException("did not find local: " + identifier);
-        
-	mProductions.addLast(Jimple.v().newArrayRef(l, immediate));   
-      
+
+	mProductions.addLast(Jimple.v().newArrayRef(l, immediate));
+
     }
-    
+
     /*
       field_ref =
       {local} local_name dot field_signature |
@@ -1365,20 +1365,20 @@ public class Walker extends DepthFirstAdapter
 	SootFieldRef field = (SootFieldRef) mProductions.removeLast();
 
         String local = (String) mProductions.removeLast();
-        
+
         Local l = mLocals.get(local);
         if(l == null) throw new RuntimeException("did not find local: " + local);
-        
+
 	mProductions.addLast(Jimple.v().newInstanceFieldRef(l, field));
     }
 
-    
+
     public void outASigFieldRef(ASigFieldRef node)
     {
 	SootFieldRef field = (SootFieldRef) mProductions.removeLast();
         field = Scene.v().makeFieldRef(field.declaringClass(), field.name(),
                 field.type(), true);
-	mProductions.addLast(Jimple.v().newStaticFieldRef(field));  
+	mProductions.addLast(Jimple.v().newStaticFieldRef(field));
     }
 
 
@@ -1386,19 +1386,19 @@ public class Walker extends DepthFirstAdapter
       field_signature =
       cmplt [class_name]:class_name [first]:colon type [field_name]:name cmpgt;
     */
-    
+
     public void outAFieldSignature(AFieldSignature node)
     {
         String className, fieldName;
         Type t;
-        
+
 	fieldName = (String) mProductions.removeLast();
 	t = (Type) mProductions.removeLast();
-	className  = (String) mProductions.removeLast();      
+	className  = (String) mProductions.removeLast();
 
         SootClass cl = mResolver.makeClassRef(className);
         SootFieldRef field = Scene.v().makeFieldRef(cl, fieldName, t, false);
-        
+
 	mProductions.addLast(field);
     }
 
@@ -1417,7 +1417,7 @@ public class Walker extends DepthFirstAdapter
     public void outACastExpression(ACastExpression node)
     {
 	Value val = (Value) mProductions.removeLast();
-        
+
 	Type type = (Type) mProductions.removeLast();
 	mProductions.addLast(Jimple.v().newCastExpr(val, type));
     }
@@ -1427,7 +1427,7 @@ public class Walker extends DepthFirstAdapter
     public void outAInstanceofExpression(AInstanceofExpression node)
     {
 	Type nonvoidType = (Type) mProductions.removeLast();
-	Value immediate = (Value) mProductions.removeLast();  
+	Value immediate = (Value) mProductions.removeLast();
 	mProductions.addLast(Jimple.v().newInstanceOfExpr(immediate, nonvoidType));
 
     }
@@ -1444,8 +1444,8 @@ public class Walker extends DepthFirstAdapter
         expr.setOp(v);
 	mProductions.addLast(expr);
     }
-    
-        
+
+
     /*
       unop =
       {lengthof} lengthof |
@@ -1463,28 +1463,28 @@ public class Walker extends DepthFirstAdapter
 
 
     /*
-      invoke_expr = 
+      invoke_expr =
       {nonstatic} nonstatic_invoke local_name dot method_signature l_paren arg_list? r_paren |
       {static}    staticinvoke method_signature l_paren arg_list? r_paren;
-    */        
-        
+    */
+
     public void         outANonstaticInvokeExpr(ANonstaticInvokeExpr node)
     {
         List args;
-        
-        if(node.getArgList() != null)                           
+
+        if(node.getArgList() != null)
 	    args = (List) mProductions.removeLast();
         else
             args = new ArrayList();
-        
+
 	SootMethodRef method = (SootMethodRef) mProductions.removeLast();
 
 	String local = (String) mProductions.removeLast();
-        
-               
+
+
         Local l = mLocals.get(local);
         if(l ==        null) throw new RuntimeException("did not find local: " + local);
-                
+
 
         Node invokeType = node.getNonstaticInvoke();
         Expr invokeExpr;
@@ -1498,27 +1498,27 @@ public class Walker extends DepthFirstAdapter
             invokeExpr = Jimple.v().newInterfaceInvokeExpr(l, method, args);
         }
 
-	mProductions.addLast(invokeExpr);  
-        
-    }        
-    
-    
+	mProductions.addLast(invokeExpr);
+
+    }
+
+
 
     public void outAStaticInvokeExpr(AStaticInvokeExpr node)
     {
         List args;
-        
-        if(node.getArgList() != null)                           
+
+        if(node.getArgList() != null)
 	    args = (List) mProductions.removeLast();
         else
             args = new ArrayList();
-        
+
 	SootMethodRef method = (SootMethodRef) mProductions.removeLast();
         method = Scene.v().makeMethodRef(method.declaringClass(),
                 method.name(), method.parameterTypes(), method.returnType(),
                 true);
-        
-	mProductions.addLast(Jimple.v().newStaticInvokeExpr(method, args));   
+
+	mProductions.addLast(Jimple.v().newStaticInvokeExpr(method, args));
     }
 
     /*
@@ -1531,7 +1531,7 @@ public class Walker extends DepthFirstAdapter
         List parameterList = new ArrayList();
         if(node.getParameterList() != null)
 	    parameterList =  (List) mProductions.removeLast();
-        
+
 	methodName = (String) mProductions.removeLast();
 	Type type = (Type) mProductions.removeLast();
 	className = (String) mProductions.removeLast();
@@ -1542,7 +1542,7 @@ public class Walker extends DepthFirstAdapter
 	mProductions.addLast(sootMethod);
     }
 
-    /*    
+    /*
           new_expr =
           {simple} new base_type |
           {array}  newarray l_paren nonvoid_type r_paren fixed_array_descriptor |
@@ -1552,7 +1552,7 @@ public class Walker extends DepthFirstAdapter
     {
 	mProductions.addLast(Jimple.v().newNewExpr((RefType)mProductions.removeLast()));
     }
-    
+
     public void outAArrayNewExpr(AArrayNewExpr node)
     {
 	Value size = (Value) mProductions.removeLast();
@@ -1562,25 +1562,25 @@ public class Walker extends DepthFirstAdapter
 
     public void outAMultiNewExpr(AMultiNewExpr node)
     {
-        
+
         LinkedList arrayDesc =  node.getArrayDescriptor();
 
         int descCnt = arrayDesc.size();
-        List sizes = new LinkedList(); 
-        
+        List sizes = new LinkedList();
+
         Iterator it = arrayDesc.iterator();
         while(it.hasNext()) {
             AArrayDescriptor o = (AArrayDescriptor) it.next();
             if(o.getImmediate() != null)
 		sizes.add(0,mProductions.removeLast());
-            else 
+            else
                 break;
         }
-                            
+
 	Type type = (Type) mProductions.removeLast();
         ArrayType arrayType = ArrayType.v(type, descCnt);
-        
-	mProductions.addLast(Jimple.v().newNewMultiArrayExpr(arrayType, sizes));   
+
+	mProductions.addLast(Jimple.v().newNewMultiArrayExpr(arrayType, sizes));
     }
 
     public void defaultCase(Node node)
@@ -1595,13 +1595,13 @@ public class Walker extends DepthFirstAdapter
            node instanceof TAtIdentifier
 
            ) {
-            if(debug) 
+            if(debug)
                 G.v().out.println("Default case -pushing token:" + ((Token) node).getText());
             String tokenString = ((Token) node).getText();
             if(node instanceof TStringConstant || node instanceof TQuotedName) {
-                tokenString = tokenString.substring(1, tokenString.length() -1 );                
-            } 
-            
+                tokenString = tokenString.substring(1, tokenString.length() -1 );
+            }
+
             if(node instanceof TIdentifier || node instanceof TFullIdentifier || node instanceof TQuotedName || node instanceof TStringConstant) {
               try {
                 tokenString = StringTools.getUnEscapedStringOf(tokenString);
@@ -1611,9 +1611,9 @@ public class Walker extends DepthFirstAdapter
                 throw e;
               }
             }
-	    	  
+
 	    mProductions.addLast(tokenString);
-        } 
+        }
     }
 
 
@@ -1623,7 +1623,7 @@ public class Walker extends DepthFirstAdapter
   {
     int modifier = 0;
     Iterator it = l.iterator();
-   
+
     while(it.hasNext()) {
       Object  t = it.next();
       if(t instanceof AAbstractModifier)
@@ -1654,12 +1654,12 @@ public class Walker extends DepthFirstAdapter
         modifier |= Modifier.ANNOTATION;
       else
         throw new RuntimeException("Impossible: modifier unknown - Have you added a new modifier and not updated this file?");
-    }        
-    
+    }
+
         return modifier;
   }
 
-    
+
     private void addBoxToPatch(String aLabelName, UnitBox aUnitBox)
     {
         List<UnitBox> patchList =  mLabelToPatchList.get(aLabelName);
@@ -1667,8 +1667,8 @@ public class Walker extends DepthFirstAdapter
             patchList = new ArrayList<UnitBox>();
             mLabelToPatchList.put(aLabelName, patchList);
         }
-        
-        patchList.add(aUnitBox);        
+
+        patchList.add(aUnitBox);
     }
 
 

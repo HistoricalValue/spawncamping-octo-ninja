@@ -32,7 +32,7 @@ public class PrimitiveType_c extends Type_c implements PrimitiveType
 
     public String translate(Resolver c) {
             String s = kind.toString();
-            if(Options.global.cppBackend() && s.equals("boolean")) 
+            if(Options.global.cppBackend() && s.equals("boolean"))
               return "bool";
             return s;
     }
@@ -69,11 +69,11 @@ public class PrimitiveType_c extends Type_c implements PrimitiveType
     public String wrapperTypeString(TypeSystem ts) {
             return ts.wrapperTypeString(this);
     }
-    
+
     public String name() {
-            return toString();	
+            return toString();
     }
-    
+
     public String fullName() {
             return name();
     }

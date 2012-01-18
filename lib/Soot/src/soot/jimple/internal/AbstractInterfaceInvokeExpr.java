@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ import java.util.*;
 
 import soot.tagkit.*;
 
-public abstract class AbstractInterfaceInvokeExpr extends AbstractInstanceInvokeExpr 
+public abstract class AbstractInterfaceInvokeExpr extends AbstractInstanceInvokeExpr
                              implements InterfaceInvokeExpr, ConvertToBaf
 {
     protected AbstractInterfaceInvokeExpr(ValueBox baseBox, SootMethodRef methodRef,
@@ -53,7 +53,7 @@ public abstract class AbstractInterfaceInvokeExpr extends AbstractInstanceInvoke
         {
             AbstractInterfaceInvokeExpr ie = (AbstractInterfaceInvokeExpr)o;
             if (!(baseBox.getValue().equivTo(ie.baseBox.getValue()) &&
-                    getMethod().equals(ie.getMethod()) && 
+                    getMethod().equals(ie.getMethod()) &&
                     argBoxes.length == ie.argBoxes.length))
                 return false;
             for (ValueBox element : argBoxes)
@@ -65,7 +65,7 @@ public abstract class AbstractInterfaceInvokeExpr extends AbstractInstanceInvoke
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return baseBox.getValue().equivHashCode() * 101 + getMethod().equivHashCode() * 17;
     }
@@ -100,19 +100,19 @@ public abstract class AbstractInterfaceInvokeExpr extends AbstractInstanceInvoke
         up.literal(".");
         up.methodRef(methodRef);
         up.literal("(");
-        
+
         for(int i = 0; i < argBoxes.length; i++)
         {
             if(i != 0)
                 up.literal(", ");
-                
+
             argBoxes[i].toString(up);
         }
 
         up.literal(")");
     }
 
-    
+
     public void apply(Switch sw)
     {
         ((ExprSwitch) sw).caseInterfaceInvokeExpr(this);
@@ -150,17 +150,17 @@ public abstract class AbstractInterfaceInvokeExpr extends AbstractInstanceInvoke
        for (ValueBox element : argBoxes) {
 	    ((ConvertToBaf)(element.getValue())).convertToBaf(context, out);
 	}
-       
+
        Unit u;
        out.add(u = Baf.v().newInterfaceInvokeInst(methodRef, argCountOf(methodRef)));
 
 	Unit currentUnit = context.getCurrentUnit();
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}
-	
+
     }
 }
 

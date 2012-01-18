@@ -23,17 +23,17 @@ import java.util.*;
 import java.io.*;
 
 public class JavaToJimple {
-	
+
     public static final polyglot.frontend.Pass.ID CAST_INSERTION = new polyglot.frontend.Pass.ID("cast-insertion");
     public static final polyglot.frontend.Pass.ID STRICTFP_PROP = new polyglot.frontend.Pass.ID("strictfp-prop");
     public static final polyglot.frontend.Pass.ID ANON_CONSTR_FINDER = new polyglot.frontend.Pass.ID("anon-constr-finder");
     public static final polyglot.frontend.Pass.ID SAVE_AST = new polyglot.frontend.Pass.ID("save-ast");
-    
+
     /**
      * sets up the info needed to invoke polyglot
      */
 	public polyglot.frontend.ExtensionInfo initExtInfo(String fileName, List<String> sourceLocations){
-		
+
         Set<String> source = new HashSet<String>();
         ExtensionInfo extInfo = new soot.javaToJimple.jj.ExtensionInfo() {
             public List passes(Job job) {
@@ -46,7 +46,7 @@ public class JavaToJimple {
                 removePass(passes, Pass.OUTPUT);
                 return passes;
             }
-            
+
         };
         polyglot.main.Options options = extInfo.getOptions();
 
@@ -61,16 +61,16 @@ public class JavaToJimple {
 
         options.source_ext = new String []{"java"};
 		options.serialize_type_info = false;
-		
+
 		source.add(fileName);
-		
+
 		options.source_path.add(new File(fileName).getParentFile());
-		
+
         polyglot.main.Options.global = options;
 
         return extInfo;
     }
-	
+
     /**
      * uses polyglot to compile source and build AST
      */
@@ -95,17 +95,17 @@ public class JavaToJimple {
             if (job == null){
 			    job = compiler.sourceExtension().addJob(source);
             }
-   
+
             boolean result = false;
 		    result = compiler.sourceExtension().runToCompletion();
-		
+
             if (!result) {
-            
+
                 throw new soot.CompilationDeathException(0, "Could not compile");
             }
 
-        
-            
+
+
             polyglot.ast.Node node = job.ast();
 
 			return node;

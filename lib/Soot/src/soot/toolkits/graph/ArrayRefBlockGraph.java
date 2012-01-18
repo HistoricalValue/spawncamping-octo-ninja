@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2003.  
+ * Modified by the Sable Research Group and others 1997-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,13 +33,13 @@ import soot.baf.Inst;
 
 
 /**
- *  A CFG where the nodes are {@link Block} instances, and where 
+ *  A CFG where the nodes are {@link Block} instances, and where
  *  {@link Unit}s which include array references start new blocks.
  *  Exceptional control flow is ignored, so
- *  the graph will be a forest where each exception handler 
+ *  the graph will be a forest where each exception handler
  *  constitutes a disjoint subgraph.
  */
-public class ArrayRefBlockGraph extends BlockGraph 
+public class ArrayRefBlockGraph extends BlockGraph
 {
     /**
      *   <p>Constructs an {@link ArrayRefBlockGraph} from the given
@@ -62,8 +62,8 @@ public class ArrayRefBlockGraph extends BlockGraph
 
     /**
      *   Constructs an <tt>ArrayRefBlockGraph</tt> corresponding to the
-     *   <tt>Unit</tt>-level control flow represented by the 
-     *   passed {@link BriefUnitGraph}. 
+     *   <tt>Unit</tt>-level control flow represented by the
+     *   passed {@link BriefUnitGraph}.
      *
      *   @param unitGraph  The <tt>BriefUnitGraph</tt> for which
      *                 to build an <tt>ArrayRefBlockGraph</tt>.
@@ -75,7 +75,7 @@ public class ArrayRefBlockGraph extends BlockGraph
 	soot.util.PhaseDumper.v().dumpGraph(this, mBody);
     }
 
-    
+
     /**
      * <p>Utility method for computing the basic block leaders for a
      * {@link Body}, given its {@link UnitGraph} (i.e., the
@@ -87,8 +87,8 @@ public class ArrayRefBlockGraph extends BlockGraph
      *
      * <ul>
      *
-     * <li>All <tt>Unit</tt>s which contain an array reference, as 
-     * defined by {@link Stmt.containsArrayRef()} and 
+     * <li>All <tt>Unit</tt>s which contain an array reference, as
+     * defined by {@link Stmt.containsArrayRef()} and
      * {@link Inst.containsArrayRef()}.
      *
      * <li>The first <tt>Unit</tt> not covered by each {@link Trap} (i.e.,

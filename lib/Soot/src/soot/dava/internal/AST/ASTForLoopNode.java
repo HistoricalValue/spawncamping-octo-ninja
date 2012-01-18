@@ -37,15 +37,15 @@ import soot.dava.toolkits.base.AST.analysis.*;
       --> increment/decrement expressions both pre and post e.g. ++bla,--bla,bla++,bla--
       --> all sorts of method invocations
       --> new class instance declaration (dont know exactly what these include)
-      
+
   * B can be any ASTCondition
 
-  * C can be   
+  * C can be
       --> assignment expressions
       --> increment/decrement expressions both pre and post e.g. ++bla,--bla,bla++,bla--
       --> all sorts of method invocations
       --> new class instance declaration (dont know exactly what these include)
-           
+
 
   Extend the ASTControlFlowNode since there is a B (ASTCondition involved)
   and also since that extends ASTlabeledNoce and a for loop can have an associated label
@@ -87,14 +87,14 @@ public class ASTForLoopNode extends ASTControlFlowNode
     {
 	return new ASTForLoopNode( get_Label(), init,get_Condition(),update, body);
     }
-    
+
     public void toString( UnitPrinter up ){
 	label_toString( up );
-	      
+
 	up.literal( "for" );
 	up.literal( " " );
 	up.literal( "(" );
-	
+
 	Iterator<Object> it = init.iterator();
 	while(it.hasNext()){
 	    AugmentedStmt as = (AugmentedStmt)it.next();
@@ -123,23 +123,23 @@ public class ASTForLoopNode extends ASTControlFlowNode
 
 	up.literal( ")" );
 	up.newline();
-	      
+
 	up.literal( "{" );
 	up.newline();
-	      
+
 	up.incIndent();
 	body_toString( up, body );
 	up.decIndent();
-	      
+
 	up.literal( "}" );
 	up.newline();
-	
+
     }
-    
+
     public String toString( )
     {
 	StringBuffer b = new StringBuffer();
-	
+
 	b.append( label_toString( ));
 	b.append( "for (");
 
@@ -167,21 +167,21 @@ public class ASTForLoopNode extends ASTControlFlowNode
 
 	b.append(")");
 	b.append( NEWLINE);
-	  
+
 	b.append( "{");
 	b.append( NEWLINE);
-	  
+
 	b.append( body_toString( body));
-	  
+
 	b.append( "}");
 	b.append( NEWLINE);
-	  
+
 	return b.toString();
     }
 
-    
+
     public void apply(Analysis a){
 	a.caseASTForLoopNode(this);
     }
-    
+
 }

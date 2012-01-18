@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -29,17 +29,17 @@ package soot.tagkit;
 /** Represents a tag that just has a string to be printed with the code.
  */
 
-public class LinkTag extends StringTag 
+public class LinkTag extends StringTag
 {
     Host link;
 	String className;
-	
+
     public LinkTag(String string, Host link, String className, String type){
         super(string, type);
 		this.link = link;
 		this.className = className;
     }
-    
+
     public LinkTag( String string, Host link, String className  ) {
         super(string);
 		this.link = link;
@@ -53,7 +53,7 @@ public class LinkTag extends StringTag
 	public String getClassName(){
 		return className;
 	}
-	
+
 	public Host getLink(){
 		return link;
 	}

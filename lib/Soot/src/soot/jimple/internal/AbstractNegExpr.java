@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -49,7 +49,7 @@ public abstract class AbstractNegExpr extends AbstractUnopExpr implements NegExp
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return opBox.getValue().equivHashCode();
     }
@@ -60,7 +60,7 @@ public abstract class AbstractNegExpr extends AbstractUnopExpr implements NegExp
     {
         return Jimple.NEG + " " + opBox.getValue().toString();
     }
-    
+
     public void toString(UnitPrinter up) {
         up.literal(Jimple.NEG);
         up.literal(" ");
@@ -72,7 +72,7 @@ public abstract class AbstractNegExpr extends AbstractUnopExpr implements NegExp
         Value op = opBox.getValue();
 
         if(op.getType().equals(IntType.v()) || op.getType().equals(ByteType.v()) ||
-            op.getType().equals(ShortType.v()) || op.getType().equals(BooleanType.v()) || 
+            op.getType().equals(ShortType.v()) || op.getType().equals(BooleanType.v()) ||
             op.getType().equals(CharType.v()))
             return IntType.v();
         else if(op.getType().equals(LongType.v()))

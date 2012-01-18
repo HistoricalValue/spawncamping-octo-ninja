@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -49,19 +49,19 @@ public abstract class Constant implements Value, ConvertToBaf, Immediate
 
         Iterator it = context.getCurrentUnit().getTags().iterator();
 
-	while(it.hasNext()) 
+	while(it.hasNext())
         {
             u.addTag((Tag) it.next());
 	}
     }
 
     /** Clones the current constant.  Not implemented here. */
-    public Object clone() 
+    public Object clone()
     {
         throw new RuntimeException();
     }
 
-    /** Returns true if this object is structurally equivalent to c. 
+    /** Returns true if this object is structurally equivalent to c.
      * For Constants, equality is structural equality, so we just call equals(). */
     public boolean equivTo(Object c)
     {
@@ -74,7 +74,7 @@ public abstract class Constant implements Value, ConvertToBaf, Immediate
     {
         return hashCode();
     }
-    
+
     public void toString( UnitPrinter up ) {
         up.constant(this);
     }

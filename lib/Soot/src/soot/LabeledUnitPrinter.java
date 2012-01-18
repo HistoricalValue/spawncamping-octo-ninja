@@ -47,7 +47,7 @@ public abstract class LabeledUnitPrinter extends AbstractUnitPrinter {
 
     public void unitRef( Unit u, boolean branchTarget ) {
         String oldIndent = getIndent();
-        
+
         // normal case, ie labels
         if(branchTarget){
             setIndent(labelIndent);
@@ -73,20 +73,20 @@ public abstract class LabeledUnitPrinter extends AbstractUnitPrinter {
                 output.append(ref);
         }
     }
-    
+
     private void createLabelMaps(Body body) {
         Chain units = body.getUnits();
 
         labels = new HashMap(units.size() * 2 + 1, 0.7f);
         references = new HashMap<Unit, String>(units.size() * 2 + 1, 0.7f);
-        
+
         // Create statement name table
         {
             Iterator boxIt = body.getAllUnitBoxes().iterator();
 
             Set<Unit> labelStmts = new HashSet<Unit>();
             Set<Unit> refStmts = new HashSet<Unit>();
-            
+
             // Build labelStmts and refStmts
             {
                 while (boxIt.hasNext()) {
@@ -105,13 +105,13 @@ public abstract class LabeledUnitPrinter extends AbstractUnitPrinter {
             {
                 int labelCount = 0;
                 int refCount = 0;
-                
+
                 Iterator stmtIt = units.iterator();
 
                 while (stmtIt.hasNext()) {
                     Unit s = (Unit) stmtIt.next();
 
-                    if (labelStmts.contains(s)) 
+                    if (labelStmts.contains(s))
                         labels.put(s, "label" + (labelCount++));
 
                     if (refStmts.contains(s))

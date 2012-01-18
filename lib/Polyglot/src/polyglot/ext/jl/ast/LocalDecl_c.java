@@ -179,11 +179,11 @@ public class LocalDecl_c extends Stmt_c implements LocalDecl {
                     + "Previous definition at " + outerLocal.position() + ".",
                 position());
         }
-        
+
         return super.typeCheckEnter(tc);
 
     }
-    
+
     /** Type check the declaration. */
     public Node typeCheck(TypeChecker tc) throws SemanticException {
         TypeSystem ts = tc.typeSystem();

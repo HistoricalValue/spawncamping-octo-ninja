@@ -29,30 +29,30 @@ public class CallGraphTagger extends BodyTransformer {
 
     public CallGraphTagger( Singletons.Global g ) {}
     public static CallGraphTagger v() { return G.v().soot_jimple_toolkits_annotation_callgraph_CallGraphTagger(); }
-    
+
     private MethodToContexts methodToContexts;
     protected void internalTransform(
             Body b, String phaseName, Map options)
     {
-        
+
         CallGraph cg = Scene.v().getCallGraph();
         if( methodToContexts == null ) {
             methodToContexts = new MethodToContexts( Scene.v().getReachableMethods().listener() );
         }
-    
+
         Iterator stmtIt = b.getUnits().iterator();
 
         while (stmtIt.hasNext()){
-        
+
             Stmt s = (Stmt) stmtIt.next();
 
-            Iterator edges = cg.edgesOutOf(s); 
-            
+            Iterator edges = cg.edgesOutOf(s);
+
             while (edges.hasNext()){
                 Edge e = (Edge)edges.next();
                 SootMethod m = e.tgt();
                 s.addTag(new LinkTag("CallGraph: Type: "+e.kind()+" Target Method/Context: "+e.getTgt().toString(), m, m.getDeclaringClass().getName(), "Call Graph"));
-                
+
             }
         }
 
@@ -62,7 +62,7 @@ public class CallGraphTagger extends BodyTransformer {
         Iterator callerEdges = cg.edgesInto(momc);
             while (callerEdges.hasNext()){
                 Edge callEdge = (Edge)callerEdges.next();
-                SootMethod methodCaller = callEdge.src();            
+                SootMethod methodCaller = callEdge.src();
                 Host src = methodCaller;
                 if( callEdge.srcUnit() != null ) {
                     src = callEdge.srcUnit();

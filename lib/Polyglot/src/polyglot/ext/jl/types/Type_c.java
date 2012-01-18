@@ -14,7 +14,7 @@ public abstract class Type_c extends TypeObject_c implements Type
 {
     /** Used for deserializing types. */
     protected Type_c() { }
-    
+
     /** Creates a new type in the given a TypeSystem. */
     public Type_c(TypeSystem ts) {
         this(ts, null);
@@ -72,7 +72,7 @@ public abstract class Type_c extends TypeObject_c implements Type
     public boolean isUncheckedException() {
 	return false;
     }
-    
+
     /** Returns a non-null iff isClass() returns true. */
     public ClassType toClass() {
 	return null;
@@ -102,16 +102,16 @@ public abstract class Type_c extends TypeObject_c implements Type
      * Return a <code>dims</code>-array of this type.
      */
     public ArrayType arrayOf(int dims) {
-	return ts.arrayOf(this, dims); 
-    }  
+	return ts.arrayOf(this, dims);
+    }
 
     /**
      * Return an array of this type.
      */
     public ArrayType arrayOf() {
 	return ts.arrayOf(this);
-    }  
-    
+    }
+
     /**
      * Return true if this type is a subtype of <code>ancestor</code>.
      */
@@ -125,7 +125,7 @@ public abstract class Type_c extends TypeObject_c implements Type
     public boolean isSubtypeImpl(Type t) {
 	return ts.equals(this, t) || ts.descendsFrom(this, t);
     }
-    
+
     /**
      * Return true if this type descends from <code>ancestor</code>.
      */
@@ -146,14 +146,14 @@ public abstract class Type_c extends TypeObject_c implements Type
     public final boolean isCastValid(Type toType) {
 	return ts.isCastValid(this, toType);
     }
-    
+
     /**
      * Return true if this type can be cast to <code>toType</code>.
      */
     public boolean isCastValidImpl(Type toType) {
 	return false;
     }
-    
+
     /**
      * Return true if a value of this type can be assigned to a variable of
      * type <code>toType</code>.
@@ -177,7 +177,7 @@ public abstract class Type_c extends TypeObject_c implements Type
     public final boolean numericConversionValid(long value) {
         return ts.numericConversionValid(this, value);
     }
-    
+
     /**
      * Return true a literal <code>value</code> can be converted to this type.
      * This method should be removed.  It is kept for backward compatibility.
@@ -185,21 +185,21 @@ public abstract class Type_c extends TypeObject_c implements Type
     public boolean numericConversionValidImpl(long value) {
         return false;
     }
-    
+
     /**
      * Return true a literal <code>value</code> can be converted to this type.
      */
     public final boolean numericConversionValid(Object value) {
         return ts.numericConversionValid(this, value);
     }
-    
+
     /**
      * Return true a literal <code>value</code> can be converted to this type.
      */
     public boolean numericConversionValidImpl(Object value) {
         return false;
     }
-    
+
     /**
      * Return true if the types can be compared; that is, if they have
      * the same type system.
@@ -249,12 +249,12 @@ public abstract class Type_c extends TypeObject_c implements Type
             if (name != null) {
                 ((CachingResolver) ts.systemResolver()).install(name, (Named) this);
             }
-            
+
             if (memberName != null) {
                 ((CachingResolver) ts.systemResolver()).install(memberName, (Named) this);
             }
         }
 
         in.defaultReadObject();
-    }    
+    }
 }

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -54,7 +54,7 @@ public class ClassHierarchy
   public final TypeNode TOP = new TypeNode(5, null);
   public final TypeNode R0_1 = new TypeNode(6, null); 		//eventually becomes boolean
   public final TypeNode R0_127 = new TypeNode(7, null); 	//eventually becomes byte
-  public final TypeNode R0_32767 = new TypeNode(8, null);	//eventually becomes short 
+  public final TypeNode R0_32767 = new TypeNode(8, null);	//eventually becomes short
 
   private final boolean[][] ancestors_1 =
   {
@@ -120,7 +120,7 @@ public class ClassHierarchy
     {      TOP,     BYTE,    SHORT,     CHAR,      INT,      TOP,   R0_127,   R0_127, R0_32767, },
     {      TOP,    SHORT,    SHORT,     CHAR,      INT,      TOP, R0_32767, R0_32767, R0_32767, },
   };
-  
+
   private final TypeNode[][] lca_2 =
   {
     {  BOOLEAN,     BYTE,    SHORT,     CHAR,      INT,     null,     null,   R0_127, R0_32767, },
@@ -133,7 +133,7 @@ public class ClassHierarchy
     {   R0_127,     BYTE,    SHORT,     CHAR,      INT,     null,     null,   R0_127, R0_32767, },
     { R0_32767,    SHORT,    SHORT,     CHAR,      INT,     null,     null, R0_32767, R0_32767, },
   };
-  
+
   private final TypeNode[][] gcd_1 =
   {
     {  BOOLEAN,     R0_1,     R0_1,     R0_1,     R0_1,  BOOLEAN,     R0_1,     R0_1,     R0_1, },
@@ -146,7 +146,7 @@ public class ClassHierarchy
     {     R0_1,   R0_127,   R0_127,   R0_127,   R0_127,   R0_127,     R0_1,   R0_127,   R0_127, },
     {     R0_1,   R0_127, R0_32767, R0_32767, R0_32767, R0_32767,     R0_1,   R0_127, R0_32767, },
   };
-  
+
   private final TypeNode[][] gcd_2 =
   {
     {  BOOLEAN,  BOOLEAN,  BOOLEAN,  BOOLEAN,  BOOLEAN,     null,     null,  BOOLEAN,  BOOLEAN, },
@@ -159,10 +159,10 @@ public class ClassHierarchy
     {  BOOLEAN,   R0_127,   R0_127,   R0_127,   R0_127,     null,     null,   R0_127,   R0_127, },
     {  BOOLEAN,   R0_127, R0_32767, R0_32767, R0_32767,     null,     null,   R0_127, R0_32767, },
   };
-  
+
   /** Map: Type -> TypeNode **/
   private final HashMap<Type,TypeNode> typeNodeMap = new HashMap();
-  
+
   /** Get the type node for the given type. **/
   public TypeNode typeNode(Type type)
   {
@@ -170,7 +170,7 @@ public class ClassHierarchy
       {
 	throw new InternalTypingException();
       }
-    
+
     TypeNode typeNode = typeNodeMap.get(type);
 
     if(typeNode == null)

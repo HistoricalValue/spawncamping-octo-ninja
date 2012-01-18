@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -53,14 +53,14 @@ public class GTableSwitchStmt extends JTableSwitchStmt
                     Unit defaultTarget)
     {
         super(Grimp.v().newExprBox(key), lowIndex, highIndex,
-              getTargetBoxesArray(targets), 
+              getTargetBoxesArray(targets),
               Grimp.v().newStmtBox(defaultTarget));
     }
 
-    
-    public Object clone() 
+
+    public Object clone()
     {
-        return new GTableSwitchStmt(Grimp.cloneIfNecessary(getKey()), getLowIndex(), getHighIndex(), 
+        return new GTableSwitchStmt(Grimp.cloneIfNecessary(getKey()), getLowIndex(), getHighIndex(),
             getTargets(), getDefaultTarget());
     }
 

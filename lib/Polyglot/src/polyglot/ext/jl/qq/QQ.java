@@ -94,7 +94,7 @@ public class QQ {
     private List list(Object o1, Object o2) {
         return list(new Object[] { o1, o2 });
     }
- 
+
     /** Create a 3-element list. */
     private List list(Object o1, Object o2, Object o3) {
         return list(new Object[] { o1, o2, o3 });
@@ -303,7 +303,7 @@ public class QQ {
      * applying substitutions. */
     public ClassDecl parseDecl(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8)
-       
+
     {
         return (ClassDecl) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8), DECL);
     }
@@ -312,7 +312,7 @@ public class QQ {
      * applying substitutions. */
     public ClassDecl parseDecl(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8, Object o9)
-       
+
     {
         return (ClassDecl) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8, o9), DECL);
     }
@@ -389,7 +389,7 @@ public class QQ {
      * applying substitutions. */
     public ClassMember parseMember(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8)
-       
+
     {
         return (ClassMember) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8), MEMB);
     }
@@ -398,7 +398,7 @@ public class QQ {
      * applying substitutions. */
     public ClassMember parseMember(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8, Object o9)
-       
+
     {
         return (ClassMember) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8, o9), MEMB);
     }
@@ -475,7 +475,7 @@ public class QQ {
      * applying substitutions. */
     public Expr parseExpr(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8)
-       
+
     {
         return (Expr) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8), EXPR);
     }
@@ -484,7 +484,7 @@ public class QQ {
      * applying substitutions. */
     public Expr parseExpr(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8, Object o9)
-       
+
     {
         return (Expr) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8, o9), EXPR);
     }
@@ -561,7 +561,7 @@ public class QQ {
      * applying substitutions. */
     public Stmt parseStmt(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8)
-       
+
     {
         return (Stmt) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8), STMT);
     }
@@ -570,7 +570,7 @@ public class QQ {
      * applying substitutions. */
     public Stmt parseStmt(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8, Object o9)
-       
+
     {
         return (Stmt) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8, o9), STMT);
     }
@@ -647,7 +647,7 @@ public class QQ {
      * applying substitutions. */
     public TypeNode parseType(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8)
-       
+
     {
         return (TypeNode) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8), TYPE);
     }
@@ -656,7 +656,7 @@ public class QQ {
      * applying substitutions. */
     public TypeNode parseType(String fmt, Object o1, Object o2, Object o3,
         Object o4, Object o5, Object o6, Object o7, Object o8, Object o9)
-       
+
     {
         return (TypeNode) parse(fmt, list(o1, o2 , o3, o4, o5, o6, o7, o8, o9), TYPE);
     }

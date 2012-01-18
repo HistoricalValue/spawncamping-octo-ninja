@@ -6,19 +6,19 @@ import java.util.Enumeration;
 /** This class represents the complete "reduce-goto" table of the parser.
  *  It has one row for each state in the parse machines, and a column for
  *  each terminal symbol.  Each entry contains a state number to shift to
- *  as the last step of a reduce. 
+ *  as the last step of a reduce.
  *
  * @see     java_cup.parse_reduce_row
  * @version last updated: 11/25/95
  * @author  Scott Hudson
  */
 public class parse_reduce_table {
- 
+
   /*-----------------------------------------------------------*/
   /*--- Constructor(s) ----------------------------------------*/
   /*-----------------------------------------------------------*/
 
-  /** Simple constructor.  Note: all terminals, non-terminals, and productions 
+  /** Simple constructor.  Note: all terminals, non-terminals, and productions
    *  must already have been entered, and the viable prefix recognizer should
    *  have been constructed before this is called.
    */
@@ -33,7 +33,7 @@ public class parse_reduce_table {
 	under_state[i] = new parse_reduce_row();
     }
 
-   
+
   /*-----------------------------------------------------------*/
   /*--- (Access to) Instance Variables ------------------------*/
   /*-----------------------------------------------------------*/
@@ -48,7 +48,7 @@ public class parse_reduce_table {
 
   /** Actual array of rows, one per state */
   public  parse_reduce_row[] under_state;
- 
+
   /*-----------------------------------------------------------*/
   /*--- General Methods ---------------------------------------*/
   /*-----------------------------------------------------------*/
@@ -73,7 +73,7 @@ public class parse_reduce_table {
 	      /* if it has action in it, print it */
 	      if (goto_st != null)
 		{
-		  result += " [non term " + col + "->"; 
+		  result += " [non term " + col + "->";
 		  result += "state " + goto_st.index() + "]";
 
 		  /* end the line after the 3rd one */

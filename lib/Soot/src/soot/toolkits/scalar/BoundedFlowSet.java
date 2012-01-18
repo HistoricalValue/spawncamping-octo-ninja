@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -26,8 +26,8 @@
 
 package soot.toolkits.scalar;
 
-/** 
- * Represents bounded information for flow analysis.  
+/**
+ * Represents bounded information for flow analysis.
  * Just like FlowSet, but also provides complementation.
  * Some implementations of BoundedFlowSet may require a FlowUniverse for construction.
  *
@@ -40,7 +40,7 @@ public interface BoundedFlowSet extends FlowSet
      */
     public void complement();
 
-    /** 
+    /**
      * Complements this BoundedFlowSet, putting the result into
      * <code>dest</code>. <code>dest</code> and <code>this</code> may be the
      * same object.

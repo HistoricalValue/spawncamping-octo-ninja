@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -30,12 +30,12 @@ import soot.jimple.*;
 public class AugEvalFunction implements IEvalFunction
 {
 	private JimpleBody jb;
-	
+
 	public AugEvalFunction(JimpleBody jb)
 	{
 		this.jb = jb;
 	}
-	
+
 	public Collection<Type> eval(Typing tg, Value expr, Stmt stmt)
 	{
 		return new SingletonList<Type>(eval_(tg, expr, stmt, this.jb));
@@ -43,7 +43,7 @@ public class AugEvalFunction implements IEvalFunction
 
 	public static Type eval_(Typing tg, Value expr, Stmt stmt, JimpleBody jb)
 	{
-		
+
 		if ( expr instanceof ThisRef )
 			return ((ThisRef)expr).getType();
 		else if ( expr instanceof ParameterRef )
@@ -51,14 +51,14 @@ public class AugEvalFunction implements IEvalFunction
 		else if ( expr instanceof Local ) {
 			Local ex = (Local) expr;
 			//changed to prevent null pointer exception in case of phantom classes where a null typing is encountered
-			//syed 
-			if (tg == null) return null; 
+			//syed
+			if (tg == null) return null;
 			else return tg.get(ex);
 		}
 		else if ( expr instanceof BinopExpr )
 		{
 			BinopExpr be = (BinopExpr)expr;
-			
+
 			Value opl = be.getOp1(), opr = be.getOp2();
 			Type tl = eval_(tg, opl, stmt, jb), tr = eval_(tg, opr, stmt, jb);
 
@@ -145,7 +145,7 @@ public class AugEvalFunction implements IEvalFunction
 		else if ( expr instanceof CaughtExceptionRef )
 		{
 			RefType r = null;
-			
+
 			for ( Iterator i = TrapManager.getExceptionTypesOf(
 				stmt, jb).iterator(); i.hasNext(); )
 			{
@@ -153,23 +153,23 @@ public class AugEvalFunction implements IEvalFunction
 				if ( r == null )
 					r = t;
 				else
-					/* In theory, we could have multiple exception types 
+					/* In theory, we could have multiple exception types
 					pointing here. The JLS requires the exception parameter be a *subclass* of Throwable, so we do not need to worry about multiple inheritance. */
 					r = BytecodeHierarchy.lcsc(r, t);
 			}
-			
+
 			if ( r == null )
 				throw new RuntimeException(
 					"Exception reference used other than as the first "
 					+ "statement of an exception handler.");
-				
+
 			return r;
 		}
 		else if ( expr instanceof ArrayRef )
 		{
 			Local av = (Local)((ArrayRef)expr).getBase();
 			Type at = tg.get(av);
-			
+
 			if ( at instanceof ArrayType )
 				return ((ArrayType)at).getElementType();
 			else if ( at instanceof BottomType || at instanceof NullType )
@@ -200,7 +200,7 @@ public class AugEvalFunction implements IEvalFunction
 		else if ( expr instanceof IntConstant )
 		{
 			int value = ((IntConstant)expr).value;
-		
+
 			if ( value >= 0 && value < 2 )
 				return Integer1Type.v();
 			else if ( value >= 2 && value < 128 )

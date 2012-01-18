@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -30,7 +30,7 @@ import soot.util.*;
 
 
 /**
- *   A class that models Java's array types. ArrayTypes are parametrized by a Type and 
+ *   A class that models Java's array types. ArrayTypes are parametrized by a Type and
  *   and an integer representing the array's dimension count..
  *   Two ArrayType are 'equal' if they are parametrized equally.
  *
@@ -48,11 +48,11 @@ public class ArrayType extends RefLikeType
      * in ArrayType, ever since the very beginning of Soot.
      */
     public final Type baseType;
-    
+
     /** dimension count for the array type*/
     public final int numDimensions;
 
-   
+
     private ArrayType(Type baseType, int numDimensions)
     {
         if( !( baseType instanceof PrimType || baseType instanceof RefType ) )
@@ -62,7 +62,7 @@ public class ArrayType extends RefLikeType
         this.numDimensions = numDimensions;
     }
 
-     /** 
+     /**
      *  Creates an ArrayType  parametrized by a given Type and dimension count.
      *  @param baseType a Type to parametrize the ArrayType
      *  @param numDimensions the dimension count to parametrize the ArrayType.

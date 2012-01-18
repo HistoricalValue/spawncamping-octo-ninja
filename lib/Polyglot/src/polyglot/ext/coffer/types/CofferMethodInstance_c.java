@@ -5,7 +5,7 @@ import polyglot.types.*;
 import polyglot.util.*;
 import java.util.*;
 
-/** An implementation of the <code>CofferMethodInstance</code> interface. 
+/** An implementation of the <code>CofferMethodInstance</code> interface.
  */
 public class CofferMethodInstance_c extends MethodInstance_c
                                 implements CofferMethodInstance
@@ -124,9 +124,9 @@ public class CofferMethodInstance_c extends MethodInstance_c
         if (! returnKeys.equals(r.addAll(newKeys))) {
             if (quiet) return false;
             throw new SemanticException(mi.signature() + " in " + mi.container() +
-                                        " cannot override " + 
-                                        mj.signature() + " in " + mj.container() + 
-                                        ";", 
+                                        " cannot override " +
+                                        mj.signature() + " in " + mj.container() +
+                                        ";",
                                         mi.position());
         }
 
@@ -141,9 +141,9 @@ public class CofferMethodInstance_c extends MethodInstance_c
                     if (! c.keys().equals(superC.keys().addAll(newKeys))) {
                         if (quiet) return false;
                         throw new SemanticException(mi.signature() + " in " + mi.container() +
-                                " cannot override " + 
-                                mj.signature() + " in " + mj.container() + 
-                                ";", 
+                                " cannot override " +
+                                mj.signature() + " in " + mj.container() +
+                                ";",
                                 mi.position());
                     }
                     continue CONSTRAINTS;
@@ -153,9 +153,9 @@ public class CofferMethodInstance_c extends MethodInstance_c
             if (! c.keys().equals(newKeys)) {
                 if (quiet) return false;
                 throw new SemanticException(mi.signature() + " in " + mi.container() +
-                        " cannot override " + 
-                        mj.signature() + " in " + mj.container() + 
-                        ";", 
+                        " cannot override " +
+                        mj.signature() + " in " + mj.container() +
+                        ";",
                         mi.position());
             }
         }

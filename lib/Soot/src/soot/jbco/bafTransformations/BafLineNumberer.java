@@ -45,7 +45,7 @@ public class BafLineNumberer extends BodyTransformer implements IJbcoTransform {
       }
       if (i instanceof IdentityInst)
         continue;
-      i.addTag(new LineNumberTag(idx++));    
+      i.addTag(new LineNumberTag(idx++));
     }
   }
 }

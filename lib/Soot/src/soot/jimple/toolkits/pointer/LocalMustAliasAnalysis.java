@@ -55,38 +55,38 @@ import soot.toolkits.scalar.ForwardFlowAnalysis;
  * to the same object.
  *
  * The underlying abstraction is based on global value numbering.
- * 
+ *
  * See also {@link StrongLocalMustAliasAnalysis} for an analysis
  * that soundly treats redefinitions within loops.
- * 
+ *
  * See Sable TR 2007-8 for details.
- * 
+ *
  * P.S. The idea behind this analysis and the way it assigns numbers is very
  * similar to what is described in the paper:
  * Lapkowski, C. and Hendren, L. J. 1996. Extended SSA numbering: introducing SSA properties to languages with multi-level pointers.
  * In Proceedings of the 1996 Conference of the Centre For Advanced Studies on Collaborative Research (Toronto, Ontario, Canada, November 12 - 14, 1996).
- * M. Bauer, K. Bennet, M. Gentleman, H. Johnson, K. Lyons, and J. Slonim, Eds. IBM Centre for Advanced Studies Conference. IBM Press, 23. 
- * 
+ * M. Bauer, K. Bennet, M. Gentleman, H. Johnson, K. Lyons, and J. Slonim, Eds. IBM Centre for Advanced Studies Conference. IBM Press, 23.
+ *
  * Only major differences: Here we only use primary numbers, no secondary numbers. Further, we use the call graph to determine fields
  * that are not written to in the transitive closure of this method's execution. A third difference is that we assign fixed values
- * to {@link IdentityRef}s, because those never change during one execution. 
- * 
+ * to {@link IdentityRef}s, because those never change during one execution.
+ *
  * @author Patrick Lam
  * @author Eric Bodden
  * @see StrongLocalMustAliasAnalysis
  * */
 public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Value,Object>>
 {
-	
+
 	public static final String UNKNOWN_LABEL = "UNKNOWN";
-	
+
 	protected static final Object UNKNOWN = new Object() {
     	public String toString() { return UNKNOWN_LABEL; }
     };
     protected static final Object NOTHING = new Object() {
     	public String toString() { return "NOTHING"; }
     };
-    
+
     /**
      * The set of all local variables and field references that we track.
      * This set contains objects of type {@link Local} and, if tryTrackFieldAssignments is
@@ -97,7 +97,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
 
     /** maps from right-hand side expressions (non-locals) to value numbers */
     protected transient Map<Value,Integer> rhsToNumber;
-    
+
     /** maps from a merge point (a unit) and a value to the unique value number of that value at this point */
     protected transient Map<Unit,Map<Value,Integer>> mergePointToValueToNumber;
 
@@ -106,40 +106,40 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
 
 	/** the containing method */
 	protected SootMethod container;
-    
+
     /**
      * Creates a new {@link LocalMustAliasAnalysis} tracking local variables.
      */
     public LocalMustAliasAnalysis(UnitGraph g) {
     	this(g,false);
     }
-	
+
     /**
      * Creates a new {@link LocalMustAliasAnalysis}. If tryTrackFieldAssignments,
      * we run an interprocedural side-effects analysis to determine which fields
      * are (transitively) written to by this method. All fields which that are not written
-     * to are tracked just as local variables. This semantics is sound for single-threaded programs.  
+     * to are tracked just as local variables. This semantics is sound for single-threaded programs.
      */
 	public LocalMustAliasAnalysis(UnitGraph g, boolean tryTrackFieldAssignments) {
         super(g);
         this.container = g.getBody().getMethod();
-        this.localsAndFieldRefs = new HashSet<Value>(); 
-        
+        this.localsAndFieldRefs = new HashSet<Value>();
+
         //add all locals
         for (Local l : (Collection<Local>) g.getBody().getLocals()) {
             if (l.getType() instanceof RefLikeType)
                 this.localsAndFieldRefs.add(l);
         }
-		
+
         if(tryTrackFieldAssignments) {
         	this.localsAndFieldRefs.addAll(trackableFields());
         }
 
        	this.rhsToNumber = new HashMap<Value, Integer>();
         this.mergePointToValueToNumber = new HashMap<Unit,Map<Value,Integer>>();
-        
+
         doAnalysis();
-        
+
         //not needed any more
         this.rhsToNumber = null;
         this.mergePointToValueToNumber = null;
@@ -160,18 +160,18 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
 				if(val instanceof FieldRef) {
 					FieldRef fieldRef = (FieldRef) val;
 					if(fieldRef.getType() instanceof RefLikeType)
-						usedFieldRefs.add(new EquivalentValue(fieldRef));						
+						usedFieldRefs.add(new EquivalentValue(fieldRef));
 				}
 			}
 		}
-        
+
         //prune all fields that are written to
         if(!usedFieldRefs.isEmpty()) {
-    	
+
 	    	if(!Scene.v().hasCallGraph()) {
 	    		throw new IllegalStateException("No call graph found!");
 	    	}
-	    	    	
+
 			CallGraph cg = Scene.v().getCallGraph();
 			ReachableMethods reachableMethods = new ReachableMethods(cg,Collections.<MethodOrMethodContext>singletonList(container));
 			reachableMethods.update();
@@ -179,7 +179,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
 				SootMethod m = (SootMethod) iterator.next();
 				if(m.hasActiveBody() &&
 				//exclude static initializer of same class (assume that it has already been executed)
-				 !(m.getName().equals(SootMethod.staticInitializerName) && m.getDeclaringClass().equals(container.getDeclaringClass()))) {				
+				 !(m.getName().equals(SootMethod.staticInitializerName) && m.getDeclaringClass().equals(container.getDeclaringClass()))) {
 					for (Unit u : m.getActiveBody().getUnits()) {
 						List<ValueBox> defBoxes = u.getDefBoxes();
 						for (ValueBox defBox : defBoxes) {
@@ -192,7 +192,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
 				}
 			}
         }
-        
+
 		return usedFieldRefs;
 	}
 
@@ -200,7 +200,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
     {
         for (Value l : localsAndFieldRefs) {
             Object i1 = inMap1.get(l), i2 = inMap2.get(l);
-            if (i1.equals(i2)) 
+            if (i1.equals(i2))
                 outMap.put(l, i1);
             else if (i1 == NOTHING)
             	outMap.put(l, i2);
@@ -209,7 +209,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
             else {
                 /* Merging two different values is tricky...
                  * A naive approach would be to assign UNKNOWN. However, that would lead to imprecision in the following case:
-                 * 
+                 *
                  * x = null;
                  * if(p) x = new X();
                  * y = x;
@@ -220,9 +220,9 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
                  * to that merge location. Consequently, both y and z is assigned that same number!
                  * In the following it is important that we use an IdentityHashSet because we want the number to be unique to the
                  * location. Using a normal HashSet would make it unique to the contents.
-                 * (Eric)  
+                 * (Eric)
                  */
-            	
+
             	//retrieve the unique number for l at the merge point succUnit
             	//if there is no such number yet, generate one
             	//then assign the number to l in the outMap
@@ -240,7 +240,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
             }
         }
     }
-    
+
 
     protected void flowThrough(HashMap<Value,Object> in, Unit u, HashMap<Value,Object> out) {
     	Stmt s = (Stmt)u;
@@ -258,7 +258,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
 				CastExpr castExpr = (CastExpr) rhs;
             	rhs = castExpr.getOp();
             }
-            
+
             if ((lhs instanceof Local
             		|| (lhs instanceof FieldRef && this.localsAndFieldRefs.contains(new EquivalentValue(lhs))))
             	&& lhs.getType() instanceof RefLikeType) {
@@ -274,7 +274,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
                 } else {
                 	//assign number for expression
                     out.put(lhs, numberOfRhs(rhs));
-                } 
+                }
             }
         } else {
         	//which other kind of statement has def-boxes? hopefully none...
@@ -291,7 +291,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
         if(num==null) {
             num = nextNumber++;
             rhsToNumber.put(rhs, num);
-        }        
+        }
         return num;
     }
 
@@ -330,11 +330,11 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
         }
         return m;
     }
-    
+
     /**
      * Returns a string (natural number) representation of the instance key associated with l
-     * at statement s or <code>null</code> if there is no such key associated or <code>UNKNOWN</code> if 
-     * the value of l at s is {@link #UNKNOWN}. 
+     * at statement s or <code>null</code> if there is no such key associated or <code>UNKNOWN</code> if
+     * the value of l at s is {@link #UNKNOWN}.
      * @param l any local of the associated method
      * @param s the statement at which to check
      */
@@ -347,7 +347,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
         }
         return ln.toString();
     }
-    
+
     /**
      * Returns true if this analysis has any information about local l
      * at statement s (i.e. it is not {@link #UNKNOWN}).
@@ -365,7 +365,7 @@ public class LocalMustAliasAnalysis extends ForwardFlowAnalysis<Unit,HashMap<Val
     		return info!=null && info!=UNKNOWN;
     	}
     }
-    
+
     /**
      * @return true if values of l1 (at s1) and l2 (at s2) have the
      * exact same object IDs, i.e. at statement s1 the variable l1 must point to the same object

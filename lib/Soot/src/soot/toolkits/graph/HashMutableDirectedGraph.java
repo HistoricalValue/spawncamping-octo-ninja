@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -40,7 +40,7 @@ import soot.util.*;
  */
 
 public class HashMutableDirectedGraph implements MutableDirectedGraph {
-		
+
 
     protected HashMap<Object,LinkedHashSet<Object>> nodeToPreds = new HashMap();
     protected HashMap<Object,LinkedHashSet<Object>> nodeToSuccs = new HashMap();
@@ -91,13 +91,13 @@ public class HashMutableDirectedGraph implements MutableDirectedGraph {
         else
             throw new RuntimeException(s+"not in graph!");
     }
-    
+
     /**
      * Same as {@link #getPredsOf(Object)} but returns a set.
      * This is faster than calling {@link #getPredsOf(Object)}.
      * Also, certain operations like {@link Collection#contains(Object)}
      * execute faster on the set than on the list.
-     * The returned set is unmodifiable. 
+     * The returned set is unmodifiable.
      */
     public Set getPredsOfAsSet(Object s)
     {
@@ -116,13 +116,13 @@ public class HashMutableDirectedGraph implements MutableDirectedGraph {
         else
             throw new RuntimeException(s+"not in graph!");
     }
-    
+
     /**
      * Same as {@link #getSuccsOf(Object)} but returns a set.
      * This is faster than calling {@link #getSuccsOf(Object)}.
      * Also, certain operations like {@link Collection#contains(Object)}
      * execute faster on the set than on the list.
-     * The returned set is unmodifiable. 
+     * The returned set is unmodifiable.
      */
     public Set getSuccsOfAsSet(Object s)
     {
@@ -215,10 +215,10 @@ public class HashMutableDirectedGraph implements MutableDirectedGraph {
     {
 				if (containsNode(node))
 						throw new RuntimeException("Node already in graph");
-				
+
 				nodeToSuccs.put(node, new LinkedHashSet<Object>());
         nodeToPreds.put(node, new LinkedHashSet<Object>());
-        heads.add(node); 
+        heads.add(node);
 				tails.add(node);
     }
 
@@ -235,7 +235,7 @@ public class HashMutableDirectedGraph implements MutableDirectedGraph {
         nodeToPreds.remove(node);
 
         if (heads.contains(node))
-            heads.remove(node); 
+            heads.remove(node);
 
         if (tails.contains(node))
             tails.remove(node);
@@ -261,4 +261,4 @@ public class HashMutableDirectedGraph implements MutableDirectedGraph {
 
 }
 
- 
+

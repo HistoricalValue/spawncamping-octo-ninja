@@ -21,9 +21,9 @@ package soot.jimple.spark.ondemand.genericutil;
 
 /**
  * A mutable pair of objects.
- * 
+ *
  * @author manu
- * 
+ *
  */
 public class MutablePair<T, U> {
 

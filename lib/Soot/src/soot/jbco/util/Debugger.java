@@ -31,9 +31,9 @@ import soot.Trap;
 import soot.Unit;
 
 public class Debugger {
-  
+
   public static void printBaf(Body b) {
-    
+
     System.out.println(b.getMethod().getName()+"\n");
     int i = 0;
     HashMap index = new HashMap();
@@ -43,14 +43,14 @@ public class Debugger {
     it = b.getUnits().iterator();
     while (it.hasNext()) {
       Object o = it.next();
-      System.out.println(index.get(o).toString() 
-          + " " + o + " " + (o instanceof TargetArgInst ? 
-              		index.get(((TargetArgInst)o).getTarget()).toString() 
+      System.out.println(index.get(o).toString()
+          + " " + o + " " + (o instanceof TargetArgInst ?
+              		index.get(((TargetArgInst)o).getTarget()).toString()
               		: ""));
     }
     System.out.println("\n");
   }
-  
+
   public static void printUnits(Body b, String msg) {
     int i = 0;
     HashMap<Unit,Integer> numbers = new HashMap<Unit,Integer>();
@@ -58,17 +58,17 @@ public class Debugger {
     Iterator<Unit> it = u.snapshotIterator();
     while (it.hasNext())
       numbers.put(it.next(),new Integer(i++));
-    
+
     int jsr = 0;
     System.out.println("\r\r"+b.getMethod().getName() + "  "+msg);
     Iterator udit = u.snapshotIterator();
     while (udit.hasNext()) {
       Unit unit = (Unit)udit.next();
       Integer numb = numbers.get(unit);
-      
-      if (numb.intValue() == 149) 
+
+      if (numb.intValue() == 149)
         System.out.println("hi");
-      
+
       if (unit instanceof TargetArgInst) {
         if(unit instanceof JSRInst) jsr++;
         TargetArgInst ti = (TargetArgInst)unit;
@@ -90,7 +90,7 @@ public class Debugger {
       }
       System.out.println(numb.toString() + " " + unit);
     }
-    
+
     Iterator tit = b.getTraps().iterator();
     while (tit.hasNext()) {
       Trap t = (Trap)tit.next();
@@ -98,24 +98,24 @@ public class Debugger {
     }
     if (jsr>0) System.out.println("\r\tJSR Instructions: "+jsr);
   }
-  
+
   public static void printUnits(PatchingChain u, String msg) {
   int i = 0;
   HashMap<Unit,Integer> numbers = new HashMap<Unit,Integer>();
   Iterator<Unit> it = u.snapshotIterator();
   while (it.hasNext())
     numbers.put(it.next(),new Integer(i++));
-  
+
   int jsr = 0;
   System.out.println("\r\r***********  "+msg);
   Iterator udit = u.snapshotIterator();
   while (udit.hasNext()) {
     Unit unit = (Unit)udit.next();
     Integer numb = numbers.get(unit);
-    
-    if (numb.intValue() == 149) 
+
+    if (numb.intValue() == 149)
       System.out.println("hi");
-    
+
     if (unit instanceof TargetArgInst) {
       if(unit instanceof JSRInst) jsr++;
       TargetArgInst ti = (TargetArgInst)unit;

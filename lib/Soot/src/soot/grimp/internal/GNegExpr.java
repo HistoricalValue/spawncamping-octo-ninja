@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
 
   * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
@@ -38,8 +38,8 @@ import soot.jimple.internal.*;
 public class GNegExpr extends AbstractNegExpr
 {
     public GNegExpr(Value op) { super(Grimp.v().newExprBox(op)); }
-        
-    public Object clone()  
+
+    public Object clone()
     {
         return new GNegExpr(Grimp.cloneIfNecessary(getOp()));
     }

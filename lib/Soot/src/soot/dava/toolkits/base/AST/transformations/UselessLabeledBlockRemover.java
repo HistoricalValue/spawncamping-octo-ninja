@@ -32,20 +32,20 @@ import soot.dava.toolkits.base.AST.analysis.DepthFirstAdapter;
  *     17th April 2006
  *     The class was implemented all wrong since the case methods were being overriddern and hence
  *     the analysis was nto going into all children.
- *     
+ *
  *     changed this by overridding out methods instead of case
- *     
- *     
+ *
+ *
  * Class serves two purposes.
  * If you know there is a useless labeled block then its static methods can be invoked
  * as done by the ASTCleaner
- * 
+ *
  * It can also be used to apply the UselessLabelFinder to all nodes of the AST
  * if that is done then make sure to set the ASTAnalysisModified
  */
 public class UselessLabeledBlockRemover extends DepthFirstAdapter{
 	boolean changed=false;
-	
+
     public UselessLabeledBlockRemover(){
     }
 
@@ -53,16 +53,16 @@ public class UselessLabeledBlockRemover extends DepthFirstAdapter{
     	super(verbose);
     }
 
-    
+
     public void outASTMethodNode(ASTMethodNode node){
     	if(changed)
     		G.v().ASTTransformations_modified = true;
     }
-    
+
     public void inASTMethodNode(ASTMethodNode node){
-    	changed=UselessLabelFinder.v().findAndKill(node);	
+    	changed=UselessLabelFinder.v().findAndKill(node);
     }
-    
+
 /*    public void caseASTSynchronizedBlockNode(ASTSynchronizedBlockNode node){
     	changed=UselessLabelFinder.v().findAndKill(node);
     }
@@ -105,7 +105,7 @@ public class UselessLabeledBlockRemover extends DepthFirstAdapter{
     		changed=true;
     }
     public void outASTUnconditionalLoopNode (ASTUnconditionalLoopNode node){
-	    boolean modified=UselessLabelFinder.v().findAndKill(node);    
+	    boolean modified=UselessLabelFinder.v().findAndKill(node);
 	    if(modified)
     		changed=true;
     }
@@ -145,10 +145,10 @@ public class UselessLabeledBlockRemover extends DepthFirstAdapter{
     		changed=true;
     }
 
-    
-    
-    
-    
+
+
+
+
     public static void removeLabeledBlock(ASTNode node, ASTLabeledBlockNode labelBlock, int subBodyNumber, int nodeNumber){
 	if(!(node instanceof ASTIfElseNode)){
 	    //these are the nodes which always have one subBody
@@ -260,10 +260,10 @@ public class UselessLabeledBlockRemover extends DepthFirstAdapter{
     public static List<Object> createNewSubBody(List<Object> oldSubBody,int nodeNumber,ASTLabeledBlockNode labelBlock){
 	//create a new SubBody
 	List<Object> newSubBody = new ArrayList<Object>();
-	
+
 	//this is an iterator of ASTNodes
 	Iterator<Object> it = oldSubBody.iterator();
-	
+
 	//copy to newSubBody all nodes until you get to nodeNumber
 	int index=0;
 	while(index!=nodeNumber ){
@@ -278,7 +278,7 @@ public class UselessLabeledBlockRemover extends DepthFirstAdapter{
 	//just to make sure check this
 	ASTNode toRemove = (ASTNode)it.next();
 	if(!(toRemove instanceof ASTLabeledBlockNode)){
-	    //something is wrong 
+	    //something is wrong
 	    return null;
 	}
 	else{
@@ -290,13 +290,13 @@ public class UselessLabeledBlockRemover extends DepthFirstAdapter{
 		//something is wrong we cant remove a non null label
 		return null;
 	    }
-	    
+
 	    //so this is the label to remove
 	    //removing a label means bringing all its bodies one step up the hierarchy
 	    List<Object> blocksSubBodies = toRemoveNode.get_SubBodies();
 	    //we know this is a labeledBlock so it has only one subBody
 	    List onlySubBodyOfLabeledBlock = (List)blocksSubBodies.get(0);
-	    
+
 	    //all these subBodies should be added to the newSubbody
 	    newSubBody.addAll(onlySubBodyOfLabeledBlock);
 	}

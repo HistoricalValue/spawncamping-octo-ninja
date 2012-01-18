@@ -24,7 +24,7 @@ import soot.jimple.toolkits.callgraph.*;
 import soot.jimple.*;
 
 public class FieldRWTagger extends BodyTransformer
-{ 
+{
     public FieldRWTagger( Singletons.Global g ) {}
     public static FieldRWTagger v() { return G.v().soot_jimple_toolkits_pointer_FieldRWTagger(); }
 
@@ -91,14 +91,14 @@ public class FieldRWTagger extends BodyTransformer
     protected void internalTransform(Body body, String phaseName, Map options)
     {
 	initializationStuff( phaseName );
-	SideEffectAnalysis sea = new SideEffectAnalysis( 
+	SideEffectAnalysis sea = new SideEffectAnalysis(
                 DumbPointerAnalysis.v(), Scene.v().getCallGraph() );
         sea.findNTRWSets( body.getMethod() );
 	HashMap<Object, RWSet> stmtToReadSet = new HashMap<Object, RWSet>();
 	HashMap<Object, RWSet> stmtToWriteSet = new HashMap<Object, RWSet>();
 	UniqueRWSets sets = new UniqueRWSets();
 	optionDontTag = PhaseOptions.getBoolean( options, "dont-tag" );
-	boolean justDoTotallyConservativeThing = 
+	boolean justDoTotallyConservativeThing =
 	    body.getMethod().getName().equals( "<clinit>" );
 	for( Iterator stmtIt = body.getUnits().iterator(); stmtIt.hasNext(); ) {
 	    final Stmt stmt = (Stmt) stmtIt.next();

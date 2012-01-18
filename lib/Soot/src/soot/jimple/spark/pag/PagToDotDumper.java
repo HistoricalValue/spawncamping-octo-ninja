@@ -36,7 +36,7 @@ import soot.jimple.spark.sets.P2SetVisitor;
 /**
  * Utilities for dumping dot representations of parts of a {@link PAG}.
  * @author msridhar
- * 
+ *
  */
 public class PagToDotDumper {
 
@@ -52,10 +52,10 @@ public class PagToDotDumper {
 		this.vmatches = new HashMap<Node, Node[]>();
 		this.invVmatches = new HashMap<Node, Node[]>();
 	}
-	
+
 	/**
 	 * Build vmatchEdges and store them in vmatches field
-	 *  
+	 *
 	 */
 	private void buildVmatchEdges() {
 		// for each store and load pair
@@ -126,7 +126,7 @@ public class PagToDotDumper {
 				System.err.println(makeLabel(frn2));
 				System.err.println("Base: " + base2.getVariable());
 				System.err.println("Field: " + frn2.getField());
-				
+
 				if (frn1.getField().equals(frn2.getField())) {
 					System.err.println("field match");
 					if (base1.getP2Set().hasNonEmptyIntersection(
@@ -157,7 +157,7 @@ public class PagToDotDumper {
             return !(n instanceof AllocNode) && n.getP2Set().isEmpty();
         }
     };
-    
+
 	/**
      * Generate a node declaration for a dot file.
 	 * @param node the node
@@ -184,7 +184,7 @@ public class PagToDotDumper {
 
 	}
 
-	private static String translateLabel(Node n) { 
+	private static String translateLabel(Node n) {
 	    return makeDotNodeLabel(n, emptyP2SetPred);
 	}
 	/**
@@ -200,7 +200,7 @@ public class PagToDotDumper {
 	}
 
 
-	
+
 	private void printOneNode(VarNode node) {
 		PrintStream ps = System.err;
 
@@ -220,7 +220,7 @@ public class PagToDotDumper {
 
 		}
 
-		
+
 		succs = pag.loadInvLookup(node);
 		ps.println("load");
 		ps.println("======");
@@ -238,14 +238,14 @@ public class PagToDotDumper {
 	}
 
     /**
-     * dumps the points-to sets for all locals in a method in a 
+     * dumps the points-to sets for all locals in a method in a
      * dot representation.  The graph has edges from each local to
      * all {@link AllocNode}s in its points-to set
      * @param fName a name for the output file
      * @param mName the name of the method whose locals should
      * be dumped
      * @throws FileNotFoundException if unable to output to specified
-     * file 
+     * file
      */
 	public void dumpP2SetsForLocals(String fName, String mName) throws FileNotFoundException {
 
@@ -295,7 +295,7 @@ public class PagToDotDumper {
 		ps.println("digraph G {");
 		ps.println("\trankdir=LR;");
 		dumpLocalPAG(cName, mName, ps);
-		
+
 		ps.print("}");
 
 	}
@@ -323,7 +323,7 @@ public class PagToDotDumper {
 		//		for (Iterator iter = pag.getFieldRefNodeNumberer().iterator(); iter
 		//				.hasNext();) {
 		//			final FieldRefNode frNode = (FieldRefNode) iter.next();
-		//			
+		//
 		//			if (frNode.getBase().)
 		//			Node[] succs = pag.storeInvLookup(frNode);
 		//			for (int i = 0; i < succs.length; i++) {
@@ -404,7 +404,7 @@ public class PagToDotDumper {
 					trace(lvn, ps, new HashSet<Node>(), TRACE_MAX_LVL);
 				}
 			}
-			
+
 			ps.print("}");
 
 		} catch (IOException e) {
@@ -462,9 +462,9 @@ public class PagToDotDumper {
 	}
 
 	/**
-	 * 
+	 *
 	 * Do a DFS traversal
-	 * 
+	 *
 	 * @param name
 	 * @param name2
 	 * @param ps2
@@ -558,19 +558,19 @@ public class PagToDotDumper {
 		else
 			return base.toString();
 	}
-	
-	
+
+
 
 	class P2SetToDotPrinter extends P2SetVisitor {
 
       private final Node curNode;
-      
+
       private final PrintStream ps;
       P2SetToDotPrinter(Node curNode, PrintStream ps) {
         this.curNode = curNode;
         this.ps = ps;
       }
-      
+
 		public void visit(Node n) {
 			ps.println("\t" + makeNodeName(n) + " [label=\""
 					+ makeLabel((AllocNode) n) + "\"];");

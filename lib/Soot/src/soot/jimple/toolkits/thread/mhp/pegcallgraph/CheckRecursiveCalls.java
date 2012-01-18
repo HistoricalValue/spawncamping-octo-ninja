@@ -23,21 +23,21 @@ public class CheckRecursiveCalls{
 		List<List<Object>> sccList = scc.getSccList();
 		//printSCC(sccList);
 		newSccList = updateScc(sccList, pcg);
-		
+
 		//System.out.println("after update scc");
 		//printSCC(newSccList);
 		check(newSccList, methodNeedExtent);
 	}
 	private List<List> updateScc(List<List<Object>> sccList, PegCallGraph pcg){
-		List<List> newList = new ArrayList<List>();    
+		List<List> newList = new ArrayList<List>();
 		Iterator<List<Object>> listIt = sccList.iterator();
 		while (listIt.hasNext()){
 			List s = listIt.next();
 			if (s.size() == 1){
 				Object o = s.get(0);
-				
+
 				if ((pcg.getSuccsOf(o)).contains(o) || (pcg.getPredsOf(o)).contains(o)){
-					//sccList.remove(s);	 
+					//sccList.remove(s);
 					newList.add(s);
 				}
 			}
@@ -47,7 +47,7 @@ public class CheckRecursiveCalls{
 		return 	newList;
 	}
 	private void check(List<List> sccList, Set<Object> methodNeedExtent){
-		Iterator<List> listIt = sccList.iterator(); 	    
+		Iterator<List> listIt = sccList.iterator();
 		while (listIt.hasNext()){
 			List s = listIt.next();
 			//printSCC(s);

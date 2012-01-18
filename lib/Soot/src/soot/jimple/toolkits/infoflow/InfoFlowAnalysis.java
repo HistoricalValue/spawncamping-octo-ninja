@@ -24,12 +24,12 @@ public class InfoFlowAnalysis
 	boolean printDebug;
 
 	Map<SootClass, ClassInfoFlowAnalysis> classToClassInfoFlowAnalysis;
-	
+
 	public InfoFlowAnalysis(boolean includePrimitiveDataFlow, boolean includeInnerFields)
 	{
-		this(includePrimitiveDataFlow, includeInnerFields, false);	
+		this(includePrimitiveDataFlow, includeInnerFields, false);
 	}
-	
+
 	public InfoFlowAnalysis(boolean includePrimitiveDataFlow, boolean includeInnerFields, boolean printDebug)
 	{
 		this.includePrimitiveInfoFlow = includePrimitiveDataFlow;
@@ -37,42 +37,42 @@ public class InfoFlowAnalysis
 		this.printDebug = printDebug;
 		classToClassInfoFlowAnalysis = new HashMap<SootClass, ClassInfoFlowAnalysis>();
 	}
-	
+
 	public boolean includesPrimitiveInfoFlow()
 	{
 		return includePrimitiveInfoFlow;
 	}
-	
+
 	public boolean includesInnerFields()
 	{
 		return includeInnerFields;
 	}
-	
+
 	public boolean printDebug()
 	{
 		return printDebug;
 	}
-	
+
 /*
 	public void doApplicationClassesAnalysis()
 	{
     	Iterator appClassesIt = Scene.v().getApplicationClasses().iterator();
-    	while (appClassesIt.hasNext()) 
+    	while (appClassesIt.hasNext())
     	{
     	    SootClass appClass = (SootClass) appClassesIt.next();
 
 			// Create the needed flow analysis object
 			ClassInfoFlowAnalysis cdfa = new ClassInfoFlowAnalysis(appClass, this);
-			
+
 			// Put the preliminary flow-insensitive results here in case they
 			// are needed by the flow-sensitive version.  This method will be
 			// reentrant if any method we are analyzing is reentrant, so we
 			// must do this to prevent an infinite recursive loop.
 			classToClassInfoFlowAnalysis.put(appClass, cdfa);
 		}
-		
+
     	Iterator appClassesIt2 = Scene.v().getApplicationClasses().iterator();
-    	while (appClassesIt2.hasNext()) 
+    	while (appClassesIt2.hasNext())
     	{
     	    SootClass appClass = (SootClass) appClassesIt2.next();
 			// Now calculate the flow-sensitive version.  If this classes methods
@@ -82,7 +82,7 @@ public class InfoFlowAnalysis
 			cdfa.doFixedPointDataFlowAnalysis();
 		}
 	}
-*/		
+*/
 
 	private ClassInfoFlowAnalysis getClassInfoFlowAnalysis(SootClass sc)
 	{
@@ -93,15 +93,15 @@ public class InfoFlowAnalysis
 		}
 		return classToClassInfoFlowAnalysis.get(sc);
 	}
-	
+
 	public SmartMethodInfoFlowAnalysis getMethodInfoFlowAnalysis(SootMethod sm)
 	{
 		ClassInfoFlowAnalysis cdfa = getClassInfoFlowAnalysis(sm.getDeclaringClass());
 		return cdfa.getMethodInfoFlowAnalysis(sm);
 	}
-	
-	/** Returns a BACKED MutableDirectedGraph whose nodes are EquivalentValue 
-	  * wrapped Refs. It's perfectly safe to modify this graph, just so long as 
+
+	/** Returns a BACKED MutableDirectedGraph whose nodes are EquivalentValue
+	  * wrapped Refs. It's perfectly safe to modify this graph, just so long as
 	  * new nodes are EquivalentValue wrapped Refs. */
 	public HashMutableDirectedGraph getMethodInfoFlowSummary(SootMethod sm) { return getMethodInfoFlowSummary(sm, true); }
 	public HashMutableDirectedGraph getMethodInfoFlowSummary(SootMethod sm, boolean doFullAnalysis)
@@ -109,7 +109,7 @@ public class InfoFlowAnalysis
 		ClassInfoFlowAnalysis cdfa = getClassInfoFlowAnalysis(sm.getDeclaringClass());
 		return cdfa.getMethodInfoFlowSummary(sm, doFullAnalysis);
 	}
-	
+
 	/** Returns an unmodifiable list of EquivalentValue wrapped Refs that source
 	  * flows to when method sm is called. */
 /*	public List getSinksOf(SootMethod sm, EquivalentValue source)
@@ -123,7 +123,7 @@ public class InfoFlowAnalysis
 			sinks = new ArrayList();
 		return sinks;
 	}
-*/	
+*/
 	/** Returns an unmodifiable list of EquivalentValue wrapped Refs that sink
 	  * flows from when method sm is called. */
 /*	public List getSourcesOf(SootMethod sm, EquivalentValue sink)
@@ -137,7 +137,7 @@ public class InfoFlowAnalysis
 			sources = new ArrayList();
 		return sources;
 	}
-*/	
+*/
 	// Returns an EquivalentValue wrapped Ref based on sfr
 	// that is suitable for comparison to the nodes of a Data Flow Graph
 	public static EquivalentValue getNodeForFieldRef(SootMethod sm, SootField sf) { return getNodeForFieldRef(sm, sf, null); }
@@ -153,7 +153,7 @@ public class InfoFlowAnalysis
 			if(sm.isConcrete() && !sm.isStatic() && sm.getDeclaringClass() == sf.getDeclaringClass() && realLocal == null)
 			{
 				JimpleLocal fakethis = new FakeJimpleLocal("fakethis", sf.getDeclaringClass().getType(), sm.retrieveActiveBody().getThisLocal());
-				
+
 				return new CachedEquivalentValue( Jimple.v().newInstanceFieldRef(fakethis, sf.makeRef()) ); // fake thisLocal
 			}
 			else
@@ -161,33 +161,33 @@ public class InfoFlowAnalysis
 				// Pretends to be a this.<somefield> ref for a method without a body,
 				// for a static method, or for an inner field
 				JimpleLocal fakethis = new FakeJimpleLocal("fakethis", sf.getDeclaringClass().getType(), realLocal);
-				
+
 				return new CachedEquivalentValue( Jimple.v().newInstanceFieldRef(fakethis, sf.makeRef()) ); // fake thisLocal
 			}
 		}
 	}
-	
+
 	// Returns an EquivalentValue wrapped Ref for @parameter i
 	// that is suitable for comparison to the nodes of a Data Flow Graph
 	public static EquivalentValue getNodeForParameterRef(SootMethod sm, int i)
 	{
 		return new CachedEquivalentValue(new ParameterRef(sm.getParameterType(i), i));
 	}
-	
+
 	// Returns an EquivalentValue wrapped Ref for the return value
 	// that is suitable for comparison to the nodes of a Data Flow Graph
 	public static EquivalentValue getNodeForReturnRef(SootMethod sm)
 	{
 		return new CachedEquivalentValue(new ParameterRef(sm.getReturnType(), -1));
 	}
-	
+
 	// Returns an EquivalentValue wrapped ThisRef
 	// that is suitable for comparison to the nodes of a Data Flow Graph
 	public static EquivalentValue getNodeForThisRef(SootMethod sm)
 	{
 		return new CachedEquivalentValue(new ThisRef(sm.getDeclaringClass().getType()));
 	}
-	
+
 	protected HashMutableDirectedGraph getInvokeInfoFlowSummary(InvokeExpr ie, SootMethod context)
 	{
 		// get the data flow graph for each possible target of ie,
@@ -195,7 +195,7 @@ public class InfoFlowAnalysis
 		SootMethodRef methodRef = ie.getMethodRef();
 		return getMethodInfoFlowSummary(methodRef.resolve(), context.getDeclaringClass().isApplicationClass());
 	}
-	
+
 	protected MutableDirectedGraph getInvokeAbbreviatedInfoFlowGraph(InvokeExpr ie, SootMethod context)
 	{
 		// get the data flow graph for each possible target of ie,
@@ -203,7 +203,7 @@ public class InfoFlowAnalysis
 		SootMethodRef methodRef = ie.getMethodRef();
 		return getMethodInfoFlowAnalysis(methodRef.resolve()).getMethodAbbreviatedInfoFlowGraph();
 	}
-	
+
 	public static void printInfoFlowSummary(DirectedGraph g)
 	{
 		Iterator nodeIt = g.iterator();
@@ -255,22 +255,22 @@ public class InfoFlowAnalysis
 			G.v().out.println(" ] --> " + node.toString());
 		}
 	}
-		
+
 	public static void printGraphToDotFile(String filename, DirectedGraph graph, String graphname, boolean onePage)
 	{
 		// this makes the node name unique
 		nodecount = 0; // reset node counter first.
 		Hashtable nodeindex = new Hashtable(graph.size());
-		
+
 		// file name is the method name + .dot
 		DotGraph canvas = new DotGraph(filename);
 		if (!onePage) {
 			canvas.setPageSize(8.5, 11.0);
 		}
-		
+
 		canvas.setNodeShape(DotGraphConstants.NODE_SHAPE_BOX);
 		canvas.setGraphLabel(graphname);
-		
+
 		Iterator nodesIt = graph.iterator();
 		while (nodesIt.hasNext())
 		{
@@ -280,7 +280,7 @@ public class InfoFlowAnalysis
 			canvas.getNode(getNodeName(node)).setLabel(getNodeLabel(node));
 
 			Iterator succsIt = graph.getSuccsOf(node).iterator();
-			
+
 			while (succsIt.hasNext())
 			{
 				Object s= succsIt.next();
@@ -291,7 +291,7 @@ public class InfoFlowAnalysis
 				canvas.drawEdge(getNodeName(node), getNodeName(s));
 			}
 		}
-		
+
 		canvas.plot(filename + ".dot");
 	}
 
@@ -302,11 +302,11 @@ public class InfoFlowAnalysis
 //		if(!nodeToNodeName.containsKey(o)) // Since this uses all different kinds of objects, we
 //										   // were getting weird collisions, causing wrong graphs.
 //			nodeToNodeName.put(o, "N" + (nodecount++));
-//			
+//
 //		return (String) nodeToNodeName.get(o);
 		return getNodeLabel(o);
 	}
-	
+
 	public static String getNodeLabel(Object o)
 	{
 		Value node = ((EquivalentValue) o).getValue();

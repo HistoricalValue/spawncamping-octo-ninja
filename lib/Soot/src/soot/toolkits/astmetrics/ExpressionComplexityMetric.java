@@ -24,9 +24,9 @@ import polyglot.ast.Node;
 import polyglot.visit.NodeVisitor;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 7-Mar-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 7-Mar-2006
  */
 public class ExpressionComplexityMetric extends ASTMetric {
 
@@ -38,7 +38,7 @@ public class ExpressionComplexityMetric extends ASTMetric {
 	public ExpressionComplexityMetric(polyglot.ast.Node node) {
 	  super(node);
 	}
-	
+
 	public void reset() {
 	  currentExprDepth = 0;
 	  exprDepthSum = 0;
@@ -49,7 +49,7 @@ public class ExpressionComplexityMetric extends ASTMetric {
 	public void addMetrics(ClassData data) {
 	  double a = exprDepthSum;
 	  double b = exprCount;
-	  
+
 	  data.addMetric(new MetricData("Expr-Complexity",new Double(a)));
 	  data.addMetric(new MetricData("Expr-Count",new Double(b)));
 	}
@@ -59,10 +59,10 @@ public class ExpressionComplexityMetric extends ASTMetric {
 	    inExpr++;
 	    currentExprDepth++;
 	  }
-	  
+
 	  return enter(n);
 	}
-	
+
 	public Node leave(Node old, Node n, NodeVisitor v){
 	  if(n instanceof Expr){
 	    if (currentExprDepth==1) {
@@ -72,7 +72,7 @@ public class ExpressionComplexityMetric extends ASTMetric {
 	    }
 	    currentExprDepth--;
 	  }
-	  
+
 	  return super.leave(old,n,v);
 	}
 }

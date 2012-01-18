@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -54,19 +54,19 @@ public class SimpleLiveLocals implements LiveLocals
      *   exceptional control flow.
      *
      *   @param g a graph on which to compute the analysis.
-     *   
+     *
      *   @see ExceptionalUnitGraph
      */
     public SimpleLiveLocals(UnitGraph graph)
     {
         if(Options.v().time())
             Timers.v().liveTimer.start();
-        
+
         if(Options.v().verbose())
             G.v().out.println("[" + graph.getBody().getMethod().getName() +
                 "]     Constructing SimpleLiveLocals...");
 
-                        
+
         SimpleLiveLocalsAnalysis analysis = new SimpleLiveLocalsAnalysis(graph);
 
         if(Options.v().time())
@@ -82,18 +82,18 @@ public class SimpleLiveLocals implements LiveLocals
             while(unitIt.hasNext())
             {
                 Unit s = (Unit) unitIt.next();
- 
+
                 FlowSet set = (FlowSet) analysis.getFlowBefore(s);
                 unitToLocalsBefore.put(s, Collections.unmodifiableList(set.toList()));
-                
+
                 set = (FlowSet) analysis.getFlowAfter(s);
                 unitToLocalsAfter.put(s, Collections.unmodifiableList(set.toList()));
-            }            
+            }
         }
-        
+
         if(Options.v().time())
             Timers.v().livePostTimer.end();
-        
+
         if(Options.v().time())
             Timers.v().liveTimer.end();
     }
@@ -102,7 +102,7 @@ public class SimpleLiveLocals implements LiveLocals
     {
         return unitToLocalsAfter.get(s);
     }
-    
+
     public List getLiveLocalsBefore(Unit s)
     {
         return unitToLocalsBefore.get(s);
@@ -183,7 +183,7 @@ class SimpleLiveLocalsAnalysis extends BackwardFlowAnalysis
             Timers.v().liveAnalysisTimer.start();
 
         doAnalysis();
-        
+
         if(Options.v().time())
             Timers.v().liveAnalysisTimer.end();
 
@@ -198,7 +198,7 @@ class SimpleLiveLocalsAnalysis extends BackwardFlowAnalysis
     {
         return emptySet.clone();
     }
-        
+
     protected void flowThrough(Object inValue, Object unit, Object outValue)
     {
         FlowSet in = (FlowSet) inValue, out = (FlowSet) outValue;
@@ -219,12 +219,12 @@ class SimpleLiveLocalsAnalysis extends BackwardFlowAnalysis
 
         inSet1.union(inSet2, outSet);
     }
-    
+
     protected void copy(Object source, Object dest)
     {
         FlowSet sourceSet = (FlowSet) source,
             destSet = (FlowSet) dest;
-            
+
         sourceSet.copy(destSet);
     }
 }

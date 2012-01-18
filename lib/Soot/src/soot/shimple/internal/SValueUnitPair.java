@@ -56,7 +56,7 @@ public class SValueUnitPair extends ValueUnitPair implements SUnitBox
     {
         return unitChanged;
     }
-    
+
     /**
      * @see SUnitBox#setUnitChanged(boolean)
      **/

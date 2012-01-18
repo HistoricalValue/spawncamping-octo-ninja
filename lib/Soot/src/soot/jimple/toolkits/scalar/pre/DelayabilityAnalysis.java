@@ -30,7 +30,7 @@ import soot.toolkits.scalar.*;
 import soot.toolkits.graph.*;
 import java.util.*;
 
-/** 
+/**
  * Performs a Delayability-analysis on the given graph.
  * This analysis is the third analysis in the PRE (lazy code motion) and has
  * little (no?) sense if used alone. Basicly it tries to push the computations

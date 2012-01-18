@@ -31,7 +31,7 @@ public class SETNodeLabel
 
     public void set_Name()
     {
-	if (name == null) 
+	if (name == null)
 	    name = "label_" + Integer.toString( G.v().SETNodeLabel_uniqueId++);
     }
 

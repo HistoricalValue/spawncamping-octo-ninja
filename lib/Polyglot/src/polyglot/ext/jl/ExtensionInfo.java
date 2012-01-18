@@ -99,7 +99,7 @@ public class ExtensionInfo extends polyglot.frontend.AbstractExtensionInfo {
 
 	return new CupParser(parser, source, eq);
     }
-    	  
+
     public List passes(Job job) {
         ArrayList l = new ArrayList(15);
 
@@ -132,7 +132,7 @@ public class ExtensionInfo extends polyglot.frontend.AbstractExtensionInfo {
 							   compiler.errorQueue(),
                                                            version())));
 	}
-	
+
 	l.add(new OutputPass(Pass.OUTPUT, job,
                              new Translator(job, ts, nf, targetFactory())));
         return l;

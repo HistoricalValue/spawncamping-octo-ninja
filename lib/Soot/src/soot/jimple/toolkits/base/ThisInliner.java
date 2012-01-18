@@ -28,23 +28,23 @@ import soot.jimple.toolkits.scalar.*;
 public class ThisInliner extends BodyTransformer{
 
     public void internalTransform(Body b, String phaseName, Map options){
-        
+
         // assure body is a constructor
         if (!b.getMethod().getName().equals("<init>")) return;
 
         // if the first invoke is a this() and not a super() inline the this()
         InvokeStmt invokeStmt = getFirstSpecialInvoke(b);
-        if (invokeStmt == null) return; 
+        if (invokeStmt == null) return;
         SpecialInvokeExpr specInvokeExpr = (SpecialInvokeExpr)invokeStmt.getInvokeExpr();
         if (specInvokeExpr.getMethod().getDeclaringClass().equals(b.getMethod().getDeclaringClass())){
-            
+
             // put locals from inlinee into container
             if (!specInvokeExpr.getMethod().hasActiveBody()){
                 specInvokeExpr.getMethod().retrieveActiveBody();
             }
 
             HashMap oldLocalsToNew = new HashMap();
-            
+
             Iterator localsIt = specInvokeExpr.getMethod().getActiveBody().getLocals().iterator();
             while (localsIt.hasNext()){
                 Local l = (Local)localsIt.next();
@@ -52,28 +52,28 @@ public class ThisInliner extends BodyTransformer{
                 b.getLocals().add(newLocal);
                 oldLocalsToNew.put(l, newLocal);
             }
-           
+
             //find identity stmt of original method
             IdentityStmt origIdStmt = findIdentityStmt(b);
-           
+
             HashMap<Stmt, Stmt> oldStmtsToNew = new HashMap<Stmt, Stmt>();
-            
+
             //System.out.println("locals: "+b.getLocals());
             Chain containerUnits = b.getUnits();
             Iterator inlineeIt = specInvokeExpr.getMethod().getActiveBody().getUnits().iterator();
             while (inlineeIt.hasNext()){
                 Stmt inlineeStmt = (Stmt)inlineeIt.next();
-               
+
                 // handle identity stmts
                 if (inlineeStmt instanceof IdentityStmt){
                     IdentityStmt idStmt = (IdentityStmt)inlineeStmt;
-                    
+
                     if (idStmt.getRightOp() instanceof ThisRef) {
-                        Stmt newThis = Jimple.v().newAssignStmt((Local)oldLocalsToNew.get(idStmt.getLeftOp()), origIdStmt.getLeftOp());         
+                        Stmt newThis = Jimple.v().newAssignStmt((Local)oldLocalsToNew.get(idStmt.getLeftOp()), origIdStmt.getLeftOp());
                         containerUnits.insertBefore(newThis, invokeStmt);
                         oldStmtsToNew.put(inlineeStmt, newThis);
                     }
-                    
+
                     else if (idStmt.getRightOp() instanceof CaughtExceptionRef){
                         Stmt newInlinee = (Stmt)inlineeStmt.clone();
                         Iterator localsToPatch = newInlinee.getUseAndDefBoxes().iterator();
@@ -83,19 +83,19 @@ public class ThisInliner extends BodyTransformer{
                                 next.setValue((Local)oldLocalsToNew.get(next.getValue()));
                             }
                         }
-                    
-                       
+
+
                         containerUnits.insertBefore(newInlinee, invokeStmt);
                         oldStmtsToNew.put(inlineeStmt, newInlinee);
                     }
                     else if (idStmt.getRightOp() instanceof ParameterRef) {
-                        Stmt newParam = Jimple.v().newAssignStmt((Local)oldLocalsToNew.get(idStmt.getLeftOp()), specInvokeExpr.getArg(((ParameterRef)idStmt.getRightOp()).getIndex()));         
+                        Stmt newParam = Jimple.v().newAssignStmt((Local)oldLocalsToNew.get(idStmt.getLeftOp()), specInvokeExpr.getArg(((ParameterRef)idStmt.getRightOp()).getIndex()));
                         containerUnits.insertBefore(newParam, invokeStmt);
                         oldStmtsToNew.put(inlineeStmt, newParam);
                     }
                 }
 
-                // handle return void stmts (cannot return anything else 
+                // handle return void stmts (cannot return anything else
                 // from a constructor)
                 else if (inlineeStmt instanceof ReturnVoidStmt){
                     Stmt newRet = Jimple.v().newGotoStmt((Stmt)containerUnits.getSuccOf(invokeStmt));
@@ -114,13 +114,13 @@ public class ThisInliner extends BodyTransformer{
                         }
                     }
 
-                       
+
                     containerUnits.insertBefore(newInlinee, invokeStmt);
                     oldStmtsToNew.put(inlineeStmt, newInlinee);
                 }
-                
+
             }
-                
+
             // handleTraps
             Iterator trapsIt = specInvokeExpr.getMethod().getActiveBody().getTraps().iterator();
             while (trapsIt.hasNext()){
@@ -146,16 +146,16 @@ public class ThisInliner extends BodyTransformer{
                     System.out.println("inlinee goto target: "+((GotoStmt)inlineeStmt).getTarget());
                     ((GotoStmt)oldStmtsToNew.get(inlineeStmt)).setTarget(oldStmtsToNew.get(((GotoStmt)inlineeStmt).getTarget()));
                 }
-                       
+
             }
-                
+
             // remove original invoke
             containerUnits.remove(invokeStmt);
-               
+
             // resolve name collisions
             LocalNameStandardizer.v().transform(b, "ji.lns");
 
-            
+
         }
         //System.out.println("locals: "+b.getLocals());
         //System.out.println("units: "+b.getUnits());
@@ -169,8 +169,8 @@ public class ThisInliner extends BodyTransformer{
 
             InvokeExpr invokeExpr = ((InvokeStmt)s).getInvokeExpr();
             if (!(invokeExpr instanceof SpecialInvokeExpr)) continue;
-    
-            return (InvokeStmt)s;        
+
+            return (InvokeStmt)s;
         }
         // but there will always be either a call to this() or to super()
         // from the constructor

@@ -19,7 +19,7 @@ import soot.toolkits.graph.*;
 
 public class WaitStmt extends JPegStmt
 {
-	
+
 	public WaitStmt(String obj, String ca, Unit un, UnitGraph ug, SootMethod sm)
 	{
 		this.object = obj;
@@ -29,9 +29,9 @@ public class WaitStmt extends JPegStmt
 		this.unitGraph = ug;
 		this.sootMethod = sm;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }

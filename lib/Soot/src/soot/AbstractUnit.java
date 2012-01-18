@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,12 +34,12 @@ import soot.util.*;
 import java.util.*;
 
 /** Provides default implementations for the methods in Unit. */
-public abstract class AbstractUnit extends AbstractHost implements Unit 
+public abstract class AbstractUnit extends AbstractHost implements Unit
 {
 
     /** Returns a deep clone of this object. */
     public abstract Object clone();
-    
+
     /** Returns a list of Boxes containing Values used in this Unit.
      * The list of boxes is dynamically updated as the structure changes.
      * Note that they are returned in usual evaluation order.
@@ -99,7 +99,7 @@ public abstract class AbstractUnit extends AbstractHost implements Unit
             ub.setUnit(null);
         }
     }
-    
+
     /** Returns a list of ValueBoxes, either used or defined in this Unit. */
     public List getUseAndDefBoxes()
     {
@@ -138,7 +138,7 @@ public abstract class AbstractUnit extends AbstractHost implements Unit
 
         Object[] boxes = boxesPointing.toArray();
         // important to change this to an array to have a static copy
-        
+
         for (Object element : boxes) {
             UnitBox box = (UnitBox) element;
 

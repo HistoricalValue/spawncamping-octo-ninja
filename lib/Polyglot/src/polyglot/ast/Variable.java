@@ -2,7 +2,7 @@ package polyglot.ast;
 
 import polyglot.types.Flags;
 
-/** 
+/**
  * An interface representing a variable.  A Variable is any expression
  * that can appear on the left-hand-side of an assignment.
  */

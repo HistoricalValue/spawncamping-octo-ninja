@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -66,49 +66,49 @@ public class StaticInliner extends SceneTransformer
             orderer.go();
             List<SootMethod> order = orderer.order();
             ListIterator<SootMethod> it = order.listIterator(order.size());
-    
+
             while (it.hasPrevious())
             {
                 SootMethod container = it.previous();
                 if( methodToOriginalSize.get(container) == null ) continue;
-    
+
                 if (!container.isConcrete())
                     continue;
-    
+
                 if (!explicitInvokesFilter.wrap( cg.edgesOutOf(container) ).hasNext())
                     continue;
-    
+
                 JimpleBody b = (JimpleBody)container.retrieveActiveBody();
-                    
+
                 List<Unit> unitList = new ArrayList<Unit>(); unitList.addAll(b.getUnits());
                 Iterator<Unit> unitIt = unitList.iterator();
-    
+
                 while (unitIt.hasNext())
                 {
                     Stmt s = (Stmt)unitIt.next();
                     if (!s.containsInvokeExpr())
                         continue;
-                    
+
                     Iterator targets = new Targets(
                             explicitInvokesFilter.wrap( cg.edgesOutOf(s) ) );
                     if( !targets.hasNext() ) continue;
                     SootMethod target = (SootMethod)targets.next();
                     if( targets.hasNext() ) continue;
-    
+
                     if (!target.getDeclaringClass().isApplicationClass() || !target.isConcrete())
                         continue;
-    
+
                     if(!InlinerSafetyManager.ensureInlinability(target, s, container, modifierOptions))
                         continue;
-                        
+
                     List<Host> l = new ArrayList<Host>();
                     l.add(target); l.add(s); l.add(container);
-                    
+
                     sitesToInline.add(l);
                 }
             }
         }
-        
+
         // Proceed to inline the sites, one at a time, keeping track of
         // expansion rates.
         {
@@ -124,21 +124,21 @@ public class StaticInliner extends SceneTransformer
 
                 SootMethod container = (SootMethod)l.get(2);
                 int containerSize = ((JimpleBody)(container.retrieveActiveBody())).getUnits().size();
-                
+
                 if (inlineeSize + containerSize > maxContainerSize)
                     continue;
 
                 if (inlineeSize > maxInlineeSize)
                     continue;
 
-                if (inlineeSize + containerSize > 
+                if (inlineeSize + containerSize >
                          expansionFactor * methodToOriginalSize.get(container).intValue())
                     continue;
 
                 if(InlinerSafetyManager.ensureInlinability(inlinee, invokeStmt, container, modifierOptions))
                 {
                     // Not that it is important to check right before inlining if the site is still valid.
-                    
+
                     SiteInliner.inlineSite(inlinee, invokeStmt, container, options);
                     if( rerunJb ) {
                         PackManager.v().getPack("jb").apply(container.getActiveBody());

@@ -13,7 +13,7 @@ public class UnknownPackage_c extends Package_c implements UnknownPackage
 {
     /** Used for deserializing types. */
     protected UnknownPackage_c() { }
-    
+
     /** Creates a new type in the given a TypeSystem. */
     public UnknownPackage_c(TypeSystem ts) {
         super(ts);

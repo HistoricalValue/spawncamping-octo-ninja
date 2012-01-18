@@ -27,7 +27,7 @@ import soot.dava.toolkits.base.AST.analysis.*;
 
 public abstract class ASTNode extends AbstractUnit
 {
-    public static final String 
+    public static final String
 	TAB     = "    ",
 	NEWLINE = "\n";
 
@@ -39,7 +39,7 @@ public abstract class ASTNode extends AbstractUnit
     }
 
     public abstract void toString( UnitPrinter up );
- 
+
     protected void body_toString( UnitPrinter up, List<Object> body )
     {
 	Iterator<Object> it = body.iterator();
@@ -63,7 +63,7 @@ public abstract class ASTNode extends AbstractUnit
 		b.append( NEWLINE);
 	}
 
-	return b.toString();	
+	return b.toString();
     }
 
     public List<Object> get_SubBodies()
@@ -83,13 +83,13 @@ public abstract class ASTNode extends AbstractUnit
 
 	    if (this instanceof ASTTryNode)
 		it = ((List) ((ASTTryNode.container) subBody).o).iterator();
-	    else 
+	    else
 		it = ((List) subBody).iterator();
-	    
+
 	    while (it.hasNext())
 		((ASTNode) it.next()).perform_Analysis( a);
 	}
-	
+
 	a.analyseASTNode( this);
     }
 
@@ -111,5 +111,5 @@ public abstract class ASTNode extends AbstractUnit
     public void apply(Analysis a){
     	throw new RuntimeException("Analysis invoked apply method on ASTNode");
     }
-    
+
 }

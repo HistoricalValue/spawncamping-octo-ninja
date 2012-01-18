@@ -12,7 +12,7 @@ import java.util.Collection;
  *
  * Overview:
  *     This iterator wraps another iterator, and returns only those elements
- *     for which a given predicate is true.  
+ *     for which a given predicate is true.
  *
  *     Does not support Remove.
  **/
@@ -46,7 +46,7 @@ public final class FilteringIterator implements Iterator {
   public boolean hasNext() {
     return next_item != null;
   }
-  
+
   public void remove() {
     throw new UnsupportedOperationException("FilteringIterator.remove");
   }
@@ -62,7 +62,7 @@ public final class FilteringIterator implements Iterator {
     }
     next_item = null;
   }
-  
+
   // AF:  if next_item==null, this iterator has no more elts to yield.
   //      otherwise, this iterator will yield next_item, followed by
   //      those elements e of backing_iterator such that predicate.isTrue(e).

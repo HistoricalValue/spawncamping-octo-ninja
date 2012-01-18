@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,10 +37,10 @@ public class BLookupSwitchInst extends AbstractInst implements LookupSwitchInst
     UnitBox[] targetBoxes;
     List unitBoxes;
 
-    public BLookupSwitchInst(Unit defaultTarget, 
+    public BLookupSwitchInst(Unit defaultTarget,
                              List lookupValues, List targets)
     {
-        this.defaultTargetBox = Baf.v().newInstBox(defaultTarget); 
+        this.defaultTargetBox = Baf.v().newInstBox(defaultTarget);
 
         this.targetBoxes = new UnitBox[targets.size()];
 
@@ -62,15 +62,15 @@ public class BLookupSwitchInst extends AbstractInst implements LookupSwitchInst
         }
     }
 
-    public Object clone() 
-    {        
+    public Object clone()
+    {
         List list = new ArrayList();
         for (UnitBox element : targetBoxes) {
 
             list.add(element.getUnit());
         }
 
-        
+
         return new  BLookupSwitchInst(defaultTargetBox.getUnit(), lookupValues, list);
     }
 
@@ -84,7 +84,7 @@ public class BLookupSwitchInst extends AbstractInst implements LookupSwitchInst
     {
         return 1;
     }
-    
+
     public int getOutCount()
     {
         return 0;
@@ -94,7 +94,7 @@ public class BLookupSwitchInst extends AbstractInst implements LookupSwitchInst
     {
         return 0;
     }
-    
+
     public Unit getDefaultTarget()
     {
         return defaultTargetBox.getUnit();
@@ -132,7 +132,7 @@ public class BLookupSwitchInst extends AbstractInst implements LookupSwitchInst
     }
 
     public int getTargetCount() { return targetBoxes.length; }
-    
+
     public Unit getTarget(int index)
     {
         return targetBoxes[index].getUnit();
@@ -170,14 +170,14 @@ public class BLookupSwitchInst extends AbstractInst implements LookupSwitchInst
     {
         StringBuffer buffer = new StringBuffer();
         String endOfLine = " ";
-        
+
         buffer.append("lookupswitch" + endOfLine);
-            
+
         buffer.append("{" + endOfLine);
-        
+
         for(int i = 0; i < lookupValues.size(); i++)
         {
-            buffer.append("    case " + lookupValues.get(i) + ": goto " + 
+            buffer.append("    case " + lookupValues.get(i) + ": goto " +
                     getTarget(i) + ";" + endOfLine);
         }
 
@@ -192,7 +192,7 @@ public class BLookupSwitchInst extends AbstractInst implements LookupSwitchInst
         up.newline();
         up.literal("{");
         up.newline();
-        
+
         for(int i = 0; i < lookupValues.size(); i++)
         {
             up.literal("    case ");

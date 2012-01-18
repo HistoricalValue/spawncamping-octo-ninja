@@ -42,7 +42,7 @@ public abstract class ClassType_c extends ReferenceType_c implements ClassType
     /** Get the class's outer class, or null if a top-level class. */
     public abstract ClassType outer();
 
-    /** Get the short name of the class, if possible. */ 
+    /** Get the short name of the class, if possible. */
     public abstract String name();
 
     /** Get the container class if a member class. */
@@ -67,7 +67,7 @@ public abstract class ClassType_c extends ReferenceType_c implements ClassType
         }
         else {
             name = name();
-        } 
+        }
         if (isTopLevel() && package_() != null) {
             return package_().fullName() + "." + name;
         }
@@ -85,7 +85,7 @@ public abstract class ClassType_c extends ReferenceType_c implements ClassType
     public boolean isAnonymous() { return kind() == ANONYMOUS; }
 
     /**
-    * @deprecated Was incorrectly defined. Use isNested for nested classes, 
+    * @deprecated Was incorrectly defined. Use isNested for nested classes,
     *          and isInnerClass for inner classes.
     */
     public final boolean isInner() {
@@ -97,13 +97,13 @@ public abstract class ClassType_c extends ReferenceType_c implements ClassType
         // extensions can add more kinds.
         return kind() == MEMBER || kind() == LOCAL || kind() == ANONYMOUS;
     }
-    
+
     public boolean isInnerClass() {
         // it's an inner class if it is not an interface, it is a nested
-        // class, and it is not explicitly or implicitly static. 
+        // class, and it is not explicitly or implicitly static.
         return !flags().isInterface() && isNested() && !flags().isStatic() && !inStaticContext();
     }
-    
+
     public boolean isCanonical() { return true; }
     public boolean isClass() { return true; }
     public ClassType toClass() { return this; }
@@ -211,7 +211,7 @@ public abstract class ClassType_c extends ReferenceType_c implements ClassType
     public boolean isUncheckedException() {
         if (isThrowable()) {
             Collection c = ts.uncheckedExceptions();
-                                  
+
             for (Iterator i = c.iterator(); i.hasNext(); ) {
                 Type t = (Type) i.next();
 
@@ -380,28 +380,28 @@ public abstract class ClassType_c extends ReferenceType_c implements ClassType
             return outer().equals(maybe_outer) ||
                   outer().isEnclosed(maybe_outer);
         else
-            throw new InternalCompilerError("Non top-level classes " + 
+            throw new InternalCompilerError("Non top-level classes " +
                     "must have outer classes.");
     }
 
-    /** 
+    /**
      * Return true if an object of the class has
-     * an enclosing instance of <code>encl</code>. 
+     * an enclosing instance of <code>encl</code>.
      */
     public boolean hasEnclosingInstanceImpl(ClassType encl) {
         if (this.equals(encl)) {
-            // object o is the zeroth lexically enclosing instance of itself. 
+            // object o is the zeroth lexically enclosing instance of itself.
             return true;
         }
-        
+
         if (!isInnerClass() || inStaticContext()) {
             // this class is not an inner class, or was declared in a static
             // context; it cannot have an enclosing
-            // instance of anything. 
+            // instance of anything.
             return false;
         }
-        
-        // see if the immediately lexically enclosing class has an 
+
+        // see if the immediately lexically enclosing class has an
         // appropriate enclosing instance
         return this.outer().hasEnclosingInstance(encl);
     }

@@ -41,9 +41,9 @@ import soot.toolkits.scalar.ForwardFlowAnalysis;
  * a local variable gets assigned a new object (unlike LocalMust, only
  * NewExprs), the analysis tracks the source of the value. If two
  * variables have different sources, then they are different.
- * 
+ *
  * See Sable TR 2007-8 for details.
- * 
+ *
  * @author Patrick Lam
  */
 public class LocalMustNotAliasAnalysis extends ForwardFlowAnalysis
@@ -53,7 +53,7 @@ public class LocalMustNotAliasAnalysis extends ForwardFlowAnalysis
             return "UNKNOWN";
         }
     };
-    
+
     protected List<Local> locals;
 
     public LocalMustNotAliasAnalysis(UnitGraph g)
@@ -86,7 +86,7 @@ public class LocalMustNotAliasAnalysis extends ForwardFlowAnalysis
             }
         }
     }
-    
+
 
     protected void flowThrough(Object inValue, Object unit,
             Object outValue)
@@ -118,7 +118,7 @@ public class LocalMustNotAliasAnalysis extends ForwardFlowAnalysis
     {
         HashMap sourceMap = (HashMap) source;
         HashMap destMap   = (HashMap) dest;
-            
+
         destMap.putAll(sourceMap);
     }
 
@@ -131,12 +131,12 @@ public class LocalMustNotAliasAnalysis extends ForwardFlowAnalysis
         }
         return m;
     }
-        
+
     protected Object newInitialFlow()
     {
         HashMap m = new HashMap();
         for (Local l : (Collection<Local>) locals) {
-            HashSet s = new HashSet(); 
+            HashSet s = new HashSet();
             m.put(l, s);
         }
         return m;
@@ -174,5 +174,5 @@ public class LocalMustNotAliasAnalysis extends ForwardFlowAnalysis
         Set n = new HashSet(); n.addAll(l1n); n.retainAll(l2n);
         return n.isEmpty();
     }
-        
+
 }

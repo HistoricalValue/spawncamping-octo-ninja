@@ -47,24 +47,24 @@ public class InterProceduralAnalyses {
 	/*
 	 * Method is invoked by postProcessDava in PackManager
 	 * if the transformations flag is true
-	 * 
+	 *
 	 * All interproceduralAnalyses should be applied in here
 	 */
 	public static void applyInterProceduralAnalyses(){
 		Chain classes = Scene.v().getApplicationClasses();
-		
+
 		if(DEBUG)
 			System.out.println("\n\nInvoking redundantFielduseEliminator");
 		ConstantFieldValueFinder finder = new ConstantFieldValueFinder(classes);
-		
+
 		HashMap<String, Object> constantValueFields = finder.getFieldsWithConstantValues();
-		if(DEBUG)		
+		if(DEBUG)
 			finder.printConstantValueFields();
-		
+
 		/*
 		 * The code above this gathers interprocedural information
 		 * the code below this USES the interprocedural results
-		 */		
+		 */
 		Iterator it = classes.iterator();
 		while(it.hasNext()){
 			//go though all the methods
@@ -86,7 +86,7 @@ public class InterProceduralAnalyses {
 
 				if(! (AST instanceof ASTMethodNode))
 					continue;
-				
+
 				Map options = PhaseOptions.v().getPhaseOptions("db.deobfuscate");
 		        boolean deobfuscate = PhaseOptions.getBoolean(options, "enabled");
 		        //System.out.println("force is "+force);
@@ -95,26 +95,26 @@ public class InterProceduralAnalyses {
 		        		System.out.println("\nSTART CP Class:"+s.getName()+ " Method: "+m.getName());
 		        	CPApplication CPApp = new CPApplication((ASTMethodNode)AST , constantValueFields, finder.getClassNameFieldNameToSootFieldMapping());
 		        	AST.apply(CPApp);
-				
+
 		        	if(DEBUG)
 		        		System.out.println("DONE CP for "+m.getName());
 		        }
-		        
+
 		        //expression simplification
 		        //SimplifyExpressions.DEBUG=true;
 		        AST.apply(new SimplifyExpressions());
-		        
-		        
+
+
 		        //SimplifyConditions.DEBUG=true;
 		        AST.apply(new SimplifyConditions());
-		        
-		        // condition elimination      
+
+		        // condition elimination
 		        //EliminateConditions.DEBUG=true;
-		        
+
 		        AST.apply(new EliminateConditions((ASTMethodNode)AST));
 		        //the above should ALWAYS be followed by an unreachable code eliminator
 		        AST.apply(new UnreachableCodeEliminator(AST));
-		        
+
 		        //local variable cleanup
 		        AST.apply(new LocalVariableCleaner(AST));
 
@@ -124,7 +124,7 @@ public class InterProceduralAnalyses {
 		        	UselessLabelFinder.DEBUG=false;
 		        	body.analyzeAST();
 		        }
-		
+
 		        //renaming should be applied as the last stage
 				options = PhaseOptions.v().getPhaseOptions("db.renamer");
 		        boolean renamer = PhaseOptions.getBoolean(options, "enabled");
@@ -138,14 +138,14 @@ public class InterProceduralAnalyses {
 
 			}
 
-		}	
+		}
 	}
-	
-	
+
+
 	/*
 	 * If there is any interprocedural information required it should be passed as argument
 	 * to this method and then the renamer can make use of it.
-	 * 
+	 *
 	 *
 	 */
 	private static void applyRenamerAnalyses(ASTNode AST,DavaBody body){
@@ -154,7 +154,7 @@ public class InterProceduralAnalyses {
 		AST.apply(info);
 
 		Renamer renamer = new Renamer(info.getHeuristicSet(),(ASTMethodNode)AST);
-		renamer.rename();		
+		renamer.rename();
 	}
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
  * contains methods and fields and which is a subtype of Object.
  */
 public interface ReferenceType extends Type
-{ 
+{
     /**
      * Return the type's super type.
      */

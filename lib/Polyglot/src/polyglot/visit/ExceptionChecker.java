@@ -50,14 +50,14 @@ public class ExceptionChecker extends ErrorHandlingVisitor
     }
 
     /**
-     * This method is called when we are to perform a "normal" traversal of 
-     * a subtree rooted at <code>n</code>.   At every node, we will push a 
+     * This method is called when we are to perform a "normal" traversal of
+     * a subtree rooted at <code>n</code>.   At every node, we will push a
      * stack frame.  Each child node will add the exceptions that it throws
      * to this stack frame. For most nodes ( excdeption for the try / catch)
      * will just aggregate the stack frames.
      *
      * @param n The root of the subtree to be traversed.
-     * @return The <code>NodeVisitor</code> which should be used to visit the 
+     * @return The <code>NodeVisitor</code> which should be used to visit the
      *  children of <code>n</code>.
      *
      */
@@ -70,25 +70,25 @@ public class ExceptionChecker extends ErrorHandlingVisitor
     }
 
     /**
-     * Here, we pop the stack frame that we pushed in enter and agregate the 
+     * Here, we pop the stack frame that we pushed in enter and agregate the
      * exceptions.
      *
      * @param old The original state of root of the current subtree.
      * @param n The current state of the root of the current subtree.
      * @param v The <code>NodeVisitor</code> object used to visit the children.
-     * @return The final result of the traversal of the tree rooted at 
+     * @return The final result of the traversal of the tree rooted at
      *  <code>n</code>.
      */
     protected Node leaveCall(Node old, Node n, NodeVisitor v)
 	throws SemanticException {
-        
+
         ExceptionChecker inner = (ExceptionChecker) v;
-        
+
         if (inner.outer != this) throw new InternalCompilerError("oops!");
-        
+
         // gather exceptions from this node.
         n = n.del().exceptionCheck(inner);
-        
+
         // Merge results from the children and free the checker used for the
         // children.
         SubtypeSet t = inner.throwsSet();
@@ -99,10 +99,10 @@ public class ExceptionChecker extends ErrorHandlingVisitor
     }
 
     /**
-     * The ast nodes will use this callback to notify us that they throw an 
-     * exception of type t. This should only be called by MethodExpr node, 
+     * The ast nodes will use this callback to notify us that they throw an
+     * exception of type t. This should only be called by MethodExpr node,
      * and throw node, since they are the only node which can generate
-     * exceptions.  
+     * exceptions.
      *
      * @param t The type of exception that the node throws.
      */
@@ -110,20 +110,20 @@ public class ExceptionChecker extends ErrorHandlingVisitor
 	throwsSet().add(t) ;
         exceptionPositions.put(t, pos);
     }
-    
+
     /**
      * Method to allow the throws clause and method body to inspect and
      * modify the throwsSet.
      */
     public SubtypeSet throwsSet() {
         if (scope == null) {
-            this.scope = new SubtypeSet(ts.Throwable());            
+            this.scope = new SubtypeSet(ts.Throwable());
         }
         return scope;
     }
-    
+
     /**
-     * Method to determine the position at which a particular exception is 
+     * Method to determine the position at which a particular exception is
      * thrown
      */
     public Position exceptionPosition(Type t) {

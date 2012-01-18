@@ -42,7 +42,7 @@ import java.util.*;
  * might not be initialized error that used to show up when recompiling
  * decompiled code Will be throughly covered in "Programmer Friendly Code" Sable
  * Tech Report (2006)
- * 
+ *
  */
 
 /*
@@ -56,7 +56,7 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 	SootMethod sootMethod;
 
 	DavaBody davaBody;
-	
+
 	List<SootField> cancelFinalModifier;
 
 	public FinalFieldDefinition(ASTMethodNode node) {
@@ -95,9 +95,9 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 	/*
 	 * this method finds all the final fields in this class and assigns them to
 	 * the finalFields list
-	 * 
+	 *
 	 * Note this stores a list of SootFields!!!
-	 * 
+	 *
 	 * Fields which are initialized in their declaration should not be added
 	 */
 	public ArrayList<SootField> findFinalFields() {
@@ -303,18 +303,18 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 	 * final for clinit and only final but non static for init and there was
 	 * atleast one place that this var was defined but it was not defined on all
 	 * paths and hence the recompilation will result in an error
-	 * 
+	 *
 	 * try{ staticFinal = defined; } catch(Exception e){}
 	 */
 
 	public void handleAssignOnSomePaths(ASTMethodNode node, SootField field,
 			List defs) {
-	
+
 		if (defs.size() != 1) {
 			// give up by removing "final" if there are more than one defs
 			cancelFinalModifier.add(field);
 		} else {
-			// if there is only one definition 
+			// if there is only one definition
 
 			// see if there is no use of def
 			AllVariableUses varUses = new AllVariableUses(node);
@@ -329,36 +329,36 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 				 * Easier to remove "final"
 				 */
 				cancelFinalModifier.add(field);
-			} 
+			}
 			else {
 				/*
 				 * we have a final field with 1 def and 0 uses but is not initialized on all paths
 				 * we can try to delay initialization using an indirect approach
-				 *                         STMT0        TYPE DavaTemp_fieldName;            
+				 *                         STMT0        TYPE DavaTemp_fieldName;
 				 *                         STMT1        DavaTemp_fieldname = DEFAULT
 				 * try{                                  try{
-				 *     field = ...         STMT2            DavaTemp_fieldname = ... 
+				 *     field = ...         STMT2            DavaTemp_fieldname = ...
 				 *    }                                         X
  				 *    catch(...){                        }catch(..){
 				 *       ....                                   ....
 				 *    }                                  }
 				 *                        STMT3          field = Dava_tempVar
-				 * 
+				 *
 				 * Notice the following code will try to place the field assignment
 				 * as close to the original assignment as possible.
-				 * 
+				 *
 				 * TODO: However there might still be issues with delaying this assignment
 				 * e.g. what if the place marked by X (more specifically between
 				 * the original def and the new def includes a method invocation
 				 * which access the delayed field.
-				 * 
+				 *
 				 * Original Comment February 2nd, 2006: Laurie mentioned that apart from direct
 				 * uses we also have to be conservative about method calls since
 				 * we are dealing with fields here What if some method was
 				 * invoked and it tried to use a field whose initialization we
 				 * are about to delay. This can be done by implementing a small
-				 * analysis. (See end of this class file. 	
-				 * 	 	
+				 * analysis. (See end of this class file.
+				 *
 				 *  TODO: SHOULD BE CHECKED FOR CODE BETWEEN THE OLD DEF AND THE NEW ASSIGNMENT
 				 *        Currently checks from some point till end of method
 				 *
@@ -373,15 +373,15 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 				 *	 	   return;
 				 * 	 	   }
 				 */
-				
-				
-				
+
+
+
 				// Creating STMT0
 				Type localType = field.getType();
 				Local newLocal = new JimpleLocal("DavaTemp_" + field.getName(),localType);
 
 				DVariableDeclarationStmt varStmt = new DVariableDeclarationStmt(localType,davaBody);
-				
+
 				varStmt.addLocal(newLocal);
 				AugmentedStmt as = new AugmentedStmt(varStmt);
 
@@ -391,7 +391,7 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 				ASTStatementSequenceNode declNode = node.getDeclarations();
 				List<Object> stmts = declNode.getStatements();
 				stmts.add(as);
-    			
+
 				declNode = new ASTStatementSequenceNode(stmts);
 
 				List<Object> subBodies = node.get_SubBodies();
@@ -407,7 +407,7 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 
 				node.setDeclarations(declNode);
 
-				
+
 				// STMT1 initialization
 				AugmentedStmt initialization = createDefaultStmt(newLocal);
 				/*
@@ -418,10 +418,10 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 				if (body.size() < 2)
 					throw new RuntimeException("Size of body is less than 1");
 
-				/* 
+				/*
 				 * If the second node is a stmt seq we put STMT1 there
 				 * otherwise we create a new stmt seq node
-				 */ 
+				 */
 
 				ASTNode nodeSecond = (ASTNode) body.get(1);
 				if (nodeSecond instanceof ASTStatementSequenceNode) {
@@ -440,15 +440,15 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 				body.add(1, nodeSecond);
 				node.replaceBody(body);
 
-				
-				
+
+
 				//STMT2
 				//done by simply replacing the leftop in the original stmt
 				((GAssignStmt) defs.get(0)).setLeftOp(newLocal);
-				
-				
+
+
 				//STMT3
-				
+
 				// have to make a field ref
 				SootFieldRef tempFieldRef = (field).makeRef();
 
@@ -474,29 +474,29 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 
 				//the def is at (GAssignStmt) defs.get(0)
 				//its parent is ASTStatementSequence and its parent is now needed
-				soot.dava.toolkits.base.AST.traversals.ASTParentNodeFinder parentFinder = 
+				soot.dava.toolkits.base.AST.traversals.ASTParentNodeFinder parentFinder =
 					new soot.dava.toolkits.base.AST.traversals.ASTParentNodeFinder();
 				node.apply(parentFinder);
-				
-				
+
+
 				Object parent = parentFinder.getParentOf(defs.get(0));
 				if(!(parent instanceof ASTStatementSequenceNode)){
 					throw new DecompilationException("Parent of stmt was not a stmt seq node");
 				}
-				
+
 				Object grandParent = parentFinder.getParentOf(parent);
 				if(grandParent == null){
 					throw new DecompilationException("Parent of stmt seq node was null");
 				}
-				
+
 				//so we have the parent stmt seq node and the grandparent node
 				//so it is the grandparent which is causing the error in MUSTINitialize
 				//we should move our assign right after the grandParent is done
-				
-				
+
+
 				MustMayInitialize must = new MustMayInitialize(node,MustMayInitialize.MUST);
 				while(!must.isMustInitialized(field)) {
-					
+
 					//System.out.println("not must initialized");
 					Object parentOfGrandParent = parentFinder.getParentOf(grandParent);
 					if( !(grandParent instanceof ASTMethodNode) && parentOfGrandParent == null){
@@ -509,23 +509,23 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 					Iterator<Object> it = ancestorBodies.iterator();
 					while(it.hasNext()){
 						List<ASTStatementSequenceNode> ancestorSubBody = null;
-					
+
 						if (ancestor instanceof ASTTryNode)
 							ancestorSubBody = (List<ASTStatementSequenceNode>) ((ASTTryNode.container) it.next()).o;
 						else
 							ancestorSubBody = (List<ASTStatementSequenceNode>) it.next();
-					 
+
 						if(ancestorSubBody.indexOf(grandParent) > -1) {
 							//grandParent is present in this body
-							int index = ancestorSubBody.indexOf(grandParent); 
+							int index = ancestorSubBody.indexOf(grandParent);
 							//check the next index
-						
+
 							if(index+1 < ancestorSubBody.size() && ancestorSubBody.get(index+1) instanceof ASTStatementSequenceNode ){
 								//there is an stmt seq node node after the grandParent
 								ASTStatementSequenceNode someNode = ancestorSubBody.get(index+1);
-							 
+
 								//add the assign stmt here
-							 
+
 								List<Object> stmtsLast = (someNode).getStatements();
 								List<Object> newStmts = new ArrayList<Object>();
 								newStmts.add(assignStmt1);
@@ -554,18 +554,18 @@ public class FinalFieldDefinition {// extends DepthFirstAdapter{
 										//problem not solved remove the stmt just added
 										ancestorSubBody.remove(index+1);
 										notResolved=true;
-									}									
+									}
 							}
 							break;//break the loop going through subBodies
 						} //if ancestor was found
-							 	
+
 					 }	//next subBody
 					if(notResolved){
-						//meaning we still dont have must initialization 
+						//meaning we still dont have must initialization
 						//we should put assign in one level above than current
 						grandParent = parentFinder.getParentOf(grandParent);
-						//System.out.println("Going one level up");						
-					}									
+						//System.out.println("Going one level up");
+					}
 				}//while ! ismustinitialized
 			}
 		}

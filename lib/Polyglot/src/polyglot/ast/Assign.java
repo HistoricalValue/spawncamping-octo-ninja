@@ -9,7 +9,7 @@ public interface Assign extends Expr
 {
     /** Assignment operator. */
     public static class Operator extends Enum {
-	public Operator(String name) { super(name); } 
+	public Operator(String name) { super(name); }
     }
 
     public static final Operator ASSIGN         = new Operator("=");
@@ -58,6 +58,6 @@ public interface Assign extends Expr
      * Set the right child (source) of the assignment.
      */
     Assign right(Expr right);
-    
+
     boolean throwsArithmeticException();
 }

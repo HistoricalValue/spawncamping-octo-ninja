@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,7 +34,7 @@ import java.util.*;
  *  */
 public interface Trap extends UnitBoxOwner
 {
-    /** <p>Returns the first trapped unit, unless this <code>Trap</code> 
+    /** <p>Returns the first trapped unit, unless this <code>Trap</code>
      *  does not trap any units at all.</p>
      *
      *  <p>If this is a degenerate <code>Trap</code> which
@@ -43,13 +43,13 @@ public interface Trap extends UnitBoxOwner
      *  untrapped unit. The returned unit will likely be the first unit
      *  remaining after the point where the trapped units were once
      *  located, but the only guarantee provided is that for such an
-     *  empty trap, <code>getBeginUnit()</code> will return the same value 
+     *  empty trap, <code>getBeginUnit()</code> will return the same value
      *  as {@link #getEndUnit()}.</p>
      */
     public Unit getBeginUnit();
 
     /** <p>Returns the unit following the last trapped unit (that is, the
-     *  first succeeding untrapped unit in the underlying 
+     *  first succeeding untrapped unit in the underlying
      *  <Code>Chain</code>), unless this <code>Trap</code> does not trap
      *  any units at all.</p>
      *
@@ -59,7 +59,7 @@ public interface Trap extends UnitBoxOwner
      *
      *  <p>Note that a weakness of marking the end of the trapped region
      *  with the first untrapped unit is that Soot has no good mechanism
-     *  for describing a <code>Trap</code> which traps the last unit 
+     *  for describing a <code>Trap</code> which traps the last unit
      *  in a method.</p>
      */
     public Unit getEndUnit();
@@ -82,11 +82,11 @@ public interface Trap extends UnitBoxOwner
     /** Returns the exception being caught. */
     public SootClass getException();
 
-    /** Sets the value to be returned by {@link #getBeginUnit()} to 
+    /** Sets the value to be returned by {@link #getBeginUnit()} to
      *  <code>beginUnit</code>. */
     public void setBeginUnit(Unit beginUnit);
 
-    /** Sets the value to be returned by {@link #getEndUnit()} to 
+    /** Sets the value to be returned by {@link #getEndUnit()} to
      *  <code>endUnit</code>. */
     public void setEndUnit(Unit endUnit);
 

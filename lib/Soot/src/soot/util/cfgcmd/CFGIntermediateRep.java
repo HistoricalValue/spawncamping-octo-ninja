@@ -30,7 +30,7 @@ import soot.shimple.Shimple;
  * representation available, for use in tools that compare or display
  * control flow graphs.
  *
- * 
+ *
  */
 public abstract class CFGIntermediateRep extends CFGOptionMatcher.CFGOption {
 
@@ -52,38 +52,38 @@ public abstract class CFGIntermediateRep extends CFGOptionMatcher.CFGOption {
 
 
   public static final CFGIntermediateRep JIMPLE_IR = new CFGIntermediateRep("jimple") {
-      public Body getBody(JimpleBody b) { 
-	return b; 
+      public Body getBody(JimpleBody b) {
+	return b;
       }
     };
 
   public static final CFGIntermediateRep BAF_IR = new CFGIntermediateRep("baf") {
-      public Body getBody(JimpleBody b) { 
-	return Baf.v().newBody(b); 
+      public Body getBody(JimpleBody b) {
+	return Baf.v().newBody(b);
       }
     };
 
   public static final CFGIntermediateRep GRIMP_IR = new CFGIntermediateRep("grimp") {
-      public Body getBody(JimpleBody b) { 
-	return Grimp.v().newBody(b, "gb"); 
+      public Body getBody(JimpleBody b) {
+	return Grimp.v().newBody(b, "gb");
       }
     };
 
   public static final CFGIntermediateRep SHIMPLE_IR = new CFGIntermediateRep("shimple") {
-      public Body getBody(JimpleBody b) { 
-	return Shimple.v().newBody(b); 
+      public Body getBody(JimpleBody b) {
+	return Shimple.v().newBody(b);
       }
     };
 
-  public static final CFGIntermediateRep VIA_SHIMPLE_JIMPLE_IR = 
+  public static final CFGIntermediateRep VIA_SHIMPLE_JIMPLE_IR =
     new CFGIntermediateRep("viaShimpleJimple") {
-      public Body getBody(JimpleBody b) { 
-	return Shimple.v().newJimpleBody(Shimple.v().newBody(b)); 
+      public Body getBody(JimpleBody b) {
+	return Shimple.v().newJimpleBody(Shimple.v().newBody(b));
       }
     };
 
-  private final static CFGOptionMatcher irOptions = 
-    new CFGOptionMatcher(new CFGIntermediateRep[] {    
+  private final static CFGOptionMatcher irOptions =
+    new CFGOptionMatcher(new CFGIntermediateRep[] {
       JIMPLE_IR,
       BAF_IR,
       GRIMP_IR,
@@ -109,22 +109,22 @@ public abstract class CFGIntermediateRep extends CFGOptionMatcher.CFGOption {
   /**
    * Returns a string containing the names of all the
    * available <code>CFGIntermediateRep</code>s, separated by
-   * '|' characters. 
+   * '|' characters.
    *
-   * @param initialIndent The number of blank spaces to insert at the 
-   *	                  beginning of the returned string. Ignored if 
+   * @param initialIndent The number of blank spaces to insert at the
+   *	                  beginning of the returned string. Ignored if
    *                      negative.
    *
    * @param rightMargin   If positive, newlines will be inserted to try
    *                      to keep the length of each line in the
    *                      returned string less than or equal to
    *                      *<code>rightMargin</code>.
-   *         
+   *
    * @param hangingIndent  If positive, this number of spaces will be
-   *                       inserted immediately after each newline 
+   *                       inserted immediately after each newline
    *                       inserted to respect the <code>rightMargin</code>.
    */
-  public static String help(int initialIndent, int rightMargin, 
+  public static String help(int initialIndent, int rightMargin,
 			    int hangingIndent) {
     return irOptions.help(initialIndent, rightMargin, hangingIndent);
   }

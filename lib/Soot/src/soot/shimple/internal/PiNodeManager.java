@@ -60,7 +60,7 @@ public class PiNodeManager
     protected DominanceFrontier df;
     protected ReversibleGraph cfg;
     protected boolean trimmed;
-    
+
     /**
      * Transforms the provided body to pure SSA form.
      **/
@@ -78,14 +78,14 @@ public class PiNodeManager
         df = sf.getReverseDominanceFrontier();
     }
     protected MultiMap varToBlocks;
-    
+
     public boolean insertTrivialPiNodes()
     {
         update();
         boolean change = false;
         MultiMap localsToUsePoints = new SHashMultiMap();
-        varToBlocks = new HashMultiMap();    
-        
+        varToBlocks = new HashMultiMap();
+
         // compute localsToUsePoints and varToBlocks
         for(Iterator blocksIt = cfg.iterator(); blocksIt.hasNext();){
             Block block = (Block)blocksIt.next();
@@ -106,15 +106,15 @@ public class PiNodeManager
         }
 
         /* Routine initialisations. */
-        
+
         int[] workFlags = new int[cfg.size()];
         int[] hasAlreadyFlags = new int[cfg.size()];
-        
+
         int iterCount = 0;
         Stack<Block> workList = new Stack<Block>();
 
         /* Main Cytron algorithm. */
-        
+
         {
             Iterator localsIt = localsToUsePoints.keySet().iterator();
 
@@ -141,11 +141,11 @@ public class PiNodeManager
                     while(frontierNodes.hasNext()){
                         Block frontierBlock = (Block) ((DominatorNode) frontierNodes.next()).getGode();
                         int fBIndex = frontierBlock.getIndexInMethod();
-                        
+
                         if(hasAlreadyFlags[fBIndex] < iterCount){
                             insertPiNodes(local, frontierBlock);
                             change = true;
-                            
+
                             hasAlreadyFlags[fBIndex] = iterCount;
 
                             if(workFlags[fBIndex] < iterCount){
@@ -181,7 +181,7 @@ public class PiNodeManager
                 return;
             }
         }
-            
+
         if(u instanceof IfStmt)
             piHandleIfStmt(local, (IfStmt) u);
         else if((u instanceof LookupSwitchStmt) || (u instanceof TableSwitchStmt))
@@ -193,14 +193,14 @@ public class PiNodeManager
     public void piHandleIfStmt(Local local, IfStmt u)
     {
         Unit target = u.getTarget();
-        
+
         PiExpr pit = Shimple.v().newPiExpr(local, u, Boolean.TRUE);
         PiExpr pif = Shimple.v().newPiExpr(local, u, Boolean.FALSE);
         Unit addt = Jimple.v().newAssignStmt(local, pit);
         Unit addf = Jimple.v().newAssignStmt(local, pif);
-            
+
         PatchingChain units = body.getUnits();
-            
+
         // insert after should be safe; a new block should result if
         // the Unit originally after the IfStmt had another predecessor.
         // what about SPatchingChain?  seems sane.
@@ -220,10 +220,10 @@ public class PiNodeManager
             catch(NoSuchElementException e){
                 predOfTarget = null;
             }
-            
+
             if(predOfTarget == null)
                 break PREDFALLSTHROUGH;
-            
+
             if(predOfTarget.fallsThrough()){
                 GotoStmt gotoStmt = Jimple.v().newGotoStmt(target);
                 units.insertAfter(gotoStmt, predOfTarget);
@@ -263,15 +263,15 @@ public class PiNodeManager
         else{
             throw new RuntimeException("Assertion failed.");
         }
-            
+
         for(int count = 0; count < targetBoxes.size(); count++){
             UnitBox targetBox = targetBoxes.get(count);
             Unit target = targetBox.getUnit();
             Object targetKey = targetKeys.get(count);
-            
+
             PiExpr pi1 = Shimple.v().newPiExpr(local, u, targetKey);
             Unit add1 = Jimple.v().newAssignStmt(local, pi1);
-            
+
             PatchingChain units = body.getUnits();
 
             /* we need to be careful with insertBefore, if target
@@ -288,7 +288,7 @@ public class PiNodeManager
                 catch(NoSuchElementException e){
                     predOfTarget = null;
                 }
-                
+
                 if(predOfTarget == null)
                     break PREDFALLSTHROUGH;
 
@@ -309,7 +309,7 @@ public class PiNodeManager
         if(smart){
             Map<Local, Value> newToOld = new HashMap<Local, Value>();
             List boxes = new ArrayList();
-            
+
             for(Iterator unitsIt = body.getUnits().iterator(); unitsIt.hasNext();){
                 Unit u = (Unit) unitsIt.next();
                 PiExpr pe = Shimple.getPiExpr(u);
@@ -332,7 +332,7 @@ public class PiNodeManager
 
             DeadAssignmentEliminator.v().transform(body);
             CopyPropagator.v().transform(body);
-            DeadAssignmentEliminator.v().transform(body);            
+            DeadAssignmentEliminator.v().transform(body);
         }
         else{
             for(Iterator unitsIt = body.getUnits().iterator(); unitsIt.hasNext();){
@@ -343,16 +343,16 @@ public class PiNodeManager
             }
         }
     }
-    
+
     public static List getUseBoxesFromBlock(Block block)
     {
         Iterator unitsIt = block.iterator();
-        
+
         List useBoxesList = new ArrayList();
-    
+
         while(unitsIt.hasNext())
             useBoxesList.addAll(((Unit)unitsIt.next()).getUseBoxes());
-        
+
         return useBoxesList;
     }
 }

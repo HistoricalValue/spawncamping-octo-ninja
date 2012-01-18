@@ -42,35 +42,35 @@ import soot.jimple.IntConstant;
 import soot.jimple.LongConstant;
 
 	/*
-	 * 	5 == 5  true   DONE              
+	 * 	5 == 5  true   DONE
 	 *  5 != 5 false   DONE (all other relational operators done)
-	 *  
+	 *
 	 *    !true  --> false DONE
 	 *    !false --> true DONE
-	 *  
+	 *
 	 *   DONE WHEN one or both are constants (did all combinations)
 	 *    true || b   ---->   true
 	 *    true && b   ----->  b
 	 *    false || b  -----> b
-	 *    false && b -------> false              
-	 *  
-	 *  if ( (z0 && z1)  ||  ( ! ( ! (z2) ||  ! (z3)) ) )     
+	 *    false && b -------> false
+	 *
+	 *  if ( (z0 && z1)  ||  ( ! ( ! (z2) ||  ! (z3)) ) )
 	 *                 ---> if ( (z0 && z1)  ||   (z2 && z3)  )     DONE
-	 *    
-	 *    
-	 *    
+	 *
+	 *
+	 *
 	 * TODO currently only doing primtype comparison of same types not handled are following types
 	 *        long <= int
 	 *        int <=long
 	 *         bla bla
-	 *         
+	 *
 	 *
 	 * TODO IDEA     if(io==0 && io==0) --> if(io==0)
 	 */
 public class SimplifyConditions extends DepthFirstAdapter {
 	public static boolean DEBUG=false;
 	public boolean changed=false;
-	
+
 	public SimplifyConditions() {
 		super();
 	}
@@ -78,10 +78,10 @@ public class SimplifyConditions extends DepthFirstAdapter {
 	public SimplifyConditions(boolean verbose) {
 		super(verbose);
 	}
-	
+
 
 	public void fixedPoint(ASTControlFlowNode node){
-		
+
 		ASTCondition returned;
 		do{
 			if(DEBUG)
@@ -93,49 +93,49 @@ public class SimplifyConditions extends DepthFirstAdapter {
 				node.set_Condition(returned);
 		}while(changed);
 	}
-	
+
     public void outASTIfNode(ASTIfNode node){
     	fixedPoint(node);
     }
-    
-    
-    
+
+
+
     public void outASTIfElseNode(ASTIfElseNode node){
     	fixedPoint(node);
     }
-    
-    
-    
+
+
+
     public void outASTWhileNode(ASTWhileNode node){
     	fixedPoint(node);
     }
-    
-    
-    
+
+
+
     public void outASTDoWhileNode(ASTDoWhileNode node){
     	fixedPoint(node);
     }
-    
-    
-    
+
+
+
     public void outASTForLoopNode(ASTForLoopNode node){
     	fixedPoint(node);
     }
 
-    
-    
-    
-    
+
+
+
+
     /*
      * !z0 && !z1  ---->   !(z0 || z1)
      * !z0 || !z1  ---->   !(z0 && z1)
-     * 
+     *
      * Send null if no change else send new condition CONDITION
      */
     public ASTCondition applyDeMorgans(ASTAggregatedCondition aggCond){
     	ASTCondition left = aggCond.getLeftOp();
     	ASTCondition right = aggCond.getRightOp();
-    	
+
     	if(aggCond.isNotted() && left instanceof ASTBinaryCondition && right instanceof ASTBinaryCondition){
     		//we can remove the not sign by simply flipping the two conditions
     		//    ! (  x==y &&  a<b )
@@ -145,12 +145,12 @@ public class SimplifyConditions extends DepthFirstAdapter {
     			aggCond = new ASTOrCondition(left,right);
     		else
     			aggCond = new ASTAndCondition(left,right);
-    		
+
     		return aggCond;
     	}
 
-    	if(    (  left.isNotted() && right.isNotted() && (  !(left instanceof ASTBinaryCondition) && !(right instanceof ASTBinaryCondition) ) ) 	
-    			|| (left.isNotted() && aggCond.isNotted() && !(left instanceof ASTBinaryCondition) ) 	   
+    	if(    (  left.isNotted() && right.isNotted() && (  !(left instanceof ASTBinaryCondition) && !(right instanceof ASTBinaryCondition) ) )
+    			|| (left.isNotted() && aggCond.isNotted() && !(left instanceof ASTBinaryCondition) )
     			|| (right.isNotted() && aggCond.isNotted()  && !(right instanceof ASTBinaryCondition) ) ){
     		//both are notted and atleast one is not a binaryCondition
     		left.flip();
@@ -169,23 +169,23 @@ public class SimplifyConditions extends DepthFirstAdapter {
     			return newCond;
     		}
     	}
-    	
+
     	return null;
     }
-    
-    
-    
+
+
+
     /*
      * When this method is invoked we are sure that there are no occurences of !true or !false since
      * this is AFTER doing depth first of the children so the unaryCondition must have simplified the above
-     * 
+     *
      * Return Null if no change else return changed condition
      */
     public ASTCondition simplifyIfAtleastOneConstant(ASTAggregatedCondition aggCond){
 		ASTCondition left = aggCond.getLeftOp();
 		ASTCondition right = aggCond.getRightOp();
-		
-		
+
+
 		Boolean leftBool = null;
 		Boolean rightBool = null;
 		if (left instanceof ASTUnaryCondition)
@@ -197,10 +197,10 @@ public class SimplifyConditions extends DepthFirstAdapter {
 		/*
 		 *  a && b NOCHANGE    DONE
 		 *  b && a NOCHANGE	 DONE
-		 *              
-		 *  a || b NOCHANGE DONE 
+		 *
+		 *  a || b NOCHANGE DONE
 		 *  b || a NOCHANGE DONE
-		 *  
+		 *
 		 */
 		if (leftBool == null && rightBool == null) {
 			// meaning both are not constants
@@ -213,16 +213,16 @@ public class SimplifyConditions extends DepthFirstAdapter {
     		 *    true && false --> false        DONE
     		 *    false && false ---> false      DONE
     		 *    false && true --> false        DONE
-    		 *    
+    		 *
     		 *    true && b   ----->  b          DONE
     		 *    false && b -------> false      DONE
-    		 *    
+    		 *
     		 *    b && true  ---> b              DONE
     		 *    b && false ---> b && false (since b could have side effects and the overall condition has to be false)      DONE
-    		 *    
+    		 *
     		 */
 
-    		
+
     		if (leftBool != null && rightBool != null) {
 				// meaning both are constants
 				if (leftBool.booleanValue() && rightBool.booleanValue()) {
@@ -260,25 +260,25 @@ public class SimplifyConditions extends DepthFirstAdapter {
 					return aggCond;
 				}
 			}
-    		
-    	
+
+
     	}
     	else if(aggCond instanceof ASTOrCondition){
     		/*
-			 * 
-			 * true || false ---> true    DONE 
+			 *
+			 * true || false ---> true    DONE
 			 * true || true --> true      DONE
 			 * false || true --> true     DONE
 			 * false || false ---> false  DONE
-			 * 
-			 * 
+			 *
+			 *
 			 * true || b ----> true DONE
 			 * false || b -----> b   DONE
-			 *   
-			 * b || true ---> b || true .... although we know the condition is true we have to evaluate b because of possible side effects   DONE 
+			 *
+			 * b || true ---> b || true .... although we know the condition is true we have to evaluate b because of possible side effects   DONE
 			 * b || false ---> b     DONE
-			 * 
-			 */    		
+			 *
+			 */
 			if (leftBool != null && rightBool != null) {
 				// meaning both are constants
 				if ( !leftBool.booleanValue() && !rightBool.booleanValue()) {
@@ -289,10 +289,10 @@ public class SimplifyConditions extends DepthFirstAdapter {
 					return new ASTUnaryCondition(DIntConstant.v(1, BooleanType.v()));
 				}
 			}
-    		
-    		
-    		
-    		
+
+
+
+
 			if (leftBool != null) {
 				// implicityly means that rigthBool is null since the above
 				// condition passed
@@ -315,37 +315,37 @@ public class SimplifyConditions extends DepthFirstAdapter {
 					//rightBool is false so everything depends on left
 					return left;
 				}
-			}   		
+			}
     	}
     	else
     		throw new RuntimeException("Found unknown aggregated condition");
-    	
-    	return null;    	
-    }
-	
 
-    
-    
-    
-    
+    	return null;
+    }
+
+
+
+
+
+
     /*
      * Method returns null if the Value is not a constant or not a boolean constant
      * return true if the constant is true
      * return false if the constant is false
      */
     public Boolean isBooleanConstant(Value internal){
-    	
+
     	if(! (internal instanceof DIntConstant))
     		return null;
-				
+
     	if(DEBUG)
     		System.out.println("Found Constant");
-    	
+
     	DIntConstant intConst = (DIntConstant)internal;
-    		
+
     	if(! (intConst.type instanceof BooleanType) )
     		return null;
-    				
+
     	//either true or false
     	if(DEBUG)
     		System.out.println("Found Boolean Constant");
@@ -359,19 +359,19 @@ public class SimplifyConditions extends DepthFirstAdapter {
     	else
     		throw new RuntimeException("BooleanType found with value different than 0 or 1");
     }
-    
-    
-    
+
+
+
     /*
 	 * In a loop keep simplifying the condition as much as possible
-	 * 
+	 *
 	 */
 	public ASTCondition simplifyTheCondition(ASTCondition cond){
 		if(cond instanceof ASTAggregatedCondition){
 			ASTAggregatedCondition aggCond = (ASTAggregatedCondition)cond;
 			ASTCondition leftCond = simplifyTheCondition(aggCond.getLeftOp());
 			ASTCondition rightCond = simplifyTheCondition(aggCond.getRightOp());
-			
+
 			 //if returned values are non null then set leftop /rightop to new condition
 			if(leftCond != null){
 				aggCond.setLeftOp(leftCond);
@@ -381,25 +381,25 @@ public class SimplifyConditions extends DepthFirstAdapter {
 				aggCond.setRightOp(rightCond);
 			}
 
-			
+
 			ASTCondition returned = simplifyIfAtleastOneConstant(aggCond);
 			if(returned != null){
 				changed=true;
 				return returned;
 			}
-				
+
 			returned = applyDeMorgans(aggCond);
 			if(returned != null){
 				changed = true;
 				return returned;
 			}
-			
+
 	    	return aggCond;
 		}
 		else if(cond instanceof ASTUnaryCondition){
 			//dont do anything with unary conditions
 			ASTUnaryCondition unary = (ASTUnaryCondition)cond;
-			
+
 			/*
 			 * if unary is a noted constant simplify it
 			 * !true to be converted to false
@@ -408,10 +408,10 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			Value unaryVal = unary.getValue();
 			if(unaryVal instanceof DNotExpr){
 				if(DEBUG) System.out.println("Found NotExpr in unary COndition"+unaryVal);
-				
+
 				DNotExpr notted = (DNotExpr)unaryVal;
 				Value internal = notted.getOp();
-				
+
 				Boolean isIt = isBooleanConstant(internal);
 				if(isIt != null){
 					//is a boolean constant truth value will give whether its true or false
@@ -440,27 +440,27 @@ public class SimplifyConditions extends DepthFirstAdapter {
 		else if(cond instanceof ASTBinaryCondition){
 			ASTBinaryCondition binary = (ASTBinaryCondition)cond;
 			ConditionExpr expr = binary.getConditionExpr();
-			
+
 			//returns null if no change
 			ASTUnaryCondition temp = evaluateBinaryCondition(expr);
 			if(DEBUG)
 				System.out.println("changed binary condition "+cond +" to" + temp);
 			if(temp != null)
 				changed=true;
-			return temp;			
+			return temp;
 		}
 		else{
 			throw new RuntimeException("Method getUseList in ASTUsesAndDefs encountered unknown condition type");
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	//return condition if was able to simplify (convert to a boolean true or false) else null
 	public ASTUnaryCondition evaluateBinaryCondition(ConditionExpr expr){
 		String symbol = expr.getSymbol();
-		
+
 		int op =-1;
 		if(symbol.indexOf("==")>-1){
 			if(DEBUG)
@@ -470,7 +470,7 @@ public class SimplifyConditions extends DepthFirstAdapter {
 		else if(symbol.indexOf(">=")>-1){
 			if(DEBUG)
 				System.out.println(">=");
-			op=2;			
+			op=2;
 		}
 		else if(symbol.indexOf('>')>-1){
 			if(DEBUG)
@@ -492,11 +492,11 @@ public class SimplifyConditions extends DepthFirstAdapter {
 				System.out.println("!=");
 			op=6;
 		}
-		
-		
+
+
 		Value leftOp = expr.getOp1();
 		Value rightOp = expr.getOp2();
-		
+
 		Boolean result=null;
 		if(leftOp instanceof LongConstant  && rightOp instanceof LongConstant){
 			if(DEBUG)
@@ -520,7 +520,7 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			int right = ((IntConstant)rightOp).value;
 			result = intSwitch(op,left,right);
 		}
-	
+
 		if(result!=null){
 			if(result.booleanValue())
 				return new ASTUnaryCondition( DIntConstant.v(1,BooleanType.v()));
@@ -529,25 +529,25 @@ public class SimplifyConditions extends DepthFirstAdapter {
 		}
 		return null;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public Boolean longSwitch(int op,long l,long r){
 		switch(op){
 		case 1:
@@ -556,8 +556,8 @@ public class SimplifyConditions extends DepthFirstAdapter {
 				return new Boolean(true);
 			else
 				return new Boolean(false);
-			
-			
+
+
 		case 2:
 			// >=
 			if(l >= r)
@@ -572,7 +572,7 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		case 4:
 			// <=
 			if(l <= r)
@@ -580,10 +580,10 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		case 5:
 			// <
-			
+
 			if(l < r)
 				return new Boolean(true);
 			else
@@ -596,21 +596,21 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		default:
 			if(DEBUG)
 				System.out.println("got here");
 			return null;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 	public Boolean doubleSwitch(int op,double l,double r){
 		switch(op){
 		case 1:
@@ -619,8 +619,8 @@ public class SimplifyConditions extends DepthFirstAdapter {
 				return new Boolean(true);
 			else
 				return new Boolean(false);
-			
-			
+
+
 		case 2:
 			// >=
 			if(l >= r)
@@ -635,7 +635,7 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		case 4:
 			// <=
 			if(l <= r)
@@ -643,10 +643,10 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		case 5:
 			// <
-			
+
 			if(l < r)
 				return new Boolean(true);
 			else
@@ -659,16 +659,16 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		default:
 			return null;
 		}
 	}
-	
 
-	
-	
-    
+
+
+
+
 	public Boolean floatSwitch(int op,float l,float r){
 		switch(op){
 		case 1:
@@ -677,8 +677,8 @@ public class SimplifyConditions extends DepthFirstAdapter {
 				return new Boolean(true);
 			else
 				return new Boolean(false);
-			
-			
+
+
 		case 2:
 			// >=
 			if(l >= r)
@@ -693,7 +693,7 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		case 4:
 			// <=
 			if(l <= r)
@@ -701,10 +701,10 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		case 5:
 			// <
-			
+
 			if(l < r)
 				return new Boolean(true);
 			else
@@ -717,20 +717,20 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		default:
 			return null;
 		}
 	}
-    
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 	public Boolean intSwitch(int op,int l,int r){
 		switch(op){
 		case 1:
@@ -739,8 +739,8 @@ public class SimplifyConditions extends DepthFirstAdapter {
 				return new Boolean(true);
 			else
 				return new Boolean(false);
-			
-			
+
+
 		case 2:
 			// >=
 			if(l >= r)
@@ -755,7 +755,7 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		case 4:
 			// <=
 			if(l <= r)
@@ -763,10 +763,10 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		case 5:
 			// <
-			
+
 			if(l < r)
 				return new Boolean(true);
 			else
@@ -779,11 +779,11 @@ public class SimplifyConditions extends DepthFirstAdapter {
 			else
 				return new Boolean(false);
 
-			
+
 		default:
 			return null;
 		}
 	}
-    
+
 
 }

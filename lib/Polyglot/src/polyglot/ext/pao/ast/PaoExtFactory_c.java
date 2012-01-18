@@ -8,9 +8,9 @@ import polyglot.ext.pao.extension.PaoExt_c;
 import polyglot.ext.pao.extension.PaoInstanceofExt_c;
 
 /**
- * Extension factory for the pao extension. The extension factory 
+ * Extension factory for the pao extension. The extension factory
  * is responsible for creating <code>Ext</code> objects, and is
- * used only by the <code>NodeFactory</code>. 
+ * used only by the <code>NodeFactory</code>.
  */
 public class PaoExtFactory_c extends AbstractExtFactory_c  {
     PaoExtFactory_c() {
@@ -18,8 +18,8 @@ public class PaoExtFactory_c extends AbstractExtFactory_c  {
     }
 
     /**
-     * @return the default Ext object for all AST 
-     * nodes other than <code>InstanceOf</code>, 
+     * @return the default Ext object for all AST
+     * nodes other than <code>InstanceOf</code>,
      * <code>Cast</code> and <code>Binary</code>.
      */
     public Ext extNodeImpl() {

@@ -46,18 +46,18 @@ public class Renamer {
 	List forLoopNames;
 
 	HashMap<Local, Boolean> changedOrNot;//keeps track of which local was changed previously
-	
+
 	public Renamer(heuristicSet info, ASTMethodNode node) {
 		heuristics = info;
 		locals = null;
 		methodNode = node;
-		
+
 		changedOrNot = new HashMap<Local, Boolean>();
 		Iterator<Local> localIt = info.getLocalsIterator();
 		while(localIt.hasNext())
 			changedOrNot.put(localIt.next(),new Boolean(false));
-		
-		
+
+
 		forLoopNames = new ArrayList();
 		forLoopNames.add("i");
 		forLoopNames.add("j");
@@ -68,7 +68,7 @@ public class Renamer {
 	/*
 	 * Add any naming heuristic as a separate method and invoke the method from
 	 * this method.
-	 * 
+	 *
 	 * HOWEVER, NOTE that the order of naming really really matters
 	 */
 	public void rename() {
@@ -76,36 +76,36 @@ public class Renamer {
 
 		// String args
 		mainMethodArgument();
-		
+
 		//for(i=0;i<bla;i++)
 		forLoopIndexing();
-		
+
 		//exceptions are named using first letter of each capital char in the class name
 		exceptionNaming();
-		
+
 		//arrays get <type>Array
 		arraysGetTypeArray();
-		
+
 		//if a local is assigned a field that name can be used since fields are conserved
 		assignedFromAField();
-		
+
 		//check if a local is assigned the result of a new invocation
 		newClassName();
 
 		//check if a local is assigned after casting
-		castedObject();	
-		
+		castedObject();
+
 		//if nothing else give a reference the name of the class
 		objectsGetClassName();
-		
+
 		//atleast remove the ugly dollar signs
 		removeDollarSigns();
 	}
 
-	
-	
+
+
 	/*
-	 * if there is an array int[] x. then if no other heuristic matches give it the name intArray 
+	 * if there is an array int[] x. then if no other heuristic matches give it the name intArray
 	 */
 	private void arraysGetTypeArray(){
 		Iterator<Local> it = heuristics.getLocalsIterator();
@@ -114,9 +114,9 @@ public class Renamer {
 			if(alreadyChanged(tempLocal)){
 				continue;
 			}
-			
+
 			debug("arraysGetTypeArray","checking "+tempLocal);
-			
+
 			Type type = tempLocal.getType();
 			if(type instanceof ArrayType){
 				debug("arraysGetTypeArray","Local:"+tempLocal+" is an Array Type: "+type.toString());
@@ -124,36 +124,36 @@ public class Renamer {
 				//remember that a toString of an array gives you the square brackets
 				if(tempClassName.indexOf('[')>=0)
 					tempClassName = tempClassName.substring(0,tempClassName.indexOf('['));
-				
+
 				//debug("arraysGetTypeArray","type of object is"+tempClassName);
 				if(tempClassName.indexOf('.')!= -1){
 					//contains a dot have to remove that
 					tempClassName=tempClassName.substring(tempClassName.lastIndexOf('.')+1);
 				}
-				
-				
+
+
 				String newName = tempClassName.toLowerCase();
 				newName = newName+"Array";
 				int count=0;
 				newName += count;
 				count++;
-				
+
 				while(!isUniqueName(newName)){
 					newName = newName.substring(0,newName.length()-1)+count;
-					count++;						
+					count++;
 				}
 				setName(tempLocal,newName);
 
 			}
 		}
-		
-		
+
+
 	}
-	
-	
-	
+
+
+
 	/*
-	 * The method assigns any local whose name hasnt been changed yet to 
+	 * The method assigns any local whose name hasnt been changed yet to
 	 * the name of the class type it belongs to
 	 */
 	private void objectsGetClassName(){
@@ -163,15 +163,15 @@ public class Renamer {
 			if(alreadyChanged(tempLocal)){
 				continue;
 			}
-			
+
 			debug("objectsGetClassName","checking "+tempLocal);
-			
+
 			Type type = tempLocal.getType();
 			if(type instanceof ArrayType){
 				//should have been handled by arraysGetTypeArray heuristic
 				continue;
 			}
-			
+
 			if(type instanceof RefLikeType){
 				debug("objectsGetClassName","Local:"+tempLocal+" Type: "+type.toString());
 				//debug("objectsGetClassName","getting array type"+type.getArrayType());
@@ -181,40 +181,40 @@ public class Renamer {
 					//contains a dot have to remove that
 					tempClassName=tempClassName.substring(tempClassName.lastIndexOf('.')+1);
 				}
-				
-				
+
+
 				String newName = tempClassName.toLowerCase();
 				int count=0;
 				newName += count;
 				count++;
-				
+
 				while(!isUniqueName(newName)){
 					newName = newName.substring(0,newName.length()-1)+count;
-					count++;						
+					count++;
 				}
 				setName(tempLocal,newName);
 
 			}
 		}
-		
+
 	}
-	
-	
-	
+
+
+
 	/*
 	 * If a local is assigned the resullt of a cast expression   temp = (List) object;
 	 * then u can use list as the name...however only if its always casted to the same object
 	 */
 	private void castedObject(){
 		debug("castedObject","");
-		
+
 		Iterator<Local> it = heuristics.getLocalsIterator();
 		while (it.hasNext()) {
 			Local tempLocal = it.next();
 			if(!alreadyChanged(tempLocal)){
 				debug("castedObject","checking "+tempLocal);
 				List<String> classes = heuristics.getCastStrings(tempLocal);
-				
+
 				Iterator<String> itClass = classes.iterator();
 				String classNameToUse = null;
 				while(itClass.hasNext()){
@@ -224,7 +224,7 @@ public class Renamer {
 						tempClassName=tempClassName.substring(tempClassName.lastIndexOf('.')+1);
 					}
 					if(classNameToUse == null)
-						classNameToUse = tempClassName;			
+						classNameToUse = tempClassName;
 					else if(!classNameToUse.equals(tempClassName)){
 						//different new assignment
 						//cant use these classNames
@@ -242,23 +242,23 @@ public class Renamer {
 					int count=0;
 					newName += count;
 					count++;
-					
+
 					while(!isUniqueName(newName)){
 						newName = newName.substring(0,newName.length()-1)+count;
-						count++;						
+						count++;
 					}
 					setName(tempLocal,newName);
 				}
 			}//not already changed
 		}//going through locals
 	}
-	
+
 	/*
 	 * See if any local was initialized using the new operator
 	 * That name might give us a hint to a name to use for the local
 	 */
 	private void newClassName(){
-		
+
 		debug("newClassName","");
 		//check if CLASSNAME is set
 		//that would mean there was new className invocation
@@ -277,7 +277,7 @@ public class Renamer {
 						tempClassName=tempClassName.substring(tempClassName.lastIndexOf('.')+1);
 					}
 					if(classNameToUse == null)
-						classNameToUse = tempClassName;			
+						classNameToUse = tempClassName;
 					else if(!classNameToUse.equals(tempClassName)){
 						//different new assignment
 						//cant use these classNames
@@ -295,25 +295,25 @@ public class Renamer {
 					int count=0;
 					newName += count;
 					count++;
-					
+
 					while(!isUniqueName(newName)){
 						newName = newName.substring(0,newName.length()-1)+count;
-						count++;						
+						count++;
 					}
 					setName(tempLocal,newName);
 				}
 			}//not already changed
 		}//going through locals
-		
+
 	}
-	
+
 	/*
 	 * If a local is assigned from a field (static or non staitc) we can use that name
 	 * to assign a some what better name for the local
-	 * 
+	 *
 	 * If multiple fields are assigned then it might be a better idea to not do
 	 * anything since that will only confuse the user
-	 * 
+	 *
 	 */
 	private void assignedFromAField(){
 		Iterator<Local> it = heuristics.getLocalsIterator();
@@ -329,7 +329,7 @@ public class Renamer {
 				else if(fieldNames.size()==1){
 					//only one field was used
 					String fieldName = fieldNames.get(0);
-					
+
 					//okkay to use the name of the field if its not in scope
 					//eg it was some other classes field
 					int count=0;
@@ -340,19 +340,19 @@ public class Renamer {
 							fieldName = fieldName.substring(0,fieldName.length()-1)+count;
 						count++;
 					}
-					
+
 					setName(tempLocal,fieldName);
 				}//only one field assigned to this local
 			}//not changed
 		}//going through locals
 	}
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	/*
 	 * If we cant come up with any better name atleast we should remove the $ signs
 	 */
@@ -361,11 +361,11 @@ public class Renamer {
 		while (it.hasNext()) {
 			Local tempLocal = it.next();
 			String currentName = tempLocal.getName();
-			int dollarIndex = currentName.indexOf('$'); 
+			int dollarIndex = currentName.indexOf('$');
 			if(dollarIndex == 0){
 				//meaning there is a $ sign in the first location
 				String newName = currentName.substring(1,currentName.length());
-				
+
 
 				if(isUniqueName(newName)){
 					setName(tempLocal,newName);
@@ -375,11 +375,11 @@ public class Renamer {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	/*
-	 * 
+	 *
 	 */
 	private void exceptionNaming(){
 		Iterator<Local> it = heuristics.getLocalsIterator();
@@ -390,7 +390,7 @@ public class Renamer {
 			if(typeString.indexOf("Exception")>=0){
 				//the string xception occurs in this type
 				debug("exceptionNaming","Type is an exception"+ tempLocal);
-				
+
 				//make a new name of all caps characters in typeString
 				String newName = "";
 				for(int i=0;i<typeString.length();i++){
@@ -404,21 +404,21 @@ public class Renamer {
 					count++;
 					while(!isUniqueName(newName+count)){
 						count++;
-					}				
+					}
 				}
 				if(count !=0)
 					newName = newName + count;
-				
+
 				setName(tempLocal,newName);
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	/*
 	 * Probably one of the most common programming idioms
 	 * for loop indexes are often i j k l
@@ -433,8 +433,8 @@ public class Renamer {
 				// this local variable is the main argument
 				// will like to set it to args if no one has an objection
 				int count = -1;
-				
-				String newName; 
+
+				String newName;
 
 				do{
 					count++;
@@ -442,7 +442,7 @@ public class Renamer {
 						newName=null;
 						break;
 					}
-					newName = (String)forLoopNames.get(count);					
+					newName = (String)forLoopNames.get(count);
 				}while (!isUniqueName(newName));
 
 				if(newName!=null){
@@ -451,9 +451,9 @@ public class Renamer {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	/*
 	 * A simple heuristic which sets the mainMethodArgument's name to args
 	 */
@@ -484,19 +484,19 @@ public class Renamer {
 
 	}
 
-	
-	
-	
-	
+
+
+
+
 	/*
 	 * In order to make sure that some previous heuristic which is usually a STRONGER
 	 * heuristic has not already changed the name we use this method which checks for
 	 * past name changes and only changes the name if the name hasnt been changed previously
 	 */
 	private void setName(Local var, String newName){
-			
+
 		Object truthValue = changedOrNot.get(var);
-		
+
 		//if it wasnt in there add it
 		if(truthValue == null)
 			changedOrNot.put(var,new Boolean(false));
@@ -507,23 +507,23 @@ public class Renamer {
 				return;
 			}
 		}
-		//will only get here if the var had not been changed 
-		
+		//will only get here if the var had not been changed
+
 		debug("setName","Changed "+var.getName()+" to "+newName);
 		var.setName(newName);
 		changedOrNot.put(var,new Boolean(true));
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	/*
 	 * Check if a local has already been changed
 	 * @param local to check
@@ -531,7 +531,7 @@ public class Renamer {
 	 */
 	private boolean alreadyChanged(Local var){
 		Object truthValue = changedOrNot.get(var);
-		
+
 		//if it wasnt in there add it
 		if(truthValue == null){
 			changedOrNot.put(var,new Boolean(false));
@@ -548,8 +548,8 @@ public class Renamer {
 		}
 	}
 
-	
-	
+
+
 	/*
 	 * Should return true if the name is unique
 	 */
@@ -559,7 +559,7 @@ public class Renamer {
 		while (it.hasNext()) {
 			Local tempLocal = (Local) it.next();
 			if (tempLocal.getName().equals(name)){
-				debug("isUniqueName","New Name "+ name+ " is not unique (matches some local)..changing");	
+				debug("isUniqueName","New Name "+ name+ " is not unique (matches some local)..changing");
 				return false;
 			}
 			else
@@ -601,7 +601,7 @@ public class Renamer {
 	 */
 	private Iterator getScopedLocals() {
 		Iterator<Local> it = heuristics.getLocalsIterator();
-		
+
 		locals = new ArrayList();
 		while(it.hasNext())
 			locals.add(it.next());
@@ -611,9 +611,9 @@ public class Renamer {
 	}
 
 	public void debug(String methodName, String debug){
-		
+
 		if(DEBUG)
 			System.out.println(methodName+ "    DEBUG: "+debug);
 	}
-	
+
 }

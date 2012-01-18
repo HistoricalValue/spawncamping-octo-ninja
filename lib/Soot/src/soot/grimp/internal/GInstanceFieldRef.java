@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -47,8 +47,8 @@ public class GInstanceFieldRef extends AbstractInstanceFieldRef
     {
         String leftOp = opString;
 
-        if (op instanceof Precedence && 
-            ((Precedence)op).getPrecedence() < getPrecedence()) 
+        if (op instanceof Precedence &&
+            ((Precedence)op).getPrecedence() < getPrecedence())
             leftOp = "(" + leftOp + ")";
         return leftOp + rightString;
     }
@@ -63,12 +63,12 @@ public class GInstanceFieldRef extends AbstractInstanceFieldRef
     {
         return 950;
     }
-    
-    public Object  clone() 
+
+    public Object  clone()
     {
-        return new GInstanceFieldRef(Grimp.cloneIfNecessary(getBase()), 
+        return new GInstanceFieldRef(Grimp.cloneIfNecessary(getBase()),
             fieldRef);
     }
 
-    
+
 }

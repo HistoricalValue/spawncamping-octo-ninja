@@ -86,7 +86,7 @@ public class OnFlyCallGraph {
         PointsToSetInternal p2set = vn.getP2Set().getNewSet();
         if( ofcgb.wantTypes( receiver ) ) {
             p2set.forall( new P2SetVisitor() {
-            public final void visit( Node n ) { 
+            public final void visit( Node n ) {
                 ofcgb.addType( receiver, context, n.getType(), (AllocNode) n );
             }} );
         }

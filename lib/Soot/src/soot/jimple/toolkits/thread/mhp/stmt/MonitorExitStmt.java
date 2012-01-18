@@ -19,7 +19,7 @@ import soot.toolkits.graph.*;
 
 public class MonitorExitStmt extends JPegStmt
 {
-	
+
 	public MonitorExitStmt(String obj, String ca, Unit un, UnitGraph ug, SootMethod sm)
 	{
 		this.object = obj;
@@ -27,7 +27,7 @@ public class MonitorExitStmt extends JPegStmt
 		this.caller = ca;
 		this.unit = un;
 		this.unitGraph = ug;
-	}	
+	}
 	public MonitorExitStmt(String obj, String ca,  UnitGraph ug, SootMethod sm)
 	{
 		this.object = obj;
@@ -36,9 +36,9 @@ public class MonitorExitStmt extends JPegStmt
 		this.unitGraph = ug;
 		this.sootMethod = sm;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }

@@ -23,7 +23,7 @@ import java.util.Set;
 public class Propagator<T> {
 
 	private final Set<T> marked;
-	
+
 	private final Stack<T> worklist;
 
 	public Propagator(Set<T> marked, Stack<T> worklist) {
@@ -31,7 +31,7 @@ public class Propagator<T> {
 		this.marked = marked;
 		this.worklist = worklist;
 	}
-	
+
 	public void prop(T val) {
 		if (marked.add(val)) {
 			worklist.push(val);

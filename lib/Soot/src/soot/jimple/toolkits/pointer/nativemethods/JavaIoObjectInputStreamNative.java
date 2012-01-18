@@ -35,14 +35,14 @@ public class JavaIoObjectInputStreamNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
 			     ReferenceVariable thisVar,
 			     ReferenceVariable returnVar,
 			     ReferenceVariable params[]){
-    
+
     String subSignature = method.getSubSignature();
 
     if (subSignature.equals("java.lang.ClassLoader latestUserDefinedLoader()")){
@@ -75,13 +75,13 @@ public class JavaIoObjectInputStreamNative extends NativeMethodClass {
 
   /*********************** java.io.ObjectInputStream *******************/
   /**
-   * NOTE: conservatively returns a reference pointing to the only copy 
+   * NOTE: conservatively returns a reference pointing to the only copy
    * of the class loader.
    *
-   * private static native java.lang.ClassLoader latestUserDefinedLoader() 
+   * private static native java.lang.ClassLoader latestUserDefinedLoader()
    *                        throws java.lang.ClassNotFoundException;
    */
-  public 
+  public
     void java_io_ObjectInputStream_latestUserDefinedLoader(
 				        SootMethod method,
 					ReferenceVariable thisVar,
@@ -96,10 +96,10 @@ public class JavaIoObjectInputStreamNative extends NativeMethodClass {
    *
    * private static native java.lang.Object allocateNewObject(java.lang.Class,
    *                                                          java.lang.Class)
-   *                             throws java.lang.InstantiationException, 
+   *                             throws java.lang.InstantiationException,
    *                             java.lang.IllegalAccessException;
    */
-  public 
+  public
     void java_io_ObjectInputStream_allocateNewObject(
 						 SootMethod method,
                                                  ReferenceVariable thisVar,
@@ -109,10 +109,10 @@ public class JavaIoObjectInputStreamNative extends NativeMethodClass {
   }
 
   /**
-   * private static native java.lang.Object allocateNewArray(java.lang.Class, 
+   * private static native java.lang.Object allocateNewArray(java.lang.Class,
    *                                                         int);
    */
-  public 
+  public
     void java_io_ObjectInputStream_allocateNewArray(
 						 SootMethod method,
 						 ReferenceVariable thisVar,
@@ -124,17 +124,17 @@ public class JavaIoObjectInputStreamNative extends NativeMethodClass {
   /**
    * Following methods have NO side effect, (the last one?????)
    * to be verified with serialization and de-serialization.
-   * 
+   *
    * private static native void bytesToFloats(byte[], int, float[], int, int);
-   * private static native void bytesToDoubles(byte[], int, 
+   * private static native void bytesToDoubles(byte[], int,
    *                                           double[], int, int);
-   * private static native void setPrimitiveFieldValues(java.lang.Object, 
-   *                                                    long[], 
-   *                                                    char[], 
+   * private static native void setPrimitiveFieldValues(java.lang.Object,
+   *                                                    long[],
+   *                                                    char[],
    *                                                    byte[]);
-   * private static native void setObjectFieldValue(java.lang.Object, 
-   *                                                long, 
-   *                                                java.lang.Class, 
+   * private static native void setObjectFieldValue(java.lang.Object,
+   *                                                long,
+   *                                                java.lang.Class,
    *                                                java.lang.Object);
    */
 

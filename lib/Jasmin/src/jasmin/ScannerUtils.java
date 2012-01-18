@@ -2,17 +2,17 @@
  > File:        jasmin/src/jasmin/ScannerUtils.java
  > Purpose:     Various static methods utilized to breakdown strings
  > Author:      Jonathan Meyer, 8 Feb 1997
- 
+
  */
 
- /** 
+ /**
     Modifications Copyright (C) 1997, 1998 Raja Vallee-Rai (kor@sable.mcgill.ca)
-    All rights reserved.                                              
-   
+    All rights reserved.
+
     Changes:
         - Changed the grammar so that Floats are produced only when an "F" is encountered.
         (putting a 'L' after a number forces it to be a long)
-        
+
 */
 
 package jasmin;
@@ -27,15 +27,15 @@ abstract class ScannerUtils {
                 throws NumberFormatException
     {
         boolean forceLong = false;
-        
+
         if(str.endsWith("L"))
         {
             forceLong = true;
             str = str.substring(0, str.length() - 1);
         }
-                    
+
         long x = Long.parseLong(str, radix);
-        
+
         if (x <= (long)Integer.MAX_VALUE && x >= (long)Integer.MIN_VALUE && !forceLong) {
             return new Integer((int)x);
         }
@@ -50,22 +50,22 @@ abstract class ScannerUtils {
                 throws NumberFormatException
     {
     //    System.out.println("Converting:" + str);
-        
+
         if (str.startsWith("0x")) {
             // base 16 integer
             return (convertInt(str.substring(2), 16));
-        } else if (str.indexOf('.') != -1) 
+        } else if (str.indexOf('.') != -1)
         {
             boolean isFloat = false;
-            
+
             if(str.endsWith("F"))
             {
                 isFloat = true;
                 str = str.substring(0, str.length() - 1);
             }
-            
+
             double x = (new Double(str)).doubleValue();
-            
+
             if(isFloat)
                 return new Float((float)x);
             else

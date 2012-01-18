@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -29,33 +29,33 @@ public class QueuedSet<E>
 {
 	private HashSet<E> hs;
 	private LinkedList<E> ll;
-	
+
 	public QueuedSet()
 	{
 		this.hs = new HashSet<E>();
 		this.ll = new LinkedList<E>();
 	}
-	
+
 	public QueuedSet(List<E> os)
 	{
-		this();	
+		this();
 		for ( E o : os )
 		{
 			this.ll.addLast(o);
 			this.hs.add(o);
 		}
 	}
-	
+
 	public QueuedSet(QueuedSet<E> qs)
 	{
 		this(qs.ll);
 	}
-	
+
 	public boolean isEmpty()
 	{
 		return this.ll.isEmpty();
 	}
-	
+
 	public boolean addLast(E o)
 	{
 		boolean r = this.hs.contains(o);
@@ -66,7 +66,7 @@ public class QueuedSet<E>
 		}
 		return r;
 	}
-	
+
 	public int addLast(List<E> os)
 	{
 		int r = 0;
@@ -75,7 +75,7 @@ public class QueuedSet<E>
 				r++;
 		return r;
 	}
-	
+
 	public E removeFirst()
 	{
 		E r = this.ll.removeFirst();

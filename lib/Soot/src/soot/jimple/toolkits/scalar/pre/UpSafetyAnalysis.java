@@ -32,7 +32,7 @@ import soot.toolkits.graph.*;
 import soot.jimple.*;
 import java.util.*;
 
-/** 
+/**
  * Performs an UpSafe-analysis on the given graph.
  * An expression is upsafe, if the computation already has been performed on
  * every path from START to the given program-point.

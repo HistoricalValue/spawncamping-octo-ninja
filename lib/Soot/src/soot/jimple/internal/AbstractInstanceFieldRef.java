@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -53,7 +53,7 @@ public abstract class AbstractInstanceFieldRef implements InstanceFieldRef, Conv
     {
         return baseBox.getValue().toString() + "." + fieldRef.getSignature();
     }
-    
+
     public void toString( UnitPrinter up ) {
         if( PrecedenceTest.needsBrackets( baseBox, this ) ) up.literal("(");
         baseBox.toString(up);
@@ -109,7 +109,7 @@ public abstract class AbstractInstanceFieldRef implements InstanceFieldRef, Conv
     {
         ((RefSwitch) sw).caseInstanceFieldRef(this);
     }
-    
+
     public boolean equivTo(Object o)
     {
         if (o instanceof AbstractInstanceFieldRef)
@@ -122,7 +122,7 @@ public abstract class AbstractInstanceFieldRef implements InstanceFieldRef, Conv
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return getField().equivHashCode() * 101 + baseBox.getValue().equivHashCode() + 17;
     }
@@ -133,9 +133,9 @@ public abstract class AbstractInstanceFieldRef implements InstanceFieldRef, Conv
 	Unit u;
         out.add(u = Baf.v().newFieldGetInst(fieldRef));
 
-	
+
 	Unit currentUnit = context.getCurrentUnit();
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}

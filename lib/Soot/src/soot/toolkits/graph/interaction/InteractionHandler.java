@@ -26,7 +26,7 @@ import java.util.*;
 import soot.options.*;
 
 public class InteractionHandler {
-   
+
     public InteractionHandler(Singletons.Global g){}
     public static InteractionHandler v() { return G.v().soot_toolkits_graph_interaction_InteractionHandler();}
 
@@ -40,7 +40,7 @@ public class InteractionHandler {
         }
         stopUnitList.add(elem);
     }
-    
+
     public void removeFromStopUnitList(Object elem){
         if (stopUnitList.contains(elem)){
             stopUnitList.remove(elem);
@@ -76,7 +76,7 @@ public class InteractionHandler {
             doInteraction(new InteractionEvent(IInteractionConstants.STOP_AT_NODE, u));
         }
     }
-    
+
     public void handleBeforeAnalysisEvent(Object beforeFlow){
         if (isInteractThisAnalysis()){
             if (autoCon()){
@@ -105,7 +105,7 @@ public class InteractionHandler {
             doInteraction(new InteractionEvent(IInteractionConstants.DONE, null));
         }
     }
-   
+
     public void handleCallGraphStart(Object info, CallGraphGrapher grapher){
         setGrapher(grapher);
         doInteraction(new InteractionEvent(IInteractionConstants.CALL_GRAPH_START, info));
@@ -117,7 +117,7 @@ public class InteractionHandler {
             handleReset();
         }
     }
-   
+
     public void handleCallGraphNextMethod(){
         if (!cgDone()){
             getGrapher().setNextMethod(getNextMethod());
@@ -132,7 +132,7 @@ public class InteractionHandler {
     public boolean isCgReset(){
         return cgReset;
     }
-    
+
     public void handleReset(){
         if (!cgDone()){
             getGrapher().reset();
@@ -149,7 +149,7 @@ public class InteractionHandler {
             handleReset();
         }
     }
-        
+
     private CallGraphGrapher grapher;
     private void setGrapher(CallGraphGrapher g){
         grapher = g;
@@ -165,11 +165,11 @@ public class InteractionHandler {
     private SootMethod getNextMethod(){
         return nextMethod;
     }
-    
+
     private synchronized void doInteraction(InteractionEvent event){
         getInteractionListener().setEvent(event);
         getInteractionListener().handleEvent();
-    
+
     }
 
     public synchronized void waitForContinue(){
@@ -178,9 +178,9 @@ public class InteractionHandler {
         }
         catch (InterruptedException e){
         }
-        
+
     }
-    
+
     private boolean interactThisAnalysis;
     public void setInteractThisAnalysis(boolean b){
         interactThisAnalysis = b;
@@ -203,7 +203,7 @@ public class InteractionHandler {
     public IInteractionListener getInteractionListener(){
         return interactionListener;
     }
-    
+
     private String currentPhaseName;
     public void currentPhaseName(String name){
         currentPhaseName = name;
@@ -212,7 +212,7 @@ public class InteractionHandler {
         return currentPhaseName;
     }
 
-    private boolean currentPhaseEnabled;    
+    private boolean currentPhaseEnabled;
     public void currentPhaseEnabled(boolean b){
         currentPhaseEnabled = b;
     }
@@ -247,6 +247,6 @@ public class InteractionHandler {
     public void stopInteraction(boolean b){
         Options.v().set_interactive_mode(false);
     }
-    
+
 }
 

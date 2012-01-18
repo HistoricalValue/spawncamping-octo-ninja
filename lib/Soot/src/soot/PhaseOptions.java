@@ -22,11 +22,11 @@ import java.util.*;
 
 /** Manages the phase options of the various soot phases. */
 public class PhaseOptions {
-    /** Needed for preventing infinite recursion in constructor. 
+    /** Needed for preventing infinite recursion in constructor.
      * Termination is assured: each constructor is called exactly once.
      * Here is a case analysis.
      *   a. PackManager used first.  Then its constructor needs PhaseOptions,
-            which also needs a PackManager; OK because we store the 
+            which also needs a PackManager; OK because we store the
             PackManager being initialized in a field.
          b. PhaseOptions used first.  Then getPM() calls PackManager.v(),
             which calls the constr, which sets the .pm field here, uses
@@ -73,7 +73,7 @@ public class PhaseOptions {
         return true;
     }
 
-    /** This method returns true iff key "name" is in options 
+    /** This method returns true iff key "name" is in options
         and maps to "true". */
     public static boolean getBoolean(Map options, String name)
     {
@@ -83,7 +83,7 @@ public class PhaseOptions {
 
 
 
-    /** This method returns the value of "name" in options 
+    /** This method returns the value of "name" in options
         or "" if "name" is not found. */
     public static String getString(Map options, String name)
     {
@@ -93,7 +93,7 @@ public class PhaseOptions {
 
 
 
-    /** This method returns the float value of "name" in options 
+    /** This method returns the float value of "name" in options
         or 1.0 if "name" is not found. */
     public static float getFloat(Map options, String name)
     {
@@ -103,7 +103,7 @@ public class PhaseOptions {
 
 
 
-    /** This method returns the integer value of "name" in options 
+    /** This method returns the integer value of "name" in options
         or 0 if "name" is not found. */
     public static int getInt(Map options, String name)
     {

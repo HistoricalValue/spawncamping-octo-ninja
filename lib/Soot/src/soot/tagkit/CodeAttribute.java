@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,8 +33,8 @@ import soot.*;
 
 
 /** A CodeAttribute object holds PC -> Tag pairs.
- * It represents abstracted attributes of Code_attribute 
- * such as LineNumberTable, ArrayBoundsCheck. 
+ * It represents abstracted attributes of Code_attribute
+ * such as LineNumberTable, ArrayBoundsCheck.
  */
 public class CodeAttribute extends JasminAttribute
 {
@@ -42,11 +42,11 @@ public class CodeAttribute extends JasminAttribute
     protected List<Tag> mTags;
 
     private byte[] value;
-    
+
     private String name = "CodeAtribute";
 
     public CodeAttribute(){}
-    
+
   /** Creates an attribute object with the given name. */
     public CodeAttribute(String name)
     {
@@ -78,7 +78,7 @@ public class CodeAttribute extends JasminAttribute
     {
     	this.value = v;
     }
-    
+
   /** Also only used as setValue(). */
     public byte[] getValue() throws AttributeValueException
     {
@@ -92,12 +92,12 @@ public class CodeAttribute extends JasminAttribute
     public String getJasminValue(Map instToLabel)
     {
         // some benchmarks fail because of the returned string larger than
-        // the possible buffer size. 
+        // the possible buffer size.
 	StringBuffer buf = new StringBuffer();
-	
+
 	if (mTags.size() != mUnits.size())
 	    throw new RuntimeException("Sizes must match!");
-	
+
 	Iterator<Tag> tagIt = mTags.iterator();
 	Iterator<Unit> unitIt = mUnits.iterator();
 
@@ -106,10 +106,10 @@ public class CodeAttribute extends JasminAttribute
 	    Object unit = unitIt.next();
 	    Object tag = tagIt.next();
 
-	    buf.append("%"+instToLabel.get(unit) + "%"+ 
+	    buf.append("%"+instToLabel.get(unit) + "%"+
 		       new String(Base64.encode(((Tag)tag).getValue())));
 	}
-    
+
 	return buf.toString();
     }
 
@@ -117,15 +117,15 @@ public class CodeAttribute extends JasminAttribute
     public List<UnitBox> getUnitBoxes()
     {
 	List<UnitBox> unitBoxes = new ArrayList<UnitBox>(mUnits.size());
-	
+
 	Iterator<Unit> it = mUnits.iterator();
-	
+
 	while(it.hasNext()) {
 	    unitBoxes.add(Baf.v().newInstBox(it.next()));
 	}
 
 	return unitBoxes;
-    }    
+    }
 
     public byte[] decode(String attr, Hashtable labelToPc)
     {
@@ -143,22 +143,22 @@ public class CodeAttribute extends JasminAttribute
 	int tablesize = 0;
 
 	byte[] pcArray;
-	while(st.hasMoreTokens()) {	    
+	while(st.hasMoreTokens()) {
 	    String token = st.nextToken();
-	    if(isLabel) {		
+	    if(isLabel) {
 		Integer pc = (Integer) labelToPc.get(token);
 
 		if(pc == null)
 		    throw new RuntimeException("PC is null, the token is "+token);
 
 		int pcvalue = pc.intValue();
-		if(pcvalue > 65535) 
+		if(pcvalue > 65535)
 		    throw new RuntimeException("PC great than 65535, the token is "+token+" : " +pcvalue);
 
 		pcArray = new byte[2];
 
 		pcArray[1] = (byte)(pcvalue&0x0FF);
-				
+
 		pcArray[0] = (byte)((pcvalue>>8)&0x0FF);
 
 		attributeHunks.add(pcArray);
@@ -166,14 +166,14 @@ public class CodeAttribute extends JasminAttribute
 		tablesize++;
 	    } else {
 
-		byte[] hunk = Base64.decode(token.toCharArray());		
+		byte[] hunk = Base64.decode(token.toCharArray());
 		attributeSize += hunk.length;
 
 		attributeHunks.add(hunk);
 	    }
-	    isLabel = !isLabel;	  
+	    isLabel = !isLabel;
 	}
-	
+
 	/* first two bytes indicate the length of attribute table. */
 	attributeSize += 2;
 	byte[] attributeValue = new byte[attributeSize];
@@ -199,4 +199,4 @@ public class CodeAttribute extends JasminAttribute
 	return attributeValue;
     }
 }
-	  
+

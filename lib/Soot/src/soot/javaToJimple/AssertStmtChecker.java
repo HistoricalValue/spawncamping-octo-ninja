@@ -39,9 +39,9 @@ public class AssertStmtChecker extends polyglot.visit.NodeVisitor {
         }
         return null;
     }
-    
+
     public polyglot.visit.NodeVisitor enter(polyglot.ast.Node parent, polyglot.ast.Node n){
-    
+
         if (n instanceof polyglot.ast.Assert) {
             hasAssert = true;
         }

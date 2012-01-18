@@ -30,7 +30,7 @@ import soot.jimple.spark.internal.TypeManager;
  */
 public class Node implements ReferenceVariable, Numberable {
     public final int hashCode() { return number; }
-    public final boolean equals( Object other ) { 
+    public final boolean equals( Object other ) {
         return this == other;
     }
     /** Returns the declared type of this node, null for unknown. */
@@ -38,12 +38,12 @@ public class Node implements ReferenceVariable, Numberable {
     /** Sets the declared type of this node, null for unknown. */
     public void setType( Type type ) {
         if( TypeManager.isUnresolved(type) ) throw new RuntimeException("Unresolved type "+type );
-        this.type = type; 
+        this.type = type;
     }
     /** If this node has been merged with another, returns the new node to be
      * used as the representative of this node; returns this if the node has
      * not been merged. */
-    public Node getReplacement() { 
+    public Node getReplacement() {
         if( replacement != replacement.replacement ) {
             replacement = replacement.getReplacement();
         }
@@ -57,8 +57,8 @@ public class Node implements ReferenceVariable, Numberable {
         Node myRep = getReplacement();
         if( other == myRep ) return;
         other.replacement = myRep;
-        if( other.p2set != p2set 
-                && other.p2set != null 
+        if( other.p2set != p2set
+                && other.p2set != null
                 && !other.p2set.isEmpty() ) {
             if( myRep.p2set == null || myRep.p2set.isEmpty() ) {
                 myRep.p2set = other.p2set;

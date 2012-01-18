@@ -49,7 +49,7 @@ import soot.toolkits.scalar.BackwardFlowAnalysis;
  * in a method if the value (before or after that location) is treated as definetely null,
  * definetely non-null or neither.  This information could be useful in deciding whether
  * or not to insert code that accesses a potentially null object.  If the original
- * program assumes a value is non-null, then adding a use of that value 
+ * program assumes a value is non-null, then adding a use of that value
  * will not introduce any NEW nullness errors into the program.
  * This code may be buggy, or just plain wrong.  It has not been checked.
  *
@@ -74,14 +74,14 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 	protected final static Object TOP = new Object() {
 		public String toString() {return "top";}
 	};
-	
+
 	/**
 	 * Creates a new analysis for the given graph/
 	 * @param graph any unit graph
 	 */
 	public NullnessAssumptionAnalysis(UnitGraph graph) {
 		super(graph);
-		
+
 		doAnalysis();
 	}
 
@@ -93,9 +93,9 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 	{
 		AnalysisInfo in = (AnalysisInfo) inValue;
 		AnalysisInfo out = new AnalysisInfo(in);
-		
+
 		Stmt s = (Stmt) unit;
-		
+
 		//in case of an if statement, we neet to compute the branch-flow;
 		//e.g. for a statement "if(x!=null) goto s" we have x==null for the fallOut and
 		//x!=null for the branchOut
@@ -109,7 +109,7 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 			MonitorStmt monitorStmt = (MonitorStmt) s;
 			out.put(monitorStmt.getOp(), NON_NULL);
 		}
-		
+
 		//if we have an array ref, set the info for this ref to TOP,
 		//cause we need to be conservative here
 		if(s.containsArrayRef()) {
@@ -126,7 +126,7 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 			InvokeExpr invokeExpr = s.getInvokeExpr();
 			handleInvokeExpr(invokeExpr, out);
 		}
-		
+
 		//allow sublasses to define certain values as always-non-null
 		for (Iterator outIter = out.entrySet().iterator(); outIter.hasNext();) {
 			Entry entry = (Entry) outIter.next();
@@ -135,7 +135,7 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 				entry.setValue(NON_NULL);
 			}
 		}
-		
+
 		//if we have a definition (assignment) statement to a ref-like type, handle it,
 		if(s instanceof DefinitionStmt) {
 			//need to copy the current out set because we need to assign under this assumption;
@@ -146,7 +146,7 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 				handleRefTypeAssignment(defStmt, temp, out);
 			}
 		}
-		
+
 		//save memory by only retaining information about locals
 		for (Iterator outIter = out.keySet().iterator(); outIter.hasNext();) {
 			Value v = (Value) outIter.next();
@@ -164,7 +164,7 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 		// now copy the computed info to out
         copy( out, outValue );
 	}
-	
+
 	/**
 	 * This can be overridden by sublasses to mark a certain value
 	 * as constantly non-null.
@@ -210,17 +210,17 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 			AnalysisInfo rhsInfo, AnalysisInfo out) {
 		Value left = assignStmt.getLeftOp();
 		Value right = assignStmt.getRightOp();
-		
+
 		//unbox casted value
 		if(right instanceof JCastExpr) {
 			JCastExpr castExpr = (JCastExpr) right;
 			right = castExpr.getOp();
 		}
-		
+
 		// An assignment invalidates any assumptions of null/non-null for lhs
 		// We COULD be more accurate by assigning those assumptions to the rhs prior to this statement
 		rhsInfo.put(right,BOTTOM);
-		
+
 		//assign from rhs to lhs
 		out.put(left,rhsInfo.get(right));
 	}
@@ -241,25 +241,25 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 	protected Object entryInitialFlow() {
 		return new AnalysisInfo();
 	}
-	/**
+	/**
 	 * {@inheritDoc}
 	 */
 	protected void merge(Object in1, Object in2, Object out) {
 		AnalysisInfo left = (AnalysisInfo) in1;
 		AnalysisInfo right = (AnalysisInfo) in2;
 		AnalysisInfo res = (AnalysisInfo) out;
-		
+
 		Set values = new HashSet();
 		values.addAll(left.keySet());
 		values.addAll(right.keySet());
-		
+
 		res.clear();
-		
+
 		for (Iterator keyIter = values.iterator(); keyIter.hasNext();) {
 			Value v = (Value) keyIter.next();
 			Set<Object> leftAndRight = new HashSet<Object>();
 			leftAndRight.add(left.get(v));
-			leftAndRight.add(right.get(v));			
+			leftAndRight.add(right.get(v));
 
 			Object result;
 			// This needs to be corrected for assumption *** TODO
@@ -270,28 +270,28 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 			}
 			else if(leftAndRight.contains(NON_NULL))
 			{
-				if(leftAndRight.contains(NULL)) 
+				if(leftAndRight.contains(NULL))
 				{
 					//NULL and NON_NULL merges to BOTTOM
 					result = BOTTOM;
 				}
-				else 
+				else
 				{
-					//NON_NULL and NON_NULL stays NON_NULL 
+					//NON_NULL and NON_NULL stays NON_NULL
 					result = NON_NULL;
 				}
 			}
 			else if(leftAndRight.contains(NULL))
 			{
-				//NULL and NULL stays NULL 
+				//NULL and NULL stays NULL
 				result = NULL;
 			}
 			else
 			{
-				//only BOTTOM remains 
+				//only BOTTOM remains
 				result = BOTTOM;
 			}
-			
+
 			res.put(v, result);
 		}
 	}
@@ -302,7 +302,7 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 	protected Object newInitialFlow() {
 		return new AnalysisInfo();
 	}
-	
+
 	/**
 	 * Returns <code>true</code> if the analysis could determine that i is always treated as null
 	 * after and including the statement s.
@@ -331,11 +331,11 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 	 * The analysis info is a simple mapping of type {@link Value} to
 	 * any of the constants BOTTOM, NON_NULL, NULL or TOP.
 	 * This class returns BOTTOM by default.
-	 * 
+	 *
 	 * @author Eric Bodden
 	 */
 	protected static class AnalysisInfo extends HashMap {
-		
+
 		public AnalysisInfo() {
 			super();
 		}
@@ -351,7 +351,7 @@ public class NullnessAssumptionAnalysis  extends BackwardFlowAnalysis
 			}
 			return object;
 		}
-		
+
 	}
 
 

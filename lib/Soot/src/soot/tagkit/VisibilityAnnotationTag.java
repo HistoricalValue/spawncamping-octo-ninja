@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -26,7 +26,7 @@
 package soot.tagkit;
 import java.util.*;
 
-/** Represents the visibility of an annotation attribute attatched 
+/** Represents the visibility of an annotation attribute attatched
  * to a class, field, method or method param (only one of these each)
  * has one or more annotations
  * for Java 1.5.
@@ -34,14 +34,14 @@ import java.util.*;
 
 public class VisibilityAnnotationTag implements  Tag
 {
-    
+
     private int visibility;
     private ArrayList<AnnotationTag> annotations;
-    
+
     public VisibilityAnnotationTag(int vis){
         this.visibility = vis;
     }
-    
+
     // should also print here number of annotations and perhaps the annotations themselves
     public String toString() {
         StringBuffer sb = new StringBuffer("Visibility Annotation: level: ");
@@ -55,8 +55,8 @@ public class VisibilityAnnotationTag implements  Tag
         case AnnotationConstants.SOURCE_VISIBLE:
         	sb.append("SOURCE");
         	break;
-        }        
-        sb.append("\n Annotations:"); 
+        }
+        sb.append("\n Annotations:");
         if (annotations != null){
             Iterator<AnnotationTag> it = annotations.iterator();
             while (it.hasNext()){
@@ -76,11 +76,11 @@ public class VisibilityAnnotationTag implements  Tag
     public String getInfo(){
         return "VisibilityAnnotation";
     }
-    
+
     public int getVisibility(){
         return visibility;
     }
-    
+
     /** Returns the tag raw data. */
     public byte[] getValue() {
         throw new RuntimeException( "VisibilityAnnotationTag has no value for bytecode" );

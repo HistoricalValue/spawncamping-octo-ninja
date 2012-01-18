@@ -30,23 +30,23 @@ import soot.dava.internal.javaRep.*;
   Nomair A. Naeem 18-FEB-2005
 
 	PATTERN ONE:
-	   label_1:                                                 
+	   label_1:
            while(cond1){                       label_1:
                if(cond2){                      while(cond1 && cond2){
                    Body 1                              Body1
                }                               }
-	       else{                           
+	       else{
 	         break label_1
 	       }
-           }                 
-	
+           }
+
 	   The important thing is that Body2 should contain an abrupt
 	   edge out of the while loop. If Body2 is just a break and nothing
-	   else the body2 in the transformed version is empty 
+	   else the body2 in the transformed version is empty
 
 
 	PATTERN TWO:
-	   label_1:                                                 
+	   label_1:
            while(true){                       label_1:
                if(cond2){                      while(cond2){
                    Body 1                              Body1
@@ -54,7 +54,7 @@ import soot.dava.internal.javaRep.*;
 	       else{                           Body2
 	           Body 2
 	       }
-           }                 
+           }
 
 
 
@@ -91,7 +91,7 @@ public class StrengthenByIfElse{
 		if(!(abStmt.is_Break())){
 		    //we need a break
 		    return null;
-		}		
+		}
 		else{
 		    if(stmtIt.hasNext()){
 			//a break should be the last stmt
@@ -103,7 +103,7 @@ public class StrengthenByIfElse{
 		    if(labelBroken != null && loopLabel != null){//stmt breaks some label
 			if(labelBroken.compareTo(loopLabel)==0){
 			    //we have found a break breaking this label
-			    
+
 			    //make sure that if the orignal was an ASTWhileNode then there was
 			    //ONLY a break statement
 			    if(loopNode instanceof ASTWhileNode){
@@ -122,7 +122,7 @@ public class StrengthenByIfElse{
 			    List<ASTNode> toReturn = new ArrayList<ASTNode>();
 			    toReturn.add(newWhileNode);
 
-			    			    
+
 			    //  Add the statementSequenceNode AFTER the whileNode except for the laststmt
 			    if(statements.size()!=1){
 				//size 1 means that the only stmt is a break stmt
@@ -191,12 +191,12 @@ public class StrengthenByIfElse{
 	    newCond = innerCond;
 	}
 	else{
-	    //not dealing with the case of ASTDoWhileNode 
+	    //not dealing with the case of ASTDoWhileNode
 	    return null;
 	}
 	List<Object> loopBody = ifElseNode.getIfBody();
 	SETNodeLabel newLabel = ((ASTLabeledNode)loopNode).get_Label();
-			    
+
 	//make new ASTWhileNode
 	return new ASTWhileNode(newLabel,newCond,loopBody);
     }

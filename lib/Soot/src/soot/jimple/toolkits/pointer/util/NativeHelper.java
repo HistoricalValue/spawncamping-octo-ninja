@@ -18,7 +18,7 @@
  */
 
 /**
- * Native method helper 
+ * Native method helper
  *
  * @author Feng Qian
  */
@@ -36,11 +36,11 @@ public abstract class NativeHelper {
    */
   public void assign(ReferenceVariable lhs, ReferenceVariable rhs){
     assignImpl(lhs, rhs);
-  }  
+  }
 
   /**
    * Assignment of an abstract object to the variable, such as
-   * " a = new A()", which is considered to add a target in a's 
+   * " a = new A()", which is considered to add a target in a's
    * points-to set.
    *
    * This method is used to fomulate the effect of getting
@@ -68,7 +68,7 @@ public abstract class NativeHelper {
   /**
    * Returns a variable which has the effect of cloning.
    * A moderate approach would return the variable itself.
-   * 
+   *
    * e.g., a = b.clone()  will be rendered to:
    *       Vr.isAssigned(Vb.cloneObject());
    *       Va = Vr;
@@ -80,7 +80,7 @@ public abstract class NativeHelper {
   /**
    * Returns a variable which carries an allocation site with
    * the least type (an artificial type, subtype of any other types,
-   * which means such type info is useless for resolving invocation 
+   * which means such type info is useless for resolving invocation
    * targets).
    *
    * It is used for simulating java.lang.Class.newInstance0();
@@ -89,11 +89,11 @@ public abstract class NativeHelper {
   public ReferenceVariable newInstanceOf(ReferenceVariable cls){
     return newInstanceOfImpl(cls);
   }
-  
-  /** 
-   * Returns a reference variable representing a static Java field.  
+
+  /**
+   * Returns a reference variable representing a static Java field.
    * The implementation must ensure that there is only one such
-   * representation for each static field. 
+   * representation for each static field.
    *
    * @param field, must be a static field
    */
@@ -106,7 +106,7 @@ public abstract class NativeHelper {
    * e.g., java.lang.Class: getSingers, setSigners
    *       java.lang.Class: getProtectionDomain0, setProtectionDomain0
    *
-   * To simplify simulation, the temporary field variable is like a 
+   * To simplify simulation, the temporary field variable is like a
    * static field.
    *
    * The temporary fields are uniquely indexed by signatures.
@@ -132,25 +132,25 @@ public abstract class NativeHelper {
 
   public ReferenceVariable tempLocalVariable(SootMethod method) {
   	return tempLocalVariableImpl(method);
-  }    
+  }
   /**
    * Sub classes should implement both.
    */
-  protected abstract 
+  protected abstract
     void assignImpl(ReferenceVariable lhs, ReferenceVariable rhs);
-  protected abstract 
+  protected abstract
     void assignObjectToImpl(ReferenceVariable lhs, AbstractObject obj);
-  protected abstract 
+  protected abstract
     void throwExceptionImpl(AbstractObject obj);
-  protected abstract 
+  protected abstract
     ReferenceVariable arrayElementOfImpl(ReferenceVariable base);
-  protected abstract 
+  protected abstract
     ReferenceVariable cloneObjectImpl(ReferenceVariable source);
-  protected abstract 
+  protected abstract
     ReferenceVariable newInstanceOfImpl(ReferenceVariable cls);
-  protected abstract 
+  protected abstract
     ReferenceVariable staticFieldImpl(String className, String fieldName );
-  protected abstract 
+  protected abstract
     ReferenceVariable tempFieldImpl(String fieldsig);
   protected abstract
     ReferenceVariable tempVariableImpl();

@@ -1,7 +1,7 @@
 package java_cup;
 
 /** This class represents a part of a production which is a symbol (terminal
- *  or non terminal).  This simply maintains a reference to the symbol in 
+ *  or non terminal).  This simply maintains a reference to the symbol in
  *  question.
  *
  * @see     java_cup.production
@@ -14,7 +14,7 @@ public class symbol_part extends production_part {
   /*--- Constructor(s) ----------------------------------------*/
   /*-----------------------------------------------------------*/
 
-  /** Full constructor. 
+  /** Full constructor.
    * @param sym the symbol that this part is made up of.
    * @param lab an optional label string for the part.
    */
@@ -30,7 +30,7 @@ public class symbol_part extends production_part {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Constructor with no label. 
+  /** Constructor with no label.
    * @param sym the symbol that this part is made up of.
    */
   public symbol_part(symbol sym) throws internal_error
@@ -60,7 +60,7 @@ public class symbol_part extends production_part {
   /** Equality comparison. */
   public boolean equals(symbol_part other)
     {
-      return other != null && super.equals(other) && 
+      return other != null && super.equals(other) &&
 	     the_symbol().equals(other.the_symbol());
     }
 
@@ -80,7 +80,7 @@ public class symbol_part extends production_part {
   /** Produce a hash code. */
   public int hashCode()
     {
-      return super.hashCode() ^ 
+      return super.hashCode() ^
 	     (the_symbol()==null ? 0 : the_symbol().hashCode());
     }
 

@@ -25,7 +25,7 @@ import soot.jimple.*;
  * @author Ondrej Lhotak
  */
 public final class Edge
-{ 
+{
     /** The method in which the call occurs; may be null for calls not
      * occurring in a specific method (eg. implicit calls by the VM)
      */
@@ -44,7 +44,7 @@ public final class Edge
     private Unit srcUnit;
     public Unit srcUnit() { return srcUnit; }
     public Stmt srcStmt() { return (Stmt) srcUnit; }
-    
+
     /** The target method of the call edge. */
     private MethodOrMethodContext tgt;
     public SootMethod tgt() { return tgt.method(); }
@@ -84,7 +84,7 @@ public final class Edge
         return kind.isExplicit();
     }
 
-	
+
     /** Returns true if the call is due to an explicit instance invoke
      * statement. */
     public boolean isInstance() {
@@ -120,7 +120,7 @@ public final class Edge
         if( o.kind != kind ) return false;
         return true;
     }
-    
+
     public String toString() {
         return kind.toString()+" edge: "+srcUnit+" in "+src+" ==> "+tgt;
     }

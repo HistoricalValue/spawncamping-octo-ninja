@@ -33,7 +33,7 @@ import soot.dava.toolkits.base.AST.analysis.*;
   Nomair A. Naeem 18-FEB-2005
 
   The class is responsible to do the following transformation on the AST
-  
+
   if(A){                   if(A && B){
       if(B){                    Body1
          Body1   ----->    }
@@ -78,7 +78,7 @@ public class AndAggregator extends DepthFirstAdapter{
 
 		    SETNodeLabel outerLabel = (node).get_Label();
 		    SETNodeLabel innerLabel = ((ASTIfNode)bodyNode).get_Label();
-		    
+
 		    SETNodeLabel newLabel = null;
 		    if(outerLabel.toString()==null && innerLabel.toString()==null){
 			newLabel = outerLabel;
@@ -140,7 +140,7 @@ public class AndAggregator extends DepthFirstAdapter{
 			if(abStmt.is_Break() || abStmt.is_Continue()){
 			    SETNodeLabel label = abStmt.getLabel();
 			    String labelBroken = label.toString();
-			    
+
 			    if(labelBroken != null){//stmt breaks some label
 				if(labelBroken.compareTo(from)==0){
 				    //have to replace the "from" label to "to" label

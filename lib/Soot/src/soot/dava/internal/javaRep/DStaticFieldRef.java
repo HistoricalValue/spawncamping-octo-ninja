@@ -23,7 +23,7 @@ package soot.dava.internal.javaRep;
 import soot.*;
 import soot.jimple.*;
 
-public class DStaticFieldRef extends StaticFieldRef 
+public class DStaticFieldRef extends StaticFieldRef
 {
     private boolean supressDeclaringClass;
 

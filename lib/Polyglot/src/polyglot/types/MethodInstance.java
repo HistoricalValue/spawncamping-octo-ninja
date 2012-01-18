@@ -76,11 +76,11 @@ public interface MethodInstance extends ProcedureInstance
     /**
      * Get the set of methods this method implements.  No ordering is
      * specified since the superinterfaces need not form a linear list
-     * (i.e., they can form a tree).  
+     * (i.e., they can form a tree).
      * @return List[MethodInstance]
      */
-    List implemented(); 
-    
+    List implemented();
+
     /**
      * Return true if this method has the same signature as <code>mi</code>.
      */
@@ -111,7 +111,7 @@ public interface MethodInstance extends ProcedureInstance
      * This method should not be called except by <code>TypeSystem</code>
      * and by subclasses.
      * If quiet is true and this method cannot override <code>mi</code>, then
-     * false is returned; otherwise, if quiet is false and this method cannot 
+     * false is returned; otherwise, if quiet is false and this method cannot
      * override <code>mi</code>, then a SemanticException is thrown.
      */
     boolean canOverrideImpl(MethodInstance mi, boolean quiet) throws SemanticException;
@@ -123,7 +123,7 @@ public interface MethodInstance extends ProcedureInstance
      * @param rt The point in the type hierarchy to begin looking for methods.
      */
     List implementedImpl(ReferenceType rt);
-    
+
     /**
      * Return true if this method has the same signature as <code>mi</code>.
      * This method should not be called except by <code>TypeSystem</code>

@@ -6,17 +6,17 @@ import polyglot.util.*;
 import polyglot.frontend.Job;
 import java.util.*;
 
-/** Visitor which allows type information to be utilized to perform AST 
-    modifications.  
-    
+/** Visitor which allows type information to be utilized to perform AST
+    modifications.
+
     The major advantage of this visitor is the new <code>ascribe()</code>
     method, which allows AST translations based on the expression
     and also the type that is expected. For the base translation (standard
-    Java), the type of the expression and the type that is expceted 
-    are the same. Language extensions however may not have this property, 
+    Java), the type of the expression and the type that is expceted
+    are the same. Language extensions however may not have this property,
     and can take advantage of the <code>ascribe</code> method to transform
     the AST into a different form that will pass Java type-checking.
-    
+
     @see #ascribe
     */
 public class AscriptionVisitor extends ContextVisitor
@@ -27,7 +27,7 @@ public class AscriptionVisitor extends ContextVisitor
     /**
      *  Default constructor. See the constructor in <code> ErrorHandingVisitor
      *  </code> for more details.
-     * 
+     *
      *  @see polyglot.visit.ErrorHandlingVisitor#ErrorHandlingVisitor
      */
     public AscriptionVisitor(Job job, TypeSystem ts, NodeFactory nf) {
@@ -43,7 +43,7 @@ public class AscriptionVisitor extends ContextVisitor
         return outer;
     }
 
-    /** Returns the type that is expected of the expression that is being 
+    /** Returns the type that is expected of the expression that is being
      *  visited.
      */
     public Type toType() {
@@ -51,9 +51,9 @@ public class AscriptionVisitor extends ContextVisitor
     }
 
     // TODO is this comment revealing too much implementation?
-    /** Sets up the expected type information for later calls to 
+    /** Sets up the expected type information for later calls to
      *  <code>ascribe()</code>. Other than that, plays the same role
-     *  as the <code>enterCall</code> method in 
+     *  as the <code>enterCall</code> method in
      *  <code>ErrorHandlingVisitor</code>.
      */
     public NodeVisitor enterCall(Node parent, Node n) throws SemanticException {
@@ -70,16 +70,16 @@ public class AscriptionVisitor extends ContextVisitor
         return v;
     }
 
-    /** The <code>ascribe()</code> method is called for each expression 
-      * and is passed the type the expression is <i>used at</i> rather 
-      * than the type the type 
+    /** The <code>ascribe()</code> method is called for each expression
+      * and is passed the type the expression is <i>used at</i> rather
+      * than the type the type
       * checker assigns to it.
       *
       * For instance, with the following code:
       *
       *     <code>Object o = new Integer(3);</code>
       *
-      * <code>ascribe()</code> will be called with expression 
+      * <code>ascribe()</code> will be called with expression
       * <code>new Integer(3)</code> and type <code>Object</code>.
       *
       * @param e The expression that is being visited
@@ -92,8 +92,8 @@ public class AscriptionVisitor extends ContextVisitor
     }
 
     // TODO is this comment revealing too much implementation?
-    /** Calls <code>ascribe()<code> with the expected type and expression 
-     *  as appropriate. Otherwise functionally the same as the <code> 
+    /** Calls <code>ascribe()<code> with the expected type and expression
+     *  as appropriate. Otherwise functionally the same as the <code>
      *  leaveCall</code> method in <code>ErrorHandlingVisitor</code>.
      */
     public Node leaveCall(Node old, Node n, NodeVisitor v)

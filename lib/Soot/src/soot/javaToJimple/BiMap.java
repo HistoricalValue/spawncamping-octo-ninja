@@ -25,7 +25,7 @@ public class BiMap {
 
     HashMap<Object, Object> keyVal;
     HashMap<Object, Object> valKey;
-    
+
     public BiMap(){
     }
 
@@ -39,7 +39,7 @@ public class BiMap {
 
         keyVal.put(key, val);
         valKey.put(val, key);
-        
+
     }
 
     public Object getKey(Object val){
@@ -56,7 +56,7 @@ public class BiMap {
         if (keyVal == null) return false;
         return keyVal.containsKey(key);
     }
-    
+
     public boolean containsVal(Object val){
         if (valKey == null) return false;
         return valKey.containsKey(val);

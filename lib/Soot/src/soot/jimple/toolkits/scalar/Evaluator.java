@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -47,7 +47,7 @@ public class Evaluator {
 			if (isValueConstantValued(innerOp))
                 return true;
         }
-        else if (op instanceof BinopExpr) 
+        else if (op instanceof BinopExpr)
         {
             /* Handle weird cases. */
             if (op instanceof DivExpr || op instanceof RemExpr)
@@ -63,7 +63,7 @@ public class Evaluator {
                 if (c2 instanceof IntConstant && ((IntConstant)c2).value == 0)
                     return false;
 
-                if (c2 instanceof LongConstant && 
+                if (c2 instanceof LongConstant &&
                          ((LongConstant)c2).value == 0)
                     return false;
             }
@@ -78,10 +78,10 @@ public class Evaluator {
     /** Returns the constant value of <code>op</code> if it is easy
      * to find the constant value; else returns <code>null</code>. */
     public static Value getConstantValueOf(Value op) {
-        
+
         if (!isValueConstantValued(op))
             return null;
-        
+
         if (op instanceof Constant)
             return op;
         else if (op instanceof UnopExpr) {
@@ -162,12 +162,12 @@ public class Evaluator {
             else if ((op instanceof CmpgExpr) || (op instanceof CmplExpr)) {
                 if ((c1 instanceof RealConstant) &&
                     (c2 instanceof RealConstant)) {
-                    
+
                     if(op instanceof CmpgExpr)
                         return ((RealConstant) c1).cmpg((RealConstant) c2);
                     else if(op instanceof CmplExpr)
                         return ((RealConstant) c1).cmpl((RealConstant) c2);
-                        
+
                 }
                 else throw new IllegalArgumentException(
                                   "CmpExpr: RealConstant(s) expected");
@@ -180,7 +180,7 @@ public class Evaluator {
     } // getConstantValueOf
 
 } // Evaluator
-    
+
 
 
 

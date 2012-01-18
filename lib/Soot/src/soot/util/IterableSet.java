@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -61,7 +61,7 @@ public class IterableSet extends HashChain implements Set
 
 	return super.remove( o);
     }
-    
+
     public boolean equals( Object o)
     {
 	if (o == null)
@@ -77,21 +77,21 @@ public class IterableSet extends HashChain implements Set
 
 	if (size() != other.size())
 	    return false;
-	
+
 	Iterator it = iterator();
-	while (it.hasNext()) 
+	while (it.hasNext())
 	    if (other.contains( it.next()) == false)
 		return false;
-	
+
 	return true;
     }
-    
+
     public Object clone()
     {
 	IterableSet s = new IterableSet();
 	s.addAll( this);
 	return s;
-    }    
+    }
 
     public boolean isSubsetOf( IterableSet other)
     {
@@ -108,7 +108,7 @@ public class IterableSet extends HashChain implements Set
 
 	return true;
     }
-    
+
     public boolean isSupersetOf( IterableSet other)
     {
 	if (other == null)
@@ -121,7 +121,7 @@ public class IterableSet extends HashChain implements Set
 	while (it.hasNext())
 	    if (contains( it.next()) == false)
 		return false;
-	
+
 	return true;
     }
 
@@ -135,7 +135,7 @@ public class IterableSet extends HashChain implements Set
 
 	return isSubsetOf( other);
     }
-    
+
     public boolean isStrictSupersetOf( IterableSet other)
     {
 	if (other == null)
@@ -180,7 +180,7 @@ public class IterableSet extends HashChain implements Set
 	    Iterator it = other.iterator();
 	    while (it.hasNext()) {
 		Object o = it.next();
-		
+
 		if (contains( o))
 		    c.add( o);
 	    }
@@ -189,7 +189,7 @@ public class IterableSet extends HashChain implements Set
 	    Iterator it = iterator();
 	    while (it.hasNext()) {
 		Object o = it.next();
-		
+
 		if (other.contains( o))
 		    c.add( o);
 	    }

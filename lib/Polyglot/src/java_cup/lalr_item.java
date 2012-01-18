@@ -3,27 +3,27 @@ package java_cup;
 import java.util.Stack;
 import java.util.Enumeration;
 
-/** This class represents an LALR item. Each LALR item consists of 
+/** This class represents an LALR item. Each LALR item consists of
  *  a production, a "dot" at a position within that production, and
  *  a set of lookahead symbols (terminal).  (The first two of these parts
- *  are provide by the super class).  An item is designed to represent a 
- *  configuration that the parser may be in.  For example, an item of the 
+ *  are provide by the super class).  An item is designed to represent a
+ *  configuration that the parser may be in.  For example, an item of the
  *  form: <pre>
  *    [A ::= B * C d E  , {a,b,c}]
  *  </pre>
  *  indicates that the parser is in the middle of parsing the production <pre>
  *    A ::= B C d E
  *  </pre>
- *  that B has already been parsed, and that we will expect to see a lookahead 
- *  of either a, b, or c once the complete RHS of this production has been 
+ *  that B has already been parsed, and that we will expect to see a lookahead
+ *  of either a, b, or c once the complete RHS of this production has been
  *  found.<p>
  *
- *  Items may initially be missing some items from their lookahead sets.  
- *  Links are maintained from each item to the set of items that would need 
- *  to be updated if symbols are added to its lookahead set.  During 
- *  "lookahead propagation", we add symbols to various lookahead sets and 
- *  propagate these changes across these dependency links as needed. 
- *  
+ *  Items may initially be missing some items from their lookahead sets.
+ *  Links are maintained from each item to the set of items that would need
+ *  to be updated if symbols are added to its lookahead set.  During
+ *  "lookahead propagation", we add symbols to various lookahead sets and
+ *  propagate these changes across these dependency links as needed.
+ *
  * @see     java_cup.lalr_item_set
  * @see     java_cup.lalr_state
  * @version last updated: 11/25/95
@@ -35,12 +35,12 @@ public class lalr_item extends lr_item_core {
   /*--- Constructor(s) ----------------------------------------*/
   /*-----------------------------------------------------------*/
 
-  /** Full constructor. 
+  /** Full constructor.
    * @param prod the production for the item.
    * @param pos  the position of the "dot" within the production.
    * @param look the set of lookahead symbols.
    */
-  public lalr_item(production prod, int pos, terminal_set look) 
+  public lalr_item(production prod, int pos, terminal_set look)
     throws internal_error
     {
       super(prod, pos);
@@ -51,7 +51,7 @@ public class lalr_item extends lr_item_core {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Constructor with default position (dot at start). 
+  /** Constructor with default position (dot at start).
    * @param prod the production for the item.
    * @param look the set of lookahead symbols.
    */
@@ -62,7 +62,7 @@ public class lalr_item extends lr_item_core {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Constructor with default position and empty lookahead set. 
+  /** Constructor with default position and empty lookahead set.
    * @param prod the production for the item.
    */
   public lalr_item(production prod) throws internal_error
@@ -83,15 +83,15 @@ public class lalr_item extends lr_item_core {
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** Links to items that the lookahead needs to be propagated to. */
-  protected Stack _propagate_items; 
+  protected Stack _propagate_items;
 
   /** Links to items that the lookahead needs to be propagated to */
   public Stack propagate_items() {return _propagate_items;}
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Flag to indicate that this item needs to propagate its lookahead 
-   *  (whether it has changed or not). 
+  /** Flag to indicate that this item needs to propagate its lookahead
+   *  (whether it has changed or not).
    */
   protected boolean needs_propagation;
 
@@ -108,7 +108,7 @@ public class lalr_item extends lr_item_core {
   /*--- General Methods ---------------------------------------*/
   /*-----------------------------------------------------------*/
 
-  /** Propagate incoming lookaheads through this item to others need to 
+  /** Propagate incoming lookaheads through this item to others need to
    *  be changed.
    * @params incoming symbols to potentially be added to lookahead of this item.
    */
@@ -143,7 +143,7 @@ public class lalr_item extends lr_item_core {
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** Produce the new lalr_item that results from shifting the dot one position
-   *  to the right. 
+   *  to the right.
    */
   public lalr_item shift() throws internal_error
     {
@@ -154,7 +154,7 @@ public class lalr_item extends lr_item_core {
 	throw new internal_error("Attempt to shift past end of an lalr_item");
 
       /* create the new item w/ the dot shifted by one */
-      result = new lalr_item(the_production(), dot_pos()+1, 
+      result = new lalr_item(the_production(), dot_pos()+1,
 					    new terminal_set(lookahead()));
 
       /* change in our lookahead needs to be propagated to this item */
@@ -168,9 +168,9 @@ public class lalr_item extends lr_item_core {
   /** Calculate lookahead representing symbols that could appear after the
    *   symbol that the dot is currently in front of.  Note: this routine must
    *   not be invoked before first sets and nullability has been calculated
-   *   for all non terminals. 
-   */ 
-  public terminal_set calc_lookahead(terminal_set lookahead_after) 
+   *   for all non terminals.
+   */
+  public terminal_set calc_lookahead(terminal_set lookahead_after)
     throws internal_error
     {
       terminal_set    result;
@@ -187,11 +187,11 @@ public class lalr_item extends lr_item_core {
       result = new terminal_set();
 
       /* consider all nullable symbols after the one to the right of the dot */
-      for (pos = dot_pos()+1; pos < the_production().rhs_length(); pos++) 
+      for (pos = dot_pos()+1; pos < the_production().rhs_length(); pos++)
 	{
 	   part = the_production().rhs(pos);
 
-	   /* consider what kind of production part it is -- skip actions */ 
+	   /* consider what kind of production part it is -- skip actions */
 	   if (!part.is_action())
 	     {
 	       sym = ((symbol_part)part).the_symbol();
@@ -214,7 +214,7 @@ public class lalr_item extends lr_item_core {
 	     }
 	}
 
-      /* if we get here everything past the dot was nullable 
+      /* if we get here everything past the dot was nullable
          we add in the lookahead for after the production and we are done */
       result.add(lookahead_after);
       return result;
@@ -222,12 +222,12 @@ public class lalr_item extends lr_item_core {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Determine if everything from the symbol one beyond the dot all the 
+  /** Determine if everything from the symbol one beyond the dot all the
    *  way to the  end of the right hand side is nullable.  This would indicate
    *  that the lookahead of this item must be included in the lookaheads of
-   *  all items produced as a closure of this item.  Note: this routine should 
-   *  not be invoked until after first sets and nullability have been 
-   *  calculated for all non terminals. 
+   *  all items produced as a closure of this item.  Note: this routine should
+   *  not be invoked until after first sets and nullability have been
+   *  calculated for all non terminals.
    */
   public boolean lookahead_visible() throws internal_error
     {
@@ -263,8 +263,8 @@ public class lalr_item extends lr_item_core {
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** Equality comparison -- here we only require the cores to be equal since
-   *   we need to do sets of items based only on core equality (ignoring 
-   *   lookahead sets). 
+   *   we need to do sets of items based only on core equality (ignoring
+   *   lookahead sets).
    */
   public boolean equals(lalr_item other)
     {
@@ -277,7 +277,7 @@ public class lalr_item extends lr_item_core {
   /** Generic equality comparison. */
   public boolean equals(Object other)
     {
-      if (!(other instanceof lalr_item)) 
+      if (!(other instanceof lalr_item))
 	return false;
       else
 	return equals((lalr_item)other);
@@ -286,7 +286,7 @@ public class lalr_item extends lr_item_core {
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** Return a hash code -- here we only hash the core since we only test core
-   *  matching in LALR items. 
+   *  matching in LALR items.
    */
   public int hashCode()
     {
@@ -301,7 +301,7 @@ public class lalr_item extends lr_item_core {
       String result = "";
 
       // additional output for debugging:
-      // result += "(" + obj_hash() + ")"; 
+      // result += "(" + obj_hash() + ")";
       result += "[";
       result += super.toString();
       result += ", ";

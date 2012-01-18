@@ -48,9 +48,9 @@ public class LineNumberAdder extends SceneTransformer {
                 }
                 if (s.hasTag("LineNumberTag")){
                     LineNumberTag tag = (LineNumberTag)s.getTag("LineNumberTag");
-                    lineToMeth.put(new Integer(tag.getLineNumber()), meth); 
+                    lineToMeth.put(new Integer(tag.getLineNumber()), meth);
                 }
-            } 
+            }
             Iterator methIt2 = sc.getMethods().iterator();
             while (methIt2.hasNext()){
                 SootMethod meth = (SootMethod)methIt2.next();
@@ -73,7 +73,7 @@ public class LineNumberAdder extends SceneTransformer {
                     }
                 }
             }
-            
+
         }
-    }                
+    }
 }

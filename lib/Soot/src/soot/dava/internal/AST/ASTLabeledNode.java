@@ -27,7 +27,7 @@ import soot.dava.toolkits.base.AST.*;
 public abstract class ASTLabeledNode extends ASTNode
 {
     private SETNodeLabel label;
-    
+
     public ASTLabeledNode( SETNodeLabel label)
     {
 	super();

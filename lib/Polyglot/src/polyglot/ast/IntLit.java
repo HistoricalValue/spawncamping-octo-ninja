@@ -2,11 +2,11 @@ package polyglot.ast;
 
 import polyglot.util.Enum;
 
-/** 
+/**
  * An <code>IntLit</code> represents a literal in Java of an integer
  * type.
  */
-public interface IntLit extends NumLit 
+public interface IntLit extends NumLit
 {
     /** Integer literal kinds: int (e.g., 0) or long (e.g., 0L). */
     public static class Kind extends Enum {

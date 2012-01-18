@@ -33,7 +33,7 @@ public interface ClassType extends Importable, ReferenceType, MemberInstance
     /**
      * Return true if the class is an inner class.
      * Equivalent to kind() == MEMBER || kind() == LOCAL || kind() == ANONYMOUS.
-     * @deprecated Was incorrectly defined. Use isNested for nested classes, 
+     * @deprecated Was incorrectly defined. Use isNested for nested classes,
      *          and isInnerClass for inner classes.
      */
     boolean isInner();
@@ -74,7 +74,7 @@ public interface ClassType extends Importable, ReferenceType, MemberInstance
      * Is used to determine if a nested class is implicitly static.
      */
     boolean inStaticContext();
-    
+
     /**
      * The class's constructors.
      * A list of <code>ConstructorInstance</code>.

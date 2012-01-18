@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ import java.util.*;
  */
 public interface DirectedGraph<N> extends Iterable<N>
 {
-    /** 
+    /**
      *  Returns a list of entry points for this graph.
      */
     public List<N> getHeads();
@@ -44,7 +44,7 @@ public interface DirectedGraph<N> extends Iterable<N>
     /** Returns a list of exit points for this graph. */
     public List<N> getTails();
 
-    /** 
+    /**
      *  Returns a list of predecessors for the given node in the graph.
      */
     public List<N> getPredsOf(N s);
@@ -66,4 +66,4 @@ public interface DirectedGraph<N> extends Iterable<N>
     public Iterator<N> iterator();
 }
 
- 
+

@@ -59,7 +59,7 @@ public class Util {
 
   /**
    * Factorial on doubles; avoids overflow problems present when using integers.
-   * 
+   *
    * @param n_
    *          arg on which to compute factorial
    * @return (<code>double</code> approximation to) factorial of largest
@@ -154,7 +154,7 @@ public class Util {
   /**
    * Test whether <em>some</em> element of the given {@link Collection}
    * satisfies the given {@link Predicate}.
-   * 
+   *
    * @return The first element satisfying the predicate; otherwise null.
    */
   public static <T> T find(Collection<T> c_, Predicate<T> p_) {
@@ -170,7 +170,7 @@ public class Util {
   /**
    * Test whether <em>some</em> element of the given {@link Collection}
    * satisfies the given {@link Predicate}.
-   * 
+   *
    * @return All the elements satisfying the predicate
    */
   public static <T> Collection<T> findAll(Collection<T> c_, Predicate<T> p_) {
@@ -199,7 +199,7 @@ public class Util {
 
   /**
    * Perform an action for all elements in a collection.
-   * 
+   *
    * @param c_
    *          the collection
    * @param v_
@@ -245,7 +245,7 @@ public class Util {
   /**
    * Filter a collection according to some predicate, placing the result in a
    * List
-   * 
+   *
    * @param src_
    *          collection to be filtered
    * @param pred_
@@ -401,7 +401,7 @@ public class Util {
 
   /**
    * checks if two sets have a non-empty intersection
-   * 
+   *
    * @param s1
    * @param s2
    * @return <code>true</code> if the sets intersect; <code>false</code>
@@ -426,7 +426,7 @@ public class Util {
   /**
    * given the name of a class C, returns the name of the top-most enclosing
    * class of class C. For example, given A$B$C, the method returns A
-   * 
+   *
    * @param typeStr
    * @return
    */
@@ -441,7 +441,7 @@ public class Util {
       vals.add(val);
     }
   }
-  
+
   public static <T> List<T> pickNAtRandom(List<T> vals, int n, long seed) {
     if (vals.size() <= n) {
       return vals;
@@ -454,8 +454,8 @@ public class Util {
       int randIndex = rand.nextInt(n);
       added = elems.add(vals.get(randIndex));
       } while (!added);
-      
+
     }
-    return new ArrayList<T>(elems);    
+    return new ArrayList<T>(elems);
   }
 } // class Util

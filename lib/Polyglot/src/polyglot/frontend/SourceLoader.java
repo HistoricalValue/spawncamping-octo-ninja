@@ -99,7 +99,7 @@ public class SourceLoader
 
     /**
      * The current user directory. We make it static so we don't need to
-     * keep on making copies of it. 
+     * keep on making copies of it.
      */
     static File current_dir = null;
 
@@ -130,7 +130,7 @@ public class SourceLoader
 
         return false;
     }
-    
+
     /** Load the source file for the given class name using the source path. */
     public FileSource classSource(String className) {
 	/* Search the source path. */
@@ -151,26 +151,26 @@ public class SourceLoader
                         for (int j = 0; j < contents.length; j++) {
                             dirContents.add(contents[j]);
                         }
-                    }                
+                    }
                 }
 
                 // check if the source file exists in the directory
                 int index = fileName.indexOf(File.separatorChar);
-                if (index < 0) index = fileName.length(); 
+                if (index < 0) index = fileName.length();
                 String firstPart = fileName.substring(0, index);
 
                 if (dirContents.contains(firstPart)) {
                     // the directory contains at least the first part of the
                     // file path. We will check if this file exists.
                     File sourceFile;
-                    
+
                     if (directory != null && directory.equals(current_dir())) {
                         sourceFile = new File(fileName);
                     }
                     else {
                         sourceFile = new File(directory, fileName);
                     }
-                    
+
                     // Skip it if already loaded
                     if (loadedSources.contains(fileKey(sourceFile))) {
                         continue;

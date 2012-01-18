@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,10 +41,10 @@ public class JEqExpr extends AbstractJimpleIntBinopExpr implements EqExpr
     public void apply(Switch sw) { ((ExprSwitch) sw).caseEqExpr(this); }
     Object makeBafInst(Type opType) { throw new RuntimeException("unsupported conversion: "+this); }
     //return Baf.v().newEqInst(this.getOp1().getType()); }
-    
-    public Object clone() 
+
+    public Object clone()
     {
         return new JEqExpr(Jimple.cloneIfNecessary(getOp1()), Jimple.cloneIfNecessary(getOp2()));
     }
-        
+
 }

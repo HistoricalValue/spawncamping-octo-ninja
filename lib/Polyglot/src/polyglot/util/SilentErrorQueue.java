@@ -18,7 +18,7 @@ public class SilentErrorQueue extends AbstractErrorQueue
     public void displayError(ErrorInfo e) {
         errors.add(e);
     }
-    
+
     public List getErrors() {
         return errors;
     }

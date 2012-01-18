@@ -6,7 +6,7 @@ import java.util.Enumeration;
 /** This class represents a non-terminal symbol in the grammar.  Each
  *  non terminal has a textual name, an index, and a string which indicates
  *  the type of object it will be implemented with at runtime (i.e. the class
- *  of object that will be pushed on the parse stack to represent it). 
+ *  of object that will be pushed on the parse stack to represent it).
  *
  * @version last updated: 11/25/95
  * @author  Scott Hudson
@@ -22,7 +22,7 @@ public class non_terminal extends symbol {
    * @param nm  the name of the non terminal.
    * @param tp  the type string for the non terminal.
    */
-  public non_terminal(String nm, String tp) 
+  public non_terminal(String nm, String tp)
     {
       /* super class does most of the work */
       super(nm, tp);
@@ -32,7 +32,7 @@ public class non_terminal extends symbol {
       if (conflict != null)
 	// can't throw an exception here because these are used in static
 	// initializers, so we crash instead
-	// was: 
+	// was:
 	// throw new internal_error("Duplicate non-terminal ("+nm+") created");
 	(new internal_error("Duplicate non-terminal ("+nm+") created")).crash();
 
@@ -45,10 +45,10 @@ public class non_terminal extends symbol {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
-  /** Constructor with default type. 
+  /** Constructor with default type.
    * @param nm  the name of the non terminal.
    */
-  public non_terminal(String nm) 
+  public non_terminal(String nm)
     {
       this(nm, null);
     }
@@ -57,20 +57,20 @@ public class non_terminal extends symbol {
   /*--- (Access to) Static (Class) Variables ------------------*/
   /*-----------------------------------------------------------*/
 
-  /** Table of all non-terminals -- elements are stored using name strings 
-   *  as the key 
+  /** Table of all non-terminals -- elements are stored using name strings
+   *  as the key
    */
   protected static Hashtable _all = new Hashtable();
 
   /** Access to all non-terminals. */
   public static Enumeration all() {return _all.elements();}
 
-  /** lookup a non terminal by name string */ 
+  /** lookup a non terminal by name string */
   public static non_terminal find(String with_name)
     {
       if (with_name == null)
         return null;
-      else 
+      else
         return (non_terminal)_all.get(with_name);
     }
 
@@ -115,10 +115,10 @@ public class non_terminal extends symbol {
   /*-----------------------------------------------------------*/
   /*--- Static Methods ----------------------------------------*/
   /*-----------------------------------------------------------*/
-	 
-  /** Method for creating a new uniquely named hidden non-terminal using 
+
+  /** Method for creating a new uniquely named hidden non-terminal using
    *  the given string as a base for the name (or "NT$" if null is passed).
-   * @param prefix base name to construct unique name from. 
+   * @param prefix base name to construct unique name from.
    */
   static non_terminal create_new(String prefix) throws internal_error
     {
@@ -130,8 +130,8 @@ public class non_terminal extends symbol {
 
   /** static routine for creating a new uniquely named hidden non-terminal */
   static non_terminal create_new() throws internal_error
-    { 
-      return create_new(null); 
+    {
+      return create_new(null);
     }
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
@@ -166,7 +166,7 @@ public class non_terminal extends symbol {
 		}
 	    }
 	}
-      
+
       /* do one last pass over the productions to finalize all of them */
       for (e=production.all(); e.hasMoreElements(); )
 	{
@@ -269,7 +269,7 @@ public class non_terminal extends symbol {
   /*-----------------------------------------------------------*/
 
   /** Indicate that this symbol is a non-terminal. */
-  public boolean is_non_term() 
+  public boolean is_non_term()
     {
       return true;
     }

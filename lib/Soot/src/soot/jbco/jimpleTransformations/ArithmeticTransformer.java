@@ -31,7 +31,7 @@ import soot.jbco.util.*;
 
 /**
  * @author Michael Batchelder
- * 
+ *
  * Created on 6-Mar-2006
  */
 
@@ -55,18 +55,18 @@ public class ArithmeticTransformer extends BodyTransformer implements
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "jtp.jbco_cae2bo";
-  
+
   public String getName() {
     return name;
   }
 
-  protected void internalTransform(Body b, String phaseName, Map options) 
+  protected void internalTransform(Body b, String phaseName, Map options)
   {
     int weight = soot.jbco.Main.getWeight(phaseName, b.getMethod().getSignature());
     if (weight == 0) return;
-    
+
     PatchingChain units = b.getUnits();
 
     int localCount = 0;
@@ -340,7 +340,7 @@ public class ArithmeticTransformer extends BodyTransformer implements
   }
 
   private double[] checkShiftValue(double val) {
-    
+
     double shift[] = new double[2];
     if (val == 0 || val == 1 || val == -1) {
       shift[0] = 0;

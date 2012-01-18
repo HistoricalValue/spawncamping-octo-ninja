@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -26,7 +26,7 @@
 package soot.tagkit;
 import java.util.*;
 
-/** Represents the visibility of an annotation attribute attatched 
+/** Represents the visibility of an annotation attribute attatched
  * to a class, field, method or method param (only one of these each)
  * has one or more annotations
  * for Java 1.5.
@@ -34,16 +34,16 @@ import java.util.*;
 
 public class VisibilityParameterAnnotationTag implements  Tag
 {
-    
+
     private int num_params;
     private int kind;
     private ArrayList<VisibilityAnnotationTag> visibilityAnnotations;
-    
+
     public VisibilityParameterAnnotationTag(int num, int kind){
         this.num_params = num;
         this.kind = kind;
     }
-    
+
     // should also print here number of annotations and perhaps the annotations themselves
     public String toString() {
         StringBuffer sb = new StringBuffer("Visibility Param Annotation: num params: "+num_params+" kind: "+kind);
@@ -66,7 +66,7 @@ public class VisibilityParameterAnnotationTag implements  Tag
     public String getInfo(){
         return "VisibilityParameterAnnotation";
     }
-    
+
     /** Returns the tag raw data. */
     public byte[] getValue() {
         throw new RuntimeException( "VisibilityParameterAnnotationTag has no value for bytecode" );

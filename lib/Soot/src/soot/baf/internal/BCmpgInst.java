@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -48,7 +48,7 @@ public class BCmpgInst extends AbstractOpTypeInst implements CmpgInst
 
 
 
-  public Object clone() 
+  public Object clone()
     {
         return new BCmpgInst(getOpType());
     }
@@ -57,7 +57,7 @@ public class BCmpgInst extends AbstractOpTypeInst implements CmpgInst
     {
         return 2*AbstractJasminClass.sizeOfType(getOpType());
     }
-    
+
     public int getOutCount()
     {
         return 1;
@@ -67,7 +67,7 @@ public class BCmpgInst extends AbstractOpTypeInst implements CmpgInst
     {
         return 1;
     }
-    
+
     public final String getName() { return "cmpg"; }
 
     public void apply(Switch sw)

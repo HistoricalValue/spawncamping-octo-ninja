@@ -18,7 +18,7 @@ public class VarDeclarator {
 		this.dims = 0;
 		this.init = null;
 	}
-	
+
 	public Position position() {
 		return pos;
 	}

@@ -31,7 +31,7 @@ import java.util.Iterator;
 public class ClassData {
 	String className;   //the name of the class whose data is being stored
 	ArrayList<MetricData> metricData;  //each element should be a MetricData
-	
+
 	public ClassData(String name){
 		className=name;
 		metricData = new ArrayList<MetricData>();
@@ -40,7 +40,7 @@ public class ClassData {
 	public String getClassName(){
 		return className;
 	}
-	
+
 	/*
 	 * returns true if this className has the same name
 	 * as the string sent as argument
@@ -48,8 +48,8 @@ public class ClassData {
 	public boolean classNameEquals(String className){
 		return (this.className.equals(className));
 	}
-	
-	
+
+
 	/*
 	 * Only add new metric if this is not already present
 	 * Else dont add
@@ -65,8 +65,8 @@ public class ClassData {
 		}
 		metricData.add(data);
 	}
-	
-	
+
+
 	public String toString(){
 		StringBuffer b = new StringBuffer();
 		b.append("<Class>\n");

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -54,20 +54,20 @@ public class SimpleLocalDefs implements LocalDefs
      *   It is recommended that a ExceptionalUnitGraph (or similar) be provided
      *   for correct results in the case of exceptional control flow.
      *   @param g a graph on which to compute the analysis.
-     *   
+     *
      *   @see ExceptionalUnitGraph
      */
     public SimpleLocalDefs(UnitGraph g)
     {
         if(Options.v().time())
             Timers.v().defsTimer.start();
-        
+
         if(Options.v().verbose())
             G.v().out.println("[" + g.getBody().getMethod().getName() +
                                "]     Constructing SimpleLocalDefs...");
-    
+
         LocalDefsFlowAnalysis analysis = new LocalDefsFlowAnalysis(g);
-        
+
         if(Options.v().time())
             Timers.v().defsPostTimer.start();
 
@@ -95,7 +95,7 @@ public class SimpleLocalDefs implements LocalDefs
                                     if(!localUnitPairToDefs.containsKey(pair))
                                         {
                                             IntPair intPair = analysis.localToIntPair.get(l);
-					    
+
                                             ArrayPackedSet value = (ArrayPackedSet) analysis.getFlowBefore(s);
 
                                             List unitLocalDefs = value.toList(intPair.op1, intPair.op2);
@@ -109,7 +109,7 @@ public class SimpleLocalDefs implements LocalDefs
 
         if(Options.v().time())
             Timers.v().defsPostTimer.end();
-                
+
         if(Options.v().time())
             Timers.v().defsTimer.end();
 
@@ -127,12 +127,12 @@ public class SimpleLocalDefs implements LocalDefs
         LocalUnitPair pair = new LocalUnitPair(l, s);
 
         List<Unit> toReturn = localUnitPairToDefs.get(pair);
-        
+
         if(toReturn == null)
-            throw new RuntimeException("Illegal LocalDefs query; local " + l + " has no definition at " + 
+            throw new RuntimeException("Illegal LocalDefs query; local " + l + " has no definition at " +
                                        s.toString());
-               
-        
+
+
         return toReturn;
     }
 
@@ -282,23 +282,23 @@ class LocalDefsFlowAnalysis extends ForwardFlowAnalysis
                     {
                         Unit s = (Unit) it.next();
 
-                    
+
                         List defBoxes = s.getDefBoxes();
                         if(!defBoxes.isEmpty()) {
-                            if(!(defBoxes.size() ==1)) 
+                            if(!(defBoxes.size() ==1))
                                 throw new RuntimeException("invalid number of def boxes");
-                            
+
                             if(((ValueBox)defBoxes.get(0)).getValue() instanceof Local) {
                                 Local defLocal = (Local) ((ValueBox)defBoxes.get(0)).getValue();
                                 List<Unit> l = localToDefList.get(defLocal);
-                            
+
                                 if(l == null)
                                     throw new RuntimeException("local " + defLocal + " is used but not declared!");
                                 else
                                     l.add(s);
                             }
                         }
-                    
+
                     }
             }
 
@@ -362,19 +362,19 @@ class LocalDefsFlowAnalysis extends ForwardFlowAnalysis
 
             for (Object element : defs) {
 			    Unit s = (Unit) element;
-			    
+
 			    List defBoxes = s.getDefBoxes();
-			    if(!(defBoxes.size() ==1)) 
+			    if(!(defBoxes.size() ==1))
 			        throw new RuntimeException("SimpleLocalDefs: invalid number of def boxes");
-			            
+
 			    if(((ValueBox)defBoxes.get(0)).getValue() instanceof Local) {
 			        Local defLocal = (Local) ((ValueBox)defBoxes.get(0)).getValue();
 			        BoundedFlowSet killSet = (BoundedFlowSet) localToKillSet.get(defLocal);
 			        killSet.add(s, killSet);
-			        
+
 			    }
 			}
-            
+
             // Store complement
             {
                 Iterator localIt = locals.iterator();
@@ -399,11 +399,11 @@ class LocalDefsFlowAnalysis extends ForwardFlowAnalysis
             Timers.v().defsAnalysisTimer.start();
 
         doAnalysis();
-        
+
         if(Options.v().time())
             Timers.v().defsAnalysisTimer.end();
     }
-    
+
     protected Object newInitialFlow()
     {
         return emptySet.clone();
@@ -421,25 +421,25 @@ class LocalDefsFlowAnalysis extends ForwardFlowAnalysis
 
         List defBoxes = unit.getDefBoxes();
         if(!defBoxes.isEmpty()) {
-            if(!(defBoxes.size() ==1)) 
+            if(!(defBoxes.size() ==1))
                 throw new RuntimeException("SimpleLocalDefs: invalid number of def boxes");
-                          
+
             Value value = ((ValueBox)defBoxes.get(0)).getValue();
             if(value  instanceof Local) {
                 Local defLocal = (Local) value;
-            
+
                 // Perform kill on value
                 in.intersection(localToPreserveSet.get(defLocal), out);
 
                 // Perform generation
                 out.add(unit, out);
-            } else { 
+            } else {
                 in.copy(out);
                 return;
             }
 
 
-        
+
 
         }
         else
@@ -450,7 +450,7 @@ class LocalDefsFlowAnalysis extends ForwardFlowAnalysis
     {
         FlowSet sourceSet = (FlowSet) source,
             destSet = (FlowSet) dest;
-        
+
         sourceSet.copy(destSet);
     }
 
@@ -458,9 +458,9 @@ class LocalDefsFlowAnalysis extends ForwardFlowAnalysis
     {
         FlowSet inSet1 = (FlowSet) in1,
             inSet2 = (FlowSet) in2;
-        
+
         FlowSet outSet = (FlowSet) out;
-        
+
         inSet1.union(inSet2, outSet);
     }
 }

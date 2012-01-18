@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,7 +34,7 @@ public class OuterClassTag implements Tag
     SootClass outerClass;
     String simpleName;
     boolean anon;
-    
+
     public OuterClassTag(SootClass outer, String simpleName, boolean anon)
     {
 	    this.outerClass = outer;
@@ -67,11 +67,11 @@ public class OuterClassTag implements Tag
     public String getSimpleName(){
         return simpleName;
     }
-    
+
     public boolean isAnon(){
         return anon;
     }
-    
+
     public String toString()
     {
 	return "[outer class="+outerClass.getName()+"]";

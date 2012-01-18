@@ -33,7 +33,7 @@ public class ReachingDefsTagger extends BodyTransformer {
     public static ReachingDefsTagger v() { return G.v().soot_jimple_toolkits_annotation_defs_ReachingDefsTagger();}
 
     protected void internalTransform(Body b, String phaseName, Map options){
-    
+
         UnitGraph g = new ExceptionalUnitGraph(b);
         LocalDefs sld = new SmartLocalDefs(g, new SimpleLiveLocals(g));
 
@@ -57,4 +57,4 @@ public class ReachingDefsTagger extends BodyTransformer {
             }
         }
     }
-}   
+}

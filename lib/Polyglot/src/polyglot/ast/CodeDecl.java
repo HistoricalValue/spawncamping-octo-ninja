@@ -16,7 +16,7 @@ public interface CodeDecl extends ClassMember
 
     /** Set the body. */
     CodeDecl body(Block body);
-    
+
     /** The CodeInstance of the method, constructor, or initializer. */
     CodeInstance codeInstance();
 }

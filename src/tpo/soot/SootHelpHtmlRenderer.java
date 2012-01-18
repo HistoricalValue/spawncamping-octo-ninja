@@ -13,36 +13,36 @@ import tpo.soot.SootOption.Argument;
 import tpo.soot.SootOption.EnumArgumentValue;
 
 public class SootHelpHtmlRenderer {
-	
+
 	///////////////////////////////////////////////////////
 	// state
 	private final StringBuilder	extraJavascript = new StringBuilder(1 << 14),
 								extraCss = new StringBuilder(1 << 14);
 	private final GroupIdGenerator gidgen = new GroupIdGenerator();
-	
+
 	///////////////////////////////////////////////////////
 	// constructors
-	
+
 	///////////////////////////////////////////////////////
 	//
 	public SootHelpHtmlRenderer AddExtraJavascript (final String script) {
 		this.extraJavascript.append(script);
 		return this;
 	}
-	
+
 	public SootHelpHtmlRenderer AddExtraCss (final String style) {
 		this.extraCss.append(style);
 		return this;
 	}
-	
+
 	public String Css () {
 		return SootHelpHtmlRendererConstants.StandardCSS + extraCss.toString();
 	}
-	
+
 	public String Javascript () {
 		return SootHelpHtmlRendererConstants.StandardJavascript + extraJavascript.toString();
 	}
-	
+
 	///////////////////////////////////////////////////////
 	//
 	public void Reset () {
@@ -50,15 +50,15 @@ public class SootHelpHtmlRenderer {
 		ResetExtraJavascript();
 		gidgen.reset();
 	}
-	
+
 	private void ResetExtraCss () {
 		StringBuilders.reset(extraCss);
 	}
-	
+
 	private void ResetExtraJavascript () {
 		StringBuilders.reset(extraJavascript);
 	}
-	
+
 	///////////////////////////////////////////////////////
 	//
 	@SuppressWarnings("FinalClass")
@@ -68,7 +68,7 @@ public class SootHelpHtmlRenderer {
 		String next () { return "group_" + seed++; }
 		void reset () { seed = 0; }
 	}
-	
+
 	public SootHelpHtmlRenderer WriteOptions (
 			final Writer sink,
 			final String css,
@@ -78,20 +78,20 @@ public class SootHelpHtmlRenderer {
 			IOException
 	{
 		Reset();
-		
+
 		final String bodyId = "bady";
-		
+
 		final ElementBuilder b = new ElementBuilder();
 		final Element index = CreateIndexElement(b);
 		final Document doc = CreateDocument(b, index, bodyId, css, js);
-		
+
 		for (final SootOptionGroup group: SootFacade.ListOfOptions())
 			AppendElementsForOptionsGroup(b, group, doc, index);
 
 		final List<String> subphasesIndecesElementsIds = new LinkedList<>();
 		for (final SootPhaseOptions opt: SootFacade.ListOfPhases())
 			AppendElementsForPhaseOption(b, opt, doc, index, subphasesIndecesElementsIds);
-		
+
 		doc.AddElement(CreateClosePopUpElementsButton(b, subphasesIndecesElementsIds));
 		doc.AddElement(CreateJavascriptMainScriptElement(b, bodyId));
 		doc.WriteTo(sink);
@@ -115,10 +115,10 @@ public class SootHelpHtmlRenderer {
 					.AddExtraJavascript(hiddenEl)
 					.AddExtraJavascript("\").style.display = \"none\";");
 		AddExtraJavascript("\n}\n");
-		
+
 		return b.div(b.text("X")).SetId("closeButton");
 	}
-	
+
 	private void AppendElementsForPhaseOption (
 			final ElementBuilder		b,
 			final SootPhaseOptions		opt,
@@ -130,9 +130,9 @@ public class SootHelpHtmlRenderer {
 		final String groupIndexId = groupId + "_index";
 		final String toggleGroupFunctionName = "ToggleGroup_" + groupIndexId;
 		final String phaseName = opt.GetName();
-		
+
 		subphasesIndecesElementsIds.add(groupIndexId);
-		
+
 		ExtraJavascriptForPhaseOptions(groupIndexId, toggleGroupFunctionName);
 		index.AddSubelement(b.li(b.a("#" + groupId, phaseName).attr("onclick", "isi." + toggleGroupFunctionName + "();")));
 
@@ -141,12 +141,12 @@ public class SootHelpHtmlRenderer {
 
 		// list of subopts
 		final Element subphaseOptionsIndexElement = CreatePopUpMenuElement(b).SetId(groupIndexId);
-		doc.AddElement(subphaseOptionsIndexElement);	
+		doc.AddElement(subphaseOptionsIndexElement);
 
 		for (final SootPhaseOptions subphaseOptions: opt.GetSubphases())
 			AppendElementForSubphaseOption(subphaseOptions, b, doc, subphaseOptionsIndexElement);
 	}
-	
+
 	private void AppendElementForSubphaseOption (
 			final SootPhaseOptions		subopt,
 			final ElementBuilder		b,
@@ -165,7 +165,7 @@ public class SootHelpHtmlRenderer {
 				.AddElement(b.p(subopt.GetDescription()).SetClass("description"))
 				.AddElement(b.p(soot.options.Options.v().getPhaseHelp(subphaseName)).SetClass("description"));
 	}
-	
+
 	private void ExtraJavascriptForPhaseOptions (
 			final String	groupIndexId,
 			final String	toggleGroupFunctionName) {
@@ -177,7 +177,7 @@ public class SootHelpHtmlRenderer {
 				.AddExtraJavascript(groupIndexId)
 				.AddExtraJavascript("\"); }");
 	}
-	
+
 	private void AppendElementsForOptionsGroup (
 			final ElementBuilder	b,
 			final SootOptionGroup	group,
@@ -199,9 +199,9 @@ public class SootHelpHtmlRenderer {
 							b.td(OptionNamesElement(b, opt)).attr("class", "name"),
 							b.td(OptionArgumentElement(b, opt.GetArgument())).attr("class", "argument"),
 							b.td(opt.GetDescription()).attr("class", "description")
-					).attr("class", "option"));		
+					).attr("class", "option"));
 	}
-	
+
 	private static Document CreateDocument (
 			final ElementBuilder	b,
 			final Element			index,
@@ -212,12 +212,12 @@ public class SootHelpHtmlRenderer {
 
 		doc.SetBodyId(bodyId);
 		doc.AddElement(index);
-		
+
 		if (css != null)
 			doc.SetStylesheet("/" + Url.EscapeUrl(css));
 		if (js != null)
 			doc.SetJavascript("/" + Url.EscapeUrl(js));
-		
+
 		return doc;
 	}
 
@@ -234,7 +234,7 @@ public class SootHelpHtmlRenderer {
 			ol.AddSubelement(b.li(name));
 		return ol;
 	}
-	
+
 	private static Element OptionArgumentElement (final ElementBuilder b, final Argument arg) {
 		Element result = null;
 		switch (arg.GetType()) {
@@ -256,21 +256,21 @@ public class SootHelpHtmlRenderer {
 	private static Element EnumOptionArgumentElement (final ElementBuilder b, final Argument arg) {
 		final Element	tbody = b.tbody(),
 						table = b.table(tbody);
-		
+
 		for (final EnumArgumentValue val: arg.GetValues())
 			tbody.AddSubelement(
 					b.tr(
 							b.td(b.ol(val.GetNames())),
 							b.td(val.GetDescription())
 					));
-		
+
 		return table;
 	}
-	
+
 	private static Element ListOptionArgumentElement (final ElementBuilder b, final Argument arg) {
 		return b.ol(arg.GetNames());
 	}
-	
+
 	private static Element NoneOptionArgumentElement (final ElementBuilder b, final Argument arg) {
 		return b.text("");
 	}

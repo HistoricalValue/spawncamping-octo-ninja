@@ -38,7 +38,7 @@ public class SPatchingChain extends PatchingChain<Unit>
      **/
     Body body = null;
     boolean debug;
-    
+
     public SPatchingChain(Body aBody, Chain aChain)
     {
         super(aChain);
@@ -67,7 +67,7 @@ public class SPatchingChain extends PatchingChain<Unit>
         super.insertBefore(in, out);
         super.remove(out);
     }
-    
+
     public void insertAfter(Unit toInsert, Unit point)
     {
         // important to do these before the patching, so that
@@ -96,7 +96,7 @@ public class SPatchingChain extends PatchingChain<Unit>
                     break patchpointers;
                 }
             }
-            
+
             /* handle each UnitBox individually */
 
             UnitBox[] boxes = (UnitBox[]) unit.getBoxesPointingToThis().toArray(new UnitBox[0]);
@@ -110,7 +110,7 @@ public class SPatchingChain extends PatchingChain<Unit>
 
                 SUnitBox box = getSBox(ub);
                 Boolean needsPatching = boxToNeedsPatching.get(box);
-                
+
                 if(needsPatching == null || box.isUnitChanged()){
                     // if boxes were added or removed to the known Phi
                     if(!boxToPhiNode.containsKey(box)){
@@ -118,7 +118,7 @@ public class SPatchingChain extends PatchingChain<Unit>
 
                         // *** FIXME: Disabling this allows us to have
                         // PiExpr that have UnitBox pointers.
-                        // I think this means that any changes 
+                        // I think this means that any changes
                         // to the relevant Unit will be ignored by
                         //  SPatchingChain.
                         //
@@ -129,7 +129,7 @@ public class SPatchingChain extends PatchingChain<Unit>
                         if(!boxToPhiNode.containsKey(box) && debug)
                             throw new RuntimeException("SPatchingChain has pointers from a Phi node that has never been seen.");
                     }
-                    
+
                     computeNeedsPatching();
                     needsPatching = boxToNeedsPatching.get(box);
 
@@ -142,7 +142,7 @@ public class SPatchingChain extends PatchingChain<Unit>
                         continue;
                     }
                 }
-                    
+
                 if(needsPatching.booleanValue()){
                     box.setUnit((Unit)toInsert);
                     box.setUnitChanged(false);
@@ -158,7 +158,7 @@ public class SPatchingChain extends PatchingChain<Unit>
         }
         super.insertAfter(toInsert, point);
     }
-    
+
     public void insertBefore(List<Unit> toInsert, Unit point)
     {
         for (Unit unit : toInsert) {
@@ -178,7 +178,7 @@ public class SPatchingChain extends PatchingChain<Unit>
         processPhiNode(u);
         super.addFirst(u);
     }
-    
+
     public void addLast(Unit u)
     {
         processPhiNode(u);
@@ -190,10 +190,10 @@ public class SPatchingChain extends PatchingChain<Unit>
         if(contains(obj)){
             Shimple.redirectToPreds(body, (Unit)obj);
         }
-        
+
         return super.remove(obj);
     }
-    
+
     /**
      * Map from UnitBox to the Phi node owning it.
      **/
@@ -206,7 +206,7 @@ public class SPatchingChain extends PatchingChain<Unit>
      **/
     protected Map<SUnitBox, Boolean> boxToNeedsPatching = new HashMap<SUnitBox, Boolean>();
 
-    
+
     protected void processPhiNode(Unit o)
     {
         Unit phiNode = (Unit) o;
@@ -237,7 +237,7 @@ public class SPatchingChain extends PatchingChain<Unit>
         while(phiNodesIt.hasNext())
             processPhiNode(phiNodesIt.next());
     }
-    
+
     /**
      * NOTE: This will *miss* all the Phi nodes outside a chain.  So
      * make sure you know what you are doing if you remove a Phi node
@@ -267,7 +267,7 @@ public class SPatchingChain extends PatchingChain<Unit>
         // If such an if statement is encountered, we do not want to
         // move any UnitBox pointers beyond the if statement.
         Set trackedBranchTargets = new HashSet();
-        
+
         Iterator unitsIt = iterator();
         while(unitsIt.hasNext()){
             Unit u = (Unit) unitsIt.next();
@@ -288,7 +288,7 @@ public class SPatchingChain extends PatchingChain<Unit>
             // update trackedBranchTargets
             if(u.fallsThrough() && u.branches())
                 trackedBranchTargets.addAll(u.getUnitBoxes());
-            
+
             // the tracked Phi nodes may be reached through branching.
             // (note: if u is a Phi node and not a trackedBranchTarget,
             // this is not triggered since u would fall through in that
@@ -354,11 +354,11 @@ public class SPatchingChain extends PatchingChain<Unit>
         {
             super(innerChain, head, tail);
         }
-        
+
         public void remove()
         {
             Unit victim = (Unit) lastObject;
-            
+
             if(!state)
                 throw new IllegalStateException("remove called before first next() call");
             Shimple.redirectToPreds(SPatchingChain.this.body, victim);

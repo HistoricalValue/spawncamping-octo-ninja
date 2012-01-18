@@ -20,13 +20,13 @@ public class TargetFactory
 	outputExtension = outExt;
 	outputStdout = so;
     }
-    
+
     /** Return the output directory */
     public File getOutputDirectory() { return outputDirectory; }
 
     /** Open a writer to the output file for the class in the given package. */
     public Writer outputWriter(String packageName, String className,
-	    Source source) throws IOException 
+	    Source source) throws IOException
     {
 	return outputWriter(outputFile(packageName, className, source));
     }
@@ -76,21 +76,21 @@ public class TargetFactory
         if (source != null && outputFile.getPath().equals(source.path())) {
 	    throw new InternalCompilerError("The output file is the same as the source file");
 	}
-	
+
 	return outputFile;
     }
-    
+
     /**
-     * Returns a filename to represent a .h file, given the name of a 
+     * Returns a filename to represent a .h file, given the name of a
      * .cpp file that represents the "main class"
      * @param filename -- the input cpp file
-     * @return the output filename for the header file with the proper 
+     * @return the output filename for the header file with the proper
      * extension
      */
     public String headerNameForFileName(String filename)
     {
       String s = null;
-      
+
       int dotIdx = filename.lastIndexOf(".");
       if(dotIdx < 0)
         s = filename + ".h";

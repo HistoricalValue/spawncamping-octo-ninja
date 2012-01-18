@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -47,15 +47,15 @@ public class XMLRoot
 	}
 
 	// add element to end of tree
-	public XMLNode addElement( String name ) 
+	public XMLNode addElement( String name )
 	{
 		return addElement( name, "", "", "" );
 	}
-	public XMLNode addElement( String name, String value ) 
+	public XMLNode addElement( String name, String value )
 	{
 		return addElement( name, value, "", "" );
 	}
-	public XMLNode addElement( String name, String value, String[] attributes ) 
+	public XMLNode addElement( String name, String value, String[] attributes )
 	{
 		return addElement( name, value, attributes, null );
 	}
@@ -84,10 +84,10 @@ public class XMLRoot
 			while( current.next != null )
 			{
 				current = current.next;
-			}           
-			current.next = newnode;     
+			}
+			current.next = newnode;
 			newnode.prev = current;
 		}
 		return newnode;
-	}   
+	}
 }

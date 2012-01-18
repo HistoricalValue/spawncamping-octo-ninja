@@ -42,7 +42,7 @@ public class ASTIfElseNode extends ASTControlFlowNode
 
     /*
       Nomair A. Naeem 17-FEB-05
-      Needed because of change of grammar of condition being stored as a ASTCondition rather 
+      Needed because of change of grammar of condition being stored as a ASTCondition rather
       than the ConditionExpr which was the case before
     */
     public ASTIfElseNode( SETNodeLabel label, ASTCondition condition, List<Object> ifBody, List<Object> elseBody)
@@ -67,7 +67,7 @@ public class ASTIfElseNode extends ASTControlFlowNode
 	subBodies.add(bodyTwo);
 	set_Condition(newCond);
 	set_Label(newLabel);
-	
+
     }
 
 
@@ -118,7 +118,7 @@ public class ASTIfElseNode extends ASTControlFlowNode
 	return new ASTIfElseNode( get_Label(), get_Condition(), ifBody, elseBody);
     }
 
-    public void toString( UnitPrinter up ) 
+    public void toString( UnitPrinter up )
     {
         label_toString( up );
 
@@ -128,7 +128,7 @@ public class ASTIfElseNode extends ASTControlFlowNode
         condition.toString( up );
         up.literal( ")" );
         up.newline();
-	
+
         up.literal( "{" );
         up.newline();
 
@@ -156,14 +156,14 @@ public class ASTIfElseNode extends ASTControlFlowNode
     public String toString()
     {
 	StringBuffer b = new StringBuffer();
-	
+
 	b.append( label_toString());
 
 	b.append( "if (");
 	b.append( get_Condition().toString());
 	b.append( ")");
 	b.append( NEWLINE);
-	
+
 	b.append( "{");
 	b.append( NEWLINE);
 

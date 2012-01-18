@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,7 +34,7 @@ public class ArrayCheckTag implements OneByteCodeTag
     private boolean lowerCheck = true;
     private boolean upperCheck = true;
 
-    /** 
+    /**
      * A tag represents two bounds checks of an array reference.
      * The value 'true' indicates check needed.
      */
@@ -44,34 +44,34 @@ public class ArrayCheckTag implements OneByteCodeTag
 	upperCheck = upper;
     }
 
-    /** 
+    /**
      * Returns back the check information in binary form, which
      * will be written into the class file.
-     */    
+     */
     public byte[] getValue()
     {
         byte[] value = new byte[1];
 
 	value[0] = 0;
-	
+
 	if (lowerCheck)
 	    value[0] |= 0x01;
-	
+
 	if (upperCheck)
 	    value[0] |= 0x02;
 
 	return value;
     }
-   
+
   /** Needs upper bound check?
-   */ 
+   */
     public boolean isCheckUpper()
     {
 	return upperCheck;
     }
-   
+
   /** Needs lower bound check?
-   */ 
+   */
     public boolean isCheckLower()
     {
 	return lowerCheck;

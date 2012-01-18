@@ -43,15 +43,15 @@ public class DecrementIncrementStmtCreation extends DepthFirstAdapter {
 	public void caseASTStatementSequenceNode(ASTStatementSequenceNode node) {
 		List<Object> statements = node.getStatements();
 		Iterator<Object> stmtIt = statements.iterator();
-				
+
 		while (stmtIt.hasNext()) {
 			Object temp = stmtIt.next();
 			//System.out.println(temp);
 			AugmentedStmt as = (AugmentedStmt)temp;
 			Stmt s = as.get_Stmt();
-			if (!( s instanceof DefinitionStmt)) 
+			if (!( s instanceof DefinitionStmt))
 				continue;
-			
+
 			// check if its i= i+1
 			Value left = ((DefinitionStmt) s).getLeftOp();
 			Value right = ((DefinitionStmt) s).getRightOp();
@@ -65,7 +65,7 @@ public class DecrementIncrementStmtCreation extends DepthFirstAdapter {
 					continue;
 				}
 				//if they are the same
-					
+
 				// check if op2 is a constant with value 1 or -1
 				if (op2 instanceof IntConstant) {
 					if (((IntConstant) op2).value == 1) {
@@ -78,7 +78,7 @@ public class DecrementIncrementStmtCreation extends DepthFirstAdapter {
 						as.set_Stmt(newStmt);
 					}
 				}
-				
+
 			}
 			else if (right instanceof AddExpr) {
 				Value op1 = ((AddExpr) right).getOp1();
@@ -96,7 +96,7 @@ public class DecrementIncrementStmtCreation extends DepthFirstAdapter {
 						// this is i = i-1
 						DDecrementStmt newStmt = new DDecrementStmt(left, right);
 						as.set_Stmt(newStmt);
-					}					
+					}
 				}
 			}//right expr was addExpr
 		}//going through statements

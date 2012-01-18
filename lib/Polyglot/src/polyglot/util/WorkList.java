@@ -60,7 +60,7 @@ public class WorkList {
    * NoSuchElementException if no such element exists.
    **/
   public Object getWork() {
-    if (size>0) 
+    if (size>0)
       return pending.getFirst();
     else
       throw new java.util.NoSuchElementException("WorkList.getWork");

@@ -59,7 +59,7 @@ public class ClassContextResolver extends ClassResolver {
 	return type;
     }
 
-    private static final Collection TOPICS = 
+    private static final Collection TOPICS =
             CollectionUtil.list(Report.types, Report.resolver);
 
 }

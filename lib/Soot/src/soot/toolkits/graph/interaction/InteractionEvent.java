@@ -21,14 +21,14 @@ package soot.toolkits.graph.interaction;
 
 public class InteractionEvent {
 
-    
+
     private int type;
     private Object info;
 
     public InteractionEvent (int type){
         type(type);
     }
-    
+
     public InteractionEvent (int type, Object info){
         type(type);
         info(info);
@@ -41,7 +41,7 @@ public class InteractionEvent {
     private void info(Object i){
         info = i;
     }
-    
+
     public int type(){
         return type;
     }

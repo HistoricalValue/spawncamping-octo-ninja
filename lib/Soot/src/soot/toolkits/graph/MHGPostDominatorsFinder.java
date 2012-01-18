@@ -33,6 +33,6 @@ public class MHGPostDominatorsFinder extends MHGDominatorsFinder
 	public MHGPostDominatorsFinder(DirectedGraph graph) {
 		super(new InverseGraph(graph));
 	}
-	
-	
+
+
 }

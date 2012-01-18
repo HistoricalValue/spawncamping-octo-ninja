@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ import soot.toolkits.graph.interaction.*;
 /**
  *   Abstract class that provides the fixed point iteration functionality
  *   required by all ForwardFlowAnalyses.
- *  
+ *
  */
 public abstract class ForwardFlowAnalysis<N,A> extends FlowAnalysis<N,A>
 {
@@ -71,7 +71,7 @@ public abstract class ForwardFlowAnalysis<N,A> extends FlowAnalysis<N,A>
         List<N> heads = graph.getHeads();
         int numNodes = graph.size();
         int numComputations = 0;
-        
+
         // Set initial values and nodes to visit.
         {
             Iterator<N> it = graph.iterator();
@@ -91,14 +91,14 @@ public abstract class ForwardFlowAnalysis<N,A> extends FlowAnalysis<N,A>
         // Set initial values for entry points
         {
             Iterator<N> it = heads.iterator();
-            
+
             while (it.hasNext()) {
                 N s = it.next();
                 // this is a forward flow analysis
                 unitToBeforeFlow.put(s, entryInitialFlow());
             }
         }
-        
+
         // Perform fixed point flow analysis
         {
             A previousAfterFlow = newInitialFlow();
@@ -120,7 +120,7 @@ public abstract class ForwardFlowAnalysis<N,A> extends FlowAnalysis<N,A>
                     List<N> preds = graph.getPredsOf(s);
 
                     beforeFlow = unitToBeforeFlow.get(s);
-                    
+
                     if(preds.size() == 1)
                         copy(unitToAfterFlow.get(preds.get(0)), beforeFlow);
                     else if(preds.size() != 0)
@@ -139,12 +139,12 @@ public abstract class ForwardFlowAnalysis<N,A> extends FlowAnalysis<N,A>
                     if(isHead && preds.size() != 0)
                     		mergeInto(s, beforeFlow, entryInitialFlow());
                     	}
-                
+
                 {
                     // Compute afterFlow and store it.
                     afterFlow = unitToAfterFlow.get(s);
                     if (Options.v().interactive_mode()){
-                        
+
                         A savedInfo = newInitialFlow();
                         if (filterUnitToBeforeFlow != null){
                             savedInfo = filterUnitToBeforeFlow.get(s);
@@ -183,20 +183,20 @@ public abstract class ForwardFlowAnalysis<N,A> extends FlowAnalysis<N,A>
                         while(succIt.hasNext())
                         {
                             N succ = succIt.next();
-                            
+
                             changedUnits.add(succ);
                         }
                     }
                 }
             }
-        
-        // G.v().out.println(graph.getBody().getMethod().getSignature() + " numNodes: " + numNodes + 
+
+        // G.v().out.println(graph.getBody().getMethod().getSignature() + " numNodes: " + numNodes +
         //    " numComputations: " + numComputations + " avg: " + Main.truncatedOf((double) numComputations / numNodes, 2));
-        
+
         Timers.v().totalFlowNodes += numNodes;
         Timers.v().totalFlowComputations += numComputations;
     }
-    
+
 	protected Collection<N> constructWorklist(final Map<N, Integer> numbers) {
 		return new TreeSet<N>( new Comparator<N>() {
             public int compare(N o1, N o2) {

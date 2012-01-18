@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -52,7 +52,7 @@ public class BStaticPutInst extends AbstractInst implements StaticPutInst
 
 
 
-    public Object clone() 
+    public Object clone()
     {
         return new  BStaticPutInst(fieldRef);
     }
@@ -63,7 +63,7 @@ public class BStaticPutInst extends AbstractInst implements StaticPutInst
   {
     return AbstractJasminClass.sizeOfType(fieldRef.type());
   }
-    
+
     public int getOutCount()
     {
         return 0;
@@ -76,8 +76,8 @@ public class BStaticPutInst extends AbstractInst implements StaticPutInst
 
     final public String getName() { return "staticput"; }
     final String getParameters()
-    { 
-        return " " + fieldRef.getSignature(); 
+    {
+        return " " + fieldRef.getSignature();
     }
     protected void getParameters(UnitPrinter up) {
         up.literal(" ");
@@ -86,10 +86,10 @@ public class BStaticPutInst extends AbstractInst implements StaticPutInst
 
     public SootFieldRef getFieldRef() { return fieldRef; }
     public SootField getField() { return fieldRef.resolve(); }
-    
+
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseStaticPutInst(this);
-    }   
+    }
     public boolean containsFieldRef() { return true; }
 }

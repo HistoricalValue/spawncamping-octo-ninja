@@ -29,7 +29,7 @@ import java.util.*;
  * @author Ondrej Lhotak
  */
 public class QueueReader<E> implements java.util.Iterator<E>
-{ 
+{
     private E[] q;
     private int index;
     QueueReader( E[] q, int index ) {

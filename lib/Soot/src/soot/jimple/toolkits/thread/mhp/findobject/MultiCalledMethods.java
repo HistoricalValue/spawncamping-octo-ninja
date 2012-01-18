@@ -20,19 +20,19 @@ import soot.jimple.toolkits.thread.mhp.pegcallgraph.PegCallGraph;
 // -Richard L. Halpert, 2006-11-30
 
 public class MultiCalledMethods{
-	
+
 	Set visited = new HashSet();
 	Set<Object> multiCalledMethods = new HashSet<Object>();
-	
+
 	MultiCalledMethods(PegCallGraph pcg, Set<Object> mcm){
 //		System.out.println("==inside MultiCaleedMethods==");
 		//checkScc(pcg);
-		multiCalledMethods = mcm;	
-		propagate(pcg); 
+		multiCalledMethods = mcm;
+		propagate(pcg);
 		finder1(pcg);
 		finder2(pcg);
 //		test();
-		
+
 	}
 	private void propagate(PegCallGraph pcg){
 		/* If a method call inside a loop, this method may be called more than one,
@@ -61,10 +61,10 @@ public class MultiCalledMethods{
 			}
 		}
 	}
-	
+
 	//Use breadth first search to find methods are called more than once in call graph
 	private void finder1(PegCallGraph pcg){
-		Set clinitMethods = pcg.getClinitMethods();    
+		Set clinitMethods = pcg.getClinitMethods();
 		Iterator it = pcg.iterator();
 		while (it.hasNext()){
 			Object head = it.next();
@@ -72,14 +72,14 @@ public class MultiCalledMethods{
 			Set<Object> gray = new HashSet<Object>();
 			LinkedList<Object> queue = new LinkedList<Object>();
 			queue.add(head);
-			
+
 			while (queue.size()>0){
 				Object root = queue.getFirst();
-				
+
 				Iterator succsIt = pcg.getSuccsOf(root).iterator();
 				while (succsIt.hasNext()){
 					Object succ = succsIt.next();
-					
+
 					if (!gray.contains(succ)){
 						gray.add(succ);
 						queue.addLast(succ);
@@ -91,14 +91,14 @@ public class MultiCalledMethods{
 				}
 				queue.remove(root);
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	//Find multi called methods relavant to recusive method invocation
 	private void finder2(PegCallGraph pcg){
-		
+
 		pcg.trim();
 		Set<Object> first = new HashSet<Object>();
 		Set<Object> second = new HashSet<Object>();
@@ -106,16 +106,16 @@ public class MultiCalledMethods{
 		Iterator it = pcg.iterator();
 		while (it.hasNext()){
 			Object s =it.next();
-			
+
 			if (!second.contains(s)){
-				
+
 				visitNode(s, pcg, first, second);
 			}
 		}
-		
-		
+
+
 	}
-	
+
 	private void visitNode(Object node, PegCallGraph pcg, Set<Object> first, Set<Object> second){
 		if (first.contains(node)){
 			second.add(node);
@@ -124,7 +124,7 @@ public class MultiCalledMethods{
 			}
 		}
 		else	first.add(node);
-		
+
 		Iterator it = pcg.getTrimSuccsOf(node).iterator();
 		while (it.hasNext()){
 			Object succ = it.next();
@@ -133,9 +133,9 @@ public class MultiCalledMethods{
 			}
 		}
 	}
-	
+
 	public Set<Object> getMultiCalledMethods(){
 		return multiCalledMethods;
 	}
-	
+
 }

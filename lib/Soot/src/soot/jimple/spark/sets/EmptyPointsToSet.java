@@ -37,7 +37,7 @@ public class EmptyPointsToSet extends PointsToSetInternal {
     }
     /** Set of all possible run-time types of objects in the set. */
     public Set possibleTypes() { return Collections.EMPTY_SET; }
-    /** Adds contents of other into this set, returns true if this set 
+    /** Adds contents of other into this set, returns true if this set
      * changed. */
     public boolean addAll( PointsToSetInternal other,
             PointsToSetInternal exclude ) {
@@ -58,7 +58,7 @@ public class EmptyPointsToSet extends PointsToSetInternal {
 
     public Set possibleStringConstants() { return Collections.EMPTY_SET; }
     public Set possibleClassConstants() { return Collections.EMPTY_SET; }
-    
+
     /**
      * {@inheritDoc}
      */

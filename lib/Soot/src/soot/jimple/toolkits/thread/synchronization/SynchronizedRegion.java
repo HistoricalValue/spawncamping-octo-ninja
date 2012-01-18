@@ -27,7 +27,7 @@ public class SynchronizedRegion
 		this.last = null;
 		this.after = null;
 	}
-	
+
 	public SynchronizedRegion(SynchronizedRegion sr)
 	{
 		this.prepStmt = sr.prepStmt;

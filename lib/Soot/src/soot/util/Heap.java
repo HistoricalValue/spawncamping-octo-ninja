@@ -23,8 +23,8 @@ import java.util.*;
 /** A heap (priority queue) implementation.
  * @author Ondrej Lhotak
  */
-public class Heap 
-{ 
+public class Heap
+{
     public interface Keys {
         public int key(Object o);
     }
@@ -45,7 +45,7 @@ public class Heap
     public boolean add(Object o) {
         if(!contents.add(o)) return false;
     	insert(o);
-    	return true;   
+    	return true;
     }
     private void insert(Object o) {
         size++;

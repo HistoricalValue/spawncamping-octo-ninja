@@ -50,9 +50,9 @@ public class ShimpleBody extends StmtBody
     protected ShimpleOptions options;
 
     protected ShimpleBodyBuilder sbb;
-    
+
     protected boolean isExtendedSSA = false;
-    
+
     /**
      * Construct an empty ShimpleBody associated with m.
      **/
@@ -64,7 +64,7 @@ public class ShimpleBody extends StmtBody
         this.options = new ShimpleOptions(options);
         setSSA(true);
         isExtendedSSA = this.options.extended();
-        
+
         unitChain = new SPatchingChain(this, new HashChain());
         sbb = new ShimpleBodyBuilder(this);
     }
@@ -101,7 +101,7 @@ public class ShimpleBody extends StmtBody
         else
             rebuild(false);
     }
-    
+
     /**
      * Recompute SSA form.
      *
@@ -121,7 +121,7 @@ public class ShimpleBody extends StmtBody
      * <p> If there are Phi nodes already present in the body, it is
      * imperative that we specify this so that the algorithm can
      * eliminate them before rebuilding SSA.
-     * 
+     *
      * <p> The eliminate Phi nodes stage is harmless, but if you
      * *know* that no Phi nodes are present and you wish to avoid the
      * transformations involved in eliminating Phi nodes, use
@@ -133,7 +133,7 @@ public class ShimpleBody extends StmtBody
         sbb.transform();
         setSSA(true);
     }
-    
+
     /**
      * Returns an equivalent unbacked JimpleBody of the current Body
      * by eliminating the Phi nodes.
@@ -183,7 +183,7 @@ public class ShimpleBody extends StmtBody
     {
         sbb.eliminatePiNodes();
     }
-    
+
     public void eliminateNodes()
     {
         sbb.preElimOpt();
@@ -193,7 +193,7 @@ public class ShimpleBody extends StmtBody
         sbb.postElimOpt();
         setSSA(false);
     }
-    
+
 
     /**
      * Returns a copy of the current ShimpleBody.
@@ -235,7 +235,7 @@ public class ShimpleBody extends StmtBody
     {
         return isExtendedSSA;
     }
-    
+
     /**
      * Returns the Shimple options applicable to this body.
      **/

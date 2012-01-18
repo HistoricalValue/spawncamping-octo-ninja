@@ -54,7 +54,7 @@ public class ASTSynchronizedBlockNode extends ASTLabeledNode
     {
 	return body.size();
     }
-    
+
     public Local getLocal() {
         return (Local) localBox.getValue();
     }
@@ -84,7 +84,7 @@ public class ASTSynchronizedBlockNode extends ASTLabeledNode
 
         up.literal( "{" );
         up.newline();
- 
+
         up.incIndent();
         body_toString( up, body );
         up.decIndent();
@@ -106,7 +106,7 @@ public class ASTSynchronizedBlockNode extends ASTLabeledNode
 
 	b.append( "{");
 	b.append( NEWLINE);
- 
+
 	b.append( body_toString( body));
 
 	b.append( "}");

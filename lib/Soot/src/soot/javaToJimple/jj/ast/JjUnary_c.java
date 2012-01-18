@@ -30,7 +30,7 @@ public class JjUnary_c extends Unary_c {
     public JjUnary_c(Position pos, Unary.Operator op, Expr expr){
         super(pos, op, expr);
     }
-    
+
     public Type childExpectedType(Expr child, AscriptionVisitor av){
         TypeSystem ts = av.typeSystem();
 
@@ -60,7 +60,7 @@ public class JjUnary_c extends Unary_c {
         }
 
         return child.type();
-        
+
 
     }
 }

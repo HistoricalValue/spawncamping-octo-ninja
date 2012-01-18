@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -39,7 +39,7 @@ import soot.Singletons;
  * functionality as PseudoTopologicalOrderer; however, this class considers the
  * order of successors. It runs slower but more precise. Currently it was only
  * used by ArrayBoundsCheckerAnalysis to reduce the iteration numbers.
- * 
+ *
  * @see: PseudoTopologicalOrderer
  */
 
@@ -82,7 +82,7 @@ public class SlowPseudoTopologicalOrderer implements Orderer {
 
 	/**
 	 * Orders in pseudo-topological order.
-	 * 
+	 *
 	 * @param g
 	 *            a DirectedGraph instance we want to order the nodes for.
 	 * @return an ordered list of the graph's nodes.
@@ -222,7 +222,7 @@ public class SlowPseudoTopologicalOrderer implements Orderer {
 
 		/**
 		 * Orders in pseudo-topological order.
-		 * 
+		 *
 		 * @param g
 		 *            a DirectedGraph instance we want to order the nodes for.
 		 * @return an ordered list of the graph's nodes.
@@ -319,7 +319,7 @@ public class SlowPseudoTopologicalOrderer implements Orderer {
 
 	/**
 	 * Set the ordering for the orderer.
-	 * 
+	 *
 	 * @param isReverse
 	 *            specify if we want reverse pseudo-topological ordering, or
 	 *            not.
@@ -331,7 +331,7 @@ public class SlowPseudoTopologicalOrderer implements Orderer {
 
 	/**
 	 * Check the ordering for the orderer.
-	 * 
+	 *
 	 * @return true if we have reverse pseudo-topological ordering, false
 	 *         otherwise.
 	 * @deprecated use {@link #newList(DirectedGraph, boolean))} instead

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -55,17 +55,17 @@ public abstract class BDupInst extends AbstractInst implements DupInst
         while(opTypesIt.hasNext()) {
             count += AbstractJasminClass.sizeOfType(opTypesIt.next());
         }
-        
-        
+
+
         return count;
     }
-    
+
     public int getOutCount()
     {
-	    return  getUnderTypes().size() + 2*getOpTypes().size(); 
-    } 
+	    return  getUnderTypes().size() + 2*getOpTypes().size();
+    }
 
-    
+
 
     public int getOutMachineCount()
     {
@@ -77,18 +77,18 @@ public abstract class BDupInst extends AbstractInst implements DupInst
         }
 
         Iterator<Type> opTypesIt = getOpTypes().iterator();
-        while(opTypesIt.hasNext()) {                        
+        while(opTypesIt.hasNext()) {
             count += 2*AbstractJasminClass.sizeOfType(opTypesIt.next());
-        }                
+        }
         return count;
     }
-    
 
-    
+
+
     public void apply(Switch sw)
     {
         throw new RuntimeException();
-    }   
+    }
 
 }
 

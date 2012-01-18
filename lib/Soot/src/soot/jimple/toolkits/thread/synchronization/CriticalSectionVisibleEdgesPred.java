@@ -29,17 +29,17 @@ public class CriticalSectionVisibleEdgesPred implements EdgePredicate
 {
 	Collection<CriticalSection> tns;
 	CriticalSection exemptTn;
-	
+
 	public CriticalSectionVisibleEdgesPred(Collection<CriticalSection> tns)
 	{
 		this.tns = tns;
 	}
-	
+
 	public void setExemptTransaction(CriticalSection exemptTn)
 	{
 		this.exemptTn = exemptTn;
 	}
-	
+
     /** Returns true iff the edge e is wanted. */
     public boolean want( Edge e )
     {
@@ -47,7 +47,7 @@ public class CriticalSectionVisibleEdgesPred implements EdgePredicate
         String tgtClass = e.tgt().getDeclaringClass().toString();
         String srcMethod = e.src().toString();
         String srcClass = e.src().getDeclaringClass().toString();
-        
+
         // Remove Deep Library Calls
 	    if(tgtClass.startsWith("sun."))
 	    	return false;
@@ -59,7 +59,7 @@ public class CriticalSectionVisibleEdgesPred implements EdgePredicate
     		return false;
 
     	// Remove calls to equals in the library
-    	if((tgtClass.startsWith("java.") || tgtClass.startsWith("javax.")) && 
+    	if((tgtClass.startsWith("java.") || tgtClass.startsWith("javax.")) &&
     		e.tgt().toString().endsWith("boolean equals(java.lang.Object)>"))
     		return false;
 
@@ -67,18 +67,18 @@ public class CriticalSectionVisibleEdgesPred implements EdgePredicate
 		// these calls will be treated as a non-transitive RW to the receiving object
 		if(tgtClass.startsWith("java.util") || srcClass.startsWith("java.util"))
 			return false;
-			
+
 		// Remove anything in java.lang
 		// these calls will be treated as a non-transitive RW to the receiving object
 		if(tgtClass.startsWith("java.lang") || srcClass.startsWith("java.lang"))
 			return false;
-			
+
 		if(tgtClass.startsWith("java"))
 			return false; // filter out the rest!
-			
+
 		if(e.tgt().isSynchronized())
 			return false;
-    		
+
 		// I THINK THIS CHUNK IS JUST NOT NEEDED... TODO: REMOVE IT
 		// Remove Calls from within a transaction
 		// one transaction is exempt - so that we may analyze calls within it
@@ -94,7 +94,7 @@ public class CriticalSectionVisibleEdgesPred implements EdgePredicate
 				}
 			}
 		}
-		
+
 		return true;
 	}
 }

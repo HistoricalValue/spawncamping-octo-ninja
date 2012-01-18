@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,7 +38,7 @@ import java.util.*;
 
 public class JasminClass extends AbstractJasminClass
 {
-    
+
     public JasminClass(SootClass sootClass)
     {
         super(sootClass);
@@ -47,34 +47,34 @@ public class JasminClass extends AbstractJasminClass
     protected void assignColorsToLocals(Body body)
     {
         super.assignColorsToLocals(body);
-        
+
         if(Options.v().time())
             Timers.v().packTimer.end();
-                    
+
     }
 
     protected void emitMethodBody(SootMethod method)
     {
         if(Options.v().time())
             Timers.v().buildJasminTimer.end();
-        
+
         Body activeBody = method.getActiveBody();
-        
+
         if(!(activeBody instanceof BafBody))
             throw new RuntimeException("method: " + method.getName() + " has an invalid active body!");
-        
+
         BafBody body = (BafBody) activeBody;
-        
+
         if(body == null)
             throw new RuntimeException("method: " + method.getName() + " has no active body!");
-            
+
         if(Options.v().time())
             Timers.v().buildJasminTimer.start();
-        
+
         Chain instList = body.getUnits();
 
         int stackLimitIndex = -1;
-        
+
 
         subroutineToReturnAddressSlot = new HashMap<Unit, Integer>(10, 0.7f);
 
@@ -101,7 +101,7 @@ public class JasminClass extends AbstractJasminClass
 
 
         // Emit the exceptions, recording the Units at the beginning
-	// of handlers so that later on we can recognize blocks that 
+	// of handlers so that later on we can recognize blocks that
 	// begin with an exception on the stack.
 	Set<Unit> handlerUnits = new ArraySet(body.getTraps().size());
         {
@@ -127,11 +127,11 @@ public class JasminClass extends AbstractJasminClass
             int thisSlot = 0;
             Set<Local> assignedLocals = new HashSet<Local>();
             Map groupColorPairToSlot = new HashMap(body.getLocalCount() * 2 + 1, 0.7f);
-            
+
             localToSlot = new HashMap<Local, Integer>(body.getLocalCount() * 2 + 1, 0.7f);
 
             //assignColorsToLocals(body);
-            
+
             // Determine slots for 'this' and parameters
             {
                 List paramTypes = method.getParameterTypes();
@@ -163,7 +163,7 @@ public class JasminClass extends AbstractJasminClass
                         IdentityRef identity = (IdentityRef) ((IdentityInst) s).getRightOp();
 
                         int slot = 0;
-                                                
+
                         if(identity instanceof ThisRef)
                         {
                             if(method.isStatic())
@@ -177,10 +177,10 @@ public class JasminClass extends AbstractJasminClass
                             // Exception ref.  Skip over this
                             continue;
                         }
-                        
+
                         localToSlot.put(l, new Integer(slot));
                         assignedLocals.add(l);
-                        
+
                     }
                 }
             }
@@ -206,7 +206,7 @@ public class JasminClass extends AbstractJasminClass
                   {
                     emit("    .limit stack ?");
                     stackLimitIndex = code.size() - 1;
-                    
+
                     emit("    .limit locals " + localCount);
                   }
             }
@@ -217,7 +217,7 @@ public class JasminClass extends AbstractJasminClass
             Iterator codeIt = instList.iterator();
 
             isEmittingMethodCode = true;
-            maxStackHeight = 0; 
+            maxStackHeight = 0;
             isNextGotoAJsr = false;
 
             while(codeIt.hasNext())
@@ -234,20 +234,20 @@ public class JasminClass extends AbstractJasminClass
             }
 
             isEmittingMethodCode = false;
-            
+
             // calculate max stack height
             {
                 maxStackHeight = 0;
                 if(activeBody.getUnits().size() !=  0 ) {
                     BlockGraph blockGraph = new BriefBlockGraph(activeBody);
 
-                
+
                     List blocks = blockGraph.getBlocks();
-                
+
 
                     if(blocks.size() != 0) {
                         // set the stack height of the entry points
-                        List entryPoints = ((DirectedGraph)blockGraph).getHeads();                
+                        List entryPoints = ((DirectedGraph)blockGraph).getHeads();
                         Iterator entryIt = entryPoints.iterator();
                         while(entryIt.hasNext()) {
                             Block entryBlock = (Block) entryIt.next();
@@ -256,7 +256,7 @@ public class JasminClass extends AbstractJasminClass
                                 initialHeight = new Integer(1);
                             } else {
                                 initialHeight = new Integer(0);
-                            }                                                
+                            }
                             if (blockToStackHeight == null){
                                 blockToStackHeight = new HashMap<Block, Integer>();
                             }
@@ -264,20 +264,20 @@ public class JasminClass extends AbstractJasminClass
                             if (blockToLogicalStackHeight == null){
                                 blockToLogicalStackHeight = new HashMap<Block, Integer>();
                             }
-                            blockToLogicalStackHeight.put(entryBlock, initialHeight); 
-                        }                
-                                    
-                        // dfs the block graph using the blocks in the entryPoints list  as roots 
+                            blockToLogicalStackHeight.put(entryBlock, initialHeight);
+                        }
+
+                        // dfs the block graph using the blocks in the entryPoints list  as roots
                         entryIt = entryPoints.iterator();
                         while(entryIt.hasNext()) {
                             Block nextBlock = (Block) entryIt.next();
                             calculateStackHeight(nextBlock);
                             calculateLogicalStackHeightCheck(nextBlock);
-                        }                
+                        }
                     }
                 }
             }
-            
+
             if (!Modifier.isNative(method.getModifiers())
                 && !Modifier.isAbstract(method.getModifiers()))
                 code.set(stackLimitIndex, "    .limit stack " + maxStackHeight);
@@ -290,7 +290,7 @@ public class JasminClass extends AbstractJasminClass
 		Tag t = (Tag) it.next();
 		if(t instanceof JasminAttribute) {
 		    emit(".code_attribute " + t.getName() +" \"" + ((JasminAttribute) t).getJasminValue(unitToLabel) +"\"");
-		}		
+		}
 	    }
 	}
     }
@@ -374,12 +374,12 @@ public class JasminClass extends AbstractJasminClass
 
             public void caseNopInst(NopInst i) { emit ("nop"); }
 
-            public void caseEnterMonitorInst(EnterMonitorInst i) 
-            { 
-                emit ("monitorenter"); 
+            public void caseEnterMonitorInst(EnterMonitorInst i)
+            {
+                emit ("monitorenter");
             }
-            
-            public void casePopInst(PopInst i) 
+
+            public void casePopInst(PopInst i)
                 {
                     if(i.getWordCount() == 2) {
                         emit("pop2");
@@ -387,20 +387,20 @@ public class JasminClass extends AbstractJasminClass
                     else
                         emit("pop");
                 }
-                    
 
-            public void caseExitMonitorInst(ExitMonitorInst i) 
-            { 
-                emit ("monitorexit"); 
+
+            public void caseExitMonitorInst(ExitMonitorInst i)
+            {
+                emit ("monitorexit");
             }
 
             public void caseGotoInst(GotoInst i)
-            { 
+            {
                 emit("goto " + unitToLabel.get(i.getTarget()));
             }
-            
+
             public void caseJSRInst(JSRInst i)
-            { 
+            {
                 emit("jsr " + unitToLabel.get(i.getTarget()));
             }
 
@@ -413,10 +413,10 @@ public class JasminClass extends AbstractJasminClass
                         emit("iconst_m1");
                     else if(v.value >= 0 && v.value <= 5)
                         emit("iconst_" + v.value);
-                    else if(v.value >= Byte.MIN_VALUE && 
+                    else if(v.value >= Byte.MIN_VALUE &&
                             v.value <= Byte.MAX_VALUE)
                         emit("bipush " + v.value);
-                    else if(v.value >= Short.MIN_VALUE && 
+                    else if(v.value >= Short.MIN_VALUE &&
                             v.value <= Short.MAX_VALUE)
                         emit("sipush " + v.value);
                     else
@@ -440,16 +440,16 @@ public class JasminClass extends AbstractJasminClass
                         emit("dconst_1");
                     else {
                         String s = v.toString();
-                        
+
                         if(s.equals("#Infinity"))
                             s="+DoubleInfinity";
-                        
+
                         if(s.equals("#-Infinity"))
                             s="-DoubleInfinity";
-                        
+
                         if(s.equals("#NaN"))
                             s="+DoubleNaN";
-                        
+
                         emit("ldc2_w " + s);
                     }
                 }
@@ -464,15 +464,15 @@ public class JasminClass extends AbstractJasminClass
                         emit("fconst_2");
                     else {
                         String s = v.toString();
-                        
+
                         if(s.equals("#InfinityF"))
                             s="+FloatInfinity";
                         if(s.equals("#-InfinityF"))
                             s="-FloatInfinity";
-                        
+
                         if(s.equals("#NaNF"))
                             s="+FloatNaN";
-                        
+
                         emit("ldc " + s);
                     }
                 }
@@ -508,7 +508,7 @@ public class JasminClass extends AbstractJasminClass
 
             public void caseStoreInst(StoreInst i)
             {
-                    final int slot = 
+                    final int slot =
                         localToSlot.get(i.getLocal()).intValue();
 
                     i.getOpType().apply(new TypeSwitch()
@@ -614,10 +614,10 @@ public class JasminClass extends AbstractJasminClass
                             else
                                 emit("astore " + slot);
                         }
-                        
+
                         public void defaultCase(Type t)
                         {
-                            throw new RuntimeException("Invalid local type:" 
+                            throw new RuntimeException("Invalid local type:"
                                                        + t);
                         }
                     });
@@ -625,7 +625,7 @@ public class JasminClass extends AbstractJasminClass
 
             public void caseLoadInst(LoadInst i)
             {
-                final int slot = 
+                final int slot =
                     localToSlot.get(i.getLocal()).intValue();
 
                 i.getOpType().apply(new TypeSwitch()
@@ -637,10 +637,10 @@ public class JasminClass extends AbstractJasminClass
                         else
                             emit("aload " + slot);
                     }
-            
+
                     public void defaultCase(Type t)
                     {
-                        throw new 
+                        throw new
                             RuntimeException("invalid local type to load" + t);
                     }
 
@@ -659,7 +659,7 @@ public class JasminClass extends AbstractJasminClass
                         else
                             emit("fload " + slot);
                     }
-            
+
                     public void caseIntType(IntType t)
                     {
                         if(slot >= 0 && slot <= 3)
@@ -784,7 +784,7 @@ public class JasminClass extends AbstractJasminClass
                     {
                         throw new RuntimeException("Invalid type: " + t);
                     }});
-                    
+
                 }
 
             public void caseArrayReadInst(ArrayReadInst i)
@@ -898,70 +898,70 @@ public class JasminClass extends AbstractJasminClass
                 {
                     public void caseIntType(IntType t)
                     {
-                        emit("if_icmpeq " + 
+                        emit("if_icmpeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseBooleanType(BooleanType t)
                     {
-                        emit("if_icmpeq " + 
+                        emit("if_icmpeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseShortType(ShortType t)
                     {
-                        emit("if_icmpeq " + 
+                        emit("if_icmpeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseCharType(CharType t)
                     {
-                        emit("if_icmpeq " + 
+                        emit("if_icmpeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseByteType(ByteType t)
                     {
-                        emit("if_icmpeq " + 
+                        emit("if_icmpeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseDoubleType(DoubleType t)
                     {
                         emit("dcmpg");
-                        emit("ifeq " + 
+                        emit("ifeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseLongType(LongType t)
                     {
                         emit("lcmp");
-                        emit("ifeq " + 
+                        emit("ifeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseFloatType(FloatType t)
                     {
                         emit("fcmpg");
-                        emit("ifeq " + 
+                        emit("ifeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseArrayType(ArrayType t)
                     {
-                        emit("if_acmpeq " + 
+                        emit("if_acmpeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseRefType(RefType t)
                     {
-                        emit("if_acmpeq " + 
+                        emit("if_acmpeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseNullType(NullType t)
                     {
-                        emit("if_acmpeq " + 
+                        emit("if_acmpeq " +
                              unitToLabel.get(i.getTarget()));
                     }
 
@@ -978,70 +978,70 @@ public class JasminClass extends AbstractJasminClass
                 {
                     public void caseIntType(IntType t)
                     {
-                        emit("if_icmpne " + 
+                        emit("if_icmpne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseBooleanType(BooleanType t)
                     {
-                        emit("if_icmpne " + 
+                        emit("if_icmpne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseShortType(ShortType t)
                     {
-                        emit("if_icmpne " + 
+                        emit("if_icmpne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseCharType(CharType t)
                     {
-                        emit("if_icmpne " + 
+                        emit("if_icmpne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseByteType(ByteType t)
                     {
-                        emit("if_icmpne " + 
+                        emit("if_icmpne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseDoubleType(DoubleType t)
                     {
                         emit("dcmpg");
-                        emit("ifne " + 
+                        emit("ifne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseLongType(LongType t)
                     {
                         emit("lcmp");
-                        emit("ifne " + 
+                        emit("ifne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseFloatType(FloatType t)
                     {
                         emit("fcmpg");
-                        emit("ifne " + 
+                        emit("ifne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseArrayType(ArrayType t)
                     {
-                        emit("if_acmpne " + 
+                        emit("if_acmpne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseRefType(RefType t)
                     {
-                        emit("if_acmpne " + 
+                        emit("if_acmpne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseNullType(NullType t)
                     {
-                        emit("if_acmpne " + 
+                        emit("if_acmpne " +
                              unitToLabel.get(i.getTarget()));
                     }
 
@@ -1058,70 +1058,70 @@ public class JasminClass extends AbstractJasminClass
                 {
                     public void caseIntType(IntType t)
                     {
-                        emit("if_icmpgt " + 
+                        emit("if_icmpgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseBooleanType(BooleanType t)
                     {
-                        emit("if_icmpgt " + 
+                        emit("if_icmpgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseShortType(ShortType t)
                     {
-                        emit("if_icmpgt " + 
+                        emit("if_icmpgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseCharType(CharType t)
                     {
-                        emit("if_icmpgt " + 
+                        emit("if_icmpgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseByteType(ByteType t)
                     {
-                        emit("if_icmpgt " + 
+                        emit("if_icmpgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseDoubleType(DoubleType t)
                     {
                         emit("dcmpg");
-                        emit("ifgt " + 
+                        emit("ifgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseLongType(LongType t)
                     {
                         emit("lcmp");
-                        emit("ifgt " + 
+                        emit("ifgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseFloatType(FloatType t)
                     {
                         emit("fcmpg");
-                        emit("ifgt " + 
+                        emit("ifgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseArrayType(ArrayType t)
                     {
-                        emit("if_acmpgt " + 
+                        emit("if_acmpgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseRefType(RefType t)
                     {
-                        emit("if_acmpgt " + 
+                        emit("if_acmpgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseNullType(NullType t)
                     {
-                        emit("if_acmpgt " + 
+                        emit("if_acmpgt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
@@ -1138,70 +1138,70 @@ public class JasminClass extends AbstractJasminClass
                 {
                     public void caseIntType(IntType t)
                     {
-                        emit("if_icmpge " + 
+                        emit("if_icmpge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseBooleanType(BooleanType t)
                     {
-                        emit("if_icmpge " + 
+                        emit("if_icmpge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseShortType(ShortType t)
                     {
-                        emit("if_icmpge " + 
+                        emit("if_icmpge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseCharType(CharType t)
                     {
-                        emit("if_icmpge " + 
+                        emit("if_icmpge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseByteType(ByteType t)
                     {
-                        emit("if_icmpge " + 
+                        emit("if_icmpge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseDoubleType(DoubleType t)
                     {
                         emit("dcmpg");
-                        emit("ifge " + 
+                        emit("ifge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseLongType(LongType t)
                     {
                         emit("lcmp");
-                        emit("ifge " + 
+                        emit("ifge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseFloatType(FloatType t)
                     {
                         emit("fcmpg");
-                        emit("ifge " + 
+                        emit("ifge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseArrayType(ArrayType t)
                     {
-                        emit("if_acmpge " + 
+                        emit("if_acmpge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseRefType(RefType t)
                     {
-                        emit("if_acmpge " + 
+                        emit("if_acmpge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseNullType(NullType t)
                     {
-                        emit("if_acmpge " + 
+                        emit("if_acmpge " +
                              unitToLabel.get(i.getTarget()));
                     }
 
@@ -1218,70 +1218,70 @@ public class JasminClass extends AbstractJasminClass
                 {
                     public void caseIntType(IntType t)
                     {
-                        emit("if_icmplt " + 
+                        emit("if_icmplt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseBooleanType(BooleanType t)
                     {
-                        emit("if_icmplt " + 
+                        emit("if_icmplt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseShortType(ShortType t)
                     {
-                        emit("if_icmplt " + 
+                        emit("if_icmplt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseCharType(CharType t)
                     {
-                        emit("if_icmplt " + 
+                        emit("if_icmplt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseByteType(ByteType t)
                     {
-                        emit("if_icmplt " + 
+                        emit("if_icmplt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseDoubleType(DoubleType t)
                     {
                         emit("dcmpg");
-                        emit("iflt " + 
+                        emit("iflt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseLongType(LongType t)
                     {
                         emit("lcmp");
-                        emit("iflt " + 
+                        emit("iflt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseFloatType(FloatType t)
                     {
                         emit("fcmpg");
-                        emit("iflt " + 
+                        emit("iflt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseArrayType(ArrayType t)
                     {
-                        emit("if_acmplt " + 
+                        emit("if_acmplt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseRefType(RefType t)
                     {
-                        emit("if_acmplt " + 
+                        emit("if_acmplt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseNullType(NullType t)
                     {
-                        emit("if_acmplt " + 
+                        emit("if_acmplt " +
                              unitToLabel.get(i.getTarget()));
                     }
 
@@ -1298,70 +1298,70 @@ public class JasminClass extends AbstractJasminClass
                 {
                     public void caseIntType(IntType t)
                     {
-                        emit("if_icmple " + 
+                        emit("if_icmple " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseBooleanType(BooleanType t)
                     {
-                        emit("if_icmple " + 
+                        emit("if_icmple " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseShortType(ShortType t)
                     {
-                        emit("if_icmple " + 
+                        emit("if_icmple " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseCharType(CharType t)
                     {
-                        emit("if_icmple " + 
+                        emit("if_icmple " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseByteType(ByteType t)
                     {
-                        emit("if_icmple " + 
+                        emit("if_icmple " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseDoubleType(DoubleType t)
                     {
                         emit("dcmpg");
-                        emit("ifle " + 
+                        emit("ifle " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseLongType(LongType t)
                     {
                         emit("lcmp");
-                        emit("ifle " + 
+                        emit("ifle " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseFloatType(FloatType t)
                     {
                         emit("fcmpg");
-                        emit("ifle " + 
+                        emit("ifle " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseArrayType(ArrayType t)
                     {
-                        emit("if_acmple " + 
+                        emit("if_acmple " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseRefType(RefType t)
                     {
-                        emit("if_acmple " + 
+                        emit("if_acmple " +
                              unitToLabel.get(i.getTarget()));
                     }
 
                     public void caseNullType(NullType t)
                     {
-                        emit("if_acmple " + 
+                        emit("if_acmple " +
                              unitToLabel.get(i.getTarget()));
                     }
 
@@ -1375,33 +1375,33 @@ public class JasminClass extends AbstractJasminClass
             public void caseStaticGetInst(StaticGetInst i)
             {
                 SootFieldRef field = i.getFieldRef();
-                emit("getstatic " + 
+                emit("getstatic " +
                      slashify(field.declaringClass().getName()) + "/" +
-                     field.name() + " " + 
+                     field.name() + " " +
                      jasminDescriptorOf(field.type()));
             }
 
             public void caseStaticPutInst(StaticPutInst i)
             {
-                emit("putstatic " + 
-                     slashify(i.getFieldRef().declaringClass().getName()) + 
-                     "/" + i.getFieldRef().name() + " " + 
+                emit("putstatic " +
+                     slashify(i.getFieldRef().declaringClass().getName()) +
+                     "/" + i.getFieldRef().name() + " " +
                      jasminDescriptorOf(i.getFieldRef().type()));
             }
 
             public void caseFieldGetInst(FieldGetInst i)
             {
-                emit("getfield " + 
-                     slashify(i.getFieldRef().declaringClass().getName()) + 
-                     "/" + i.getFieldRef().name() + " " + 
+                emit("getfield " +
+                     slashify(i.getFieldRef().declaringClass().getName()) +
+                     "/" + i.getFieldRef().name() + " " +
                      jasminDescriptorOf(i.getFieldRef().type()));
             }
 
             public void caseFieldPutInst(FieldPutInst i)
             {
-                emit("putfield " + 
-                     slashify(i.getFieldRef().declaringClass().getName()) + 
-                     "/" + i.getFieldRef().name() + " " + 
+                emit("putfield " +
+                     slashify(i.getFieldRef().declaringClass().getName()) +
+                     "/" + i.getFieldRef().name() + " " +
                      jasminDescriptorOf(i.getFieldRef().type()));
             }
 
@@ -1442,7 +1442,7 @@ public class JasminClass extends AbstractJasminClass
                 emit("invokestatic " + slashify(m.declaringClass().getName()) + "/" +
                     m.name() + jasminDescriptorOf(m));
             }
-            
+
             public void caseVirtualInvokeInst(VirtualInvokeInst i)
             {
                 SootMethodRef m = i.getMethodRef();
@@ -1589,7 +1589,7 @@ public class JasminClass extends AbstractJasminClass
             {
                 if(((ValueBox) i.getUseBoxes().get(0)).getValue() != ((ValueBox) i.getDefBoxes().get(0)).getValue())
                     throw new RuntimeException("iinc def and use boxes don't match");
-                    
+
                 emit("iinc " + localToSlot.get(i.getLocal()) + " " + i.getConstant());
             }
 
@@ -1615,7 +1615,7 @@ public class JasminClass extends AbstractJasminClass
 
             public void caseNewMultiArrayInst(NewMultiArrayInst i)
             {
-                emit("multianewarray " + jasminDescriptorOf(i.getBaseType()) + " " + 
+                emit("multianewarray " + jasminDescriptorOf(i.getBaseType()) + " " +
                      i.getDimensionCount());
             }
 
@@ -1627,7 +1627,7 @@ public class JasminClass extends AbstractJasminClass
                 List targets = i.getTargets();
 
                 for(int j = 0; j < lookupValues.size(); j++)
-                    emit("  " + lookupValues.get(j) + " : " + 
+                    emit("  " + lookupValues.get(j) + " : " +
                          unitToLabel.get(targets.get(j)));
 
                 emit("  default : " + unitToLabel.get(i.getDefaultTarget()));
@@ -1650,7 +1650,7 @@ public class JasminClass extends AbstractJasminClass
                 return t instanceof LongType || t instanceof DoubleType
                     || t instanceof DoubleWordType;
             }
-            
+
             public void caseDup1Inst(Dup1Inst i)
             {
                 Type firstOpType = i.getOp1Type();
@@ -1670,12 +1670,12 @@ public class JasminClass extends AbstractJasminClass
                     emit("dup2"); // (form 2)
                     if(isDwordType(secondOpType)) {
                         emit("dup2"); // (form 2 -- by simulation)
-                    } else 
+                    } else
                         emit("dup"); // also a simulation
                 } else if(isDwordType(secondOpType)) {
                     if(isDwordType(firstOpType)) {
                         emit("dup2"); // (form 2)
-                    } else 
+                    } else
                         emit("dup");
                     emit("dup2"); // (form 2 -- complete the simulation)
                 } else {
@@ -1687,18 +1687,18 @@ public class JasminClass extends AbstractJasminClass
             {
                 Type opType = i.getOp1Type();
                 Type underType = i.getUnder1Type();
-                
+
                 if(isDwordType(opType)) {
                     if(isDwordType(underType)) {
                         emit("dup2_x2"); // (form 4)
-                    } else 
+                    } else
                         emit("dup2_x1"); // (form 2)
                 } else {
-                    if(isDwordType(underType)) 
+                    if(isDwordType(underType))
                         emit("dup_x2");  // (form 2)
-                    else 
+                    else
                         emit("dup_x1");  // (only one form)
-                }        
+                }
             }
 
             public void caseDup1_x2Inst(Dup1_x2Inst i)
@@ -1710,11 +1710,11 @@ public class JasminClass extends AbstractJasminClass
 //              07-20-2006 Michael Batchelder
                 // NOW handling all types of dup1_x2
                 /* From VM Spec:    cat1 = category 1 (word type)       cat2 = category 2 (doubleword)
-        
+
                   Form 1: [..., cat1_value3, cat1_value2, cat1_value1]->[..., cat1_value2, cat1_value1, cat1_value3, cat1_value2, cat1_value1]
                   Form 2: [..., cat1_value2, cat2_value1]->[..., cat2_value1, cat1_value2, cat2_value1]
-                */ 
-                
+                */
+
                 if (isDwordType(opType)) {
                     if (!isDwordType(under1Type) && !isDwordType(under2Type))
                         emit("dup2_x2"); // (form 2)
@@ -1737,10 +1737,10 @@ public class JasminClass extends AbstractJasminClass
                 // 07-20-2006 Michael Batchelder
                 // NOW handling all types of dup2_x1
                 /* From VM Spec:    cat1 = category 1 (word type)       cat2 = category 2 (doubleword)
-        
+
                   Form 1: [..., cat1_value3, cat1_value2, cat1_value1]->[..., cat1_value2, cat1_value1, cat1_value3, cat1_value2, cat1_value1]
                   Form 2: [..., cat1_value2, cat2_value1]->[..., cat2_value1, cat1_value2, cat2_value1]
-                */ 
+                */
                 if (isDwordType(under1Type)) {
                     if (!isDwordType(op1Type) && !isDwordType(op2Type))
                         throw new RuntimeException("magic not implemented yet");
@@ -1748,13 +1748,13 @@ public class JasminClass extends AbstractJasminClass
                         emit("dup2_x2"); // (form 3)
                 } else {
                     if ((isDwordType(op1Type) && op2Type != null) || isDwordType(op2Type))
-                        throw new RuntimeException("magic not implemented yet");                    
+                        throw new RuntimeException("magic not implemented yet");
                 }
 
                 emit("dup2_x1"); // (form 1)
             }
 
-           
+
 
             public void caseDup2_x2Inst(Dup2_x2Inst i)
             {
@@ -1765,7 +1765,7 @@ public class JasminClass extends AbstractJasminClass
 
                 // 07-20-2006 Michael Batchelder
                 // NOW handling all types of dup2_x2
-                
+
                 /* From VM Spec:    cat1 = category 1 (word type)       cat2 = category 2 (doubleword)
                   Form 1: [..., cat1_value4, cat1_value3, cat1_value2, cat1_value1]->[..., cat1_value2, cat1_value1, cat1_value4, cat1_value3, cat1_value2, cat1_value1]
                   Form 2: [..., cat1_value3, cat1_value2, cat2_value1]->[ ..., cat2_value1, cat1_value3, cat1_value2, cat2_value1]
@@ -1775,11 +1775,11 @@ public class JasminClass extends AbstractJasminClass
                 boolean malformed = true;
                 if (isDwordType(op1Type)) {
                   if (op2Type == null && under1Type != null)
-                    if( (under2Type == null && isDwordType(under1Type)) 
+                    if( (under2Type == null && isDwordType(under1Type))
                         || (!isDwordType(under1Type) && under2Type != null && !isDwordType(under2Type)))
                       malformed = false;
                 } else if (op1Type != null && op2Type != null && !isDwordType(op2Type)) {
-                  if ( (under2Type == null && isDwordType(under1Type)) 
+                  if ( (under2Type == null && isDwordType(under1Type))
                       || (under1Type !=null && !isDwordType(under1Type) && under2Type !=null && !isDwordType(under2Type)))
                     malformed = false;
                 }
@@ -1798,10 +1798,10 @@ public class JasminClass extends AbstractJasminClass
 
         });
     }
-   
 
 
- 
+
+
     private void calculateStackHeight(Block aBlock)
     {
         Iterator it = aBlock.iterator();
@@ -1809,30 +1809,30 @@ public class JasminClass extends AbstractJasminClass
         if( blockHeight > maxStackHeight) {
             maxStackHeight = blockHeight;
         }
-        
+
         while(it.hasNext()) {
           Inst nInst = (Inst) it.next();
-          
+
           blockHeight -= nInst.getInMachineCount();
-	  
-          if(blockHeight < 0 ){            
+
+          if(blockHeight < 0 ){
 	      throw new RuntimeException("Negative Stack height has been attained in :"+ aBlock.getBody().getMethod().getSignature() +" \n" +
                                        "StackHeight: " + blockHeight + "\n" +
                                        "At instruction:" + nInst + "\n" +
                                        "Block:\n" + aBlock +
-                                       "\n\nMethod: " + aBlock.getBody().getMethod().getName() 
-                                       + "\n" +  aBlock.getBody().getMethod()                                       
+                                       "\n\nMethod: " + aBlock.getBody().getMethod().getName()
+                                       + "\n" +  aBlock.getBody().getMethod()
                                        );
           }
-          
+
           blockHeight += nInst.getOutMachineCount();
           if( blockHeight > maxStackHeight) {
             maxStackHeight = blockHeight;
           }
-          //G.v().out.println(">>> " + nInst + " " + blockHeight);            
+          //G.v().out.println(">>> " + nInst + " " + blockHeight);
         }
-        
-        
+
+
         Iterator succs = aBlock.getSuccs().iterator();
         while(succs.hasNext()) {
             Block b = (Block) succs.next();
@@ -1841,12 +1841,12 @@ public class JasminClass extends AbstractJasminClass
                 if(i.intValue() != blockHeight) {
                     throw new RuntimeException(aBlock.getBody().getMethod().getSignature() + ": incoherent stack height at block merge point " + b + aBlock + "\ncomputed blockHeight == " + blockHeight + " recorded blockHeight = " + i.intValue());
                 }
-                
+
             } else {
                 blockToStackHeight.put(b, new Integer(blockHeight));
                 calculateStackHeight(b);
-            }            
-        }        
+            }
+        }
     }
 
 
@@ -1854,28 +1854,28 @@ public class JasminClass extends AbstractJasminClass
     {
         Iterator it = aBlock.iterator();
         int blockHeight =  blockToLogicalStackHeight.get(aBlock).intValue();
-        
+
         while(it.hasNext()) {
             Inst nInst = (Inst) it.next();
-          
+
             blockHeight -= nInst.getInCount();
 
-            if(blockHeight < 0 ){            
+            if(blockHeight < 0 ){
                 throw new RuntimeException("Negative Stack Logical height has been attained: \n" +
-                                           "StackHeight: " + blockHeight + 
+                                           "StackHeight: " + blockHeight +
                                            "\nAt instruction:" + nInst +
                                            "\nBlock:\n" + aBlock +
-                                           "\n\nMethod: " + aBlock.getBody().getMethod().getName() 
-                                           + "\n" +  aBlock.getBody().getMethod()                                       
+                                           "\n\nMethod: " + aBlock.getBody().getMethod().getName()
+                                           + "\n" +  aBlock.getBody().getMethod()
                                            );
-            }          
+            }
 
             blockHeight += nInst.getOutCount();
-            
-            //G.v().out.println(">>> " + nInst + " " + blockHeight);            
+
+            //G.v().out.println(">>> " + nInst + " " + blockHeight);
         }
-        
-        
+
+
         Iterator succs = aBlock.getSuccs().iterator();
         while(succs.hasNext()) {
             Block b = (Block) succs.next();
@@ -1884,12 +1884,12 @@ public class JasminClass extends AbstractJasminClass
                 if(i.intValue() != blockHeight) {
                     throw new RuntimeException("incoherent logical stack height at block merge point " + b + aBlock);
                 }
-                
+
             } else {
                 blockToLogicalStackHeight.put(b, new Integer(blockHeight));
                 calculateLogicalStackHeightCheck(b);
-            }            
-        }        
+            }
+        }
     }
 
 
@@ -1907,13 +1907,13 @@ class GroupIntPair
 {
     Object group;
     int x;
-    
+
     GroupIntPair(Object group, int x)
     {
         this.group = group;
         this.x = x;
     }
-    
+
     public boolean equals(Object other)
     {
         if(other instanceof GroupIntPair)
@@ -1922,11 +1922,11 @@ class GroupIntPair
         else
             return false;
     }
-    
+
     public int hashCode()
     {
         return group.hashCode() + 1013 * x;
     }
-    
-    
+
+
 }

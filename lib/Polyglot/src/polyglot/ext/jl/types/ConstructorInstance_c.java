@@ -59,7 +59,7 @@ public class ConstructorInstance_c extends ProcedureInstance_c
     public String toString() {
 	return designator() + " " + flags.translate() + signature();
     }
-    
+
     public String signature() {
         return container + "(" + TypeSystem_c.listToString(formalTypes) + ")";
     }

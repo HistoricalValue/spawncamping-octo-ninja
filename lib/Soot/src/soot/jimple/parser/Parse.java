@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -37,10 +37,10 @@ import java.util.*;
 import soot.*;
 
 /** Provides a test-driver for the Jimple parser. */
-public class Parse 
+public class Parse
 {
     private static final String EXT = ".jimple";
-    
+
     private static final String USAGE = "usage: java Parse [options] " +
         "jimple_file [jimple_file ...]";
 
@@ -51,14 +51,14 @@ public class Parse
       argument the SootClass you want fill it's method bodies.
       If you want to create a SootClass for the inputStream set the 2nd arg to null.
     */
-    static public SootClass parse(InputStream istream, SootClass sc) 
-    {  
+    static public SootClass parse(InputStream istream, SootClass sc)
+    {
         Start tree = null;
-        
-        Parser p = 
+
+        Parser p =
                 new Parser(new Lexer(
                       new PushbackReader(new EscapedReader(new BufferedReader(
-                              new InputStreamReader(istream))), 1024)));        
+                              new InputStreamReader(istream))), 1024)));
 
         try {
             tree = p.parse();
@@ -69,27 +69,27 @@ public class Parse
         } catch(IOException e) {
             throw new RuntimeException("IOException occurred: " + e);
         }
-        
+
         Walker w;
         if(sc == null)
             w = new Walker(null);
         else {
             w = new BodyExtractorWalker(sc, null, new HashMap<SootMethod, JimpleBody>());
         }
-        
-        tree.apply(w);          
-        return w.getSootClass();        
+
+        tree.apply(w);
+        return w.getSootClass();
     }
 
 
-    public static void main(String args[])  
+    public static void main(String args[])
         throws java.lang.Exception
-              
+
 
     {
     boolean verbose = false;
         InputStream inFile;
-        
+
         // check arguments
         if (args.length < 1) {
             G.v().out.println(USAGE);
@@ -108,7 +108,7 @@ public class Parse
             }
             else {
 
-               
+
                 try {
                     if (verbose)
                         G.v().out.println(" ... looking for " + arg);
@@ -128,7 +128,7 @@ public class Parse
                         continue;
                     }
                 }
-               
+
                 Parser p =
                     new Parser(
                                new Lexer(
@@ -136,8 +136,8 @@ public class Parse
                                                             new InputStreamReader(inFile), 1024)));
 
                 Start tree = p.parse();
-                    
-                tree.apply(new Walker(null));               
+
+                tree.apply(new Walker(null));
             }
         }
     } // main

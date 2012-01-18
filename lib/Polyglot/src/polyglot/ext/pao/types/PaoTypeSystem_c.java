@@ -28,7 +28,7 @@ public class PaoTypeSystem_c extends TypeSystem_c implements PaoTypeSystem {
      * Returns a new instance of <code>PaoParsedClassType_c</code>
      * @see PaoParsedClassType_c
      */
-    public ParsedClassType createClassType(LazyClassInitializer init, 
+    public ParsedClassType createClassType(LazyClassInitializer init,
                                            Source fromSource) {
         return new PaoParsedClassType_c(this, init, fromSource);
     }
@@ -72,13 +72,13 @@ public class PaoTypeSystem_c extends TypeSystem_c implements PaoTypeSystem {
     public MethodInstance getter(PrimitiveType t) {
         // The method instances could be cached for greater efficiency,
         // but we are not too worried about this.
-        
+
         String methodName = t.toString() + "Value";
-        
+
         // get the type used to represent boxed values of type t
         ReferenceType boxedType = boxedType(t);
 
-        // take the first method with the appropriate name and an empty 
+        // take the first method with the appropriate name and an empty
         // argument list, in the type boxedType
         List l = boxedType.methods(methodName, Collections.EMPTY_LIST);
         if (!l.isEmpty()) {

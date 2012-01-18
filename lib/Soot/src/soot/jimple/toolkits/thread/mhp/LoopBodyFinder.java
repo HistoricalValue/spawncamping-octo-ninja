@@ -15,8 +15,8 @@ import java.util.*;
 // -Richard L. Halpert, 2006-11-30
 
 public class LoopBodyFinder{
-	
-	private final Stack<Object> stack = new Stack<Object>();   
+
+	private final Stack<Object> stack = new Stack<Object>();
 	private final Set<Set<Object>> loops = new HashSet<Set<Object>>();
 	LoopBodyFinder(Map<Object, Object> backEdges, DirectedGraph g){
 		findLoopBody(backEdges, g);
@@ -29,13 +29,13 @@ public class LoopBodyFinder{
 			//Tag tag = (Tag)key.getTags().get(0);
 			// System.out.println("---key=  "+tag+" "+key);
 			Object  head  = entry.getValue();
-			Set<Object> loopBody = finder(tail, head, g); 
+			Set<Object> loopBody = finder(tail, head, g);
 			loops.add(loopBody);
 		}
-		
+
 	}
-	
-	
+
+
 	private Set<Object> finder(Object tail, Object head, DirectedGraph g){
 		Set<Object> loop = new HashSet<Object>();
 		stack.empty();
@@ -51,7 +51,7 @@ public class LoopBodyFinder{
 		}
 		return loop;
 	}
-	
+
 	private void insert(Object m, Set<Object> loop){
 		if (!loop.contains(m)){
 			loop.add(m);

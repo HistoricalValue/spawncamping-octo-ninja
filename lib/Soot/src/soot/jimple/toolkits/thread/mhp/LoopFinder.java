@@ -19,7 +19,7 @@ import java.util.*;
 
 public class LoopFinder{
 	private final Map<Chain, Set<Set<Object>>> chainToLoop = new HashMap<Chain, Set<Set<Object>>>();
-	
+
 	LoopFinder(PegGraph peg){
 		Chain chain = peg.getMainPegChain();
 		DfsForBackEdge dfsForBackEdge = new DfsForBackEdge(chain, peg);
@@ -28,7 +28,7 @@ public class LoopFinder{
 		Set<Set<Object>> loopBody = 	lbf.getLoopBody();
 		testLoops(loopBody);
 		chainToLoop.put(chain, loopBody);
-		
+
 	}
 	private void testLoops(Set<Set<Object>> loopBody){
 		System.out.println("====loops===");
@@ -45,8 +45,8 @@ public class LoopFinder{
 		}
 		System.out.println("===end===loops===");
 	}
-	
-	
-	
-	
+
+
+
+
 }

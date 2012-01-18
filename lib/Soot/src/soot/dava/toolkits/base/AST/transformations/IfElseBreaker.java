@@ -70,7 +70,7 @@ public class IfElseBreaker{
 	    //we are only interested if size is one
 	    return false;
 	}
-	
+
 	ASTNode onlyNode=(ASTNode)ifBody.get(0);
 	boolean check = checkStmt(onlyNode,node);
 	if(!check){
@@ -81,7 +81,7 @@ public class IfElseBreaker{
 	//break and store
 	newIfNode = new ASTIfNode(((ASTLabeledNode)node).get_Label(),node.get_Condition(),ifBody);
 	remainingBody = node.getElseBody();
-	
+
 	return true;
     }
 
@@ -92,7 +92,7 @@ public class IfElseBreaker{
 	    //we are only interested if size is one
 	    return false;
 	}
-	
+
 	ASTNode onlyNode=(ASTNode)elseBody.get(0);
 	boolean check = checkStmt(onlyNode,node);
 	if(!check){
@@ -106,7 +106,7 @@ public class IfElseBreaker{
 
 	newIfNode = new ASTIfNode(((ASTLabeledNode)node).get_Label(),cond,elseBody);
 	remainingBody = node.getIfBody();
-	
+
 	return true;
     }
 
@@ -118,14 +118,14 @@ public class IfElseBreaker{
 	    //only interested in StmtSeq nodes
 	    return false;
 	}
-	
+
 	ASTStatementSequenceNode stmtNode=(ASTStatementSequenceNode)onlyNode;
 	List<Object> statements = stmtNode.getStatements();
 	if(statements.size()!=1){
 	    //need one stmt only
 	    return false;
 	}
-	
+
 	AugmentedStmt as = (AugmentedStmt)statements.get(0);
 	Stmt stmt = as.get_Stmt();
 
@@ -142,7 +142,7 @@ public class IfElseBreaker{
 	//make sure that the break is not that of the if
 	//unliekly but good to check
 	SETNodeLabel ifLabel = ((ASTLabeledNode)node).get_Label();
-	
+
 	if (ifLabel!=null){
 	    if(ifLabel.toString()!=null){
 		if(abStmt.is_Break()){
@@ -193,7 +193,7 @@ public class IfElseBreaker{
 	ASTNode temp = (ASTNode)oldIt.next();
 	if(!(temp instanceof ASTIfElseNode))
 	    return null;
-	
+
 	newSubBody.add(newIfNode);
 
 	newSubBody.addAll(remainingBody);
@@ -203,7 +203,7 @@ public class IfElseBreaker{
 	while(oldIt.hasNext()){
 	    newSubBody.add(oldIt.next());
 	}
-	
+
 	return newSubBody;
     }
 }

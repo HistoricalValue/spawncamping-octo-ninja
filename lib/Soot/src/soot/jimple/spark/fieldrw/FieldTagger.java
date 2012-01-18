@@ -25,7 +25,7 @@ import soot.jimple.toolkits.callgraph.*;
 import soot.jimple.*;
 
 public class FieldTagger extends BodyTransformer
-{ 
+{
     public FieldTagger( Singletons.Global g ) {}
     public static FieldTagger v() { return G.v().soot_jimple_spark_fieldrw_FieldTagger(); }
 

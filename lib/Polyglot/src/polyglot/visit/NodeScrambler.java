@@ -10,9 +10,9 @@ import java.util.*;
  * The <code>NodeScrambler</code> is test case generator of sorts. Since it
  * is ofter useful to introduce ``random'' errors into source code, this
  * class provides a way of doing so in a semi-structed manner. The process
- * takes place in two phases. First, a "FirstPass" is made to collect 
- * a list of nodes and their parents. Then a second pass is made to randomly 
- * replace a branch of the tree with another suitable branch. 
+ * takes place in two phases. First, a "FirstPass" is made to collect
+ * a list of nodes and their parents. Then a second pass is made to randomly
+ * replace a branch of the tree with another suitable branch.
  */
 public class NodeScrambler extends NodeVisitor
 {
@@ -37,7 +37,7 @@ public class NodeScrambler extends NodeVisitor
 
     Random ran = new Random();
     seed = ran.nextLong();
-    
+
     System.err.println( "Using seed: " + seed);
     this.ran = new Random( seed);
   }
@@ -49,13 +49,13 @@ public class NodeScrambler extends NodeVisitor
   public NodeScrambler( long seed)
   {
     this.fp = new FirstPass();
-    
+
     this.pairs = new HashMap();
     this.nodes = new LinkedList();
     this.currentParents = new LinkedList();
     this.cw = new CodeWriter( System.err, 72);
     this.seed = seed;
-    
+
     this.ran = new Random( seed);
   }
 
@@ -64,17 +64,17 @@ public class NodeScrambler extends NodeVisitor
    * the set of parents for each node in the tree. <b>This visitor should be
    * run before the main <code>NodeScrambler</code> visits the tree.</b>
    */
-  public class FirstPass extends NodeVisitor 
+  public class FirstPass extends NodeVisitor
   {
     public NodeVisitor enter( Node n)
     {
       pairs.put( n, currentParents.clone());
       nodes.add( n);
-      
+
       currentParents.add( n);
       return this;
     }
-    
+
     public Node leave( Node old, Node n, NodeVisitor v)
     {
       currentParents.remove( n);
@@ -118,7 +118,7 @@ public class NodeScrambler extends NodeVisitor
     }
     else {
       return null;
-    }  
+    }
   }
 
   protected boolean coinFlip()

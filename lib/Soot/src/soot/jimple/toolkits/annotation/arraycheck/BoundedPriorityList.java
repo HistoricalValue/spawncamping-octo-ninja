@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -32,14 +32,14 @@ import java.util.List;
 import java.util.ListIterator;
 
 /** BoundedPriorityList keeps a list in a priority queue.
- * The order is decided by the initial list. 
- * 
+ * The order is decided by the initial list.
+ *
  * @author Eric Bodden (adapted from Feng Qian's code)
  */
 public class BoundedPriorityList implements Collection
 {
     protected final List fulllist;
-    protected ArrayList worklist; 
+    protected ArrayList worklist;
 
     public BoundedPriorityList(List list) {
 		this.fulllist = list;
@@ -58,7 +58,7 @@ public class BoundedPriorityList implements Collection
 		if(contains(toadd)) {
 			return false;
 		}
-		
+
 		/* it is not added to the end, but keep it in the order */
 		int index = fulllist.indexOf(toadd);
 
@@ -75,7 +75,7 @@ public class BoundedPriorityList implements Collection
 		return false;
 	}
 
-	//rest is only necessary to implement the Collection interface 
+	//rest is only necessary to implement the Collection interface
 
 	/**
 	 * {@inheritDoc}
@@ -84,7 +84,7 @@ public class BoundedPriorityList implements Collection
 		boolean addedSomething = false;
 		for (Iterator iter = c.iterator(); iter.hasNext();) {
 			Object o = iter.next();
-			addedSomething |= add(o);			
+			addedSomething |= add(o);
 		}
 		return addedSomething;
 	}
@@ -165,21 +165,21 @@ public class BoundedPriorityList implements Collection
 	public Object[] toArray(Object[] a) {
 		return worklist.toArray(a);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public String toString() {
 		return worklist.toString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean equals(Object obj) {
 		return worklist.equals(obj);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

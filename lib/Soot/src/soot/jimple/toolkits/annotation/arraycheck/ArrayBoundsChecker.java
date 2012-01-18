@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -45,7 +45,7 @@ public class ArrayBoundsChecker extends BodyTransformer
     protected boolean takeCSE = false;
     protected boolean takeRectArray = false;
     protected boolean addColorTags = false;
-    
+
     protected void internalTransform(Body body, String phaseName, Map opts)
     {
         ABCOptions options = new ABCOptions( opts );
@@ -70,7 +70,7 @@ public class ArrayBoundsChecker extends BodyTransformer
 
         {
             SootMethod m = body.getMethod();
-        
+
             Date start = new Date();
 
             if (Options.v().verbose())
@@ -83,47 +83,47 @@ public class ArrayBoundsChecker extends BodyTransformer
 
             if (hasArrayLocals(body))
             {
-                analysis = 
-                    new ArrayBoundsCheckerAnalysis(body, 
-                                                   takeClassField, 
-                                                   takeFieldRef, 
-                                                   takeArrayRef, 
-                                                   takeCSE, 
+                analysis =
+                    new ArrayBoundsCheckerAnalysis(body,
+                                                   takeClassField,
+                                                   takeFieldRef,
+                                                   takeArrayRef,
+                                                   takeCSE,
                                                    takeRectArray);
             }
-            
+
             SootClass counterClass = null;
             SootMethod increase = null;
-            
+
             if (options.profiling())
             {
                 counterClass = Scene.v().loadClassAndSupport("MultiCounter");
                 increase = counterClass.getMethod("void increase(int)") ;
             }
-            
+
             Chain units = body.getUnits();
-            
+
             IntContainer zero = new IntContainer(0);
-            
+
             Iterator unitIt = units.snapshotIterator();
-            
+
             while (unitIt.hasNext())
             {
                 Stmt stmt = (Stmt)unitIt.next();
-	   
+
                 if (stmt.containsArrayRef())
                 {
                     ArrayRef aref = stmt.getArrayRef();
-                    
+
                     {
-                        WeightedDirectedSparseGraph vgraph = 
+                        WeightedDirectedSparseGraph vgraph =
                             (WeightedDirectedSparseGraph)analysis.getFlowBefore(stmt);
-            
+
                         int res = interpretGraph(vgraph, aref, stmt, zero);
-                        
+
                         boolean lowercheck = true;
                         boolean uppercheck = true;
-                        
+
                         if (res == 0) {
                             lowercheck = true;
                             uppercheck = true;
@@ -140,7 +140,7 @@ public class ArrayBoundsChecker extends BodyTransformer
                             lowercheck = false;
                             uppercheck = false;
                         }
-               
+
                         if (addColorTags){
                             if (res == 0) {
                                 aref.getIndexBox().addTag(new ColorTag(255, 0, 0, false, "ArrayCheckTag"));
@@ -176,7 +176,7 @@ public class ArrayBoundsChecker extends BodyTransformer
                         /*
                         boolean lowercheck = true;
                         boolean uppercheck = true;
-                        
+
                         {
                             if (Options.v().debug())
                             {
@@ -186,24 +186,24 @@ public class ArrayBoundsChecker extends BodyTransformer
                                     G.v().out.println(vgraph);
                                 }
                             }
-                            
+
                             Value base = aref.getBase();
                             Value index = aref.getIndex();
-                            
+
                             if (index instanceof IntConstant)
                             {
                                 int indexv = ((IntConstant)index).value;
-                                
+
                                 if (vgraph.hasEdge(base, zero))
                                 {
                                     int alength = vgraph.edgeWeight(base, zero);
-                                    
+
                                     if (-alength > indexv)
                                         uppercheck = false;
                                 }
-                                
+
                                 if (indexv >= 0)
-                                    lowercheck = false;			
+                                    lowercheck = false;
                             }
                             else
                             {
@@ -213,7 +213,7 @@ public class ArrayBoundsChecker extends BodyTransformer
                                     if (upperdistance < 0)
                                         uppercheck = false;
                                 }
-                                
+
                                 if (vgraph.hasEdge(index, zero))
                                 {
                                     int lowerdistance = vgraph.edgeWeight(index, zero);
@@ -223,23 +223,23 @@ public class ArrayBoundsChecker extends BodyTransformer
                                 }
                             }
                         }*/
-                        
+
                         if (options.profiling())
                         {
                             int lowercounter = 0;
                             if (!lowercheck)
                                 lowercounter = 1;
-                            
-                            units.insertBefore (Jimple.v().newInvokeStmt( 
-                                 Jimple.v().newStaticInvokeExpr(increase.makeRef(), 
+
+                            units.insertBefore (Jimple.v().newInvokeStmt(
+                                 Jimple.v().newStaticInvokeExpr(increase.makeRef(),
                                         IntConstant.v(lowercounter))), stmt);
 
                             int uppercounter = 2;
                             if (!uppercheck)
                                 uppercounter = 3;
-                            
-                            units.insertBefore (Jimple.v().newInvokeStmt( 
-                                 Jimple.v().newStaticInvokeExpr(increase.makeRef(), 
+
+                            units.insertBefore (Jimple.v().newInvokeStmt(
+                                 Jimple.v().newStaticInvokeExpr(increase.makeRef(),
                                         IntConstant.v(uppercounter))), stmt) ;
 
                             /*
@@ -250,7 +250,7 @@ public class ArrayBoundsChecker extends BodyTransformer
                                         IntConstant.v(4))), stmt);
 
                                 NullCheckTag nullTag = (NullCheckTag)stmt.getTag("NullCheckTag");
-			    
+
                                 if (nullTag != null && !nullTag.needCheck())
                                     units.insertBefore(Jimple.v().newInvokeStmt(
                                         Jimple.v().newStaticInvokeExpr(increase,
@@ -285,7 +285,7 @@ public class ArrayBoundsChecker extends BodyTransformer
             }
 
             Date finish = new Date();
-            if (Options.v().verbose()) 
+            if (Options.v().verbose())
             {
                 long runtime = finish.getTime() - start.getTime();
                 G.v().out.println("[abc] ended on "+finish
@@ -298,22 +298,22 @@ public class ArrayBoundsChecker extends BodyTransformer
     private boolean hasArrayLocals(Body body)
     {
         Iterator localIt = body.getLocals().iterator();
-        
+
         while (localIt.hasNext())
         {
             Local local = (Local)localIt.next();
             if (local.getType() instanceof ArrayType)
                 return true;
         }
-        
+
         return false;
     }
 
     protected int interpretGraph(WeightedDirectedSparseGraph vgraph, ArrayRef aref, Stmt stmt, IntContainer zero){
-    
+
         boolean lowercheck = true;
         boolean uppercheck = true;
-                        
+
         {
             if (Options.v().debug())
             {
@@ -323,24 +323,24 @@ public class ArrayBoundsChecker extends BodyTransformer
                     G.v().out.println(vgraph);
                 }
             }
-                            
+
             Value base = aref.getBase();
             Value index = aref.getIndex();
-                            
+
             if (index instanceof IntConstant)
             {
                 int indexv = ((IntConstant)index).value;
-                        
+
                 if (vgraph.hasEdge(base, zero))
                 {
                     int alength = vgraph.edgeWeight(base, zero);
-                                    
+
                     if (-alength > indexv)
                         uppercheck = false;
                 }
-                                
+
                 if (indexv >= 0)
-                    lowercheck = false;			
+                    lowercheck = false;
             }
             else
             {
@@ -350,7 +350,7 @@ public class ArrayBoundsChecker extends BodyTransformer
                     if (upperdistance < 0)
                         uppercheck = false;
                 }
-                                
+
                 if (vgraph.hasEdge(index, zero))
                 {
                     int lowerdistance = vgraph.edgeWeight(index, zero);
@@ -360,8 +360,8 @@ public class ArrayBoundsChecker extends BodyTransformer
                 }
             }
         }
-                        
-        
+
+
         if (lowercheck && uppercheck) return 0;
         else if (lowercheck && !uppercheck) return 1;
         else if (!lowercheck && uppercheck) return 2;

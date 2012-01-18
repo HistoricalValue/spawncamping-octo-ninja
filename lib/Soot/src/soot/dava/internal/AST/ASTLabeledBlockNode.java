@@ -31,7 +31,7 @@ public class ASTLabeledBlockNode extends ASTLabeledNode
     public ASTLabeledBlockNode( SETNodeLabel label, List<Object> body){
 	super( label);
 	this.body = body;
-	
+
 	subBodies.add( body);
     }
 
@@ -61,7 +61,7 @@ public class ASTLabeledBlockNode extends ASTLabeledNode
 
         up.literal( "{" );
         up.newline();
- 
+
         up.incIndent();
         body_toString( up, body );
         up.decIndent();
@@ -83,7 +83,7 @@ public class ASTLabeledBlockNode extends ASTLabeledNode
 
 	b.append( "{");
 	b.append( NEWLINE);
- 
+
 	b.append( body_toString(body));
 
 	b.append( "} //");

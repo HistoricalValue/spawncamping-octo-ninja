@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,12 +34,12 @@ class StronglyConnectedComponents
   List<TypeVariable> variables;
   Set<TypeVariable> black;
   LinkedList<TypeVariable> finished;
-  
+
   LinkedList<LinkedList<TypeVariable>> forest = new LinkedList<LinkedList<TypeVariable>>();
   LinkedList<TypeVariable> current_tree;
-  
+
   private static final boolean DEBUG = false;
-  
+
   public static void merge(List<TypeVariable> typeVariableList) throws TypeException
   {
     new StronglyConnectedComponents(typeVariableList);
@@ -48,10 +48,10 @@ class StronglyConnectedComponents
   private StronglyConnectedComponents(List<TypeVariable> typeVariableList) throws TypeException
   {
     variables = typeVariableList;
-    
+
     black = new TreeSet<TypeVariable>();
     finished = new LinkedList<TypeVariable>();
-    
+
     for (TypeVariable var : variables) {
 	if(!black.contains(var))
 	  {
@@ -59,9 +59,9 @@ class StronglyConnectedComponents
 	    dfsg_visit(var);
 	  }
       }
-    
+
     black = new TreeSet<TypeVariable>();
-    
+
     for (TypeVariable var : finished) {
 	if(!black.contains(var))
 	  {
@@ -71,7 +71,7 @@ class StronglyConnectedComponents
 	    dfsgt_visit(var);
 	  }
       }
-    
+
     for(Iterator<LinkedList<TypeVariable>> i = forest.iterator(); i.hasNext();)
       {
 	LinkedList list = i.next();
@@ -81,11 +81,11 @@ class StronglyConnectedComponents
 	  {
 	    s = new StringBuffer("scc:\n");
 	  }
-	
+
 	for(Iterator j = list.iterator(); j.hasNext();)
 	  {
 	    TypeVariable current = (TypeVariable) j.next();
-	   
+
 	    if(DEBUG)
 	      {
 		s.append(" " + current + "\n");
@@ -113,11 +113,11 @@ class StronglyConnectedComponents
 	  }
       }
   }
-  
+
   private void dfsg_visit(TypeVariable var)
   {
     List<TypeVariable> parents = var.parents();
-    
+
     for (TypeVariable parent : parents) {
 	if(!black.contains(parent))
 	  {
@@ -125,16 +125,16 @@ class StronglyConnectedComponents
 	    dfsg_visit(parent);
 	  }
       }
-    
+
     finished.add(0, var);
   }
-  
+
   private void dfsgt_visit(TypeVariable var)
   {
     current_tree.add(var);
-    
+
     List<TypeVariable> children = var.children();
-    
+
     for (TypeVariable child : children) {
 	if(!black.contains(child))
 	  {

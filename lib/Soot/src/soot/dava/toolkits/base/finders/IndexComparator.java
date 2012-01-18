@@ -27,7 +27,7 @@ class IndexComparator implements Comparator
     {
 	if (o1 == o2)
 	    return 0;
-	
+
 	if (o1 instanceof String)
 	    return 1;
 

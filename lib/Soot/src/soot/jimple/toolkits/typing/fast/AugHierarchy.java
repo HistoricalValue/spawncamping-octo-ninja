@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -27,12 +27,12 @@ import soot.*;
  * @author Ben Bellamy
  */
 public class AugHierarchy implements IHierarchy
-{	
+{
 	public Collection<Type> lcas(Type a, Type b)
 	{
 		return lcas_(a, b);
 	}
-	
+
 	public static Collection<Type> lcas_(Type a, Type b)
 	{
 		if ( TypeResolver.typesEqual(a, b) )
@@ -64,12 +64,12 @@ public class AugHierarchy implements IHierarchy
 			return new EmptyList<Type>();
 		else return BytecodeHierarchy.lcas_(a, b);
 	}
-	
+
 	public boolean ancestor(Type ancestor, Type child)
 	{
 		return ancestor_(ancestor, child);
 	}
-	
+
 	public static boolean ancestor_(Type ancestor, Type child)
 	{
 		if ( TypeResolver.typesEqual(ancestor, child) )

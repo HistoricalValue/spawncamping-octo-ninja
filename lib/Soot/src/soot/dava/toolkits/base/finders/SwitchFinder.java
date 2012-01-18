@@ -82,7 +82,7 @@ public class SwitchFinder implements FactFinder
 		LookupSwitchStmt lss = (LookupSwitchStmt) s;
 
 		int target_count = lss.getTargetCount();
-		for (int i=0; i<target_count; i++) 
+		for (int i=0; i<target_count; i++)
 		    build_Bindings( as, new Integer( lss.getLookupValue( i)), asg.get_AugStmt( (Stmt) lss.getTarget( i)));
 
 		build_Bindings( as, defaultStr, asg.get_AugStmt( (Stmt) lss.getDefaultTarget()));
@@ -96,15 +96,15 @@ public class SwitchFinder implements FactFinder
 
 		snTargetList.addLast( new SwitchNode( target, (TreeSet<Object>) tSucc2indexSet.get( tSucc), (IterableSet) tSucc2Body.get( tSucc)));
 	    }
-	    
-	    TreeSet 
+
+	    TreeSet
 		targetHeads = new TreeSet(),
 		killBodies  = new TreeSet();
-	    
+
 	    //  Get the set of head cases and clear those bodies that should not be included in the switch.  Clear as mud, huh? :-)
 	    {
 		asg.calculate_Reachability( targetList, targetSet, as);
-		
+
 		SwitchNodeGraph sng = new SwitchNodeGraph( snTargetList);
 
 		killBodies.addAll( snTargetList);
@@ -115,7 +115,7 @@ public class SwitchFinder implements FactFinder
 
 		while (worklist.isEmpty() == false) {
 		    SwitchNode sn = (SwitchNode) worklist.removeFirst();
-		    
+
 		    snTargetList.addLast( sn);
 		    killBodies.remove( sn);
 
@@ -124,7 +124,7 @@ public class SwitchFinder implements FactFinder
 
 		    while (sit.hasNext()) {
 			SwitchNode ssn = (SwitchNode) sit.next();
-			
+
 			if ((champ == null) || (champ.get_Score() < ssn.get_Score()))
 			    champ = ssn;
 		    }
@@ -155,7 +155,7 @@ public class SwitchFinder implements FactFinder
 
 		    if ((targetHeads.isEmpty()) ||
 			((targetHeads.isEmpty() == false) && (killBodies.isEmpty() == false) && (((SwitchNode) targetHeads.first()).compareTo( killBodies.first()) > 0))) {
-			
+
 			SwitchNode nextNode = (SwitchNode) killBodies.first();
 			killBodies.remove( nextNode);
 
@@ -197,16 +197,16 @@ public class SwitchFinder implements FactFinder
 	    while (enlit.hasNext()) {
 		ExceptionNode en = (ExceptionNode) enlit.next();
 		IterableSet tryBody = en.get_TryBody();
-		
+
 		if (tryBody.contains( as)) {
 		    Iterator fbit = body.snapshotIterator();
-		    
+
 		    while (fbit.hasNext()) {
 			AugmentedStmt fbas = (AugmentedStmt) fbit.next();
-			
+
 			if (tryBody.contains( fbas) == false) {
 			    body.remove( fbas);
-			    
+
 			    snlit = switchNodeList.iterator();
 			    while (snlit.hasNext()) {
 				IterableSet switchBody = snlit.next().get_Body();
@@ -223,7 +223,7 @@ public class SwitchFinder implements FactFinder
 
 	    SET.nest( new SETSwitchNode( as, key, body, switchNodeList, junkBody));
 	}
-    }    
+    }
 
     private IterableSet find_SubBody( AugmentedStmt switchAS, AugmentedStmt branchS)
     {
@@ -232,19 +232,19 @@ public class SwitchFinder implements FactFinder
 
 	subBody.add( branchS);
 	branchS = (AugmentedStmt) branchS.bsuccs.get(0);
-	
+
 	if (branchS.get_Dominators().contains( switchAS)) {
 	    worklist.addLast( branchS);
 	    subBody.add( branchS);
 	}
-	
+
 	while (worklist.isEmpty() == false) {
 	    AugmentedStmt as = worklist.removeFirst();
-	    
+
 	    Iterator sit = as.csuccs.iterator();
 	    while (sit.hasNext()) {
 		AugmentedStmt sas = (AugmentedStmt) sit.next();
-		
+
 		if ((subBody.contains( sas) == false) && (sas.get_Dominators().contains( branchS))) {
 		    worklist.addLast( sas);
 		    subBody.add( sas);
@@ -261,9 +261,9 @@ public class SwitchFinder implements FactFinder
 
 	if (targetSet.add( tSucc))
 	    targetList.addLast( tSucc);
-	
+
 	index2target.put( index, target);
-	
+
 	TreeSet indices = null;
 	if ((indices = (TreeSet) tSucc2indexSet.get( tSucc)) == null) {
 	    indices = new TreeSet( new IndexComparator());
@@ -278,7 +278,7 @@ public class SwitchFinder implements FactFinder
 	    // break all edges between the junk body and any of it's successors
 
 	    Iterator sit = target.bsuccs.iterator();
-	    while (sit.hasNext()) 
+	    while (sit.hasNext())
 		((AugmentedStmt) sit.next()).bpreds.remove( target);
 
 	    sit = target.csuccs.iterator();
@@ -288,7 +288,7 @@ public class SwitchFinder implements FactFinder
 	    target.bsuccs.clear();
 	    target.csuccs.clear();
 	}
-	
+
 	indices.add( index);
     }
 }

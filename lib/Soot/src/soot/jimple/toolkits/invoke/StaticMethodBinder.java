@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -53,8 +53,8 @@ public class StaticMethodBinder extends SceneTransformer
         while (classesIt.hasNext())
         {
             SootClass c = (SootClass)classesIt.next();
-            
-            LinkedList methodsList = new LinkedList(); 
+
+            LinkedList methodsList = new LinkedList();
             for( Iterator it = c.methodIterator(); it.hasNext(); ) {
                 methodsList.add(it.next());
             }
@@ -70,7 +70,7 @@ public class StaticMethodBinder extends SceneTransformer
                     continue;
 
                 JimpleBody b = (JimpleBody)container.getActiveBody();
-                
+
                 List<Unit> unitList = new ArrayList<Unit>(); unitList.addAll(b.getUnits());
                 Iterator<Unit> unitIt = unitList.iterator();
 
@@ -83,11 +83,11 @@ public class StaticMethodBinder extends SceneTransformer
 
                     InvokeExpr ie = s.getInvokeExpr();
 
-                    if (ie instanceof StaticInvokeExpr || 
+                    if (ie instanceof StaticInvokeExpr ||
                         ie instanceof SpecialInvokeExpr)
                         continue;
 
-                    Iterator targets = new Targets( 
+                    Iterator targets = new Targets(
                             instanceInvokesFilter.wrap( cg.edgesOutOf(s) ) );
                     if( !targets.hasNext() ) continue;
                     SootMethod target = (SootMethod)targets.next();
@@ -95,10 +95,10 @@ public class StaticMethodBinder extends SceneTransformer
 
                     // Ok, we have an Interface or VirtualInvoke going to 1.
 
-                    
+
                     if (!AccessManager.ensureAccess(container, target, modifierOptions))
                         continue;
-                    
+
                     if (!target.getDeclaringClass().isApplicationClass() || !target.isConcrete())
                         continue;
 
@@ -120,7 +120,7 @@ public class StaticMethodBinder extends SceneTransformer
 
                         // Check for signature conflicts.
                         String newName = target.getName() + "_static";
-                        while (target.getDeclaringClass().declaresMethod(newName, 
+                        while (target.getDeclaringClass().declaresMethod(newName,
                                                 newParameterTypes,
                                                 target.getReturnType()))
                             newName = newName + "_static";
@@ -142,7 +142,7 @@ public class StaticMethodBinder extends SceneTransformer
                             while (newUnits.hasNext())
                             {
                                 Stmt oldStmt, newStmt;
-                                oldStmt = (Stmt)oldUnits.next(); 
+                                oldStmt = (Stmt)oldUnits.next();
                                 newStmt = (Stmt)newUnits.next();
 
                                 Iterator edges = cg.edgesOutOf( oldStmt );
@@ -150,13 +150,13 @@ public class StaticMethodBinder extends SceneTransformer
                                     Edge e = (Edge) edges.next();
                                     cg.addEdge( new Edge(
                                         ct, newStmt, e.tgt(), e.kind() ) );
-                                    cg.removeEdge( e );                                        
+                                    cg.removeEdge( e );
                                 }
                             }
                         }
 
                         // Shift the parameter list to apply to the new this parameter.
-                        // If the method uses this, then we replace 
+                        // If the method uses this, then we replace
                         //              the r0 := @this with r0 := @parameter0 & shift.
                         // Otherwise, just zap the r0 := @this.
                         {
@@ -189,7 +189,7 @@ public class StaticMethodBinder extends SceneTransformer
                                     }
                                 }
                             }
-                            
+
                         }
 
                         instanceToStaticMap.put(target, ct);
@@ -230,7 +230,7 @@ public class StaticMethodBinder extends SceneTransformer
 
                         StaticInvokeExpr sie = Jimple.v().newStaticInvokeExpr
                             (clonedTarget.makeRef(), newArgs);
-                        
+
                         ValueBox ieBox = s.getInvokeExprBox();
                         ieBox.setValue(sie);
 
@@ -248,7 +248,7 @@ public class StaticMethodBinder extends SceneTransformer
                         {
                             /* In this case, we don't use throwPoint;
                              * instead, put the code right there. */
-                            Stmt insertee = Jimple.v().newIfStmt(Jimple.v().newNeExpr(((InstanceInvokeExpr)ie).getBase(), 
+                            Stmt insertee = Jimple.v().newIfStmt(Jimple.v().newNeExpr(((InstanceInvokeExpr)ie).getBase(),
                                 NullConstant.v()), s);
 
                             b.getUnits().insertBefore(insertee, s);
@@ -260,15 +260,15 @@ public class StaticMethodBinder extends SceneTransformer
                         }
                         else
                         {
-                            Stmt throwPoint = 
+                            Stmt throwPoint =
                                 ThrowManager.getNullPointerExceptionThrower(b);
                             b.getUnits().insertBefore
-                                (Jimple.v().newIfStmt(Jimple.v().newEqExpr(((InstanceInvokeExpr)ie).getBase(), 
+                                (Jimple.v().newIfStmt(Jimple.v().newEqExpr(((InstanceInvokeExpr)ie).getBase(),
                                 NullConstant.v()), throwPoint),
                                  s);
                         }
                     }
-                    
+
                     // Add synchronizing stuff.
                     {
                         if (target.isSynchronized())

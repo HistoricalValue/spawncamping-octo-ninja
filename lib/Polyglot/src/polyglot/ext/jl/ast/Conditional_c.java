@@ -24,7 +24,7 @@ public class Conditional_c extends Expr_c implements Conditional
     }
 
     /** Get the precedence of the expression. */
-    public Precedence precedence() { 
+    public Precedence precedence() {
 	return Precedence.CONDITIONAL;
     }
 
@@ -207,7 +207,7 @@ public class Conditional_c extends Expr_c implements Conditional
 
         return succs;
     }
-    
+
     public boolean isConstant() {
 	return cond.isConstant() && consequent.isConstant() && alternative.isConstant();
     }

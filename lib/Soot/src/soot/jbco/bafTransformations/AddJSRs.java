@@ -27,9 +27,9 @@ import soot.jbco.util.*;
 
 /**
  * @author Michael Batchelder
- * 
+ *
  * Created on 22-Mar-2006
- * 
+ *
  * This transformer transforms gotos/ifs into JSRS, but not all of them.
  */
 public class AddJSRs extends BodyTransformer implements IJbcoTransform {
@@ -37,13 +37,13 @@ public class AddJSRs extends BodyTransformer implements IJbcoTransform {
   int jsrcount = 0;
 
   public static String dependancies[] = new String[] { "jtp.jbco_jl", "bb.jbco_cb2ji", "bb.jbco_ful", "bb.lp" };
-  
+
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "bb.jbco_cb2ji";
-  
+
   public String getName() {
     return name;
   }
@@ -231,7 +231,7 @@ public class AddJSRs extends BodyTransformer implements IJbcoTransform {
         ((LookupSwitchInst) sw).setDefaultTarget(def);
       }
     }
-    
+
     if (debug)
       StackTypeHeightCalculator.calculateStackHeights(b);
   }

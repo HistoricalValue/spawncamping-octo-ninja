@@ -63,10 +63,10 @@ public class DavaPrinter {
     }
 
     private void printStatementsInBody(Body body, java.io.PrintWriter out) {
-      
+
       if (Options.v().verbose())
         System.out.println("Printing "+body.getMethod().getName());
-      
+
         Chain units = ((DavaBody) body).getUnits();
 
         if (units.size() != 1) {
@@ -79,7 +79,7 @@ public class DavaPrinter {
     }
 
     public void printTo(SootClass cl, PrintWriter out) {
-    	
+
     	//IterableSet packagesUsed = new IterableSet();
     	IterableSet importList = new IterableSet();
         {
@@ -99,10 +99,10 @@ public class DavaPrinter {
             Iterator interfaceIt = cl.getInterfaces().iterator();
             while (interfaceIt.hasNext()) {
                 String interfacePackage = ((SootClass) interfaceIt.next()).toString();
-                
+
                 if(!importList.contains(interfacePackage))
                 	importList.add(interfacePackage);
-                	
+
                 //if (!packagesUsed.contains(interfacePackage))
                   //  packagesUsed.add(interfacePackage);
             }
@@ -121,7 +121,7 @@ public class DavaPrinter {
                     String thrownPackage =eit.next().toString();
                     if(!importList.contains(thrownPackage))
                     	importList.add(thrownPackage);
-                    
+
                     //if (!packagesUsed.contains(thrownPackage))
                       //  packagesUsed.add(thrownPackage);
                 }
@@ -132,10 +132,10 @@ public class DavaPrinter {
 
                     if (t instanceof RefType) {
                         String paramPackage = ((RefType) t).getSootClass().toString();
-                        
+
                         if (!importList.contains(paramPackage))
                             importList.add(paramPackage);
-                        
+
                         //if (packagesUsed.contains(paramPackage) == false)
                           //  packagesUsed.add(paramPackage);
                     }
@@ -144,11 +144,11 @@ public class DavaPrinter {
                 Type t = dm.getReturnType();
                 if (t instanceof RefType) {
                     String returnPackage = ((RefType) t).getSootClass().toString();
-                    
+
                     if (!importList.contains(returnPackage))
                     	importList.add(returnPackage);
 
-                
+
                     //if (packagesUsed.contains(returnPackage) == false)
                       //  packagesUsed.add(returnPackage);
                 }
@@ -165,7 +165,7 @@ public class DavaPrinter {
 
                 if (t instanceof RefType) {
                     String fieldPackage = ((RefType) t).getSootClass().toString();
-                    
+
                     if (!importList.contains(fieldPackage))
                         importList.add(fieldPackage);
                 }
@@ -182,7 +182,7 @@ public class DavaPrinter {
             	String temp = (String)pit.next();
             	//System.out.println("temp is "+temp);
             	if(temp.indexOf("java.lang")>-1 ){
-            		//problem is that we need to import sub packages java.lang.ref 
+            		//problem is that we need to import sub packages java.lang.ref
             		//for instance if the type is java.lang.ref.WeakReference
             		String tempClassName = RemoveFullyQualifiedName.getClassName(temp);
             		if(temp.equals("java.lang."+tempClassName)){
@@ -195,11 +195,11 @@ public class DavaPrinter {
             		//System.out.println("here  "+temp);
             		continue;
             	}
-            	
+
             	if(cl.toString().equals(temp))
             		continue;
-            	               
-            	
+
+
             	//System.out.println("printing"+);
             	toImport.add(temp);
 
@@ -234,13 +234,13 @@ public class DavaPrinter {
             }
             boolean addNewLine=false;
             addNewLine=true;
-            
+
            // out.println("import " + temp + ";");
-            
-            
+
+
             if(addNewLine)
             	out.println();
-            
+
             /*if (!packagesUsed.isEmpty())
                 out.println();
 
@@ -271,9 +271,9 @@ public class DavaPrinter {
         // Print extension
         if (cl.hasSuperclass()
             && !(cl.getSuperclass().getName().equals("java.lang.Object"))){
-        		
+
         	String superClassName = cl.getSuperclass().getName();
-        	
+
         	//Nomair Naeem 8th Feb 2006
         	//also check if the super class name is not a fully qualified
         	//name. in which case if the package is imported no need for
@@ -315,14 +315,14 @@ public class DavaPrinter {
 
 
 					String declaration = null;
-					
+
 					Type fieldType = f.getType();
-					
-				
+
+
 			        String qualifiers = Modifier.toString(f.getModifiers()) + " ";
-			        
-			        qualifiers += RemoveFullyQualifiedName.getReducedName(importList,fieldType.toString(),fieldType); 
-			        
+
+			        qualifiers += RemoveFullyQualifiedName.getReducedName(importList,fieldType.toString(),fieldType);
+
 			        qualifiers = qualifiers.trim();
 
 			        if(qualifiers.equals(""))
@@ -332,49 +332,49 @@ public class DavaPrinter {
 
 
 			        if (f.isFinal() && f.isStatic()) {
-										
+
 						if (fieldType instanceof DoubleType && f.hasTag("DoubleConstantValueTag")) {
-							
+
 							double val = ((DoubleConstantValueTag) f.getTag("DoubleConstantValueTag")).getDoubleValue();
 							out.println("    " + declaration + " = "+ val + ";");
-							
+
 						} else if (fieldType instanceof FloatType && f.hasTag("FloatConstantValueTag")) {
-							
+
 							float val = ((FloatConstantValueTag) f.getTag("FloatConstantValueTag")).getFloatValue();
 							out.println("    " + declaration + " = "+ val + "f;");
-							
+
 						} else if (fieldType instanceof LongType && f.hasTag("LongConstantValueTag")) {
 
 							long val = ((LongConstantValueTag) f.getTag("LongConstantValueTag")).getLongValue();
 							out.println("    " + declaration + " = "+ val + "l;");
-							
+
 						} else if (fieldType instanceof CharType && f.hasTag("IntegerConstantValueTag")) {
 
 							int val = ((IntegerConstantValueTag) f.getTag("IntegerConstantValueTag")).getIntValue();
 							out.println("    " + declaration + " = '" + ((char) val) + "';");
 
 						} else if (fieldType instanceof BooleanType && f.hasTag("IntegerConstantValueTag")) {
-							
+
 							int val = ((IntegerConstantValueTag) f.getTag("IntegerConstantValueTag")).getIntValue();
 
 							if (val == 0)
 								out.println("    " + declaration+ " = false;");
 							else
 								out.println("    " + declaration+ " = true;");
-							
+
 						} else if ((fieldType instanceof IntType
-								|| fieldType instanceof ByteType || 
+								|| fieldType instanceof ByteType ||
 								fieldType instanceof ShortType)
 								&& f.hasTag("IntegerConstantValueTag")) {
-							
+
 							int val = ((IntegerConstantValueTag) f.getTag("IntegerConstantValueTag")).getIntValue();
 							out.println("    " + declaration + " = "+ val + ";");
-							
+
 						} else if (f.hasTag("StringConstantValueTag")) {
 
 							String val = ((StringConstantValueTag) f.getTag("StringConstantValueTag")).getStringValue();
 							out.println("    " + declaration + " = \""+ val + "\";");
-							
+
 						} else {
 							// System.out.println("Couldnt find type of
 							// field"+f.getDeclaration());
@@ -436,7 +436,7 @@ public class DavaPrinter {
 	 * Instead of creating a data structure for it we are right now just going to print it in the form
 	 * of a string
 	 *
-	 * It would be interesting to later have an internal inner class structure so that we could 
+	 * It would be interesting to later have an internal inner class structure so that we could
 	 * decompile inner classes into inner classes
 	 */
 
@@ -458,11 +458,11 @@ public class DavaPrinter {
         out.println("}");
     }
 
-    
-    
-    
-    
-        
+
+
+
+
+
     /**
      *   Prints out the method corresponding to b Body, (declaration and body),
      *   in the textual format corresponding to the IR used to encode b body.

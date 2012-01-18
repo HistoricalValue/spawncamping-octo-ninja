@@ -46,7 +46,7 @@ public class EBBCollapser {
     public EBBCollapser( PAG pag ) {
         this.pag = pag;
     }
-    
+
     /* End of public methods. */
     /* End of package methods. */
 
@@ -92,7 +92,7 @@ public class EBBCollapser {
                     if( pag.allocInvLookup( succ ).length > 0 ) continue;
                     if( pag.loadInvLookup( succ ).length > 0 ) continue;
                     if( pag.simpleInvLookup( succ ).length > 1 ) continue;
-                    if( ofcg 
+                    if( ofcg
                     && ( succ.isInterProcTarget() || n.isInterProcSource() ) ) continue;
                     n.mergeWith( succ );
                     change = true;

@@ -70,13 +70,13 @@ public class AmbPrefix_c extends Node_c implements AmbPrefix
     public Node typeCheck(TypeChecker tc) throws SemanticException {
 	throw new InternalCompilerError(position(),
 	    "Cannot type check ambiguous node " + this + ".");
-    } 
+    }
 
     /** Check exceptions thrown by the prefix. */
     public Node exceptionCheck(ExceptionChecker ec) throws SemanticException {
 	throw new InternalCompilerError(position(),
 	    "Cannot exception check ambiguous node " + this + ".");
-    } 
+    }
 
     /** Write the prefix to an output file. */
     public void prettyPrint(CodeWriter w, PrettyPrinter tr) {
@@ -84,7 +84,7 @@ public class AmbPrefix_c extends Node_c implements AmbPrefix
             print(prefix, w, tr);
             w.write(".");
         }
-                
+
         w.write(name);
     }
 

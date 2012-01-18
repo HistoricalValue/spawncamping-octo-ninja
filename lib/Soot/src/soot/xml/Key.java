@@ -28,7 +28,7 @@ public class Key {
     private final int blue;
     private final String key;
     private String aType;
-    
+
     public Key(int r, int g, int b, String k){
         red = r;
         green = g;
@@ -55,7 +55,7 @@ public class Key {
     public void print(PrintWriter writerOut){
         writerOut.println("<key red=\""+red()+"\" green=\""+green()+"\" blue=\""+blue()+"\" key=\""+key()+"\" aType=\""+aType()+"\"/>");
     }
-    
+
     public String aType(){
         return aType;
     }

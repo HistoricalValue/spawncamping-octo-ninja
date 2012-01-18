@@ -5,7 +5,7 @@ import polyglot.types.*;
 import polyglot.visit.*;
 import polyglot.util.*;
 
-/** 
+/**
  * An <code>CharLit</code> represents a literal in java of
  * <code>char</code> type.
  */
@@ -30,7 +30,7 @@ public class CharLit_c extends NumLit_c implements CharLit
     /** Type check the expression. */
     public Node typeCheck(TypeChecker tc) throws SemanticException {
 	return type(tc.typeSystem().Char());
-    }  
+    }
 
     public String toString() {
         return "'" + StringUtil.escape((char) value) + "'";

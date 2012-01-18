@@ -48,7 +48,7 @@ public class ValueGraph
     protected Map<Node, Value> nodeToLocal;
     protected List<Node> nodeList;
     protected int currentNodeNumber;
-    
+
     public ValueGraph(BlockGraph cfg)
     {
         if(!(cfg.getBody() instanceof ShimpleBody))
@@ -90,13 +90,13 @@ public class ValueGraph
         if(!(rightOp instanceof Local) && !node.isStub())
             nodeToLocal.put(node, leftOp);
     }
-    
+
     protected Node fetchNode(Value value)
     {
         Node ret = null;
 
         if(value instanceof Local){
-            // assumption: the local definition has already been processed            
+            // assumption: the local definition has already been processed
             ret = getNode(value);
 
             // or maybe not...  a PhiExpr may refer to a local that
@@ -116,7 +116,7 @@ public class ValueGraph
     protected Node fetchGraph(Value value)
     {
         AbstractShimpleValueSwitch vs;
-        
+
         value.apply(vs = new AbstractShimpleValueSwitch()
         {
             /**
@@ -128,7 +128,7 @@ public class ValueGraph
                 throw new RuntimeException("Internal error: " + object +
                                            " unhandled case.");
             }
-            
+
             /**
              * Handle a trivial assignment.
              **/
@@ -164,7 +164,7 @@ public class ValueGraph
 
                 setResult(new Node(binop, ordered, children));
             }
-            
+
             // *** FIXME
             // *** assume non-equality by default
             // *** what about New expressions?
@@ -172,14 +172,14 @@ public class ValueGraph
             {
                 setResult(fetchNode(expr));
             }
-            
+
             public void handleUnop(UnopExpr unop)
             {
                 Node nop = fetchNode(unop.getOp());
                 List<Node> child = new SingletonList(nop);
                 setResult(new Node(unop, true, child));
             }
-            
+
             public void caseFloatConstant(FloatConstant v)
             {
                 handleConstant(v);
@@ -189,7 +189,7 @@ public class ValueGraph
             {
                 handleConstant(v);
             }
-            
+
             public void caseLongConstant(LongConstant v)
             {
                 handleConstant(v);
@@ -254,47 +254,47 @@ public class ValueGraph
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseCmplExpr(CmplExpr v)
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseDivExpr(DivExpr v)
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseEqExpr(EqExpr v)
             {
                 handleBinop(v, false);
             }
-                
+
             public void caseNeExpr(NeExpr v)
             {
                 handleBinop(v, false);
             }
-            
+
             public void caseGeExpr(GeExpr v)
             {
                 handleBinop(v, true);
             }
-                
+
             public void caseGtExpr(GtExpr v)
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseLeExpr(LeExpr v)
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseLtExpr(LtExpr v)
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseMulExpr(MulExpr v)
             {
                 handleBinop(v, false);
@@ -305,27 +305,27 @@ public class ValueGraph
             {
                 handleBinop(v, false);
             }
-            
+
             public void caseRemExpr(RemExpr v)
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseShlExpr(ShlExpr v)
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseShrExpr(ShrExpr v)
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseUshrExpr(UshrExpr v)
             {
                 handleBinop(v, true);
             }
-            
+
             public void caseSubExpr(SubExpr v)
             {
                 handleBinop(v, true);
@@ -336,7 +336,7 @@ public class ValueGraph
             {
                 handleBinop(v, false);
             }
-            
+
             public void caseInterfaceInvokeExpr(InterfaceInvokeExpr v)
             {
                 handleUnknown(v);
@@ -346,12 +346,12 @@ public class ValueGraph
             {
                 handleUnknown(v);
             }
-            
+
             public void caseStaticInvokeExpr(StaticInvokeExpr v)
             {
                 handleUnknown(v);
             }
-            
+
             public void caseVirtualInvokeExpr(VirtualInvokeExpr v)
             {
                 handleUnknown(v);
@@ -387,7 +387,7 @@ public class ValueGraph
             {
                 handleUnknown(v);
             }
-            
+
             public void caseNewMultiArrayExpr(NewMultiArrayExpr v)
             {
                 handleUnknown(v);
@@ -446,7 +446,7 @@ public class ValueGraph
     public String toString()
     {
         StringBuffer tmp = new StringBuffer();
-        
+
         for(int i = 0; i < nodeList.size(); i++){
             tmp.append(nodeList.get(i));
             tmp.append("\n");
@@ -479,7 +479,7 @@ public class ValueGraph
         protected List<Node> children;
 
         protected boolean stub = false;
-        
+
         // stub node
         protected Node(Value local, boolean ignored)
         {
@@ -505,7 +505,7 @@ public class ValueGraph
                 }
             }
         }
-        
+
         protected void checkIfStub()
         {
             if(isStub())
@@ -525,7 +525,7 @@ public class ValueGraph
 
             // updateLabel() relies on nodeNumber being set
             nodeNumber = currentNodeNumber++;
-            updateLabel(); 
+            updateLabel();
             nodeList.add(nodeNumber, this);
         }
 
@@ -533,7 +533,7 @@ public class ValueGraph
         {
             this.node = node;
         }
-        
+
         protected void setOrdered(boolean ordered)
         {
             this.ordered = ordered;
@@ -553,7 +553,7 @@ public class ValueGraph
             }
             else{
                 // *** FIXME
-                
+
                 // NewExpr
                 // NewArrayExpr
                 // NewMultiArrayExpr
@@ -580,7 +580,7 @@ public class ValueGraph
                     nodeLabel = nodeLabel + " " + getNodeNumber();
             }
         }
-        
+
         public boolean isStub()
         {
             return stub;
@@ -588,7 +588,7 @@ public class ValueGraph
 
         public String getLabel()
         {
-            checkIfStub();            
+            checkIfStub();
             return nodeLabel;
         }
 
@@ -610,17 +610,17 @@ public class ValueGraph
             checkIfStub();
             return nodeNumber;
         }
-        
+
         public String toString()
         {
             checkIfStub();
 
             StringBuffer tmp = new StringBuffer();
-            
+
             Local local = getLocal(this);
             if(local != null)
                 tmp.append(local.toString());
-            
+
             tmp.append("\tNode " + getNodeNumber() + ": " + getLabel());
 
             List<Node> children = getChildren();
@@ -635,7 +635,7 @@ public class ValueGraph
                 }
                 tmp.append("]");
             }
-        
+
             return tmp.toString();
         }
     }
@@ -696,5 +696,5 @@ public class ValueGraph
         {
             return hashCode();
         }
-    }    
+    }
 }

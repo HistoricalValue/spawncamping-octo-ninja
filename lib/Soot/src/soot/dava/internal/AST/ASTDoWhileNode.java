@@ -40,7 +40,7 @@ public class ASTDoWhileNode extends ASTControlFlowNode
 
     /*
       Nomair A. Naeem 17-FEB-05
-      Needed because of change of grammar of condition being stored as a ASTCondition rather 
+      Needed because of change of grammar of condition being stored as a ASTCondition rather
       than the ConditionExpr which was the case before
     */
     public ASTDoWhileNode( SETNodeLabel label, ASTCondition ce, List<Object> body)
@@ -95,7 +95,7 @@ public class ASTDoWhileNode extends ASTControlFlowNode
     public String toString()
     {
 	StringBuffer b = new StringBuffer();
-	
+
 	b.append( label_toString());
 
 	b.append( "do");

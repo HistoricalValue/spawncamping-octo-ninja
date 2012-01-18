@@ -88,7 +88,7 @@ public class CombinedDUAnalysis extends BackwardFlowAnalysis implements Combined
     }
 
     // The actual analysis is below.
-    
+
     private final Map<ValueBox, Unit> useBoxToUnit = new HashMap<ValueBox, Unit>();
     private final Map<Unit, Value> unitToLocalDefed = new HashMap<Unit, Value>();
     private Local localDefed(Unit u) { return (Local) unitToLocalDefed.get(u); }
@@ -140,9 +140,9 @@ public class CombinedDUAnalysis extends BackwardFlowAnalysis implements Combined
         if(Options.v().verbose())
             G.v().out.println("[" + graph.getBody().getMethod().getName() +
                                "]     Constructing CombinedDUAnalysis...");
- 
+
         for( Iterator uIt = graph.iterator(); uIt.hasNext(); ) {
- 
+
             final Unit u = (Unit) uIt.next();
             List<Value> defs = localsInBoxes(u.getDefBoxes());
             if( defs.size() == 1 ) unitToLocalDefed.put(u, defs.get(0));
@@ -182,7 +182,7 @@ public class CombinedDUAnalysis extends BackwardFlowAnalysis implements Combined
         if(Options.v().verbose())
             G.v().out.println("[" + graph.getBody().getMethod().getName() +
                                "]     Finished CombinedDUAnalysis...");
- 
+
     }
     private List<Value> localsInBoxes(List/*ValueBox*/ boxes) {
         List<Value> ret = new ArrayList<Value>();
@@ -248,7 +248,7 @@ public class CombinedDUAnalysis extends BackwardFlowAnalysis implements Combined
     {
         return new ArraySparseSet();
     }
-        
+
     protected Object newInitialFlow()
     {
         return new ArraySparseSet();
@@ -257,7 +257,7 @@ public class CombinedDUAnalysis extends BackwardFlowAnalysis implements Combined
     protected void copy(Object source, Object dest) {
         FlowSet sourceSet = (FlowSet) source;
         FlowSet destSet   = (FlowSet) dest;
-            
+
         sourceSet.copy(destSet);
     }
 

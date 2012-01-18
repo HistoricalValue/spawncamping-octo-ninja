@@ -67,7 +67,7 @@ class Base_ic implements Base_icExpr {
     @Override public void setBase (final Value base) {
         if (base == null)
             throw new NullPointerException();
-        
+
         if (iie != null) {
             assert ifr == null;
             iie.setBase(base);
@@ -121,7 +121,7 @@ class Base_ic implements Base_icExpr {
 
 enum AlterationType { Insertion, Replacement, Removal, Appending }
 @SuppressWarnings("ClassWithoutLogger")
-final class Alteration {    
+final class Alteration {
     final AlterationType    type;
     final Unit              point;
     final Chain<Unit>       patch;
@@ -270,17 +270,17 @@ final class Transformer {
     }
 
 
-    
+
     private static Collection<? extends Local> getTagged (  final Chain<Local>  locals,
                                                             final SootMethod    method)
     {
          Collection<Local> result;
-         
+
         if (tpotifier_netbeans.SootSetuper.SootMode.equals(tpotifier_netbeans._SootMode.WholeProgramWithSpark)) {
             final PAG                       points  = (PAG) Scene.v().getPointsToAnalysis();
             final Map<Local, Iterable<Node[]>>
                                             aliases = new HashMap<Local, Iterable<Node[]>>(locals.size());
-            
+
             for (final Local local: locals) {
                 final LocalVarNode localVarNode = points.findLocalVarNode(local);
                 if (localVarNode == null)
@@ -292,7 +292,7 @@ final class Transformer {
                 subrs.add(allocnodes); subrs.add(loadnodes); subrs.add(simplenodes);
                 aliases.put(local, subrs);
             }
-    
+
             final Set<Local> tagged = new HashSet<Local>(20);
             for (final Entry<Local, Iterable<Node[]>> entry: aliases.entrySet()) {
                 final StringBuilder aliases_str_b = new StringBuilder(1024);
@@ -318,7 +318,7 @@ final class Transformer {
                         aliases_str_b.append(java.util.Arrays.toString(nodes));
                     }
                 }
-                
+
                 final String aliases_str = aliases_str_b.toString();
                 out.printf("%s: %s%n", entry.getKey(), aliases_str);
 //                if (isAnyTaggable(entry.getValue()))
@@ -850,7 +850,7 @@ final class Transformer {
 //        patch.addLast(opOnObj);
         return patch;
     }
-    
+
     private HashChain<Unit> generatePatchForProxiedObjectOperation(final Local local, final Local objHolder) {
         final Unit              noop    = jimple.newNopStmt();
         final HashChain<Unit>   patch   = generatePatchForProxiedObjectOperation(local, objHolder, noop);

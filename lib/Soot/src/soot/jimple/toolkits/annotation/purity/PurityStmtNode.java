@@ -50,20 +50,20 @@ public class PurityStmtNode implements PurityNode
     private static int n = 0;
 
     PurityStmtNode(Stmt id, boolean inside)
-    { 
+    {
 	this.id = id; this.inside = inside;
 	if (!nMap.containsKey(id)) { nMap.put(id,new Integer(n)); n++; }
     }
 
-    public String toString() 
-    { 
+    public String toString()
+    {
 	if (inside) return "I_"+nMap.get(id); else return "L_"+nMap.get(id);
-	//if (inside) return "I_"+id; else return "L_"+id; 
+	//if (inside) return "I_"+id; else return "L_"+id;
     }
 
-    public int hashCode() 
+    public int hashCode()
     { return id.hashCode(); }
-    
+
     public boolean equals(Object o)
     {
 	if (o instanceof PurityStmtNode) {
@@ -73,12 +73,12 @@ public class PurityStmtNode implements PurityNode
 	else return false;
     }
 
-    public boolean isInside() 
+    public boolean isInside()
     { return inside; }
 
     public boolean isLoad()
     { return !inside; }
 
-    public boolean isParam() 
+    public boolean isParam()
     { return false; }
 }

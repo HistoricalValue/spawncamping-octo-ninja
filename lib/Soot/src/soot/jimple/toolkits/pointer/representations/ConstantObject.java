@@ -18,7 +18,7 @@
  */
 
 /**
- * An instance of ConstantObject represents a set of aliased environmental 
+ * An instance of ConstantObject represents a set of aliased environmental
  * objects created by VM. It is used for:
  *          GeneralConstantObject
  *          ClassConstant

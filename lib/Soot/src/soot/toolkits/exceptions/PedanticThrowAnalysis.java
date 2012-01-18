@@ -36,10 +36,10 @@ import soot.jimple.ThrowStmt;
 public class PedanticThrowAnalysis extends AbstractThrowAnalysis {
 
     /**
-     * Constructs a <code>PedanticThrowAnalysis</code> for inclusion in 
+     * Constructs a <code>PedanticThrowAnalysis</code> for inclusion in
      * Soot's global variable manager, {@link G}.
      *
-     * @param g guarantees that the constructor may only be called 
+     * @param g guarantees that the constructor may only be called
      * from {@link Singletons}.
      */
     public PedanticThrowAnalysis(Singletons.Global g) {}
@@ -49,8 +49,8 @@ public class PedanticThrowAnalysis extends AbstractThrowAnalysis {
      *
      * @return Soot's <code>PedanticThrowAnalysis</code>.
      */
-    public static PedanticThrowAnalysis v() { 
-	return G.v().soot_toolkits_exceptions_PedanticThrowAnalysis(); 
+    public static PedanticThrowAnalysis v() {
+	return G.v().soot_toolkits_exceptions_PedanticThrowAnalysis();
     }
 
 
@@ -70,7 +70,7 @@ public class PedanticThrowAnalysis extends AbstractThrowAnalysis {
 
     /**
      * Returns the set of all <code>Throwable</code>s as the set
-     * of types that a <code>throw</code> instruction may throw implicitly, 
+     * of types that a <code>throw</code> instruction may throw implicitly,
      * that is, the possible types of errors which might arise in
      * the course of executing the <code>throw</code> instruction, rather
      * than the type of the <code>throw</code>'s operand.
@@ -86,7 +86,7 @@ public class PedanticThrowAnalysis extends AbstractThrowAnalysis {
 
     /**
      * Returns the set of all <code>Throwable</code>s as the set
-     * of types that a <code>throw</code> statement may throw implicitly, 
+     * of types that a <code>throw</code> statement may throw implicitly,
      * that is, the possible types of errors which might arise in
      * the course of executing the <code>throw</code> statement, rather
      * than the type of the <code>throw</code>'s operand.

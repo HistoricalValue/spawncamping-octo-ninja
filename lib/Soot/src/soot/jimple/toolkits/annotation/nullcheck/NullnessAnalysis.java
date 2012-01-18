@@ -69,7 +69,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 	 * The analysis info is a simple mapping of type {@link Value} to
 	 * any of the constants BOTTOM, NON_NULL, NULL or TOP.
 	 * This class returns BOTTOM by default.
-	 * 
+	 *
 	 * @author Julian Tibble
 	 */
 	protected class AnalysisInfo extends java.util.BitSet
@@ -94,7 +94,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 
 			return result;
 		}
-		
+
 		public void put(Value key, int val)
 		{
 			int index;
@@ -114,7 +114,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 	protected final static int NULL = 1;
 	protected final static int NON_NULL = 2;
 	protected final static int TOP = 3;
-	
+
 	protected final HashMap<Value,Integer> valueToIndex = new HashMap<Value,Integer>();
 	protected int used = 0;
 
@@ -124,7 +124,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 	 */
 	public NullnessAnalysis(UnitGraph graph) {
 		super(graph);
-		
+
 		doAnalysis();
 	}
 
@@ -136,9 +136,9 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 		AnalysisInfo in = (AnalysisInfo) flowin;
 		AnalysisInfo out = new AnalysisInfo(in);
 		AnalysisInfo outBranch = new AnalysisInfo(in);
-		
+
 		Stmt s = (Stmt)u;
-		
+
 		//in case of an if statement, we neet to compute the branch-flow;
 		//e.g. for a statement "if(x!=null) goto s" we have x==null for the fallOut and
 		//x!=null for the branchOut
@@ -152,7 +152,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 			MonitorStmt monitorStmt = (MonitorStmt) s;
 			out.put(monitorStmt.getOp(), NON_NULL);
 		}
-		
+
 		// if we have an array ref, set the base to non-null
 		if(s.containsArrayRef()) {
 			ArrayRef arrayRef = s.getArrayRef();
@@ -168,7 +168,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 			InvokeExpr invokeExpr = s.getInvokeExpr();
 			handleInvokeExpr(invokeExpr, out);
 		}
-		
+
 		//if we have a definition (assignment) statement to a ref-like type, handle it,
 		//i.e. assign it TOP, except in the following special cases:
 		// x=null,               assign NULL
@@ -180,7 +180,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 				handleRefTypeAssignment(defStmt, out);
 			}
 		}
-		
+
 		// now copy the computed info to all successors
 		for( Iterator it = fallOut.iterator(); it.hasNext(); ) {
 			copy( out, it.next() );
@@ -189,7 +189,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 			copy( outBranch, it.next() );
 		}
 	}
-	
+
 	/**
 	 * This can be overwritten by sublasses to mark a certain value
 	 * as constantly non-null.
@@ -200,7 +200,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 	protected boolean isAlwaysNonNull(Value v) {
 		return false;
 	}
-	
+
 	private void handleIfStmt(JIfStmt ifStmt, AnalysisInfo in, AnalysisInfo out, AnalysisInfo outBranch) {
 		Value condition = ifStmt.getCondition();
 		if(condition instanceof JInstanceOfExpr) {
@@ -211,14 +211,14 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 			//a==b or a!=b
 			AbstractBinopExpr eqExpr = (AbstractBinopExpr) condition;
 			handleEqualityOrNonEqualityCheck(eqExpr, in, out, outBranch);
-		} 		
+		}
 	}
 
 	private void handleEqualityOrNonEqualityCheck(AbstractBinopExpr eqExpr, AnalysisInfo in,
 			AnalysisInfo out, AnalysisInfo outBranch) {
 		Value left = eqExpr.getOp1();
 		Value right = eqExpr.getOp2();
-		
+
 		Value val=null;
 		if(left==NullConstant.v()) {
 			if(right!=NullConstant.v()) {
@@ -229,7 +229,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 				val = left;
 			}
 		}
-		
+
 		//if we compare a local with null then process further...
 		if(val!=null && val instanceof Local) {
 			if(eqExpr instanceof JEqExpr)
@@ -254,7 +254,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 		out.put(val, NON_NULL);
 		outBranch.put(val, NULL);
 	}
-	
+
 	private void handleInstanceOfExpression(JInstanceOfExpr expr,
 			AnalysisInfo in, AnalysisInfo out, AnalysisInfo outBranch) {
 		Value op = expr.getOp();
@@ -290,13 +290,13 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 	private void handleRefTypeAssignment(DefinitionStmt assignStmt, AnalysisInfo out) {
 		Value left = assignStmt.getLeftOp();
 		Value right = assignStmt.getRightOp();
-		
+
 		//unbox casted value
 		if(right instanceof JCastExpr) {
 			JCastExpr castExpr = (JCastExpr) right;
 			right = castExpr.getOp();
 		}
-		
+
 		//if we have a definition (assignment) statement to a ref-like type, handle it,
 		if ( isAlwaysNonNull(right)
 		|| right instanceof NewExpr || right instanceof NewArrayExpr
@@ -347,7 +347,7 @@ public class NullnessAnalysis  extends ForwardBranchedFlowAnalysis
 	protected Object newInitialFlow() {
 		return new AnalysisInfo();
 	}
-	
+
 	/**
 	 * Returns <code>true</code> if the analysis could determine that i is always null
 	 * before the statement s.

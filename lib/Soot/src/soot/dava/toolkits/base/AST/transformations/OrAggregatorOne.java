@@ -33,16 +33,16 @@ import soot.dava.toolkits.base.AST.analysis.*;
   Nomair A. Naeem 18-FEB-2005
 
   The class is responsible to do the following transformation on the AST
-  
-  label_1:{                                  label_1:{ 
+
+  label_1:{                                  label_1:{
      label_0:{                                  if(cond1 || cond2){
          if(cond1){                                 Body1
             break label_0;                      }
          }                                   }
-         if(!cond2){                         Body2    
-            break label_1;     ------>  
-	 }                                     Cant remove label_1 as Body 1 
-    }//end of label_0                          might have reference to it  
+         if(!cond2){                         Body2
+            break label_1;     ------>
+	 }                                     Cant remove label_1 as Body 1
+    }//end of label_0                          might have reference to it
     Body1                                      can however set some flag if we are
   }//end of label_1                            sure that label_1 is not broken
   Body2                                        and later removed
@@ -82,7 +82,7 @@ public class OrAggregatorOne extends DepthFirstAdapter{
 	    //empty or marked for deletion
 	    return;
 	}
-	
+
 	List secondLabelsBodies= getSecondLabeledBlockBodies(secondLabeledBlockNode);
 
 	boolean allIfs = checkAllAreIfsWithProperBreaks(secondLabelsBodies.iterator(),outerLabel,innerLabel);
@@ -92,8 +92,8 @@ public class OrAggregatorOne extends DepthFirstAdapter{
 	}
 
 	//the pattern has been matched do the transformation
-	
-	// Create a list of conditions to be Ored together 
+
+	// Create a list of conditions to be Ored together
 	// remembering that the last ones condition is to be flipped
 	List<ASTCondition> conditions = getConditions(secondLabelsBodies.iterator());
 
@@ -107,7 +107,7 @@ public class OrAggregatorOne extends DepthFirstAdapter{
 	    else
 		newCond=new ASTOrCondition(newCond,next);
 	}
-	
+
 
 	//will contain the Body of the ASTIfNode
 	List<Object> newIfBody = new ArrayList<Object>();
@@ -142,17 +142,17 @@ public class OrAggregatorOne extends DepthFirstAdapter{
 
 	UselessLabelFinder.v().findAndKill(node);
     }
-    
+
 
     private ASTLabeledBlockNode isLabelWithinLabel(ASTLabeledBlockNode node){
-	List<Object> subBodies = node.get_SubBodies(); 
+	List<Object> subBodies = node.get_SubBodies();
 	if(subBodies.size()==0){ //shouldnt happen
 	    //labeledBlockNodes size is zero this is a useless label
 	    //marked for removal by setting an empty SETNodeLabel
 	    node.set_Label(new SETNodeLabel());
 	    return null;
 	}
-	
+
 	//LabeledBlockNode had SubBody we know there is always only one
 	List bodies = (List)subBodies.get(0);
 	//these bodies should be a labelled block followed by something
@@ -167,16 +167,16 @@ public class OrAggregatorOne extends DepthFirstAdapter{
 	ASTNode firstBody = (ASTNode)bodies.get(0);
 	if(!(firstBody instanceof ASTLabeledBlockNode)){
 	    //first body is not a labeledBlock node thus the pattern
-	    //does not have the shape 
+	    //does not have the shape
 	    //                      label_1:
-	    //                          label_0   
+	    //                          label_0
 	    return null;
 	}
-	
+
 	//Pattern is fine return the ASTLabeledBlockNode found
 	return (ASTLabeledBlockNode)firstBody;
     }
-    
+
 
     private List getSecondLabeledBlockBodies(ASTLabeledBlockNode secondLabeledBlockNode){
 	//retrieve the SubBodies of this second labeledblock
@@ -188,20 +188,20 @@ public class OrAggregatorOne extends DepthFirstAdapter{
 	    return null;
 	}
 	/*
-	  there is atleast one body in there and infact it should be only one 
+	  there is atleast one body in there and infact it should be only one
 	  since this is a labeledBlockNode
 	*/
 	List secondLabelsBodies = (List)secondLabelsSubBodies.get(0);
-	
+
 	//return the list
 	return secondLabelsBodies;
     }
-    
+
     private boolean checkAllAreIfsWithProperBreaks(Iterator it,String outerLabel, String innerLabel){
 	//the pattern says that ALL bodies in this list should be IF statements
 	while(it.hasNext()){
 	    ASTNode secondLabelsBody = (ASTNode)it.next();
-	    
+
 	    //check that this is a ifNode with a single statement
 	    Stmt stmt = isIfNodeWithOneStatement(secondLabelsBody);
 	    if(stmt == null){
@@ -214,7 +214,7 @@ public class OrAggregatorOne extends DepthFirstAdapter{
 		//stmt does not break a label
 		return false;
 	    }
-	    
+
 	    //check if this is the inner label broken and is not the last in the iterator
 	    if(labelBroken.compareTo(innerLabel)==0 && it.hasNext())
 		continue;
@@ -267,13 +267,13 @@ public class OrAggregatorOne extends DepthFirstAdapter{
 	    //if body should always have oneSubBody
 	    return null;
 	}
-	
+
 	//if has one SubBody
 	List ifBody = (List)ifSubBodies.get(0);
-	
+
 	//Looking for a statement sequence node with a single stmt
 	if(ifBody.size()!=1){
-	    //there should only be one body 
+	    //there should only be one body
 	    return null;
 	}
 
@@ -284,7 +284,7 @@ public class OrAggregatorOne extends DepthFirstAdapter{
 	    return null;
 	}
 
-	//the only ASTnode is a ASTStatementSequence 
+	//the only ASTnode is a ASTStatementSequence
 	List<Object> statements = ((ASTStatementSequenceNode)ifBodysBody).getStatements();
 	if(statements.size()!=1){
 	    //there is more than one statement
@@ -304,13 +304,13 @@ public class OrAggregatorOne extends DepthFirstAdapter{
       of methods called before in the outASTLabeledBlockNode
       it knows the following:
       1, All nodes are ASTIFNodes
-    */  
+    */
     private List<ASTCondition> getConditions(Iterator it){
 	List<ASTCondition> toReturn = new ArrayList<ASTCondition>();
 	while(it.hasNext()){
 	    //safe cast since we know these are all ASTIfNodes
 	    ASTIfNode node = (ASTIfNode)it.next();
-	    
+
 	    ASTCondition cond = node.get_Condition();
 	    //check if this is the last in which case we need to flip
 	    if(it.hasNext()){

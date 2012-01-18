@@ -5,7 +5,7 @@ import java.io.*;
 
 /**
  * The ConstantValue attribute stores an index into the constant pool
- * that represents constant value.  A class's static fields have 
+ * that represents constant value.  A class's static fields have
  * constant value attributes.
  *
  * @see polyglot.types.reflect Field

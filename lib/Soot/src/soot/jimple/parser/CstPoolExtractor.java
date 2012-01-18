@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,8 +34,8 @@ import soot.jimple.parser.analysis.*;
 import java.util.*;
 
 
-/** 
- *  Walks a jimple AST, extracting all the contained reference 
+/**
+ *  Walks a jimple AST, extracting all the contained reference
  *  type names.
  */
 
@@ -45,29 +45,29 @@ class CstPoolExtractor
     private  Set mRefTypes = null;
     private Start mParseTree;
 
-    public CstPoolExtractor(Start parseTree) 
+    public CstPoolExtractor(Start parseTree)
     {
         mParseTree = parseTree;
     }
 
     public Set getCstPool()
     {
-        if(mRefTypes == null) {            
+        if(mRefTypes == null) {
             mRefTypes = new HashSet();
-            CstPoolExtractorWalker  walker = new CstPoolExtractorWalker();         
-            mParseTree.apply(walker);          
+            CstPoolExtractorWalker  walker = new CstPoolExtractorWalker();
+            mParseTree.apply(walker);
             mParseTree = null; // allow garbage collection
-        }           
+        }
         return mRefTypes;
-    }        
-                
+    }
+
 
     private class CstPoolExtractorWalker extends DepthFirstAdapter
-    {               
-        CstPoolExtractorWalker() 
-        {        
+    {
+        CstPoolExtractorWalker()
+        {
         }
-   
+
         public void inStart(Start node)
         {
             defaultIn(node);
@@ -77,18 +77,18 @@ class CstPoolExtractor
         public void outAQuotedClassName(AQuotedClassName node)
         {
 	    String tokenString = node.getQuotedName().getText();
-	    tokenString = tokenString.substring(1, tokenString.length() -1 );                                       
+	    tokenString = tokenString.substring(1, tokenString.length() -1 );
 	    tokenString = StringTools.getUnEscapedStringOf(tokenString);
 
             mRefTypes.add(tokenString);
-       
+
         }
 
         public void outAIdentClassName(AIdentClassName node)
         {
 	    String tokenString = node.getIdentifier().getText();
 	    tokenString = StringTools.getUnEscapedStringOf(tokenString);
-	    
+
 	    mRefTypes.add(tokenString);
         }
 
@@ -96,36 +96,36 @@ class CstPoolExtractor
         {
 	    String tokenString = node.getFullIdentifier().getText();
 	    tokenString = StringTools.getUnEscapedStringOf(tokenString);
-	    
+
             mRefTypes.add(tokenString);
         }
 
         public void outAQuotedNonvoidType(AQuotedNonvoidType node)
         {
 	    String tokenString = node.getQuotedName().getText();
-	    tokenString = tokenString.substring(1, tokenString.length() -1 );                                       
+	    tokenString = tokenString.substring(1, tokenString.length() -1 );
 	    tokenString = StringTools.getUnEscapedStringOf(tokenString);
 
             mRefTypes.add(tokenString);
         }
-   
+
         public void outAFullIdentNonvoidType(AFullIdentNonvoidType node)
         {
 	    String tokenString = node.getFullIdentifier().getText();
 	    tokenString = StringTools.getUnEscapedStringOf(tokenString);
 
             mRefTypes.add(tokenString);
-        }    
-    
+        }
+
         public void outAIdentNonvoidType(AIdentNonvoidType node)
         {
 	    String tokenString = node.getIdentifier().getText();
 	    tokenString = StringTools.getUnEscapedStringOf(tokenString);
-	    
+
             mRefTypes.add(tokenString);
         }
     }
-} 
+}
 
 
 

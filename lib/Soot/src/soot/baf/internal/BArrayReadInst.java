@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -46,8 +46,8 @@ public class BArrayReadInst extends AbstractOpTypeInst implements ArrayReadInst
         return 2;
     }
 
-    
-    public Object clone() 
+
+    public Object clone()
     {
         return new BArrayReadInst(getOpType());
     }
@@ -56,20 +56,20 @@ public class BArrayReadInst extends AbstractOpTypeInst implements ArrayReadInst
     {
         return 2;
     }
-    
+
     public int getOutCount()
     {
         return 1;
     }
 
-    
+
 
     final public String getName() { return "arrayread"; }
 
-    
+
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseArrayReadInst(this);
-    }   
+    }
     public boolean containsArrayRef() { return true; }
 }

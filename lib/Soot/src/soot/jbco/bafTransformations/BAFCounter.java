@@ -42,7 +42,7 @@ public class BAFCounter extends BodyTransformer implements IJbcoTransform {
   public void outputSummary() {
     out.println("Count: " + count);
   }
-  
+
   protected void internalTransform(Body b, String phaseName, Map options) {
     Iterator it = b.getUnits().snapshotIterator();
     while (it.hasNext()) {

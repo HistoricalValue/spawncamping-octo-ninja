@@ -24,7 +24,7 @@ package soot.javaToJimple;
 import java.util.*;
 
 public abstract class AbstractJimpleBodyBuilder {
-   
+
     protected soot.jimple.JimpleBody body;
 
     public void ext(AbstractJimpleBodyBuilder ext){
@@ -39,7 +39,7 @@ public abstract class AbstractJimpleBodyBuilder {
         return ext;
     }
     private AbstractJimpleBodyBuilder ext = null;
-    
+
     public void base(AbstractJimpleBodyBuilder base){
         this.base = base;
     }
@@ -47,20 +47,20 @@ public abstract class AbstractJimpleBodyBuilder {
         return base;
     }
     private AbstractJimpleBodyBuilder base = this;
-    
+
     protected soot.jimple.JimpleBody createJimpleBody(polyglot.ast.Block block, List formals, soot.SootMethod sootMethod){
         return ext().createJimpleBody(block, formals, sootMethod);
     }
-    
+
     /*protected soot.Value createExpr(polyglot.ast.Expr expr){
         return ext().createExpr(expr);
     }*/
-    
+
     protected soot.Value createAggressiveExpr(polyglot.ast.Expr expr, boolean reduceAggressively, boolean reverseCondIfNec){
         //System.out.println("in abstract");
         return ext().createAggressiveExpr(expr, reduceAggressively, reverseCondIfNec);
     }
-    
+
     protected void createStmt(polyglot.ast.Stmt stmt){
         ext().createStmt(stmt);
     }
@@ -68,24 +68,24 @@ public abstract class AbstractJimpleBodyBuilder {
     protected boolean needsAccessor(polyglot.ast.Expr expr){
         return ext().needsAccessor(expr);
     }
-    
+
     protected soot.Local handlePrivateFieldAssignSet(polyglot.ast.Assign assign){
         return ext().handlePrivateFieldAssignSet(assign);
     }
-    
+
     protected soot.Local handlePrivateFieldUnarySet(polyglot.ast.Unary unary){
         return ext().handlePrivateFieldUnarySet(unary);
     }
-    
+
 
     protected soot.Value getAssignRightLocal(polyglot.ast.Assign assign, soot.Local leftLocal){
         return ext().getAssignRightLocal(assign, leftLocal);
     }
-   
+
     protected soot.Value getSimpleAssignRightLocal(polyglot.ast.Assign assign){
         return ext().getSimpleAssignRightLocal(assign);
     }
-   
+
     protected soot.Local handlePrivateFieldSet(polyglot.ast.Expr expr, soot.Value right, soot.Value base){
         return ext().handlePrivateFieldSet(expr, right, base);
     }

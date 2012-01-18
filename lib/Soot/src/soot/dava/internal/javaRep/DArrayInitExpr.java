@@ -15,15 +15,15 @@ import soot.util.Switch;
 public class DArrayInitExpr implements Value {
 	// an array of elements for the initialization
 	ValueBox[] elements;
-	
+
 	//store the type of the array
 	Type type;
-	
+
 	public DArrayInitExpr (ValueBox[] elements,Type type){
 		this.elements = elements;
 		this.type=type;
 	}
-	
+
 	/*
 	 * go through the elements array
 	 * return useBoxes of each value plus the valubox itself
@@ -45,7 +45,7 @@ public class DArrayInitExpr implements Value {
 	public Object clone() {
 		return this;
 	}
-	
+
 	public Type getType() {
 		return type;
 	}
@@ -60,8 +60,8 @@ public class DArrayInitExpr implements Value {
 		up.literal("}");
 	}
 
-	
-	
+
+
 	public String toString() {
 		StringBuffer b = new StringBuffer();
 		b.append("{");
@@ -88,7 +88,7 @@ public class DArrayInitExpr implements Value {
 		int toReturn =0;
 		for (ValueBox element : elements)
 			toReturn += element.getValue().equivHashCode();
-		
+
 		return toReturn;
 	}
 

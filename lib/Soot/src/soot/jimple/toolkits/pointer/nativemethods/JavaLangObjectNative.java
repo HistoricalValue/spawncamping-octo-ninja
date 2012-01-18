@@ -34,7 +34,7 @@ public class JavaLangObjectNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -51,8 +51,8 @@ public class JavaLangObjectNative extends NativeMethodClass {
 
     } else if (subSignature.equals("java.lang.Object clone()")) {
       java_lang_Object_clone(method, thisVar, returnVar, params);
-      return; 
-     
+      return;
+
     } else {
       defaultMethod(method, thisVar, returnVar, params);
       return;
@@ -77,7 +77,7 @@ public class JavaLangObjectNative extends NativeMethodClass {
    * Creates and returns a copy of this object. The precise meaning of
    * "copy" may depend on the class of the object. The general intent
    * is that, for any object x, the expression:
-   * 
+   *
    *      x.clone() != x
    *
    * will be true, and that the expression:
@@ -98,7 +98,7 @@ public class JavaLangObjectNative extends NativeMethodClass {
    *       analysis by implementing the ReferneceVariable.cloneObject()
    *       method.
    *
-   * protected native java.lang.Object clone() 
+   * protected native java.lang.Object clone()
    *                  throws java.lang.CloneNotSupported
    */
   public void java_lang_Object_clone(SootMethod method,
@@ -116,7 +116,7 @@ public class JavaLangObjectNative extends NativeMethodClass {
    * public native int hashCode();
    * public final native void notify();
    * public final native void notifyAll();
-   * public final native void wait(long) 
+   * public final native void wait(long)
    *              throws java.lang.InterruptedException;
    */
 

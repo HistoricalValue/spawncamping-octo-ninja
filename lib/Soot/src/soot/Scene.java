@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -64,7 +64,7 @@ public class Scene  //extends AbstractHost
     public Scene ( Singletons.Global g )
     {
     	setReservedNames();
-    	
+
         // load soot.class.path system property, if defined
         String scp = System.getProperty("soot.class.path");
 
@@ -86,12 +86,12 @@ public class Scene  //extends AbstractHost
         addSootBasicClasses();
     }
     public static Scene  v() { return G.v().soot_Scene (); }
-    
+
     Chain<SootClass> classes = new HashChain<SootClass>();
     Chain<SootClass> applicationClasses = new HashChain<SootClass>();
     Chain<SootClass> libraryClasses = new HashChain<SootClass>();
     Chain<SootClass> phantomClasses = new HashChain<SootClass>();
-    
+
     private final Map<String,Type> nameToClass = new HashMap<String,Type>();
 
     ArrayNumberer kindNumberer = new ArrayNumberer();
@@ -119,7 +119,7 @@ public class Scene  //extends AbstractHost
 
     // Two default values for constructing ExceptionalUnitGraphs:
     private ThrowAnalysis defaultThrowAnalysis = null;
-    
+
     public void setMainClass(SootClass m)
     {
         mainClass = m;
@@ -127,22 +127,22 @@ public class Scene  //extends AbstractHost
         	throw new RuntimeException("Main-class has no main method!");
         }
     }
-    
+
     Set<String> reservedNames = new HashSet<String>();
-    
+
     /**
         Returns a set of tokens which are reserved.  Any field, class, method, or local variable with such a name will be quoted.
      */
-     
+
     public Set<String> getReservedNames()
     {
         return reservedNames;
     }
-    
+
     /**
         If this name is in the set of reserved names, then return a quoted version of it.  Else pass it through.
      */
-    
+
     public String quotedNameOf(String s)
     {
         if(reservedNames.contains(s))
@@ -150,7 +150,7 @@ public class Scene  //extends AbstractHost
         else
             return s;
     }
-    
+
     public SootClass getMainClass()
     {
         if(mainClass == null) {
@@ -158,26 +158,26 @@ public class Scene  //extends AbstractHost
         }
         if(mainClass == null)
             throw new RuntimeException("There is no main class set!");
-            
+
         return mainClass;
     }
     public SootMethod getMainMethod() {
         if(mainClass==null) {
             throw new RuntimeException("There is no main class set!");
-        } 
+        }
         if (!mainClass.declaresMethod ("main", new SingletonList( ArrayType.v(RefType.v("java.lang.String"), 1) ), VoidType.v())) {
             throw new RuntimeException("Main class declares no main method!");
         }
-        return mainClass.getMethod ("main", new SingletonList( ArrayType.v(RefType.v("java.lang.String"), 1) ), VoidType.v());   
+        return mainClass.getMethod ("main", new SingletonList( ArrayType.v(RefType.v("java.lang.String"), 1) ), VoidType.v());
     }
-    
-    
+
+
     public void setSootClassPath(String p)
     {
         sootClassPath = p;
         SourceLocator.v().invalidateClassPath();
     }
-    
+
     public String getSootClassPath()
     {
         if( sootClassPath == null ) {
@@ -186,7 +186,7 @@ public class Scene  //extends AbstractHost
                 sootClassPath = optionscp;
 
             String defaultSootClassPath = defaultClassPath();
-	
+
 	        //if no classpath is given on the command line, take the default
 	        if( sootClassPath == null ) {
 	        	sootClassPath = defaultSootClassPath;
@@ -195,14 +195,14 @@ public class Scene  //extends AbstractHost
 	            if(Options.v().prepend_classpath()) {
 	            	//if the prepend flag is set, append the default classpath
 	            	sootClassPath += File.pathSeparator + defaultSootClassPath;
-	            } 
+	            }
 	            //else, leave it as it is
-	        }        
+	        }
         }
 
         return sootClassPath;
     }
-    
+
 	public String defaultClassPath() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(System.getProperty("java.class.path")+File.pathSeparator);
@@ -216,7 +216,7 @@ public class Scene  //extends AbstractHost
 	        sb.append("Classes");
 	        sb.append(File.separator);
 	        sb.append("classes.jar");
-	
+
 	        sb.append(File.pathSeparator);
 	        sb.append(System.getProperty("java.home"));
 	        sb.append(File.separator);
@@ -235,14 +235,14 @@ public class Scene  //extends AbstractHost
             sb.append(File.separator);
             sb.append("rt.jar");
         }
-        
+
 		if(Options.v().whole_program() || Options.v().output_format()==Options.output_format_dava) {
 			//add jce.jar, which is necessary for whole program mode
-			//(java.security.Signature from rt.jar import javax.crypto.Cipher from jce.jar            	
+			//(java.security.Signature from rt.jar import javax.crypto.Cipher from jce.jar
 			sb.append(File.pathSeparator+
 				System.getProperty("java.home")+File.separator+"lib"+File.separator+"jce.jar");
 		}
-		
+
 		return sb.toString();
 	}
 
@@ -257,7 +257,7 @@ public class Scene  //extends AbstractHost
         activePointsToAnalysis = null;
     }
 
-    public void addClass(SootClass c) 
+    public void addClass(SootClass c)
     {
         if(c.isInScene())
             throw new RuntimeException("already managed: "+c.getName());
@@ -280,7 +280,7 @@ public class Scene  //extends AbstractHost
             throw new RuntimeException();
 
         classes.remove(c);
-        
+
         if(c.isLibraryClass()) {
             libraryClasses.remove(c);
         } else if(c.isPhantomClass()) {
@@ -288,7 +288,7 @@ public class Scene  //extends AbstractHost
         } else if(c.isApplicationClass()) {
             applicationClasses.remove(c);
         }
-        
+
         c.getType().setSootClass(null);
         c.setInScene(false);
         modifyHierarchy();
@@ -302,7 +302,7 @@ public class Scene  //extends AbstractHost
         SootClass c = type.getSootClass();
         return c.isInScene();
     }
-    
+
     public boolean containsType(String className)
     {
         return nameToClass.containsKey(className);
@@ -338,7 +338,7 @@ public class Scene  //extends AbstractHost
     {
         return grabField(fieldSignature) != null;
     }
-    
+
     private SootMethod grabMethod(String methodSignature)
     {
         String cname = signatureToClass( methodSignature );
@@ -371,21 +371,21 @@ public class Scene  //extends AbstractHost
         throw new RuntimeException("tried to get nonexistent method "+methodSignature);
     }
 
-    /** 
+    /**
      * Attempts to load the given class and all of the required support classes.
      * Returns the original class if it was loaded, or null otherwise.
      */
-     
-    public SootClass tryLoadClass(String className, int desiredLevel) 
-    {   
+
+    public SootClass tryLoadClass(String className, int desiredLevel)
+    {
         /*
         if(Options.v().time())
             Main.v().resolveTimer.start();
         */
-        
+
         setPhantomRefs(true);
         //SootResolver resolver = new SootResolver();
-        if( !getPhantomRefs() 
+        if( !getPhantomRefs()
         && SourceLocator.v().getClassSource(className) == null ) {
             setPhantomRefs(false);
             return null;
@@ -395,30 +395,30 @@ public class Scene  //extends AbstractHost
         setPhantomRefs(false);
 
         return toReturn;
-        
+
         /*
         if(Options.v().time())
             Main.v().resolveTimer.end(); */
     }
-    
-    /** 
+
+    /**
      * Loads the given class and all of the required support classes.  Returns the first class.
      */
-     
-    public SootClass loadClassAndSupport(String className) 
+
+    public SootClass loadClassAndSupport(String className)
     {
         SootClass ret = loadClass(className, SootClass.SIGNATURES);
         if( !ret.isPhantom() ) ret = loadClass(className, SootClass.BODIES);
         return ret;
     }
 
-    public SootClass loadClass(String className, int desiredLevel) 
-    {   
+    public SootClass loadClass(String className, int desiredLevel)
+    {
         /*
         if(Options.v().time())
             Main.v().resolveTimer.start();
         */
-        
+
         setPhantomRefs(true);
         //SootResolver resolver = new SootResolver();
         SootResolver resolver = SootResolver.v();
@@ -426,18 +426,18 @@ public class Scene  //extends AbstractHost
         setPhantomRefs(false);
 
         return toReturn;
-        
+
         /*
         if(Options.v().time())
             Main.v().resolveTimer.end(); */
     }
-    
+
     /**
-     * Returns the RefType with the given className.  
+     * Returns the RefType with the given className.
      * @throws IllegalStateException if the RefType for this class cannot be found.
      * Use {@link #containsType(String)} to check if type is registered
      */
-    public RefType getRefType(String className) 
+    public RefType getRefType(String className)
     {
         RefType refType = (RefType) nameToClass.get(className);
         if(refType==null) {
@@ -447,7 +447,7 @@ public class Scene  //extends AbstractHost
         }
 		return refType;
     }
-    
+
     /**
      * Returns the {@link RefType} for {@link Object}.
      */
@@ -456,15 +456,15 @@ public class Scene  //extends AbstractHost
     }
 
     /**
-     * Returns the RefType with the given className.  
+     * Returns the RefType with the given className.
      */
-    public void addRefType(RefType type) 
+    public void addRefType(RefType type)
     {
         nameToClass.put(type.getClassName(), type);
     }
 
     /**
-     * Returns the SootClass with the given className.  
+     * Returns the SootClass with the given className.
      */
 
 	public SootClass getSootClass(String className) {
@@ -489,7 +489,7 @@ public class Scene  //extends AbstractHost
     /**
      * Returns an backed chain of the classes in this manager.
      */
-     
+
     public Chain<SootClass> getClasses()
     {
         return classes;
@@ -541,21 +541,21 @@ public class Scene  //extends AbstractHost
         Retrieves the active side-effect analysis
      */
 
-    public SideEffectAnalysis getSideEffectAnalysis() 
+    public SideEffectAnalysis getSideEffectAnalysis()
     {
         if(!hasSideEffectAnalysis()) {
 	    setSideEffectAnalysis( new SideEffectAnalysis(
 			getPointsToAnalysis(),
 			getCallGraph() ) );
 	}
-            
+
         return activeSideEffectAnalysis;
     }
-    
+
     /**
         Sets the active side-effect analysis
      */
-     
+
     public void setSideEffectAnalysis(SideEffectAnalysis sea)
     {
         activeSideEffectAnalysis = sea;
@@ -565,7 +565,7 @@ public class Scene  //extends AbstractHost
     {
         return activeSideEffectAnalysis != null;
     }
-    
+
     public void releaseSideEffectAnalysis()
     {
         activeSideEffectAnalysis = null;
@@ -576,19 +576,19 @@ public class Scene  //extends AbstractHost
         Retrieves the active pointer analysis
      */
 
-    public PointsToAnalysis getPointsToAnalysis() 
+    public PointsToAnalysis getPointsToAnalysis()
     {
         if(!hasPointsToAnalysis()) {
 	    return DumbPointerAnalysis.v();
 	}
-            
+
         return activePointsToAnalysis;
     }
-    
+
     /**
         Sets the active pointer analysis
      */
-     
+
     public void setPointsToAnalysis(PointsToAnalysis pa)
     {
         activePointsToAnalysis = pa;
@@ -598,7 +598,7 @@ public class Scene  //extends AbstractHost
     {
         return activePointsToAnalysis != null;
     }
-    
+
     public void releasePointsToAnalysis()
     {
         activePointsToAnalysis = null;
@@ -617,18 +617,18 @@ public class Scene  //extends AbstractHost
         Retrieves the active fast hierarchy
      */
 
-    public FastHierarchy getFastHierarchy() 
+    public FastHierarchy getFastHierarchy()
     {
         if(!hasFastHierarchy())
             throw new RuntimeException("no active FastHierarchy present for scene");
-            
+
         return activeFastHierarchy;
     }
-    
+
     /**
         Sets the active hierarchy
      */
-     
+
     public void setFastHierarchy(FastHierarchy hierarchy)
     {
         activeFastHierarchy = hierarchy;
@@ -638,7 +638,7 @@ public class Scene  //extends AbstractHost
     {
         return activeFastHierarchy != null;
     }
-    
+
     public void releaseFastHierarchy()
     {
         activeFastHierarchy = null;
@@ -649,19 +649,19 @@ public class Scene  //extends AbstractHost
         Retrieves the active hierarchy
      */
 
-    public Hierarchy getActiveHierarchy() 
+    public Hierarchy getActiveHierarchy()
     {
         if(!hasActiveHierarchy())
             //throw new RuntimeException("no active Hierarchy present for scene");
             setActiveHierarchy( new Hierarchy() );
-            
+
         return activeHierarchy;
     }
-    
+
     /**
         Sets the active hierarchy
      */
-     
+
     public void setActiveHierarchy(Hierarchy hierarchy)
     {
         activeHierarchy = hierarchy;
@@ -671,7 +671,7 @@ public class Scene  //extends AbstractHost
     {
         return activeHierarchy != null;
     }
-    
+
     public void releaseActiveHierarchy()
     {
         activeHierarchy = null;
@@ -700,15 +700,15 @@ public class Scene  //extends AbstractHost
         this.cscg = cscg;
     }
 
-    public CallGraph getCallGraph() 
+    public CallGraph getCallGraph()
     {
         if(!hasCallGraph()) {
             throw new RuntimeException( "No call graph present in Scene. Maybe you want Whole Program mode (-w)." );
         }
-            
+
         return activeCallGraph;
     }
-    
+
     public void setCallGraph(CallGraph cg)
     {
         reachableMethods = null;
@@ -719,7 +719,7 @@ public class Scene  //extends AbstractHost
     {
         return activeCallGraph != null;
     }
-    
+
     public void releaseCallGraph()
     {
         activeCallGraph = null;
@@ -742,7 +742,7 @@ public class Scene  //extends AbstractHost
     public void releaseReachableMethods() {
         reachableMethods = null;
     }
-   
+
     public boolean getPhantomRefs()
     {
         //if( !Options.v().allow_phantom_refs() ) return false;
@@ -754,7 +754,7 @@ public class Scene  //extends AbstractHost
     {
         allowsPhantomRefs = value;
     }
-    
+
     public boolean allowsPhantomRefs()
     {
         return getPhantomRefs();
@@ -782,7 +782,7 @@ public class Scene  //extends AbstractHost
      *
      * @return the default {@link ThrowAnalysis}
      */
-    public ThrowAnalysis getDefaultThrowAnalysis() 
+    public ThrowAnalysis getDefaultThrowAnalysis()
     {
 	if( defaultThrowAnalysis == null ) {
 	    int optionsThrowAnalysis = Options.v().throw_analysis();
@@ -807,14 +807,14 @@ public class Scene  //extends AbstractHost
      *
      * @param the default {@link ThrowAnalysis}.
      */
-    public void setDefaultThrowAnalysis(ThrowAnalysis ta) 
+    public void setDefaultThrowAnalysis(ThrowAnalysis ta)
     {
 	defaultThrowAnalysis = ta;
     }
 
     private void setReservedNames()
     {
-        Set<String> rn = getReservedNames();        
+        Set<String> rn = getReservedNames();
         rn.add("newarray");
         rn.add("newmultiarray");
         rn.add("nop");
@@ -934,7 +934,7 @@ public class Scene  //extends AbstractHost
 	addBasicClass("java.lang.Runnable");
 	addBasicClass("java.lang.Cloneable");
 
-	addBasicClass("java.io.Serializable");	
+	addBasicClass("java.io.Serializable");
 
 	addBasicClass("java.lang.ref.Finalizer");
     }
@@ -942,18 +942,18 @@ public class Scene  //extends AbstractHost
     public void addBasicClass(String name) {
 	addBasicClass(name,SootClass.HIERARCHY);
     }
-    
+
     public void addBasicClass(String name,int level) {
 	basicclasses[level].add(name);
     }
 
     /** Load just the set of basic classes soot needs, ignoring those
-     *  specified on the command-line. You don't need to use both this and 
+     *  specified on the command-line. You don't need to use both this and
      *  loadNecessaryClasses, though it will only waste time.
      */
     public void loadBasicClasses() {
     	addReflectionTraceClasses();
-    	
+
 		for(int i=SootClass.BODIES;i>=SootClass.HIERARCHY;i--) {
 		    for(String name: basicclasses[i]) {
 		    	tryLoadClass(name,i);
@@ -964,7 +964,7 @@ public class Scene  //extends AbstractHost
     private void addReflectionTraceClasses() {
     	CGOptions options = new CGOptions( PhaseOptions.v().getPhaseOptions("cg") );
     	String log = options.reflection_log();
-    	
+
     	Set<String> classNames = new HashSet<String>();
     	if(log!=null && log.length()>0) {
 			BufferedReader reader;
@@ -991,7 +991,7 @@ public class Scene  //extends AbstractHost
 				throw new RuntimeException("Line: '"+line+"'", e);
 			}
     	}
-    	
+
     	for (String c : classNames) {
     		addBasicClass(c, SootClass.BODIES);
 		}
@@ -1059,7 +1059,7 @@ public class Scene  //extends AbstractHost
 
             dynamicClasses.add( loadClassAndSupport(className) );
         }
-        
+
         //remove non-concrete classes that may accidentally have been loaded
         for (Iterator<SootClass> iterator = dynamicClasses.iterator(); iterator.hasNext();) {
 			SootClass c = iterator.next();
@@ -1074,7 +1074,7 @@ public class Scene  //extends AbstractHost
 
 
     /* Generate classes to process, adding or removing package marked by
-     * command line options. 
+     * command line options.
      */
     private void prepareClasses() {
 
@@ -1143,7 +1143,7 @@ public class Scene  //extends AbstractHost
 
 
     /** Create an unresolved reference to a method. */
-    public SootMethodRef makeMethodRef( 
+    public SootMethodRef makeMethodRef(
             SootClass declaringClass,
             String name,
             List<Type> parameterTypes,
@@ -1154,23 +1154,23 @@ public class Scene  //extends AbstractHost
     }
 
     /** Create an unresolved reference to a constructor. */
-    public SootMethodRef makeConstructorRef( 
+    public SootMethodRef makeConstructorRef(
             SootClass declaringClass,
             List<Type> parameterTypes) {
-        return makeMethodRef(declaringClass, SootMethod.constructorName, 
+        return makeMethodRef(declaringClass, SootMethod.constructorName,
                                          parameterTypes, VoidType.v(), false );
     }
 
 
     /** Create an unresolved reference to a field. */
-    public SootFieldRef makeFieldRef( 
+    public SootFieldRef makeFieldRef(
             SootClass declaringClass,
             String name,
             Type type,
             boolean isStatic) {
         return new AbstractSootFieldRef(declaringClass, name, type, isStatic);
     }
-    /** Returns the list of SootClasses that have been resolved at least to 
+    /** Returns the list of SootClasses that have been resolved at least to
      * the level specified. */
     public List/*SootClass*/<SootClass> getClasses(int desiredLevel) {
         List<SootClass> ret = new ArrayList<SootClass>();
@@ -1189,31 +1189,31 @@ public class Scene  //extends AbstractHost
         if( Options.v().main_class() != null
                 && Options.v().main_class().length() > 0 ) {
             setMainClass(getSootClass(Options.v().main_class()));
-        } else {             	
-        	// try to infer a main class from the command line if none is given 
+        } else {
+        	// try to infer a main class from the command line if none is given
         	for (Iterator<String> classIter = Options.v().classes().iterator(); classIter.hasNext();) {
                     SootClass c = getSootClass(classIter.next());
                     if (c.declaresMethod ("main", new SingletonList( ArrayType.v(RefType.v("java.lang.String"), 1) ), VoidType.v()))
                     {
-                        G.v().out.println("No main class given. Inferred '"+c.getName()+"' as main class.");					
+                        G.v().out.println("No main class given. Inferred '"+c.getName()+"' as main class.");
                         setMainClass(c);
                         return;
                     }
             }
-        	
-        	// try to infer a main class from the usual classpath if none is given 
+
+        	// try to infer a main class from the usual classpath if none is given
         	for (Iterator<SootClass> classIter = getApplicationClasses().iterator(); classIter.hasNext();) {
                     SootClass c = (SootClass) classIter.next();
                     if (c.declaresMethod ("main", new SingletonList( ArrayType.v(RefType.v("java.lang.String"), 1) ), VoidType.v()))
                     {
-                        G.v().out.println("No main class given. Inferred '"+c.getName()+"' as main class.");					
+                        G.v().out.println("No main class given. Inferred '"+c.getName()+"' as main class.");
                         setMainClass(c);
                         return;
                     }
             }
         }
     }
-    
+
     /**
      * This method returns true when in incremental build mode.
      * Other classes can query this flag and change the way in which they use the Scene,
@@ -1222,7 +1222,7 @@ public class Scene  //extends AbstractHost
     public boolean isIncrementalBuild() {
     	return incrementalBuild;
     }
-    
+
     public void initiateIncrementalBuild() {
     	this.incrementalBuild = true;
     }

@@ -9,7 +9,7 @@ import java.util.*;
 public interface CofferMethodDecl extends MethodDecl {
     KeySetNode entryKeys();
     CofferMethodDecl entryKeys(KeySetNode entryKeys);
-    
+
     KeySetNode returnKeys();
     CofferMethodDecl returnKeys(KeySetNode returnKeys);
 

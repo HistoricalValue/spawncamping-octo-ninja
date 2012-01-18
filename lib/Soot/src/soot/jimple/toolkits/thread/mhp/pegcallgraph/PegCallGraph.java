@@ -28,7 +28,7 @@ public class PegCallGraph implements DirectedGraph{
 	private final Map<Object,List> methodToPreds;
 	private final Map<Object,List> methodToSuccsTrim;
 	private final Set clinitMethods;
-	
+
 	public PegCallGraph( CallGraph cg){
 		clinitMethods = new HashSet();
 		chain = new HashChain();
@@ -46,7 +46,7 @@ public class PegCallGraph implements DirectedGraph{
 		//testMethodToPred();
 		//testClinitMethods();
 	}
-	
+
 	protected void testChain()
 	{
 		System.out.println("******** chain of pegcallgraph********");
@@ -54,7 +54,7 @@ public class PegCallGraph implements DirectedGraph{
 		while (it.hasNext()) {
 			SootMethod sm = (SootMethod)it.next();
 			System.out.println(sm);
-			//System.out.println("name: "+sm.getName());	
+			//System.out.println("name: "+sm.getName());
 		}
 	}
 	public Set getClinitMethods(){
@@ -88,8 +88,8 @@ public class PegCallGraph implements DirectedGraph{
 						if (edge.isClinit()){
 							clinitMethods.add(target);
 						}
-						
-						
+
+
 					}
 				}
 				//if (succsList == null) System.out.println("null succsList");
@@ -97,7 +97,7 @@ public class PegCallGraph implements DirectedGraph{
 			}
 		}
 		//testChain();
-		/* Because CallGraph.sourceMethods only "Returns an iterator 
+		/* Because CallGraph.sourceMethods only "Returns an iterator
 		 * over all methods that are the sources of at least one edge",
 		 * some application methods may not in methodToSuccs. So add them.
 		 */
@@ -105,7 +105,7 @@ public class PegCallGraph implements DirectedGraph{
 			Iterator chainIt = chain.iterator();
 			while (chainIt.hasNext()){
 				SootMethod sm = (SootMethod)chainIt.next();
-				
+
 				if (!methodToSuccs.containsKey(sm)){
 					methodToSuccs.put(sm, new ArrayList());
 					//System.out.println("put: "+sm+"into methodToSuccs");
@@ -126,13 +126,13 @@ public class PegCallGraph implements DirectedGraph{
 			}
 		}
 		//testMethodToSucc();
-		
-		
+
+
 		//unmodidiable
 		{
 			Iterator chainIt = chain.iterator();
 			while(chainIt.hasNext()){
-				
+
 				SootMethod s =  (SootMethod)chainIt.next();
 				//		System.out.println(s);
 				if (methodToSuccs.containsKey(s)){
@@ -140,38 +140,38 @@ public class PegCallGraph implements DirectedGraph{
 				}
 			}
 		}
-		
-		
+
+
 	}
 	private void buildPreds(){
-		
-		
+
+
 		// initialize the pred sets to empty
 		{
 			Iterator unitIt = chain.iterator();
-			
+
 			while(unitIt.hasNext()){
-				
+
 				methodToPreds.put(unitIt.next(), new ArrayList());
 			}
 		}
-		
+
 		{
 			Iterator unitIt = chain.iterator();
-			
+
 			while(unitIt.hasNext())
 			{
 				Object s =  unitIt.next();
-				
+
 				// Modify preds set for each successor for this statement
 				List succList = methodToSuccs.get(s);
 				if (succList.size()>0){
 					Iterator succIt = succList.iterator();
-					
+
 					while(succIt.hasNext()){
-						
+
 						Object successor =  succIt.next();
-						
+
 						List<Object> predList = methodToPreds.get(successor);
 						//  if (predList == null) System.out.println("null predList");
 						//if (s == null) System.out.println("null s");
@@ -185,11 +185,11 @@ public class PegCallGraph implements DirectedGraph{
 				}
 			}
 		}
-		
+
 		// Make pred lists unmodifiable.
 		{
 			Iterator unitIt = chain.iterator();
-			
+
 			while(unitIt.hasNext())
 			{
 				SootMethod s =  (SootMethod)unitIt.next();
@@ -199,7 +199,7 @@ public class PegCallGraph implements DirectedGraph{
 				}
 			}
 		}
-		
+
 	}
 	public void trim(){
 		//If there are multiple edges from one method to another, we only keeps one edge.  BROKEN
@@ -222,7 +222,7 @@ public class PegCallGraph implements DirectedGraph{
 	public List getTails(){
 		return tails;
 	}
-	
+
 	public List getTrimSuccsOf(Object s){
 		if (!methodToSuccsTrim.containsKey(s))
 			return java.util.Collections.EMPTY_LIST;
@@ -235,9 +235,9 @@ public class PegCallGraph implements DirectedGraph{
 //			throw new RuntimeException("Invalid method"+s);
 		return methodToSuccs.get(s);
 	}
-	
+
 	public List getPredsOf(Object s){
-		if (!methodToPreds.containsKey(s))	
+		if (!methodToPreds.containsKey(s))
 			return java.util.Collections.EMPTY_LIST;
 //			throw new RuntimeException("Invalid method"+s);
 		return methodToPreds.get(s);
@@ -246,9 +246,9 @@ public class PegCallGraph implements DirectedGraph{
 		return chain.iterator();
 	}
 	public int size(){
-		return chain.size();	
+		return chain.size();
 	}
-	
+
 	protected void testMethodToSucc(){
 		System.out.println("=====test methodToSucc ");
 		Set maps = methodToSuccs.entrySet();
@@ -257,18 +257,18 @@ public class PegCallGraph implements DirectedGraph{
 			System.out.println("---key=  "+entry.getKey());
 			List list = (List)entry.getValue();
 			if (list.size()>0){
-				
+
 				System.out.println("**succ set:");
 				Iterator it = list.iterator();
 				while (it.hasNext()){
 					System.out.println(it.next());
-					
-					
+
+
 				}
-				
+
 			}
 		}
-		System.out.println("=========methodToSucc--ends--------");	
+		System.out.println("=========methodToSucc--ends--------");
 	}
 	protected void testMethodToPred(){
 		System.out.println("=====test methodToPred ");
@@ -278,18 +278,18 @@ public class PegCallGraph implements DirectedGraph{
 			System.out.println("---key=  "+entry.getKey());
 			List list = (List)entry.getValue();
 			if (list.size()>0){
-				
+
 				System.out.println("**pred set:");
 				Iterator it = list.iterator();
 				while (it.hasNext()){
 					System.out.println(it.next());
-					
-					
+
+
 				}
-				
+
 			}
 		}
-		System.out.println("=========methodToPred--ends--------");	
+		System.out.println("=========methodToPred--ends--------");
 	}
-	
+
 }

@@ -13,7 +13,7 @@ public:
 
 	virtual bool equals(Object *obj) { return obj == this; };
 	virtual String *toString() { return makestring("Object"); };
-	
+
 };
 
 //namespaces

@@ -63,23 +63,23 @@ public class ErrorHandlingVisitor extends HaltingVisitor
         return ts;
     }
 
-    /** Replaces the functionality of the <code>enter()</code> method; all 
-      * sub-classes should over-ride this method instead of 
+    /** Replaces the functionality of the <code>enter()</code> method; all
+      * sub-classes should over-ride this method instead of
       * <code>enter()</code> if there is any chance of exceptions being
       * generated.
       *
-      * This method is the replacement for the <code>enter()</code> method, 
-      * so that all of its subclasses gain the error handling capabilities 
-      * of this visitor without having to rewrite it for the 
+      * This method is the replacement for the <code>enter()</code> method,
+      * so that all of its subclasses gain the error handling capabilities
+      * of this visitor without having to rewrite it for the
       * <code>enter()</code> for each sub-class.
       *
-      * This method allows for a <code>SemanticException</code> to be 
+      * This method allows for a <code>SemanticException</code> to be
       * thrown in the body, while <code>enter()</code> does not.
-      * 
+      *
       * @see polyglot.visit.NodeVisitor#enter(Node, Node)
       * @throws SemanticException
       * @param n The root of the subtree to be traversed.
-      * @return The <code>ErrorHandlingVisitor</code> which should be 
+      * @return The <code>ErrorHandlingVisitor</code> which should be
       * used to visit the children of <code>n</code>.
      */
     protected NodeVisitor enterCall(Node parent, Node n)
@@ -109,7 +109,7 @@ public class ErrorHandlingVisitor extends HaltingVisitor
       * </code> method, but allows <code>SemanticExceptions</code> to be
       * thrown.
       *
-      * This method is in addition to the <code>leave</code> method, 
+      * This method is in addition to the <code>leave</code> method,
       * and allows the compiler writer to write code that can throw errors
       * and let the polyglot infrastructure handle the exceptions.
       *
@@ -151,7 +151,7 @@ public class ErrorHandlingVisitor extends HaltingVisitor
      *
      * In overriding this method, unless the class explicitly does not
      * want to maintain any of the error handling aspects of this class, a call
-     * <code>super.enter</code> should be embedded within the method at the 
+     * <code>super.enter</code> should be embedded within the method at the
      * end.
      *
      * @param n The root of the subtree to be traversed.
@@ -183,7 +183,7 @@ public class ErrorHandlingVisitor extends HaltingVisitor
             }
             else {
                 // silent error; these should be thrown only
-                // when the error has already been reported 
+                // when the error has already been reported
             }
 
             if (! catchErrors(n)) {
@@ -214,7 +214,7 @@ public class ErrorHandlingVisitor extends HaltingVisitor
      *
      * In overriding this method, unless the class explicitly does not
      * want to maintain any of the error handling aspects of this class, a call
-     * <code>super.leave</code> should be embedded within the method at the 
+     * <code>super.leave</code> should be embedded within the method at the
      * end.
      *
      * @param old The original state of root of the current subtree.
@@ -223,7 +223,7 @@ public class ErrorHandlingVisitor extends HaltingVisitor
      * @return The final result of the traversal of the tree rooted at
      * <code>n</code>.
      */
- 
+
     public Node leave(Node parent, Node old, Node n, NodeVisitor v) {
         try {
             if (v instanceof ErrorHandlingVisitor &&
@@ -263,7 +263,7 @@ public class ErrorHandlingVisitor extends HaltingVisitor
             }
             else {
                 // silent error; these should be thrown only
-                // when the error has already been reported 
+                // when the error has already been reported
             }
 
             if (catchErrors(n)) {

@@ -26,7 +26,7 @@ public class PrivateAccessUses extends polyglot.visit.NodeVisitor {
 
     private final ArrayList<IdentityKey> list;
     private ArrayList avail;
-    
+
     public ArrayList<IdentityKey> getList() {
         return list;
     }
@@ -34,15 +34,15 @@ public class PrivateAccessUses extends polyglot.visit.NodeVisitor {
     public void avail(ArrayList list){
         avail = list;
     }
-    
+
     public PrivateAccessUses(){
         list = new ArrayList<IdentityKey>();
     }
 
     public polyglot.ast.Node leave(polyglot.ast.Node old, polyglot.ast.Node n, polyglot.visit.NodeVisitor visitor) {
-    
+
         if (n instanceof polyglot.ast.Field) {
-            
+
             polyglot.types.FieldInstance fi = ((polyglot.ast.Field)n).fieldInstance();
 
             if (avail.contains(new polyglot.util.IdentityKey(fi))){
@@ -50,7 +50,7 @@ public class PrivateAccessUses extends polyglot.visit.NodeVisitor {
             }
         }
         if (n instanceof polyglot.ast.Call) {
-            
+
             polyglot.types.ProcedureInstance pi = ((polyglot.ast.Call)n).methodInstance();
 
             if (avail.contains(new polyglot.util.IdentityKey(pi))) {
@@ -58,7 +58,7 @@ public class PrivateAccessUses extends polyglot.visit.NodeVisitor {
             }
         }
         if (n instanceof polyglot.ast.New) {
-            
+
             polyglot.types.ProcedureInstance pi = ((polyglot.ast.New)n).constructorInstance();
 
             if (avail.contains(new polyglot.util.IdentityKey(pi))) {
@@ -66,7 +66,7 @@ public class PrivateAccessUses extends polyglot.visit.NodeVisitor {
             }
         }
         if (n instanceof polyglot.ast.ConstructorCall) {
-            
+
             polyglot.types.ProcedureInstance pi = ((polyglot.ast.ConstructorCall)n).constructorInstance();
 
             if (avail.contains(new polyglot.util.IdentityKey(pi))) {

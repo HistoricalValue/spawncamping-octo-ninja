@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2003.  
+ * Modified by the Sable Research Group and others 1997-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -43,7 +43,7 @@ import soot.*;
  *
  */
 
-public class ZonedBlockGraph extends BlockGraph 
+public class ZonedBlockGraph extends BlockGraph
 {
     /**
      *   <p>Constructs a <tt>ZonedBlockGraph</tt> for the <tt>Unit</tt>s
@@ -67,8 +67,8 @@ public class ZonedBlockGraph extends BlockGraph
 
     /**
      *   Constructs a <tt>ZonedBlockGraph</tt> corresponding to the
-     *   <tt>Unit</tt>-level control flow represented by the 
-     *   passed {@link BriefUnitGraph}. 
+     *   <tt>Unit</tt>-level control flow represented by the
+     *   passed {@link BriefUnitGraph}.
      *
      *   @param unitGraph    The <tt>BriefUnitGraph</tt> for which to produce
      *                  a <tt>ZonedBlockGraph</tt>.
@@ -81,7 +81,7 @@ public class ZonedBlockGraph extends BlockGraph
     }
 
 
-    
+
     /**
      * <p>Utility method for computing the basic block leaders for a
      * {@link Body}, given its {@link UnitGraph} (i.e., the

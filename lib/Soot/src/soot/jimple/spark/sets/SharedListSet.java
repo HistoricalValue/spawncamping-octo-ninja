@@ -5,7 +5,7 @@ import soot.jimple.spark.pag.Node;
 import soot.jimple.spark.pag.PAG;
 import soot.util.BitVector;
 
-/* 
+/*
  * Reference counting was amazingly difficult to get right, for the number of lines of
  * code it makes up.
  * Reference counting keeps track of how many things are pointing to a ListNode.  When
@@ -19,7 +19,7 @@ import soot.util.BitVector;
  * has one extra thing pointing at it, so increase its reference count.
  * -Reference count decreases when a chain is detached.  Detachment is bit of a complicated
  * process; it should be described in my thesis.
- * 
+ *
  */
 
 //Can't use java.lang.ref.WeakReferences instead because:
@@ -44,7 +44,7 @@ add: O(n), and might add things to other lists too
 
  */
 
-/** Implementation of a points-to set as a sorted list of elements, 
+/** Implementation of a points-to set as a sorted list of elements,
  * but where similar lists share parts of their data.
  */
 public class SharedListSet extends PointsToSetInternal
@@ -54,7 +54,7 @@ public class SharedListSet extends PointsToSetInternal
         super( type );
         this.pag = pag;
 	}
-	
+
 	// Ripped from the other points-to sets - returns a factory that can be
 	// used to construct SharedHybridSets
 	public final static P2SetFactory getFactory() {
@@ -73,13 +73,13 @@ public class SharedListSet extends PointsToSetInternal
 		}
 		return false;
 	}
-	
+
 	public boolean isEmpty()
 	{
 		return data == null;
 	}
-	
-	public boolean forall(P2SetVisitor v) 
+
+	public boolean forall(P2SetVisitor v)
 	{
 		for (ListNode i = data; i != null; i = i.next)
 		{
@@ -87,7 +87,7 @@ public class SharedListSet extends PointsToSetInternal
 		}
 		return v.getReturnValue();
 	}
-	
+
 	private ListNode advanceExclude(ListNode exclude, ListNode other)
 	{
 		//If exclude's node is less than other's first node, then there
@@ -110,16 +110,16 @@ public class SharedListSet extends PointsToSetInternal
 		//This algorithm must be recursive because we don't know whether to detach until
 		//we know the rest of the list.
 
-		if (first == null) 
+		if (first == null)
 		{
 			if (other == null) return null;
-			
+
 			//Normally, we could just return other in this case.
 			//But the problem is that there might be elements to exclude from other.
 			//We also can't modify other and remove elements from it, because that would
 			//remove elements from the points-to set whose elements are being added to this
 			//one.
-			//So we have to create a new list from scratch of the copies of the elements 
+			//So we have to create a new list from scratch of the copies of the elements
 			//of other.
 			if (exclude == null && mask == null)
 			{
@@ -195,9 +195,9 @@ public class SharedListSet extends PointsToSetInternal
 			}
 			return retVal;
 		}
-		
+
 	}
-	
+
 	//Common function to prevent repeated code in add and addAll
 	private boolean addOrAddAll(ListNode first, ListNode other, ListNode exclude, BitVector mask)
 	{
@@ -216,7 +216,7 @@ public class SharedListSet extends PointsToSetInternal
 			return true;
 		}
 	}
-	
+
 	public boolean add(Node n)
 	{
 
@@ -232,17 +232,17 @@ public class SharedListSet extends PointsToSetInternal
 		other.decRefCount();  //undo its creation
 		return added;
 	}
-	
+
 	public boolean addAll(PointsToSetInternal other, PointsToSetInternal exclude)
 	{
 		if (other == null) return false;
-		
+
 		if ((!(other instanceof SharedListSet))
-				|| (exclude != null && !(exclude instanceof SharedListSet))) 
+				|| (exclude != null && !(exclude instanceof SharedListSet)))
 		{
 			return super.addAll(other, exclude);
 		}
-		else 
+		else
 		{
 			SharedListSet realOther = (SharedListSet) other,
 				realExclude = (SharedListSet) exclude;
@@ -250,11 +250,11 @@ public class SharedListSet extends PointsToSetInternal
 			BitVector mask = getBitMask(realOther, pag);
 
 			ListNode excludeData = (realExclude == null)? null : realExclude.data;
-			
+
 			return addOrAddAll(data, realOther.data, excludeData, mask);
 		}
 	}
-	
+
 	//Holds pairs of (Node, ListNode)
 	public class Pair
 	{
@@ -274,7 +274,7 @@ public class SharedListSet extends PointsToSetInternal
 		{
 			if (! (other instanceof Pair)) return false;
 			Pair o = (Pair)other;
-			return ((first == null && o.first == null) || first == o.first) 
+			return ((first == null && o.first == null) || first == o.first)
 			&& ((second == null && o.second == null) || second == o.second);
 		}
 	}
@@ -286,14 +286,14 @@ public class SharedListSet extends PointsToSetInternal
 		private Node elem;
 		private ListNode next = null;
 		public long refCount;
-		
+
 		public ListNode(Node elem, ListNode next)
 		{
 			this.elem = elem;
 			this.next = next;
 			refCount = 0;  //When it's first created, it's being used exactly once
 		}
-		
+
 		public void incRefCount()
 		{
 			++refCount;
@@ -312,7 +312,7 @@ public class SharedListSet extends PointsToSetInternal
 		}
 	}
 
-	//I wanted to make this a static method of ListNode, but it 
+	//I wanted to make this a static method of ListNode, but it
 	//wasn't working for some reason
 	private ListNode makeNode(Node elem, ListNode next)
 	{
@@ -326,15 +326,15 @@ public class SharedListSet extends PointsToSetInternal
 				//thing pointing at it (the newly created node)
 			AllSharedListNodes.v().allNodes.put(p, retVal);
 		}
-			
+
 		return retVal;
 	}
-	
+
 	//private final Map allNodes = AllSharedListNodes.v().allNodes;
 	//private static Map allNodes = new HashMap();
 	private PAG pag; // I think this is needed to get the size of the bit
 	// vector and the mask for casting
-	
+
 	private ListNode data = null;
-	
+
 }

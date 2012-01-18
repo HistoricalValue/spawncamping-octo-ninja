@@ -33,7 +33,7 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
     protected Map<Node, Partition> nodeToPartition;
 
     protected int currentPartitionNumber;
-    
+
     public SimpleGlobalValueNumberer(BlockGraph cfg)
     {
         this.cfg = cfg;
@@ -41,7 +41,7 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
         partitions = new HashSet<Partition>(); // not deterministic
         nodeToPartition = new HashMap<Node, Partition>();
         currentPartitionNumber = 0;
-        
+
         initPartition();
         iterPartition();
     }
@@ -60,13 +60,13 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
         SimpleGlobalValueNumberer sgvn = new SimpleGlobalValueNumberer(cfg);
         System.out.println(sgvn);
     }
-    
+
     public int getGlobalValueNumber(Local local)
     {
         Node node = vg.getNode(local);
         return nodeToPartition.get(node).getPartitionNumber();
     }
-    
+
     public boolean areEqual(Local local1, Local local2)
     {
         Node node1 = vg.getNode(local1);
@@ -74,16 +74,16 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
 
         return (nodeToPartition.get(node1) == nodeToPartition.get(node2));
     }
-    
+
     protected void initPartition()
     {
         Map<String, Partition> labelToPartition = new HashMap<String, Partition>();
-        
+
         Iterator<Node> topNodesIt = vg.getTopNodes().iterator();
         while(topNodesIt.hasNext()){
             Node node = topNodesIt.next();
             String label = node.getLabel();
-            
+
             Partition partition = labelToPartition.get(label);
             if(partition == null){
                 partition = new Partition();
@@ -97,7 +97,7 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
     }
 
     protected List<Partition> newPartitions;
-    
+
     protected void iterPartition()
     {
         newPartitions = new ArrayList<Partition>();
@@ -121,7 +121,7 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
         Node firstNode = (Node) partition.get(0);
         Partition newPartition = new Partition();
         boolean processNewPartition = false;
-        
+
         for(int i = 1; i < size; i++){
             Node node = (Node) partition.get(i);
 
@@ -138,7 +138,7 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
         if(processNewPartition)
             processPartition(newPartition);
     }
-    
+
     protected boolean childrenAreInSamePartition(Node node1, Node node2)
     {
         boolean ordered = node1.isOrdered();
@@ -151,7 +151,7 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
         int numberOfChildren = children1.size();
         if(children2.size() != numberOfChildren)
             return false;
-        
+
         if(ordered){
             for(int i = 0; i < numberOfChildren; i++){
                 Node child1 = children1.get(i);
@@ -202,7 +202,7 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
         while(partitionsIt.hasNext()){
             Partition partition = (Partition) partitionsIt.next();
             int partitionNumber = partition.getPartitionNumber();
-            
+
             Iterator partitionIt = partition.iterator();
             while(partitionIt.hasNext()){
                 Local local = vg.getLocal((Node)partitionIt.next());
@@ -212,14 +212,14 @@ public class SimpleGlobalValueNumberer implements GlobalValueNumberer
             }
         }
         */
-        
+
         return tmp.toString();
     }
-    
+
     protected class Partition extends ArrayList
     {
         protected int partitionNumber;
-        
+
         protected Partition()
         {
             super();

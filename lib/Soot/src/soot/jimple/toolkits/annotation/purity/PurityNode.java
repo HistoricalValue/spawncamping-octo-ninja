@@ -34,7 +34,7 @@ package soot.jimple.toolkits.annotation.purity;
  * arguments (structural equality).
  *
  */
-public interface PurityNode { 
+public interface PurityNode {
 
     /** Is it an inside node ? */
     public boolean isInside();
@@ -44,4 +44,4 @@ public interface PurityNode {
 
     /** Is it a parameter or this node ? */
     public boolean isParam();
-} 
+}

@@ -23,7 +23,7 @@ package soot;
  * @author Ondrej Lhotak
  */
 public interface MethodOrMethodContext
-{ 
+{
     public SootMethod method();
     public Context context();
 }

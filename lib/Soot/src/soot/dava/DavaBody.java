@@ -157,16 +157,16 @@ import soot.util.Switchable;
  *
  *             Nomair - 7th Feb, 2006: Starting work on a naming mechanism
  *             Nomair - 13th Feb 2006: Added db phase options
- *             	        
+ *
  *				renamer: on /off  DEFAULT:TRUE
  *				deobfuscate: DEFAULT: FALSE, dead code eliminateion, class/field renaming, constant field elimination
  *              force-recompilability: DEFAULT TRUE, super, final
- *              
+ *
  *            Nomair: March 28th, 2006: Removed the applyRenamerAnalyses method from DavaBody to InterProceduralAnalyses
  *                    Although currently renaming is done intra-proceduraly  there is strong indication that
  *                    inter procedural analyses will be required to get good names
- *                    
- *			Nomair: March 29th, 2006: dealing with trying to remove fully qualified names 			                    
+ *
+ *			Nomair: March 29th, 2006: dealing with trying to remove fully qualified names
  *
  */
 
@@ -175,7 +175,7 @@ import soot.util.Switchable;
  *  	    AST.perform_Analysis( UselessTryRemover.v());
  *         use the new AnalysisAdapter routines to write this analysis. Then delete these
  *         obselete and rather clumsy way of writing analyses
- *         
+ *
  * TODO: Nomair 14th Feb 2006, Use the Dava options renamer, deobfuscate, force-recompilability
  *          Specially the deobfuscate option with the boolean constant propagation analysis
  *
@@ -189,9 +189,9 @@ public class DavaBody extends Body {
 	private HashSet<Object> consumedConditions, thisLocals;
 
 	private IterableSet synchronizedBlockFacts, exceptionFacts, monitorFacts;
-	
+
 	private IterableSet importList;
-	
+
 	private Local controlLocal;
 
 	private InstanceInvokeExpr constructorExpr; //holds constructorUnit.getInvokeExpr
@@ -201,7 +201,7 @@ public class DavaBody extends Body {
 	private List caughtrefs;
 
 	/**
-	 *  Construct an empty DavaBody 
+	 *  Construct an empty DavaBody
 	 */
 
 	DavaBody(SootMethod m) {
@@ -287,12 +287,12 @@ public class DavaBody extends Body {
 	public IterableSet get_MonitorFacts() {
 		return monitorFacts;
 	}
-	
+
 	public IterableSet getImportList(){
 		return importList;
 	}
-	
-	
+
+
 	/**
 	 * Constructs a DavaBody from the given Body.
 	 */
@@ -300,7 +300,7 @@ public class DavaBody extends Body {
 		this(body.getMethod());
 		debug("DavaBody","creating DavaBody for"+body.getMethod().toString());
 		Dava.v().log("\nstart method " + body.getMethod().toString());
-		
+
 		if(DEBUG){
 			if(body.getMethod().getExceptions().size()!=0)
 				debug("DavaBody","printing NON EMPTY exception list for "+body.getMethod().toString()+ " " + body.getMethod().getExceptions().toString());
@@ -309,7 +309,7 @@ public class DavaBody extends Body {
 		//DEBUG=true;
 		copy_Body(body);
 		//DEBUG=false;
-		
+
 		// prime the analysis
 		AugmentedStmtGraph asg = new AugmentedStmtGraph(
 				new BriefUnitGraph(this), new TrapUnitGraph(this));
@@ -346,7 +346,7 @@ public class DavaBody extends Body {
 		getUnits().clear();
 		getUnits().addLast(AST);
 
-		// perform transformations on the AST	
+		// perform transformations on the AST
 		/*
 		 * Nomair This should be refactored to use the new AnalysisAdapter classes
 		 */
@@ -384,8 +384,8 @@ public class DavaBody extends Body {
 		Dava.v().log("end method " + body.getMethod().toString());
 	}
 
-	
-	
+
+
 	public void applyBugFixes(){
    		ASTNode AST = (ASTNode) this.getUnits().getFirst();
 		debug("applyBugFixes","Applying AST analyzes for method"+this.getMethod().toString());
@@ -394,17 +394,17 @@ public class DavaBody extends Body {
 		AST.apply(new ShortcutIfGenerator());
 		debug("applyBugFixes","after ShortcutIfGenerator"+G.v().ASTTransformations_modified);
 
-		
+
 		AST.apply(new TypeCastingError());
 		debug("applyBugFixes","after TypeCastingError"+G.v().ASTTransformations_modified);
 	}
-	
-	
+
+
 	/*
 	 * Method is invoked by the packmanager just before it is actually about to generate
 	 * decompiled code. Works as a separate stage from the DavaBody() constructor.
 	 * All AST transformations should be implemented from within this method.
-	 * 
+	 *
 	 * Method is also invoked from the InterProceduralAnlaysis method once those have been invoked
 	 */
 	public void analyzeAST() {
@@ -432,22 +432,22 @@ public class DavaBody extends Body {
 		 * March 28th Nomair A. Naeem.  Since there is a chance
 		 * that the analyze method gets involved multiple times
 		 * we dont want renaming done more than once.
-		 * 
-		 * hence removing the call of the renamer from here 
+		 *
+		 * hence removing the call of the renamer from here
 		 * Also looking ahead i have a feeling that we will be going interprocedural
 		 * for the renamer hence i am placing the renamer code
 		 * inside the interprocedural class
 		 */
-		
-		
+
+
 
 		/*
-		 In the end check 
+		 In the end check
 		 1, if there are labels which can be safely removed
 		 2, int temp; temp=0 to be converted to int temp=0;
 		 */
 		//AST.apply(new ExtraLabelNamesRemover());
-        
+
         //System.out.println("\nEND analyzing method"+this.getMethod().toString());
 	}
 
@@ -460,30 +460,30 @@ public class DavaBody extends Body {
 		//The BooleanConditionSimplification changes flag==false to just flag
 
 		//AST.apply(new DepthFirstAdapter(true));
-		
+
 		AST.apply(new BooleanConditionSimplification());
 
 		AST.apply(new DecrementIncrementStmtCreation());
 
 		debug("applyASTAnalyses","initial one time analyses completed");
-		
+
 		boolean flag = true;
 		int times = 0;
 
 		G.v().ASTTransformations_modified = false;
 		G.v().ASTIfElseFlipped = false;
-		
+
 		int countFlipping=0;
-		
+
 		if (flag) {
-			// perform transformations on the AST	
+			// perform transformations on the AST
 			do {
 				debug("applyASTAnalyses","ITERATION");
 				G.v().ASTTransformations_modified = false;
 				times++;
 
-				
-				
+
+
 				AST.apply(new AndAggregator());
 				debug("applyASTAnalyses","after AndAggregator"+G.v().ASTTransformations_modified);
 				/*
@@ -495,8 +495,8 @@ public class DavaBody extends Body {
 				debug("applyASTAnalyses","after OraggregatorOne"+G.v().ASTTransformations_modified);
 
 				/*
-				 Note OrAggregatorTwo should always be followed by an emptyElseRemover 
-				 since orAggregatorTwo can create empty else bodies and the ASTIfElseNode 
+				 Note OrAggregatorTwo should always be followed by an emptyElseRemover
+				 since orAggregatorTwo can create empty else bodies and the ASTIfElseNode
 				 can be replaced by ASTIfNodes
 				 OrAggregator has two patterns see the class for them
 				 */
@@ -504,7 +504,7 @@ public class DavaBody extends Body {
 				AST.apply(new OrAggregatorTwo());
 				debug("applyASTAnalyses","after OraggregatorTwo"+G.v().ASTTransformations_modified);
 				debug("applyASTAnalyses","after OraggregatorTwo ifElseFlipped is"+G.v().ASTIfElseFlipped);
-				
+
 				AST.apply(new OrAggregatorFour());
 				debug("applyASTAnalyses","after OraggregatorFour"+G.v().ASTTransformations_modified);
 
@@ -525,8 +525,8 @@ public class DavaBody extends Body {
 				 */
 				AST.apply(new PushLabeledBlockIn());
 				debug("applyASTAnalyses","after PushLabeledBlockIn"+G.v().ASTTransformations_modified);
-				
-				
+
+
 				AST.apply(new LoopStrengthener());
 				debug("applyASTAnalyses","after LoopStrengthener"+G.v().ASTTransformations_modified);
 
@@ -538,33 +538,33 @@ public class DavaBody extends Body {
 				AST.apply(new ASTCleanerTwo());
 				debug("applyASTAnalyses","after ASTCleanerTwo"+G.v().ASTTransformations_modified);
 
-				
+
 				AST.apply(new ForLoopCreator());
 				debug("applyASTAnalyses","after ForLoopCreator"+G.v().ASTTransformations_modified);
 
-				
+
 				AST.apply(new NewStringBufferSimplification());
 				debug("applyASTAnalyses","after NewStringBufferSimplification"+G.v().ASTTransformations_modified);
 
-				
+
 				AST.apply(new ShortcutArrayInit());
 				debug("applyASTAnalyses","after ShortcutArrayInit"+G.v().ASTTransformations_modified);
 
-				
+
 				AST.apply(new UselessLabeledBlockRemover());
 				debug("applyASTAnalyses","after UselessLabeledBlockRemover"+G.v().ASTTransformations_modified);
-				
+
 				if(!G.v().ASTTransformations_modified){
 					AST.apply(new IfElseSplitter());
 					debug("applyASTAnalyses","after IfElseSplitter"+G.v().ASTTransformations_modified);
-				}				
-			
+				}
+
 				if(!G.v().ASTTransformations_modified){
 					AST.apply(new UselessAbruptStmtRemover());
 					debug("applyASTAnalyses","after UselessAbruptStmtRemover"+G.v().ASTTransformations_modified);
 				}
-				
-				
+
+
 				AST.apply(new ShortcutIfGenerator());
 				debug("applyASTAnalyses","after ShortcutIfGenerator"+G.v().ASTTransformations_modified);
 
@@ -572,7 +572,7 @@ public class DavaBody extends Body {
 				debug("applyASTAnalyses","after TypeCastingError"+G.v().ASTTransformations_modified);
 
 				/*
-				 * if we matched some useful pattern we reserve the 
+				 * if we matched some useful pattern we reserve the
 				 * right to flip conditions again
 				 */
 				if(G.v().ASTTransformations_modified){
@@ -597,7 +597,7 @@ public class DavaBody extends Body {
 						}
 					}
 				}//if ASTTransformations was not modified
-				
+
 			} while (G.v().ASTTransformations_modified);
 			//System.out.println("The AST trasnformations has run"+times);
 		}
@@ -657,9 +657,9 @@ public class DavaBody extends Body {
 
 	}
 
-	
 
-		
+
+
 	/*
 	 *  Copy and patch a GrimpBody so that it can be used to output Java.
 	 */
@@ -681,7 +681,7 @@ public class DavaBody extends Body {
 
 			Iterator it = grimpBody.getUnits().iterator();
 
-			// Clone units in body's statement list 
+			// Clone units in body's statement list
 			while (it.hasNext()) {
 				Unit original = (Unit) it.next();
 				Unit copy = (Unit) original.clone();
@@ -689,7 +689,7 @@ public class DavaBody extends Body {
 				// Add cloned unit to our unitChain.
 				getUnits().addLast(copy);
 
-				// Build old <-> new map to be able to patch up references to other units 
+				// Build old <-> new map to be able to patch up references to other units
 				// within the cloned units. (these are still refering to the original
 				// unit objects).
 				bindings.put(original, copy);
@@ -758,7 +758,7 @@ public class DavaBody extends Body {
 				UnitBox box = (UnitBox) it.next();
 				Unit newObject, oldObject = box.getUnit();
 
-				// if we have a reference to an old object, replace it 
+				// if we have a reference to an old object, replace it
 				// it's clone.
 				if ((newObject = (Unit) bindings.get(oldObject)) != null)
 					box.setUnit(newObject);
@@ -772,7 +772,7 @@ public class DavaBody extends Body {
 					vb.setValue((Value) bindings.get(vb.getValue()));
 			}
 
-			// clone the traps 
+			// clone the traps
 			Iterator trit = grimpBody.getTraps().iterator();
 			while (trit.hasNext()) {
 
@@ -868,20 +868,20 @@ public class DavaBody extends Body {
 				if (t instanceof RefType) {
 					RefType rt = (RefType) t;
 
-			
+
 					String className = rt.getSootClass().toString();
 					String packageName = rt.getSootClass().getJavaPackageName();
-					
+
 					String classPackageName = packageName;
-					
+
 					if (className.lastIndexOf('.') > 0) {// 0 doesnt make sense
 						classPackageName = className.substring(0, className.lastIndexOf('.'));
 					}
 					if(!packageName.equals(classPackageName))
 						throw new DecompilationException("Unable to retrieve package name for identifier. Please report to developer.");
-					
+
 					addToImportList(className);
-					
+
 					//addPackage(rt.getSootClass().getJavaPackageName());
 				}
 			}
@@ -1016,7 +1016,7 @@ public class DavaBody extends Body {
 	}
 
 	/*
-	 *  The following set of routines takes care of converting the syntax of single grimp 
+	 *  The following set of routines takes care of converting the syntax of single grimp
 	 *  statements to java.
 	 */
 
@@ -1060,21 +1060,21 @@ public class DavaBody extends Body {
 		if (r instanceof StaticFieldRef) {
 			SootFieldRef fieldRef = ((StaticFieldRef) r).getFieldRef();
 			//addPackage(fieldRef.declaringClass().getJavaPackageName());
-			
+
 			String className = fieldRef.declaringClass().toString();
 			String packageName = fieldRef.declaringClass().getJavaPackageName();
-			
+
 			String classPackageName = packageName;
-			
+
 			if (className.lastIndexOf('.') > 0) {// 0 doesnt make sense
 				classPackageName = className.substring(0, className.lastIndexOf('.'));
 			}
 			if(!packageName.equals(classPackageName))
 				throw new DecompilationException("Unable to retrieve package name for identifier. Please report to developer.");
-			
+
 			addToImportList(className);
-			
-			
+
+
 			vb.setValue(new DStaticFieldRef(fieldRef, getMethod().getDeclaringClass().getName()));
 		} else if (r instanceof ArrayRef) {
 			ArrayRef ar = (ArrayRef) r;
@@ -1123,7 +1123,7 @@ public class DavaBody extends Body {
 					rightOpBox.setValue(DIntConstant.v(
 							((IntConstant) rightOp).value, null));
 			}
-		} 
+		}
 		else if (leftOp instanceof IntConstant) {
 			javafy(rightOpBox);
 			rightOp = rightOpBox.getValue();
@@ -1191,13 +1191,13 @@ public class DavaBody extends Body {
 		String className = ie.getMethodRef().declaringClass().toString();
 		String packageName = ie.getMethodRef().declaringClass().getJavaPackageName();
 		String classPackageName = packageName;
-		
+
 		if (className.lastIndexOf('.') > 0) {// 0 doesnt make sense
 			classPackageName = className.substring(0, className.lastIndexOf('.'));
 		}
 		if(!packageName.equals(classPackageName))
 			throw new DecompilationException("Unable to retrieve package name for identifier. Please report to developer.");
-		
+
 		addToImportList(className);
 
 		for (int i = 0; i < ie.getArgCount(); i++) {
@@ -1237,18 +1237,18 @@ public class DavaBody extends Body {
 				NewInvokeExpr nie = (NewInvokeExpr) sie;
 
 				RefType rt = nie.getBaseType();
-				
+
 				className = rt.getSootClass().toString();
 				packageName = rt.getSootClass().getJavaPackageName();
-				
+
 				classPackageName = packageName;
-				
+
 				if (className.lastIndexOf('.') > 0) {// 0 doesnt make sense
 					classPackageName = className.substring(0, className.lastIndexOf('.'));
 				}
 				if(!packageName.equals(classPackageName))
 					throw new DecompilationException("Unable to retrieve package name for identifier. Please report to developer.");
-				
+
 				addToImportList(className);
 				vb.setValue(new DNewInvokeExpr((RefType) nie.getType(), nie.getMethodRef(), nie.getArgs()));
 			}
@@ -1256,15 +1256,15 @@ public class DavaBody extends Body {
 				SootMethodRef methodRef = sie.getMethodRef();
 				className = methodRef.declaringClass().toString();
 				packageName = methodRef.declaringClass().getJavaPackageName();
-				
+
 				classPackageName = packageName;
-				
+
 				if (className.lastIndexOf('.') > 0) {// 0 doesnt make sense
 					classPackageName = className.substring(0, className.lastIndexOf('.'));
 				}
 				if(!packageName.equals(classPackageName))
 					throw new DecompilationException("Unable to retrieve package name for identifier. Please report to developer.");
-				
+
 				addToImportList(className);
 
 				//addPackage(methodRef.declaringClass().getJavaPackageName());
@@ -1280,31 +1280,31 @@ public class DavaBody extends Body {
 
 		String className = ne.getBaseType().getSootClass().toString();
 		String packageName = ne.getBaseType().getSootClass().getJavaPackageName();
-		
+
 		String classPackageName = packageName;
-		
+
 		if (className.lastIndexOf('.') > 0) {// 0 doesnt make sense
 			classPackageName = className.substring(0, className.lastIndexOf('.'));
 		}
 		if(!packageName.equals(classPackageName))
 			throw new DecompilationException("Unable to retrieve package name for identifier. Please report to developer.");
-		
+
 		addToImportList(className);
 	}
 
-	
+
 	public void addToImportList(String className){
 		if(className.equals(""))
 			return;
-		
+
 		if(!importList.contains(className)){
 			importList.add(className);
-			if(DEBUG) 
+			if(DEBUG)
 				System.out.println("Adding to import list: "+className);
 		}
 	}
-	
-	public void debug(String methodName, String debug){		
+
+	public void debug(String methodName, String debug){
 		if(DEBUG)
 			System.out.println(methodName+ "    DEBUG: "+debug);
 	}

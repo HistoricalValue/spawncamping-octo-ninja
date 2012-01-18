@@ -102,11 +102,11 @@ public class Import_c extends Node_c implements Import
 		if (! Options.global.fully_qualified_names) {
 		    w.write("import ");
 		    w.write(name);
-		
+
 		    if (kind == PACKAGE) {
 		        w.write(".*");
 		    }
-		
+
 		    w.write(";");
 		    w.newline(0);
 		}

@@ -11,7 +11,7 @@ import java.io.Writer;
 import java.io.IOException;
 import java.util.Vector;
 
-/** 
+/**
  * A <code>CodeWriter</code> is a pretty-printing engine.
  * It formats structured text onto an output stream <code>o</code> in the
  * minimum number of lines, while keeping the width of the output
@@ -39,7 +39,7 @@ public class CodeWriter
         width = width_;
         current = input = new Block(null, 0);
     }
-        
+
     /** Print the string <code>s</code> verbatim on the output stream. */
     public void write(String s) {
        if (s.length() > 0)
@@ -68,18 +68,18 @@ public class CodeWriter
      * is printed at the current cursor position <code>pos</code>,
      * all the following lines are printed at the position
      * <code>pos+n</code>.
-     * 
+     *
      * @param n the number of characters increased on indentation (relative
      * to the current position) for all lines in the block.
-     */         
+     */
     public void begin(int n) {
         Block b = new Block(current, n);
         current.add(b);
         current = b;
     }
-        
-    /** 
-     * Terminate the most recent outstanding <code>begin</code>. 
+
+    /**
+     * Terminate the most recent outstanding <code>begin</code>.
      */
     public void end() {
         current = current.parent;
@@ -92,7 +92,7 @@ public class CodeWriter
      *
      * @param n the amount of increase in indentation if
      * the newline is inserted.
-     */ 
+     */
     public void allowBreak(int n) {
         current.add(new AllowBreak(n, " "));
     }
@@ -103,8 +103,8 @@ public class CodeWriter
      * @param n the amount of increase in indentation if
      *  the newline is inserted.
      * @param alt if no newline is inserted, the string <code>alt</code> is
-     *  output instead.   
-     */ 
+     *  output instead.
+     */
     public void allowBreak(int n, String alt) {
         current.add(new AllowBreak(n, alt));
     }
@@ -154,25 +154,25 @@ public class CodeWriter
  * An <code>Overrun</code> represents a formatting that failed because the right
  * margin was exceeded by at least <code>amount</code> chars.
  */
-class Overrun extends Exception 
+class Overrun extends Exception
 {
     int amount;
     Overrun(int amount_) {
 	amount = amount_;
-    }  
+    }
 }
 
 /**
  * An <code>Item</code> is a piece of input handed to the formatter. It
  * contains a reference to a possibly empty list of items that follow it.
  */
-abstract class Item 
+abstract class Item
 {
     Item next;
 
     protected Item() { next = null; }
 
-    /** 
+    /**
      * Try to format this item and subsequent items. The current cursor
      * position is <code>pos</code>, left and right margins are as
      * specified. Returns the final position, which must be <code>&lt;
@@ -200,10 +200,10 @@ abstract class Item
 
     /** Make the garbage collector's job easy: free references to any
         other items. */
-    void free() { 
-        if( next != null) { 
-            next.free(); 
-            next = null; 
+    void free() {
+        if( next != null) {
+            next.free();
+            next = null;
         }
     }
 
@@ -235,13 +235,13 @@ class Block extends Item {
     Item first;
     Item last;
     int indent;
-        
+
     Block(Block parent_, int indent_) {
         parent = parent_;
         first = last = null;
         indent = indent_;
     }
-        
+
     /**
      * Add a new item to the end of the block. Successive
      * StringItems are concatenated together to limit recursion
@@ -310,7 +310,7 @@ int formatN(int lmargin, int pos, int rmargin, int fin, boolean can_break,
 
     void free() {
         super.free();
-  
+
         parent = null;
         if( first != null) {
             first.free();
@@ -322,7 +322,7 @@ int formatN(int lmargin, int pos, int rmargin, int fin, boolean can_break,
 class StringItem extends Item {
     String s;
     StringItem(String s_) { s = s_; }
-        
+
     int formatN(int lmargin, int pos, int rmargin, int fin, boolean can_break,
 		boolean nofail) throws Overrun {
 	return format(next, lmargin, pos + s.length(), rmargin, fin,
@@ -335,21 +335,21 @@ class StringItem extends Item {
     void appendString(String s) { this.s = this.s + s; }
 }
 
-class AllowBreak extends Item 
+class AllowBreak extends Item
 {
     int indent;
     boolean broken = true;
     String alt;
-        
+
     AllowBreak(int n_, String alt_) { indent = n_; alt = alt_; }
-        
+
     int formatN(int lmargin, int pos, int rmargin, int fin, boolean can_break,
     		boolean nofail) throws Overrun {
         if (can_break) { pos = lmargin + indent; broken = true; }
         else { pos += alt.length(); broken = false; }
 	return format(next, lmargin, pos, rmargin, fin, can_break, nofail);
     }
-        
+
     int sendOutput(Writer o, int lmargin, int pos)
         throws IOException {
         if (broken) {
@@ -363,10 +363,10 @@ class AllowBreak extends Item
     }
 }
 
-class Newline extends AllowBreak 
+class Newline extends AllowBreak
 {
     Newline(int n_) { super(n_, ""); }
-        
+
     int formatN(int lmargin, int pos, int rmargin, int fin, boolean can_break,
 		boolean nofail) throws Overrun {
         broken = true;
@@ -374,7 +374,7 @@ class Newline extends AllowBreak
 	return format(next, lmargin, lmargin + indent, rmargin, fin,
 			can_break, nofail);
     }
-        
+
     int sendOutput(Writer o, int lmargin, int pos)
             throws IOException {
         o.write("\r\n");

@@ -36,7 +36,7 @@ public class FlattenVisitor extends NodeVisitor
 
     protected Node noFlatten = null;
 
-    /** 
+    /**
      * When entering a BlockStatement, place a new StatementList
      * onto the stack
      */
@@ -55,7 +55,7 @@ public class FlattenVisitor extends NodeVisitor
 	return this;
     }
 
-    /** 
+    /**
      * Flatten complex expressions within the AST
      */
     public Node leave(Node old, Node n, NodeVisitor v) {

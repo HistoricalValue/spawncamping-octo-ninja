@@ -117,7 +117,7 @@ public class TypeBuilder extends HaltingVisitor
                 errorQueue().enqueue(ErrorInfo.SEMANTIC_ERROR,
                                     e.getMessage(), position);
             }
-                            
+
             return this;
 	}
     }
@@ -163,7 +163,7 @@ public class TypeBuilder extends HaltingVisitor
         if (importTable() != null && type.isTopLevel()) {
 	    tb.importTable().addClassImport(type.fullName());
 	}
-        
+
         return tb;
     }
 
@@ -207,7 +207,7 @@ public class TypeBuilder extends HaltingVisitor
             boolean allMembers = (container.isMember() || container.isTopLevel());
             while (container.isMember()) {
                 container = container.outer();
-                allMembers = allMembers && 
+                allMembers = allMembers &&
                         (container.isMember() || container.isTopLevel());
             }
 

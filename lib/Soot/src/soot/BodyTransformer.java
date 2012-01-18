@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -29,17 +29,17 @@ import java.util.*;
 
 /**
  *  An abstract class which acts on a Body. This class provides a harness and acts as an
- *  interface for classes that wish to transform a Body. Subclasses 
+ *  interface for classes that wish to transform a Body. Subclasses
  *  provide the actual Body transformation  implementation.
  */
 
 public abstract class BodyTransformer extends Transformer
 {
-    /** 
+    /**
      *  Called by clients of the transformation. Acts as a generic interface
      *  for BodyTransformers.
      *  Calls internalTransform with the optionsString properly set up.
-     *  That is, the options in optionsString override those in the Scene. 
+     *  That is, the options in optionsString override those in the Scene.
      *  @param b the body on which to apply the transformation
      *  @param phaseName phaseName for the transform. Used to retrieve options from the Scene.
      */
@@ -66,7 +66,7 @@ public abstract class BodyTransformer extends Transformer
     /**
      *  This method is called to perform the transformation itself. It is declared
      *  abstract; subclasses must implement this method by making it the entry point
-     *  to their actual Body transformation. 
+     *  to their actual Body transformation.
      *  @param b the body on which to apply the transformation
      *  @param phaseName the phasename for this transform; not typically used by implementations.
      *  @param options  the actual computed options; a combination of default options and Scene specified options.

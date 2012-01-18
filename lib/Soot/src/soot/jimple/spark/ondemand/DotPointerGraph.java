@@ -35,9 +35,9 @@ import soot.jimple.spark.pag.VarNode;
 
 /**
  * you can just add edges and then dump them as a dot graph
- * 
+ *
  * @author Manu Sridharan
- * 
+ *
  */
 public class DotPointerGraph {
 
@@ -93,7 +93,7 @@ public class DotPointerGraph {
 	public int numEdges() {
 		return edges.size();
 	}
-	
+
 	public void dump(String filename) {
 		PrintWriter pw = null;
 		try {

@@ -80,7 +80,7 @@ public class Unary_c extends Expr_c implements Unary
 		throw new SemanticException("Operand of " + op +
 		    " operator must be a variable.", expr.position());
             }
-            
+
             if (((Variable) expr).flags().isFinal()) {
 		throw new SemanticException("Operand of " + op +
 		    " operator must be a non-final variable.",
@@ -204,7 +204,7 @@ public class Unary_c extends Expr_c implements Unary
         }
         return succs;
     }
-    
+
     public boolean isConstant() {
 	return expr.isConstant();
     }
@@ -213,7 +213,7 @@ public class Unary_c extends Expr_c implements Unary
         if (! isConstant()) {
 	    return null;
 	}
-	
+
 	Object v = expr.constantValue();
 
         if (v instanceof Boolean) {

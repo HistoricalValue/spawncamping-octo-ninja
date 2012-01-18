@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -416,7 +416,7 @@ public class Grimp
     {
         return Jimple.v().newBreakpointStmt();
     }
-    
+
     public BreakpointStmt newBreakpointStmt(BreakpointStmt s)
     {
         return Jimple.v().newBreakpointStmt();
@@ -545,7 +545,7 @@ public class Grimp
 
     public TableSwitchStmt newTableSwitchStmt(TableSwitchStmt s)
     {
-        return new GTableSwitchStmt(s.getKey(), s.getLowIndex(), 
+        return new GTableSwitchStmt(s.getKey(), s.getLowIndex(),
                                     s.getHighIndex(), s.getTargets(),
                                     s.getDefaultTarget());
     }
@@ -938,14 +938,14 @@ public class Grimp
                     public void defaultCase(Object v)
                     {
                         returnedExpr.setValue((Expr)v);
-                    }                        
+                    }
                 });
                 return returnedExpr.getValue();
             }
-        else 
+        else
             {
                 if (value instanceof ArrayRef)
-                    return newArrayRef(((ArrayRef)value).getBase(), 
+                    return newArrayRef(((ArrayRef)value).getBase(),
                                        newExpr(((ArrayRef)value).getIndex()));
                 if (value instanceof InstanceFieldRef)
                     return newInstanceFieldRef
@@ -968,11 +968,11 @@ public class Grimp
         return new GrimpBody(b);
     }
 
-    public static Value cloneIfNecessary(Value val) 
+    public static Value cloneIfNecessary(Value val)
     {
         if( val instanceof Local || val instanceof Constant )
             return val;
         else
             return (Value) val.clone();
-    } 
+    }
 }

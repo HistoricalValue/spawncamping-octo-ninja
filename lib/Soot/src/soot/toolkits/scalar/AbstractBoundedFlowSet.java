@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -26,7 +26,7 @@
 
 package soot.toolkits.scalar;
 
-/** 
+/**
  * provides functional code for most of the methods. Subclasses are invited to
  * provide a more efficient version. Most often this will be done in the
  * following way:<br>
@@ -42,7 +42,7 @@ package soot.toolkits.scalar;
 
 public abstract class AbstractBoundedFlowSet extends AbstractFlowSet implements
                                                                BoundedFlowSet {
-  
+
   public void complement() {
     complement(this);
   }

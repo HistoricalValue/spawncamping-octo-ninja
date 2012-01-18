@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -30,7 +30,7 @@ public class Array2ndDimensionSymbol
 {
     private Object var;
 
-   
+
     public static Array2ndDimensionSymbol v(Object which)
     {
    	Array2ndDimensionSymbol tdal = G.v().Array2ndDimensionSymbol_pool.get(which);
@@ -42,12 +42,12 @@ public class Array2ndDimensionSymbol
 
 	return tdal;
     }
-    
+
     private Array2ndDimensionSymbol(Object which)
     {
 	this.var = which;
     }
-    
+
     public Object getVar()
     {
 	return this.var;

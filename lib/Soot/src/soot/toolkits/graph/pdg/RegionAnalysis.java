@@ -47,18 +47,18 @@ import soot.toolkits.graph.UnitGraph;
 /**
  * This class computes the set of weak regions for a given method. It is based on the
  * algorithm given in the following paper:
- * 
- * Ball, T. 1993. What's in a region?: or computing control dependence regions in near-linear 
- * time for reducible control flow. ACM Lett. Program. Lang. Syst. 2, 1-4 (Mar. 1993), 
+ *
+ * Ball, T. 1993. What's in a region?: or computing control dependence regions in near-linear
+ * time for reducible control flow. ACM Lett. Program. Lang. Syst. 2, 1-4 (Mar. 1993),
  * 1-16. DOI= http://doi.acm.org/10.1145/176454.176456
- * 
+ *
  * @author Hossein Sadat-Mohtasham
  * Jan 2009
  */
 
 @SuppressWarnings("unchecked")
 public class RegionAnalysis{
-	
+
 	protected SootClass m_class = null;
 	protected SootMethod m_method = null;
 	protected Body m_methodBody;
@@ -71,11 +71,11 @@ public class RegionAnalysis{
 	private int m_regCount = 0;
 	private MHGDominatorTree m_dom;
 	//this would actually be the postdominator tree in the original CFG
-	private MHGDominatorTree m_pdom;	
+	private MHGDominatorTree m_pdom;
 	protected Region m_topLevelRegion = null;
 	protected Hashtable<Block, Region> m_block2region = null;
 
-	
+
 	public RegionAnalysis(UnitGraph  cfg, SootMethod m, SootClass c)
 	{
 		this.m_methodBody = cfg.getBody();
@@ -89,8 +89,8 @@ public class RegionAnalysis{
 		if(Options.v().verbose())
 			G.v().out.println("[RegionAnalysis]~~~~~~~~~~~~~~~ End:" + m.getName() +" ~~~~~~~~~~~~~~~~~~~~");
 	}
-	
-	
+
+
 	private void findWeakRegions()
 	{
 
@@ -99,7 +99,7 @@ public class RegionAnalysis{
 		 * the appropriate block CFG. Note that almost all of the processing
 		 * is done on the block CFG.
 		 */
-		
+
 		if(this.m_cfg instanceof ExceptionalUnitGraph)
 			this.m_blockCFG = new ExceptionalBlockGraph((ExceptionalUnitGraph)this.m_cfg);
 		else if(this.m_cfg instanceof EnhancedUnitGraph)
@@ -108,39 +108,39 @@ public class RegionAnalysis{
 			this.m_blockCFG = new BriefBlockGraph((BriefUnitGraph)this.m_cfg);
 		else
 			throw new RuntimeException("Unsupported CFG passed into the RegionAnalyis constructor!");
-		
-	
-		
+
+
+
 		this.m_dom = new MHGDominatorTree(new MHGDominatorsFinder(this.m_blockCFG));
-					
-		
+
+
 		String s = dominatorTreeToString(this.m_dom, this.m_dom.getHead());
 
 		if(Options.v().verbose())
 			G.v().out.println("[RegionAnalysis] Dominator tree: " + s);
-		
-				
-		
+
+
+
 		try{
-		
+
 			this.m_pdom = new MHGDominatorTree(new MHGPostDominatorsFinder(m_blockCFG));
-		
+
 			if(Options.v().verbose())
 				G.v().out.println("[RegionAnalysis] PostDominator tree: ");
-			
+
 			List heads = this.m_pdom.getHeads();
-			
+
 			for(Iterator headItr = heads.iterator(); headItr.hasNext(); )
 			{
 				s = dominatorTreeToString(this.m_pdom, (DominatorNode) headItr.next());
 				if(Options.v().verbose())
-					G.v().out.println(s);	
+					G.v().out.println(s);
 			}
-			
-					
+
+
 			this.m_regCount = -1;
-			
-			
+
+
 			/*
 			 * If a Brief graph or Exceptional graph is used, the CFG might be multi-headed and/or
 			 * multi-tailed, which in turn, could result in a post-dominator forest instead of tree.
@@ -148,15 +148,15 @@ public class RegionAnalysis{
 			 * because it is designed based on the assumption that there is an auxiliary STOP node in the
 			 * CFG that post-dominates all other nodes. In fact, most of the CFG algorithms augment
 			 * the control flow graph with two nodes: ENTRY and EXIT (or START and STOP) nodes. We have
-			 * not added these nodes since the CFG here is created from the Jimple code and to be 
+			 * not added these nodes since the CFG here is created from the Jimple code and to be
 			 * consistent we'd have to transform the code to reflect these nodes. Instead, we implemted
 			 * the EnhancedUnitGraph (EnhancedBlockGraph) which is guaranteed to be single-headed single-tailed.
 			 * But note that EnhancedUnitGraph represents exceptional flow differently.
-			 * 
-			 * 
+			 *
+			 *
 			 */
 
-		
+
 			if(this.m_blockCFG.getHeads().size() == 1)
 			{
 				this.m_regCount++;
@@ -168,41 +168,41 @@ public class RegionAnalysis{
 				this.m_regCount++;
 				this.m_regions.put(new Integer(this.m_regCount), this.createRegion(this.m_regCount));
 				this.weakRegionDFS((Block)this.m_blockCFG.getTails().get(0), this.m_regCount);
-			
+
 			}
-			else 
+			else
 			{
 				if(Options.v().verbose())
 					G.v().out.println("WARNING: RegionAnalysis: the CFG is multi-headed and tailed, so, the results of this analysis might not be reliable!");
-				
+
 				for(int i = 0; i < this.m_blockCFG.getTails().size(); i++)
 				{
 					this.m_regCount++;
 					this.m_regions.put(new Integer(this.m_regCount), this.createRegion(this.m_regCount));
 					this.weakRegionDFS((Block)this.m_blockCFG.getTails().get(i), this.m_regCount);
-				
+
 				}
 				//throw new RuntimeException("RegionAnalysis: cannot properly deal with multi-headed and tailed CFG!");
 			}
-			
-		
+
+
 		}
 		catch(RuntimeException e)
 		{
-			G.v().out.println("[RegionAnalysis] Exception in findWeakRegions: " + e);			
+			G.v().out.println("[RegionAnalysis] Exception in findWeakRegions: " + e);
 		}
-		
-		
+
+
 	}
-	
+
 	/**
-	 * This algorithms assumes that the first time it's called with a tail of the CFG. Then for each 
+	 * This algorithms assumes that the first time it's called with a tail of the CFG. Then for each
 	 * child node w of v in the post-dominator tree, it compares the parent of v in the dominator tree
 	 * with w and if they are the same, that means w belongs to the same region as v, so  weakRegionDFS
 	 * is recursively called with w and the same region id as v.
 	 * If the comparison fails, then a new region is created and weakRegionDFS is called recursively with
 	 * w but this time with the newly created region id.
-	 * 
+	 *
 	 * @param v
 	 * @param r
 	 */
@@ -211,27 +211,27 @@ public class RegionAnalysis{
 		try{
 			//System.out.println("##entered weakRegionDFS for region " + r);
 			this.m_regions.get(new Integer(r)).add(v);
-			
+
 			DominatorNode parentOfV = this.m_dom.getParentOf(this.m_dom.getDode(v));
 			Block u2 = (parentOfV == null) ? null : (Block)parentOfV.getGode();
-			
+
 			List children = this.m_pdom.getChildrenOf(this.m_pdom.getDode(v));
 			for(int i = 0; i < children.size(); i++)
 			{
 				DominatorNode w = (DominatorNode)children.get(i);
 				Block u1 = (Block)w.getGode();
-	
+
 				if(u2 != null && u1.equals(u2))
 				{
-					this.weakRegionDFS((Block)w.getGode(), r);			
+					this.weakRegionDFS((Block)w.getGode(), r);
 				}
 				else
 				{
 					this.m_regCount++;
 					this.m_regions.put(new Integer(this.m_regCount), this.createRegion(this.m_regCount));
-					this.weakRegionDFS((Block)w.getGode(), this.m_regCount);			
-				}	
-			}	
+					this.weakRegionDFS((Block)w.getGode(), this.m_regCount);
+				}
+			}
 		}
 		catch(RuntimeException e)
 		{
@@ -251,27 +251,27 @@ public class RegionAnalysis{
 		//regions keep an implicit order of the contained blocks so it matters where blocks are added
 		//below.
 		this.m_regions.get(new Integer(r)).add2Back(v);
-		
+
 		DominatorNode parentOfV = this.m_pdom.getParentOf(this.m_pdom.getDode(v));
 		Block u2 = (parentOfV == null) ? null : (Block)parentOfV.getGode();
-		
+
 		List children = this.m_dom.getChildrenOf(this.m_dom.getDode(v));
 		for(int i = 0; i < children.size(); i++)
 		{
 			DominatorNode w = (DominatorNode)children.get(i);
 			Block u1 = (Block)w.getGode();
-			
+
 			if(u2 != null && u1.equals(u2))
 			{
-				this.weakRegionDFS2((Block)w.getGode(), r);			
+				this.weakRegionDFS2((Block)w.getGode(), r);
 			}
 			else
 			{
 				this.m_regCount++;
 				this.m_regions.put(new Integer(this.m_regCount), this.createRegion(this.m_regCount));
-				this.weakRegionDFS2((Block)w.getGode(), this.m_regCount);			
-			}	
-		}	
+				this.weakRegionDFS2((Block)w.getGode(), this.m_regCount);
+			}
+		}
 
 	}
 	public List<Region> getRegions()
@@ -287,70 +287,70 @@ public class RegionAnalysis{
 				this.m_regionsList.add(region);
 			}
 		}
-		
+
 		return this.m_regionsList;
-		
+
 	}
-	
+
 	public Hashtable<Unit, Region> getUnit2RegionMap()
 	{
 		Hashtable<Unit, Region> unit2region = new Hashtable<Unit, Region>();
 		List<Region> regions = this.getRegions();
-		
+
 		for(Iterator<Region> itr = regions.iterator(); itr.hasNext();)
 		{
 			Region r = itr.next();
 			List<Unit> units = r.getUnits();
-			for (Iterator<Unit> itr1 = units.iterator(); itr1.hasNext();) 
+			for (Iterator<Unit> itr1 = units.iterator(); itr1.hasNext();)
 			{
 				Unit u = itr1.next();
 				unit2region.put(u, r);
-				
+
 			}
 		}
-		
+
 		return unit2region;
 	}
-	
+
 	public Hashtable<Block, Region> getBlock2RegionMap()
 	{
 		if(this.m_block2region == null)
 		{
 			this.m_block2region = new Hashtable<Block, Region>();
-		
+
 			List<Region> regions = this.getRegions();
-		
+
 			for(Iterator<Region> itr = regions.iterator(); itr.hasNext();)
 			{
 				Region r = itr.next();
 				List<Block> blocks = r.getBlocks();
-				for (Iterator<Block> itr1 = blocks.iterator(); itr1.hasNext();) 
+				for (Iterator<Block> itr1 = blocks.iterator(); itr1.hasNext();)
 				{
 					Block u = itr1.next();
 					m_block2region.put(u, r);
-				
+
 				}
 			}
 		}
 		return this.m_block2region;
-		
+
 	}
-	
+
 	public BlockGraph getBlockCFG()
 	{
 		return this.m_blockCFG;
 	}
-	
+
 	public DominatorTree getPostDominatorTree()
 	{
 		return this.m_pdom;
 	}
-	
+
 	public DominatorTree getDominatorTree()
 	{
 		return this.m_dom;
 	}
-	
+
 	public void reset()
 	{
 		this.m_regions.clear();
@@ -358,83 +358,83 @@ public class RegionAnalysis{
 		this.m_regionsList = null;
 		this.m_block2region.clear();
 		this.m_block2region = null;
-		
+
 		m_regCount = 0;
 	}
 
-	
+
 	/**
-	 * Create a region 
+	 * Create a region
 	 */
-	
+
 	protected Region createRegion(int id)
 	{
 		Region region = new Region(id, this.m_method, this.m_class, this.m_cfg);
 		if(id == 0)
 			this.m_topLevelRegion = region;
-		
+
 		return region;
 	}
-	
+
 	public Region getTopLevelRegion()
 	{
 		return this.m_topLevelRegion;
 	}
-	
+
 	public String CFGtoString(DirectedGraph cfg, boolean blockDetail)
 	{
 		String s = new String("");
 		s += "Headers: " + cfg.getHeads().size() + " " + cfg.getHeads();
-		for (Iterator<Block> it = cfg.iterator(); it.hasNext(); ) 
+		for (Iterator<Block> it = cfg.iterator(); it.hasNext(); )
 		{
 		    Block node = it.next();
 		    s += "Node = " + node.toShortString() + "\n";
 		    s += "Preds:\n";
-		    for (Iterator<Block> predsIt = cfg.getPredsOf(node).iterator(); predsIt.hasNext(); ) 
+		    for (Iterator<Block> predsIt = cfg.getPredsOf(node).iterator(); predsIt.hasNext(); )
 		    {
 		    	s += "     ";
 		    	s += predsIt.next().toShortString() + "\n";
 		    }
 		    s += "Succs:\n";
-		    for (Iterator<Block> succsIt = cfg.getSuccsOf(node).iterator(); succsIt.hasNext(); ) 
+		    for (Iterator<Block> succsIt = cfg.getSuccsOf(node).iterator(); succsIt.hasNext(); )
 		    {
 		    	s += "     ";
 		    	s += succsIt.next().toShortString() + "\n";
 		    }
 		}
-		
+
 		if(blockDetail)
 		{
 			s += "Blocks Detail:";
-			for (Iterator<Block> it = cfg.iterator(); it.hasNext(); ) 
+			for (Iterator<Block> it = cfg.iterator(); it.hasNext(); )
 			{
 			    Block node = it.next();
 			    s += node + "\n";
 			}
-			
+
 		}
-		
+
 		return s;
 
 	}
-	
+
 	private String dominatorTreeToString(DominatorTree dom, DominatorNode root)
 	{
 		String s = new String();
 		s += "\n Begin " + ((Block)root.getGode()).toShortString() + " ( ";
 		List children = dom.getChildrenOf(root);
-		
+
 		for(int i = 0; i < children.size(); i++)
 		{
 			s += dominatorTreeToString(dom, (DominatorNode) children.get(i));
-		
+
 		}
 		s += " ) end of " + ((Block)root.getGode()).toShortString();
-		
+
 		return s;
-		
-		
+
+
 	}
-	
-	
+
+
 }

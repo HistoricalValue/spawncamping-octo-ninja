@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -39,12 +39,12 @@ public class JimpleMethodSource implements MethodSource
     }
 
     public Body getBody(SootMethod m, String phaseName)
-    {  
+    {
         JimpleBody jb = (JimpleBody)mJimpleAST.getBody(m);
 
         if(Options.v().verbose())
             G.v().out.println("[" + m.getName() + "] Retrieving JimpleBody from AST...");
-    
+
 
         PackManager.v().getPack("jb").apply(jb);
         return jb;

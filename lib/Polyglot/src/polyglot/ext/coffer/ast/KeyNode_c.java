@@ -8,7 +8,7 @@ import polyglot.visit.*;
 import polyglot.util.*;
 
 /**
- * An AST node for a <code>Key</code>.  The key may be ambiguous. 
+ * An AST node for a <code>Key</code>.  The key may be ambiguous.
  */
 public class KeyNode_c extends Node_c implements KeyNode
 {

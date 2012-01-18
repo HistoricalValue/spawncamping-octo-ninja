@@ -140,7 +140,7 @@ public class ClassDecl_c extends Term_c implements ClassDecl
 
     public NodeVisitor buildTypesEnter(TypeBuilder tb) throws SemanticException {
 	tb = tb.pushClass(position(), flags, name);
-        
+
         ParsedClassType ct = tb.currentClass();
 
         // Member classes of interfaces are implicitly public and static.
@@ -148,12 +148,12 @@ public class ClassDecl_c extends Term_c implements ClassDecl
             ct.flags(ct.flags().Public().Static());
         }
 
-        // Member interfaces are implicitly static. 
+        // Member interfaces are implicitly static.
         if (ct.isMember() && ct.flags().isInterface()) {
             ct.flags(ct.flags().Static());
         }
 
-        // Interfaces are implicitly abstract. 
+        // Interfaces are implicitly abstract.
         if (ct.flags().isInterface()) {
             ct.flags(ct.flags().Abstract());
         }
@@ -162,7 +162,7 @@ public class ClassDecl_c extends Term_c implements ClassDecl
     }
 
     public Node buildTypes(TypeBuilder tb) throws SemanticException {
-	ParsedClassType type = tb.currentClass();        
+	ParsedClassType type = tb.currentClass();
         if (type != null) {
             return type(type).flags(type.flags());
         }
@@ -208,7 +208,7 @@ public class ClassDecl_c extends Term_c implements ClassDecl
 
             ts.checkCycles(t.toReference());
         }
-        else if (ts.Object() != this.type && 
+        else if (ts.Object() != this.type &&
                  !ts.Object().fullName().equals(this.type.fullName())) {
             // the supertype was not specified, and the type is not the same
             // as ts.Object() (which is typically java.lang.Object)
@@ -218,12 +218,12 @@ public class ClassDecl_c extends Term_c implements ClassDecl
         else {
             // the type is the same as ts.Object(), so it has no supertype.
             this.type.superType(null);
-        }    
+        }
     }
 
     public Node disambiguate(AmbiguityRemover ar) throws SemanticException {
         if (ar.kind() == AmbiguityRemover.SIGNATURES) {
-            // make sure that the inStaticContext flag of the class is 
+            // make sure that the inStaticContext flag of the class is
             // correct
             Context ctxt = ar.context();
             this.type().inStaticContext(ctxt.inStaticContext());
@@ -247,7 +247,7 @@ public class ClassDecl_c extends Term_c implements ClassDecl
 	    Report.report(2, "Cleaning " + type + ".");
 
         disambiguateSuperType(ar);
-        
+
         for (Iterator i = this.interfaces.iterator(); i.hasNext(); ) {
             TypeNode tn = (TypeNode) i.next();
             Type t = tn.type();
@@ -301,7 +301,7 @@ public class ClassDecl_c extends Term_c implements ClassDecl
         if (this.type.superType() instanceof ClassType) {
             ConstructorInstance sci = ts.defaultConstructor(position(),
                                                 (ClassType) this.type.superType());
-            ConstructorCall cc = nf.SuperCall(position(), 
+            ConstructorCall cc = nf.SuperCall(position(),
                                               Collections.EMPTY_LIST);
             cc = cc.constructorInstance(sci);
             block = nf.Block(position(), cc);
@@ -325,14 +325,14 @@ public class ClassDecl_c extends Term_c implements ClassDecl
             while (container instanceof Named) {
                 if (!container.isAnonymous()) {
                     String name = ((Named) container).name();
-    
+
                     if (name.equals(this.name)) {
                         throw new SemanticException("Cannot declare member " +
                                                     "class \"" + this.type +
                                                     "\" inside class with the " +
                                                     "same name.", position());
                     }
-                }    
+                }
                 if (container.isNested()) {
                     container = container.outer();
                 }
@@ -340,15 +340,15 @@ public class ClassDecl_c extends Term_c implements ClassDecl
                     break;
                 }
             }
-                        
+
             if (this.type().isLocal()) {
                 // a local class name cannot be redeclared within the same
-                // method, constructor or initializer, and within its scope                
+                // method, constructor or initializer, and within its scope
                 Context ctxt = tc.context();
 
                 if (ctxt.isLocal(this.name)) {
                     // something with the same name was declared locally.
-                    // (but not in an enclosing class)                                    
+                    // (but not in an enclosing class)
                     Named nm = ctxt.find(this.name);
                     if (nm instanceof Type) {
                         Type another = (Type)nm;
@@ -359,7 +359,7 @@ public class ClassDecl_c extends Term_c implements ClassDecl
                                 "local class of the same name.", position());
                         }
                     }
-                }                
+                }
             }
         }
 
@@ -367,17 +367,17 @@ public class ClassDecl_c extends Term_c implements ClassDecl
         if (type().isMember() && flags().isInterface() &&
               type().outer().isInnerClass()) {
             // it's a member interface in an inner class.
-            throw new SemanticException("Inner classes cannot declare " + 
-                    "member interfaces.", this.position());             
+            throw new SemanticException("Inner classes cannot declare " +
+                    "member interfaces.", this.position());
         }
 
         // Make sure that static members are not declared inside inner classes
-        if (type().isMember() && type().flags().isStatic() 
+        if (type().isMember() && type().flags().isStatic()
                && type().outer().isInnerClass()) {
-            throw new SemanticException("Inner classes cannot declare static " 
+            throw new SemanticException("Inner classes cannot declare static "
                                  + "member classes.", position());
         }
-        
+
         if (type.superType() != null) {
             if (! type.superType().isClass()) {
                 throw new SemanticException("Cannot extend non-class \"" +
@@ -408,7 +408,7 @@ public class ClassDecl_c extends Term_c implements ClassDecl
         catch (SemanticException e) {
             throw new SemanticException(e.getMessage(), position());
         }
-        
+
         // check the class implements all abstract methods that it needs to.
         ts.checkClassConformance(type);
 
@@ -467,7 +467,7 @@ public class ClassDecl_c extends Term_c implements ClassDecl
         w.write("}");
         w.newline(0);
     }
-    
+
     public void prettyPrint(CodeWriter w, PrettyPrinter tr) {
       //generate a Java file.
       prettyPrintHeader(w, tr);

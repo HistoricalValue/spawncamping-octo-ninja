@@ -5,7 +5,7 @@ import java.util.*;
 import polyglot.types.Type;
 
 public class AnonConstructorFinder extends polyglot.visit.ContextVisitor {
-    
+
     public AnonConstructorFinder(polyglot.frontend.Job job, polyglot.types.TypeSystem ts, polyglot.ast.NodeFactory nf) {
         super(job, ts, nf);
     }

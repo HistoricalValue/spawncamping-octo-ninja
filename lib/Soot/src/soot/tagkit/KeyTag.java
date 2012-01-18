@@ -26,7 +26,7 @@ public class KeyTag implements Tag {
     private int blue;
     private String key;
     private String analysisType;
-    
+
     /*public KeyTag(int r, int g, int b, String k){
         this(r, g, b, k, "Unknown");
     }*/
@@ -88,7 +88,7 @@ public class KeyTag implements Tag {
                 blue = 220;
                 break;
             }
-                     
+
         }
         key = k;
     }
@@ -112,7 +112,7 @@ public class KeyTag implements Tag {
     public String analysisType(){
         return analysisType;
     }
-    
+
     public String getName(){
         return "KeyTag";
     }
@@ -121,5 +121,5 @@ public class KeyTag implements Tag {
         byte[] v = new byte[4];
         return v;
     }
-    
-}   
+
+}

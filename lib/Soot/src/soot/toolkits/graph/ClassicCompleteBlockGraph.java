@@ -41,7 +41,7 @@ import soot.*;
  *
  */
 
-public class ClassicCompleteBlockGraph extends BlockGraph 
+public class ClassicCompleteBlockGraph extends BlockGraph
 {
     /**
      *   <p> Constructs a <tt>ClassicCompleteBlockGraph</tt> for the blocks
@@ -65,12 +65,12 @@ public class ClassicCompleteBlockGraph extends BlockGraph
 
     /**
      *   Constructs a graph for the blocks found by partitioning the
-     *   the units in a {@link ClassicCompleteUnitGraph}.  
+     *   the units in a {@link ClassicCompleteUnitGraph}.
      *
-     *   @param unitGraph A {@link ClassicCompleteUnitGraph} built from 
+     *   @param unitGraph A {@link ClassicCompleteUnitGraph} built from
      *                  <tt>body</tt>. The <tt>CompleteBlockGraph</tt> constructor uses
      *                  the passed <tt>graph</tt> to split the body into
-     *			blocks. 
+     *			blocks.
      */
     public ClassicCompleteBlockGraph(ClassicCompleteUnitGraph unitGraph)
     {

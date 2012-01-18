@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -45,7 +45,7 @@ public class BIfEqInst extends AbstractBranchInst implements IfEqInst
         return 1;
     }
 
-    public Object clone() 
+    public Object clone()
     {
         return new  BIfEqInst(getTarget());
     }
@@ -54,7 +54,7 @@ public class BIfEqInst extends AbstractBranchInst implements IfEqInst
     {
         return 1;
     }
-    
+
     public int getOutCount()
     {
         return 0;
@@ -70,6 +70,6 @@ public class BIfEqInst extends AbstractBranchInst implements IfEqInst
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseIfEqInst(this);
-    }    
+    }
 }
 

@@ -58,11 +58,11 @@ public class ASTMethodNode extends ASTNode {
 	 * Variables that are used in shortcu statements are kept in the
 	 * declarations since other analyses need quick access to all the declared
 	 * locals in the method
-	 * 
+	 *
 	 * Any local in the dontPrintLocals list is not printed in the top declarations
 	 */
 	private List<Local> dontPrintLocals = new ArrayList<Local>();
-	
+
 	/*
 	 typeToLocals stores the type of the local and a list of all locals with that type
 	 */
@@ -156,7 +156,7 @@ public class ASTMethodNode extends ASTNode {
 	public ASTMethodNode(List<Object> body) {
 		super();
 		this.body = body;
-		subBodies.add(body);	
+		subBodies.add(body);
 	}
 
 	/*
@@ -185,7 +185,7 @@ public class ASTMethodNode extends ASTNode {
 
 				toReturn.add(decIt.next());
 			}//going through all locals of this type
-		}//going through all stmts 
+		}//going through all stmts
 		return toReturn;
 	}
 
@@ -268,11 +268,11 @@ public class ASTMethodNode extends ASTNode {
 	public void setDontPrintLocals(List<Local> list){
 		dontPrintLocals=list;
 	}
-	
+
 	public void addToDontPrintLocalsList(Local toAdd){
 		dontPrintLocals.add(toAdd);
 	}
-	
+
 	public void perform_Analysis(ASTAnalysis a) {
 		perform_AnalysisOnSubBodies(a);
 	}
@@ -295,7 +295,7 @@ public class ASTMethodNode extends ASTNode {
 						constructorExpr.getMethodRef().declaringClass().toString()))
 					dup.printString("        this(");
 				else{
-					//only invoke super if its not the default call since the default is 
+					//only invoke super if its not the default call since the default is
 					//called automatically
 					if(constructorExpr.getArgCount()>0)
 						dup.printString("        super(");
@@ -345,7 +345,7 @@ public class ASTMethodNode extends ASTNode {
 	/*
 	 * This method has been written to bring into the printing of the method body the printing of the
 	 * declared locals
-	 * 
+	 *
 	 * This is required because the dontPrintLocals list contains a list of locals which are declared from within
 	 * the body and hence we dont want to print them here at the top of the method. However at the same time we dont
 	 * want to remove the local entry in the declarations node since this is used by analyses throughout as a quick and
@@ -353,14 +353,14 @@ public class ASTMethodNode extends ASTNode {
 	 */
 	public void printDeclarationsFollowedByBody(UnitPrinter up, List<Object> body){
 		//System.out.println("printing body from within MEthodNode\n\n"+body.toString());
-		
+
 		List<Object> stmts = declarations.getStatements();
 		Iterator<Object> it = stmts.iterator();
 		while (it.hasNext()) {
 			AugmentedStmt as = (AugmentedStmt) it.next();
 			//System.out.println("Stmt is:"+as.get_Stmt());
 			Unit u = as.get_Stmt();
-			
+
 			//stupid sanity check cos i am paranoid
 			if(u instanceof DVariableDeclarationStmt){
 				DVariableDeclarationStmt declStmt = (DVariableDeclarationStmt)u;
@@ -385,8 +385,8 @@ public class ASTMethodNode extends ASTNode {
 
 				if (!(up instanceof DavaUnitPrinter))
 					throw new RuntimeException("DavaBody should always be printed using the DavaUnitPrinter");
-	
-				DavaUnitPrinter dup = (DavaUnitPrinter) up;	
+
+				DavaUnitPrinter dup = (DavaUnitPrinter) up;
 				dup.startUnit(u);
 				String type = declStmt.getType().toString();
 
@@ -396,9 +396,9 @@ public class ASTMethodNode extends ASTNode {
 					IterableSet importSet = davaBody.getImportList();
 					if(!importSet.contains(type))
 						davaBody.addToImportList(type);
-							
+
 					type = RemoveFullyQualifiedName.getReducedName(davaBody.getImportList(),type,declStmt.getType());
-					
+
 					dup.printString(type);
 				}
 				dup.printString(" ");
@@ -415,7 +415,7 @@ public class ASTMethodNode extends ASTNode {
 					number++;
 					dup.printString(tempDec.getName());
 				}
-				
+
                 up.literal(";");
                 up.endUnit( u );
                 up.newline();
@@ -447,9 +447,9 @@ public class ASTMethodNode extends ASTNode {
 		if(!printed){
 			//System.out.println("Here for method"+this.getDavaBody().getMethod().toString());
 			body_toString(up, body);
-		}		
+		}
 	}
-	
+
 	public String toString() {
 		StringBuffer b = new StringBuffer();
 		/*

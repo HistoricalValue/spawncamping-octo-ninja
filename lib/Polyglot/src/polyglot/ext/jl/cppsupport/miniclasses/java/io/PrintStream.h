@@ -16,7 +16,7 @@ public:
 	PrintStream(std::ostream &o);
 
 
-	virtual void close(); 
+	virtual void close();
 	virtual void flush();
 	virtual void write(jmatch_array<char> *b);
 	virtual void write(jmatch_array<char> *b, int off, int len);

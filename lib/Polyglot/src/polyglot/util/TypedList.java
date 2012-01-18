@@ -141,11 +141,11 @@ public class TypedList implements List, java.io.Serializable, Cloneable
 			 allowed_type,
 			 immutable);
   }
-  public void clear() 
+  public void clear()
     { tryMod(); backing_list.clear(); }
-  public boolean contains(Object o) 
+  public boolean contains(Object o)
     { return backing_list.contains(o); }
-  public boolean containsAll(Collection coll) 
+  public boolean containsAll(Collection coll)
     { return backing_list.containsAll(coll); }
   public boolean equals(Object o)
     { return backing_list.equals(o); }
@@ -171,7 +171,7 @@ public class TypedList implements List, java.io.Serializable, Cloneable
     { tryMod(); return backing_list.retainAll(coll); }
   public int size()
     { return backing_list.size(); }
-  public Object[] toArray() 
+  public Object[] toArray()
     { return backing_list.toArray(); }
   public Object[] toArray(Object[] oa)
     { return backing_list.toArray(oa); }
@@ -179,36 +179,36 @@ public class TypedList implements List, java.io.Serializable, Cloneable
     { return backing_list.toString(); }
 
   private final void tryIns(Object o) {
-    if (immutable) 
+    if (immutable)
       throw new UnsupportedOperationException(
 			         "Add to an immutable TypedListIterator");
-    
-    if (allowed_type != null && 
+
+    if (allowed_type != null &&
 	!allowed_type.isAssignableFrom(o.getClass())) {
       String why = "Tried to add a " + o.getClass().getName() +
 	" to a list of type " + allowed_type.getName();
       throw new UnsupportedOperationException(why);
-    }    
+    }
   }
 
   private final void tryIns(Collection coll) {
-    if (immutable) 
+    if (immutable)
       throw new UnsupportedOperationException(
 			         "Add to an immutable TypedListIterator");
-    
+
     for (Iterator it = coll.iterator(); it.hasNext(); ) {
       Object o = it.next();
-      if (allowed_type != null && 
+      if (allowed_type != null &&
 	  !allowed_type.isAssignableFrom(o.getClass())) {
 	String why = "Tried to add a " + o.getClass().getName() +
 	  " to a list of type " + allowed_type.getName();
 	throw new UnsupportedOperationException(why);
-      }    
+      }
     }
   }
 
   private final void tryMod() {
-    if (immutable) 
+    if (immutable)
       throw new UnsupportedOperationException(
 			         "Change to an immutable TypedListIterator");
   }

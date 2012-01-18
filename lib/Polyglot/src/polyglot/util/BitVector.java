@@ -10,7 +10,7 @@ public class BitVector
   {
     this( 32);
   }
-  
+
   public BitVector( int initialSize)
   {
     size = initialSize;
@@ -26,7 +26,7 @@ public class BitVector
         newBits[i] = bits[i];
       bits = newBits;
     }
-    
+
     bits[ which] = value;
   }
 

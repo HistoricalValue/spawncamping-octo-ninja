@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -59,9 +59,9 @@ package soot.coffi;
  * @see Instruction_Unknown
  */
 class Instruction_Ret extends Instruction_bytevar{
-    public Instruction_Ret() { 
-	super((byte)ByteCode.RET); 
-	name = "ret"; 
+    public Instruction_Ret() {
+	super((byte)ByteCode.RET);
+	name = "ret";
 	branches = true;
 	/* returns = true; */
     }

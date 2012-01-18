@@ -7,34 +7,34 @@ import polyglot.ast.ExtFactory;
  * This abstract implementation of <code>ExtFactory</code> provides
  * a way of chaining together ExtFactories, and default implementations
  * of factory methods for each node.
- * 
+ *
  * <p>
  * For a given type of AST node <code>N</code>, there are three methods:
- * <code>extN()</code>,  <code>extNImpl()</code> and <code>postExtN(Ext)</code>. 
+ * <code>extN()</code>,  <code>extNImpl()</code> and <code>postExtN(Ext)</code>.
  * The method <code>extN()</code> calls <code>extNImpl()</code> to create
- * an appropriate extension object, and if other <code>ExtFactory</code>s are 
- * chained onto this one, it will also call <code>extN()</code> on the next 
- * <code>ExtFactory</code>. The method <code>extN()</code> will then 
+ * an appropriate extension object, and if other <code>ExtFactory</code>s are
+ * chained onto this one, it will also call <code>extN()</code> on the next
+ * <code>ExtFactory</code>. The method <code>extN()</code> will then
  * call <code>postExtN</code>, passing in the newly created extension object.
- * 
+ *
  * <p>
  * The default implementation of <code>extNImpl()</code> is to simply call
- * <code>extMImpl()</code>, where <code>M</code> is the immediate 
+ * <code>extMImpl()</code>, where <code>M</code> is the immediate
  * superclass of <code>N</code>. Similarly, the default implementation of
  * <code>postExtN(Ext)</code> is to call <code>postExtM(Ext)</code>.
- * 
- * @see polyglot.ext.jl.ast.AbstractDelFactory_c has a very similar structure. 
+ *
+ * @see polyglot.ext.jl.ast.AbstractDelFactory_c has a very similar structure.
  */
 public abstract class AbstractExtFactory_c implements ExtFactory
 {
     protected AbstractExtFactory_c() {
         this(null);
     }
-    
+
     protected AbstractExtFactory_c(ExtFactory nextExtFactory) {
         this.nextExtFactory = nextExtFactory;
     }
-    
+
     /**
      * The next extFactory in the chain. Whenever an extension is instantiated,
      * the next extFactory should be called to see if it also has an extension,
@@ -49,21 +49,21 @@ public abstract class AbstractExtFactory_c implements ExtFactory
     /**
      * Compose two extensions together. Order is important: e1 gets added
      * at the end of e2's chain of extensions.
-     * @param e1 the <code>Ext</code> object to add to the end of e2's 
-     *             chain of extensions. 
-     * @param e2 the second <code>Ext</code> object that will have e1 added to 
+     * @param e1 the <code>Ext</code> object to add to the end of e2's
+     *             chain of extensions.
+     * @param e2 the second <code>Ext</code> object that will have e1 added to
      *             its chain of extensions.
      * @return the result of adding e1 to the end of e2's chain of extensions.
      */
     protected Ext composeExts(Ext e1, Ext e2) {
-        if (e1 == null) return e2;        
-        if (e2 == null) return e1;        
+        if (e1 == null) return e2;
+        if (e2 == null) return e1;
         // add e1 as e2's last extension, by recursing...
         return e2.ext(composeExts(e1, e2.ext()));
     }
-    
+
     // ******************************************
-    // Final methods that call the Impl methods to construct 
+    // Final methods that call the Impl methods to construct
     // extensions, and then check with nextExtFactory to see if it
     // also has an extension. Finally, call an appropriate post method,
     // to allow subclasses to perform operations on the construction Exts
@@ -831,7 +831,7 @@ public abstract class AbstractExtFactory_c implements ExtFactory
     // ********************************************
     // Impl methods
     // ********************************************
-    
+
     /**
      * Create the <code>Ext</code> object for a <code>AmbAssign</code> AST node.
      * @return the <code>Ext</code> object for a <code>AmbAssign</code> AST node.

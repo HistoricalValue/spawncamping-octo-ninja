@@ -36,9 +36,9 @@ public class ValidMatches {
 
 	// edges are in same direction as PAG, in the direction of value flow
 	private final MultiMap<VarNode, VarNode> vMatchEdges = new HashSetMultiMap<VarNode, VarNode>();
-	
+
 	private final MultiMap<VarNode, VarNode> vMatchBarEdges = new HashSetMultiMap<VarNode, VarNode>();
-	
+
 	public ValidMatches(PAG pag, FieldToEdgesMap fieldToStores) {
 		for (Iterator iter = pag.loadSources().iterator(); iter.hasNext();) {
 			FieldRefNode loadSource = (FieldRefNode) iter.next();
@@ -46,7 +46,7 @@ public class ValidMatches {
 			VarNode loadBase = loadSource.getBase();
 			ArraySet<Pair<VarNode, VarNode>> storesOnField = fieldToStores.get(field);
 			for (Pair<VarNode, VarNode> store : storesOnField) {
-				VarNode storeBase = store.getO2();				
+				VarNode storeBase = store.getO2();
 				if (loadBase.getP2Set().hasNonEmptyIntersection(storeBase.getP2Set())) {
 					VarNode matchSrc = store.getO1();
 					Node[] loadTargets = pag.loadLookup(loadSource);
@@ -55,11 +55,11 @@ public class ValidMatches {
 						vMatchEdges.put(matchSrc, matchTgt);
 						vMatchBarEdges.put(matchTgt, matchSrc);
 					}
-				}				
+				}
 			}
 		}
 	}
-	
+
 	public Set<VarNode> vMatchLookup(VarNode src) {
 		return vMatchEdges.get(src);
 	}

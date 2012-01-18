@@ -28,29 +28,29 @@ public class LocalGenerator{
     public LocalGenerator(Body b){
           body = b;
     }
-    
-    private transient Set<String> localNames = null; 
-    
+
+    private transient Set<String> localNames = null;
+
     private boolean bodyContainsLocal(String name){
-        return localNames.contains(name);       
+        return localNames.contains(name);
     }
-    
+
     private void initLocalNames() {
     	localNames = new HashSet<String>();
         Iterator it = body.getLocals().iterator();
         while (it.hasNext()){
             localNames.add(((soot.Local)it.next()).getName());
-        }    	
+        }
     }
-    
+
     /**
      * generates a new soot local given the type
      */
     public soot.Local generateLocal(soot.Type type){
-        
+
     	//store local names for enhanced performance
     	initLocalNames();
-    	
+
 		String name = "v";
 		if (type instanceof soot.IntType) {
             while (true){
@@ -117,10 +117,10 @@ public class LocalGenerator{
         	localNames = null;
             throw new RuntimeException("Unhandled Type of Local variable to Generate - Not Implemented");
         }
-		
+
     	localNames = null;
 		return createLocal(name, type);
-		
+
 	}
 
 	private int tempInt = -1;
@@ -133,7 +133,7 @@ public class LocalGenerator{
     private int tempByte = -1;
     private int tempShort = -1;
     private int tempChar = -1;
-	
+
     private String nextIntName(){
 		tempInt++;
 		return "$i"+tempInt;
@@ -168,7 +168,7 @@ public class LocalGenerator{
 		tempDouble++;
 		return "$d"+tempDouble;
 	}
-    
+
 	private String nextFloatName(){
 		tempFloat++;
 		return "$f"+tempFloat;
@@ -183,7 +183,7 @@ public class LocalGenerator{
         tempRefLikeType++;
         return "$r"+tempRefLikeType;
     }
-    
+
     // this should be used for generated locals only
     private soot.Local createLocal(String name, soot.Type sootType) {
         soot.Local sootLocal = soot.jimple.Jimple.v().newLocal(name, sootType);

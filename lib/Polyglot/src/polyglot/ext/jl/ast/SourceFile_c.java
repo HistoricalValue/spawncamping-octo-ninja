@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * A <code>SourceFile</code> is an immutable representations of a Java
- * langauge source file.  It consists of a package name, a list of 
+ * langauge source file.  It consists of a package name, a list of
  * <code>Import</code>s, and a list of <code>GlobalDecl</code>s.
  */
 public class SourceFile_c extends Node_c implements SourceFile
@@ -167,7 +167,7 @@ public class SourceFile_c extends Node_c implements SourceFile
 	    String s = d.name();
 
 	    if (names.contains(s)) {
-		throw new SemanticException("Duplicate declaration: \"" + s + 
+		throw new SemanticException("Duplicate declaration: \"" + s +
 		    "\".", d.position());
 	    }
 
@@ -183,7 +183,7 @@ public class SourceFile_c extends Node_c implements SourceFile
 		hasPublic = true;
 	    }
 	}
-     
+
 	return this;
     }
 
@@ -208,7 +208,7 @@ public class SourceFile_c extends Node_c implements SourceFile
 	    Import im = (Import) i.next();
 	    print(im, w, tr);
 	}
-	 
+
 	if (! imports.isEmpty()) {
 	    w.newline(0);
 	}

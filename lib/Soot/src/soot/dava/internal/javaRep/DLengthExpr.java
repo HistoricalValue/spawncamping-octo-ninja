@@ -31,8 +31,8 @@ public class DLengthExpr extends AbstractLengthExpr implements Precedence
     }
 
     public int getPrecedence() { return 950; }
-      
-    public Object clone() 
+
+    public Object clone()
     {
         return new DLengthExpr(Grimp.cloneIfNecessary(getOp()));
     }

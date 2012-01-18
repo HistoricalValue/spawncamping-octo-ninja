@@ -43,7 +43,7 @@ public class Main {
             throw new NullPointerException("Class-to-analyse has not been set");
         if (SootSetuper.SootMode == null)
             throw new NullPointerException("Execution mode has not been set");
-        
+
         final SootSetuper.MainArguments args = sootSetuper. new MainArguments(
                 tpojbto,
                 mainClass,
@@ -67,7 +67,7 @@ public class Main {
 
         // Set execution mode
         mien.SetApplicationModeOn();
-        
+
         // Set significant classes
         mien.SetMainClass("sample.Sample");
         mien.SetClassToAnalyse("sample.Sample");

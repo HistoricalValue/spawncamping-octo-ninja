@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -59,10 +59,10 @@ package soot.coffi;
  * @see Instruction_Unknown
  */
 class Instruction_Jsr_w extends Instruction_longbranch {
-   	public Instruction_Jsr_w() { 
-		super((byte)ByteCode.JSR_W); 
-		name = "jsr_w"; 
-//   	    calls = true; 
+   	public Instruction_Jsr_w() {
+		super((byte)ByteCode.JSR_W);
+		name = "jsr_w";
+//   	    calls = true;
    	}
    public Instruction[] branchpoints(Instruction next) {
       Instruction i[] = new Instruction[1];

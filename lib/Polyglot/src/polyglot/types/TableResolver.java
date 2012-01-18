@@ -47,7 +47,7 @@ public class TableResolver extends ClassResolver implements TopLevelResolver {
                 }
             }
         }
-      
+
         return false;
     }
 
@@ -70,7 +70,7 @@ public class TableResolver extends ClassResolver implements TopLevelResolver {
     public String toString() {
         return "(table " + table + ")";
     }
-    
-    private static final Collection TOPICS = 
+
+    private static final Collection TOPICS =
                 CollectionUtil.list(Report.types, Report.resolver);
 }

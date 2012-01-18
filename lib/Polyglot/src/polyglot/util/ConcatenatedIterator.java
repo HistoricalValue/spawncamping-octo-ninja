@@ -53,7 +53,7 @@ public final class ConcatenatedIterator implements Iterator {
   public boolean hasNext() {
     return next_item != null;
   }
-  
+
   public void remove() {
     throw new UnsupportedOperationException("ConcatenatedIterator.remove");
   }
@@ -71,9 +71,9 @@ public final class ConcatenatedIterator implements Iterator {
     }
     next_item = null;
   }
-  
+
   // AF:  if next_item==null, this iterator has no more elts to yield.
-  //      otherwise, this iterator will yield next_item, followed by the 
+  //      otherwise, this iterator will yield next_item, followed by the
   //      remaining elements of backing_iterators[index], followed by the
   //      elements of backing_iterators[index+1]...
   Object next_item;

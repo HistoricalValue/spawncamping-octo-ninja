@@ -1,6 +1,6 @@
 /* Soot - a J*va Optimization Framework
- * Copyright (C) 2008 Ben Bellamy 
- * 
+ * Copyright (C) 2008 Ben Bellamy
+ *
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -29,11 +29,11 @@ public class BottomType extends Type
 {
 	private static BottomType instance;
 	static { instance = new BottomType(); }
-	
+
 	public static BottomType v() { return instance; }
-	
+
 	private BottomType() { }
-	
+
 	public String toString() { return "bottom_type"; }
 	public boolean equals(Object t) { return this == t; }
 }

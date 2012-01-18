@@ -14,14 +14,14 @@ public class CommonPrecedingEqualValueAnalysis extends BackwardFlowAnalysis
 {
 	Map unitToAliasSet;
 	Stmt s;
-	
+
 	public CommonPrecedingEqualValueAnalysis(UnitGraph g)
 	{
 		super(g);
-		
+
 		unitToAliasSet = null;
 		s = null;
-		
+
 		// analysis is done on-demand, not now
 	}
 
@@ -44,18 +44,18 @@ public class CommonPrecedingEqualValueAnalysis extends BackwardFlowAnalysis
 		FlowSet inSet1 = (FlowSet) in1;
 		FlowSet inSet2 = (FlowSet) in2;
 		FlowSet outSet = (FlowSet) out;
-		
+
 		inSet1.intersection(inSet2, outSet);
 //		inSet1.union(inSet2, outSet);
 	}
-	
+
 	protected void flowThrough(Object inValue, Object unit,
 			Object outValue)
 	{
 		FlowSet in  = (FlowSet) inValue;
 		FlowSet out = (FlowSet) outValue;
 		Stmt stmt = (Stmt) unit;
-		
+
 		in.copy(out);
 
 		// get list of definitions at this unit
@@ -65,7 +65,7 @@ public class CommonPrecedingEqualValueAnalysis extends BackwardFlowAnalysis
 		{
 			newDefs.add( new EquivalentValue( ((ValueBox) newDefBoxesIt.next()).getValue()) );
 		}
-		
+
 		// If the local of interest was defined in this statement, then we must
 		// generate a new list of aliases to it starting here
 		if( unitToAliasSet.keySet().contains(stmt) )
@@ -86,25 +86,25 @@ public class CommonPrecedingEqualValueAnalysis extends BackwardFlowAnalysis
 
 //		G.v().out.println(stmt + " HAS ALIASES in" + in + " out" + out);
 	}
-	
+
 	protected void copy(Object source, Object dest)
 	{
-		
+
 		FlowSet sourceSet = (FlowSet) source;
 		FlowSet destSet   = (FlowSet) dest;
-		
+
 		sourceSet.copy(destSet);
-		
+
 	}
-	
+
 	protected Object entryInitialFlow()
 	{
 		return new ArraySparseSet(); // should be a full set, not an empty one
 	}
-	
+
 	protected Object newInitialFlow()
 	{
 		return new ArraySparseSet(); // should be a full set, not an empty one
-	}	
+	}
 }
 

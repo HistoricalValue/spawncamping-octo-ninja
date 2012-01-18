@@ -2,10 +2,10 @@ package polyglot.ast;
 
 /**
  * An immutable representation of a Java language <code>if</code> statement.
- * Contains an expression whose value is tested, a "then" statement 
+ * Contains an expression whose value is tested, a "then" statement
  * (consequent), and optionally an "else" statement (alternate).
  */
-public interface If extends CompoundStmt 
+public interface If extends CompoundStmt
 {
     /** Get the if's condition. */
     Expr cond();

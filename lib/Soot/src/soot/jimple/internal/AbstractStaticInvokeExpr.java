@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -50,7 +50,7 @@ public abstract class AbstractStaticInvokeExpr extends AbstractInvokeExpr implem
         if (o instanceof AbstractStaticInvokeExpr)
         {
             AbstractStaticInvokeExpr ie = (AbstractStaticInvokeExpr)o;
-            if (!(getMethod().equals(ie.getMethod()) && 
+            if (!(getMethod().equals(ie.getMethod()) &&
                   argBoxes.length == ie.argBoxes.length))
                 return false;
             for (ValueBox element : argBoxes)
@@ -62,13 +62,13 @@ public abstract class AbstractStaticInvokeExpr extends AbstractInvokeExpr implem
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return getMethod().equivHashCode();
     }
 
     public abstract Object clone();
-    
+
     protected AbstractStaticInvokeExpr(SootMethodRef methodRef, ValueBox[] argBoxes)
     {
         if( !methodRef.isStatic() ) throw new RuntimeException("wrong static-ness");
@@ -134,13 +134,13 @@ public abstract class AbstractStaticInvokeExpr extends AbstractInvokeExpr implem
        for (ValueBox element : argBoxes) {
 	    ((ConvertToBaf)(element.getValue())).convertToBaf(context, out);
 	}
-       
+
        Unit u;
        out.add(u = Baf.v().newStaticInvokeInst(methodRef));
 
        Unit currentUnit = context.getCurrentUnit();
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}

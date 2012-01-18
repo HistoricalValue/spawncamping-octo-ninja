@@ -61,7 +61,7 @@ public class Flags implements Serializable
      *
      * @param name the name of the new flag in Java
      * @param cHeadName the name of the flag to print in the C++ header file
-     * @param cBodyName the name of the flag to print in the C++ body file 
+     * @param cBodyName the name of the flag to print in the C++ body file
      * @param after the flags after which this flag should be printed;
      *        Flags.NONE to print before all other flags, null
      *        if we should print at the end.
@@ -473,7 +473,7 @@ public class Flags implements Serializable
 
         return sb.toString();
     }
-    
+
     /**
      * Returns the flag information appropriate for C++ functions
      */
@@ -490,7 +490,7 @@ public class Flags implements Serializable
 
       return sb.toString();
     }
-    
+
     /**
      * Returns the flag information appropriate for C++ header files
      */

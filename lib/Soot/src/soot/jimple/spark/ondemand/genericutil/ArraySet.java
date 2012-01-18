@@ -68,7 +68,7 @@ public class ArraySet<T> extends AbstractSet<T> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see AAA.util.AAASet#add(java.lang.Object)
    */
   @SuppressWarnings("all")
@@ -98,7 +98,7 @@ public class ArraySet<T> extends AbstractSet<T> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see AAA.util.AAASet#contains(java.lang.Object)
    */
   public boolean contains(Object obj_) {
@@ -119,7 +119,7 @@ public class ArraySet<T> extends AbstractSet<T> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see AAA.util.AAASet#forall(AAA.util.ObjectVisitor)
    */
   public void forall(ObjectVisitor<T> visitor_) {
@@ -180,7 +180,7 @@ public class ArraySet<T> extends AbstractSet<T> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.util.Set#toArray()
    */
   public Object[] toArray() {
@@ -189,7 +189,7 @@ public class ArraySet<T> extends AbstractSet<T> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.util.Set#addAll(java.util.Collection)
    */
   public boolean addAll(Collection<? extends T> c) {
@@ -203,7 +203,7 @@ public class ArraySet<T> extends AbstractSet<T> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.util.Set#iterator()
    */
   public Iterator<T> iterator() {
@@ -212,7 +212,7 @@ public class ArraySet<T> extends AbstractSet<T> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.util.Set#toArray(java.lang.Object[])
    */
   @SuppressWarnings("unchecked")
@@ -234,14 +234,14 @@ public class ArraySet<T> extends AbstractSet<T> {
     final int setSize = size();
 
     /**
-     * 
+     *
      */
     public ArraySetIterator() {
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Iterator#remove()
      */
     public void remove() {
@@ -250,7 +250,7 @@ public class ArraySet<T> extends AbstractSet<T> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Iterator#hasNext()
      */
     public boolean hasNext() {
@@ -259,7 +259,7 @@ public class ArraySet<T> extends AbstractSet<T> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Iterator#next()
      */
     public T next() {

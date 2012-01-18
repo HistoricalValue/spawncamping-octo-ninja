@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ import java.util.*;
 import soot.tagkit.*;
 
 public abstract class AbstractVirtualInvokeExpr extends AbstractInstanceInvokeExpr
-  implements VirtualInvokeExpr, ConvertToBaf                                               
+  implements VirtualInvokeExpr, ConvertToBaf
 {
     protected AbstractVirtualInvokeExpr(ValueBox baseBox, SootMethodRef methodRef,
                                 ValueBox[] argBoxes)
@@ -52,7 +52,7 @@ public abstract class AbstractVirtualInvokeExpr extends AbstractInstanceInvokeEx
         {
             AbstractVirtualInvokeExpr ie = (AbstractVirtualInvokeExpr)o;
             if (!(baseBox.getValue().equivTo(ie.baseBox.getValue()) &&
-                    getMethod().equals(ie.getMethod()) && 
+                    getMethod().equals(ie.getMethod()) &&
                     argBoxes.length == ie.argBoxes.length))
                 return false;
             for (ValueBox element : argBoxes)
@@ -64,7 +64,7 @@ public abstract class AbstractVirtualInvokeExpr extends AbstractInstanceInvokeEx
     }
 
     /** Returns a hash code for this object, consistent with structural equality. */
-    public int equivHashCode() 
+    public int equivHashCode()
     {
         return baseBox.getValue().equivHashCode() * 101 + getMethod().equivHashCode() * 17;
     }
@@ -75,7 +75,7 @@ public abstract class AbstractVirtualInvokeExpr extends AbstractInstanceInvokeEx
     {
         ((ExprSwitch) sw).caseVirtualInvokeExpr(this);
     }
-    
+
     public String toString()
     {
         StringBuffer buffer = new StringBuffer();
@@ -87,7 +87,7 @@ public abstract class AbstractVirtualInvokeExpr extends AbstractInstanceInvokeEx
         {
             if(i != 0)
                 buffer.append(", ");
-                        
+
             buffer.append(argBoxes[i].getValue().toString());
         }
 
@@ -104,12 +104,12 @@ public abstract class AbstractVirtualInvokeExpr extends AbstractInstanceInvokeEx
         up.literal(".");
         up.methodRef(methodRef);
         up.literal("(");
-        
+
         for(int i = 0; i < argBoxes.length; i++)
         {
             if(i != 0)
                 up.literal(", ");
-                                        
+
             argBoxes[i].toString(up);
         }
 
@@ -129,7 +129,7 @@ public abstract class AbstractVirtualInvokeExpr extends AbstractInstanceInvokeEx
 
        Unit currentUnit = context.getCurrentUnit();
 
-	Iterator it = currentUnit.getTags().iterator();	
+	Iterator it = currentUnit.getTags().iterator();
 	while(it.hasNext()) {
 	    u.addTag((Tag) it.next());
 	}

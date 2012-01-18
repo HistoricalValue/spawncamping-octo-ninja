@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2003.  
+ * Modified by the Sable Research Group and others 1997-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,7 +41,7 @@ public class UnreachableCodeEliminator extends BodyTransformer
     public UnreachableCodeEliminator( Singletons.Global g ) {}
     public static UnreachableCodeEliminator v() { return G.v().soot_jimple_toolkits_scalar_UnreachableCodeEliminator(); }
 
-    protected void internalTransform(Body b, String phaseName, Map options) 
+    protected void internalTransform(Body b, String phaseName, Map options)
     {
         new Instance().internalTransform(b, phaseName, options);
     }
@@ -51,11 +51,11 @@ public class UnreachableCodeEliminator extends BodyTransformer
         HashSet<Object> visited;
         int numPruned;
 
-        protected void internalTransform(Body b, String phaseName, Map options) 
+        protected void internalTransform(Body b, String phaseName, Map options)
         {
             StmtBody body = (StmtBody)b;
-            
-            if (Options.v().verbose()) 
+
+            if (Options.v().verbose())
                 G.v().out.println("[" + body.getMethod().getName() + "] Eliminating unreachable code...");
 
             numPruned = 0;
@@ -99,12 +99,12 @@ public class UnreachableCodeEliminator extends BodyTransformer
             }
 
             Iterator stmtIt = body.getUnits().snapshotIterator();
-            while (stmtIt.hasNext()) 
+            while (stmtIt.hasNext())
             {
                 // find unmarked nodes
                 Stmt stmt = (Stmt)stmtIt.next();
-                
-                if (!visited.contains(stmt)) 
+
+                if (!visited.contains(stmt))
                 {
                     body.getUnits().remove(stmt);
                     Set traps = handlerToTraps.get(stmt);
@@ -119,14 +119,14 @@ public class UnreachableCodeEliminator extends BodyTransformer
             }
             if (Options.v().verbose())
                 G.v().out.println("[" + body.getMethod().getName() + "]     Removed " + numPruned + " statements...");
-                
-            // Now eliminate empty traps. 
+
+            // Now eliminate empty traps.
             //
             // For the most part, this is an atavism, an an artifact of
-            // pre-ExceptionalUnitGraph code, when the only way for a trap to 
+            // pre-ExceptionalUnitGraph code, when the only way for a trap to
             // become unreachable was if all its trapped units were removed, and
             // the stmtIt loop did not remove Traps as it removed handler units.
-            // We've left this separate test for empty traps here, even though 
+            // We've left this separate test for empty traps here, even though
             // most such traps would already have been eliminated by the preceding
             // loop, because in arbitrary bytecode you could have
             // handler unit that was still reachable by normal control flow, even
@@ -135,16 +135,16 @@ public class UnreachableCodeEliminator extends BodyTransformer
             // source.
             {
                 Iterator trapIt = b.getTraps().iterator();
-                
+
                 while(trapIt.hasNext())
                 {
                     Trap t = (Trap) trapIt.next();
-                    
+
                     if(t.getBeginUnit() == t.getEndUnit())
                         trapIt.remove();
                 }
             }
-            
+
     } // pruneUnreachables
 
         private void visitStmts(LinkedList<Unit> st) {

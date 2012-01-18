@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2003.  
+ * Modified by the Sable Research Group and others 1997-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -53,16 +53,16 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
     protected List<Unit> tails;
 
     protected Map<Unit,List<Unit>> unitToSuccs;
-    protected Map<Unit,List<Unit>> unitToPreds;        
+    protected Map<Unit,List<Unit>> unitToPreds;
     protected SootMethod method;
     protected Body body;
     protected Chain<Unit> unitChain;
 
     /**
-     *   Performs the work that is required to construct any sort of 
+     *   Performs the work that is required to construct any sort of
      *   <tt>UnitGraph</tt>.
      *
-     *   @param body The body of the method for which to construct a 
+     *   @param body The body of the method for which to construct a
      *               control flow graph.
      */
     protected UnitGraph( Body body) {
@@ -70,26 +70,26 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
 	unitChain = body.getUnits();
         method = body.getMethod();
         if(Options.v().verbose())
-	    G.v().out.println("[" + method.getName() + "]     Constructing " + 
+	    G.v().out.println("[" + method.getName() + "]     Constructing " +
 			      this.getClass().getName() + "...");
-      
+
     }
-    
+
 
     /**
      * Utility method for <tt>UnitGraph</tt> constructors. It computes
      * the edges corresponding to unexceptional control flow.
      *
-     * @param unitToSuccs A {@link Map} from {@link Unit}s to 
+     * @param unitToSuccs A {@link Map} from {@link Unit}s to
      *                    {@link List}s of {@link Unit}s. This is
      *	                  an ``out parameter''; callers must pass an empty
      *                    {@link Map}. <tt>buildUnexceptionalEdges</tt> will
      *                    add a mapping for every <tt>Unit</tt> in the
      *                    body to a list of its unexceptional successors.
      *
-     * @param unitToPreds A {@link Map} from {@link Unit}s to 
-     *                    {@link List}s of {@link Unit}s. This is an 
-     *                    ``out parameter''; callers must pass an empty 
+     * @param unitToPreds A {@link Map} from {@link Unit}s to
+     *                    {@link List}s of {@link Unit}s. This is an
+     *                    ``out parameter''; callers must pass an empty
      *                    {@link Map}. <tt>buildUnexceptionalEdges</tt> will
      *                    add a mapping for every <tt>Unit</tt> in the body
      *                    to a list of its unexceptional predecessors.
@@ -100,18 +100,18 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
 	for (Iterator<Unit> unitIt = unitChain.iterator(); unitIt.hasNext(); ) {
 	    unitToPreds.put(unitIt.next(), new ArrayList<Unit>());
 	}
-	
+
 	Iterator<Unit> unitIt = unitChain.iterator();
 	Unit currentUnit, nextUnit;
-                
+
 	nextUnit = unitIt.hasNext() ? (Unit) unitIt.next(): null;
-                
+
 	while(nextUnit != null) {
 	    currentUnit = nextUnit;
 	    nextUnit = unitIt.hasNext() ? (Unit) unitIt.next(): null;
-                    
+
 	    List<Unit> successors = new ArrayList<Unit>();
-                    
+
 	    if( currentUnit.fallsThrough() ) {
 		// Add the next unit as the successor
 		if(nextUnit != null) {
@@ -119,7 +119,7 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
 		    unitToPreds.get(nextUnit).add(currentUnit);
 		}
 	    }
-                        
+
 	    if( currentUnit.branches() ) {
 		for (Iterator<UnitBox> targetIt = currentUnit.getUnitBoxes().iterator();
 		     targetIt.hasNext(); ) {
@@ -182,10 +182,10 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
 
 
     /**
-     * Utility method that replaces the values of a {@link Map}, 
+     * Utility method that replaces the values of a {@link Map},
      * which must be instances of {@link List}, with unmodifiable
      * equivalents.
-     * 
+     *
      * @param map      The map whose values are to be made unmodifiable.
      */
     protected static void makeMappedListsUnmodifiable(Map<?,List<Unit>> map) {
@@ -208,14 +208,14 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
      * maps of all predecessors and successors. The values stored in
      * both argument maps must be {@link List}s of {@link Unit}s,
      * which are assumed not to contain any duplicate <tt>Unit</tt>s.
-     * 
-     * @param mapA      The first map to be combined. 
+     *
+     * @param mapA      The first map to be combined.
      *
      * @param mapB	The second map to be combined.
      */
     protected Map<Unit,List<Unit>> combineMapValues
     	(Map<Unit,List<Unit>> mapA, Map<Unit,List<Unit>> mapB) {
-	// The duplicate screen 
+	// The duplicate screen
 	Map<Unit,List<Unit>> result = new HashMap<Unit,List<Unit>>(mapA.size() * 2 + 1, 0.7f);
 	for (Iterator<Unit> chainIt = unitChain.iterator(); chainIt.hasNext(); ) {
 	    Unit unit = (Unit) chainIt.next();
@@ -234,7 +234,7 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
 	    } else {
 		List<Unit> resultList = new ArrayList<Unit>(resultSize);
 		Iterator<Unit> listIt = null;
-		// As a minor optimization of the duplicate screening, 
+		// As a minor optimization of the duplicate screening,
 		// copy the longer list first.
 		if (listA.size() >= listB.size()) {
 		    resultList.addAll(listA);
@@ -265,7 +265,7 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
 
     /**
      * Utility method for adding an edge to maps representing the CFG.
-     * 
+     *
      * @param unitToSuccs The {@link Map} from {@link Unit}s to {@link List}s
      *                    of their successors.
      *
@@ -309,19 +309,19 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
 
 
   /**
-   *  Look for a path in graph,  from def to use. 
-   *  This path has to lie inside an extended basic block 
-   *  (and this property implies uniqueness.). The path returned 
+   *  Look for a path in graph,  from def to use.
+   *  This path has to lie inside an extended basic block
+   *  (and this property implies uniqueness.). The path returned
    *   includes from and to.
    *
    *  @param from start point for the path.
-   *  @param to   end point for the path. 
+   *  @param to   end point for the path.
    *  @return null if there is no such path.
    */
   public List<Unit> getExtendedBasicBlockPathBetween(Unit from, Unit to)
     {
         UnitGraph g = this;
-        
+
       // if this holds, we're doomed to failure!!!
       if (g.getPredsOf(to).size() > 1)
         return null;
@@ -376,7 +376,7 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
           pathStack.add(betweenUnit);
         }
       return null;
-    }       
+    }
 
 
     /* DirectedGraph implementation */
@@ -392,7 +392,7 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
 
     public List<Unit> getPredsOf(Unit u)
     {
-        if(!unitToPreds.containsKey(u)) 
+        if(!unitToPreds.containsKey(u))
 	    throw new NoSuchElementException("Invalid unit " + u);
 
         return unitToPreds.get(u);
@@ -408,14 +408,14 @@ public abstract class UnitGraph implements DirectedGraph<Unit>
     public int size()
     {
         return unitChain.size();
-    }  
+    }
 
     public Iterator<Unit> iterator()
     {
         return unitChain.iterator();
     }
 
-    public String toString() 
+    public String toString()
     {
         Iterator<Unit> it = unitChain.iterator();
         StringBuffer buf = new StringBuffer();

@@ -34,7 +34,7 @@ import java.util.*;
 public class DominatorTreeAdapter implements DirectedGraph
 {
     DominatorTree dt;
-    
+
     public DominatorTreeAdapter(DominatorTree dt)
     {
         this.dt = dt;

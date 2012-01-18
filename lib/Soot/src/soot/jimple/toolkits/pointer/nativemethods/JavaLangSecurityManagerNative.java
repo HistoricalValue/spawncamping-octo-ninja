@@ -35,7 +35,7 @@ public class JavaLangSecurityManagerNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -46,14 +46,14 @@ public class JavaLangSecurityManagerNative extends NativeMethodClass {
     String subSignature = method.getSubSignature();
 
     if (subSignature.equals("java.lang.Class[] getClassContext()")) {
-      java_lang_SecurityManager_getClassContext(method, thisVar, 
+      java_lang_SecurityManager_getClassContext(method, thisVar,
 						returnVar, params);
       return;
 
     } else if (subSignature.equals("java.lang.ClassLoader currentClassLoader0()")){
       java_lang_SecurityManager_currentClassLoader0(method,
-						    thisVar, 
-						    returnVar, 
+						    thisVar,
+						    returnVar,
 						    params);
       return;
 
@@ -72,13 +72,13 @@ public class JavaLangSecurityManagerNative extends NativeMethodClass {
   }
   /************************* java.lang.SecurityManager ***************/
   /**
-   * Returns the current execution stack as an array of classes. 
+   * Returns the current execution stack as an array of classes.
    *
    * NOTE: an array of object may be created.
-   * 
+   *
    *     protected native java.lang.Class getClassContext()[];
    */
-  public 
+  public
     void java_lang_SecurityManager_getClassContext(SootMethod method,
 						   ReferenceVariable thisVar,
 						   ReferenceVariable returnVar,
@@ -93,11 +93,11 @@ public class JavaLangSecurityManagerNative extends NativeMethodClass {
    * is not equal to the system class loader (as returned by
    * ClassLoader.getSystemClassLoader()) or one of its ancestors.
    *
-   * NOTE: returns a variable pointing to the only class loader object. 
+   * NOTE: returns a variable pointing to the only class loader object.
    *
    *     private native java.lang.ClassLoader currentClassLoader0();
    */
-  public 
+  public
     void java_lang_SecurityManager_currentClassLoader0(
 			    SootMethod method,
 			    ReferenceVariable thisVar,
@@ -108,10 +108,10 @@ public class JavaLangSecurityManagerNative extends NativeMethodClass {
 
   /**
    * Returns a variable pointing to all class objects.
-   * 
+   *
    *    private native java.lang.Class currentLoadedClass0();
    */
-  public 
+  public
     void java_lang_SecurityManager_currentLoadedClass0(
 					 SootMethod method,
 					 ReferenceVariable thisVar,
@@ -124,7 +124,7 @@ public class JavaLangSecurityManagerNative extends NativeMethodClass {
    * Both methods have NO side effects.
    *
    *     protected native int classDepth(java.lang.String);
-   *     private native int classLoaderDepth0(); 
+   *     private native int classLoaderDepth0();
    */
 
 }

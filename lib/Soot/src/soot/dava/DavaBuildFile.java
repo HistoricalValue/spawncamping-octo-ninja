@@ -62,18 +62,18 @@ public class DavaBuildFile {
 		out.print("	 </javac>\n");
 		out.print("	</target>\n");
 
-		
-		
-		
+
+
+
 		out.print("	<!--  ==========AST METRICS FOR DECOMPILED CODE================= -->\n");
 		out.print("<target name=\"ast-metrics\" description=\"Compute the ast metrics\">\n");
 		/*
 		 * NEED TO MAKE SURE SRC-PREC IS SET so that java to jimple gets evaluate
-		 * The command is going to be java soot.Main -ast-metrics followed by 
+		 * The command is going to be java soot.Main -ast-metrics followed by
 		 * all the classes on which we had originally done the decompile
 		 * Need a specialized task
 		 */
-		
+
 		out.print("   <exec executable=\"java\" dir=\"src\">\n");
 		out.print("		<arg value=\"-Xmx400m\" />\n");
 		out.print("		<arg value=\"soot.Main\" />\n");
@@ -81,7 +81,7 @@ public class DavaBuildFile {
 		out.print("		<arg value=\"--src-prec\" />\n");
 		out.print("		<arg value=\"java\" />\n");
 
-		
+
 		Iterator<String> it = decompiledClasses.iterator();
 		while(it.hasNext()){
 			String temp = it.next();
@@ -90,7 +90,7 @@ public class DavaBuildFile {
 			}
 			//System.out.println(temp);
 			out.print("		<arg value=\"" + temp + "\" />\n");
-			
+
 		}
 
 		out.print("");

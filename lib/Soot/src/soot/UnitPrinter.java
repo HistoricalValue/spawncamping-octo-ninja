@@ -36,7 +36,7 @@ public interface UnitPrinter {
     public void noIndent();
     public void setIndent(String newIndent);
     public String getIndent();
-    
+
     public void literal( String s );
     public void newline();
     public void local( Local l );

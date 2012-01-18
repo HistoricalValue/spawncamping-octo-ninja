@@ -109,7 +109,7 @@ public final class AllocAndContextSet extends ArraySet<AllocAndContext> implemen
       }
       return res;
   }
-  
+
   /**
    * Computes a hash code based on the contents of the points-to set.
    * Note that hashCode() is not overwritten on purpose.
@@ -123,7 +123,7 @@ public final class AllocAndContextSet extends ArraySet<AllocAndContext> implemen
       }
       return result;
   }
-  
+
   /**
    * Returns <code>true</code> if and only if other holds the same alloc nodes as this.
    * Note that equals() is not overwritten on purpose.
@@ -137,11 +137,11 @@ public final class AllocAndContextSet extends ArraySet<AllocAndContext> implemen
           return false;
       }
       AllocAndContextSet otherPts = (AllocAndContextSet) other;
-      
-      //both sets are equal if they are supersets of each other 
-      return superSetOf(otherPts, this) && superSetOf(this, otherPts);        
+
+      //both sets are equal if they are supersets of each other
+      return superSetOf(otherPts, this) && superSetOf(this, otherPts);
   }
-  
+
   /**
    * Returns <code>true</code> if <code>onePts</code> is a (non-strict) superset of <code>otherPts</code>.
    */

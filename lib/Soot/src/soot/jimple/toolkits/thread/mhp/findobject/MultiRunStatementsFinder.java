@@ -37,51 +37,51 @@ import soot.toolkits.scalar.ForwardFlowAnalysis;
 public class MultiRunStatementsFinder extends ForwardFlowAnalysis<Unit,BitSet>
 {
 	Set<Unit> multiRunStatements = new HashSet<Unit>();
-	
+
     protected Map<Object,Integer> nodeToIndex;
     protected int lastIndex = 0;
-	
+
 	//add soot method here just for debug
 	public MultiRunStatementsFinder(UnitGraph g, SootMethod sm, Set<Object> multiCalledMethods, CallGraph cg)
 	{
 		super(g);
-		
+
 		nodeToIndex = new HashMap<Object, Integer>();
-				
-		//      System.out.println("===entering MultiObjectAllocSites==");	
+
+		//      System.out.println("===entering MultiObjectAllocSites==");
 		doAnalysis();
-		
+
 		//testMultiObjSites(sm);
 		findMultiCalledMethodsIntra(multiCalledMethods, cg);
-		
+
 		// testMultiObjSites(sm);
 	}
-	
+
 	private void findMultiCalledMethodsIntra(Set<Object> multiCalledMethods, CallGraph callGraph){
 		Iterator<Unit> it = multiRunStatements.iterator();
 		while (it.hasNext()){
 			Unit unit = it.next();
 			if (((Stmt)unit).containsInvokeExpr()){
-				
+
 				Value invokeExpr =((Stmt)unit).getInvokeExpr();
-				
+
 				List<SootMethod> targetList = new ArrayList<SootMethod>();
 				SootMethod method =  ((InvokeExpr)invokeExpr).getMethod();
 				if (invokeExpr instanceof StaticInvokeExpr){
-					
+
 					targetList.add(method);
 				}
-				else if (invokeExpr instanceof InstanceInvokeExpr) { 
+				else if (invokeExpr instanceof InstanceInvokeExpr) {
 					//System.out.println("unit: "+unit);
-					
+
 					if (method.isConcrete() && !method.getDeclaringClass().isLibraryClass()){
-						
+
 						TargetMethodsFinder tmd = new TargetMethodsFinder();
 						//	targetList = tmd.find(unit, callGraph, false, true);
 						targetList = tmd.find(unit, callGraph, true, true); // list could be empty... that's ok
 					}
-					
-					
+
+
 				}
 				if (targetList != null){
 					Iterator<SootMethod> iterator = targetList.iterator();
@@ -92,12 +92,12 @@ public class MultiRunStatementsFinder extends ForwardFlowAnalysis<Unit,BitSet>
 						}
 					}
 				}
-				
+
 			}
-			
+
 		}
 	}
-	
+
 //	STEP 4: Is the merge operator union or intersection?
 //	UNION
 	protected void merge(BitSet in1, BitSet in2, BitSet out)
@@ -106,17 +106,17 @@ public class MultiRunStatementsFinder extends ForwardFlowAnalysis<Unit,BitSet>
 		out.or(in1);
 		out.or(in2);
 	}
-	
-	
+
+
 //	STEP 5: Define flow equations.
 //	in(s) = ( out(s) minus defs(s) ) union uses(s)
-//	
+//
 	protected void flowThrough(BitSet in, Unit unit,
 			BitSet out)
 	{
 		out.clear();
 		out.or(in);
-		
+
 		if (!out.get(indexOf(unit))){
 			out.set(indexOf(unit));
 //			System.out.println("add to out: "+unit);
@@ -124,33 +124,33 @@ public class MultiRunStatementsFinder extends ForwardFlowAnalysis<Unit,BitSet>
 		else{
 			multiRunStatements.add(unit);
 		}
-		
+
 //		System.out.println("in: "+in);
 //		System.out.println("out: "+out);
-		
+
 	}
-	
+
 	protected void copy(BitSet source, BitSet dest)
 	{
 		dest.clear();
 		dest.or(source);
 	}
-	
+
 //	STEP 6: Determine value for start/end node, and
 //	initial approximation.
-//	
+//
 //	start node:              empty set
 //	initial approximation:   empty set
 	protected BitSet entryInitialFlow()
 	{
 		return new BitSet();
 	}
-	
+
 	protected BitSet newInitialFlow()
 	{
 		return new BitSet();
 	}
-	
+
 	public FlowSet getMultiRunStatements(){
 		FlowSet res = new ArraySparseSet();
 		for (Unit u : multiRunStatements) {
@@ -158,7 +158,7 @@ public class MultiRunStatementsFinder extends ForwardFlowAnalysis<Unit,BitSet>
 		}
 		return res;
 	}
-	
+
     protected int indexOf(Object o) {
         Integer index = nodeToIndex.get(o);
         if(index==null) {
@@ -168,6 +168,6 @@ public class MultiRunStatementsFinder extends ForwardFlowAnalysis<Unit,BitSet>
         }
         return index;
     }
-	
+
 }
 

@@ -28,7 +28,7 @@ public class TopologicalSorter
 		go();
 //		printSeq(sorter);
 	}
-	
+
 	private void go(){
 		Iterator it = chain.iterator();
 		while (it.hasNext()){
@@ -36,13 +36,13 @@ public class TopologicalSorter
 			dfsVisit(node);
 		}
 	}
-	
+
 	private void dfsVisit(Object m){
 		if( visited.contains( m ) ) return;
 		visited.add( m );
 		Iterator targetsIt = pg.getSuccsOf(m).iterator();
 		while (targetsIt.hasNext()){
-			Object target = targetsIt.next();	
+			Object target = targetsIt.next();
 			dfsVisit(target);
 		}
 		sorter.addFirst(m);

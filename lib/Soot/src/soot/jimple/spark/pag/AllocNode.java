@@ -39,13 +39,13 @@ public class AllocNode extends Node implements Context {
     /** Returns the new expression of this allocation site. */
     public Object getNewExpr() { return newExpr; }
     /** Returns all field ref nodes having this node as their base. */
-    public Collection getAllFieldRefs() { 
+    public Collection getAllFieldRefs() {
         if( fields == null ) return Collections.EMPTY_LIST;
         return fields.values();
     }
     /** Returns the field ref node having this node as its base,
      * and field as its field; null if nonexistent. */
-    public AllocDotField dot( SparkField field ) 
+    public AllocDotField dot( SparkField field )
     { return fields == null ? null : (AllocDotField) fields.get( field ); }
     public String toString() {
 	return "AllocNode "+getNumber()+" "+newExpr+" in method "+method;

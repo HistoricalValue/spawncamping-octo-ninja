@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -43,7 +43,7 @@ import soot.JastAddJ.JastAddJavaParser;
 import soot.JastAddJ.Program;
 
 /** Loads symbols for SootClasses from either class files or jimple files. */
-public class SootResolver 
+public class SootResolver
 {
     /** Maps each resolved class to a list of all references in it. */
     private final Map<SootClass, ArrayList> classToTypesSignature = new HashMap<SootClass, ArrayList>();
@@ -60,8 +60,8 @@ public class SootResolver
         worklist[SootClass.HIERARCHY] = new LinkedList();
         worklist[SootClass.SIGNATURES] = new LinkedList();
         worklist[SootClass.BODIES] = new LinkedList();
-        
-        
+
+
         program = new Program();
 	program.state().reset();
 
@@ -87,11 +87,11 @@ public class SootResolver
     }
 
     public static SootResolver v() { return G.v().soot_SootResolver();}
-    
+
     /** Returns true if we are resolving all class refs recursively. */
     private boolean resolveEverything() {
         return( Options.v().whole_program() || Options.v().whole_shimple()
-	|| Options.v().full_resolver() 
+	|| Options.v().full_resolver()
 	|| Options.v().output_format() == Options.output_format_dava );
     }
 
@@ -200,9 +200,9 @@ public class SootResolver
 
     public void reResolveHierarchy(SootClass sc) {
         // Bring superclasses to hierarchy
-        if(sc.hasSuperclass()) 
+        if(sc.hasSuperclass())
             addToResolveWorklist(sc.getSuperclass(), SootClass.HIERARCHY);
-        if(sc.hasOuterClass()) 
+        if(sc.hasOuterClass())
             addToResolveWorklist(sc.getOuterClass(), SootClass.HIERARCHY);
         for( Iterator ifaceIt = sc.getInterfaces().iterator(); ifaceIt.hasNext(); ) {
             final SootClass iface = (SootClass) ifaceIt.next();
@@ -217,7 +217,7 @@ public class SootResolver
     private void bringToSignatures(SootClass sc) {
         if(sc.resolvingLevel() >= SootClass.SIGNATURES ) return;
         bringToHierarchy(sc);
-        if(Options.v().debug_resolver()) 
+        if(Options.v().debug_resolver())
             G.v().out.println("bringing to SIGNATURES: "+sc);
         sc.setResolvingLevel(SootClass.SIGNATURES);
 
@@ -239,7 +239,7 @@ public class SootResolver
         }
 
         // Bring superclasses to signatures
-        if(sc.hasSuperclass()) 
+        if(sc.hasSuperclass())
             addToResolveWorklist(sc.getSuperclass(), SootClass.SIGNATURES);
         for( Iterator ifaceIt = sc.getInterfaces().iterator(); ifaceIt.hasNext(); ) {
             final SootClass iface = (SootClass) ifaceIt.next();
@@ -258,7 +258,7 @@ public class SootResolver
     private void bringToBodies(SootClass sc) {
         if(sc.resolvingLevel() >= SootClass.BODIES ) return;
         bringToSignatures(sc);
-        if(Options.v().debug_resolver()) 
+        if(Options.v().debug_resolver())
             G.v().out.println("bringing to BODIES: "+sc);
         sc.setResolvingLevel(SootClass.BODIES);
 

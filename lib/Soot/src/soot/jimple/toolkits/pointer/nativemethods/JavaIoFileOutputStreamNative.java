@@ -35,7 +35,7 @@ public class JavaIoFileOutputStreamNative extends NativeMethodClass {
 
   /**
    * Implements the abstract method simulateMethod.
-   * It distributes the request to the corresponding methods 
+   * It distributes the request to the corresponding methods
    * by signatures.
    */
   public void simulateMethod(SootMethod method,
@@ -55,15 +55,15 @@ public class JavaIoFileOutputStreamNative extends NativeMethodClass {
   /**
    * NO side effects, may throw exceptions.
    *
-   *    private native void open(java.lang.String) 
+   *    private native void open(java.lang.String)
    *                    throws java.io.FileNotFoundException;
-   *    private native void openAppend(java.lang.String) 
+   *    private native void openAppend(java.lang.String)
    *                    throws java.io.FileNotFoundException;
-   *    public native void write(int) 
+   *    public native void write(int)
    *                    throws java.io.IOException;
-   *    private native void writeBytes(byte[], int, int) 
+   *    private native void writeBytes(byte[], int, int)
    *                    throws java.io.IOException;
-   *    public native void close() 
+   *    public native void close()
    *                    throws java.io.IOException;
    *    private static native void initIDs();
    */

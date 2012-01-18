@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -33,25 +33,25 @@ public class TagManager
     public static TagManager v() { return G.v().soot_tagkit_TagManager(); }
     private TagPrinter tagPrinter = new StdTagPrinter();
 
-    /** Returns the Tag class with the given name. 
+    /** Returns the Tag class with the given name.
      *
      * (This does not seem to be necessary.) */
     public Tag getTagFor(String tagName) {
 	try {
 	    Class cc = Class.forName("soot.tagkit." + tagName);
 	    return (Tag) cc.newInstance();
-	} 
+	}
 	catch (ClassNotFoundException e) {
 	    return null;
 	} catch(IllegalAccessException e) {
 	    throw new RuntimeException();
 	} catch (InstantiationException e) {
 	    throw new RuntimeException(e.toString());
-	}	
+	}
     }
 
     /** Sets the default tag printer. */
-    public void setTagPrinter(TagPrinter p) 
+    public void setTagPrinter(TagPrinter p)
     {
 	tagPrinter = p;
     }

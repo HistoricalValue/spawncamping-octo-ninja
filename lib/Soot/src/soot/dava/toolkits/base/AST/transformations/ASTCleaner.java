@@ -54,7 +54,7 @@ public class ASTCleaner extends DepthFirstAdapter{
     	super(verbose);
     }
 
-    
+
     public void caseASTStatementSequenceNode(ASTStatementSequenceNode node){
     }
 
@@ -81,7 +81,7 @@ public class ASTCleaner extends DepthFirstAdapter{
     	Iterator<Object> sbit = node.get_SubBodies().iterator();
 
     	//onlyASTIfElseNode has 2 subBodies but we need to deal with that
-    	int subBodyNumber=0; 
+    	int subBodyNumber=0;
     	while (sbit.hasNext()) {
     	    Object subBody = sbit.next();
     	    Iterator it = ((List) subBody).iterator();
@@ -99,7 +99,7 @@ public class ASTCleaner extends DepthFirstAdapter{
     			UselessLabeledBlockRemover.removeLabeledBlock(node,labelBlock,subBodyNumber,nodeNumber);
     			if(G.v().ASTTransformations_modified){
     			    return;
-    			}			
+    			}
     		    }
     		}
     		else if(temp instanceof ASTIfElseNode){
@@ -114,14 +114,14 @@ public class ASTCleaner extends DepthFirstAdapter{
     		    if(it.hasNext()){//means we can get the nodeNumber+1
     			ASTNode nextNode = (ASTNode)((List)subBody).get(nodeNumber+1);
     			if(nextNode instanceof ASTIfNode){
-    			    //found an If followed by another if might match Patter 3. 
+    			    //found an If followed by another if might match Patter 3.
     			    OrAggregatorThree.checkAndTransform(node,(ASTIfNode)temp,(ASTIfNode)nextNode,nodeNumber,subBodyNumber);
     			    if(G.v().ASTTransformations_modified){
     			    	//if we modified something we want to stop since the tree is stale
     			    	//System.out.println("here");
     			    	return;
     			    }
-    			    
+
     			}
     		    }
     		}
@@ -135,7 +135,7 @@ public class ASTCleaner extends DepthFirstAdapter{
     public void caseASTTryNode(ASTTryNode node){
 	inASTTryNode(node);
 
-	//get try body 
+	//get try body
 	List<Object> tryBody = node.get_TryBody();
 	Iterator<Object> it = tryBody.iterator();
 
@@ -149,7 +149,7 @@ public class ASTCleaner extends DepthFirstAdapter{
 		SETNodeLabel label = labelBlock.get_Label();
 		if(label.toString()==null){
 		    //uselessLabeledBlock Found REMOVE IT
-		    
+
 		    List<Object> newBody=UselessLabeledBlockRemover.createNewSubBody(tryBody,nodeNumber,labelBlock);
 		    if(newBody!=null){
 			//something did not go wrong
@@ -179,7 +179,7 @@ public class ASTCleaner extends DepthFirstAdapter{
 		if(it.hasNext()){//means we can get the nodeNumber+1
 		    ASTNode nextNode = (ASTNode)tryBody.get(nodeNumber+1);
 		    if(nextNode instanceof ASTIfNode){
-			//found an If followed by another if might match Patter 3. 
+			//found an If followed by another if might match Patter 3.
 			List<Object> newBody=OrAggregatorThree.createNewNodeBody(tryBody,nodeNumber,(ASTIfNode)temp,(ASTIfNode)nextNode);
 			if(newBody!=null){
 			    //something did not go wrong and pattern was matched
@@ -211,10 +211,10 @@ public class ASTCleaner extends DepthFirstAdapter{
         it = catchList.iterator();
 	while (it.hasNext()) {
 	    ASTTryNode.container catchBody = (ASTTryNode.container)it.next();
-	    
+
 	    SootClass sootClass = ((SootClass)exceptionMap.get(catchBody));
 	    Type type = sootClass.getType();
-	    
+
 	    //apply on type of exception
 	    caseType(type);
 
@@ -236,7 +236,7 @@ public class ASTCleaner extends DepthFirstAdapter{
 		    SETNodeLabel label = labelBlock.get_Label();
 		    if(label.toString()==null){
 			//uselessLabeledBlock Found REMOVE IT
-			
+
 			List<Object> newBody=UselessLabeledBlockRemover.createNewSubBody(body,nodeNumber,labelBlock);
 			if(newBody!=null){
 			    //something did not go wrong
@@ -244,7 +244,7 @@ public class ASTCleaner extends DepthFirstAdapter{
 			    G.v().ASTTransformations_modified = true;
 			    //System.out.println("REMOVED LABEL from within catchlist");
 			}
-			
+
 		    }
 		}
 		else if(temp instanceof ASTIfElseNode){
@@ -267,7 +267,7 @@ public class ASTCleaner extends DepthFirstAdapter{
 		    if(itBody.hasNext()){//means we can get the nodeNumber+1
 			ASTNode nextNode = (ASTNode)body.get(nodeNumber+1);
 			if(nextNode instanceof ASTIfNode){
-			    //found an If followed by another if might match Patter 3. 
+			    //found an If followed by another if might match Patter 3.
 			    List<Object> newBody=OrAggregatorThree.createNewNodeBody(body,nodeNumber,(ASTIfNode)temp,(ASTIfNode)nextNode);
 			    if(newBody!=null){
 				//something did not go wrong and pattern was matched
@@ -283,7 +283,7 @@ public class ASTCleaner extends DepthFirstAdapter{
 		nodeNumber++;
 	    }
 	}
-	
+
 	outASTTryNode(node);
     }
 
@@ -298,9 +298,9 @@ public class ASTCleaner extends DepthFirstAdapter{
 	while (it.hasNext()) {//going through all the cases of the switch statement
 	    Object currentIndex = it.next();
 	    List<Object> body = index2BodyList.get( currentIndex);
-	    
+
 	    if (body != null){
-		//this body is a list of ASTNodes 
+		//this body is a list of ASTNodes
 
 		Iterator<Object> itBody = body.iterator();
 		int nodeNumber=0;
@@ -313,11 +313,11 @@ public class ASTCleaner extends DepthFirstAdapter{
 			SETNodeLabel label = labelBlock.get_Label();
 			if(label.toString()==null){
 			    //uselessLabeledBlock Found REMOVE IT
-		    
+
 			    List<Object> newBody=UselessLabeledBlockRemover.createNewSubBody(body,nodeNumber,labelBlock);
 			    if(newBody!=null){
 				//something did not go wrong
-				
+
 				//put this body in the Map
 				index2BodyList.put(currentIndex,newBody);
 				//replace in actual switchNode
@@ -335,7 +335,7 @@ public class ASTCleaner extends DepthFirstAdapter{
 			    List<Object> newBody=EmptyElseRemover.createNewNodeBody(body,nodeNumber,(ASTIfElseNode)temp);
 			    if(newBody!=null){
 				//something did not go wrong
-				
+
 			       //put this body in the Map
 				index2BodyList.put(currentIndex,newBody);
 				//replace in actual switchNode
@@ -351,7 +351,7 @@ public class ASTCleaner extends DepthFirstAdapter{
 			if(itBody.hasNext()){//means we can get the nodeNumber+1
 			    ASTNode nextNode = (ASTNode)body.get(nodeNumber+1);
 			    if(nextNode instanceof ASTIfNode){
-				//found an If followed by another if might match Patter 3. 
+				//found an If followed by another if might match Patter 3.
 				List<Object> newBody=OrAggregatorThree.createNewNodeBody(body,nodeNumber,(ASTIfNode)temp,(ASTIfNode)nextNode);
 				if(newBody!=null){
 				    //something did not go wrong and pattern was matched

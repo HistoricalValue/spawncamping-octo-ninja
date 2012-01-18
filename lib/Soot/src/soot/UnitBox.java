@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -30,7 +30,7 @@ package soot;
 
 import java.io.*;
 
-/** A box which can contain units. 
+/** A box which can contain units.
  *
  * @see Unit
  */
@@ -43,8 +43,8 @@ public interface UnitBox extends Serializable
     public Unit getUnit();
 
     /** Returns true if this box can contain the given Unit. */
-    public boolean canContainUnit(Unit u);   
-    
+    public boolean canContainUnit(Unit u);
+
     /**
      * Returns true if the UnitBox is holding a Unit that is the
      * target of a branch (ie a Unit at the beginning of a CFG block).
@@ -56,5 +56,5 @@ public interface UnitBox extends Serializable
      **/
     public boolean isBranchTarget();
 
-    public void toString(UnitPrinter up); 
+    public void toString(UnitPrinter up);
 }

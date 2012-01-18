@@ -30,7 +30,7 @@ public abstract class ParamTypeSystem_c extends TypeSystem_c
      *
      * @throws SemanticException when the actuals do not agree with the formals
      */
-    public ClassType instantiate(Position pos, PClass base, List actuals) 
+    public ClassType instantiate(Position pos, PClass base, List actuals)
         throws SemanticException
     {
         checkInstantiation(pos, base, actuals);
@@ -88,7 +88,7 @@ public abstract class ParamTypeSystem_c extends TypeSystem_c
             throw new InternalCompilerError("Instantiating a PClass "
                 + "produced something other than a ClassType.", pos);
         }
-        
+
         return inst.toClass();
     }
 

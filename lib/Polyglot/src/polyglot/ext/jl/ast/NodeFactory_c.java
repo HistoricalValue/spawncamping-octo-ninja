@@ -21,19 +21,19 @@ public class NodeFactory_c extends AbstractNodeFactory_c
     public NodeFactory_c() {
         // use an empty implementation of AbstractExtFactory_c and
         // AbstractDelFactory_c, so we don't need to do null checks
-        this(new AbstractExtFactory_c() {}, 
-             new AbstractDelFactory_c() {}); 
+        this(new AbstractExtFactory_c() {},
+             new AbstractDelFactory_c() {});
     }
     public NodeFactory_c(ExtFactory extFactory) {
-        this(extFactory, 
-             new AbstractDelFactory_c() {}); 
+        this(extFactory,
+             new AbstractDelFactory_c() {});
     }
     public NodeFactory_c(ExtFactory extFactory,
                            DelFactory delFactory ) {
-        this.extFactory = extFactory; 
-        this.delFactory = delFactory; 
+        this.extFactory = extFactory;
+        this.delFactory = delFactory;
     }
-    
+
     protected ExtFactory extFactory() {
         return this.extFactory;
     }

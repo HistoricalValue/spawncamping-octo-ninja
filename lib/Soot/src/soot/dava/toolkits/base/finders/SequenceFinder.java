@@ -46,7 +46,7 @@ public class SequenceFinder implements FactFinder
 
 	    if (childUnion.contains( as))
 		continue;
-	    
+
 	    IterableSet sequenceBody = new IterableSet();
 
 	    while (as.bpreds.size() == 1) {
@@ -61,7 +61,7 @@ public class SequenceFinder implements FactFinder
 
 		childUnion.add( as);
 		sequenceBody.addLast( as);
-		
+
 		if (as.bsuccs.isEmpty() == false)
 		    as = (AugmentedStmt) as.bsuccs.get(0);
 

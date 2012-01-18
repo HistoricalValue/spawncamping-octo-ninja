@@ -131,8 +131,8 @@ public final class HybridPointsToSet extends PointsToSetInternal {
         if( ret ) empty = false;
         return ret;
     }
- 
-    /** Adds contents of other into this set, returns true if this set 
+
+    /** Adds contents of other into this set, returns true if this set
      * changed. */
     public final boolean addAll( final PointsToSetInternal other,
             final PointsToSetInternal exclude ) {
@@ -264,17 +264,17 @@ public final class HybridPointsToSet extends PointsToSetInternal {
     private Node n3 = null;
     private Node n4 = null;
     private Node n5 = null;
-    private Node n6 = null; 
-    private Node n7 = null; 
-    private Node n8 = null; 
-    private Node n9 = null; 
+    private Node n6 = null;
+    private Node n7 = null;
+    private Node n8 = null;
+    private Node n9 = null;
     private Node n10 = null;
     private Node n11 = null;
     private Node n12 = null;
     private Node n13 = null;
     private Node n14 = null;
     private Node n15 = null;
-    private Node n16 = null; 
+    private Node n16 = null;
     private BitVector bits = null;
     private PAG pag;
     private boolean empty = true;
@@ -293,7 +293,7 @@ public final class HybridPointsToSet extends PointsToSetInternal {
                     if (set1.contains(n))
                         ret.add(n);
                 }
-            });                
+            });
         } else {
             // set1 smaller, or both small
             set1.forall(new P2SetVisitor() {
@@ -302,7 +302,7 @@ public final class HybridPointsToSet extends PointsToSetInternal {
                     if (set2.contains(n))
                         ret.add(n);
                 }
-            });                                
+            });
         }
     } else {
         // both big; do bit-vector operation
@@ -313,6 +313,6 @@ public final class HybridPointsToSet extends PointsToSetInternal {
     }
     return ret;
 }
-    
+
 }
 

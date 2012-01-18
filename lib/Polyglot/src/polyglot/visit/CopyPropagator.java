@@ -21,7 +21,7 @@ public class CopyPropagator extends DataFlow {
     protected static class DataFlowItem extends Item {
 	// Map of LocalInstance -> CopyInfo.  The CopyInfo nodes form a forest
 	// to represent copy information.
-	private Map map;  
+	private Map map;
 
 	/**
 	 * Constructor for creating an empty set.

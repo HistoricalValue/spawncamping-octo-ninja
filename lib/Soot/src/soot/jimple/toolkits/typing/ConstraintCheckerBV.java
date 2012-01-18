@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,7 +38,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 {
   private final ClassHierarchy hierarchy;
   private final boolean fix;  // if true, fix constraint violations
-  
+
   private JimpleBody stmtBody;
 
   public ConstraintCheckerBV(TypeResolverBV resolver, boolean fix)
@@ -83,14 +83,14 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
     if(ie instanceof InterfaceInvokeExpr)
       {
 	InterfaceInvokeExpr invoke = (InterfaceInvokeExpr) ie;
-	
+
 	SootMethodRef method = invoke.getMethodRef();
 	Value base = invoke.getBase();
-	
+
 	if(base instanceof Local)
 	  {
 	    Local local = (Local) base;
-	    
+
 	    if(!hierarchy.typeNode(local.getType()).hasAncestorOrSelf(hierarchy.typeNode(method.declaringClass().getType())))
 	      {
 		if(fix)
@@ -103,9 +103,9 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 		  }
 	      }
 	  }
-	
+
 	int count = invoke.getArgCount();
-	
+
 	for(int i = 0; i < count; i++)
 	  {
 	    if(invoke.getArg(i) instanceof Local)
@@ -282,9 +282,9 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 	  }
 
 	left = base.element();
-	
+
 	Value index = ref.getIndex();
-	
+
 	if(index instanceof Local)
 	  {
 	    if(!hierarchy.typeNode(((Local) index).getType()).hasAncestorOrSelf(hierarchy.typeNode(IntType.v())))
@@ -308,9 +308,9 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
     else if(l instanceof InstanceFieldRef)
       {
 	InstanceFieldRef ref = (InstanceFieldRef) l;
-	
+
 	TypeNode base = hierarchy.typeNode(((Local) ref.getBase()).getType());
-	
+
 	if(!base.hasAncestorOrSelf(hierarchy.typeNode(ref.getField().getDeclaringClass().getType())))
 	  {
 	    if(fix)
@@ -374,7 +374,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 	  }
 
 	Value index = ref.getIndex();
-	
+
 	if(index instanceof Local)
 	{
 	  if(!hierarchy.typeNode(((Local) index).getType()).hasAncestorOrSelf(hierarchy.typeNode(IntType.v())))
@@ -435,12 +435,12 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
     else if(r instanceof BinopExpr)
       {
 	//******** BINOP EXPR ********
-	
+
 	BinopExpr be = (BinopExpr) r;
 
 	Value lv = be.getOp1();
 	Value rv = be.getOp2();
-	
+
 	TypeNode lop;
 	TypeNode rop;
 
@@ -481,7 +481,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 	  {
 	    throw new RuntimeException("Unhandled binary expression left operand type: " + lv.getClass());
 	  }
-	
+
 	//******** RIGHT ********
 	if(rv instanceof Local)
 	  {
@@ -519,7 +519,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 	  {
 	    throw new RuntimeException("Unhandled binary expression right operand type: " + rv.getClass());
 	  }
-	
+
 	if((be instanceof AddExpr) ||
 	   (be instanceof SubExpr) ||
 	   (be instanceof MulExpr) ||
@@ -529,7 +529,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 	   (be instanceof OrExpr) ||
 	   (be instanceof XorExpr))
 	  {
-	    if(!(left.hasDescendantOrSelf(lop) && 
+	    if(!(left.hasDescendantOrSelf(lop) &&
 		 left.hasDescendantOrSelf(rop)))
 	      {
 		error("Type Error(27)");
@@ -539,7 +539,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 		(be instanceof ShrExpr) ||
 		(be instanceof UshrExpr))
 	  {
-	    if(!(left.hasDescendantOrSelf(lop) && 
+	    if(!(left.hasDescendantOrSelf(lop) &&
 		 hierarchy.typeNode(IntType.v()).hasAncestorOrSelf(rop)))
 	      {
 		error("Type Error(28)");
@@ -607,7 +607,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 	InstanceOfExpr ioe = (InstanceOfExpr) r;
 	TypeNode type = hierarchy.typeNode(ioe.getCheckType());
 	TypeNode op = hierarchy.typeNode(ioe.getOp().getType());
-	
+
 	try
 	  {
 	    op.lca(type);
@@ -617,7 +617,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 	    G.v().out.println(r + "[" + op + "<->" + type + "]");
 	    error(e.getMessage());
 	  }
-	
+
 	if(!left.hasDescendantOrSelf(hierarchy.typeNode(IntType.v())))
 	  {
 	    error("Type Error(31)");
@@ -643,7 +643,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 
 	if(baseType instanceof ArrayType)
 	  {
-	    right = hierarchy.typeNode(ArrayType.v(((ArrayType) baseType).baseType, 
+	    right = hierarchy.typeNode(ArrayType.v(((ArrayType) baseType).baseType,
 						      ((ArrayType) baseType).numDimensions + 1));
 	  }
 	else
@@ -746,7 +746,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 	  {
 	    throw new RuntimeException("Unhandled neg expression operand type: " + ne.getOp().getClass());
 	  }
-	
+
 	if(!left.hasDescendantOrSelf(right))
 	  {
 	    error("Type Error(40)");
@@ -780,9 +780,9 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
 	    else
 	      {
 		error("Type Error(42)");
-	      }	    
+	      }
 	  }
-	
+
 	if(!left.hasDescendantOrSelf(hierarchy.typeNode(ref.getField().getType())))
 	  {
 	    error("Type Error(43)");
@@ -821,17 +821,17 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
       {
 	List exceptionTypes = TrapManager.getExceptionTypesOf(stmt, stmtBody);
 	Iterator typeIt = exceptionTypes.iterator();
-	
+
 	while(typeIt.hasNext())
 	  {
 	    Type t = (Type) typeIt.next();
-	    
+
 	    if(!left.hasDescendantOrSelf(hierarchy.typeNode(t)))
 	      {
 		error("Type Error(47)");
 	      }
 	  }
-	
+
 	if(!left.hasAncestorOrSelf(hierarchy.typeNode(RefType.v("java.lang.Throwable"))))
 	  {
 	    error("Type Error(48)");
@@ -844,11 +844,11 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
     if(stmt.getOp() instanceof Local)
       {
 	TypeNode op = hierarchy.typeNode(((Local) stmt.getOp()).getType());
-	
+
 	if(!op.hasAncestorOrSelf(hierarchy.typeNode(RefType.v("java.lang.Object"))))
 	  {
 	    error("Type Error(49)");
-	  }    
+	  }
       }
   }
 
@@ -857,11 +857,11 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
     if(stmt.getOp() instanceof Local)
       {
 	TypeNode op = hierarchy.typeNode(((Local) stmt.getOp()).getType());
-	
+
 	if(!op.hasAncestorOrSelf(hierarchy.typeNode(RefType.v("java.lang.Object"))))
 	  {
 	    error("Type Error(49)");
-	  }    
+	  }
       }
   }
 
@@ -872,14 +872,14 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
   public void caseIfStmt(IfStmt stmt)
   {
     ConditionExpr cond = (ConditionExpr) stmt.getCondition();
-    
+
     BinopExpr expr = cond;
     Value lv = expr.getOp1();
     Value rv = expr.getOp2();
-    
+
     TypeNode lop;
     TypeNode rop;
-    
+
     //******** LEFT ********
     if(lv instanceof Local)
       {
@@ -917,7 +917,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
       {
 	throw new RuntimeException("Unhandled binary expression left operand type: " + lv.getClass());
       }
-    
+
     //******** RIGHT ********
     if(rv instanceof Local)
       {
@@ -955,7 +955,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
       {
 	throw new RuntimeException("Unhandled binary expression right operand type: " + rv.getClass());
       }
-    
+
     try
       {
 	lop.lca(rop);
@@ -1024,7 +1024,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
     if(stmt.getOp() instanceof Local)
       {
 	TypeNode op = hierarchy.typeNode(((Local) stmt.getOp()).getType());
-	    
+
 	if(!op.hasAncestorOrSelf(hierarchy.typeNode(RefType.v("java.lang.Throwable"))))
 	  {
 	    if(fix)
@@ -1048,7 +1048,7 @@ class ConstraintCheckerBV extends AbstractStmtSwitch
   {
     Local newlocal = Jimple.v().newLocal("tmp", type);
     stmtBody.getLocals().add(newlocal);
-    
+
     stmtBody.getUnits().insertBefore(Jimple.v().newAssignStmt(newlocal, Jimple.v().newCastExpr(oldlocal, type)), stmt);
     return newlocal;
   }

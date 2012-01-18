@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -39,7 +39,7 @@ import java.util.*;
 
 /**
  *  Analysis that implements the LocalUses interface.
- *  Uses for a Local defined at a given Unit are returned as 
+ *  Uses for a Local defined at a given Unit are returned as
  *  a list of UnitValueBoxPairs each containing a Unit that use the
  *  local and the Local itself wrapped in a ValueBox.
  */
@@ -69,18 +69,18 @@ public class SimpleLocalUses implements LocalUses
     {
         if(Options.v().time())
            Timers.v().usesTimer.start();
-    
+
         if(Options.v().time())
            Timers.v().usePhase1Timer.start();
-        
+
         if(Options.v().verbose())
             G.v().out.println("[" + body.getMethod().getName() +
                 "]     Constructing SimpleLocalUses...");
-    
+
 	Chain units = body.getUnits();
-	
+
         unitToUses = new HashMap<Unit, List>(units.size() * 2 + 1, 0.7f);
-    
+
         // Initialize this map to empty sets
         {
             Iterator it = units.iterator();
@@ -94,10 +94,10 @@ public class SimpleLocalUses implements LocalUses
 
         if(Options.v().time())
            Timers.v().usePhase1Timer.end();
-    
+
         if(Options.v().time())
            Timers.v().usePhase2Timer.start();
-    
+
         // Traverse units and associate uses with definitions
         {
             Iterator it = units.iterator();
@@ -133,26 +133,26 @@ public class SimpleLocalUses implements LocalUses
 
         if(Options.v().time())
            Timers.v().usePhase2Timer.end();
-    
+
         if(Options.v().time())
            Timers.v().usePhase3Timer.start();
-    
+
         // Store the map as a bunch of unmodifiable lists.
         {
             Iterator it = units.iterator();
-            
+
             while(it.hasNext())
             {
                 Unit s = (Unit) it.next();
 
                 unitToUses.put(s, Collections.unmodifiableList(unitToUses.get(s)));
             }
-            
+
         }
-        
+
         if(Options.v().time())
            Timers.v().usePhase3Timer.end();
-    
+
         if(Options.v().time())
             Timers.v().usesTimer.end();
 
@@ -162,7 +162,7 @@ public class SimpleLocalUses implements LocalUses
     }
 
     /**
-     *  Uses for a Local defined at a given Unit are returned as 
+     *  Uses for a Local defined at a given Unit are returned as
      *  a list of UnitValueBoxPairs each containing a Unit that use the
      *  local and the Local itself wrapped in a ValueBox.
      *  @param s a unit that we want to query for the uses of the Local it (may) define.

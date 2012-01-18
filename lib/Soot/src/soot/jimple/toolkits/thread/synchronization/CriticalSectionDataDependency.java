@@ -7,7 +7,7 @@ class CriticalSectionDataDependency
 	public CriticalSection other;
 	public int size;
 	public RWSet rw;
-	
+
 	CriticalSectionDataDependency(CriticalSection other, int size, RWSet rw)
 	{
 		this.other = other;

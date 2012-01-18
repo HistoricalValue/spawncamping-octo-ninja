@@ -31,10 +31,10 @@ public final class Assert {
    **/
   public static void check(String condition, boolean ok) {
     if (!ok)
-      throw new AssertionFailedError("Assertion \"" + 
+      throw new AssertionFailedError("Assertion \"" +
 				     condition + "\" failed.");
   }
-  
+
   // This class cannot be instantiated.
   private Assert() {}
   // The error thrown.

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -177,7 +177,7 @@ public class Printer {
                     }
                     out.println("    " + f.getDeclaration() + ";");
                     if (addJimpleLn()) {
-                        setJimpleLnNum(addJimpleLnTags(getJimpleLnNum(), f));		
+                        setJimpleLnNum(addJimpleLnTags(getJimpleLnNum(), f));
                     }
 
                     //incJimpleLnNum();
@@ -225,7 +225,7 @@ public class Printer {
                             incJimpleLnNum();
                         }
                     } else {
-                           
+
                         if (Options.v().print_tags_in_output()){
                             Iterator mTagIterator = method.getTags().iterator();
                             while (mTagIterator.hasNext()) {
@@ -235,7 +235,7 @@ public class Printer {
                                 out.println("*/");
                             }
                         }
-                        
+
                         out.print("    ");
                         out.print(method.getDeclaration());
                         out.println(";");
@@ -327,8 +327,8 @@ public class Printer {
 
         out.println("    " + decl);
         //incJimpleLnNum();
-    
-        // only print tags if not printing attributes in a file 
+
+        // only print tags if not printing attributes in a file
         if (!addJimpleLn()) {
             /*for( Iterator tIt = b.getMethod().getTags().iterator(); tIt.hasNext(); ) {    final Tag t = (Tag) tIt.next();
                 out.println(t);
@@ -336,15 +336,15 @@ public class Printer {
 
             }*/
         }
-       
+
         if (addJimpleLn()) {
-            setJimpleLnNum(addJimpleLnTags(getJimpleLnNum(), b.getMethod()));		
+            setJimpleLnNum(addJimpleLnTags(getJimpleLnNum(), b.getMethod()));
             //G.v().out.println("added jimple ln tag for method: "+b.getMethod().toString()+" "+b.getMethod().getDeclaringClass().getName());
         }
 
         out.println("    {");
         incJimpleLnNum();
-        
+
         UnitGraph unitGraph = new soot.toolkits.graph.BriefUnitGraph(b);
 
         LabeledUnitPrinter up;
@@ -354,7 +354,7 @@ public class Printer {
         if (addJimpleLn()) {
             up.setPositionTagger( new AttributesUnitPrinter(getJimpleLnNum()) );
         }
-	
+
         printLocalsInBody(b, up);
 
         printStatementsInBody(b, out, up, unitGraph);
@@ -415,7 +415,7 @@ public class Printer {
             up.literal(";");
             up.newline();
 
-            // only print them if not generating attributes files 
+            // only print them if not generating attributes files
             // because they mess up line number
             //if (!addJimpleLn()) {
             if (Options.v().print_tags_in_output()){
@@ -483,7 +483,7 @@ public class Printer {
 	lnNum++;
 	return lnNum;
     }
-    
+
     private int addJimpleLnTags(int lnNum, SootField f) {
     	f.addTag(new JimpleLineNumberTag(lnNum));
 	lnNum++;

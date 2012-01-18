@@ -144,8 +144,8 @@ public class Initializer_c extends Term_c implements Initializer
         if (flags().isStatic() &&
               initializerInstance().container().toClass().isInnerClass()) {
             // it's a static initializer in an inner class.
-            throw new SemanticException("Inner classes cannot declare " + 
-                    "static initializers.", this.position());             
+            throw new SemanticException("Inner classes cannot declare " +
+                    "static initializers.", this.position());
         }
 
 	return this;
@@ -163,7 +163,7 @@ public class Initializer_c extends Term_c implements Initializer
 	    if (! t.isUncheckedException()) {
                 // TODO: This should agree with Java Language Spec 2nd Ed. 8.6
                 // An instance initializer of a named class may not throw
-                // a checked exception unless that exception or one of its 
+                // a checked exception unless that exception or one of its
                 // superclasses is explicitly declared in the throws clause
                 // of each contructor or its class, and the class has at least
                 // one explicitly declared constructor.
@@ -172,7 +172,7 @@ public class Initializer_c extends Term_c implements Initializer
                         "A static initializer block may not throw a " + t + ".",
                         ec.exceptionPosition(t));
                 }
-                
+
                 if (!initializerInstance().container().toClass().isAnonymous()) {
                         // XXX should only throw this if it is not common to all
                         // declared constructors, and there is at least one

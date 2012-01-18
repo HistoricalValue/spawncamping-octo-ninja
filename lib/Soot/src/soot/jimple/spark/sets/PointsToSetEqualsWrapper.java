@@ -36,16 +36,16 @@ public class PointsToSetEqualsWrapper implements PointsToSet {
     public PointsToSetEqualsWrapper(EqualsSupportingPointsToSet pts) {
         this.pts = pts;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public int hashCode() {        
+    public int hashCode() {
         //delegate
         return pts.pointsToSetHashCode();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -54,9 +54,9 @@ public class PointsToSetEqualsWrapper implements PointsToSet {
         if(this==obj || this.pts==obj) {
             return true;
         }
-        
+
         //unwrap other
-        obj = unwrapIfNecessary(obj);       
+        obj = unwrapIfNecessary(obj);
         //delegate
         return pts.pointsToSetEquals(obj);
     }
@@ -68,7 +68,7 @@ public class PointsToSetEqualsWrapper implements PointsToSet {
      */
     public boolean hasNonEmptyIntersection(PointsToSet other) {
         //unwrap other
-        other = (PointsToSet) unwrapIfNecessary(other);       
+        other = (PointsToSet) unwrapIfNecessary(other);
         return pts.hasNonEmptyIntersection(other);
     }
 
@@ -103,7 +103,7 @@ public class PointsToSetEqualsWrapper implements PointsToSet {
     public Set<Type> possibleTypes() {
         return pts.possibleTypes();
     }
-    
+
     protected Object unwrapIfNecessary(Object obj) {
         if(obj instanceof PointsToSetEqualsWrapper) {
             PointsToSetEqualsWrapper wrapper = (PointsToSetEqualsWrapper) obj;
@@ -111,7 +111,7 @@ public class PointsToSetEqualsWrapper implements PointsToSet {
         }
         return obj;
     }
-    
+
     /**
      * {@inheritDoc}
      */

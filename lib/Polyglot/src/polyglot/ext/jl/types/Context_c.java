@@ -38,7 +38,7 @@ public class Context_c implements Context
     public static final Kind CODE = new Kind("code");
     public static final Kind OUTER = new Kind("outer");
     public static final Kind SOURCE = new Kind("source");
-    
+
     public Context_c(TypeSystem ts) {
         this.ts = ts;
         this.outer = null;
@@ -114,7 +114,7 @@ public class Context_c implements Context
         if (isClass()) {
             return false;
         }
-        
+
         if ((isBlock() || isCode()) &&
             (findVariableInThisScope(name) != null || findInThisScope(name) != null)) {
             return true;
@@ -126,7 +126,7 @@ public class Context_c implements Context
 
         return outer.isLocal(name);
     }
-     
+
     /**
      * Looks up a method with name "name" and arguments compatible with
      * "argTypes".
@@ -401,14 +401,14 @@ public class Context_c implements Context
         return inCode;
     }
 
-    
-    /** 
+
+    /**
      * Returns whether the current context is a static context.
      * A statement of expression occurs in a static context if and only if the
      * inner-most method, constructor, instance initializer, static initializer,
-     * field initializer, or explicit constructor statement enclosing the 
-     * statement or expressions is a static method, static initializer, the 
-     * variable initializer of a static variable, or an explicity constructor 
+     * field initializer, or explicit constructor statement enclosing the
+     * statement or expressions is a static method, static initializer, the
+     * variable initializer of a static variable, or an explicity constructor
      * invocation statment. (Java Language Spec, 2nd Edition, 8.1.2)
      */
     public boolean inStaticContext() {
@@ -511,7 +511,7 @@ public class Context_c implements Context
         vars.put(var.name(), var);
     }
 
-    private static final Collection TOPICS = 
+    private static final Collection TOPICS =
                 CollectionUtil.list(Report.types, Report.context);
 
 }

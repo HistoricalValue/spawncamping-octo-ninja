@@ -54,7 +54,7 @@ public class SmartLocalDefs implements LocalDefs
 
         if(Options.v().time())
             Timers.v().defsTimer.start();
-        
+
         if(Options.v().verbose())
             G.v().out.println("[" + g.getBody().getMethod().getName() +
                                "]     Constructing SmartLocalDefs...");
@@ -142,7 +142,7 @@ public class SmartLocalDefs implements LocalDefs
             outSet.addAll(inSet1);
             outSet.addAll(inSet2);
         }
-		
+
         protected void flowThrough(Object inValue, Object unit, Object outValue) {
             Unit u = (Unit) unit;
             HashSet in = (HashSet) inValue;
@@ -164,7 +164,7 @@ public class SmartLocalDefs implements LocalDefs
 			else
 			{//check unit whether contained in allDefUnits before add into out set.
 				allDefUnits = defsOf(l);
-				
+
 	            for( Iterator inUIt = in.iterator(); inUIt.hasNext(); ) {
 	                final Unit inU = (Unit) inUIt.next();
     	            if( mask.contains(localDef(inU)) )
@@ -181,15 +181,15 @@ public class SmartLocalDefs implements LocalDefs
 			}
         }
 
-    
+
         protected void copy(Object source, Object dest) {
             HashSet sourceSet = (HashSet) source;
             HashSet<Object> destSet   = (HashSet<Object>) dest;
-              
+
 			//retain all the elements contained by sourceSet
 			if (destSet.size() > 0)
 				destSet.retainAll(sourceSet);
-			
+
 			//add the elements not contained by destSet
 			if (sourceSet.size() > 0)
 			{

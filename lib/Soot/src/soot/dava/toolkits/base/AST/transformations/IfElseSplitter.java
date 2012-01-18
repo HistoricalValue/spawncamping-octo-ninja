@@ -30,12 +30,12 @@ import soot.jimple.Stmt;
  *   else{                       BodyB
  *      BodyB
  *   }
- *   
+ *
  *   Things to ensure:
  *       If abrupt then check BodyA does not target a label on the ifelse
- *       
+ *
  * ALWAYS  Make sure BodyB does not target a label on the ifelse
- *       
+ *
  *    If the pattern is NOT matched check the reverse i.e. maybe BodyB
  *    has the abrupt statement in that case we just negated the condition
  */
@@ -44,30 +44,30 @@ public class IfElseSplitter extends DepthFirstAdapter {
 	boolean targeted=false;
 	ASTMethodNode methodNode;
 
-	
+
 	ASTNode parent;
 	ASTIfElseNode toReplace;
 	ASTIfNode toInsert;
 	List<Object> bodyAfterInsert;
 	boolean transform=false;
-	
+
 	public IfElseSplitter(){
-		
+
 	}
-	
+
 	public IfElseSplitter(boolean verbose){
 		super(verbose);
 	}
-	
+
 	public void inASTMethodNode(ASTMethodNode node){
 		methodNode = node;
 	}
-	
-	
+
+
 	public void outASTMethodNode(ASTMethodNode a){
 		if(!transform)
 			return;
-		
+
 		List<Object> parentBodies = parent.get_SubBodies();
 		Iterator<Object> it = parentBodies.iterator();
 		while(it.hasNext()){
@@ -86,28 +86,28 @@ public class IfElseSplitter extends DepthFirstAdapter {
 		    	G.v().ASTTransformations_modified=true;
 		    }
 		}
-	
+
 	}
-	
-	
-	
+
+
+
 	public void outASTIfElseNode(ASTIfElseNode node){
 		//if some pattern has already matched cant do another one in this go
 		if(transform)
 			return;
-		
+
 		List<Object> subBodies = node.get_SubBodies();
 		if(subBodies.size()!=2)
 			throw new DecompilationException("IfelseNode without two subBodies. report to developer");
-		
+
 		List<Object> ifBody = (List<Object>)subBodies.get(0);
 		List<Object> elseBody = (List<Object>)subBodies.get(1);
-		
+
 		boolean patternMatched = tryBodyPattern(ifBody,node.get_Label(),elseBody);
 		List<Object> newIfBody = null;
 		List<Object> outerScopeBody = null;
 		boolean negateIfCondition=false;
-		
+
 		if(patternMatched){
 			if(DEBUG)
 				System.out.println("First pattern matched");
@@ -126,13 +126,13 @@ public class IfElseSplitter extends DepthFirstAdapter {
 				negateIfCondition=true;
 			}
 		}
-	
+
 		//if at this point newIfBody and outerScopeBody are non null we got ourselves a transformation :)
 		if(newIfBody!= null && outerScopeBody!= null){
 			ASTCondition cond = node.get_Condition();
 			if(negateIfCondition)
 				cond.flip();
-			
+
 			ASTIfNode newNode = new ASTIfNode(node.get_Label(),cond,newIfBody);
 			if(DEBUG){
 				System.out.println("New IF Node is: "+newNode.toString());
@@ -140,8 +140,8 @@ public class IfElseSplitter extends DepthFirstAdapter {
 				for(int i=0;i<outerScopeBody.size();i++)
 					System.out.println("\n\n "+outerScopeBody.get(i).toString());
 			}
-			
-			
+
+
 
 			ASTParentNodeFinder finder = new ASTParentNodeFinder();
 			methodNode.apply(finder);
@@ -150,10 +150,10 @@ public class IfElseSplitter extends DepthFirstAdapter {
 				//coundnt find parent so cant do anything
 				return;
 			}
-			
+
 			/*
 			 * Setting globals since everything is ready for transformation
-			 * BECAUSE we cant modify the parent here we are going to do some 
+			 * BECAUSE we cant modify the parent here we are going to do some
 			 * bad coding style
 			 * store the information needed for this into globals
 			 * set a flag
@@ -163,18 +163,18 @@ public class IfElseSplitter extends DepthFirstAdapter {
 			toReplace=node;
 			toInsert = newNode;
 			bodyAfterInsert = outerScopeBody;
-			transform=true;			
-			
+			transform=true;
+
 		}
 	}
-	
+
 	public boolean tryBodyPattern(List<Object> body,SETNodeLabel label, List<Object> otherBody){
 		Stmt lastStmt = getLastStmt(body);
 		if(lastStmt == null){
 			//dont have a last stmt so cant match pattern
 			return false;
 		}
-			
+
 		if(! (lastStmt instanceof ReturnStmt || lastStmt instanceof ReturnVoidStmt || lastStmt instanceof DAbruptStmt)){
 			//lastStmt is not an abrupt stmt
 			return false;
@@ -188,10 +188,10 @@ public class IfElseSplitter extends DepthFirstAdapter {
 		//pattern matched
 		return true;
 	}
-	
 
-	
-	
+
+
+
 	/*
 	 * Check that label is non null and the string inside is non null... if yes return false
 	 * Check that the given list (sequeneof ASTNodes have no abrupt edge targeting the label.
@@ -201,16 +201,16 @@ public class IfElseSplitter extends DepthFirstAdapter {
 		//no SETNodeLabel is good
 		if(label == null)
 			return false;
-		
+
 		//SETNodeLabel but with no string is also good
 		if(label.toString() == null)
 			return false;
-		
+
 		final String strLabel = label.toString();
-		
+
 		//go through the body use traversal to find whether there is an abrupt stmt targeting this
 		Iterator<Object> it = body.iterator();
-		
+
 		targeted=false;
 		while (it.hasNext()) {
 			ASTNode temp = (ASTNode) it.next();
@@ -221,25 +221,25 @@ public class IfElseSplitter extends DepthFirstAdapter {
 					//only interested in abrupt stmts
 					if(!(s instanceof DAbruptStmt))
 						return;
-					
+
 					DAbruptStmt abrupt = (DAbruptStmt)s;
 					SETNodeLabel label = abrupt.getLabel();
 					if(label != null && label.toString()!= null && label.toString().equals(strLabel)){
 						targeted=true;
-						
+
 					}
 				}
 			});
-					
+
 			if(targeted)
 				break;
 		}
-		return targeted;		
+		return targeted;
 	}
-	
-	
-	
-	
+
+
+
+
 	/*
 	 * Given a list of ASTNodes see if the last astnode is a StatementSequenceNode
 	 * if not return null
@@ -248,17 +248,17 @@ public class IfElseSplitter extends DepthFirstAdapter {
 	public Stmt getLastStmt(List<Object> body){
 		if(body.size()==0)
 			return null;
-		
+
 		ASTNode lastNode = (ASTNode)body.get(body.size()-1);
 		if(!(lastNode instanceof ASTStatementSequenceNode))
 			return null;
-		
+
 		ASTStatementSequenceNode stmtNode = (ASTStatementSequenceNode)lastNode;
 		List<Object> stmts = stmtNode.getStatements();
 		if(stmts.size()==0)
 			return null;
-		
+
 		AugmentedStmt lastStmt = (AugmentedStmt)stmts.get(stmts.size()-1);
-		return lastStmt.get_Stmt();						
+		return lastStmt.get_Stmt();
 	}
 }

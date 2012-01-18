@@ -8,9 +8,9 @@ import polyglot.types.Flags;
  * initializer block in a Java class (which appears outside of any
  * method).  Such a block is executed before the code for any of the
  * constructors.  Such a block can optionally be static, in which case
- * it is executed when the class is loaded.  
+ * it is executed when the class is loaded.
  */
-public interface Initializer extends CodeDecl 
+public interface Initializer extends CodeDecl
 {
     /** Get the initializer's flags. */
     Flags flags();

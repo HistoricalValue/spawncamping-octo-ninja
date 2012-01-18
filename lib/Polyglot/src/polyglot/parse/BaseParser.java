@@ -97,7 +97,7 @@ public abstract class BaseParser extends java_cup.runtime.lr_parser
       else {
           return null;
       }
-  }      
+  }
   public Position pos(Object first, Object last){
       return pos(first, last, first);
   }
@@ -109,8 +109,8 @@ public abstract class BaseParser extends java_cup.runtime.lr_parser
       if (fpos != null && epos != null) {
           if (epos.endColumn() != Position.END_UNUSED) {
               return new Position(fpos, epos);
-          }        
-          
+          }
+
           // the end line and column are not being used in this extension.
           // so return the default for that case.
           return posForObject(noEndDefault);
@@ -118,7 +118,7 @@ public abstract class BaseParser extends java_cup.runtime.lr_parser
       return null;
 
   }
-  
+
   /**
    * Return the position of the Token.
    */
@@ -127,7 +127,7 @@ public abstract class BaseParser extends java_cup.runtime.lr_parser
     if (t == null) return null;
     return t.getPosition ();
   }
-  
+
   /**
    * Return the source position of the Type.
    */
@@ -159,7 +159,7 @@ public abstract class BaseParser extends java_cup.runtime.lr_parser
     if (n == null) return null;
     return n.pos;
   }
-  
+
   /**
    * Return the source position of the Node.
    */
@@ -266,7 +266,7 @@ public abstract class BaseParser extends java_cup.runtime.lr_parser
     die (pos (t));
     return null;
   }
-  
+
   /**
    * Helper for exprToType.
    */

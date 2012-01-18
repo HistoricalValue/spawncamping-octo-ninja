@@ -40,7 +40,7 @@ public class LoadedClassResolver extends ClassResolver implements TopLevelResolv
    * @param classpath The class path
    * @param loader The class file loader to use.
    * @param version The version of classes to load.
-   * @param allowRawClasses allow class files without encoded type information 
+   * @param allowRawClasses allow class files without encoded type information
    */
   public LoadedClassResolver(TypeSystem ts, String classpath,
                              ClassFileLoader loader, Version version,
@@ -65,7 +65,7 @@ public class LoadedClassResolver extends ClassResolver implements TopLevelResolv
     if (nocache.contains(name)) {
         return null;
     }
-    
+
     try {
         ClassFile clazz = loader.loadClass(name);
 
@@ -112,7 +112,7 @@ public class LoadedClassResolver extends ClassResolver implements TopLevelResolv
 	Report.report(4, "Using encoded class type for " + name);
       return getEncodedType(clazz, name);
     }
-    
+
     if (allowRawClasses) {
       if (Report.should_report(report_topics, 4))
 	Report.report(4, "Using raw class file for " + name);
@@ -120,13 +120,13 @@ public class LoadedClassResolver extends ClassResolver implements TopLevelResolv
     }
 
     // We have a raw class, but are not allowed to use it, and
-    // cannot find appropriate encoded info. 
+    // cannot find appropriate encoded info.
     throw new SemanticException("Unable to find a suitable definition of \""
         + name +"\". A class file was found,"
-        + " but it did not contain appropriate information for this" 
+        + " but it did not contain appropriate information for this"
         + " language extension. If the source for this file is written"
         + " in the language extension, try recompiling the source code.");
-    
+
   }
 
   /**
@@ -141,7 +141,7 @@ public class LoadedClassResolver extends ClassResolver implements TopLevelResolv
     // Check to see if it has serialized info. If so then check the
     // version.
     FieldInstance field;
-    
+
     int comp = checkCompilerVersion(clazz.compilerVersion(version.name()));
 
     if (comp == NOT_COMPATIBLE) {
@@ -153,7 +153,7 @@ public class LoadedClassResolver extends ClassResolver implements TopLevelResolv
 
     // Alright, go with it!
     ClassType dt;
-    
+
     try {
         dt = (ClassType) te.decode(clazz.encodedClassType(version.name()));
     }

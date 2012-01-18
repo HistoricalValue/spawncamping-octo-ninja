@@ -15,14 +15,14 @@ private:
 	System() { };
 
 public:
-	static void arraycopy(jmatch_array<Object *> *tgt, int tgtOff, 
+	static void arraycopy(jmatch_array<Object *> *tgt, int tgtOff,
 		jmatch_array<Object *> *src, int srcOff, int len);
 	static PrintStream *out;
 	static PrintStream *err;
 
 	static void exit(int status) { ::exit(status); };
-	
-	
+
+
 };
 
 //namespaces

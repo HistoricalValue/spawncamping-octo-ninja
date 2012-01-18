@@ -50,7 +50,7 @@ public class AbruptEdgeFinder implements FactFinder
 	Iterator pit = scn.get_CharacterizingStmt().bpreds.iterator();
 	while (pit.hasNext()) {
 	    AugmentedStmt pas = (AugmentedStmt) pit.next();
-	    
+
 	    if ((body.contains( pas)) && (naturalPreds.contains( pas) == false))
 		((SETStatementSequenceNode) pas.myNode).insert_AbruptStmt( new DAbruptStmt( "continue", scn.get_Label()));
 	}
@@ -63,7 +63,7 @@ public class AbruptEdgeFinder implements FactFinder
 	Iterator pit = cur.get_EntryStmt().bpreds.iterator();
 	while (pit.hasNext()) {
 	    AugmentedStmt pas = (AugmentedStmt) pit.next();
-	    
+
 	    if (prev.get_Body().contains( pas) == false)
 		continue;
 

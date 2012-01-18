@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,7 +38,7 @@ import java.io.*;
 import java.util.*;
 
 public class DotGraph implements Renderable{
-  
+
   /* allow a serialized drawing, following steps:
    * 1. new DotGraph
    * 2. draw(Directed)Edge / drawUndirectedEdge
@@ -51,7 +51,7 @@ public class DotGraph implements Renderable{
   private HashMap<String, DotGraphNode> nodes;
   /* draw elements are sub graphs, edges, commands */
   private List<Renderable>    drawElements;
- 
+
   private List<DotGraphAttribute>    attributes;
 
   /**
@@ -71,7 +71,7 @@ public class DotGraph implements Renderable{
     this.drawElements = new LinkedList<Renderable>();
     this.attributes   = new LinkedList<DotGraphAttribute>();
   }
-  
+
   /**
    * Generates the drawing on canvas to the dot file.
    * @param filename the name for the output file.  By convention, it should
@@ -79,9 +79,9 @@ public class DotGraph implements Renderable{
    */
   public void plot(String filename) {
     try {
-      BufferedOutputStream out = 
+      BufferedOutputStream out =
 	new BufferedOutputStream(new FileOutputStream(filename));
-							  
+
       render(out, 0);
       out.close();
     } catch (IOException ioe) {
@@ -100,16 +100,16 @@ public class DotGraph implements Renderable{
     DotGraphNode src = drawNode(from);
     DotGraphNode dst = drawNode(to);
     DotGraphEdge edge = new DotGraphEdge(src, dst);
-    
+
     this.drawElements.add(edge);
-    
+
     return edge;
   }
 
   /**
    * Draws a node.
    * @param name, the node to draw.
-   * @return the {@link DotGraphNode} corresponding to the 
+   * @return the {@link DotGraphNode} corresponding to the
    * specified name.
    */
   public DotGraphNode drawNode(String name){
@@ -200,7 +200,7 @@ public class DotGraph implements Renderable{
    * @param value is the attribute value.
    */
   public void setGraphAttribute(String id, String value){
-    this.setGraphAttribute(new DotGraphAttribute(id, value));    
+    this.setGraphAttribute(new DotGraphAttribute(id, value));
   }
 
   /**
@@ -209,7 +209,7 @@ public class DotGraph implements Renderable{
    * attribute name and value.
    */
   public void setGraphAttribute(DotGraphAttribute attr){
-    this.attributes.add(attr);    
+    this.attributes.add(attr);
   }
 
   /**

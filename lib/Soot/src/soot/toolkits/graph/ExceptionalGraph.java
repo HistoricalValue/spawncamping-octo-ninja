@@ -18,13 +18,13 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2004.  
+ * Modified by the Sable Research Group and others 1997-2004.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
 
 
- 
+
 
 
 
@@ -80,7 +80,7 @@ public interface ExceptionalGraph<N> extends DirectedGraph<N>
 	 * Returns the exceptions thrown to this destination.
 	 *
 	 * @return a {@link ThrowableSet} representing
-	 * the exceptions which may be caught by this 
+	 * the exceptions which may be caught by this
 	 * <code>ExceptionDest</code>'s trap.
 	 */
 	public ThrowableSet getThrowables();
@@ -129,7 +129,7 @@ public interface ExceptionalGraph<N> extends DirectedGraph<N>
      *
      * @param n The node whose successors are to be returned.
      *
-     * @return a {@link List} of nodes in this graph to which 
+     * @return a {@link List} of nodes in this graph to which
      *         there is an unexceptional edge from <code>n</code>.
      */
     public List<N> getUnexceptionalSuccsOf(N n);
@@ -141,7 +141,7 @@ public interface ExceptionalGraph<N> extends DirectedGraph<N>
      *
      * @param n The node whose predecessors are to be returned.
      *
-     * @return a {@link List} of nodes in this graph from which 
+     * @return a {@link List} of nodes in this graph from which
      *         there is an exceptional edge to <code>n</code>.
      */
     public List<N> getExceptionalPredsOf(N n);
@@ -153,14 +153,14 @@ public interface ExceptionalGraph<N> extends DirectedGraph<N>
      *
      * @param n The node whose successors are to be returned.
      *
-     * @return a {@link List} of nodes in this graph to which 
+     * @return a {@link List} of nodes in this graph to which
      *         there is an exceptional edge from <code>n</code>.
      */
     public List<N> getExceptionalSuccsOf(N n);
 
 
     /**
-     * Returns a collection of 
+     * Returns a collection of
      * {@link ExceptionalGraph.ExceptionDest ExceptionDest}
      * objects which represent how exceptions thrown by a specified
      * node will be handled.

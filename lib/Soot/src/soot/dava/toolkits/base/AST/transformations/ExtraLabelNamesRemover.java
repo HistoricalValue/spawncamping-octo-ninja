@@ -32,7 +32,7 @@ public class ExtraLabelNamesRemover extends DepthFirstAdapter{
 
       label_0:
       switch(cond){
-          case 0:  
+          case 0:
 	        Body
 		break label_0;     NO NEED for break label_0
 	  case 1:                  Use just break

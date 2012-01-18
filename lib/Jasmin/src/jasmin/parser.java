@@ -25,7 +25,7 @@ public class parser
   public parser(java_cup.runtime.Scanner s) {super(s);}
 
   /** Production table. */
-  protected static final short _production_table[][] = 
+  protected static final short _production_table[][] =
     unpackFromStrings(new String[] {
     "\000\276\000\002\030\017\000\002\002\004\000\002\046" +
     "\005\000\002\046\002\000\002\014\006\000\002\014\006" +
@@ -91,7 +91,7 @@ public class parser
   public short[][] production_table() {return _production_table;}
 
   /** Parse-action table. */
-  protected static final short[][] _action_table = 
+  protected static final short[][] _action_table =
     unpackFromStrings(new String[] {
     "\000\u0167\000\010\005\ufffe\016\004\022\ufffe\001\002\000" +
     "\004\117\u0168\001\002\000\006\005\011\022\010\001\002" +
@@ -407,7 +407,7 @@ public class parser
   public short[][] action_table() {return _action_table;}
 
   /** <code>reduce_goto</code> table. */
-  protected static final short[][] _reduce_table = 
+  protected static final short[][] _reduce_table =
     unpackFromStrings(new String[] {
     "\000\u0167\000\006\030\005\046\004\001\001\000\002\001" +
     "\001\000\004\014\011\001\001\000\002\001\001\000\002" +
@@ -605,7 +605,7 @@ public class parser
 
 	public Scanner scanner;
 	public ClassFile classFile;
-	
+
 	public void report_error(String message, Object info)  {
     	classFile.report_error("Warning - " + message);
 	}
@@ -654,7 +654,7 @@ class CUP$parser$actions {
       switch (CUP$parser$act_num)
         {
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 189: // elem_val_pair ::= DELEM ANN_KIND Str SEP annotation DEND DANNOT_ELEM SEP 
+          case 189: // elem_val_pair ::= DELEM ANN_KIND Str SEP annotation DEND DANNOT_ELEM SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
@@ -663,15 +663,15 @@ class CUP$parser$actions {
 		int attrleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int attrright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Object attr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		
+
         RESULT = classFile.makeAnnotElem(name, '@', attr);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 188: // elem_val_pair ::= DELEM ARR_KIND Str SEP elem_val_pair_list_opt DEND DARR_ELEM SEP 
+          case 188: // elem_val_pair ::= DELEM ARR_KIND Str SEP elem_val_pair_list_opt DEND DARR_ELEM SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
@@ -680,15 +680,15 @@ class CUP$parser$actions {
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int listright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Object list = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		
+
         RESULT = classFile.makeArrayElem(name, '[', list);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 187: // elem_val_pair ::= DELEM CLS_KIND Str Str SEP 
+          case 187: // elem_val_pair ::= DELEM CLS_KIND Str Str SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -697,15 +697,15 @@ class CUP$parser$actions {
 		int descleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int descright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String desc = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeClassElem(name, 'c', desc);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 186: // elem_val_pair ::= DELEM ENUM_KIND Str Str Str SEP 
+          case 186: // elem_val_pair ::= DELEM ENUM_KIND Str Str Str SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
@@ -717,15 +717,15 @@ class CUP$parser$actions {
 		int cnameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int cnameright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String cname = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeEnumElem(name, 'e', tname, cname);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 185: // elem_val_pair ::= DELEM STR_KIND Str Str SEP 
+          case 185: // elem_val_pair ::= DELEM STR_KIND Str Str SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -734,15 +734,15 @@ class CUP$parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeConstantElem(name, 's', val);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 184: // elem_val_pair ::= DELEM DOUB_KIND Str item SEP 
+          case 184: // elem_val_pair ::= DELEM DOUB_KIND Str item SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -751,15 +751,15 @@ class CUP$parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object val = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeConstantElem(name, 'D', val);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 183: // elem_val_pair ::= DELEM FLOAT_KIND Str item SEP 
+          case 183: // elem_val_pair ::= DELEM FLOAT_KIND Str item SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -768,15 +768,15 @@ class CUP$parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object val = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeConstantElem(name, 'F', val);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 182: // elem_val_pair ::= DELEM LONG_KIND Str item SEP 
+          case 182: // elem_val_pair ::= DELEM LONG_KIND Str item SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -785,15 +785,15 @@ class CUP$parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object val = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeConstantElem(name, 'J', val);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 181: // elem_val_pair ::= DELEM BOOL_KIND Str Int SEP 
+          case 181: // elem_val_pair ::= DELEM BOOL_KIND Str Int SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -802,15 +802,15 @@ class CUP$parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Integer val = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeConstantElem(name, 'Z', val);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 180: // elem_val_pair ::= DELEM CHAR_KIND Str Int SEP 
+          case 180: // elem_val_pair ::= DELEM CHAR_KIND Str Int SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -819,15 +819,15 @@ class CUP$parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Integer val = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeConstantElem(name, 'C', val);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 179: // elem_val_pair ::= DELEM BYTE_KIND Str Int SEP 
+          case 179: // elem_val_pair ::= DELEM BYTE_KIND Str Int SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -836,15 +836,15 @@ class CUP$parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Integer val = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeConstantElem(name, 'B', val);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 178: // elem_val_pair ::= DELEM SHORT_KIND Str Int SEP 
+          case 178: // elem_val_pair ::= DELEM SHORT_KIND Str Int SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -853,15 +853,15 @@ class CUP$parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Integer val = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeConstantElem(name, 'S', val);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 177: // elem_val_pair ::= DELEM INT_KIND Str Int SEP 
+          case 177: // elem_val_pair ::= DELEM INT_KIND Str Int SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -870,29 +870,29 @@ class CUP$parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Integer val = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = classFile.makeConstantElem(name, 'I', val);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(80/*elem_val_pair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 176: // elem_val_pair_list ::= elem_val_pair 
+          case 176: // elem_val_pair_list ::= elem_val_pair
             {
               Object RESULT = null;
 		int elemleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int elemright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         RESULT = classFile.makeNewElemValPairList(elem);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(77/*elem_val_pair_list*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 175: // elem_val_pair_list ::= elem_val_pair_list elem_val_pair 
+          case 175: // elem_val_pair_list ::= elem_val_pair_list elem_val_pair
             {
               Object RESULT = null;
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -901,40 +901,40 @@ class CUP$parser$actions {
 		int elemleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int elemright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         RESULT = classFile.mergeNewElemValPair(list, elem);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(77/*elem_val_pair_list*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 174: // elem_val_pair_list_opt ::= 
+          case 174: // elem_val_pair_list_opt ::=
             {
               Object RESULT = null;
-		
+
         RESULT = null;
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(87/*elem_val_pair_list_opt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 173: // elem_val_pair_list_opt ::= elem_val_pair_list 
+          case 173: // elem_val_pair_list_opt ::= elem_val_pair_list
             {
               Object RESULT = null;
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int listright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object list = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         RESULT = list;
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(87/*elem_val_pair_list_opt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 172: // annotation ::= DANNOTATION Str SEP elem_val_pair_list_opt DEND DANNOTATION SEP 
+          case 172: // annotation ::= DANNOTATION Str SEP elem_val_pair_list_opt DEND DANNOTATION SEP
             {
               Object RESULT = null;
 		int annotation_typeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
@@ -943,29 +943,29 @@ class CUP$parser$actions {
 		int elemsleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int elemsright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Object elems = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		
+
         RESULT = classFile.makeAnnotation(annotation_type, elems);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(76/*annotation*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 171: // annotation_list ::= annotation 
+          case 171: // annotation_list ::= annotation
             {
               Object RESULT = null;
 		int elemleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int elemright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         RESULT = classFile.makeNewAnnotationList(elem);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(75/*annotation_list*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 170: // annotation_list ::= annotation_list annotation 
+          case 170: // annotation_list ::= annotation_list annotation
             {
               Object RESULT = null;
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -974,40 +974,40 @@ class CUP$parser$actions {
 		int elemleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int elemright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         RESULT = classFile.mergeNewAnnotation(list, elem);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(75/*annotation_list*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 169: // annotation_list_opt ::= 
+          case 169: // annotation_list_opt ::=
             {
               Object RESULT = null;
-		
+
         RESULT = null;
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(86/*annotation_list_opt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 168: // annotation_list_opt ::= annotation_list 
+          case 168: // annotation_list_opt ::= annotation_list
             {
               Object RESULT = null;
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int listright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object list = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         RESULT = list;
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(86/*annotation_list_opt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 167: // annotation_attr ::= visibility_type SEP annotation_list_opt DEND DANNOTATION_ATTR SEP 
+          case 167: // annotation_attr ::= visibility_type SEP annotation_list_opt DEND DANNOTATION_ATTR SEP
             {
               Object RESULT = null;
 		int tvalleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
@@ -1016,123 +1016,123 @@ class CUP$parser$actions {
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int listright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Object list = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		
+
         RESULT = classFile.makeVisibilityAnnotation(tval, list);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(74/*annotation_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 166: // annotation_attr_opt ::= 
+          case 166: // annotation_attr_opt ::=
             {
               Object RESULT = null;
-		
+
         RESULT = null; /* empty */
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(85/*annotation_attr_opt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 165: // annotation_attr_opt ::= annotation_attr 
+          case 165: // annotation_attr_opt ::= annotation_attr
             {
               Object RESULT = null;
 		int attrleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int attrright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object attr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		  
+
         RESULT = attr;
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(85/*annotation_attr_opt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 164: // param_visibility_type ::= DRUNTIME_PARAM_INVISIBLE 
+          case 164: // param_visibility_type ::= DRUNTIME_PARAM_INVISIBLE
             {
               Object RESULT = null;
-		 RESULT = "RuntimeInvisibleParameter"; 
+		 RESULT = "RuntimeInvisibleParameter";
               CUP$parser$result = new java_cup.runtime.Symbol(84/*param_visibility_type*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 163: // param_visibility_type ::= DRUNTIME_PARAM_VISIBLE 
+          case 163: // param_visibility_type ::= DRUNTIME_PARAM_VISIBLE
             {
               Object RESULT = null;
-		 RESULT = "RuntimeVisibleParameter"; 
+		 RESULT = "RuntimeVisibleParameter";
               CUP$parser$result = new java_cup.runtime.Symbol(84/*param_visibility_type*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 162: // visibility_type ::= DRUNTIME_INVISIBLE 
+          case 162: // visibility_type ::= DRUNTIME_INVISIBLE
             {
               Object RESULT = null;
-		 RESULT = "RuntimeInvisible"; 
+		 RESULT = "RuntimeInvisible";
               CUP$parser$result = new java_cup.runtime.Symbol(73/*visibility_type*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 161: // visibility_type ::= DRUNTIME_VISIBLE 
+          case 161: // visibility_type ::= DRUNTIME_VISIBLE
             {
               Object RESULT = null;
-		 RESULT = "RuntimeVisible"; 
+		 RESULT = "RuntimeVisible";
               CUP$parser$result = new java_cup.runtime.Symbol(73/*visibility_type*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 160: // signature_attr ::= 
+          case 160: // signature_attr ::=
             {
               Object RESULT = null;
-		
+
         /* empty */ RESULT = null;
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(5/*signature_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 159: // signature_attr ::= DSIG_ATTR Str SEP 
+          case 159: // signature_attr ::= DSIG_ATTR Str SEP
             {
               Object RESULT = null;
 		int sigleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int sigright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String sig = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         RESULT = sig;
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(5/*signature_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 158: // deprecated_attr ::= 
+          case 158: // deprecated_attr ::=
             {
               Object RESULT = null;
-		
+
         /* empty */ RESULT = null;
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(4/*deprecated_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 157: // deprecated_attr ::= DDEPRECATED SEP 
+          case 157: // deprecated_attr ::= DDEPRECATED SEP
             {
               Object RESULT = null;
-		
+
         RESULT = "deprecated";
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(4/*deprecated_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 156: // encl_meth_attr ::= 
+          case 156: // encl_meth_attr ::=
             {
               Object RESULT = null;
 
@@ -1141,7 +1141,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 155: // encl_meth_attr ::= DENCLOSING_METH Str Str Str SEP 
+          case 155: // encl_meth_attr ::= DENCLOSING_METH Str Str Str SEP
             {
               Object RESULT = null;
 		int cleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
@@ -1153,15 +1153,15 @@ class CUP$parser$actions {
 		int sleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String s = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
         classFile.addEnclMethAttr(c, m, s);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(67/*encl_meth_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 154: // synth_attr ::= 
+          case 154: // synth_attr ::=
             {
               Object RESULT = null;
 
@@ -1170,29 +1170,29 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 153: // synth_attr ::= DSYNTHETIC SEP 
+          case 153: // synth_attr ::= DSYNTHETIC SEP
             {
               Object RESULT = null;
-		
+
         classFile.addClassSynthAttr();
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(66/*synth_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 152: // end_inner_class_attr ::= DEND DINNER_CLASS_ATTR SEP 
+          case 152: // end_inner_class_attr ::= DEND DINNER_CLASS_ATTR SEP
             {
               Object RESULT = null;
-		
+
         classFile.endInnerClassAttr();
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(65/*end_inner_class_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 151: // inner_class_attr_spec ::= DINNER_CLASS_SPEC_ATTR Str Str Str access DEND DINNER_CLASS_SPEC_ATTR SEP 
+          case 151: // inner_class_attr_spec ::= DINNER_CLASS_SPEC_ATTR Str Str Str access DEND DINNER_CLASS_SPEC_ATTR SEP
             {
               Object RESULT = null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).left;
@@ -1207,15 +1207,15 @@ class CUP$parser$actions {
 		int dleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int dright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Short d = (Short)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		
+
         classFile.addInnerClassSpec(a, b, c, (short)d.intValue());
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(64/*inner_class_attr_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 150: // inner_class_attr_list ::= inner_class_attr_spec 
+          case 150: // inner_class_attr_list ::= inner_class_attr_spec
             {
               Object RESULT = null;
 
@@ -1224,7 +1224,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 149: // inner_class_attr_list ::= inner_class_attr_list inner_class_attr_spec 
+          case 149: // inner_class_attr_list ::= inner_class_attr_list inner_class_attr_spec
             {
               Object RESULT = null;
 
@@ -1233,7 +1233,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 148: // inner_class_attr ::= 
+          case 148: // inner_class_attr ::=
             {
               Object RESULT = null;
 
@@ -1242,18 +1242,18 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 147: // inner_class_attr ::= DINNER_CLASS_ATTR SEP inner_class_attr_list end_inner_class_attr 
+          case 147: // inner_class_attr ::= DINNER_CLASS_ATTR SEP inner_class_attr_list end_inner_class_attr
             {
               Object RESULT = null;
-		
+
         classFile.addInnerClassAttr();
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(62/*inner_class_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 146: // field_attr_spec ::= DFIELD_ATTR Word Str SEP 
+          case 146: // field_attr_spec ::= DFIELD_ATTR Word Str SEP
             {
               Object RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1262,16 +1262,16 @@ class CUP$parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String v = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
 		 byte[] data = Base64.decode(v.toCharArray());
                 classFile.addGenericAttrToField(w, data);
-          
+
               CUP$parser$result = new java_cup.runtime.Symbol(61/*field_attr_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 145: // field_attr_list ::= field_attr_spec 
+          case 145: // field_attr_list ::= field_attr_spec
             {
               Object RESULT = null;
 
@@ -1280,7 +1280,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 144: // field_attr_list ::= field_attr_list field_attr_spec 
+          case 144: // field_attr_list ::= field_attr_list field_attr_spec
             {
               Object RESULT = null;
 
@@ -1289,7 +1289,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 143: // field_attrs ::= field_attr_list 
+          case 143: // field_attrs ::= field_attr_list
             {
               Object RESULT = null;
 
@@ -1298,7 +1298,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 142: // method_attr_spec ::= DMETHOD_ATTR Word Str SEP 
+          case 142: // method_attr_spec ::= DMETHOD_ATTR Word Str SEP
             {
               Object RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1307,16 +1307,16 @@ class CUP$parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String v = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
 		 byte[] data = Base64.decode(v.toCharArray());
-                classFile.addGenericAttrToMethod(w, data);	
-          
+                classFile.addGenericAttrToMethod(w, data);
+
               CUP$parser$result = new java_cup.runtime.Symbol(57/*method_attr_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 141: // method_attr_list ::= method_attr_spec 
+          case 141: // method_attr_list ::= method_attr_spec
             {
               Object RESULT = null;
 
@@ -1325,7 +1325,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 140: // method_attr_list ::= method_attr_list method_attr_spec 
+          case 140: // method_attr_list ::= method_attr_list method_attr_spec
             {
               Object RESULT = null;
 
@@ -1334,7 +1334,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 139: // method_attrs ::= method_attr_list 
+          case 139: // method_attrs ::= method_attr_list
             {
               Object RESULT = null;
 
@@ -1343,7 +1343,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 138: // class_attr_spec ::= DCLASS_ATTR Word Str SEP 
+          case 138: // class_attr_spec ::= DCLASS_ATTR Word Str SEP
             {
               Object RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1352,16 +1352,16 @@ class CUP$parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String v = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
 		byte[] data = Base64.decode(v.toCharArray());
-                classFile.addGenericAttrToClass(new GenericAttr(w, data));             
-          
+                classFile.addGenericAttrToClass(new GenericAttr(w, data));
+
               CUP$parser$result = new java_cup.runtime.Symbol(53/*class_attr_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 137: // class_attr_list ::= class_attr_spec 
+          case 137: // class_attr_list ::= class_attr_spec
             {
               Object RESULT = null;
 
@@ -1370,7 +1370,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 136: // class_attr_list ::= class_attr_list class_attr_spec 
+          case 136: // class_attr_list ::= class_attr_list class_attr_spec
             {
               Object RESULT = null;
 
@@ -1379,7 +1379,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 135: // class_attrs ::= 
+          case 135: // class_attrs ::=
             {
               Object RESULT = null;
 
@@ -1388,7 +1388,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 134: // class_attrs ::= class_attr_list 
+          case 134: // class_attrs ::= class_attr_list
             {
               Object RESULT = null;
 
@@ -1397,35 +1397,35 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 133: // table_default ::= DEFAULT COLON Word 
+          case 133: // table_default ::= DEFAULT COLON Word
             {
               Object RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int wright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String w = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.endTableswitch(w);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(44/*table_default*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 132: // table_entry ::= Word SEP 
+          case 132: // table_entry ::= Word SEP
             {
               Object RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int wright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String w = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
             classFile.addTableswitch(w);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(45/*table_entry*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 131: // table_list ::= table_entry 
+          case 131: // table_list ::= table_entry
             {
               Object RESULT = null;
 
@@ -1434,7 +1434,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 130: // table_list ::= table_list table_entry 
+          case 130: // table_list ::= table_list table_entry
             {
               Object RESULT = null;
 
@@ -1443,7 +1443,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 129: // table_list_t ::= table_list 
+          case 129: // table_list_t ::= table_list
             {
               Object RESULT = null;
 
@@ -1452,7 +1452,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 128: // table_list_t ::= 
+          case 128: // table_list_t ::=
             {
               Object RESULT = null;
 
@@ -1461,7 +1461,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 127: // table_args ::= Int Int SEP 
+          case 127: // table_args ::= Int Int SEP
             {
               Object RESULT = null;
 		int lowleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1470,29 +1470,29 @@ class CUP$parser$actions {
 		int highleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int highright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Integer high = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
             classFile.newTableswitch(low.intValue(), high.intValue());
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(42/*table_args*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 126: // table_args ::= Int SEP 
+          case 126: // table_args ::= Int SEP
             {
               Object RESULT = null;
 		int lowleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int lowright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Integer low = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
             classFile.newTableswitch(low.intValue());
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(42/*table_args*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 125: // table ::= table_args table_list_t table_default 
+          case 125: // table ::= table_args table_list_t table_default
             {
               Object RESULT = null;
 
@@ -1501,19 +1501,19 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 124: // lookup_default ::= DEFAULT COLON Word 
+          case 124: // lookup_default ::= DEFAULT COLON Word
             {
               Object RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int wright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String w = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 classFile.endLookupswitch(w); 
+		 classFile.endLookupswitch(w);
               CUP$parser$result = new java_cup.runtime.Symbol(27/*lookup_default*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 123: // lookup_entry ::= Int COLON Word SEP 
+          case 123: // lookup_entry ::= Int COLON Word SEP
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
@@ -1522,15 +1522,15 @@ class CUP$parser$actions {
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int wright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String w = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
             classFile.addLookupswitch(i.intValue(), w);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(28/*lookup_entry*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 122: // lookup_list ::= lookup_entry 
+          case 122: // lookup_list ::= lookup_entry
             {
               Object RESULT = null;
 
@@ -1539,7 +1539,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 121: // lookup_list ::= lookup_list lookup_entry 
+          case 121: // lookup_list ::= lookup_list lookup_entry
             {
               Object RESULT = null;
 
@@ -1548,7 +1548,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 120: // lookup_list_t ::= lookup_list 
+          case 120: // lookup_list_t ::= lookup_list
             {
               Object RESULT = null;
 
@@ -1557,7 +1557,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 119: // lookup_list_t ::= 
+          case 119: // lookup_list_t ::=
             {
               Object RESULT = null;
 
@@ -1566,16 +1566,16 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 118: // lookup_args ::= SEP 
+          case 118: // lookup_args ::= SEP
             {
               Object RESULT = null;
-		 classFile.newLookupswitch(); 
+		 classFile.newLookupswitch();
               CUP$parser$result = new java_cup.runtime.Symbol(26/*lookup_args*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 117: // lookup ::= lookup_args lookup_list_t lookup_default 
+          case 117: // lookup ::= lookup_args lookup_list_t lookup_default
             {
               Object RESULT = null;
 
@@ -1584,7 +1584,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 116: // complex_instruction ::= TABLESWITCH table 
+          case 116: // complex_instruction ::= TABLESWITCH table
             {
               Object RESULT = null;
 
@@ -1593,7 +1593,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 115: // complex_instruction ::= LOOKUPSWITCH lookup 
+          case 115: // complex_instruction ::= LOOKUPSWITCH lookup
             {
               Object RESULT = null;
 
@@ -1602,7 +1602,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 114: // simple_instruction ::= Insn Str 
+          case 114: // simple_instruction ::= Insn Str
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1611,15 +1611,15 @@ class CUP$parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.plantString(i, n);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(35/*simple_instruction*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 113: // simple_instruction ::= Insn Word Word 
+          case 113: // simple_instruction ::= Insn Word Word
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1631,15 +1631,15 @@ class CUP$parser$actions {
 		int n2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int n2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String n2 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.plant(i, n1, n2);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(35/*simple_instruction*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 112: // simple_instruction ::= Insn Word Int 
+          case 112: // simple_instruction ::= Insn Word Int
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1651,15 +1651,15 @@ class CUP$parser$actions {
 		int n2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int n2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Integer n2 = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.plant(i, n, n2.intValue());
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(35/*simple_instruction*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 111: // simple_instruction ::= Insn Word 
+          case 111: // simple_instruction ::= Insn Word
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1668,15 +1668,15 @@ class CUP$parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.plant(i, n);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(35/*simple_instruction*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 110: // simple_instruction ::= Insn Num 
+          case 110: // simple_instruction ::= Insn Num
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1685,15 +1685,15 @@ class CUP$parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Number n = (Number)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.plant(i, n);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(35/*simple_instruction*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 109: // simple_instruction ::= Insn Int 
+          case 109: // simple_instruction ::= Insn Int
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1702,15 +1702,15 @@ class CUP$parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Integer n = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.plant(i, n.intValue());
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(35/*simple_instruction*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 108: // simple_instruction ::= Insn Int Int 
+          case 108: // simple_instruction ::= Insn Int Int
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -1722,29 +1722,29 @@ class CUP$parser$actions {
 		int n2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int n2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Integer n2 = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.plant(i, n1.intValue(), n2.intValue());
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(35/*simple_instruction*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 107: // simple_instruction ::= Insn 
+          case 107: // simple_instruction ::= Insn
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.plant(i);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(35/*simple_instruction*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 106: // instruction ::= complex_instruction 
+          case 106: // instruction ::= complex_instruction
             {
               Object RESULT = null;
 
@@ -1753,7 +1753,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 105: // instruction ::= simple_instruction 
+          case 105: // instruction ::= simple_instruction
             {
               Object RESULT = null;
 
@@ -1762,7 +1762,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 104: // set_expr ::= Word Str 
+          case 104: // set_expr ::= Word Str
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1771,13 +1771,13 @@ class CUP$parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String v = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 scanner.dict.put(name, v); 
+		 scanner.dict.put(name, v);
               CUP$parser$result = new java_cup.runtime.Symbol(34/*set_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 103: // set_expr ::= Word Num 
+          case 103: // set_expr ::= Word Num
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1786,13 +1786,13 @@ class CUP$parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Number v = (Number)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 scanner.dict.put(name, v); 
+		 scanner.dict.put(name, v);
               CUP$parser$result = new java_cup.runtime.Symbol(34/*set_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 102: // set_expr ::= Word Word 
+          case 102: // set_expr ::= Word Word
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1801,13 +1801,13 @@ class CUP$parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String v = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 scanner.dict.put(name, v); 
+		 scanner.dict.put(name, v);
               CUP$parser$result = new java_cup.runtime.Symbol(34/*set_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 101: // set_expr ::= Word Int 
+          case 101: // set_expr ::= Word Int
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1816,13 +1816,13 @@ class CUP$parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Integer v = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 scanner.dict.put(name, v); 
+		 scanner.dict.put(name, v);
               CUP$parser$result = new java_cup.runtime.Symbol(34/*set_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 100: // catch_expr ::= classname FROM Word TO Word USING Word 
+          case 100: // catch_expr ::= classname FROM Word TO Word USING Word
             {
               Object RESULT = null;
 		int aclassleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).left;
@@ -1837,43 +1837,43 @@ class CUP$parser$actions {
 		int branchlableft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int branchlabright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String branchlab = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.addCatch(aclass,
                             fromlab, tolab,
                             branchlab);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(9/*catch_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 99: // throws_expr ::= classname 
+          case 99: // throws_expr ::= classname
             {
               Object RESULT = null;
 		int sleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String s = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.addThrow(s);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(48/*throws_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 98: // line_expr ::= Int 
+          case 98: // line_expr ::= Int
             {
               Object RESULT = null;
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Integer v = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 classFile.addLine(v.intValue()); 
+		 classFile.addLine(v.intValue());
               CUP$parser$result = new java_cup.runtime.Symbol(43/*line_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 97: // limit_expr ::= Word Int 
+          case 97: // limit_expr ::= Word Int
             {
               Object RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1882,7 +1882,7 @@ class CUP$parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Integer v = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         // .limit locals
         if (w.equals("locals")
                  || w.equals("vars")) // "vars" for historic reasons
@@ -1893,13 +1893,13 @@ class CUP$parser$actions {
         else
             classFile.report_error(".limit expected \"stack\" or \"locals\", but got "
                           + w);
-      
+
               CUP$parser$result = new java_cup.runtime.Symbol(24/*limit_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 96: // var_expr ::= Int IS Word Word 
+          case 96: // var_expr ::= Int IS Word Word
             {
               Object RESULT = null;
 		int regleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
@@ -1911,15 +1911,15 @@ class CUP$parser$actions {
 		int sigleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int sigright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String sig = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
              classFile.addVar(null, null, name, sig, reg.intValue());
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(49/*var_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 95: // var_expr ::= Int IS Word Word FROM Word TO Word 
+          case 95: // var_expr ::= Int IS Word Word FROM Word TO Word
             {
               Object RESULT = null;
 		int regleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).left;
@@ -1937,16 +1937,16 @@ class CUP$parser$actions {
 		int elableft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int elabright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String elab = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
              classFile.addVar(slab, elab, name,
                             sig, reg.intValue());
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(49/*var_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 94: // code_attr_expr ::= Word Str 
+          case 94: // code_attr_expr ::= Word Str
             {
               Object RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -1955,43 +1955,43 @@ class CUP$parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String v = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
-               classFile.addSootCodeAttr(w, v);    
-          
+
+               classFile.addSootCodeAttr(w, v);
+
               CUP$parser$result = new java_cup.runtime.Symbol(50/*code_attr_expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 93: // meth_annotation_default_attr ::= DANNOT_DEFAULT elem_val_pair DEND DANNOT_DEFAULT 
+          case 93: // meth_annotation_default_attr ::= DANNOT_DEFAULT elem_val_pair DEND DANNOT_DEFAULT
             {
               Object RESULT = null;
 		int defleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int defright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object def = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		
+
         classFile.addMethAnnotDefault(def);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(81/*meth_annotation_default_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 92: // annotation_attr_list ::= annotation_attr 
+          case 92: // annotation_attr_list ::= annotation_attr
             {
               Object RESULT = null;
 		int elemleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int elemright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         RESULT = classFile.makeNewAnnotAttrList(elem);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(83/*annotation_attr_list*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 91: // annotation_attr_list ::= annotation_attr_list annotation_attr 
+          case 91: // annotation_attr_list ::= annotation_attr_list annotation_attr
             {
               Object RESULT = null;
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -2000,15 +2000,15 @@ class CUP$parser$actions {
 		int elemleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int elemright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object elem = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         RESULT = classFile.mergeNewAnnotAttr(list, elem);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(83/*annotation_attr_list*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 90: // meth_param_annotation_attr ::= DPARAM_ANNOT_ATTR visibility_type SEP annotation_attr_list DEND DPARAM_ANNOT_ATTR 
+          case 90: // meth_param_annotation_attr ::= DPARAM_ANNOT_ATTR visibility_type SEP annotation_attr_list DEND DPARAM_ANNOT_ATTR
             {
               Object RESULT = null;
 		int kindleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
@@ -2017,19 +2017,19 @@ class CUP$parser$actions {
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int listright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object list = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		
+
         RESULT = classFile.makeParameterVisibilityAnnotation(kind, list);
         if(kind.equals("RuntimeVisible"))
         	classFile.addMethParamAnnotAttrVisible(RESULT);
         else
-            classFile.addMethParamAnnotAttrInvisible(RESULT);        
-    
+            classFile.addMethParamAnnotAttrInvisible(RESULT);
+
               CUP$parser$result = new java_cup.runtime.Symbol(82/*meth_param_annotation_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 89: // meth_annotation_attr ::= visibility_type SEP annotation_list DEND DANNOTATION_ATTR 
+          case 89: // meth_annotation_attr ::= visibility_type SEP annotation_list DEND DANNOTATION_ATTR
             {
               Object RESULT = null;
 		int tvalleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
@@ -2038,55 +2038,55 @@ class CUP$parser$actions {
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int listright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object list = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		
+
         RESULT = classFile.makeVisibilityAnnotation(tval, list);
         if(tval.equals("RuntimeVisible"))
         	classFile.addMethAnnotAttrVisible(RESULT);
         else
-            classFile.addMethAnnotAttrInvisible(RESULT);        
-    
+            classFile.addMethAnnotAttrInvisible(RESULT);
+
               CUP$parser$result = new java_cup.runtime.Symbol(78/*meth_annotation_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 88: // meth_sig_attr ::= DSIG_ATTR Str 
+          case 88: // meth_sig_attr ::= DSIG_ATTR Str
             {
               Object RESULT = null;
 		int sleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String s = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         classFile.addMethSigAttr(s);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(70/*meth_sig_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 87: // meth_depr_attr ::= DDEPRECATED 
+          case 87: // meth_depr_attr ::= DDEPRECATED
             {
               Object RESULT = null;
-		
+
         classFile.addMethDeprAttr();
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(69/*meth_depr_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 86: // meth_synth_attr ::= DSYNTHETIC 
+          case 86: // meth_synth_attr ::= DSYNTHETIC
             {
               Object RESULT = null;
-		
+
         classFile.addMethSynthAttr();
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(68/*meth_synth_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 85: // directive ::= meth_param_annotation_attr 
+          case 85: // directive ::= meth_param_annotation_attr
             {
               Object RESULT = null;
 
@@ -2095,7 +2095,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 84: // directive ::= meth_annotation_default_attr 
+          case 84: // directive ::= meth_annotation_default_attr
             {
               Object RESULT = null;
 
@@ -2104,7 +2104,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 83: // directive ::= meth_annotation_attr 
+          case 83: // directive ::= meth_annotation_attr
             {
               Object RESULT = null;
 
@@ -2113,7 +2113,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 82: // directive ::= meth_sig_attr 
+          case 82: // directive ::= meth_sig_attr
             {
               Object RESULT = null;
 
@@ -2122,7 +2122,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 81: // directive ::= meth_depr_attr 
+          case 81: // directive ::= meth_depr_attr
             {
               Object RESULT = null;
 
@@ -2131,7 +2131,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 80: // directive ::= meth_synth_attr 
+          case 80: // directive ::= meth_synth_attr
             {
               Object RESULT = null;
 
@@ -2140,7 +2140,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 79: // directive ::= DCODE_ATTR code_attr_expr 
+          case 79: // directive ::= DCODE_ATTR code_attr_expr
             {
               Object RESULT = null;
 
@@ -2149,7 +2149,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 78: // directive ::= DSET set_expr 
+          case 78: // directive ::= DSET set_expr
             {
               Object RESULT = null;
 
@@ -2158,7 +2158,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 77: // directive ::= DCATCH catch_expr 
+          case 77: // directive ::= DCATCH catch_expr
             {
               Object RESULT = null;
 
@@ -2167,7 +2167,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 76: // directive ::= DTHROWS throws_expr 
+          case 76: // directive ::= DTHROWS throws_expr
             {
               Object RESULT = null;
 
@@ -2176,7 +2176,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 75: // directive ::= DLINE line_expr 
+          case 75: // directive ::= DLINE line_expr
             {
               Object RESULT = null;
 
@@ -2185,7 +2185,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 74: // directive ::= DLIMIT limit_expr 
+          case 74: // directive ::= DLIMIT limit_expr
             {
               Object RESULT = null;
 
@@ -2194,7 +2194,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 73: // directive ::= DVAR var_expr 
+          case 73: // directive ::= DVAR var_expr
             {
               Object RESULT = null;
 
@@ -2203,21 +2203,21 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 72: // label ::= Word COLON 
+          case 72: // label ::= Word COLON
             {
               Object RESULT = null;
 		int labelleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int labelright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String label = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
             classFile.plantLabel(label);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(23/*label*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 71: // stmnt ::= 
+          case 71: // stmnt ::=
             {
               Object RESULT = null;
 
@@ -2226,7 +2226,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 70: // stmnt ::= label 
+          case 70: // stmnt ::= label
             {
               Object RESULT = null;
 
@@ -2235,7 +2235,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 69: // stmnt ::= error 
+          case 69: // stmnt ::= error
             {
               Object RESULT = null;
 
@@ -2244,7 +2244,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 68: // stmnt ::= directive 
+          case 68: // stmnt ::= directive
             {
               Object RESULT = null;
 
@@ -2253,7 +2253,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 67: // stmnt ::= instruction 
+          case 67: // stmnt ::= instruction
             {
               Object RESULT = null;
 
@@ -2262,7 +2262,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 66: // statement ::= NT$1 stmnt SEP 
+          case 66: // statement ::= NT$1 stmnt SEP
             {
               Object RESULT = null;
               // propagate RESULT from NT$1
@@ -2274,16 +2274,16 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 65: // NT$1 ::= 
+          case 65: // NT$1 ::=
             {
               Object RESULT = null;
- classFile.setLine(scanner.token_line_num); 
+ classFile.setLine(scanner.token_line_num);
               CUP$parser$result = new java_cup.runtime.Symbol(90/*NT$1*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 64: // statements ::= statement 
+          case 64: // statements ::= statement
             {
               Object RESULT = null;
 
@@ -2292,7 +2292,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 63: // statements ::= statements statement 
+          case 63: // statements ::= statements statement
             {
               Object RESULT = null;
 
@@ -2301,18 +2301,18 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 62: // endmethod ::= DEND METHOD SEP 
+          case 62: // endmethod ::= DEND METHOD SEP
             {
               Object RESULT = null;
-		
+
             classFile.endMethod();
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(14/*endmethod*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 61: // defmethod ::= DMETHOD access Word SEP 
+          case 61: // defmethod ::= DMETHOD access Word SEP
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -2321,16 +2321,16 @@ class CUP$parser$actions {
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int nameright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String name = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
             String split[] = ScannerUtils.splitMethodSignature(name);
             classFile.newMethod(split[0], split[1], i.intValue());
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(12/*defmethod*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 60: // method_spec ::= defmethod endmethod 
+          case 60: // method_spec ::= defmethod endmethod
             {
               Object RESULT = null;
 
@@ -2339,7 +2339,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 59: // method_spec ::= defmethod statements endmethod 
+          case 59: // method_spec ::= defmethod statements endmethod
             {
               Object RESULT = null;
 
@@ -2348,7 +2348,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 58: // method_item ::= method_spec 
+          case 58: // method_item ::= method_spec
             {
               Object RESULT = null;
 
@@ -2357,7 +2357,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 57: // method_item ::= method_spec method_attrs 
+          case 57: // method_item ::= method_spec method_attrs
             {
               Object RESULT = null;
 
@@ -2366,7 +2366,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 56: // method_list ::= method_item 
+          case 56: // method_list ::= method_item
             {
               Object RESULT = null;
 
@@ -2375,7 +2375,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 55: // method_list ::= method_list method_item 
+          case 55: // method_list ::= method_list method_item
             {
               Object RESULT = null;
 
@@ -2384,7 +2384,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 54: // methods ::= 
+          case 54: // methods ::=
             {
               Object RESULT = null;
 
@@ -2393,7 +2393,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 53: // methods ::= method_list 
+          case 53: // methods ::= method_list
             {
               Object RESULT = null;
 
@@ -2402,64 +2402,64 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 52: // item ::= Str 
+          case 52: // item ::= Str
             {
               Object RESULT = null;
 		int sleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String s = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = s; 
+		 RESULT = s;
               CUP$parser$result = new java_cup.runtime.Symbol(3/*item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 51: // item ::= Num 
+          case 51: // item ::= Num
             {
               Object RESULT = null;
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Number n = (Number)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = n; 
+		 RESULT = n;
               CUP$parser$result = new java_cup.runtime.Symbol(3/*item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 50: // item ::= Int 
+          case 50: // item ::= Int
             {
               Object RESULT = null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Integer i = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = i; 
+		 RESULT = i;
               CUP$parser$result = new java_cup.runtime.Symbol(3/*item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 49: // optional_default ::= 
+          case 49: // optional_default ::=
             {
               Object RESULT = null;
-		 RESULT = null; 
+		 RESULT = null;
               CUP$parser$result = new java_cup.runtime.Symbol(2/*optional_default*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 48: // optional_default ::= EQ item 
+          case 48: // optional_default ::= EQ item
             {
               Object RESULT = null;
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object v = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = v; 
+		 RESULT = v;
               CUP$parser$result = new java_cup.runtime.Symbol(2/*optional_default*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 47: // field_spec ::= DFIELD access Str Word optional_default DSYNTHETIC SEP deprecated_attr signature_attr annotation_attr annotation_attr 
+          case 47: // field_spec ::= DFIELD access Str Word optional_default DSYNTHETIC SEP deprecated_attr signature_attr annotation_attr annotation_attr
             {
               Object RESULT = null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)).left;
@@ -2486,15 +2486,15 @@ class CUP$parser$actions {
 		int vis_annot_attr2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vis_annot_attr2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object vis_annot_attr2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.addField((short)a.intValue(), name, sig, v, "synth", dep_attr, sig_attr, vis_annot_attr1, vis_annot_attr2);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(16/*field_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-10)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 46: // field_spec ::= DFIELD access Str Word optional_default SEP deprecated_attr signature_attr annotation_attr annotation_attr 
+          case 46: // field_spec ::= DFIELD access Str Word optional_default SEP deprecated_attr signature_attr annotation_attr annotation_attr
             {
               Object RESULT = null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)).left;
@@ -2521,15 +2521,15 @@ class CUP$parser$actions {
 		int vis_annot_attr2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vis_annot_attr2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object vis_annot_attr2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.addField((short)a.intValue(), name, sig, v, dep_attr, sig_attr, vis_annot_attr1, vis_annot_attr2);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(16/*field_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 45: // field_spec ::= DFIELD access Str Word optional_default DSYNTHETIC SEP deprecated_attr signature_attr annotation_attr_opt 
+          case 45: // field_spec ::= DFIELD access Str Word optional_default DSYNTHETIC SEP deprecated_attr signature_attr annotation_attr_opt
             {
               Object RESULT = null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)).left;
@@ -2553,15 +2553,15 @@ class CUP$parser$actions {
 		int vis_annot_attrleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vis_annot_attrright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object vis_annot_attr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.addField((short)a.intValue(), name, sig, v, "synth", dep_attr, sig_attr, vis_annot_attr, null);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(16/*field_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 44: // field_spec ::= DFIELD access Str Word optional_default SEP deprecated_attr signature_attr annotation_attr_opt 
+          case 44: // field_spec ::= DFIELD access Str Word optional_default SEP deprecated_attr signature_attr annotation_attr_opt
             {
               Object RESULT = null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).left;
@@ -2585,15 +2585,15 @@ class CUP$parser$actions {
 		int vis_annot_attrleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int vis_annot_attrright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object vis_annot_attr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
             classFile.addField((short)a.intValue(), name, sig, v, dep_attr, sig_attr, vis_annot_attr, null);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(16/*field_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 43: // field_item ::= field_spec 
+          case 43: // field_item ::= field_spec
             {
               Object RESULT = null;
 
@@ -2602,7 +2602,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 42: // field_item ::= field_spec field_attrs 
+          case 42: // field_item ::= field_spec field_attrs
             {
               Object RESULT = null;
 
@@ -2611,7 +2611,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 41: // field_list ::= field_item 
+          case 41: // field_list ::= field_item
             {
               Object RESULT = null;
 
@@ -2620,7 +2620,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 40: // field_list ::= field_list field_item 
+          case 40: // field_list ::= field_list field_item
             {
               Object RESULT = null;
 
@@ -2629,7 +2629,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 39: // fields ::= 
+          case 39: // fields ::=
             {
               Object RESULT = null;
 
@@ -2638,7 +2638,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 38: // fields ::= field_list 
+          case 38: // fields ::= field_list
             {
               Object RESULT = null;
 
@@ -2647,7 +2647,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 37: // class_annotation_attr ::= annotation_attr annotation_attr 
+          case 37: // class_annotation_attr ::= annotation_attr annotation_attr
             {
               Object RESULT = null;
 		int annot_attrleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -2656,7 +2656,7 @@ class CUP$parser$actions {
 		int annot_attr2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int annot_attr2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object annot_attr2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         if(((VisibilityAnnotationAttr)annot_attr).getKind().equals("RuntimeVisible"))
         	classFile.addClassAnnotAttrVisible(annot_attr);
         else
@@ -2664,73 +2664,73 @@ class CUP$parser$actions {
         if(((VisibilityAnnotationAttr)annot_attr2).getKind().equals("RuntimeVisible"))
         	classFile.addClassAnnotAttrVisible(annot_attr2);
         else
-            classFile.addClassAnnotAttrInvisible(annot_attr2);        
-    
+            classFile.addClassAnnotAttrInvisible(annot_attr2);
+
               CUP$parser$result = new java_cup.runtime.Symbol(79/*class_annotation_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 36: // class_annotation_attr ::= annotation_attr_opt 
+          case 36: // class_annotation_attr ::= annotation_attr_opt
             {
               Object RESULT = null;
 		int annot_attrleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int annot_attrright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object annot_attr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
     	if(annot_attr!=null) {
 	        if(((VisibilityAnnotationAttr)annot_attr).getKind().equals("RuntimeVisible"))
 	        	classFile.addClassAnnotAttrVisible(annot_attr);
 	        else
 	            classFile.addClassAnnotAttrInvisible(annot_attr);
 	    }
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(79/*class_annotation_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 35: // class_sig_attr ::= signature_attr 
+          case 35: // class_sig_attr ::= signature_attr
             {
               Object RESULT = null;
 		int sig_attrleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int sig_attrright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object sig_attr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         classFile.addClassSigAttr(sig_attr);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(72/*class_sig_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 34: // class_depr_attr ::= deprecated_attr 
+          case 34: // class_depr_attr ::= deprecated_attr
             {
               Object RESULT = null;
 		int dep_attrleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int dep_attrright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object dep_attr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		
+
         classFile.addClassDeprAttr(dep_attr);
-    
+
               CUP$parser$result = new java_cup.runtime.Symbol(71/*class_depr_attr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 33: // implements_spec ::= DIMPLEMENTS classname SEP 
+          case 33: // implements_spec ::= DIMPLEMENTS classname SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int nameright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String name = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 classFile.addInterface(name); 
+		 classFile.addInterface(name);
               CUP$parser$result = new java_cup.runtime.Symbol(21/*implements_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 32: // implements_list ::= implements_spec 
+          case 32: // implements_list ::= implements_spec
             {
               Object RESULT = null;
 
@@ -2739,7 +2739,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 31: // implements_list ::= implements_list implements_spec 
+          case 31: // implements_list ::= implements_list implements_spec
             {
               Object RESULT = null;
 
@@ -2748,7 +2748,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 30: // impls ::= 
+          case 30: // impls ::=
             {
               Object RESULT = null;
 
@@ -2757,7 +2757,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 29: // impls ::= implements_list 
+          case 29: // impls ::= implements_list
             {
               Object RESULT = null;
 
@@ -2766,158 +2766,158 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 28: // super_spec ::= DNOSUPER SEP 
+          case 28: // super_spec ::= DNOSUPER SEP
             {
               Object RESULT = null;
-		
+
             classFile.setNoSuperClass();
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(40/*super_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 27: // super_spec ::= DSUPER classname SEP 
+          case 27: // super_spec ::= DSUPER classname SEP
             {
               Object RESULT = null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int nameright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String name = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
             classFile.setSuperClass(name);
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(40/*super_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 26: // access_item ::= ENUM 
+          case 26: // access_item ::= ENUM
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_ENUM; 
+		 access_val |= RuntimeConstants.ACC_ENUM;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 25: // access_item ::= ANNOTATION 
+          case 25: // access_item ::= ANNOTATION
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_ANNOTATION; 
+		 access_val |= RuntimeConstants.ACC_ANNOTATION;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 24: // access_item ::= STRICTFP 
+          case 24: // access_item ::= STRICTFP
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_STRICTFP; 
+		 access_val |= RuntimeConstants.ACC_STRICTFP;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 23: // access_item ::= ABSTRACT 
+          case 23: // access_item ::= ABSTRACT
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_ABSTRACT; 
+		 access_val |= RuntimeConstants.ACC_ABSTRACT;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 22: // access_item ::= INTERFACE 
+          case 22: // access_item ::= INTERFACE
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_INTERFACE; 
+		 access_val |= RuntimeConstants.ACC_INTERFACE;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 21: // access_item ::= NATIVE 
+          case 21: // access_item ::= NATIVE
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_NATIVE; 
+		 access_val |= RuntimeConstants.ACC_NATIVE;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 20: // access_item ::= TRANSIENT 
+          case 20: // access_item ::= TRANSIENT
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_TRANSIENT; 
+		 access_val |= RuntimeConstants.ACC_TRANSIENT;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 19: // access_item ::= VOLATILE 
+          case 19: // access_item ::= VOLATILE
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_VOLATILE; 
+		 access_val |= RuntimeConstants.ACC_VOLATILE;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 18: // access_item ::= SYNCHRONIZED 
+          case 18: // access_item ::= SYNCHRONIZED
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_SYNCHRONIZED; 
+		 access_val |= RuntimeConstants.ACC_SYNCHRONIZED;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 17: // access_item ::= FINAL 
+          case 17: // access_item ::= FINAL
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_FINAL; 
+		 access_val |= RuntimeConstants.ACC_FINAL;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 16: // access_item ::= STATIC 
+          case 16: // access_item ::= STATIC
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_STATIC; 
+		 access_val |= RuntimeConstants.ACC_STATIC;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 15: // access_item ::= PROTECTED 
+          case 15: // access_item ::= PROTECTED
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_PROTECTED; 
+		 access_val |= RuntimeConstants.ACC_PROTECTED;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 14: // access_item ::= PRIVATE 
+          case 14: // access_item ::= PRIVATE
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_PRIVATE; 
+		 access_val |= RuntimeConstants.ACC_PRIVATE;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 13: // access_item ::= PUBLIC 
+          case 13: // access_item ::= PUBLIC
             {
               Object RESULT = null;
-		 access_val |= RuntimeConstants.ACC_PUBLIC; 
+		 access_val |= RuntimeConstants.ACC_PUBLIC;
               CUP$parser$result = new java_cup.runtime.Symbol(6/*access_item*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // access_items ::= access_item 
+          case 12: // access_items ::= access_item
             {
               Object RESULT = null;
 
@@ -2926,7 +2926,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // access_items ::= access_items access_item 
+          case 11: // access_items ::= access_items access_item
             {
               Object RESULT = null;
 
@@ -2935,7 +2935,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // access_list ::= 
+          case 10: // access_list ::=
             {
               Object RESULT = null;
 
@@ -2944,7 +2944,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // access_list ::= access_items 
+          case 9: // access_list ::= access_items
             {
               Object RESULT = null;
 
@@ -2953,40 +2953,40 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // access ::= NT$0 access_list 
+          case 8: // access ::= NT$0 access_list
             {
               Short RESULT = null;
               // propagate RESULT from NT$0
               if ( ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value != null )
                 RESULT = (Short) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 RESULT = new Short(access_val); 
+		 RESULT = new Short(access_val);
               CUP$parser$result = new java_cup.runtime.Symbol(88/*access*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // NT$0 ::= 
+          case 7: // NT$0 ::=
             {
               Object RESULT = null;
- access_val = 0; 
+ access_val = 0;
               CUP$parser$result = new java_cup.runtime.Symbol(89/*NT$0*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // classname ::= Word 
+          case 6: // classname ::= Word
             {
               String RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left;
 		int wright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String w = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
-		 RESULT = ScannerUtils.convertDots(w); 
+		 RESULT = ScannerUtils.convertDots(w);
               CUP$parser$result = new java_cup.runtime.Symbol(1/*classname*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 5: // class_spec ::= DINTERFACE access classname SEP 
+          case 5: // class_spec ::= DINTERFACE access classname SEP
             {
               Object RESULT = null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -2995,17 +2995,17 @@ class CUP$parser$actions {
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int nameright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String name = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
             classFile.setClass(name,
                 (short)(a.intValue() |
                         RuntimeConstants.ACC_INTERFACE));
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(10/*class_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // class_spec ::= DCLASS access classname SEP 
+          case 4: // class_spec ::= DCLASS access classname SEP
             {
               Object RESULT = null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -3014,16 +3014,16 @@ class CUP$parser$actions {
 		int nameleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int nameright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String name = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		
+
             classFile.setClass(name,
                 (short)(a.intValue() | RuntimeConstants.ACC_SUPER));
-        
+
               CUP$parser$result = new java_cup.runtime.Symbol(10/*class_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 3: // source_spec ::= 
+          case 3: // source_spec ::=
             {
               Object RESULT = null;
 
@@ -3032,19 +3032,19 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 2: // source_spec ::= DSOURCE Word SEP 
+          case 2: // source_spec ::= DSOURCE Word SEP
             {
               Object RESULT = null;
 		int wleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int wright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String w = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 classFile.setSource(w); 
+		 classFile.setSource(w);
               CUP$parser$result = new java_cup.runtime.Symbol(36/*source_spec*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 1: // $START ::= jas_file EOF 
+          case 1: // $START ::= jas_file EOF
             {
               Object RESULT = null;
 		int start_valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -3058,7 +3058,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 0: // jas_file ::= source_spec class_spec super_spec impls class_attrs synth_attr inner_class_attr encl_meth_attr class_depr_attr class_sig_attr class_annotation_attr fields methods 
+          case 0: // jas_file ::= source_spec class_spec super_spec impls class_attrs synth_attr inner_class_attr encl_meth_attr class_depr_attr class_sig_attr class_annotation_attr fields methods
             {
               Object RESULT = null;
 

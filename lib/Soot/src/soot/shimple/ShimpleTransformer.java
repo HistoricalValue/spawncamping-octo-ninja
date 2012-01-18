@@ -43,12 +43,12 @@ public class ShimpleTransformer extends SceneTransformer
         // *** FIXME: Add debug output to indicate which class/method is being shimplified.
         // *** FIXME: Is ShimpleTransformer the right solution?  The call graph may deem
         //            some classes unreachable.
-        
+
         Iterator classesIt = Scene.v().getClasses().iterator();
         while(classesIt.hasNext()){
             SootClass sClass = (SootClass) classesIt.next();
             if(sClass.isPhantom()) continue;
-            
+
             Iterator methodsIt = sClass.getMethods().iterator();
             while(methodsIt.hasNext()){
                 SootMethod method = (SootMethod) methodsIt.next();

@@ -24,7 +24,7 @@ import soot.jimple.*;
 import soot.jimple.toolkits.callgraph.*;
 
 public class BadFields extends SceneTransformer {
-    public static void main(String[] args) 
+    public static void main(String[] args)
     {
 	PackManager.v().getPack("cg").add(
 	    new Transform("cg.badfields", new BadFields()));
@@ -69,7 +69,7 @@ public class BadFields extends SceneTransformer {
     }
 
     private void warn( String warning ) {
-        if( lastClass != currentClass ) 
+        if( lastClass != currentClass )
             G.v().out.println( "In class "+currentClass );
         lastClass = currentClass;
         G.v().out.println( "  "+warning );

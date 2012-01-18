@@ -7,7 +7,7 @@ import java.io.*;
 /**
  * Method represents a method in a Java classfile.  A method's name and
  * value (the types of its parameters and its return type) are modeled
- * as indices into it class's constant pool.  A method has modifiers 
+ * as indices into it class's constant pool.  A method has modifiers
  * that determine whether it is public, private, static, final, etc.
  * Methods have a number of attributes such as their Code and any
  * Exceptions they may throw.
@@ -20,9 +20,9 @@ import java.io.*;
  */
 public class Method
 {
-  protected ClassFile clazz; 
+  protected ClassFile clazz;
   protected DataInputStream in;
-  
+
   protected int modifiers;
   protected int name;
   protected int type;
@@ -40,7 +40,7 @@ public class Method
    * @exception IOException
    *        If an error occurs while reading.
    */
-  public Method(DataInputStream in, ClassFile clazz) 
+  public Method(DataInputStream in, ClassFile clazz)
   {
     this.clazz = clazz;
     this.in = in;

@@ -1,4 +1,4 @@
-﻿- Επέκταση μιας υπάρχουσας ανάλυσης για Java για τη διαφανή υποστήριξη transactional memory objects. 
+﻿- Επέκταση μιας υπάρχουσας ανάλυσης για Java για τη διαφανή υποστήριξη transactional memory objects.
 
 Η πρώτη αναφορά περιλαμβάνει 1 σελίδα (το πολύ 2) με 1 ή 2 παραγράφους με background και motivation, και 1 ή 2 παραγράφους με το problem statement:
 -Ποιό είναι το πρόβλημα που θα λύσετε στο project;
@@ -67,7 +67,7 @@ with the respective read or write methods, where necessary.
 Generally, the rules to follow are:
         - replace variables which are found to be aliases of a Proxy-typed
           object,
-        - replace every assignment to a proxy object with an invocation of the 
+        - replace every assignment to a proxy object with an invocation of the
           assignment method (passing the RHS as an argument, of course),
         - replace every occurence of a proxy-typed variable with an invocation
           of the read method.

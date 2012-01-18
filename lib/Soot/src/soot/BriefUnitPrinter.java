@@ -46,7 +46,7 @@ public class BriefUnitPrinter extends LabeledUnitPrinter {
         }
         output.append( m.name() );
     }
-    public void fieldRef( SootFieldRef f ) { 
+    public void fieldRef( SootFieldRef f ) {
         handleIndent();
         if( baf || f.resolve().isStatic() ){
             output.append( f.declaringClass().getName() );

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -34,7 +34,7 @@ import soot.jimple.toolkits.callgraph.*;
 import java.util.*;
 
 /** Interprocedural analysis to identify rectangular multi-dimension array
- * locals. It is based on the call graph. 
+ * locals. It is based on the call graph.
  */
 
 public class RectangularArrayFinder extends SceneTransformer
@@ -68,14 +68,14 @@ public class RectangularArrayFinder extends SceneTransformer
 	    SootClass c = (SootClass)classIt.next();
 
 	    Iterator methodIt = c.methodIterator();
-	    
+
 	    while (methodIt.hasNext())
 	    {
 		SootMethod method = (SootMethod)methodIt.next();
-		
+
 		if (!method.isConcrete())
 		    continue;
-		
+
 		if (!sc.getReachableMethods().contains(method))
 		    continue;
 
@@ -83,7 +83,7 @@ public class RectangularArrayFinder extends SceneTransformer
 		addInfoFromMethod(method);
 	    }
 	}
-	
+
 	/*
 	MutableDirectedGraph methodGraph = ig.newMethodGraph();
 	HashSet visitedMethods = new HashSet();
@@ -128,13 +128,13 @@ public class RectangularArrayFinder extends SceneTransformer
 
 	    falseSet.addAll(startNodes);
 	    changedNodeList.addAll(startNodes);
-	
+
 	    while (!changedNodeList.isEmpty())
 	    {
 		Object node = changedNodeList.remove(0);
 
 		List succs = agraph.getSuccsOf(node);
-	    
+
 		Iterator succsIt = succs.iterator();
 
 		while (succsIt.hasNext())
@@ -171,7 +171,7 @@ public class RectangularArrayFinder extends SceneTransformer
 	    while (!changedNodeList.isEmpty())
 	    {
 		Object node = changedNodeList.remove(0);
-		
+
 		List succs = agraph.getSuccsOf(node);
 
 		Iterator succsIt = succs.iterator();
@@ -193,7 +193,7 @@ public class RectangularArrayFinder extends SceneTransformer
 	}
 
 	/* For verification, print out true set and false set. */
-	
+
 	if (Options.v().debug())
 	{
 	    G.v().out.println("Rectangular Array :");
@@ -213,14 +213,14 @@ public class RectangularArrayFinder extends SceneTransformer
 		while (nodeIt.hasNext())
 		{
 		    Object node = nodeIt.next();
-		    
+
 		    G.v().out.println(node);
 		}
 	    }
 	}
-	
+
 	Date finish = new Date();
-	if (Options.v().verbose()) 
+	if (Options.v().verbose())
 	{
 	    long runtime = finish.getTime() - start.getTime();
 	    long mins = runtime/60000;
@@ -232,7 +232,7 @@ public class RectangularArrayFinder extends SceneTransformer
 
     private void addInfoFromMethod(SootMethod method)
     {
-	if (Options.v().verbose()) 
+	if (Options.v().verbose())
 	    G.v().out.println("[ra] Operating "+method.getSignature());
 
 	boolean needTransfer = true;
@@ -245,7 +245,7 @@ public class RectangularArrayFinder extends SceneTransformer
 
 	boolean trackReturn = false;
 	Type rtnType = method.getReturnType();
-	
+
 	if (rtnType instanceof ArrayType)
 	{
 	    if (((ArrayType)rtnType).numDimensions > 1)
@@ -253,7 +253,7 @@ public class RectangularArrayFinder extends SceneTransformer
 		trackReturn = true;
 		needTransfer = true;
 	    }
-	}      
+	}
 
 	Set<Local> arrayLocal = new HashSet<Local>();
 
@@ -264,7 +264,7 @@ public class RectangularArrayFinder extends SceneTransformer
 	while (localIt.hasNext())
 	{
 	    Local local = (Local)localIt.next();
-	    
+
 	    Type type = local.getType();
 
 	    if (type instanceof ArrayType)
@@ -279,7 +279,7 @@ public class RectangularArrayFinder extends SceneTransformer
 	}
 
 	/* The method has a local graph. It will be merged to the whole graph after simplification. */
-	ExtendedHashMutableDirectedGraph ehmdg = new ExtendedHashMutableDirectedGraph();	
+	ExtendedHashMutableDirectedGraph ehmdg = new ExtendedHashMutableDirectedGraph();
 
 	Iterator unitIt = body.getUnits().snapshotIterator();
 
@@ -291,9 +291,9 @@ public class RectangularArrayFinder extends SceneTransformer
 	    if (s.containsInvokeExpr())
 	    {
 		InvokeExpr iexpr = s.getInvokeExpr();
-		
+
 		int argnum = iexpr.getArgCount();
-		
+
 		for (int i=0; i<argnum; i++)
 		{
 		    Value arg = iexpr.getArg(i);
@@ -306,13 +306,13 @@ public class RectangularArrayFinder extends SceneTransformer
 		    MethodLocal ml = new MethodLocal(method, (Local)arg);
 
                     Iterator targetIt = new Targets( cg.edgesOutOf(s) );
-		    
+
 		    while (targetIt.hasNext())
 		    {
 			SootMethod target = (SootMethod)targetIt.next();
-			
+
 			MethodParameter mp = new MethodParameter(target, i);
-			
+
 			/* add edge to the graph. */
 			ehmdg.addMutualEdge(ml, mp);
 		    }
@@ -336,14 +336,14 @@ public class RectangularArrayFinder extends SceneTransformer
 	    {
 		Value leftOp = ((DefinitionStmt)s).getLeftOp();
 		Value rightOp = ((DefinitionStmt)s).getRightOp();
-		
-		if (! (leftOp.getType() instanceof ArrayType) 
+
+		if (! (leftOp.getType() instanceof ArrayType)
 		    && ! (rightOp.getType() instanceof ArrayType))
 		    continue;
 
 		Object from = null;
 		Object to = null;
-		
+
 		/* kick out the possible cast. */
 		if ((leftOp instanceof Local) && (rightOp instanceof Local))
 		{
@@ -351,11 +351,11 @@ public class RectangularArrayFinder extends SceneTransformer
 		    {
 			int leftDims = ((ArrayType)((Local)leftOp).getType()).numDimensions;
 			int rightDims = ((ArrayType)((Local)rightOp).getType()).numDimensions;
-			
+
 			to = new MethodLocal(method, (Local)leftOp);
 			from = new MethodLocal(method, (Local)rightOp);
 			ehmdg.addMutualEdge(from, to);
-			
+
 			if (leftDims != rightDims)
 			    ehmdg.addEdge(BoolValue.v(false), from);
 		    }
@@ -363,7 +363,7 @@ public class RectangularArrayFinder extends SceneTransformer
 		    if (! arrayLocal.contains(leftOp))
 		    {	/* implicitly cast from right side to left side, and the left side declare type is Object ... */
 			ehmdg.addEdge(BoolValue.v(false), new MethodLocal(method, (Local)rightOp));
-		    }			
+		    }
 		}
 		else
 		if ((leftOp instanceof Local) && (rightOp instanceof ParameterRef))
@@ -410,7 +410,7 @@ public class RectangularArrayFinder extends SceneTransformer
 			/* to recover the SWAP of array dimensions. */
 			Object suspect = new MethodLocal(method, (Local)rightOp);
 			Object arrRef = new ArrayReferenceNode(method, base);
-			
+
 			boolean doNothing = false;
 
 		    blocklabel:
@@ -422,7 +422,7 @@ public class RectangularArrayFinder extends SceneTransformer
 			    List preds = ehmdg.getSuccsOf(suspect);
 
 			    Set neighbor = new HashSet();
-			    
+
 			    neighbor.addAll(succs);
 			    neighbor.addAll(preds);
 
@@ -432,7 +432,7 @@ public class RectangularArrayFinder extends SceneTransformer
 			    Object neighborOne = (neighbor.toArray())[0];
 
 			    if (arrRef.equals(neighborOne))
-				doNothing = true;		 
+				doNothing = true;
 			}
 
 			if (!doNothing)
@@ -447,7 +447,7 @@ public class RectangularArrayFinder extends SceneTransformer
 			to = new MethodLocal(method, (Local)leftOp);
 
 			Iterator targetIt = new Targets( cg.edgesOutOf(s) );
-			
+
 			while (targetIt.hasNext())
 			{
 			    SootMethod target = (SootMethod)targetIt.next();
@@ -467,9 +467,9 @@ public class RectangularArrayFinder extends SceneTransformer
 
 			to = ((FieldRef)leftOp).getField();
 			from = new MethodLocal(method, (Local)rightOp);
-			
+
 			ehmdg.addMutualEdge(from, to);
-			
+
 			if (!ftype.equals(ltype))
 			{
 			    ehmdg.addEdge(BoolValue.v(false), to);
@@ -488,9 +488,9 @@ public class RectangularArrayFinder extends SceneTransformer
 
 			to = new MethodLocal(method, (Local)leftOp);
 			from = ((FieldRef)rightOp).getField();
-			
+
 			ehmdg.addMutualEdge(from, to);
-			
+
 			if (!ftype.equals(ltype))
 			{
 			    ehmdg.addEdge(BoolValue.v(false), to);
@@ -540,23 +540,23 @@ public class RectangularArrayFinder extends SceneTransformer
 		    if (arrayLocal.contains(rOp))
 		    {
 			ehmdg.addEdge(BoolValue.v(false), from);
-		    }			
+		    }
 		}
 	    }
 	}
 
 	/* Compute the graph locally, it will skip all locals */
-	
+
 	if (needTransfer)
 	{
 	    Iterator<Object> tmpNodeIt = tmpNode.iterator();
-	
+
 	    while (tmpNodeIt.hasNext())
-	    {	    
+	    {
       		ehmdg.skipNode(tmpNodeIt.next());
 	    }
-	
-	    /* Add local graph to whole graph */	
+
+	    /* Add local graph to whole graph */
 	    agraph.mergeWith(ehmdg);
 	}
 
@@ -575,7 +575,7 @@ public class RectangularArrayFinder extends SceneTransformer
 	    Type type = local.getType();
 	    if (!(type instanceof ArrayType))
 		continue;
-	    
+
 	    if (((ArrayType)type).numDimensions == 2)
 		malocal.add(local);
 	}
@@ -601,7 +601,7 @@ public class RectangularArrayFinder extends SceneTransformer
 	    /* possible candidates */
 		if (!(stmt instanceof AssignStmt))
 		    break searchblock;
-		    
+
 		Value leftOp = ((AssignStmt)stmt).getLeftOp();
 		Value rightOp = ((AssignStmt)stmt).getRightOp();
 
@@ -609,9 +609,9 @@ public class RectangularArrayFinder extends SceneTransformer
 		    break searchblock;
 
 		Local local = (Local)leftOp;
- 
+
 		NewArrayExpr naexpr = (NewArrayExpr)rightOp;
-		
+
 		Value size = naexpr.getSize();
 		if (!(size instanceof IntConstant))
 		    break searchblock;
@@ -625,13 +625,13 @@ public class RectangularArrayFinder extends SceneTransformer
 
 		Local[] tmplocals = new Local[firstdim];
 
-		int seconddim = lookforPattern(units, stmt, 
+		int seconddim = lookforPattern(units, stmt,
 					       firstdim, local,
 					       basetype, tmplocals);
 
 		if (seconddim >= 0)
-		    transferPattern(units, stmt, 
-				    firstdim, seconddim, 
+		    transferPattern(units, stmt,
+				    firstdim, seconddim,
 				    local, basetype, tmplocals);
 	    }
 
@@ -642,7 +642,7 @@ public class RectangularArrayFinder extends SceneTransformer
     /* if the local is assigned a rect array, return back the second dimension length,
        else return -1
     */
-    private int lookforPattern(Chain units, Stmt startpoint, 
+    private int lookforPattern(Chain units, Stmt startpoint,
 			       int firstdim, Local local,
 			       Type basetype, Local[] tmplocals)
     {
@@ -682,7 +682,7 @@ public class RectangularArrayFinder extends SceneTransformer
 		/* we already did state 0 outside */
 	    case 0:
 		break;
-		
+
 	    case 1:
 		/* make sure it is a new array expr */
 		{
@@ -690,7 +690,7 @@ public class RectangularArrayFinder extends SceneTransformer
 
 		    if (!(rightOp instanceof NewArrayExpr))
 			break;
-		    
+
 		    NewArrayExpr naexpr = (NewArrayExpr)rightOp;
 		    Type type = naexpr.getBaseType();
 		    Value size = naexpr.getSize();
@@ -708,7 +708,7 @@ public class RectangularArrayFinder extends SceneTransformer
 			if (((IntConstant)size).value != seconddim)
 			    break;
 		    }
-		    
+
 		    curtmp = leftOp;
 
 		    state = 2;
@@ -734,7 +734,7 @@ public class RectangularArrayFinder extends SceneTransformer
 		    {
 			if (!(idx instanceof IntConstant))
 			    break;
-			
+
 			if (curdim != ((IntConstant)idx).value)
 			    break;
 
@@ -752,17 +752,17 @@ public class RectangularArrayFinder extends SceneTransformer
 		    }
 		}
 		break;
-		
+
 	    case 3:
 		return seconddim;
-      
+
 
 	    default:
 		return -1;
 	    }
 	}
     }
-    
+
     private void transferPattern(Chain units, Stmt startpoint,
 				 int firstdim, int seconddim,
 				 Local local, Type basetype,
@@ -787,10 +787,10 @@ public class RectangularArrayFinder extends SceneTransformer
 	    Stmt curstmt = (Stmt)units.getSuccOf(startpoint);
 
 	    while (curdim < firstdim)
-	    {	        
+	    {
 		Value leftOp = ((AssignStmt)curstmt).getLeftOp();
 		Value rightOp = ((AssignStmt)curstmt).getRightOp();
-		
+
 		if (tmplocals[curdim].equals(leftOp) && (rightOp instanceof NewArrayExpr))
 		{
 		    ArrayRef arexpr = new JArrayRef(local, IntConstant.v(curdim));
@@ -799,7 +799,7 @@ public class RectangularArrayFinder extends SceneTransformer
 		}
 		else
 		if ((leftOp instanceof ArrayRef) && (rightOp.equals(tmpcur)))
-		{		    
+		{
 		    /* delete current stmt */
 		    Stmt tmpstmt = curstmt;
 		    curstmt = (Stmt)units.getSuccOf(curstmt);
@@ -808,7 +808,7 @@ public class RectangularArrayFinder extends SceneTransformer
 		    curdim++;
 		}
 		else
-		    curstmt = (Stmt)units.getSuccOf(curstmt);		
+		    curstmt = (Stmt)units.getSuccOf(curstmt);
 	    }
 	}
     }

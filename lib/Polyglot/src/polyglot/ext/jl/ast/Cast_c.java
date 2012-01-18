@@ -12,7 +12,7 @@ import java.util.*;
  * A <code>Cast</code> is an immutable representation of a casting
  * operation.  It consists of an <code>Expr</code> being cast and a
  * <code>TypeNode</code> being cast to.
- */ 
+ */
 public class Cast_c extends Expr_c implements Cast
 {
     protected TypeNode castType;
@@ -78,8 +78,8 @@ public class Cast_c extends Expr_c implements Cast
         TypeSystem ts = tc.typeSystem();
 
         if (! ts.isCastValid(expr.type(), castType.type())) {
-	    throw new SemanticException("Cannot cast the expression of type \"" 
-					+ expr.type() + "\" to type \"" 
+	    throw new SemanticException("Cannot cast the expression of type \""
+					+ expr.type() + "\" to type \""
 					+ castType.type() + "\".",
 				        position());
 	}
@@ -104,7 +104,7 @@ public class Cast_c extends Expr_c implements Cast
 
         return child.type();
     }
-  
+
     public String toString() {
 	return "(" + castType + ") " + expr;
     }
@@ -137,18 +137,18 @@ public class Cast_c extends Expr_c implements Cast
 
         return Collections.EMPTY_LIST;
     }
-    
+
     public boolean isConstant() {
 	return expr.isConstant() && castType.type().isPrimitive();
     }
-    
+
     public Object constantValue() {
         Object v = expr.constantValue();
 
 	if (v == null) {
 	    return null;
 	}
-	
+
         if (v instanceof Boolean) {
             if (castType.type().isBoolean()) return v;
         }

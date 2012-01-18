@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -36,7 +36,7 @@ import java.util.*;
 public class DeterministicHashMap extends HashMap
 {
     Set<Object> keys = new TrustingMonotonicArraySet();
-    
+
     /** Constructs a DeterministicHashMap with the given initial capacity. */
     public DeterministicHashMap(int initialCapacity)
     {
@@ -46,30 +46,30 @@ public class DeterministicHashMap extends HashMap
     /** Constructs a DeterministicHashMap with the given initial capacity and load factor. */
     public DeterministicHashMap(int initialCapacity, float loadFactor)
     {
-        super(initialCapacity, loadFactor);    
+        super(initialCapacity, loadFactor);
     }
-    
+
     /** Inserts a mapping in this HashMap from <code>key</code> to <code>value</code>. */
     public Object put(Object key, Object value)
     {
         if(!containsKey(key))
             keys.add(key);
-    
-        return super.put(key, value);    
-    }   
+
+        return super.put(key, value);
+    }
 
     /** Returns a backed list of entries for this HashMap (unsupported). */
     public Collection entries()
     {
         throw new UnsupportedOperationException();
-    }    
-    
+    }
+
     /** Removes the given object from this HashMap (unsupported). */
     public Object remove(Object obj)
     {
         throw new UnsupportedOperationException();
     }
-    
+
     /** Returns a backed list of keys for this HashMap (unsupported). */
     public Set<Object> keySet()
     {

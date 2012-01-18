@@ -37,7 +37,7 @@ public class ImportTable extends ClassResolver
     protected Package pkg;
 
     private static final Object NOT_FOUND = "NOT FOUND";
-    
+
     /**
      * Create an import table.
      * @param ts The type system
@@ -97,7 +97,7 @@ public class ImportTable extends ClassResolver
                 packageImports.contains(pkgName)) {
             return;
         }
-        
+
         packageImports.add(pkgName);
     }
 
@@ -152,7 +152,7 @@ public class ImportTable extends ClassResolver
             // The name was long.
             return resolver.find(name);
         }
-        
+
         // The class name is short.
         // First see if we have a mapping already.
         Object res = map.get(name);
@@ -167,7 +167,7 @@ public class ImportTable extends ClassResolver
         try {
             if (pkg != null) {
                 // check if the current package defines it.
-                // If so, this takes priority over the package imports (or 
+                // If so, this takes priority over the package imports (or
                 // "type-import-on-demand" declarations as they are called in
                 // the JLS), so even if another package defines the same name,
                 // there is no conflict. See Section 6.5.2 of JLS, 2nd Ed.
@@ -181,12 +181,12 @@ public class ImportTable extends ClassResolver
                     return n;
                 }
             }
-            
+
             List imports = new ArrayList(packageImports.size() + 5);
-            
+
             imports.addAll(ts.defaultPackageImports());
             imports.addAll(packageImports);
-            
+
             // It wasn't a ClassImport.  Maybe it was a PackageImport?
             Named resolved = null;
             for (Iterator iter = imports.iterator(); iter.hasNext(); ) {
@@ -204,25 +204,25 @@ public class ImportTable extends ClassResolver
                         // this is the 2nd occurance of name we've found
                         // in an imported package.
                         // That's bad.
-                        throw new SemanticException("Reference to \"" + 
-                                name + "\" is ambiguous; both " + 
-                                resolved.fullName() + " and " + n.fullName() + 
+                        throw new SemanticException("Reference to \"" +
+                                name + "\" is ambiguous; both " +
+                                resolved.fullName() + " and " + n.fullName() +
                                 " match.");
                     }
                 }
             }
-            
+
             if (resolved == null) {
                 // The name was short, but not in any imported class or package.
                 // Check the null package.
                 resolved = resolver.find(name); // may throw exception
-            
+
                 if (!isVisibleFrom(resolved, "")) {
                     // Not visible.
                     throw new NoClassException(name, sourcePos);
                 }
             }
-            
+
             // Memoize the result.
             if (Report.should_report(TOPICS, 3))
                Report.report(3, this + ".find(" + name + "): found as " + resolved.fullName());
@@ -237,7 +237,7 @@ public class ImportTable extends ClassResolver
             throw e;
         }
     }
-    
+
     protected Named findInPkg(String name, String pkgName) throws SemanticException {
         String fullName = pkgName + "." + name;
 
@@ -245,7 +245,7 @@ public class ImportTable extends ClassResolver
             Named n = resolver.find(pkgName);
 
             if (n instanceof ClassType) {
-                n = ts.classContextResolver((ClassType) n).find(name); 
+                n = ts.classContextResolver((ClassType) n).find(name);
                 return n;
             }
         }
@@ -275,23 +275,23 @@ public class ImportTable extends ClassResolver
      */
     protected boolean isVisibleFrom(Named n, String pkgName) {
         boolean isVisible = false;
-        boolean inSamePackage = this.pkg != null 
+        boolean inSamePackage = this.pkg != null
                 && this.pkg.fullName().equals(pkgName)
-            || this.pkg == null 
+            || this.pkg == null
                 && pkgName.equals("");
         if (n instanceof Type) {
             Type t = (Type) n;
             //FIXME: Assume non-class types are always visible.
-            isVisible = !t.isClass() 
-                || t.toClass().flags().isPublic() 
-                || inSamePackage; 
+            isVisible = !t.isClass()
+                || t.toClass().flags().isPublic()
+                || inSamePackage;
         } else {
             //FIXME: Assume non-types are always visible.
             isVisible = true;
         }
         return isVisible;
     }
-    
+
     /**
      * Load the class imports, lazily.
      */
@@ -340,7 +340,7 @@ public class ImportTable extends ClassResolver
                             }
                         }
                         else {
-                            // t, whatever it is, is further qualified, but 
+                            // t, whatever it is, is further qualified, but
                             // should be, at least in Java, a ClassType.
                             throw new InternalCompilerError("Qualified type \"" + t + "\" is not a class type.", sourcePos);
                         }
@@ -394,7 +394,7 @@ public class ImportTable extends ClassResolver
         }
     }
 
-    private static final Collection TOPICS = 
+    private static final Collection TOPICS =
         CollectionUtil.list(Report.types, Report.resolver, Report.imports);
 
 }

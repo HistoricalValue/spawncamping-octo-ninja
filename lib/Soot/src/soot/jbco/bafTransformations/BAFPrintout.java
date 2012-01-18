@@ -26,45 +26,45 @@ import soot.Body;
 import soot.BodyTransformer;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 15-Jun-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 15-Jun-2006
  */
 public class BAFPrintout extends BodyTransformer implements IJbcoTransform {
-  
+
   private String name = "bb.printout";
-  
+
   public void outputSummary() {}
   public String[] getDependancies() {return new String[0];}
-  public String getName() { 
+  public String getName() {
     return name;
   }
   static boolean stack = false;
-  
+
   public BAFPrintout() {}
-  
+
   public BAFPrintout(String newname, boolean print_stack) {
     name = newname;
     stack = print_stack;
   }
-  
+
   protected void internalTransform(Body b, String phaseName, Map options) {
     //if (b.getMethod().getSignature().indexOf("run")<0) return;
     System.out.println("\n"+b.getMethod().getSignature());
-  
+
     if (stack) {
-      HashMap Stacks = null, b2j = soot.jbco.Main.methods2Baf2JLocals.get(b.getMethod());      
-      
+      HashMap Stacks = null, b2j = soot.jbco.Main.methods2Baf2JLocals.get(b.getMethod());
+
       try {
         if (b2j == null)
           Stacks = StackTypeHeightCalculator.calculateStackHeights(b);
         else
           Stacks = StackTypeHeightCalculator.calculateStackHeights(b,b2j);
-      
+
         StackTypeHeightCalculator.printStack(b.getUnits(), Stacks, true);
       } catch (Exception exc) {
         System.out.println("\n**************Exception calculating height " + exc + ", printing plain bytecode now\n\n");
-        soot.jbco.util.Debugger.printUnits(b, "  FINAL");  
+        soot.jbco.util.Debugger.printUnits(b, "  FINAL");
       }
     } else {
       soot.jbco.util.Debugger.printUnits(b, "  FINAL");

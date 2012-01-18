@@ -96,7 +96,7 @@ public class PAGDumper {
                     file.println( "");
                 }
             }
-            
+
             file.println( "Loads:" );
             for (Object object : pag.loadSources()) {
                 final FieldRefNode n = (FieldRefNode) object;

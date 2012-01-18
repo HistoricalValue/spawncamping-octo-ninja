@@ -23,7 +23,7 @@ import soot.*;
 import soot.tagkit.*;
 
 public class FieldReadTagAggregator extends ImportantTagAggregator
-{    
+{
     public FieldReadTagAggregator( Singletons.Global g ) {}
     public static FieldReadTagAggregator v() { return G.v().soot_jimple_spark_fieldrw_FieldReadTagAggregator(); }
 
@@ -32,7 +32,7 @@ public class FieldReadTagAggregator extends ImportantTagAggregator
     {
 	return (t instanceof FieldReadTag);
     }
-    
+
     public String aggregatedName()
     {
         return "FieldRead";

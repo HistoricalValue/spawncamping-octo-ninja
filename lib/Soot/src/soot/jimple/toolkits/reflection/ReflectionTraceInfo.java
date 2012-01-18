@@ -39,9 +39,9 @@ import soot.tagkit.Host;
 import soot.tagkit.SourceLnPosTag;
 
 public class ReflectionTraceInfo {
-	
+
 	protected Map<SootMethod,Set<String>> classForNameReceivers;
-	
+
 	protected Map<SootMethod,Set<String>> classNewInstanceReceivers;
 
 	protected Map<SootMethod,Set<String>> constructorNewInstanceReceivers;
@@ -87,22 +87,22 @@ public class ReflectionTraceInfo {
 							if(!Scene.v().containsMethod(target)) {
 								throw new RuntimeException("Unknown method for signature: "+target);
 							}
-							
+
 							Set<String> receiverNames;
 							if((receiverNames=methodInvokeReceivers.get(sourceMethod))==null) {
 								methodInvokeReceivers.put(sourceMethod, receiverNames = new HashSet<String>());
 							}
-							receiverNames.add(target);								
+							receiverNames.add(target);
 						} else if (kind.equals("Constructor.newInstance")) {
 							if(!Scene.v().containsMethod(target)) {
 								throw new RuntimeException("Unknown method for signature: "+target);
 							}
-							
+
 							Set<String> receiverNames;
 							if((receiverNames=constructorNewInstanceReceivers.get(sourceMethod))==null) {
 								constructorNewInstanceReceivers.put(sourceMethod, receiverNames = new HashSet<String>());
 							}
-							receiverNames.add(target);								
+							receiverNames.add(target);
 						} else
 							throw new RuntimeException("Unknown entry kind: "+kind);
 					}
@@ -115,7 +115,7 @@ public class ReflectionTraceInfo {
 			}
 		}
 	}
-	
+
 	private Set<SootMethod> inferSource(String source, int lineNumber) {
 		String className = source.substring(0,source.lastIndexOf("."));
 		String methodName = source.substring(source.lastIndexOf(".")+1);
@@ -133,7 +133,7 @@ public class ReflectionTraceInfo {
 			if(m.getName().equals(methodName)) {
 				methodsWithRightName.add(m);
 			}
-		} 
+		}
 
 		if(methodsWithRightName.isEmpty()) {
 			throw new RuntimeException("Trace file refers to unknown method with name "+methodName+" in Class "+className);
@@ -157,10 +157,10 @@ public class ReflectionTraceInfo {
 					}
 				}
 			}
-			
+
 			//if we get here then we found no method with the right line number information;
 			//be conservative and return all method that we found
-			return methodsWithRightName;				
+			return methodsWithRightName;
 		}
 	}
 
@@ -173,7 +173,7 @@ public class ReflectionTraceInfo {
 		}
 		return false;
 	}
-	
+
 	public Set<String> classForNameClassNames(SootMethod container) {
 		if(!classForNameReceivers.containsKey(container)) return Collections.emptySet();
 		return classForNameReceivers.get(container);
@@ -186,12 +186,12 @@ public class ReflectionTraceInfo {
 		}
 		return result;
 	}
-	
+
 	public Set<String> classNewInstanceClassNames(SootMethod container) {
 		if(!classNewInstanceReceivers.containsKey(container)) return Collections.emptySet();
 		return classNewInstanceReceivers.get(container);
 	}
-	
+
 	public Set<SootClass> classNewInstanceClasses(SootMethod container) {
 		Set<SootClass> result = new HashSet<SootClass>();
 		for(String className: classNewInstanceClassNames(container)) {
@@ -199,12 +199,12 @@ public class ReflectionTraceInfo {
 		}
 		return result;
 	}
-	
+
 	public Set<String> constructorNewInstanceSignatures(SootMethod container) {
 		if(!constructorNewInstanceReceivers.containsKey(container)) return Collections.emptySet();
 		return constructorNewInstanceReceivers.get(container);
 	}
-	
+
 	public Set<SootMethod> constructorNewInstanceConstructors(SootMethod container) {
 		Set<SootMethod> result = new HashSet<SootMethod>();
 		for(String signature: constructorNewInstanceSignatures(container)) {
@@ -212,7 +212,7 @@ public class ReflectionTraceInfo {
 		}
 		return result;
 	}
-	
+
 	public Set<String> methodInvokeSignatures(SootMethod container) {
 		if(!methodInvokeReceivers.containsKey(container)) return Collections.emptySet();
 		return methodInvokeReceivers.get(container);

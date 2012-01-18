@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,7 +41,7 @@ abstract public class AbstractUnopExpr implements UnopExpr
     protected AbstractUnopExpr(ValueBox opBox) { this.opBox = opBox; }
 
     public abstract Object clone();
-    
+
     public Value getOp()
     {
         return opBox.getValue();
@@ -63,7 +63,7 @@ abstract public class AbstractUnopExpr implements UnopExpr
 
         list.addAll(opBox.getValue().getUseBoxes());
         list.add(opBox);
-    
+
         return list;
     }
 

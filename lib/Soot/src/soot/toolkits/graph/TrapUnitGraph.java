@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-2003.  
+ * Modified by the Sable Research Group and others 1997-2003.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -41,7 +41,7 @@ import soot.options.Options;
  *  exception caught by the <code>Trap</code>.</p>
  *
  *  <p>
- *  There are three distinctions between the exceptional edges added 
+ *  There are three distinctions between the exceptional edges added
  *  in <code>TrapUnitGraph</code> and the exceptional edges added in
  *  {@link ExceptionalUnitGraph}:
  *  <ol>
@@ -106,7 +106,7 @@ public class TrapUnitGraph extends UnitGraph
 
     /**
      * Method to compute the edges corresponding to exceptional
-     * control flow. 
+     * control flow.
      *
      * @param unitToSuccs A <code>Map</code> from {@link Unit}s to {@link
      *                    List}s of <code>Unit</code>s. This is an &ldquo;out
@@ -116,7 +116,7 @@ public class TrapUnitGraph extends UnitGraph
      *                    Trap}s to a <code>List</code> of the handler
      *                    units of those <code>Trap</code>s.
      *
-     * @param unitToPreds A <code>Map</code> from <code>Unit</code>s to 
+     * @param unitToPreds A <code>Map</code> from <code>Unit</code>s to
      *                    <code>List</code>s of <code>Unit</code>s. This is an
      *                    &ldquo;out parameter&rdquo;;
      *                    <code>buildExceptionalEdges</code> will add a
@@ -125,7 +125,7 @@ public class TrapUnitGraph extends UnitGraph
      *                    that <code>Trap</code>.
      */
     protected void buildExceptionalEdges(Map unitToSuccs, Map unitToPreds) {
-	for (Iterator trapIt = body.getTraps().iterator(); 
+	for (Iterator trapIt = body.getTraps().iterator();
 	     trapIt.hasNext(); ) {
 	    Trap trap = (Trap) trapIt.next();
 	    Unit first = trap.getBeginUnit();

@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the Sable Research Group and others 1997-1999.  
+ * Modified by the Sable Research Group and others 1997-1999.
  * See the 'credits' file distributed with Soot for the complete list of
  * contributors.  (Soot is distributed at http://www.sable.mcgill.ca/soot)
  */
@@ -38,8 +38,8 @@ public class BLoadInst extends AbstractOpTypeInst implements LoadInst
 {
     ValueBox localBox;
     List useBoxes;
-    
-       
+
+
     public BLoadInst(Type opType, Local local)
     {
         super(opType);
@@ -52,7 +52,7 @@ public class BLoadInst extends AbstractOpTypeInst implements LoadInst
         return 0;
     }
 
-    public Object clone() 
+    public Object clone()
     {
         return new  BLoadInst(getOpType(), getLocal());
     }
@@ -61,14 +61,14 @@ public class BLoadInst extends AbstractOpTypeInst implements LoadInst
     {
         return 0;
     }
-    
+
     public int getOutCount()
     {
         return 1;
     }
 
-    
-       
+
+
 
 
     final public String getName() { return "load"; }
@@ -78,28 +78,28 @@ public class BLoadInst extends AbstractOpTypeInst implements LoadInst
         up.literal(" ");
         localBox.toString(up);
     }
-    
+
     public void apply(Switch sw)
     {
         ((InstSwitch) sw).caseLoadInst(this);
-    }   
- 
+    }
+
     public void setLocal(Local l)
     {
         localBox.setValue(l);
-    }   
-    
+    }
+
     public Local getLocal()
     {
         return (Local) localBox.getValue();
     }
 
-    public List getUseBoxes() 
+    public List getUseBoxes()
     {
         return useBoxes;
     }
 
-    
-    
+
+
 
 }

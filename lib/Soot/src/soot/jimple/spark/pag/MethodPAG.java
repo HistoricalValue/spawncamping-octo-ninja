@@ -82,7 +82,7 @@ public final class MethodPAG {
         internalEdges.add( dst );
         if (hasBeenAdded) {
             pag.addEdge(src, dst);
-        }        
+        }
     }
     public void addInEdge( Node src, Node dst ) {
         if( src == null ) return;
@@ -90,7 +90,7 @@ public final class MethodPAG {
         inEdges.add( dst );
         if (hasBeenAdded) {
             pag.addEdge(src, dst);
-        }        
+        }
     }
     public void addOutEdge( Node src, Node dst ) {
         if( src == null ) return;
@@ -98,7 +98,7 @@ public final class MethodPAG {
         outEdges.add( dst );
         if (hasBeenAdded) {
             pag.addEdge(src, dst);
-        }        
+        }
     }
     private final ChunkedQueue internalEdges = new ChunkedQueue();
     private final ChunkedQueue inEdges = new ChunkedQueue();
@@ -114,7 +114,7 @@ public final class MethodPAG {
 
     public static MethodPAG v( PAG pag, SootMethod m ) {
         MethodPAG ret = G.v().MethodPAG_methodToPag.get( m );
-        if( ret == null ) { 
+        if( ret == null ) {
             ret = new MethodPAG( pag, m );
             G.v().MethodPAG_methodToPag.put( m, ret );
         }
@@ -149,7 +149,7 @@ public final class MethodPAG {
     }
     public Node parameterize( Node n, Context varNodeParameter ) {
         if( varNodeParameter == null ) return n;
-        if( n instanceof LocalVarNode ) 
+        if( n instanceof LocalVarNode )
             return parameterize( (LocalVarNode) n, varNodeParameter);
         if( n instanceof FieldRefNode )
             return parameterize( (FieldRefNode) n, varNodeParameter);
@@ -169,8 +169,8 @@ public final class MethodPAG {
     }
     protected void buildNative() {
         ValNode thisNode = null;
-        ValNode retNode = null; 
-        if( !method.isStatic() ) { 
+        ValNode retNode = null;
+        if( !method.isStatic() ) {
 	    thisNode = (ValNode) nodeFactory.caseThis();
         }
         if( method.getReturnType() instanceof RefLikeType ) {
@@ -200,7 +200,7 @@ public final class MethodPAG {
                 "<java.lang.ref.Finalizer: void <init>(java.lang.Object)>")) {
             addInEdge( nodeFactory.caseThis(), pag().nodeFactory().caseFinalizeQueue());
         } else
-        	
+
         if (method.getSignature().equals(
                 "<java.lang.ref.Finalizer: void runFinalizer()>")) {
             addInEdge(pag.nodeFactory().caseFinalizeQueue(), nodeFactory.caseThis());

@@ -72,7 +72,7 @@ public class Disamb_c implements Disamb
         } else {
             return null;
         }
-        
+
         if (q.isPackage() && packageOK()) {
             return nf.PackageNode(pos, q.toPackage());
         } else if (q.isType() && typeOK()) {
@@ -83,8 +83,8 @@ public class Disamb_c implements Disamb
     }
 
 
-    protected Node disambiguateTypeNodePrefix(TypeNode tn) 
-        throws SemanticException 
+    protected Node disambiguateTypeNodePrefix(TypeNode tn)
+        throws SemanticException
     {
         // Try static fields.
         Type t = tn.type();
@@ -98,7 +98,7 @@ public class Disamb_c implements Disamb
                     // something went wrong...
                     throw e;
                 }
-                
+
                 // ignore so we can check if we're a member class.
             }
         }
@@ -128,7 +128,7 @@ public class Disamb_c implements Disamb
 
         // First try local variables and fields.
         VarInstance vi = c.findVariableSilent(name);
-        
+
         if (vi != null && exprOK()) {
             Node n = disambiguateVarInstance(vi);
             if (n != null) return n;
@@ -149,7 +149,7 @@ public class Disamb_c implements Disamb
                     throw e;
                 }
 
-                // couldn't find a type named name. 
+                // couldn't find a type named name.
                 // It must be a package--ignore the exception.
             }
         }

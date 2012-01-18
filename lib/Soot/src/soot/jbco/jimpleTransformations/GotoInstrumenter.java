@@ -27,9 +27,9 @@ import soot.jimple.*;
 import java.util.*;
 
 /**
- * @author Michael Batchelder 
- * 
- * Created on 15-Feb-2006 
+ * @author Michael Batchelder
+ *
+ * Created on 15-Feb-2006
  */
 public class GotoInstrumenter extends BodyTransformer implements IJbcoTransform {
 
@@ -41,27 +41,27 @@ public class GotoInstrumenter extends BodyTransformer implements IJbcoTransform 
   public String[] getDependancies() {
     return dependancies;
   }
-  
+
   public static String name = "jtp.jbco_gia";
-  
+
   public String getName() {
     return name;
   }
-  
+
   public void outputSummary() {
     out.println("Gotos Instrumented "+gotosInstrumented);
     out.println("Traps Added "+trapsAdded);
   }
 
   static boolean verbose = G.v().soot_options_Options().verbose();
-  
-  protected void internalTransform(Body b, String phaseName, Map options) 
-  { 
+
+  protected void internalTransform(Body b, String phaseName, Map options)
+  {
     if (b.getMethod().getName().indexOf("<init>")>=0) return;
-    
+
     int weight = soot.jbco.Main.getWeight(phaseName, b.getMethod().getSignature());
     if (weight == 0) return;
-    
+
     PatchingChain units = b.getUnits();
     int size = units.size();
     Unit first = null;
@@ -74,44 +74,44 @@ public class GotoInstrumenter extends BodyTransformer implements IJbcoTransform 
       } else
         break;
     }
-    
+
     if (size < 8) return;
-    
+
     if (first == null)
       first = (Unit)units.getFirst();
-    
+
     Chain traps = b.getTraps();
     int i = 0, rand = 0;
     while (i++ < 10)
     {
       rand = Rand.getInt(size);
-      if (rand<1) 
+      if (rand<1)
         rand = 1;
       else if (rand == size - 1)
         rand = size - 2;
-     
+
       if (isExceptionCaughtAt(units, rand + (units.size() - size), traps.iterator()))
         continue;
       break;
     }
-    
+
     // if 10 tries, we give up
     if (i>=10) return;
-    
-    
+
+
     i = 0;
-    
+
     if (output) {
     	out.println("Applying Gotos to "+b.getMethod().getName());
     }
- 
-    
+
+
     /*Iterator it = units.iterator();
     while(it.hasNext()) {
       Unit x = (Unit)it.next();
       System.out.println(i+++":  "+x.toString() + "  : "+isExceptionCaughtAt(units, x,traps.iterator()));
     }*/
-  
+
     // move random-size chunk at beginning to end
     first = (Unit)units.getSuccOf(first);
     Unit u = first;
@@ -119,20 +119,20 @@ public class GotoInstrumenter extends BodyTransformer implements IJbcoTransform 
       Object toU[] = u.getBoxesPointingToThis().toArray();
       for (Object element : toU)
 		u.removeBoxPointingToThis((UnitBox)element);
-      
+
       // unit box targets stay with a unit even if the unit is removed.
       Unit u2 = (Unit)units.getSuccOf(u);
       units.remove(u);
       units.add(u);
-      
+
       for (Object element : toU)
 		u.addBoxPointingToThis((UnitBox)element);
-      
+
       u = u2;
     } while (++i < rand);
 
     Unit oldFirst = first;
-    // add goto as FIRST unit to point to new chunk location    
+    // add goto as FIRST unit to point to new chunk location
     if (first instanceof GotoStmt) {
       oldFirst = ((GotoStmt)first).getTargetBox().getUnit();
       first = Jimple.v().newGotoStmt(((GotoStmt)first).getTargetBox().getUnit());
@@ -147,19 +147,19 @@ public class GotoInstrumenter extends BodyTransformer implements IJbcoTransform 
         gtS = Jimple.v().newGotoStmt(((GotoStmt)u).getTargetBox().getUnit());
       else
         gtS = Jimple.v().newGotoStmt(u);
-    
+
       units.add(gtS);
     }
-    
+
     RefType throwable = G.v().soot_Scene().getRefType("java.lang.Throwable");
     CaughtExceptionRef cexc = Jimple.v().newCaughtExceptionRef();
     Local excLocal = Jimple.v().newLocal("jbco_gi_caughtExceptionLocal", throwable);
     b.getLocals().add(excLocal);
-    
+
     Unit handler = Jimple.v().newIdentityStmt(excLocal,cexc);
     units.add(handler);
     units.add(Jimple.v().newThrowStmt(excLocal));
-    
+
     Unit trapEnd = (Unit)units.getSuccOf(oldFirst);
     try {
 	    while (trapEnd instanceof IdentityStmt)
@@ -170,7 +170,7 @@ public class GotoInstrumenter extends BodyTransformer implements IJbcoTransform 
     } catch (Exception exc) {}
     gotosInstrumented++;
   }
-  
+
   private boolean isExceptionCaughtAt(Chain units, int idx, Iterator trapsIt)
   {
     Object u = null;
@@ -183,7 +183,7 @@ public class GotoInstrumenter extends BodyTransformer implements IJbcoTransform 
       }
       it.next();
     }
-  
+
     //System.out.println("\r\tselected unit is "+u);
     while (trapsIt.hasNext())
     {
@@ -195,7 +195,7 @@ public class GotoInstrumenter extends BodyTransformer implements IJbcoTransform 
       if (t.getEndUnit().equals(u))
         return true;
     }
-    
+
     return false;
   }
 }

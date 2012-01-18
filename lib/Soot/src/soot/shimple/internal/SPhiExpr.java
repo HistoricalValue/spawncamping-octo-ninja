@@ -37,7 +37,7 @@ public class SPhiExpr implements PhiExpr
     protected List argPairs = new ArrayList();
     protected Map predToPair = new HashMap();  // cache
     protected Type type;
-    
+
     /**
      * Create a trivial Phi expression for leftLocal.  preds is an ordered
      * list of the control flow predecessor Blocks of the PhiExpr.
@@ -67,7 +67,7 @@ public class SPhiExpr implements PhiExpr
     {
         if(args.size() == 0)
             throw new RuntimeException("Arg list may not be empty");
-        
+
         if(args.size() != preds.size())
             throw new RuntimeException("Arg list does not match Pred list");
 
@@ -89,7 +89,7 @@ public class SPhiExpr implements PhiExpr
     }
 
     /* get-accessor implementations */
-    
+
     public List getArgs()
     {
         return Collections.unmodifiableList(argPairs);
@@ -104,7 +104,7 @@ public class SPhiExpr implements PhiExpr
             Value arg = ((ValueUnitPair)argPairsIt.next()).getValue();
             args.add(arg);
         }
-        
+
         return args;
     }
 
@@ -117,7 +117,7 @@ public class SPhiExpr implements PhiExpr
             Unit arg = ((ValueUnitPair)argPairsIt.next()).getUnit();
             preds.add(arg);
         }
-        
+
         return preds;
     }
 
@@ -132,7 +132,7 @@ public class SPhiExpr implements PhiExpr
             return null;
         return (ValueUnitPair) argPairs.get(index);
     }
-    
+
     public Value getValue(int index)
     {
         ValueUnitPair arg = getArgBox(index);
@@ -171,7 +171,7 @@ public class SPhiExpr implements PhiExpr
         // (null if not found)
         return vup;
     }
-    
+
     public Value getValue(Unit predTailUnit)
     {
         ValueBox vb = getArgBox(predTailUnit);
@@ -213,7 +213,7 @@ public class SPhiExpr implements PhiExpr
     }
 
     /* set-accessor implementations */
-    
+
     public boolean setArg(int index, Value arg, Unit predTailUnit)
     {
         boolean ret1 = setValue(index, arg);
@@ -222,12 +222,12 @@ public class SPhiExpr implements PhiExpr
             throw new RuntimeException("Assertion failed.");
         return ret1;
     }
-    
+
     public boolean setArg(int index, Value arg, Block pred)
     {
         return setArg(index, arg, pred.getTail());
     }
-    
+
     public boolean setValue(int index, Value arg)
     {
         ValueUnitPair argPair = getArgBox(index);
@@ -271,9 +271,9 @@ public class SPhiExpr implements PhiExpr
     {
         return setPred(index, pred.getTail());
     }
-    
+
     /* add/remove implementations */
-    
+
     public boolean removeArg(int index)
     {
         ValueUnitPair arg = getArgBox(index);
@@ -291,7 +291,7 @@ public class SPhiExpr implements PhiExpr
         ValueUnitPair arg = getArgBox(pred);
         return removeArg(arg);
     }
-    
+
     public boolean removeArg(ValueUnitPair arg)
     {
         if(argPairs.remove(arg)){
@@ -301,7 +301,7 @@ public class SPhiExpr implements PhiExpr
             arg.getUnit().removeBoxPointingToThis(arg);
             return true;
         }
-        
+
         return false;
     }
 
@@ -309,7 +309,7 @@ public class SPhiExpr implements PhiExpr
     {
         return addArg(arg, pred.getTail());
     }
-    
+
     public boolean addArg(Value arg, Unit predTailUnit)
     {
         // we have no choice but to flush the cache
@@ -340,7 +340,7 @@ public class SPhiExpr implements PhiExpr
             throw new RuntimeException("Assertion failed:  Block Id unknown.");
         return blockId;
     }
-    
+
     /* misc */
 
     /**
@@ -379,7 +379,7 @@ public class SPhiExpr implements PhiExpr
     public int equivHashCode()
     {
         int hashcode = 1;
-        
+
         for(int i = 0; i < getArgCount(); i++){
             hashcode = hashcode * 17 + getArgBox(i).equivHashCode();
         }
@@ -400,7 +400,7 @@ public class SPhiExpr implements PhiExpr
             box.setUnit(null);
         }
     }
-    
+
     public List getUseBoxes()
     {
         Set set = new HashSet();
@@ -439,7 +439,7 @@ public class SPhiExpr implements PhiExpr
 
         return expr.toString();
     }
-    
+
     public void toString(UnitPrinter up)
     {
         up.literal(Shimple.PHI);
@@ -456,7 +456,7 @@ public class SPhiExpr implements PhiExpr
 
         up.literal(")");
     }
-        
+
     public void apply(Switch sw)
     {
         ((ShimpleExprSwitch) sw).casePhiExpr(this);
