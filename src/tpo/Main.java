@@ -7,7 +7,6 @@ import isi.net.http.Response;
 import isi.net.http.Server;
 import isi.net.http.Status;
 import isi.util.Charstreams;
-import isi.util.Cwd;
 import isi.util.Ref;
 import isi.util.Strings;
 import isi.util.Throwables;
@@ -21,7 +20,8 @@ import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.net.ServerSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import tpo.soot.SootFacade;
@@ -32,11 +32,13 @@ import tpo.soot.util.OutputCapturer;
 public class Main {
 	
 	public static void main (final String[] args) throws SecurityException, IOException {
-		main0(args);
+		Runtime.PushDefault();
+		TpoMain(args);
+		Runtime.PopRuntime();
 	}
 	
-	public static void main0 (String[] args) throws SecurityException, IOException {
-		Runtime.PushRuntime(new Runtime(new Cwd("./wd")));
+	public static void TpoMain (String[] args) throws SecurityException, IOException {
+		Runtime.cd("wd");
 		
 		Loggers.Initialise();
 		final OutputCapturer sootOutputCapturer = SootFacade.CaptureOutput(Runtime.GetCurrentCwd().resolve("soot_out.txt"), true, false);
@@ -47,7 +49,7 @@ public class Main {
 	}
 	
 	private void Run () throws IOException {
-		final Server s = new Server(new ServerSocket(8000));
+		final Server s = new Server(new InetSocketAddress(InetAddress.getLoopbackAddress(), 8000), 1);
 		final Ref<Boolean> done = Ref.CreateRef(Boolean.FALSE);
 		final SootHelpHtmlRenderer sootHelpHtmlRenderer = new SootHelpHtmlRenderer();
 		s.AddHandler(new RequestHandler() {
@@ -55,7 +57,7 @@ public class Main {
 			@SuppressWarnings({"fallthrough", "ConvertToStringSwitch"})
 			public void Handle (final Response response, final Writer client, final Request request) throws IOException {
 				response.SetStatus(Status.OK);
-				final String stylePathName = "γεια σου μπόμπ", jsPathName = "拉帮结伙";
+				final String stylePathName = "γεια σου μπόμπ", jsPathName = "拉&帮/结\\伙+=-";
 				final String style = "/" + stylePathName, js = "/" + jsPathName;
 				final String path = request.GetPath();
 				if (path.equals(style)) {
@@ -105,17 +107,17 @@ public class Main {
 				final Path filepath = Runtime.GetCurrentCwd().resolve(filePathStr);
 				if (Files.exists(filepath))
 					try (final CharArrayWriter caw = new CharArrayWriter(1 << 19)) {
-						try (final Reader cssfin = Files.newBufferedReader(filepath, Request.CHARSET)) {
+						try (final Reader cssfin = Files.newBufferedReader(filepath, Request.Encoding)) {
 						try (final Writer allouts = new MultiWriterDelegate(caw, client)) {
 							Charstreams.transfuse(cssfin, allouts);
 						}}
-						try (final Writer csslitfout = Files.newBufferedWriter(Runtime.GetCurrentCwd().resolve(outFilePathStr), Request.CHARSET)) {
+						try (final Writer csslitfout = Files.newBufferedWriter(Runtime.GetCurrentCwd().resolve(outFilePathStr), Request.Encoding)) {
 						try (final Reader r = new CharArrayReader(caw.toCharArray())) {
 							csslitfout.append(Strings.ToJavaLiteral(r));
 						}}
 					}
 				else
-					try (final Writer w = Files.newBufferedWriter(filepath, Request.CHARSET)) {
+					try (final Writer w = Files.newBufferedWriter(filepath, Request.Encoding)) {
 					try (final Writer allouts = new MultiWriterDelegate(client, w)) {
 						allouts.append(ifNotFound);
 					}}
