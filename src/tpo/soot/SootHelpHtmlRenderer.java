@@ -97,7 +97,7 @@ public class SootHelpHtmlRenderer {
 		doc.WriteTo(sink);
 		return this;
 	}
-	
+
 	private static Element CreateJavascriptMainScriptElement (
 			final ElementBuilder	b,
 			final String			bodyId) {
@@ -106,7 +106,7 @@ public class SootHelpHtmlRenderer {
 		script.attr("type", "text/javascript");
 		return script;
 	}
-	
+
 	private static Element CreateCloseButton (final ElementBuilder b) {
 		return b.div(b.text("X")).SetId("closeButton").SetClass("clickable");
 	}
@@ -116,7 +116,7 @@ public class SootHelpHtmlRenderer {
 			final Element				closeButton,
 			final List<Element>			subphasesIndecesElements) {
 		final Element popup = b.div(closeButton).SetId("popup");
-		
+
 		AddExtraJavascript("\n\nisi.HideAllSubphases = function HideAllSubphases () {");
 		for (final Element hidden: subphasesIndecesElements) {
 			AddExtraJavascript("\n\t$(\"")

@@ -262,7 +262,7 @@ public class SootHelpHtmlRendererConstants {
 			+ "	}\n"
 			+ "}\n"
 			+ "\n";
-	
+
 	///////////////////////////////////////////////////////
 	// private
 	private SootHelpHtmlRendererConstants () {
