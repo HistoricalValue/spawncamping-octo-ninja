@@ -15,6 +15,10 @@ import tpo.soot.SootOption.EnumArgumentValue;
 public class SootHelpHtmlRenderer {
 
 	///////////////////////////////////////////////////////
+	// static utils
+	private static final String CloseButtonId = "closeButton";
+
+	///////////////////////////////////////////////////////
 	// state
 	private final StringBuilder	extraJavascript = new StringBuilder(1 << 14),
 								extraCss = new StringBuilder(1 << 14);
@@ -108,7 +112,7 @@ public class SootHelpHtmlRenderer {
 	}
 
 	private static Element CreateCloseButton (final ElementBuilder b) {
-		return b.div(b.text("X")).SetId("closeButton").SetClass("clickable");
+		return b.div(b.text("X")).SetId(CloseButtonId).SetClass("clickable");
 	}
 
 	private Element CreatePopUpMenusContainerElement (
@@ -142,7 +146,11 @@ public class SootHelpHtmlRenderer {
 		final String phaseName = opt.GetName();
 
 		ExtraJavascriptForTogglingPhaseOptionsPopUpMenuVisibility(groupIndexId, toggleGroupFunctionName);
-		index.AddSubelement(b.li(b.a("#" + groupId, phaseName).attr("onclick", "isi." + toggleGroupFunctionName + "();")));
+		index.AddSubelement(b.li(b.a("#" + groupId, phaseName)
+				.attr(	"onclick",
+						opt.GetSubphases().isEmpty()?
+							"isi.g.closeButton.onclick();" :
+							"isi." + toggleGroupFunctionName + "();")));
 
 		doc.AddElement(b.h1(phaseName).SetId(groupId));
 		doc.AddElement(b.p(soot.options.Options.v().getPhaseHelp(phaseName)).SetClass("description"));

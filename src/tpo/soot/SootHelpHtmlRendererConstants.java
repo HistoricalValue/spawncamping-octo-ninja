@@ -260,7 +260,6 @@ public class SootHelpHtmlRendererConstants {
 			+ "		g.popup.style.display = \"block\";\n"
 			+ "		g.visibleMenuId = id;\n"
 			+ "	}\n"
-			+ "}\n"
 			+ "\n";
 
 	///////////////////////////////////////////////////////
