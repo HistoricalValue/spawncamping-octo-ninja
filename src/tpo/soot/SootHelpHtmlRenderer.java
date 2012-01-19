@@ -88,16 +88,16 @@ public class SootHelpHtmlRenderer {
 		for (final SootOptionGroup group: SootFacade.ListOfOptions())
 			AppendElementsForOptionsGroup(b, group, doc, index);
 
-		final List<String> subphasesIndecesElementsIds = new LinkedList<>();
+		final List<Element> subphasesIndecesElements = new LinkedList<>();
 		for (final SootPhaseOptions opt: SootFacade.ListOfPhases())
-			AppendElementsForPhaseOption(b, opt, doc, index, subphasesIndecesElementsIds);
+			AppendElementsForPhaseOption(b, opt, doc, index, subphasesIndecesElements);
 
-		doc.AddElement(CreateClosePopUpElementsButton(b, subphasesIndecesElementsIds));
+		doc.AddElement(CreatePopUpMenusContainerElement(b, CreateCloseButton(b), subphasesIndecesElements));
 		doc.AddElement(CreateJavascriptMainScriptElement(b, bodyId));
 		doc.WriteTo(sink);
 		return this;
 	}
-
+	
 	private static Element CreateJavascriptMainScriptElement (
 			final ElementBuilder	b,
 			final String			bodyId) {
@@ -106,17 +106,27 @@ public class SootHelpHtmlRenderer {
 		script.attr("type", "text/javascript");
 		return script;
 	}
-	private Element CreateClosePopUpElementsButton (
+	
+	private static Element CreateCloseButton (final ElementBuilder b) {
+		return b.div(b.text("X")).SetId("closeButton").SetClass("clickable");
+	}
+
+	private Element CreatePopUpMenusContainerElement (
 			final ElementBuilder		b,
-			final List<String>			subphasesIndecesElementsIds) {
+			final Element				closeButton,
+			final List<Element>			subphasesIndecesElements) {
+		final Element popup = b.div(closeButton).SetId("popup");
+		
 		AddExtraJavascript("\n\nisi.HideAllSubphases = function HideAllSubphases () {");
-		for (final String hiddenEl: subphasesIndecesElementsIds)
+		for (final Element hidden: subphasesIndecesElements) {
 			AddExtraJavascript("\n\t$(\"")
-					.AddExtraJavascript(hiddenEl)
+					.AddExtraJavascript(hidden.GetId())
 					.AddExtraJavascript("\").style.display = \"none\";");
+			popup.AddSubelement(hidden);
+		}
 		AddExtraJavascript("\n}\n");
 
-		return b.div(b.text("X")).SetId("closeButton");
+		return popup;
 	}
 
 	private void AppendElementsForPhaseOption (
@@ -124,16 +134,14 @@ public class SootHelpHtmlRenderer {
 			final SootPhaseOptions		opt,
 			final Document				doc,
 			final Element				index,
-			final List<String>			subphasesIndecesElementsIds
+			final List<Element>			subphasesIndecesElements
 			) {
 		final String groupId = gidgen.next();
 		final String groupIndexId = groupId + "_index";
 		final String toggleGroupFunctionName = "ToggleGroup_" + groupIndexId;
 		final String phaseName = opt.GetName();
 
-		subphasesIndecesElementsIds.add(groupIndexId);
-
-		ExtraJavascriptForPhaseOptions(groupIndexId, toggleGroupFunctionName);
+		ExtraJavascriptForTogglingPhaseOptionsPopUpMenuVisibility(groupIndexId, toggleGroupFunctionName);
 		index.AddSubelement(b.li(b.a("#" + groupId, phaseName).attr("onclick", "isi." + toggleGroupFunctionName + "();")));
 
 		doc.AddElement(b.h1(phaseName).SetId(groupId));
@@ -141,7 +149,7 @@ public class SootHelpHtmlRenderer {
 
 		// list of subopts
 		final Element subphaseOptionsIndexElement = CreatePopUpMenuElement(b).SetId(groupIndexId);
-		doc.AddElement(subphaseOptionsIndexElement);
+		subphasesIndecesElements.add(subphaseOptionsIndexElement);
 
 		for (final SootPhaseOptions subphaseOptions: opt.GetSubphases())
 			AppendElementForSubphaseOption(subphaseOptions, b, doc, subphaseOptionsIndexElement);
@@ -166,7 +174,7 @@ public class SootHelpHtmlRenderer {
 				.AddElement(b.p(soot.options.Options.v().getPhaseHelp(subphaseName)).SetClass("description"));
 	}
 
-	private void ExtraJavascriptForPhaseOptions (
+	private void ExtraJavascriptForTogglingPhaseOptionsPopUpMenuVisibility (
 			final String	groupIndexId,
 			final String	toggleGroupFunctionName) {
 		AddExtraJavascript("\nisi.")
