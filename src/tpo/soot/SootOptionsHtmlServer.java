@@ -7,6 +7,7 @@ import isi.net.http.Response;
 import isi.net.http.Server;
 import isi.net.http.Status;
 import isi.util.Charstreams;
+import isi.util.IdGenerator;
 import isi.util.Ref;
 import isi.util.Runtime;
 import isi.util.Strings;
@@ -63,9 +64,14 @@ public class SootOptionsHtmlServer {
 		final Ref<Boolean> done = Ref.CreateRef(Boolean.FALSE);
 		final SootHelpHtmlRenderer sootHelpHtmlRenderer = new SootHelpHtmlRenderer();
 		server.AddHandler(new RequestHandler() {
+			private final IdGenerator requestIdGenerator = new IdGenerator("request:", "");
+			private String requestId;
+			
 			@Override
 			@SuppressWarnings({"fallthrough", "ConvertToStringSwitch"})
 			public void Handle (final Response response, final Writer client, final Request request) throws IOException {
+				requestId = requestIdGenerator.next();
+				
 				response.SetStatus(Status.OK);
 				final String stylePathName = "γεια σου μπόμπ", jsPathName = "拉&帮/结\\伙+=-";
 				final String style = "/" + stylePathName, js = "/" + jsPathName;
@@ -82,10 +88,10 @@ public class SootOptionsHtmlServer {
 				else
 				switch (path) {
 					case "/stop": case "/giveup": case "/shutup":
-						L().i("giving up through " + path);
+						L().i(requestId + ": giving up through " + path);
 						done.Assign(Boolean.TRUE);
 					case "/":
-						L().i("serving options");
+						L().i(requestId + ": serving options");
 						try {
 							response.SetContentType(ContentType.Html);
 							sootHelpHtmlRenderer.WriteOptions(client, stylePathName, jsPathName);
@@ -94,12 +100,12 @@ public class SootOptionsHtmlServer {
 						}
 						break;
 					default:
-						L().w("Not found " + path);
+						L().w(requestId + ": Not found " + path);
 						response.SetStatus(Status.NotFound);
 						client.close();
 				}
 
-				L().fff("DONE HANDLING");
+				L().fff(requestId + ": DONE HANDLING");
 			}
 
 			private void ServeFile (
@@ -112,7 +118,7 @@ public class SootOptionsHtmlServer {
 				)
 					throws IOException
 			{
-				L().i("serving " + servingWhat + " from " + servingPath);
+				L().i(requestId + ": serving " + servingWhat + " from " + servingPath);
 
 				final Path filepath = Runtime.GetCurrentCwd().resolve(filePathStr);
 				if (Files.exists(filepath))
