@@ -360,7 +360,7 @@ public class SootFacade {
 
 	///////////////////////////////////////////////////////
 	// Static state
-	private static final AutoLogger L = new AutoLogger(Loggers.GetLogger(SootFacade.class));
+	private static final AutoLogger L = Loggers.GetLogger(SootFacade.class);
 	private static final int RootGroup = 347823;
 	private static final int SubGroup = 38471;
 	private static final Pattern	INDENT = Pattern.compile("^(\\s*).*$"),

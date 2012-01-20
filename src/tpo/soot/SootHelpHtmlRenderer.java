@@ -1,5 +1,6 @@
 package tpo.soot;
 
+import isi.util.IdGenerator;
 import isi.net.http.helpers.Url;
 import isi.util.StringBuilders;
 import isi.util.html.Document;
@@ -22,7 +23,7 @@ public class SootHelpHtmlRenderer {
 	// state
 	private final StringBuilder	extraJavascript = new StringBuilder(1 << 14),
 								extraCss = new StringBuilder(1 << 14);
-	private final GroupIdGenerator gidgen = new GroupIdGenerator();
+	private final IdGenerator gidgen = new IdGenerator("group_", "");
 
 	///////////////////////////////////////////////////////
 	// constructors
@@ -61,16 +62,6 @@ public class SootHelpHtmlRenderer {
 
 	private void ResetExtraJavascript () {
 		StringBuilders.reset(extraJavascript);
-	}
-
-	///////////////////////////////////////////////////////
-	//
-	@SuppressWarnings("FinalClass")
-	private final static class GroupIdGenerator {
-		private int seed = 0;
-		@SuppressWarnings("ValueOfIncrementOrDecrementUsed")
-		String next () { return "group_" + seed++; }
-		void reset () { seed = 0; }
 	}
 
 	public SootHelpHtmlRenderer WriteOptions (
