@@ -23,6 +23,8 @@ import java.io.Writer;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -69,20 +71,25 @@ public class SootOptionsHtmlServer {
 			
 			@Override
 			@SuppressWarnings({"fallthrough", "ConvertToStringSwitch"})
-			public void Handle (final Response response, final Writer client, final Request request) throws IOException {
+			public void Handle (final Response response, final WritableByteChannel clientChannel, final Request request) throws IOException {
 				requestId = requestIdGenerator.next();
+				final Writer client = Channels.newWriter(clientChannel, Request.Encoding.newEncoder(), 200);
 				
-				response.SetStatus(Status.OK);
 				final String stylePathName = "γεια σου μπόμπ", jsPathName = "拉&帮/结\\伙+=-";
 				final String style = "/" + stylePathName, js = "/" + jsPathName;
 				final String path = request.GetPath();
+				
+				response.SetStatus(Status.OK);
+				
 				if (path.equals(style)) {
 					response.SetContentType(ContentType.Css);
+					response.SetEncoding(Request.Encoding);
 					ServeFile("style", style, "style.css", "Css.java", sootHelpHtmlRenderer.Css(), client);
 				}
 				else
 				if (path.equals(js)) {
 					response.SetContentType(ContentType.Javascript);
+					response.SetEncoding(Request.Encoding);
 					ServeFile("javascript", js, "script.js", "Script.java", sootHelpHtmlRenderer.Javascript(), client);
 				}
 				else
@@ -94,6 +101,7 @@ public class SootOptionsHtmlServer {
 						L().i(requestId + ": serving options");
 						try {
 							response.SetContentType(ContentType.Html);
+							response.SetEncoding(Request.Encoding);
 							sootHelpHtmlRenderer.WriteOptions(client, stylePathName, jsPathName);
 						} catch (final SootOptionsParsingException ex) {
 							Document.FromString(Throwables.toString(ex)).WriteTo(client);
@@ -102,9 +110,9 @@ public class SootOptionsHtmlServer {
 					default:
 						L().w(requestId + ": Not found " + path);
 						response.SetStatus(Status.NotFound);
-						client.close();
 				}
 
+				client.flush();
 				L().fff(requestId + ": DONE HANDLING");
 			}
 
@@ -124,9 +132,10 @@ public class SootOptionsHtmlServer {
 				if (Files.exists(filepath))
 					try (final CharArrayWriter caw = new CharArrayWriter(1 << 19)) {
 						try (final Reader cssfin = Files.newBufferedReader(filepath, Request.Encoding)) {
-						try (final Writer allouts = new MultiWriterDelegate(caw, client)) {
+							final Writer allouts = new MultiWriterDelegate(caw, client);
 							Charstreams.transfuse(cssfin, allouts);
-						}}
+							allouts.flush();
+						}
 						try (final Writer csslitfout = Files.newBufferedWriter(Runtime.GetCurrentCwd().resolve(outFilePathStr), Request.Encoding)) {
 						try (final Reader r = new CharArrayReader(caw.toCharArray())) {
 							csslitfout.append(Strings.ToJavaLiteral(r));
@@ -134,9 +143,20 @@ public class SootOptionsHtmlServer {
 					}
 				else
 					try (final Writer w = Files.newBufferedWriter(filepath, Request.Encoding)) {
-					try (final Writer allouts = new MultiWriterDelegate(client, w)) {
+						final Writer allouts = new MultiWriterDelegate(client, w);
 						allouts.append(ifNotFound);
-					}}
+						allouts.flush();
+					}
+			}
+
+			@Override
+			public boolean ShouldHandleDirect (final Request request) {
+				return false;
+			}
+
+			@Override
+			public void HandleDirect (final Response response, final WritableByteChannel client, final Request request) throws IOException {
+				throw new UnsupportedOperationException("Not supported (ever).");
 			}
 		});
 
