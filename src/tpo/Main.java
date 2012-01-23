@@ -1,8 +1,8 @@
 package tpo;
 
+import isi.util.Runtime;
 import isi.util.logging.AutoLogger;
 import isi.util.logging.Loggers;
-import isi.util.Runtime;
 import java.io.IOException;
 import tpo.soot.SootFacade;
 import tpo.soot.util.OutputCapturer;
