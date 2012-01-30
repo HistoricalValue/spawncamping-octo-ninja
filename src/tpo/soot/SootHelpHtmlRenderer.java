@@ -1,7 +1,7 @@
 package tpo.soot;
 
-import isi.util.IdGenerator;
 import isi.net.http.helpers.Url;
+import isi.util.IdGenerator;
 import isi.util.StringBuilders;
 import isi.util.html.Document;
 import isi.util.html.Element;

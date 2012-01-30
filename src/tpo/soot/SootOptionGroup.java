@@ -2,6 +2,7 @@ package tpo.soot;
 
 import isi.util.Collections;
 import java.util.List;
+
 import static java.util.Objects.requireNonNull;
 
 public class SootOptionGroup {

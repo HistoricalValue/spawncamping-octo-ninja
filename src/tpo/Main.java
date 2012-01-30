@@ -4,24 +4,33 @@ import isi.util.Runtime;
 import isi.util.logging.AutoLogger;
 import isi.util.logging.Loggers;
 import java.io.IOException;
-import tpo.soot.SootFacade;
-import tpo.soot.util.OutputCapturer;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateException;
 
 public class Main {
 
-	public static void main (final String[] args) throws SecurityException, IOException {
+	public static void main (final String[] args) throws SecurityException, IOException, InterruptedException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException, KeyStoreException {
 		Runtime.PushDefault();
-		TpoMain(args);
+		Runtime.cd(args[0]);
+		Loggers.Initialise();
+		Globals.CreateSingleton();
+		{
+			TpoMain(args);
+		//	Moin.CrapsMain(Arrays.copyOfRange(args, 1, args.length));
+		}
+		Globals.ForgetSingleton();
+		Loggers.CleanUp();
+		Runtime.PopRuntime();
 		Runtime.PopRuntime();
 	}
 
 	public static void TpoMain (String[] args) throws SecurityException, IOException {
-		Runtime.cd("wd");
+		Runtime.cd(args[0]);
 
-		Loggers.Initialise();
-		final OutputCapturer sootOutputCapturer = SootFacade.CaptureOutput(Runtime.GetCurrentCwd().resolve("soot_out.txt"), true, false);
+//		final OutputCapturer sootOutputCapturer = SootFacade.CaptureOutput(Runtime.GetCurrentCwd().resolve("soot_out.txt"), true, false);
 		new Main().Run();
-		Loggers.CleanUp();
 
 		Runtime.PopRuntime();
 	}

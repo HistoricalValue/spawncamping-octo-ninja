@@ -1,27 +1,20 @@
 package tpo.soot;
 
-import isi.util.logging.Loggers;
-import static isi.util.Collections.map;
-import static isi.util.Collections.select;
-import isi.util.OnceSettable.GetUnsetOrSetSetException;
 import isi.util.OnceSettable;
-import isi.util.streams.StreamTokeniserTokenType;
-import java.util.LinkedList;
-import java.util.List;
+import isi.util.OnceSettable.GetUnsetOrSetSetException;
 import isi.util.Ref;
 import isi.util.StreamTokenisers;
 import isi.util.ValueMapper;
 import isi.util.logging.AutoLogger;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
+import isi.util.logging.Loggers;
+import isi.util.streams.StreamTokeniserTokenType;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,9 +22,13 @@ import soot.G;
 import tpo.soot.SootOption.EnumArgumentValue;
 import tpo.soot.util.OutputCapturer;
 import tpo.soot.util.StoringOutputCapturer;
+
+import static isi.util.Collections.map;
+import static isi.util.Collections.select;
+import static isi.util.Matchers.matches;
+import static isi.util.Matchers.matches;
 import static isi.util.StringBuilders.isEmpty;
 import static isi.util.StringBuilders.reset;
-import static isi.util.Matchers.matches;
 import static java.util.Objects.requireNonNull;
 
 public class SootFacade {

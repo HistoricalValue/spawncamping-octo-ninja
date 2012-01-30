@@ -29,47 +29,47 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class SootOptionsHtmlServer {
-	
+
 	///////////////////////////////////////////////////////
 	// state
 	private final Server server;
 	private final RequestHandler handler = new RequestHandler();
-	
+
 	///////////////////////////////////////////////////////
 	// Constructors
 	public SootOptionsHtmlServer () throws IOException {
 		this(8000);
 	}
-	
+
 	public SootOptionsHtmlServer (final int port) throws IOException {
 		this(port, 1);
 	}
-	
+
 	public SootOptionsHtmlServer (final int port, final int backlog) throws IOException {
 		this(InetAddress.getLoopbackAddress(), port, backlog);
 	}
-	
+
 	public SootOptionsHtmlServer (final InetAddress addr, final int port, final int backlog) throws IOException {
 		this(new InetSocketAddress(addr, port), backlog);
 	}
-	
+
 	public SootOptionsHtmlServer (final SocketAddress bindAddress, final int backlog) throws IOException {
 		server = new Server(bindAddress, backlog, handler);
 	}
-	
+
 	///////////////////////////////////////////////////////
 	//
 	public void ServeLoop () throws IOException {
 		final Ref<Boolean> done = Ref.CreateRef(Boolean.FALSE);
 		final SootHelpHtmlRenderer sootHelpHtmlRenderer = new SootHelpHtmlRenderer();
-		
+
 		handler.SetDone(done);
 		handler.SetSootHelpHtmlRenderer(sootHelpHtmlRenderer);
 
 		while (!done.Deref())
 			server.Serve();
 	}
-	
+
 	///////////////////////////////////////////////////////
 	// static utils
 	private static AutoLogger L () {
