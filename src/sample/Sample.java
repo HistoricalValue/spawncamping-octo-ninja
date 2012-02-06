@@ -26,4 +26,7 @@ public class Sample {
         Object o = new Sample();
         Sample s = (Sample) o;
     }
+
+	private Sample () {
+	}
 }

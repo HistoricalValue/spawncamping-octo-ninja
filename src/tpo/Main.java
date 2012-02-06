@@ -3,6 +3,7 @@ package tpo;
 import isi.util.Runtime;
 import isi.util.logging.AutoLogger;
 import isi.util.logging.Loggers;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -27,16 +28,17 @@ public class Main {
 	}
 
 	public static void TpoMain (String[] args) throws SecurityException, IOException {
-		Runtime.cd(args[0]);
-
 //		final OutputCapturer sootOutputCapturer = SootFacade.CaptureOutput(Runtime.GetCurrentCwd().resolve("soot_out.txt"), true, false);
+		java.util.logging.LogManager.getLogManager().readConfiguration(new ByteArrayInputStream((""
+				+ "handlers = tpo.util.LogHandler\n"
+				+ ".level = ALL\n"
+				+ "").getBytes()));
 		new Main().Run();
-
-		Runtime.PopRuntime();
 	}
 
 	private void Run () throws IOException {
-		new tpo.soot.SootOptionsHtmlServer().ServeLoop();
+//		new tpo.soot.SootOptionsHtmlServer().ServeLoop();
+		new SootTest().run();
 	}
 
 
