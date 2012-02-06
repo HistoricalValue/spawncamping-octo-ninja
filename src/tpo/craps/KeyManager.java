@@ -12,12 +12,12 @@ import java.security.cert.CertificateException;
 import tpo.Globals;
 
 public class KeyManager {
-	
+
 	///////////////////////////////////////////////////////
 	// state
 	private final KeyStore ks = KeyStore.getInstance("pkcs12");
 	private final char[] keystorePasswd;
-	
+
 	///////////////////////////////////////////////////////
 	//
 	public KeyManager (
@@ -28,13 +28,13 @@ public class KeyManager {
 	{
 		this.keystorePasswd = storePasswd.toCharArray();
 	}
-	
+
 	///////////////////////////////////////////////////////
 	//
 	public boolean Load () throws IOException, NoSuchAlgorithmException, CertificateException  {
 		final Path keysPath = isi.util.Runtime.GetCurrentCwd().resolve(Globals.GetSingleton().GetConfiguration().GetConfig().get("https.server.keys"));
 		boolean loaded;
-		
+
 		if (Files.exists(keysPath))
 			try (final InputStream ins = Files.newInputStream(keysPath, StandardOpenOption.READ)) {
 				ks.load(ins, keystorePasswd);
@@ -42,17 +42,17 @@ public class KeyManager {
 			}
 		else
 			loaded = false;
-		
+
 		return loaded;
 	}
-	
+
 	///////////////////////////////////////////////////////
 	//
 	@SuppressWarnings("ReturnOfCollectionOrArrayField")
 	public char[] GetKeystorePassword () {
 		return keystorePasswd;
 	}
-	
+
 	public KeyStore GetKeystore () {
 		return ks;
 	}

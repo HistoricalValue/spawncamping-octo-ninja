@@ -57,21 +57,21 @@ public class HttpsServer {
 			throw new RuntimeException(ex);
 		}
 	}
-	
+
 	@SuppressWarnings("SleepWhileInLoop")
 	public static void Main0 (final String[] args) throws IOException, InterruptedException, NoSuchAlgorithmException, KeyStoreException, UnrecoverableKeyException, KeyManagementException {
 		final KeyStore ks = Globals.GetSingleton().GetKeyManager().GetKeystore();
-		
+
 		final KeyManagerFactory kmf = KeyManagerFactory.getInstance("PKIX");
 		kmf.init(ks, "sandy1".toCharArray());
-		
+
 		final TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
 		tmf.init(ks);
-		
+
 		final SSLContext ssl = SSLContext.getInstance("SSLv3");
 		ssl.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 //		PrintSSLContextInfo(ssl);
-		
+
 		final SSLServerSocketFactory serverSocketFactory = ssl.getServerSocketFactory();
 
 		final SSLServerSocket server = (SSLServerSocket) serverSocketFactory.createServerSocket(8000, 5, InetAddress.getLoopbackAddress());
@@ -116,7 +116,7 @@ public class HttpsServer {
 			}
 		}
 	}
-	
+
 	@SuppressWarnings("UseOfSystemOutOrSystemErr")
 	private static void PrintSSLContextInfo (final SSLContext ssl) {
 		final SSLParameters params = ssl.getSupportedSSLParameters();
@@ -139,13 +139,13 @@ public class HttpsServer {
 	private HttpsServer () {
 	}
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	public static class HttpsServerHerong {
 		public static void main (final String[] args) {
 			mainisid(args);
@@ -161,13 +161,13 @@ public class HttpsServer {
 			try {
 				KeyStore ks = KeyStore.getInstance("PKCS12");
 				ks.load(new FileInputStream(ksName), ksPass);
-				KeyManagerFactory kmf = 
+				KeyManagerFactory kmf =
 				KeyManagerFactory.getInstance("PKIX"); // "SunX509");
 				kmf.init(ks, ctPass);
 				SSLContext sc = SSLContext.getInstance("SSLv3");
 				sc.init(kmf.getKeyManagers(), null, null);
 				SSLServerSocketFactory ssf = sc.getServerSocketFactory();
-				SSLServerSocket s 
+				SSLServerSocket s
 					= (SSLServerSocket) ssf.createServerSocket(8000);
 				System.out.println("Server started:");
 				printServerSocketInfo(s);
@@ -201,13 +201,13 @@ public class HttpsServer {
 			try {
 				KeyStore ks = KeyStore.getInstance("PKCS12");
 				ks.load(new FileInputStream(ksName), ksPass);
-				KeyManagerFactory kmf = 
+				KeyManagerFactory kmf =
 				KeyManagerFactory.getInstance("SunX509");
 				kmf.init(ks, ctPass);
 				SSLContext sc = SSLContext.getInstance("SSLv3");
 				sc.init(kmf.getKeyManagers(), null, null);
 				SSLServerSocketFactory ssf = sc.getServerSocketFactory();
-				SSLServerSocket s 
+				SSLServerSocket s
 					= (SSLServerSocket) ssf.createServerSocket(8000);
 				System.out.println("Server started:");
 				printServerSocketInfo(s);
@@ -234,7 +234,7 @@ public class HttpsServer {
 				e.printStackTrace();
 			}
 		}
-		
+
 		private static void printSocketInfo(SSLSocket s) {
 			System.out.println("Socket class: "+s.getClass());
 			System.out.println("   Remote address = "

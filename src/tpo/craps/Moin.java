@@ -27,10 +27,10 @@ public class Moin {
 		InitialiseConfiguration();
 		Globals.GetSingleton().GetKeyManager().Load();
 		final Options opts = new Options(args);
-		
+
 		final Thread server = CreateServerThread(args);
 		final Thread client = CreateClientThread(args);
-		
+
 		if (opts.threaded) {
 			if (opts.mode.isServer()) {
 				server.start();
@@ -74,45 +74,45 @@ public class Moin {
 			}
 		};
 	}
-	
+
 	private static void InitialiseConfiguration () {
 		final Configuration configuration = Globals.GetSingleton().GetConfiguration();
 		configuration.SetStoragePath(isi.util.Runtime.GetCurrentCwd().resolve("config.config"));
 		final boolean loaded = configuration.LoadIFEmpty();
 		final boolean failure = configuration.GetFailureReason() != null;
 		assert !failure || !loaded;
-		
+
 		if (failure) { // set defaults
 			final Map<String, String> config = configuration.GetConfig();
 			config.put("https.server.keys", "C:\\tmp\\security\\kss");
 		}
 	}
-	
+
 	private static class Options {
 		enum Mode {
 			server(true, false),
 			client(false, true),
 			servent(false, false);
-		
+
 			private final boolean isServer;
 			private final boolean isClient;
 			Mode (final boolean isServer, final boolean isClient) {
 				this.isServer = isServer;
 				this.isClient = isClient;
 			}
-			
+
 			public boolean isServer () { return isServer; }
 			public boolean isClient () { return isClient; }
 		};
 		public final boolean threaded;
 		public final Mode mode;
-		
+
 		Options (final String[] args) {
 			threaded = Boolean.valueOf(args[0]);
 			mode = Mode.valueOf(args[1]);
 		}
 	}
-	
+
 	private Moin () {
 	}
 }
