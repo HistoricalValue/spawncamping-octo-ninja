@@ -54,6 +54,7 @@ public class LogHandler extends Handler {
 					.append(record.getLoggerName())
 					.append(":")
 					.append(formatMessage(record))
+					.append("\n")
 					.toString();
 		}
 	}
@@ -80,7 +81,7 @@ public class LogHandler extends Handler {
 	public void publish (final LogRecord record) {
 		try {
 			final String formattedRecord = f.format(record);
-			out.println(formattedRecord);
+			out.print(formattedRecord);
 
 			final int length = formattedRecord.length();
 			for (int i = 0; i < length; ) {
